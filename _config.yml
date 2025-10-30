@@ -23,24 +23,24 @@ repository               : "academicpages/academicpages.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profile.png"
+  avatar           : "images/profile.png"
   name             : "Alessio Borgi"
   pronouns         : # example: "she/her"  
-  bio              : "PhD in Graph Neural Networks and GenAI"
+  bio              : "PhD in Graph Neural Networks and Generative AI"
   location         : "Italy"
   employer         : "Sapienza University & Cambridge University"
   uri              : # URL
   email            : "borgialessio01@gmail.com, alessio.borgi@uniroma1.it" 
 
   # Academic websites
-  academia         : # URL
+  academia         : "https://wwwuniroma1.academia.edu/AlessioBorgi"
   arxiv            : # URL - Update with the correct link to your profile
   googlescholar    : "https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it"
   inspire-hep      : # URL
   impactstory      : # URL
   orcid            : "https://orcid.org/0009-0007-1979-0857"
   semantic         : # URL
-  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
+  pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   researchgate     : # URL
   scopus           : # URL
 
