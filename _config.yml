@@ -26,19 +26,19 @@ author:
   avatar           : "profile.png"
   name             : "Alessio Borgi"
   pronouns         : # example: "she/her"  
-  bio              : "Short biography for the left-hand sidebar"
+  bio              : "PhD in Graph Neural Networks and GenAI"
   location         : "Italy"
-  employer         : "Sapienza University of Rome & Cambridge University"
+  employer         : "Sapienza University & Cambridge University"
   uri              : # URL
-  email            : "borgialessio01@gmail.com" 
+  email            : "borgialessio01@gmail.com, alessio.borgi@uniroma1.it" 
 
   # Academic websites
   academia         : # URL
   arxiv            : # URL - Update with the correct link to your profile
-  googlescholar    : "https://scholar.google.com/citations?user=PS_CX0AAAAAJ"
+  googlescholar    : "https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it"
   inspire-hep      : # URL
   impactstory      : # URL
-  orcid            : "https://orcid.org/yourorcidurl"
+  orcid            : "https://orcid.org/0009-0007-1979-0857"
   semantic         : # URL
   pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   researchgate     : # URL
@@ -48,7 +48,7 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : "academicpages"
+  github           : "https://github.com/alessioborgi"
   kaggle           : # Username  
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
@@ -63,7 +63,7 @@ author:
   keybase          : # Username
   instagram        : # Username
   lastfm           : # Username
-  linkedin         : # Username
+  linkedin         : https://www.linkedin.com/in/alessio-borgi/
   mastodon         : # URL
   medium           : # URL
   pinterest        : # Username
