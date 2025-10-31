@@ -1,13 +1,21 @@
 # Authors
 
-Name Name:
-  name        : "Name Name"
-  uri         : "https://name.com"
-  email       : "name@name.com"
-  bio         : "This is the first name."
-  avatar      : "bio-photo-2.jpg"
-  twitter     : "name"
-  google_plus : "Name"
+alessio:
+  name: "Alessio Borgi"
+  avatar: "profile.png"
+  bio: "PhD student in AI (Sapienza & Cambridge). Research: GNNs, SheafNNs, Diffusion Models, Robotics, Medical AI."
+  pronouns: ""
+  email: "borgialessio01@gmail.com"
+  links:
+    - label: "GitHub"
+      url: "https://github.com/alessioborgi"
+    - label: "LinkedIn"
+      url: "https://www.linkedin.com/in/alessio-borgi/"
+    - label: "Google Scholar"
+      url: "https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it"
+    - label: "ORCID"
+      url: "https://orcid.org/0009-0007-1979-0857"
+
 
 Name2 Name2:
   name        : "Name2 Name2"
