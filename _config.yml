@@ -26,10 +26,10 @@ author:
   avatar           : "profile.png"
   name             : "Alessio Borgi"
   pronouns         : # example: "she/her"  
-  bio              : "PhD in Graph Neural Networks and Generative AI"
-  location         : "Italy, UK"
-  employer         : "Sapienza University"
-  employer2        : "Cambridge University"
+  bio              : "PhD in Graph Neural Networks and Generative AI 👨🏻‍💻🤖"
+  location         : "🇮🇹 Italy, 🇬🇧 UK"
+  employer         : "🇮🇹 Sapienza University"
+  employer2        : "🇬🇧 Cambridge University"
   uri              : # URL
   email            : "borgialessio01@gmail.com, alessio.borgi@uniroma1.it" 
 
