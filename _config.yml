@@ -11,8 +11,8 @@ locale                   : "en-US"
 site_theme               : "default" # Currently available options are "default", "air"
 title                    : "Alessio Borgi's Website"
 title_separator          : "-"
-name                     : &name "Alessio borgi"
-description              : &description "Your Name's academic portfolio"   # Update this with a general description of your site, this is the default if not overridden by a page
+name                     : &name "Alessio Borgi"
+description              : &description "Alessio Borgi's Personal WebPage"   # Update this with a general description of your site, this is the default if not overridden by a page
 url                      : https://alessioborgi.github.io # The base hostname & protocol for your site e.g. "https://[your GitHub username].github.io",
                                                            # or if you already have some other page hosted on Github then use "https://[your GitHub username].github.io/[Your Repo Name]"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
@@ -23,7 +23,7 @@ repository               : "academicpages/academicpages.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "images/profile.png"
+  avatar           : "profile.png"
   name             : "Alessio Borgi"
   pronouns         : # example: "she/her"  
   bio              : "PhD in Graph Neural Networks and Generative AI"
