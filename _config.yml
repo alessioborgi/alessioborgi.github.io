@@ -28,7 +28,8 @@ author:
   pronouns         : # example: "she/her"  
   bio              : "PhD in Graph Neural Networks and Generative AI"
   location         : "Italy"
-  employer         : "Sapienza University & Cambridge University"
+  employer         : "Sapienza University"
+  employer         : "Cambridge University"
   uri              : # URL
   email            : "borgialessio01@gmail.com, alessio.borgi@uniroma1.it" 
 
