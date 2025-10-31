@@ -27,7 +27,7 @@ author:
   name             : "Alessio Borgi"
   pronouns         : # example: "she/her"  
   bio              : "PhD in Graph Neural Networks and Generative AI"
-  location         : "Italy"
+  location         : "Italy, UK"
   employer         : "Sapienza University"
   employer2        : "Cambridge University"
   uri              : # URL
@@ -254,14 +254,14 @@ defaults:
       layout: single
       author_profile: true
   # _teaching
-  - scope:
-      path: ""
-      type: teaching
-    values:
-      layout: single
-      author_profile: true
-      share: true
-      comments: true
+  # - scope:
+  #     path: ""
+  #     type: teaching
+  #   values:
+  #     layout: single
+  #     author_profile: true
+  #     share: true
+  #     comments: true
   # _publications
   - scope:
       path: ""
