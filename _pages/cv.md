@@ -15,20 +15,56 @@ redirect_from:
 
 ---
 
-
 ## Education
-- **Ph.D. in Engineering in Computer Science - Artificial Intelligence**, Sapienza University of Rome — *2025–present*  
-  **Thesis (with Prof. Pietro Liò, University of Cambridge):** *Equivariant Sheaf Neural Networks for Controllable Graph Generation*  
-  Focus: Equivariant fiber-aware transports, Chebyshev-filtered diffusion, style-aligned generation on graphs/proteins.
-- **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University of Rome — *2023–2025*  
-  **Thesis (with Prof. Pietro Liò, University of Cambridge):** *Equivariant Sheaf Neural Networks for Controllable Graph Generation*  
-  Focus: Equivariant fiber-aware transports, Chebyshev-filtered diffusion, style-aligned generation on graphs/proteins.
 
-- **Summer Schools**
-  - **M2L Summer School, Milan** — 2024 · Poster + research sprint
-  - **Linz Summer School, Austria** — 2024 · *CareConnect* demo & poster
+- **Ph.D. in Engineering in Computer Science — Artificial Intelligence**, Sapienza University of Rome & University of Cambridge — *2025–present*  
+  **Supervisors:** [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (primary), [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (co-supervisor).  
+  **Focus:** Graph Neural Networks & Generative AI. 
+  
+
+- **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University of Rome — *2023–2025*  
+  **Final mark:** 110/110.  
+  **Thesis:** *Polynomial Sheaf Diffusion and Equivariant Sheaf Neural Networks* (link in progress).  
+  **Courses:** Artificial Intelligence, Machine Learning, Neural Networks, Robot Programming, Robotics I & II, NeuroEngineering, Computer Vision, Medical Robotics, Reinforcement Learning, Autonomous & Mobile Robotics, Deep Learning, Advanced ML, Generative AI Safety, HRI, Robot Benchmarking & Competitions, Multilingual NLP.  
+  **Memberships:** [ALCOR Lab](https://alcorlab.diag.uniroma1.it/); [ISPAMM Lab](https://sites.google.com/uniroma1.it/ispamm/). :contentReference[oaicite:1]{index=1}
+
+- **B.Sc. in Applied Computer Science and Artificial Intelligence**, Sapienza University of Rome — *2020–2023*  
+  **Final mark:** 110/110 with Honours.  
+  **Thesis:** *Building Real-Time Multivariate Anomaly Detection Systems in Industry’s 5G Networks: A Comprehensive Workflow* — [GitHub](https://github.com/alessioborgi/Bachelor-s-Thesis).  
+  **Courses (selected):** Deep Learning, AI Lab & Computer Vision, Machine Learning, Artificial Intelligence, Web & Software Architecture, Cybersecurity, Programming I/II (+ Lab), Databases, HCI, Networking, Operating Systems, Algorithms, Statistics, Startup & Management, Business & CS, Computer Architecture, Calculus I/II/III, Linear Algebra, Physics, Probability, Foundations of CS.  
+  **Membership:** [OmniAI Lab](https://omnai.di.uniroma1.it/undergrad/). :contentReference[oaicite:2]{index=2}
+
+- **Secondary School — Information Technology**, I.I.S. Guglielmo Marconi (Civitavecchia, Rome) — *2015–2020*  
+  **Final mark:** 100/100.  
+  **Thesis/Project:** *Electric Company: Ticketing System* — [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). :contentReference[oaicite:3]{index=3}
+
+### Visiting Research
+
+- **Space Robotics** — Tohoku University, Space Robotics Lab, Sendai, Japan 🇯🇵 — *June–July 2025*  
+  **Supervisor:** [Prof. Kazuya Yoshida](https://astro.mech.tohoku.ac.jp/e/).  
+  **Project:** *MoonBot Navigation* — Autonomous robot for lunar navigation & object interaction. Dijkstra-based path planning, object detection (vision), custom robot design, gripper control.  
+  **Repository:** [MoonBot Navigation (GitHub)](https://github.com/alessioborgi/MoonBot-Navigation).  
+  **Outcome:** Selected as top-1 student for the exchange; **won TESP 2025 Competition**; received **Research Certificate of Excellence**. [Program notes](https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591). :contentReference[oaicite:4]{index=4}
+
+- **AI & Robotics in Healthcare** — Johannes Kepler Universität (JKU), Linz, Austria 🇦🇹 — *Aug–Sept 2024*  
+  **Supervisor:** [Prof. Alexander Steinmaurer](https://it-u.at/en/persons/team/alexander-steinmaurer/).  
+  **Project:** *CareConnect* — AI-driven system to query environmental/hospital data via chat, generate real-time graphs, and trigger notifications & robotic actions using LangChain.  
+  **Repository:** [CareConnect (GitHub)](https://github.com/alessioborgi/CareConnect).  
+  **Achievement:** **Best Poster & Project Award** (program showcase). :contentReference[oaicite:5]{index=5}
 
 ---
+
+## Work Experience
+
+- **AI & ML Software Research Engineer (Intern)** — Hewlett Packard Enterprise (HPE), PathFinder — *Mar 2023 – Aug 2023*  
+  Research on **Multivariate Anomaly Detection** over **5G time-series**.  
+  – Designed a **customer-centered & customer-agnostic workflow**: from network data integration to feature selection for anomaly identification.  
+  – Validated with a **major network customer**, reducing models to train/maintain and lowering design/inference resource/time requirements while **preserving overall metrics**.  
+  – **Honourable Mention** in an internal HPE Hackathon.  
+  – Team **Best HPE 2023 Paper Award**.
+
+---
+
 
 ## Publications
 <ul>
@@ -38,37 +74,15 @@ redirect_from:
 </ul>
 
 **Selected:**  
-- Borgi, A.; Maiano, L.; Amerini, I. (2025). **Z-SASLM: Zero-Shot Style-Aligned SLI Blending for Latent Manipulation.** *CVPR 2025 Workshops (CVEU)*.
-
----
-
-## Research & Project Experience
-- **Style Alignment & Latent Manipulation** — *2024–2025*  
-  - First author on **Z-SASLM** (CVPR 2025 Workshops). Zero-shot, fine-tuning-free **multi-style blending** via **SLI** in latent space; stronger consistency metrics and robust content preservation.
-
-- **Equivariant Sheaf Neural Networks** — *2024–2025*  
-  - Designed **Equivariant Sheaf Diffusion** with fiber-aware transports and polynomial filters (Chebyshev). Implemented stable training, runtime/accuracy trade-offs, and ablations across synthetic + real graph benchmarks.
-
-- **SPQR RoboCup Team (NAO)** — *2024–2025*  
-  - Analyzed and extended **WalkKickEngine**; experiments on gait & kick dynamics; simulation to field-ready tuning.
-
-- **CareConnect (clinical orchestration)** — *2024*  
-  - Chat + graph pipeline that queries data and sequences robotic actions; demos at summer schools.
+- Borgi, A.; Maiano, L.; Amerini, I. (2025). **Z-SASLM: Zero-Shot Style-Aligned SLI Blending for Latent Manipulation.** *CVPR 2025 Workshops (CVEU)*. :contentReference[oaicite:6]{index=6}
 
 ---
 
 ## Awards
-- **Best Poster Award**, M2L Summer School — 2024  
-- (Team) **Best Paper Award**, M2L Summer School — 2024
-
----
-
-## Talks, Posters & Participation
-- **CVPR 2025 Workshops (CVEU)** — *Poster:* Z-SASLM  
-- **M2L Summer School 2024** — *Best Poster*  
-- **Linz Summer School 2024** — *Project demo & poster*
-
-*See also:* [Participation & Talks](/participation-talks/)
+- **Best Poster Award** — DeepMind’s Mediterranean Machine Learning (M2L) Summer School, 2024. :contentReference[oaicite:7]{index=7}  
+- **Best Paper Award (team)** — HPE PathFinder, 2023. :contentReference[oaicite:8]{index=8}  
+- **Honourable Mention (Hackathon)** — Hewlett Packard Enterprise, 2023. :contentReference[oaicite:9]{index=9}  
+- **Generative AI Safety Challenge (DL2025)** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), 2025. :contentReference[oaicite:10]{index=10}
 
 ---
 
@@ -81,20 +95,21 @@ redirect_from:
 
 ---
 
-## Teaching & Mentoring
-<ul>
-{% for post in site.teaching reversed %}
-  {% include archive-single-cv.html %}
-{% endfor %}
-</ul>
-
-*(If you want this section populated, add entries to the `_teaching/` collection.)*
+## Certifications
+- **Cambridge Assessment International Education** — First Certificate (B2) *(ID: B3329535)*  
+- **Instituto Cervantes** — **DELE A1** *(ID: S6516DL9BAHUJHY248TJ4V4KJ2)*  
+- **DeepLearning.AI & AWS** — *Generative AI with Large Language Models* (Coursera) *(ID: VHCBD26QZP7W)*  
+- **AWS** — AI & ML Scholarship Program *(verified)*  
+- **COMAU** — “Use and Programming” **Robotic License** *(ID: kDHqAdhwAT)*  
+- **IBM** — **Cloud Core** Certification *(verified)*  
+- **IBM** — **Blockchain Essentials** Certification *(verified)*
 
 ---
 
-## Service & Leadership
-- Open-source maintainer/contributor on research repos (SheafNNs, Equivariant diffusion, XGNN-GraphGenRL, CareConnect).  
-- Repro-first culture: fixed seeds, honest baselines, ablations, CD diagrams, runtime vs accuracy plots.
+## Languages
+- **Italian** — C2 (*Mother tongue*)  
+- **English** — C1 
+- **Spanish** — A1
 
 ---
 
