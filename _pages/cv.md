@@ -49,7 +49,7 @@ redirect_from:
 - **AI & Robotics in Healthcare** — Johannes Kepler Universität (JKU), Linz, Austria 🇦🇹 — *Aug–Sept 2024*  
   **Supervisor:** [Prof. Alexander Steinmaurer](https://it-u.at/en/persons/team/alexander-steinmaurer/)  
   **Project:** *CareConnect* — AI-driven system to query environmental/hospital data via chat, generate real-time graphs, and trigger notifications & robotic actions using LangChain.  
-  **Repository:** [CareConnect (GitHub)](https://github.com/alessioborgi/CareConnect).  
+  **Repository:** [CareConnect (GitHub)](https://github.com/alessioborgi/CareConnect)  
   **Achievement:** **Best Poster & Project Award** (program showcase). 
 
 ---
@@ -62,19 +62,6 @@ redirect_from:
   – Validated with a **major network customer**, reducing models to train/maintain and lowering design/inference resource/time requirements while **preserving overall metrics**.  
   – **Honourable Mention** in an internal HPE Hackathon.  
   – Team **Best HPE 2023 Paper Award**.
-
----
-
-
-## Publications
-<ul>
-{% for post in site.publications reversed %}
-  {% include archive-single-cv.html %}
-{% endfor %}
-</ul>
-
-**Selected:**  
-- Borgi, A.; Maiano, L.; Amerini, I. (2025). **Z-SASLM: Zero-Shot Style-Aligned SLI Blending for Latent Manipulation.** *CVPR 2025 Workshops (CVEU)*. 
 
 ---
 
@@ -112,6 +99,16 @@ redirect_from:
 - **Spanish** — A1
 
 ---
+
+## Publications
+<ul>
+{% for post in site.publications reversed %}
+  {% include archive-single-cv.html %}
+{% endfor %}
+</ul>
+---
+
+
 
 ## Contact
 - 📧 **Email:** <a href="mailto:alessio.borgi@uniroma1.it">alessio.borgi@uniroma1.it</a> <a href="mailto:borgialessio01@gmail.com">borgialessio01@gmail.com</a>  
