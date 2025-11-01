@@ -1,11 +1,9 @@
 ---
-title: "About"
-permalink: /about/
-layout: single
+permalink: /
+title: "Academic Pages is a ready-to-fork GitHub Pages template for academic personal websites"
 author_profile: true
-classes: wide
-last_modified_at: 2025-11-01
-redirect_from:
+redirect_from: 
+  - /about/
   - /about.html
 ---
 
@@ -17,9 +15,9 @@ redirect_from:
 ---
 
 ## Hi, I’m Alessio 👋
-I’m a PhD student in **Graph Neural Networks and Generative AI**, under the supervision of **Prof. Pietro Liò (University of Cambridge)** and **Prof. Fabrizio Silvestri (Sapienza University of Rome)**. I have obtained my **Master of Science** in **Artificial Intelligence & Robotics** and my **Bachelor of Science** in **Applied Computer Science and Artificial Intelligence** at **Sapienza University of Rome**, both with the highest marks. My research sits at the intersection of **Graph Neural Networks**, **Geometric Deep Learning**, and **Diffusion Models**, with applications to **Robotics**, **Vision**, and **Biomedical AI**. 
+I’m a PhD student in **Graph Neural Networks and Generative AI**, under the supervision of **Prof. Pietro Liò (University of Cambridge)** and **Prof. Fabrizio Silvestri (Sapienza University of Rome)**. I have obtained my **Master of Science** in **Artificial Intelligence & Robotics** and my **Bachelor of Science** in **Applied Computer Science and Artificial Intelligence** at **Sapienza University of Rome**, both with the highest marks. My research sits at the intersection of **Graph Neural Networks**, **Geometric Deep Learning**, and **Diffusion Models**, with applications to **Robotics**, **Vision**, and **Biomedical AI**. I have
 
-I love turning rigorous theory into working systems, and then open-sourcing the whole thing so others can build on it.
+I love turning rigorous theory into working systems—and then open-sourcing the whole thing so others can build on it.
 
 - 🏆 **Best Poster Award**, M2L Summer School (2024)  
 - 🧪 **CVPR 2025 Workshops** author: *Z-SASLM — Zero-Shot Style-Aligned SLI Blending for Latent Manipulation*  
