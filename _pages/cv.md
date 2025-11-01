@@ -66,8 +66,8 @@ redirect_from:
 ---
 
 ## Awards
-- **Best Poster Award** — DeepMind’s Mediterranean Machine Learning (M2L) Summer School, 2024. :contentReference[oaicite:7]{index=7}  
-- **Best Paper Award (team)** — HPE PathFinder, 2023.{index=8}  
+- **Best Poster Award** — DeepMind’s Mediterranean Machine Learning (M2L) Summer School, 2024.
+- **Best Paper Award (team)** — HPE PathFinder, 2023.
 - **Honourable Mention (Hackathon)** — Hewlett Packard Enterprise, 2023.  
 - **Generative AI Safety Challenge (DL2025)** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), 2025. 
 
