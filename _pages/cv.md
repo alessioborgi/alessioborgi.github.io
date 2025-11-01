@@ -38,7 +38,7 @@ redirect_from:
   **Final mark:** 100/100  
   **Thesis/Project:** *Electric Company: Ticketing System* — [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). 
 
-### Visiting Research
+## Visiting Research
 
 - **Space Robotics** — Tohoku University, Space Robotics Lab, Sendai, Japan 🇯🇵 — *June–July 2025*  
   **Supervisor:** [Prof. Kazuya Yoshida](https://astro.mech.tohoku.ac.jp/e/)  
