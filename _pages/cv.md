@@ -18,36 +18,36 @@ redirect_from:
 ## Education
 
 - **Ph.D. in Engineering in Computer Science — Artificial Intelligence**, Sapienza University of Rome & University of Cambridge — *2025–present*  
-  **Supervisors:** [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (primary), [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (co-supervisor).  
-  **Focus:** Graph Neural Networks & Generative AI. 
+  **Supervisors:** [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (primary), [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (co-supervisor)  
+  **Focus:** Graph Neural Networks & Generative AI 
   
 
 - **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University of Rome — *2023–2025*  
-  **Final mark:** 110/110.  
-  **Thesis:** *Polynomial Sheaf Diffusion and Equivariant Sheaf Neural Networks* (link in progress).  
+  **Final mark:** 110/110  
+  **Thesis:** *Polynomial Sheaf Diffusion and Equivariant Sheaf Neural Networks* (link in progress)  
   **Courses:** Artificial Intelligence, Machine Learning, Neural Networks, Robot Programming, Robotics I & II, NeuroEngineering, Computer Vision, Medical Robotics, Reinforcement Learning, Autonomous & Mobile Robotics, Deep Learning, Advanced ML, Generative AI Safety, HRI, Robot Benchmarking & Competitions, Multilingual NLP.  
-  **Memberships:** [ALCOR Lab](https://alcorlab.diag.uniroma1.it/); [ISPAMM Lab](https://sites.google.com/uniroma1.it/ispamm/). 
+  **Memberships:** [ALCOR Lab](https://alcorlab.diag.uniroma1.it/) and [ISPAMM Lab](https://sites.google.com/uniroma1.it/ispamm/). 
 
 - **B.Sc. in Applied Computer Science and Artificial Intelligence**, Sapienza University of Rome — *2020–2023*  
-  **Final mark:** 110/110 with Honours.  
+  **Final mark:** 110/110 with Honours  
   **Thesis:** *Building Real-Time Multivariate Anomaly Detection Systems in Industry’s 5G Networks: A Comprehensive Workflow* — [GitHub](https://github.com/alessioborgi/Bachelor-s-Thesis).  
   **Courses (selected):** Deep Learning, AI Lab & Computer Vision, Machine Learning, Artificial Intelligence, Web & Software Architecture, Cybersecurity, Programming I/II (+ Lab), Databases, HCI, Networking, Operating Systems, Algorithms, Statistics, Startup & Management, Business & CS, Computer Architecture, Calculus I/II/III, Linear Algebra, Physics, Probability, Foundations of CS.  
   **Membership:** [OmniAI Lab](https://omnai.di.uniroma1.it/undergrad/). 
 
 - **Secondary School — Information Technology**, I.I.S. Guglielmo Marconi (Civitavecchia, Rome) — *2015–2020*  
-  **Final mark:** 100/100.  
+  **Final mark:** 100/100  
   **Thesis/Project:** *Electric Company: Ticketing System* — [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). 
 
 ### Visiting Research
 
 - **Space Robotics** — Tohoku University, Space Robotics Lab, Sendai, Japan 🇯🇵 — *June–July 2025*  
-  **Supervisor:** [Prof. Kazuya Yoshida](https://astro.mech.tohoku.ac.jp/e/).  
+  **Supervisor:** [Prof. Kazuya Yoshida](https://astro.mech.tohoku.ac.jp/e/)  
   **Project:** *MoonBot Navigation* — Autonomous robot for lunar navigation & object interaction. Dijkstra-based path planning, object detection (vision), custom robot design, gripper control.  
-  **Repository:** [MoonBot Navigation (GitHub)](https://github.com/alessioborgi/MoonBot-Navigation).  
-  **Outcome:** Selected as top-1 student for the exchange; **won TESP 2025 Competition**; received **Research Certificate of Excellence**. [Program notes](https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591). 
+  **Repository:** [MoonBot Navigation (GitHub)](https://github.com/alessioborgi/MoonBot-Navigation)  
+  **Outcome:** Selected as top-1 student for the exchange, **won TESP 2025 Competition** and received **Research Certificate of Excellence**. [Program notes](https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591). 
 
 - **AI & Robotics in Healthcare** — Johannes Kepler Universität (JKU), Linz, Austria 🇦🇹 — *Aug–Sept 2024*  
-  **Supervisor:** [Prof. Alexander Steinmaurer](https://it-u.at/en/persons/team/alexander-steinmaurer/).  
+  **Supervisor:** [Prof. Alexander Steinmaurer](https://it-u.at/en/persons/team/alexander-steinmaurer/)  
   **Project:** *CareConnect* — AI-driven system to query environmental/hospital data via chat, generate real-time graphs, and trigger notifications & robotic actions using LangChain.  
   **Repository:** [CareConnect (GitHub)](https://github.com/alessioborgi/CareConnect).  
   **Achievement:** **Best Poster & Project Award** (program showcase). 
