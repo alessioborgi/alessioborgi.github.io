@@ -8,14 +8,14 @@ redirect_from:
 ---
 
 {: .notice--primary}
-### 🚀 I’m open to collaborate!
+### 🚀 I’m always open to collaborate, exchange ideas or just talk about anything!
 **I’m eager to work with anyone who has great ideas, wants to learn more and more and also share their experience to others.** Don’t hesitate to write me if you’d like to propose your help or ask for mine on a project, research, paper-idea, or a moonshot you’re cooking up.  
 👉 <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a> &nbsp; 
 
 ---
 
 ## Hi, I’m Alessio 👋
-I’m a PhD student in **Graph Neural Networks and Generative AI**, under the supervision of [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (University of Cambridge) and [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (Sapienza University of Rome). I have obtained my *Master of Science* in *Artificial Intelligence & Robotics* and my *Bachelor of Science* in *Applied Computer Science and Artificial Intelligence* at *Sapienza University of Rome*, both with the highest marks. My research sits at the intersection of *Graph Neural Networks*, *Geometric Deep Learning*, and *Diffusion Models*, with applications to *Robotics*, *Vision*, and *Biomedical AI*.
+I’m a PhD student in **Graph Neural Networks and Generative AI**, under the supervision of [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (University of Cambridge) and [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (Sapienza University of Rome). I have obtained my Master of Science in *Artificial Intelligence & Robotics* and my Bachelor of Science in *Applied Computer Science and Artificial Intelligence* at Sapienza University of Rome, both with the highest marks. My research sits at the intersection of *Graph Neural Networks*, *Geometric Deep Learning*, and *Diffusion Models*, with applications to *Robotics*, *Vision*, and *Biomedical AI*.
 
 I love turning rigorous theory into working systems—and then open-sourcing the whole thing so others can build on it.
 

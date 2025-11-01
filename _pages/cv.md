@@ -7,58 +7,101 @@ redirect_from:
   - /resume
 ---
 
-{% include base_path %}
 
-Education
-======
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
-* M.S. in Jekyll, GitHub University, 2014
-* B.S. in GitHub, GitHub University, 2012
+{: .notice--primary}
+### 🚀 I’m always open to collaborate, exchange ideas or just talk about anything!
+**I’m eager to work with anyone who has great ideas, wants to learn more and more and also share their experience to others.** Don’t hesitate to write me if you’d like to propose your help or ask for mine on a project, research, paper-idea, or a moonshot you’re cooking up.  
+👉 <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a> &nbsp; 
 
-Work experience
-======
-* Spring 2024: Academic Pages Collaborator
-  * GitHub University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
+---
 
-* Fall 2015: Research Assistant
-  * GitHub University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+## Profile
+Master’s student in **AI & Robotics** at **Sapienza University of Rome**, developing a thesis with **Prof. Pietro Liò (University of Cambridge)** on **Equivariant Sheaf Neural Networks** and **controllable diffusion on graphs**. I bridge rigorous theory (equivariance, fiber-aware transports, polynomial/sheaf diffusion) with practical systems for **vision**, **robotics**, and **biomedical AI**. First author of a **CVPR 2025 Workshop** paper on zero-shot style alignment (**Z-SASLM**).
 
-* Summer 2015: Research Assistant
-  * GitHub University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
-  
-Skills
-======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+**Interests:** Graph/Sheaf Neural Networks · Equivariance (E(n)) · Polynomial/Sheaf Diffusion · Diffusion Models · Computer Vision · Robotics (planning, control) · Brain/EEG Graphs
 
-Publications
-======
-  <ul>{% for post in site.publications reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Talks
-======
-  <ul>{% for post in site.talks reversed %}
-    {% include archive-single-talk-cv.html  %}
-  {% endfor %}</ul>
-  
-Teaching
-======
-  <ul>{% for post in site.teaching reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Service and leadership
-======
-* Currently signed in to 43 different slack teams
+---
+
+## Education
+- **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University of Rome — *2023–present*  
+  **Thesis (with Prof. Pietro Liò, University of Cambridge):** *Equivariant Sheaf Neural Networks for Controllable Graph Generation*  
+  Focus: Equivariant fiber-aware transports, Chebyshev-filtered diffusion, style-aligned generation on graphs/proteins.
+
+- **Summer Schools**
+  - **M2L Summer School, Milan** — 2024 · Poster + research sprint
+  - **Linz Summer School, Austria** — 2024 · *CareConnect* demo & poster
+
+---
+
+## Publications
+<ul>
+{% for post in site.publications reversed %}
+  {% include archive-single-cv.html %}
+{% endfor %}
+</ul>
+
+**Selected:**  
+- Borgi, A.; Maiano, L.; Amerini, I. (2025). **Z-SASLM: Zero-Shot Style-Aligned SLI Blending for Latent Manipulation.** *CVPR 2025 Workshops (CVEU)*.
+
+---
+
+## Research & Project Experience
+- **Style Alignment & Latent Manipulation** — *2024–2025*  
+  - First author on **Z-SASLM** (CVPR 2025 Workshops). Zero-shot, fine-tuning-free **multi-style blending** via **SLI** in latent space; stronger consistency metrics and robust content preservation.
+
+- **Equivariant Sheaf Neural Networks** — *2024–2025*  
+  - Designed **Equivariant Sheaf Diffusion** with fiber-aware transports and polynomial filters (Chebyshev). Implemented stable training, runtime/accuracy trade-offs, and ablations across synthetic + real graph benchmarks.
+
+- **SPQR RoboCup Team (NAO)** — *2024–2025*  
+  - Analyzed and extended **WalkKickEngine**; experiments on gait & kick dynamics; simulation to field-ready tuning.
+
+- **CareConnect (clinical orchestration)** — *2024*  
+  - Chat + graph pipeline that queries data and sequences robotic actions; demos at summer schools.
+
+---
+
+## Awards
+- **Best Poster Award**, M2L Summer School — 2024  
+- (Team) **Best Paper Award**, M2L Summer School — 2024
+
+---
+
+## Talks, Posters & Participation
+- **CVPR 2025 Workshops (CVEU)** — *Poster:* Z-SASLM  
+- **M2L Summer School 2024** — *Best Poster*  
+- **Linz Summer School 2024** — *Project demo & poster*
+
+*See also:* [Participation & Talks](/participation-talks/)
+
+---
+
+## Skills
+**Core ML/Graph:** PyTorch · PyTorch Geometric · Diffusers · Transformers · W&B · NumPy · SciPy  
+**Equivariance/Geometry:** E(n)-equivariant models · fiber transports · spectral/polynomial filtering  
+**Vision & GenAI:** diffusion pipelines · latent manipulation · CLAP/Whisper integration  
+**Robotics & Systems:** MATLAB · ROS · SLAM basics · control & kinematics · simulation  
+**Tooling:** CUDA · Git · Linux · Docker · LaTeX · Hydra/YAML sweeps
+
+---
+
+## Teaching & Mentoring
+<ul>
+{% for post in site.teaching reversed %}
+  {% include archive-single-cv.html %}
+{% endfor %}
+</ul>
+
+*(If you want this section populated, add entries to the `_teaching/` collection.)*
+
+---
+
+## Service & Leadership
+- Open-source maintainer/contributor on research repos (SheafNNs, Equivariant diffusion, XGNN-GraphGenRL, CareConnect).  
+- Repro-first culture: fixed seeds, honest baselines, ablations, CD diagrams, runtime vs accuracy plots.
+
+---
+
+## Contact
+- 📧 **Email:** <a href="mailto:borgialessio01@gmail.com">borgialessio01@gmail.com</a>  
+- 🔗 **GitHub:** <a href="https://github.com/alessioborgi">alessioborgi</a> · **Scholar:** <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">profile</a> · **ORCID:** <a href="https://orcid.org/0009-0007-1979-0857">0009-0007-1979-0857</a>  
+- 📄 **Full CV (PDF):** <a href="/assets/Alessio_Borgi_CV_Short.pdf">download</a>
