@@ -15,15 +15,12 @@ redirect_from:
 
 ---
 
-## Profile
-Master’s student in **AI & Robotics** at **Sapienza University of Rome**, developing a thesis with **Prof. Pietro Liò (University of Cambridge)** on **Equivariant Sheaf Neural Networks** and **controllable diffusion on graphs**. I bridge rigorous theory (equivariance, fiber-aware transports, polynomial/sheaf diffusion) with practical systems for **vision**, **robotics**, and **biomedical AI**. First author of a **CVPR 2025 Workshop** paper on zero-shot style alignment (**Z-SASLM**).
-
-**Interests:** Graph/Sheaf Neural Networks · Equivariance (E(n)) · Polynomial/Sheaf Diffusion · Diffusion Models · Computer Vision · Robotics (planning, control) · Brain/EEG Graphs
-
----
 
 ## Education
-- **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University of Rome — *2023–present*  
+- **Ph.D. in Engineering in Computer Science - Artificial Intelligence**, Sapienza University of Rome — *2025–present*  
+  **Thesis (with Prof. Pietro Liò, University of Cambridge):** *Equivariant Sheaf Neural Networks for Controllable Graph Generation*  
+  Focus: Equivariant fiber-aware transports, Chebyshev-filtered diffusion, style-aligned generation on graphs/proteins.
+- **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University of Rome — *2023–2025*  
   **Thesis (with Prof. Pietro Liò, University of Cambridge):** *Equivariant Sheaf Neural Networks for Controllable Graph Generation*  
   Focus: Equivariant fiber-aware transports, Chebyshev-filtered diffusion, style-aligned generation on graphs/proteins.
 
