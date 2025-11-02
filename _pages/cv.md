@@ -34,7 +34,7 @@ redirect_from:
   **Courses:** Deep Learning, AI Lab & Computer Vision, Machine Learning, Artificial Intelligence, Web & Software Architecture, Cybersecurity, Programming I/II (+ Lab), Databases, HCI, Networking, Operating Systems, Algorithms, Statistics, Startup & Management, Business & CS, Computer Architecture, Calculus I/II/III, Linear Algebra, Physics, Probability, Foundations of CS.  
   **Membership:** [OmniAI Lab](https://omnai.di.uniroma1.it/undergrad/). 
 
-- **Secondary School — Information Technology**, I.I.S. Guglielmo Marconi, Civitavecchia — *2015–2020*  
+- **Secondary School — Information Technology**, I.I.S. Guglielmo Marconi, Civitavecchia 🇮🇹 — *2015–2020*  
   **Final mark:** 100/100  
   **Thesis/Project:** *Electric Company: Ticketing System* — [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). 
 
@@ -76,11 +76,10 @@ redirect_from:
 ---
 
 ## Skills
-**Core ML/Graph:** PyTorch · PyTorch Geometric · Diffusers · Transformers · W&B · NumPy · SciPy  
-**Equivariance/Geometry:** E(n)-equivariant models · fiber transports · spectral/polynomial filtering  
-**Vision & GenAI:** diffusion pipelines · latent manipulation · CLAP/Whisper integration  
-**Robotics & Systems:** MATLAB · ROS · SLAM basics · control & kinematics · simulation  
-**Tooling:** CUDA · Git · Linux · Docker · LaTeX · Hydra/YAML sweeps
+**Programming Languages:** Python · Java · C++ · Matlab · Java-FX · Swing · FXML · RISC-V · GO · JavaScript · VueJS · OpenAPI · CSS · HTML · SQL · PHP · Flutter 
+**Core ML/Graph:** PyTorch · Tensorflow · Diffusers · Transformers · W&B · NumPy · PySpark · Pandas · OpenCV 
+**Robotics & Systems:** ROS · Rviz · WeBots · GMapping
+**Tooling:** CUDA · Git · Linux · Docker · LaTeX · Hydra/YAML · Streamlit · Figma · Arduino · Raspberry Pi · Docker · WordPress · Axios
 
 ---
 
@@ -114,5 +113,6 @@ redirect_from:
 
 ## Contact
 - 📧 **Email:** <a href="mailto:alessio.borgi@uniroma1.it">alessio.borgi@uniroma1.it</a> <a href="mailto:borgialessio01@gmail.com">borgialessio01@gmail.com</a>  
-- 🔗 **GitHub:** <a href="https://github.com/alessioborgi">alessioborgi</a> · **Scholar:** <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">profile</a> · **ORCID:** <a href="https://orcid.org/0009-0007-1979-0857">0009-0007-1979-0857</a>  
-- 📄 **Full CV (PDF):** <a href="/assets/Alessio_Borgi_CV_Short.pdf">download</a>
+- 🔗 **GitHub:** <a href="https://github.com/alessioborgi">alessioborgi</a> 
+-  **Scholar:** <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">profile</a> 
+- å **ORCID:** <a href="https://orcid.org/0009-0007-1979-0857">0009-0007-1979-0857</a>  

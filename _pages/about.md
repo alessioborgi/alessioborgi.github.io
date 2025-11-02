@@ -27,44 +27,220 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 {% assign posts = site.posts | size | default: 0 %}
 {% assign projects = site.projects | size | default: 0 %}
 
-<style>
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:1.25rem 0}
-.stat-card{border:1px solid var(--mm-grey-300,#e6e6e6);border-radius:12px;padding:1rem;background:var(--mm-bg,#fff);box-shadow:0 1px 0 rgba(0,0,0,.03)}
-.stat-num{font-size:2rem;line-height:1.1;font-weight:800;margin:0}
-.stat-lab{opacity:.8;margin-top:.25rem}
-.badges{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
-.focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
-.focus-card{border:1px solid var(--mm-grey-300,#e6e6e6);border-radius:12px;padding:1rem;background:var(--mm-bg,#fff)}
-.chips{display:flex;flex-wrap:wrap;gap:.5rem}
-.chip{border:1px solid var(--mm-grey-300,#ddd);border-radius:999px;padding:.2rem .65rem;font-size:.85rem;text-decoration:none}
-.chip:hover{border-color:currentColor;text-decoration:none}
-.featured{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
-.card{border:1px solid var(--mm-grey-300,#e6e6e6);border-radius:12px;padding:1rem;background:var(--mm-bg,#fff)}
-.card h4{margin-top:0}
-</style>
+<!-- ====== GITHUB STATS (drop-in) ====== -->
+<section id="gh-stats" data-username="alessioborgi">
+  <style>
+    #gh-stats{margin:1.25rem 0}
+    #gh-stats .grid{display:grid;gap:1rem}
+    #gh-stats .grid.cols-4{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+    #gh-stats .card{border:1px solid var(--mm-grey-300,#e6e6e6);border-radius:14px;background:var(--mm-bg,#fff);
+      box-shadow:0 1px 0 rgba(0,0,0,.04)}
+    #gh-stats .card .pad{padding:1rem}
+    #gh-stats h3{margin:.35rem 0 .75rem 0}
+    #gh-stats .stat{display:flex;align-items:baseline;gap:.5rem}
+    #gh-stats .num{font-size:2.1rem;font-weight:800;line-height:1}
+    #gh-stats .lab{opacity:.8}
+    /* skeleton */
+    #gh-stats .skeleton{position:relative;overflow:hidden;background:linear-gradient(90deg,rgba(0,0,0,.06),rgba(0,0,0,.03),rgba(0,0,0,.06));min-height:24px;border-radius:8px}
+    #gh-stats .skeleton::after{content:"";position:absolute;inset:0;
+      animation:shine 1.2s infinite; background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent)}
+    @keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    /* chips */
+    #gh-stats .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+    #gh-stats .chip{border:1px solid var(--mm-grey-300,#ddd);border-radius:999px;padding:.18rem .6rem;font-size:.8rem;text-decoration:none}
+    #gh-stats .chip:hover{border-color:currentColor;text-decoration:none}
+    /* repo grid */
+    #gh-stats .repos{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+    #gh-stats .repo h4{margin:0 0 .4rem 0;font-size:1.05rem}
+    #gh-stats .repo p{margin:.2rem 0 .6rem 0}
+    #gh-stats .meta{display:flex;gap:.75rem;flex-wrap:wrap;opacity:.85}
+    #gh-stats .meta .dot{width:.6rem;height:.6rem;border-radius:50%;display:inline-block;margin-right:.35rem;vertical-align:middle}
+    /* language bars */
+    #gh-stats .lang-wrap{margin-top:.25rem}
+    #gh-stats .lang-row{display:flex;align-items:center;gap:.5rem;margin:.35rem 0}
+    #gh-stats .lang-name{min-width:120px;font-size:.9rem}
+    #gh-stats .bar{flex:1;height:.65rem;border-radius:999px;background:var(--mm-grey-200,#eee);overflow:hidden}
+    #gh-stats .bar > span{display:block;height:100%}
+    /* heatmap img responsive */
+    #gh-stats .heatmap img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--mm-grey-300,#e6e6e6)}
+    /* dark tweak for external image */
+    @media (prefers-color-scheme: dark){
+      #gh-stats .heatmap img{filter: invert(1) hue-rotate(180deg) contrast(1.1)}
+    }
+  </style>
 
-### At a glance
-<div class="stats-grid">
-  <div class="stat-card">
-    <div class="stat-num">{{ pubs }}</div>
-    <div class="stat-lab">Publications</div>
+  <!-- 1) KPI Cards -->
+  <div class="grid cols-4">
+    <div class="card"><div class="pad">
+      <div class="lab">Total Stars</div>
+      <div class="stat"><div class="num" id="gh-stars" aria-live="polite">—</div></div>
+    </div></div>
+    <div class="card"><div class="pad">
+      <div class="lab">Total Forks</div>
+      <div class="stat"><div class="num" id="gh-forks">—</div></div>
+    </div></div>
+    <div class="card"><div class="pad">
+      <div class="lab">Public Repos</div>
+      <div class="stat"><div class="num" id="gh-repos">—</div></div>
+    </div></div>
+    <div class="card"><div class="pad">
+      <div class="lab">Followers</div>
+      <div class="stat"><div class="num" id="gh-followers">—</div></div>
+    </div></div>
   </div>
-  <div class="stat-card">
-    <div class="stat-num">{{ talks }}</div>
-    <div class="stat-lab">Talks & Workshops</div>
+
+  <!-- 2) Top Languages + Heatmap -->
+  <div class="grid" style="margin-top:1rem">
+    <div class="card"><div class="pad">
+      <h3>Top Languages</h3>
+      <div id="gh-langs">
+        <div class="skeleton" style="height:120px"></div>
+      </div>
+      <div class="chips" id="gh-lang-chips"></div>
+    </div></div>
+
+    <div class="card"><div class="pad heatmap">
+      <h3>Contribution Heatmap</h3>
+      <!-- external, auto-updating chart; color inverted on dark mode -->
+      <img id="gh-heatmap" alt="GitHub contribution heatmap"/>
+      <div class="lab" style="margin-top:.4rem">
+        Source: GitHub contributions (last 1y)
+      </div>
+    </div></div>
   </div>
-  <div class="stat-card">
-    <div class="stat-num">{{ projects }}</div>
-    <div class="stat-lab">Projects (site collection)</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">{{ posts }}</div>
-    <div class="stat-lab">Blog Posts</div>
-    <div class="badges">
-      <img src="https://img.shields.io/github/followers/alessioborgi?label=GitHub%20followers&style=flat" alt="GitHub followers badge">
+
+  <!-- 3) Popular Repositories (auto, like pinned) -->
+  <div class="card" style="margin-top:1rem"><div class="pad">
+    <h3>Popular Repositories</h3>
+    <div class="repos" id="gh-repos-grid">
+      <div class="skeleton" style="height:140px"></div>
+      <div class="skeleton" style="height:140px"></div>
+      <div class="skeleton" style="height:140px"></div>
     </div>
-  </div>
-</div>
+  </div></div>
+
+  <script>
+    (function(){
+      const root = document.getElementById('gh-stats');
+      if(!root) return;
+      const u = root.dataset.username || 'alessioborgi';
+
+      const el = sel => root.querySelector(sel);
+      const fmt = n => n.toLocaleString(undefined);
+
+      // endpoints
+      const USER = `https://api.github.com/users/${u}`;
+      const REPOS = `https://api.github.com/users/${u}/repos?per_page=100&type=owner&sort=updated`;
+
+      // heatmap (external image service)
+      const heat = el('#gh-heatmap');
+      heat.src = `https://ghchart.rshah.org/${u}`;
+
+      // color palette for language bars
+      const langColor = (name) => {
+        // Tiny built-in palette (fallback); GitHub’s exact colors are in linguist, but we keep it light.
+        const m = {
+          "Python":"#3572A5","Jupyter Notebook":"#DA5B0B","MATLAB":"#e16737","C++":"#f34b7d",
+          "C":"#555555","JavaScript":"#f1e05a","TypeScript":"#3178c6","HTML":"#e34c26","CSS":"#563d7c",
+          "Shell":"#89e051","Rust":"#dea584","Go":"#00ADD8","Scala":"#c22d40","Julia":"#a270ba",
+          "TeX":"#3D6117","R":"#198CE7","Dockerfile":"#384d54","Makefile":"#427819"
+        };
+        return m[name] || "#6a9fb5";
+      };
+
+      // rate-limit safety
+      const ghFetch = (url) => fetch(url, {
+        headers: {
+          "Accept":"application/vnd.github+json",
+          "X-GitHub-Api-Version":"2022-11-28"
+        }
+      }).then(r=>{
+        if(!r.ok) throw new Error("GitHub API: "+r.status);
+        return r.json();
+      });
+
+      Promise.all([ghFetch(USER), ghFetch(REPOS)]).then(async ([user, repos])=>{
+        // KPIs
+        const totalStars = repos.reduce((a,r)=>a+(r.stargazers_count||0),0);
+        const totalForks = repos.reduce((a,r)=>a+(r.forks_count||0),0);
+        el('#gh-stars').textContent = fmt(totalStars);
+        el('#gh-forks').textContent = fmt(totalForks);
+        el('#gh-repos').textContent = fmt(user.public_repos||repos.length||0);
+        el('#gh-followers').textContent = fmt(user.followers||0);
+
+        // Popular repos = top by stars (owner-only)
+        const top = repos
+          .filter(r=>!r.fork) // your originals
+          .sort((a,b)=>(b.stargazers_count||0)-(a.stargazers_count||0))
+          .slice(0,6);
+
+        const grid = el('#gh-repos-grid');
+        grid.innerHTML = '';
+        top.forEach(r=>{
+          const lang = r.language || '—';
+          const card = document.createElement('div');
+          card.className = 'repo card';
+          card.innerHTML = `
+            <div class="pad">
+              <h4><a href="${r.html_url}" target="_blank" rel="noopener">${r.name}</a></h4>
+              <p>${(r.description||'').replace(/</g,'&lt;')}</p>
+              <div class="meta">
+                <span><span class="dot" style="background:${langColor(lang)}"></span>${lang}</span>
+                <span>⭐ ${fmt(r.stargazers_count||0)}</span>
+                <span>🍴 ${fmt(r.forks_count||0)}</span>
+                <span>📦 ${fmt(r.size||0)} KB</span>
+              </div>
+            </div>`;
+          grid.appendChild(card);
+        });
+
+        // Top Languages (weighted by stars for top repos to keep API calls light)
+        // Option A (lightweight): weight by each repo's stars
+        const langWeighted = {};
+        top.forEach(r=>{
+          const l = r.language || 'Other';
+          const w = Math.max(1, r.stargazers_count||0);
+          langWeighted[l] = (langWeighted[l]||0) + w;
+        });
+        // If all zero (new account), fall back to simple counts
+        const entries = Object.entries(langWeighted).length ? Object.entries(langWeighted) :
+                        Object.entries(repos.reduce((acc,r)=>{const l=r.language||'Other'; acc[l]=(acc[l]||0)+1; return acc;},{}));
+        // normalize
+        const totalW = entries.reduce((a,[_l,v])=>a+v,0) || 1;
+        const topLangs = entries.sort((a,b)=>b[1]-a[1]).slice(0,6);
+
+        const wrap = el('#gh-langs');
+        wrap.innerHTML = '';
+        topLangs.forEach(([name,val])=>{
+          const pct = Math.round((val/totalW)*100);
+          const row = document.createElement('div');
+          row.className = 'lang-row';
+          row.innerHTML = `
+            <div class="lang-name">${name}</div>
+            <div class="bar"><span style="width:${pct}%;background:${langColor(name)}"></span></div>
+            <div class="lab">${pct}%</div>`;
+          wrap.appendChild(row);
+        });
+
+        // chips
+        const chips = el('#gh-lang-chips');
+        chips.innerHTML = '';
+        topLangs.forEach(([name])=>{
+          const span = document.createElement('span');
+          span.className = 'chip';
+          span.textContent = name;
+          chips.appendChild(span);
+        });
+
+      }).catch(err=>{
+        // graceful fallback
+        el('#gh-repos-grid').innerHTML = `<p class="lab">Couldn’t load live GitHub stats right now (rate limit?). The section will refresh on your next visit.</p>`;
+        console.error(err);
+      });
+    })();
+  </script>
+</section>
+<!-- ====== /GITHUB STATS ====== -->
 
 ---
 
