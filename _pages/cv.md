@@ -17,24 +17,24 @@ redirect_from:
 
 ## Education
 
-- **Ph.D. in Engineering in Computer Science — Artificial Intelligence**, Sapienza University of Rome & University of Cambridge — *2025–present*  
-  **Supervisors:** [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (primary), [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (co-supervisor)  
+- **Ph.D. in Engineering in Computer Science — Artificial Intelligence**, Sapienza University 🇮🇹 & University of Cambridge 🇬🇧 — *2025–present*  
+  **Supervisors:** [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (supervisor), [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (co-supervisor)  
   **Focus:** Graph Neural Networks & Generative AI 
   
 
-- **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University of Rome — *2023–2025*  
+- **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University 🇮🇹 — *2023–2025*  
   **Final mark:** 110/110  
   **Thesis:** *Polynomial Sheaf Diffusion and Equivariant Sheaf Neural Networks* (link in progress)  
   **Courses:** Artificial Intelligence, Machine Learning, Neural Networks, Robot Programming, Robotics I & II, NeuroEngineering, Computer Vision, Medical Robotics, Reinforcement Learning, Autonomous & Mobile Robotics, Deep Learning, Advanced ML, Generative AI Safety, HRI, Robot Benchmarking & Competitions, Multilingual NLP.  
   **Memberships:** [ALCOR Lab](https://alcorlab.diag.uniroma1.it/) and [ISPAMM Lab](https://sites.google.com/uniroma1.it/ispamm/). 
 
-- **B.Sc. in Applied Computer Science and Artificial Intelligence**, Sapienza University of Rome — *2020–2023*  
+- **B.Sc. in Applied Computer Science and Artificial Intelligence**, Sapienza University 🇮🇹 — *2020–2023*  
   **Final mark:** 110/110 with Honours  
   **Thesis:** *Building Real-Time Multivariate Anomaly Detection Systems in Industry’s 5G Networks: A Comprehensive Workflow* — [GitHub](https://github.com/alessioborgi/Bachelor-s-Thesis).  
-  **Courses (selected):** Deep Learning, AI Lab & Computer Vision, Machine Learning, Artificial Intelligence, Web & Software Architecture, Cybersecurity, Programming I/II (+ Lab), Databases, HCI, Networking, Operating Systems, Algorithms, Statistics, Startup & Management, Business & CS, Computer Architecture, Calculus I/II/III, Linear Algebra, Physics, Probability, Foundations of CS.  
+  **Courses:** Deep Learning, AI Lab & Computer Vision, Machine Learning, Artificial Intelligence, Web & Software Architecture, Cybersecurity, Programming I/II (+ Lab), Databases, HCI, Networking, Operating Systems, Algorithms, Statistics, Startup & Management, Business & CS, Computer Architecture, Calculus I/II/III, Linear Algebra, Physics, Probability, Foundations of CS.  
   **Membership:** [OmniAI Lab](https://omnai.di.uniroma1.it/undergrad/). 
 
-- **Secondary School — Information Technology**, I.I.S. Guglielmo Marconi (Civitavecchia, Rome) — *2015–2020*  
+- **Secondary School — Information Technology**, I.I.S. Guglielmo Marconi, Civitavecchia — *2015–2020*  
   **Final mark:** 100/100  
   **Thesis/Project:** *Electric Company: Ticketing System* — [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). 
 
@@ -56,7 +56,7 @@ redirect_from:
 
 ## Work Experience
 
-- **AI & ML Software Research Engineer (Intern)** — Hewlett Packard Enterprise (HPE), PathFinder — *Mar 2023 – Aug 2023*  
+- **AI & ML Software Research Engineer (Intern)** — Hewlett Packard Enterprise (HPE) — *Mar 2023 – Aug 2023*  
   Research on **Multivariate Anomaly Detection** over **5G time-series**.  
   – Designed a **customer-centered & customer-agnostic workflow**: from network data integration to feature selection for anomaly identification.  
   – Validated with a **major network customer**, reducing models to train/maintain and lowering design/inference resource/time requirements while **preserving overall metrics**.  
@@ -66,10 +66,12 @@ redirect_from:
 ---
 
 ## Awards
-- **Best Poster Award** — DeepMind’s Mediterranean Machine Learning (M2L) Summer School, 2024.
-- **Best Paper Award (team)** — HPE PathFinder, 2023.
-- **Honourable Mention (Hackathon)** — Hewlett Packard Enterprise, 2023.  
-- **Generative AI Safety Challenge (DL2025)** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), 2025. 
+- **Research Certificate of Excellence** - Selected as top-1 student for the exchange, **won TESP 2025 Competition**, Tohoku University 2025.
+- **Generative AI Safety Challenge** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), Rome 2025. 
+- **Best Poster Award** — DeepMind’s Mediterranean Machine Learning (M2L) Summer School, Milan 2024.
+- **Best Paper Award (team)** — HPE PathFinder, Rome 2023.
+- **Honourable Mention (Hackathon)** — Hewlett Packard Enterprise, Rome 2023.  
+
 
 ---
 
