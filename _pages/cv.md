@@ -77,8 +77,11 @@ redirect_from:
 
 ## Skills
 **Programming Languages:** Python · Java · C++ · Matlab · Java-FX · Swing · FXML · RISC-V · GO · JavaScript · VueJS · OpenAPI · CSS · HTML · SQL · PHP · Flutter 
+
 **Core ML/Graph:** PyTorch · Tensorflow · Diffusers · Transformers · W&B · NumPy · PySpark · Pandas · OpenCV 
+
 **Robotics & Systems:** ROS · Rviz · WeBots · GMapping
+
 **Tooling:** CUDA · Git · Linux · Docker · LaTeX · Hydra/YAML · Streamlit · Figma · Arduino · Raspberry Pi · Docker · WordPress · Axios
 
 ---
