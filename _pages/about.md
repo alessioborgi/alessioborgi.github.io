@@ -22,10 +22,10 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 <!--  At-a-glance Stats     -->
 <!-- ====================== -->
 
-{% assign pubs = site.publications | size | default: 0 %}
+<!-- {% assign pubs = site.publications | size | default: 0 %}
 {% assign talks = site.talks | size | default: 0 %}
 {% assign posts = site.posts | size | default: 0 %}
-{% assign projects = site.projects | size | default: 0 %}
+{% assign projects = site.projects | size | default: 0 %} -->
 
 <section id="gh-stats" data-username="alessioborgi" data-token="">
   <style>
