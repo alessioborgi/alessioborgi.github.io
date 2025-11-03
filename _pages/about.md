@@ -27,23 +27,22 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 {% assign posts = site.posts | size | default: 0 %}
 {% assign projects = site.projects | size | default: 0 %}
 
-<!-- ====== GITHUB STATS (drop-in) ====== -->
-<section id="gh-stats" data-username="alessioborgi">
+<section id="gh-stats" data-username="alessioborgi" data-token="">
   <style>
     #gh-stats{margin:1.25rem 0}
     #gh-stats .grid{display:grid;gap:1rem}
     #gh-stats .grid.cols-4{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
     #gh-stats .card{border:1px solid var(--mm-grey-300,#e6e6e6);border-radius:14px;background:var(--mm-bg,#fff);
       box-shadow:0 1px 0 rgba(0,0,0,.04)}
-    #gh-stats .card .pad{padding:1rem}
+    #gh-stats .pad{padding:1rem}
     #gh-stats h3{margin:.35rem 0 .75rem 0}
     #gh-stats .stat{display:flex;align-items:baseline;gap:.5rem}
     #gh-stats .num{font-size:2.1rem;font-weight:800;line-height:1}
     #gh-stats .lab{opacity:.8}
     /* skeleton */
     #gh-stats .skeleton{position:relative;overflow:hidden;background:linear-gradient(90deg,rgba(0,0,0,.06),rgba(0,0,0,.03),rgba(0,0,0,.06));min-height:24px;border-radius:8px}
-    #gh-stats .skeleton::after{content:"";position:absolute;inset:0;
-      animation:shine 1.2s infinite; background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent)}
+    #gh-stats .skeleton::after{content:"";position:absolute;inset:0;animation:shine 1.2s infinite;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent)}
     @keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
     /* chips */
     #gh-stats .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
@@ -56,60 +55,43 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     #gh-stats .meta{display:flex;gap:.75rem;flex-wrap:wrap;opacity:.85}
     #gh-stats .meta .dot{width:.6rem;height:.6rem;border-radius:50%;display:inline-block;margin-right:.35rem;vertical-align:middle}
     /* language bars */
-    #gh-stats .lang-wrap{margin-top:.25rem}
     #gh-stats .lang-row{display:flex;align-items:center;gap:.5rem;margin:.35rem 0}
     #gh-stats .lang-name{min-width:120px;font-size:.9rem}
     #gh-stats .bar{flex:1;height:.65rem;border-radius:999px;background:var(--mm-grey-200,#eee);overflow:hidden}
     #gh-stats .bar > span{display:block;height:100%}
-    /* heatmap img responsive */
+    /* heatmap */
     #gh-stats .heatmap img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--mm-grey-300,#e6e6e6)}
-    /* dark tweak for external image */
     @media (prefers-color-scheme: dark){
       #gh-stats .heatmap img{filter: invert(1) hue-rotate(180deg) contrast(1.1)}
     }
   </style>
 
-  <!-- 1) KPI Cards -->
+  <!-- KPI Cards -->
   <div class="grid cols-4">
-    <div class="card"><div class="pad">
-      <div class="lab">Total Stars</div>
-      <div class="stat"><div class="num" id="gh-stars" aria-live="polite">—</div></div>
-    </div></div>
-    <div class="card"><div class="pad">
-      <div class="lab">Total Forks</div>
-      <div class="stat"><div class="num" id="gh-forks">—</div></div>
-    </div></div>
-    <div class="card"><div class="pad">
-      <div class="lab">Public Repos</div>
-      <div class="stat"><div class="num" id="gh-repos">—</div></div>
-    </div></div>
-    <div class="card"><div class="pad">
-      <div class="lab">Followers</div>
-      <div class="stat"><div class="num" id="gh-followers">—</div></div>
-    </div></div>
+    <div class="card"><div class="pad"><div class="lab">Total Stars</div><div class="stat"><div class="num" id="gh-stars">—</div></div></div></div>
+    <div class="card"><div class="pad"><div class="lab">Total Forks</div><div class="stat"><div class="num" id="gh-forks">—</div></div></div></div>
+    <div class="card"><div class="pad"><div class="lab">Public Repos</div><div class="stat"><div class="num" id="gh-repos">—</div></div></div></div>
+    <div class="card"><div class="pad"><div class="lab">Followers</div><div class="stat"><div class="num" id="gh-followers">—</div></div></div></div>
   </div>
 
-  <!-- 2) Top Languages + Heatmap -->
+  <!-- Top Languages + Heatmap -->
   <div class="grid" style="margin-top:1rem">
     <div class="card"><div class="pad">
       <h3>Top Languages</h3>
-      <div id="gh-langs">
-        <div class="skeleton" style="height:120px"></div>
-      </div>
+      <div id="gh-langs"><div class="skeleton" style="height:120px"></div></div>
       <div class="chips" id="gh-lang-chips"></div>
     </div></div>
 
     <div class="card"><div class="pad heatmap">
       <h3>Contribution Heatmap</h3>
-      <!-- external, auto-updating chart; color inverted on dark mode -->
-      <img id="gh-heatmap" alt="GitHub contribution heatmap"/>
-      <div class="lab" style="margin-top:.4rem">
-        Source: GitHub contributions (last 1y)
-      </div>
+      <!-- robust, auto-updating SVG -->
+      <img id="gh-heatmap" alt="GitHub contribution heatmap"
+           src="https://github-readme-activity-graph.vercel.app/graph?username=alessioborgi&hide_border=true&radius=8&area=true&theme=github-light"/>
+      <div class="lab" style="margin-top:.4rem">Source: GitHub contributions (last 1y)</div>
     </div></div>
   </div>
 
-  <!-- 3) Popular Repositories (auto, like pinned) -->
+  <!-- Popular Repositories (auto, like pinned) -->
   <div class="card" style="margin-top:1rem"><div class="pad">
     <h3>Popular Repositories</h3>
     <div class="repos" id="gh-repos-grid">
@@ -124,56 +106,62 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
       const root = document.getElementById('gh-stats');
       if(!root) return;
       const u = root.dataset.username || 'alessioborgi';
+      const token = (root.dataset.token || '').trim(); // optional PAT for reliability
 
       const el = sel => root.querySelector(sel);
-      const fmt = n => n.toLocaleString(undefined);
+      const fmt = n => (typeof n === 'number') ? n.toLocaleString(undefined) : '—';
 
-      // endpoints
-      const USER = `https://api.github.com/users/${u}`;
-      const REPOS = `https://api.github.com/users/${u}/repos?per_page=100&type=owner&sort=updated`;
+      // ---- API helpers (avoid preflight; only safe headers) ----
+      const baseHeaders = token ? { 'Accept':'application/vnd.github+json', 'Authorization':'Bearer '+token } 
+                                : { 'Accept':'application/vnd.github+json' };
 
-      // heatmap (external image service)
-      const heat = el('#gh-heatmap');
-      heat.src = `https://ghchart.rshah.org/${u}`;
+      const gh = (url) => fetch(url, { headers: baseHeaders, mode:'cors', cache:'no-store' })
+        .then(r=>{
+          if(!r.ok) throw new Error(r.status+': '+r.statusText);
+          return r.json().then(data=>({data,headers:r.headers}));
+        });
 
-      // color palette for language bars
-      const langColor = (name) => {
-        // Tiny built-in palette (fallback); GitHub’s exact colors are in linguist, but we keep it light.
-        const m = {
-          "Python":"#3572A5","Jupyter Notebook":"#DA5B0B","MATLAB":"#e16737","C++":"#f34b7d",
-          "C":"#555555","JavaScript":"#f1e05a","TypeScript":"#3178c6","HTML":"#e34c26","CSS":"#563d7c",
-          "Shell":"#89e051","Rust":"#dea584","Go":"#00ADD8","Scala":"#c22d40","Julia":"#a270ba",
-          "TeX":"#3D6117","R":"#198CE7","Dockerfile":"#384d54","Makefile":"#427819"
-        };
-        return m[name] || "#6a9fb5";
+      // paginate through all repos
+      const fetchAllRepos = async () => {
+        let page=1, out=[];
+        while(true){
+          const {data,headers} = await gh(`https://api.github.com/users/${u}/repos?per_page=100&type=owner&sort=updated&page=${page}`);
+          out = out.concat(data);
+          // stop if <100 or no Link: next
+          const link = headers.get('Link') || '';
+          if(data.length < 100 || !/rel="next"/.test(link)) break;
+          page++;
+          if(page>10) break; // safety cap
+        }
+        return out;
       };
 
-      // rate-limit safety
-      const ghFetch = (url) => fetch(url, {
-        headers: {
-          "Accept":"application/vnd.github+json",
-          "X-GitHub-Api-Version":"2022-11-28"
-        }
-      }).then(r=>{
-        if(!r.ok) throw new Error("GitHub API: "+r.status);
-        return r.json();
-      });
+      // small language palette
+      const langColor = name => ({
+        "Python":"#3572A5","Jupyter Notebook":"#DA5B0B","MATLAB":"#e16737","C++":"#f34b7d","C":"#555555",
+        "JavaScript":"#f1e05a","TypeScript":"#3178c6","HTML":"#e34c26","CSS":"#563d7c","Shell":"#89e051",
+        "Go":"#00ADD8","Rust":"#dea584","Scala":"#c22d40","Julia":"#a270ba","TeX":"#3D6117","R":"#198CE7"
+      })[name] || "#6a9fb5";
 
-      Promise.all([ghFetch(USER), ghFetch(REPOS)]).then(async ([user, repos])=>{
+      // main
+      Promise.all([
+        gh(`https://api.github.com/users/${u}`),
+        fetchAllRepos()
+      ]).then(([userResp, repos])=>{
+        const user = userResp.data || {};
+
         // KPIs
-        const totalStars = repos.reduce((a,r)=>a+(r.stargazers_count||0),0);
-        const totalForks = repos.reduce((a,r)=>a+(r.forks_count||0),0);
-        el('#gh-stars').textContent = fmt(totalStars);
-        el('#gh-forks').textContent = fmt(totalForks);
-        el('#gh-repos').textContent = fmt(user.public_repos||repos.length||0);
-        el('#gh-followers').textContent = fmt(user.followers||0);
+        const stars = repos.reduce((a,r)=>a+(r.stargazers_count||0),0);
+        const forks = repos.reduce((a,r)=>a+(r.forks_count||0),0);
+        el('#gh-stars').textContent     = fmt(stars);
+        el('#gh-forks').textContent     = fmt(forks);
+        el('#gh-repos').textContent     = fmt(user.public_repos || repos.length || 0);
+        el('#gh-followers').textContent = fmt(user.followers || 0);
 
-        // Popular repos = top by stars (owner-only)
-        const top = repos
-          .filter(r=>!r.fork) // your originals
-          .sort((a,b)=>(b.stargazers_count||0)-(a.stargazers_count||0))
-          .slice(0,6);
-
+        // Popular repos (top by stars, originals only)
+        const top = repos.filter(r=>!r.fork)
+                         .sort((a,b)=>(b.stargazers_count||0)-(a.stargazers_count||0))
+                         .slice(0,6);
         const grid = el('#gh-repos-grid');
         grid.innerHTML = '';
         top.forEach(r=>{
@@ -188,24 +176,20 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
                 <span><span class="dot" style="background:${langColor(lang)}"></span>${lang}</span>
                 <span>⭐ ${fmt(r.stargazers_count||0)}</span>
                 <span>🍴 ${fmt(r.forks_count||0)}</span>
-                <span>📦 ${fmt(r.size||0)} KB</span>
+                <span>🕒 ${new Date(r.pushed_at).toLocaleDateString()}</span>
               </div>
             </div>`;
           grid.appendChild(card);
         });
 
-        // Top Languages (weighted by stars for top repos to keep API calls light)
-        // Option A (lightweight): weight by each repo's stars
-        const langWeighted = {};
-        top.forEach(r=>{
+        // Top languages (weighted by stars across all repos)
+        const weights = {};
+        repos.forEach(r=>{
           const l = r.language || 'Other';
           const w = Math.max(1, r.stargazers_count||0);
-          langWeighted[l] = (langWeighted[l]||0) + w;
+          weights[l] = (weights[l]||0) + w;
         });
-        // If all zero (new account), fall back to simple counts
-        const entries = Object.entries(langWeighted).length ? Object.entries(langWeighted) :
-                        Object.entries(repos.reduce((acc,r)=>{const l=r.language||'Other'; acc[l]=(acc[l]||0)+1; return acc;},{}));
-        // normalize
+        const entries = Object.entries(weights).filter(([k,v])=>v>0);
         const totalW = entries.reduce((a,[_l,v])=>a+v,0) || 1;
         const topLangs = entries.sort((a,b)=>b[1]-a[1]).slice(0,6);
 
@@ -222,7 +206,6 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
           wrap.appendChild(row);
         });
 
-        // chips
         const chips = el('#gh-lang-chips');
         chips.innerHTML = '';
         topLangs.forEach(([name])=>{
@@ -231,15 +214,23 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
           span.textContent = name;
           chips.appendChild(span);
         });
-
       }).catch(err=>{
-        // graceful fallback
-        el('#gh-repos-grid').innerHTML = `<p class="lab">Couldn’t load live GitHub stats right now (rate limit?). The section will refresh on your next visit.</p>`;
-        console.error(err);
+        console.error('GitHub stats error:', err);
+        el('#gh-repos-grid').innerHTML = `<p class="lab">Couldn’t load live GitHub stats (rate limit or network). Try again later.</p>`;
       });
+
+      // Dark/light heatmap theme swap (optional)
+      const heat = document.getElementById('gh-heatmap');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+      const setHeat = () => {
+        const theme = prefersDark.matches ? 'github-dark' : 'github-light';
+        heat.src = `https://github-readme-activity-graph.vercel.app/graph?username=${u}&hide_border=true&radius=8&area=true&theme=${theme}`;
+      };
+      setHeat(); prefersDark && prefersDark.addEventListener('change', setHeat);
     })();
   </script>
 </section>
+<!-- ====== /GITHUB STATS ====== -->
 <!-- ====== /GITHUB STATS ====== -->
 
 ---
