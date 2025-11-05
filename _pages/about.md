@@ -16,7 +16,7 @@ redirect_from:
 ---
 
 ## Hi, I’m Alessio 👋
-I’m a PhD student in **Graph Neural Networks and Generative AI**, under the supervision of [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (University of Cambridge). I am also co-supervised by [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (Sapienza University of Rome). I have obtained my Master of Science in *Artificial Intelligence & Robotics* and my Bachelor of Science in *Applied Computer Science and Artificial Intelligence* at Sapienza University of Rome, both with the highest marks. My research sits at the intersection of *Graph Neural Networks*, *Geometric Deep Learning*, and *Diffusion Models*, with applications to *Robotics*, *Vision*, and *Biomedical AI*.
+I’m a PhD student in **Graph Neural Networks and Generative AI**, under the supervision of [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (University of Cambridge). I am also co-supervised by [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (Sapienza University of Rome). I have obtained my Master of Science in *Artificial Intelligence & Robotics* and my Bachelor of Science in *Applied Computer Science and Artificial Intelligence* at Sapienza University of Rome, both with the highest marks. My research sits at the intersection of *Graph Neural Networks*, *Geometric Deep Learning*, *Topological Deep Learning* and *Diffusion Models*, with applications to *Robotics*, *Vision*, and *Biomedical AI*.
 
 <!-- ====================== -->
 <!--  At-a-glance Stats     -->
