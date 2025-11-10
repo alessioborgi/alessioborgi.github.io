@@ -1,38 +1,74 @@
-name: Update GitHub stats
+name: Update GitHub stats and deploy
 
 on:
   schedule:
-    - cron: "0 6 * * *"    # every day at 06:00 UTC
-  workflow_dispatch:        # let you run it by hand
-  push:
-    paths:
-      - .github/workflows/github-stats.yml
+    - cron: "55 * * * *"   # every hour at :55 UTC
+  workflow_dispatch:        # allow manual run
+  push:                     # rebuild when you push
+    branches: [ master ]    # your repo shows 'master' in the screenshot
 
 jobs:
-  fetch-and-commit:
+  build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # we will commit _data/github.json
+      contents: write       # we will commit _data/github.json
+      pages: write          # deploy Pages
+      id-token: write
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Fetch GitHub stats
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Generate _data/github.json
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           mkdir -p _data
+          # use your existing script
           python scripts/fetch_github_stats.py alessioborgi "$GH_TOKEN" > _data/github.json
 
-      - name: Commit changes
+      - name: Commit stats (if changed)
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add _data/github.json
-          git commit -m "Update GitHub stats" || echo "No changes"
+          git diff --quiet && echo "No changes" || git commit -m "Update GitHub stats"
           git push
+
+      # Build & deploy Jekyll via Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
