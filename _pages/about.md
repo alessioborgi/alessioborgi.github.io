@@ -27,7 +27,13 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 {% assign posts = site.posts | size | default: 0 %}
 {% assign projects = site.projects | size | default: 0 %} -->
 
-<section id="gh-stats" data-username="alessioborgi" data-token="">
+<!-- ====================== -->
+<!--  At-a-glance Stats     -->
+<!-- ====================== -->
+
+{% assign gh = site.data.github %}
+
+<section id="gh-stats">
   <style>
     #gh-stats{margin:1.25rem 0}
     #gh-stats .grid{display:grid;gap:1rem}
@@ -39,11 +45,6 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     #gh-stats .stat{display:flex;align-items:baseline;gap:.5rem}
     #gh-stats .num{font-size:2.1rem;font-weight:800;line-height:1}
     #gh-stats .lab{opacity:.8}
-    /* skeleton */
-    #gh-stats .skeleton{position:relative;overflow:hidden;background:linear-gradient(90deg,rgba(0,0,0,.06),rgba(0,0,0,.03),rgba(0,0,0,.06));min-height:24px;border-radius:8px}
-    #gh-stats .skeleton::after{content:"";position:absolute;inset:0;animation:shine 1.2s infinite;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent)}
-    @keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
     /* chips */
     #gh-stats .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
     #gh-stats .chip{border:1px solid var(--mm-grey-300,#ddd);border-radius:999px;padding:.18rem .6rem;font-size:.8rem;text-decoration:none}
@@ -53,12 +54,6 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     #gh-stats .repo h4{margin:0 0 .4rem 0;font-size:1.05rem}
     #gh-stats .repo p{margin:.2rem 0 .6rem 0}
     #gh-stats .meta{display:flex;gap:.75rem;flex-wrap:wrap;opacity:.85}
-    #gh-stats .meta .dot{width:.6rem;height:.6rem;border-radius:50%;display:inline-block;margin-right:.35rem;vertical-align:middle}
-    /* language bars */
-    #gh-stats .lang-row{display:flex;align-items:center;gap:.5rem;margin:.35rem 0}
-    #gh-stats .lang-name{min-width:120px;font-size:.9rem}
-    #gh-stats .bar{flex:1;height:.65rem;border-radius:999px;background:var(--mm-grey-200,#eee);overflow:hidden}
-    #gh-stats .bar > span{display:block;height:100%}
     /* heatmap */
     #gh-stats .heatmap img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--mm-grey-300,#e6e6e6)}
     @media (prefers-color-scheme: dark){
@@ -68,169 +63,123 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 
   <!-- KPI Cards -->
   <div class="grid cols-4">
-    <div class="card"><div class="pad"><div class="lab">Total Stars</div><div class="stat"><div class="num" id="gh-stars">—</div></div></div></div>
-    <div class="card"><div class="pad"><div class="lab">Total Forks</div><div class="stat"><div class="num" id="gh-forks">—</div></div></div></div>
-    <div class="card"><div class="pad"><div class="lab">Public Repos</div><div class="stat"><div class="num" id="gh-repos">—</div></div></div></div>
-    <div class="card"><div class="pad"><div class="lab">Followers</div><div class="stat"><div class="num" id="gh-followers">—</div></div></div></div>
+    <div class="card">
+      <div class="pad">
+        <div class="lab">Total Stars</div>
+        <div class="stat">
+          <div class="num">
+            {% if gh and gh.total_stars %}{{ gh.total_stars }}{% else %}—{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="pad">
+        <div class="lab">Total Forks</div>
+        <div class="stat">
+          <div class="num">
+            {% if gh and gh.total_forks %}{{ gh.total_forks }}{% else %}—{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="pad">
+        <div class="lab">Public Repos</div>
+        <div class="stat">
+          <div class="num">
+            {% if gh and gh.public_repos %}{{ gh.public_repos }}{% else %}—{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="pad">
+        <div class="lab">Followers</div>
+        <div class="stat">
+          <div class="num">
+            {% if gh and gh.followers %}{{ gh.followers }}{% else %}—{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Top Languages + Heatmap -->
   <div class="grid" style="margin-top:1rem">
-    <div class="card"><div class="pad">
-      <h3>Top Languages</h3>
-      <div id="gh-langs"><div class="skeleton" style="height:120px"></div></div>
-      <div class="chips" id="gh-lang-chips"></div>
-    </div></div>
+    <div class="card">
+      <div class="pad">
+        <h3>Top Languages</h3>
+        <p class="lab" style="margin-bottom:0">
+          {% if gh and gh.top_languages %}
+            <!-- if later you make your action dump languages, render them here -->
+            {% for lang in gh.top_languages %}
+              <span class="chip">{{ lang.name }} ({{ lang.percent }}%)</span>
+            {% endfor %}
+          {% else %}
+            Not available (build step didn’t export languages).
+          {% endif %}
+        </p>
+      </div>
+    </div>
 
-    <div class="card"><div class="pad heatmap">
-      <h3>Contribution Heatmap</h3>
-      <!-- robust, auto-updating SVG -->
-      <img id="gh-heatmap" alt="GitHub contribution heatmap"
-           src="https://github-readme-activity-graph.vercel.app/graph?username=alessioborgi&hide_border=true&radius=8&area=true&theme=github-light"/>
-      <div class="lab" style="margin-top:.4rem">Source: GitHub contributions (last 1y)</div>
-    </div></div>
+    <div class="card">
+      <div class="pad heatmap">
+        <h3>Contribution Heatmap</h3>
+        <img id="gh-heatmap" alt="GitHub contribution heatmap"
+             src="https://github-readme-activity-graph.vercel.app/graph?username=alessioborgi&hide_border=true&radius=8&area=true&theme=github-light"/>
+        <div class="lab" style="margin-top:.4rem">Source: GitHub contributions (last 1y)</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Popular Repositories (auto, like pinned) -->
-  <div class="card" style="margin-top:1rem"><div class="pad">
-    <h3>Popular Repositories</h3>
-    <div class="repos" id="gh-repos-grid">
-      <div class="skeleton" style="height:140px"></div>
-      <div class="skeleton" style="height:140px"></div>
-      <div class="skeleton" style="height:140px"></div>
+  <!-- Popular Repositories -->
+  <div class="card" style="margin-top:1rem">
+    <div class="pad">
+      <h3>Popular Repositories</h3>
+      <p class="lab">
+        {% if gh and gh.popular_repos %}
+          <!-- if your action writes them -->
+          <div class="repos">
+            {% for repo in gh.popular_repos %}
+              <div class="repo card">
+                <div class="pad">
+                  <h4><a href="{{ repo.html_url }}" target="_blank" rel="noopener">{{ repo.name }}</a></h4>
+                  <p>{{ repo.description }}</p>
+                  <div class="meta">
+                    <span>⭐ {{ repo.stars }}</span>
+                    <span>🍴 {{ repo.forks }}</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          You can make the GitHub Action also dump a list of repos to <code>_data/github.json</code> and it will show here.
+        {% endif %}
+      </p>
     </div>
-  </div></div>
+  </div>
 
   <script>
-    (function(){
-      const root = document.getElementById('gh-stats');
-      if(!root) return;
-      const u = root.dataset.username || 'alessioborgi';
-      const token = (root.dataset.token || '').trim(); // optional PAT for reliability
-
-      const el = sel => root.querySelector(sel);
-      const fmt = n => (typeof n === 'number') ? n.toLocaleString(undefined) : '—';
-
-      // ---- API helpers (avoid preflight; only safe headers) ----
-      const baseHeaders = token ? { 'Accept':'application/vnd.github+json', 'Authorization':'Bearer '+token } 
-                                : { 'Accept':'application/vnd.github+json' };
-
-      const gh = (url) => fetch(url, { headers: baseHeaders, mode:'cors', cache:'no-store' })
-        .then(r=>{
-          if(!r.ok) throw new Error(r.status+': '+r.statusText);
-          return r.json().then(data=>({data,headers:r.headers}));
-        });
-
-      // paginate through all repos
-      const fetchAllRepos = async () => {
-        let page=1, out=[];
-        while(true){
-          const {data,headers} = await gh(`https://api.github.com/users/${u}/repos?per_page=100&type=owner&sort=updated&page=${page}`);
-          out = out.concat(data);
-          // stop if <100 or no Link: next
-          const link = headers.get('Link') || '';
-          if(data.length < 100 || !/rel="next"/.test(link)) break;
-          page++;
-          if(page>10) break; // safety cap
-        }
-        return out;
-      };
-
-      // small language palette
-      const langColor = name => ({
-        "Python":"#3572A5","Jupyter Notebook":"#DA5B0B","MATLAB":"#e16737","C++":"#f34b7d","C":"#555555",
-        "JavaScript":"#f1e05a","TypeScript":"#3178c6","HTML":"#e34c26","CSS":"#563d7c","Shell":"#89e051",
-        "Go":"#00ADD8","Rust":"#dea584","Scala":"#c22d40","Julia":"#a270ba","TeX":"#3D6117","R":"#198CE7"
-      })[name] || "#6a9fb5";
-
-      // main
-      Promise.all([
-        gh(`https://api.github.com/users/${u}`),
-        fetchAllRepos()
-      ]).then(([userResp, repos])=>{
-        const user = userResp.data || {};
-
-        // KPIs
-        const stars = repos.reduce((a,r)=>a+(r.stargazers_count||0),0);
-        const forks = repos.reduce((a,r)=>a+(r.forks_count||0),0);
-        el('#gh-stars').textContent     = fmt(stars);
-        el('#gh-forks').textContent     = fmt(forks);
-        el('#gh-repos').textContent     = fmt(user.public_repos || repos.length || 0);
-        el('#gh-followers').textContent = fmt(user.followers || 0);
-
-        // Popular repos (top by stars, originals only)
-        const top = repos.filter(r=>!r.fork)
-                         .sort((a,b)=>(b.stargazers_count||0)-(a.stargazers_count||0))
-                         .slice(0,6);
-        const grid = el('#gh-repos-grid');
-        grid.innerHTML = '';
-        top.forEach(r=>{
-          const lang = r.language || '—';
-          const card = document.createElement('div');
-          card.className = 'repo card';
-          card.innerHTML = `
-            <div class="pad">
-              <h4><a href="${r.html_url}" target="_blank" rel="noopener">${r.name}</a></h4>
-              <p>${(r.description||'').replace(/</g,'&lt;')}</p>
-              <div class="meta">
-                <span><span class="dot" style="background:${langColor(lang)}"></span>${lang}</span>
-                <span>⭐ ${fmt(r.stargazers_count||0)}</span>
-                <span>🍴 ${fmt(r.forks_count||0)}</span>
-                <span>🕒 ${new Date(r.pushed_at).toLocaleDateString()}</span>
-              </div>
-            </div>`;
-          grid.appendChild(card);
-        });
-
-        // Top languages (weighted by stars across all repos)
-        const weights = {};
-        repos.forEach(r=>{
-          const l = r.language || 'Other';
-          const w = Math.max(1, r.stargazers_count||0);
-          weights[l] = (weights[l]||0) + w;
-        });
-        const entries = Object.entries(weights).filter(([k,v])=>v>0);
-        const totalW = entries.reduce((a,[_l,v])=>a+v,0) || 1;
-        const topLangs = entries.sort((a,b)=>b[1]-a[1]).slice(0,6);
-
-        const wrap = el('#gh-langs');
-        wrap.innerHTML = '';
-        topLangs.forEach(([name,val])=>{
-          const pct = Math.round((val/totalW)*100);
-          const row = document.createElement('div');
-          row.className = 'lang-row';
-          row.innerHTML = `
-            <div class="lang-name">${name}</div>
-            <div class="bar"><span style="width:${pct}%;background:${langColor(name)}"></span></div>
-            <div class="lab">${pct}%</div>`;
-          wrap.appendChild(row);
-        });
-
-        const chips = el('#gh-lang-chips');
-        chips.innerHTML = '';
-        topLangs.forEach(([name])=>{
-          const span = document.createElement('span');
-          span.className = 'chip';
-          span.textContent = name;
-          chips.appendChild(span);
-        });
-      }).catch(err=>{
-        console.error('GitHub stats error:', err);
-        el('#gh-repos-grid').innerHTML = `<p class="lab">Couldn’t load live GitHub stats (rate limit or network). Try again later.</p>`;
-      });
-
-      // Dark/light heatmap theme swap (optional)
+    // keep just the light/dark swap for the external SVG
+    (function() {
       const heat = document.getElementById('gh-heatmap');
+      if (!heat) return;
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
-      const setHeat = () => {
+      const update = () => {
         const theme = prefersDark.matches ? 'github-dark' : 'github-light';
-        heat.src = `https://github-readme-activity-graph.vercel.app/graph?username=${u}&hide_border=true&radius=8&area=true&theme=${theme}`;
+        heat.src = `https://github-readme-activity-graph.vercel.app/graph?username=alessioborgi&hide_border=true&radius=8&area=true&theme=${theme}`;
       };
-      setHeat(); prefersDark && prefersDark.addEventListener('change', setHeat);
+      update();
+      prefersDark && prefersDark.addEventListener('change', update);
     })();
   </script>
 </section>
-<!-- ====== /GITHUB STATS ====== -->
+
 <!-- ====== /GITHUB STATS ====== -->
 
 ---

@@ -1,0 +1,38 @@
+name: Update GitHub stats
+
+on:
+  schedule:
+    - cron: "0 6 * * *"    # every day at 06:00 UTC
+  workflow_dispatch:        # let you run it by hand
+  push:
+    paths:
+      - .github/workflows/github-stats.yml
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # we will commit _data/github.json
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Fetch GitHub stats
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          mkdir -p _data
+          python scripts/fetch_github_stats.py alessioborgi "$GH_TOKEN" > _data/github.json
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _data/github.json
+          git commit -m "Update GitHub stats" || echo "No changes"
+          git push
