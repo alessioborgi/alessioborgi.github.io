@@ -3,38 +3,97 @@ name: Update GitHub stats and deploy
 on:
   schedule:
     - cron: "55 * * * *"   # every hour at :55 UTC
-  workflow_dispatch:        # allow manual run
-  push:                     # rebuild when you push
-    branches: [ master ]    # your repo shows 'master' in the screenshot
+  workflow_dispatch:
+  push:
+    branches: [ master ]   # your repo is on master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write       # we will commit _data/github.json
-      pages: write          # deploy Pages
+      contents: write
+      pages: write
       id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
-
       - name: Generate _data/github.json
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_USER: alessioborgi
         run: |
           mkdir -p _data
-          # use your existing script
-          python scripts/fetch_github_stats.py alessioborgi "$GH_TOKEN" > _data/github.json
+          python - << 'PY'
+          import os, sys, json, urllib.request, urllib.parse
+
+          token = os.environ.get("GH_TOKEN", "")
+          user  = os.environ.get("GITHUB_USER", "")
+          if not user:
+              print("GITHUB_USER is missing", file=sys.stderr)
+              sys.exit(1)
+
+          headers = {"Accept": "application/vnd.github+json"}
+          if token:
+              headers["Authorization"] = f"Bearer {token}"
+
+          def gh(url, params=None):
+              if params:
+                  url = url + "?" + urllib.parse.urlencode(params)
+              req = urllib.request.Request(url, headers=headers)
+              with urllib.request.urlopen(req) as resp:
+                  return json.loads(resp.read().decode("utf-8"))
+
+          # 1) user info
+          user_data = gh(f"https://api.github.com/users/{user}")
+
+          # 2) all repos (owner only), paginated
+          repos = []
+          page = 1
+          while True:
+              data = gh(
+                  f"https://api.github.com/users/{user}/repos",
+                  {"per_page": 100, "page": page, "type": "owner", "sort": "updated"}
+              )
+              if not data:
+                  break
+              repos.extend(data)
+              page += 1
+              if page > 10:   # safety
+                  break
+
+          total_stars = sum(r.get("stargazers_count", 0) for r in repos)
+          total_forks = sum(r.get("forks_count", 0) for r in repos)
+
+          top = sorted(
+              [r for r in repos if not r.get("fork", False)],
+              key=lambda r: r.get("stargazers_count", 0),
+              reverse=True
+          )[:6]
+
+          popular = [{
+              "name": r["name"],
+              "html_url": r["html_url"],
+              "description": r.get("description") or "",
+              "stars": r.get("stargazers_count", 0),
+              "forks": r.get("forks_count", 0),
+              "language": r.get("language") or "—",
+          } for r in top]
+
+          out = {
+              "username": user,
+              "total_stars": total_stars,
+              "total_forks": total_forks,
+              "public_repos": user_data.get("public_repos", len(repos)),
+              "followers": user_data.get("followers", 0),
+              "popular_repos": popular,
+          }
+
+          with open("_data/github.json", "w") as f:
+              json.dump(out, f, indent=2)
+
+          print("✅ wrote _data/github.json")
+          PY
 
       - name: Commit stats (if changed)
         run: |
@@ -44,7 +103,7 @@ jobs:
           git diff --quiet && echo "No changes" || git commit -m "Update GitHub stats"
           git push
 
-      # Build & deploy Jekyll via Pages
+      # ---- build & deploy Pages ----
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
