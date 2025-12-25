@@ -24,7 +24,7 @@ redirect_from:
 
 - **M.Sc. in Artificial Intelligence & Robotics**, Sapienza University 🇮🇹 — *2023–2025*  
   **Final mark:** 110/110  
-  **Thesis:** *Polynomial Sheaf Diffusion and Equivariant Sheaf Neural Networks* (link in progress)  
+  **Thesis:** [*Polynomial Sheaf Diffusion and Equivariant Sheaf Neural Networks*](https://arxiv.org/abs/2512.00242)  
   **Courses:** Artificial Intelligence, Machine Learning, Neural Networks, Robot Programming, Robotics I & II, NeuroEngineering, Computer Vision, Medical Robotics, Reinforcement Learning, Autonomous & Mobile Robotics, Deep Learning, Advanced ML, Generative AI Safety, HRI, Robot Benchmarking & Competitions, Multilingual NLP.  
   **Memberships:** [ALCOR Lab](https://alcorlab.diag.uniroma1.it/) and [ISPAMM Lab](https://sites.google.com/uniroma1.it/ispamm/). 
 
@@ -71,7 +71,7 @@ redirect_from:
 - **Generative AI Safety Challenge** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), (Sapienza University of Rome, Italy, 2025). 
 - **[Best Poster Award](https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024)** — Mediterranean Machine Learning (M2L) Summer School, (Milan, Italy, 2024).
 - **Best Paper Award (team)** — Hewlett Packard Enterprise PathFinder Team Recognition, (2023).
-- **Honourable Mention (Hackathon)** — Hewlett Packard Enterprise Hackaton, (2023).  
+- **Honourable Mention** — Hewlett Packard Enterprise Internal Hackaton, (2023).  
 
 
 ---
@@ -116,7 +116,7 @@ redirect_from:
 
 
 ## Contact
-- 📧 **Email:** <a href="mailto:alessio.borgi@uniroma1.it">alessio.borgi@uniroma1.it</a> <a href="mailto:borgialessio01@gmail.com">borgialessio01@gmail.com</a>  
+- 📧 **Email:** <a href="mailto:alessio.borgi@uniroma1.it">alessio.borgi@uniroma1.it</a> <a href="mailto:borgialessio01@gmail.com">borgialessio01@gmail.com</a>  <a href="mailto:ab3352@cam.ac.uk">ab3352@cam.ac.uk</a>
 - 🔗 **GitHub:** <a href="https://github.com/alessioborgi">alessioborgi</a> 
--  **Scholar:** <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">profile</a> 
-- å **ORCID:** <a href="https://orcid.org/0009-0007-1979-0857">0009-0007-1979-0857</a>  
+- **Scholar:** <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">profile</a> 
+- **ORCID:** <a href="https://orcid.org/0009-0007-1979-0857">0009-0007-1979-0857</a>  
