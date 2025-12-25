@@ -44,7 +44,7 @@ redirect_from:
   **Supervisor:** [Prof. Kazuya Yoshida](https://astro.mech.tohoku.ac.jp/e/)  
   **Project:** *MoonBot Navigation* — Autonomous robot for lunar navigation & object interaction. Dijkstra-based path planning, object detection (vision), custom robot design, gripper control.  
   **Repository:** [MoonBot Navigation (GitHub)](https://github.com/alessioborgi/MoonBot-Navigation)  
-  **Outcome:** Selected as top-1 student for the exchange, **won TESP 2025 Competition** and received **Research Certificate of Excellence**. [Program notes](https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591). 
+  **Outcome:** Selected as top-1 student for the exchange; the **MoonBot Navigation** project (linked above) won the **TESP 2025 Competition**, and I received the **Research Certificate of Excellence**. See the [program notes](https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591) for details and view the official certificate on the [certificate page](/visiting-research/tohoku-2025/).
 
 - **AI & Robotics in Healthcare** — Johannes Kepler Universität (JKU), Linz, Austria 🇦🇹 — *Aug–Sept 2024*  
   **Supervisor:** [Prof. Alexander Steinmaurer](https://it-u.at/en/persons/team/alexander-steinmaurer/)  
@@ -67,7 +67,7 @@ redirect_from:
 
 ## Awards
 - **[G-Research Early Career Award](https://www.gresearch.com/news/g-research-november-2025-grant-winners/)**: Scholarship for promising young researchers (November, 2025).
-- **Research Certificate of Excellence** - Selected as top-1 student for the visiting period and **won TESP 2025 Competition**, (Tohoku University 2025, Japan).
+- **[Research Certificate of Excellence](/certificates/tesp-2025/)** - Selected as top-1 student for the visiting period and **won TESP 2025 Competition**, (Tohoku University 2025, Japan).
 - **Generative AI Safety Challenge** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), (Sapienza University of Rome, Italy, 2025). 
 - **[Best Poster Award](https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024)** — Mediterranean Machine Learning (M2L) Summer School, (Milan, Italy, 2024).
 - **Best Paper Award (team)** — Hewlett Packard Enterprise PathFinder Team Recognition, (2023).
