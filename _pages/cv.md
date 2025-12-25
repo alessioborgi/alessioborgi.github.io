@@ -66,11 +66,12 @@ redirect_from:
 ---
 
 ## Awards
-- **Research Certificate of Excellence** - Selected as top-1 student for the exchange, **won TESP 2025 Competition**, Tohoku University 2025.
-- **Generative AI Safety Challenge** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), Rome 2025. 
-- **Best Poster Award** — DeepMind’s Mediterranean Machine Learning (M2L) Summer School, Milan 2024.
-- **Best Paper Award (team)** — HPE PathFinder, Rome 2023.
-- **Honourable Mention (Hackathon)** — Hewlett Packard Enterprise, Rome 2023.  
+- **[G-Research Early Career Award](https://www.gresearch.com/news/g-research-november-2025-grant-winners/)**: Scholarship for promising young researchers (November, 2025).
+- **Research Certificate of Excellence** - Selected as top-1 student for the visiting period and **won TESP 2025 Competition**, (Tohoku University 2025, Japan).
+- **Generative AI Safety Challenge** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), (Sapienza University of Rome, Italy, 2025). 
+- **[Best Poster Award](https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024)** — Mediterranean Machine Learning (M2L) Summer School, (Milan, Italy, 2024).
+- **Best Paper Award (team)** — Hewlett Packard Enterprise PathFinder Team Recognition, (2023).
+- **Honourable Mention (Hackathon)** — Hewlett Packard Enterprise Hackaton, (2023).  
 
 
 ---
