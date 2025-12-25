@@ -67,7 +67,7 @@ redirect_from:
 
 ## Awards
 - **[G-Research Early Career Award](https://www.gresearch.com/news/g-research-november-2025-grant-winners/)**: Scholarship for promising young researchers (November, 2025).
-- **[Research Certificate of Excellence](/certificates/tesp-2025/)** - Selected as top-1 student for the visiting period and **won TESP 2025 Competition**, (Tohoku University 2025, Japan).
+- **[Research Certificate of Excellence](_pages/certificates/tesp-2025.md)** - Selected as top-1 student for the visiting period and **won TESP 2025 Competition**, (Tohoku University 2025, Japan).
 - **Generative AI Safety Challenge** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), (Sapienza University of Rome, Italy, 2025). 
 - **[Best Poster Award](https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024)** — Mediterranean Machine Learning (M2L) Summer School, (Milan, Italy, 2024).
 - **Best Paper Award (team)** — Hewlett Packard Enterprise PathFinder Team Recognition, (2023).
