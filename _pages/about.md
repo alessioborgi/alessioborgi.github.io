@@ -54,6 +54,13 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     #gh-stats .repo h4{margin:0 0 .4rem 0;font-size:1.05rem}
     #gh-stats .repo p{margin:.2rem 0 .6rem 0}
     #gh-stats .meta{display:flex;gap:.75rem;flex-wrap:wrap;opacity:.85}
+    /* languages */
+    #gh-stats .langs{display:flex;flex-direction:column;gap:.65rem}
+    #gh-stats .lang-row{display:flex;align-items:center;gap:.75rem}
+    #gh-stats .lang-name{min-width:120px;font-weight:600}
+    #gh-stats .lang-bar{flex:1;height:10px;border-radius:999px;background:var(--mm-grey-200,#e9ecf0);position:relative;overflow:hidden}
+    #gh-stats .lang-bar span{display:block;height:100%;background:#00bdb6;}
+    #gh-stats .lang-percent{min-width:40px;text-align:right;font-variant-numeric:tabular-nums}
     /* heatmap */
     #gh-stats .heatmap img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--mm-grey-300,#e6e6e6)}
     @media (prefers-color-scheme: dark){
@@ -113,11 +120,23 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     <div class="card">
       <div class="pad">
         <h3>Top Languages <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
-        <div class="lab" style="margin-bottom:0">
-          <a href="https://github.com/alessioborgi" target="_blank" rel="noopener">
-            <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=donut-vertical&hide_border=true&title_color=133844&text_color=133844&bg_color=f5f7fb&langs_count=8" alt="Top languages chart for alessioborgi" style="width:100%;max-width:420px;border-radius:8px;">
-          </a>
-        </div>
+        {% if gh and gh.top_languages %}
+          <div class="langs">
+            {% for lang in gh.top_languages %}
+              <div class="lang-row">
+                <div class="lang-name">{{ lang.name }}</div>
+                <div class="lang-bar"><span style="width: {{ lang.percent }}%"></span></div>
+                <div class="lang-percent">{{ lang.percent }}%</div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="lab" style="margin-bottom:0">
+            <a href="https://github.com/alessioborgi" target="_blank" rel="noopener">
+              <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=donut-vertical&hide_border=true&title_color=133844&text_color=133844&bg_color=f5f7fb&langs_count=8" alt="Top languages chart for alessioborgi" style="width:100%;max-width:420px;border-radius:8px;">
+            </a>
+          </div>
+        {% endif %}
       </div>
     </div>
 

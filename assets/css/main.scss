@@ -43,6 +43,8 @@
 ;
 
 /* Custom accents for masthead and sidebar */
+$cambridge-dark-blue: #133844;
+
 :root {
   --global-masthead-link-color: #e6f5ff;
   --global-masthead-link-color-hover: #ffffff;
@@ -53,14 +55,22 @@ body {
 }
 
 .masthead {
-  background: #133844;
+  background: $cambridge-dark-blue;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
 
   .masthead__inner-wrap {
-    background: #133844;
+    background: $cambridge-dark-blue;
     max-width: 100%;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+
+  /* Keep the navigation bar on Cambridge Dark Blue rather than falling back to white */
+  #site-nav,
+  #site-nav.greedy-nav,
+  .greedy-nav,
+  .masthead__menu {
+    background: $cambridge-dark-blue;
   }
 
   &::after {
@@ -73,8 +83,8 @@ body {
 }
 
 .sidebar {
-  background: #00BDB6 !important; /* Cambridge Warm Blue */
-  border-right: 1px solid #009e97;
+  background: #a3c1ad !important; /* Cambridge Light Blue */
+  border-right: 1px solid #8da596;
   box-shadow: 8px 0 24px rgba(0, 0, 0, 0.12);
   padding-left: 18px;
   padding-right: 14px;
