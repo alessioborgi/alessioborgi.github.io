@@ -114,7 +114,9 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
       <div class="pad">
         <h3>Top Languages <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
         <div class="lab" style="margin-bottom:0">
-          <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=donut&hide_border=true&title_color=133844&text_color=133844&bg_color=f5f7fb&langs_count=8" alt="Top languages chart" style="width:100%;max-width:420px;border-radius:8px;">
+          <a href="https://github.com/alessioborgi" target="_blank" rel="noopener">
+            <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=donut-vertical&hide_border=true&title_color=133844&text_color=133844&bg_color=f5f7fb&langs_count=8" alt="Top languages chart for alessioborgi" style="width:100%;max-width:420px;border-radius:8px;">
+          </a>
         </div>
       </div>
     </div>
