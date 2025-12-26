@@ -125,7 +125,8 @@ author_profile: true
             {% endif %}
           </div>
         </div>
-        {% if post.url contains "moonbot-navigation" %}
+        {% assign project_key = post.slug | default: post.title | downcase %}
+        {% if project_key contains "moonbot" or post.url contains "moonbot-navigation" %}
           <p class="project-lead">An autonomous navigation and object-interaction stack for a lunar rover prototype.</p>
           <ul class="project-details">
             <li><strong>Planner:</strong> Dijkstra-based waypoint navigation with dynamic obstacle handling.</li>
@@ -162,3 +163,35 @@ author_profile: true
 {% else %}
   <p>No projects published yet.</p>
 {% endif %}
+
+
+
+
+<section class="tesp-section">
+    <div class="moonbot-header">
+      <div>
+        <h2>MoonBot Navigation</h2>
+        <p class="moonbot-sub">An autonomous navigation and object-interaction stack for a lunar rover prototype.</p>
+      </div>
+      <div class="moonbot-actions">
+        <a class="tesp-pill-btn" href="{{ "/projects/moonbot-navigation/" | relative_url }}">
+          <img class="btn-icon" src="{{ '/images/webpage.webp' | relative_url }}" alt="Project Page">
+          Project page
+        </a>
+        <a class="tesp-pill-btn" href="https://github.com/alessioborgi/MoonBot-Navigation" target="_blank" rel="noopener">
+          <img class="btn-icon" src="{{ '/images/github.png' | relative_url }}" alt="GitHub">
+          GitHub Repository
+        </a>
+      </div>
+    </div>
+    <ul class="tesp-list">
+      <li><strong>Planner:</strong> Dijkstra-based waypoint navigation with dynamic obstacle handling.</li>
+      <li><strong>Perception:</strong> Visual object detection and tracking to trigger tasks and avoid hazards.</li>
+      <li><strong>Hardware:</strong> Custom gripper actuation and onboard execution for reliable field operation.</li>
+    </ul>
+    <div class="tesp-meta tesp-meta-compact" style="margin-top:0.6rem;">
+      <span class="tesp-pill pill-blue">Navigation & Perception</span>
+      <span class="tesp-pill pill-green">Onboard Planning</span>
+      <span class="tesp-pill pill-amber">Robotics Hardware</span>
+    </div>
+  </section>
