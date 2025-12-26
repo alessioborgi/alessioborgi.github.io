@@ -13,11 +13,11 @@ author_profile: true
     gap: 1.25rem;
   }
   .project-card {
-    border: 1px solid #e5e7eb;
+    border: 1px solid #b7e4d9;
     border-radius: 14px;
     padding: 1.25rem 1.4rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-    background: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    background: linear-gradient(145deg, #d1f9f1 0%, #b7e4d9 100%); /* Cambridge Light Blue palette */
   }
   .project-header {
     display: flex;
@@ -50,6 +50,21 @@ author_profile: true
     margin: 0.6rem 0 0.9rem;
     color: #374151;
     line-height: 1.55;
+  }
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0.25rem 0 0.85rem;
+  }
+  .project-tag {
+    background: #fff;
+    border: 1px solid #9ccfc4;
+    color: #133844;
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.85rem;
+    font-weight: 600;
   }
   .project-actions {
     display: flex;
@@ -86,6 +101,13 @@ author_profile: true
             Project details coming soon.
           {% endif %}
         </p>
+        {% if post.tags %}
+          <div class="project-tags">
+            {% for tag in post.tags %}
+              <span class="project-tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
         <div class="project-actions">
           <a class="btn btn--primary" href="{{ post.url | relative_url }}">Project Page</a>
           {% if post.github %}

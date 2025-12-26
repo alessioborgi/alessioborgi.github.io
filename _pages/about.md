@@ -27,6 +27,27 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 {% assign posts = site.posts | size | default: 0 %}
 {% assign projects = site.projects | size | default: 0 %} -->
 
+
+---
+## Recent publications
+{% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
+{% assign recent_pubs = site.publications | sort: "date" | reverse %}
+<ul>
+  {% if z_pub %}
+    {% include archive-single.html post=z_pub %}
+  {% endif %}
+  {% for pub in recent_pubs %}
+    {% if z_pub and pub.slug == z_pub.slug %}
+      {% continue %}
+    {% endif %}
+    {% include archive-single.html post=pub %}
+    {% if forloop.index == 3 %}{% break %}{% endif %}
+  {% endfor %}
+</ul>
+
+<p><a class="btn" href="/publications/">View all publications →</a></p>
+
+---
 <!-- ====================== -->
 <!--  At-a-glance Stats     -->
 <!-- ====================== -->
@@ -194,26 +215,7 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   </script>
 </section>
 
----
-## Recent publications
-{% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
-{% assign recent_pubs = site.publications | sort: "date" | reverse %}
-<ul>
-  {% if z_pub %}
-    {% include archive-single.html post=z_pub %}
-  {% endif %}
-  {% for pub in recent_pubs %}
-    {% if z_pub and pub.slug == z_pub.slug %}
-      {% continue %}
-    {% endif %}
-    {% include archive-single.html post=pub %}
-    {% if forloop.index == 3 %}{% break %}{% endif %}
-  {% endfor %}
-</ul>
 
-<p><a class="btn" href="/publications/">View all publications →</a></p>
-
----
 <!-- ## A few things I’m exploring next
 <div class="chips">
   <span class="chip">Equivariant Sheaf Diffusion</span>

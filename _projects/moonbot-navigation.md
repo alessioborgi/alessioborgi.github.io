@@ -6,6 +6,10 @@ permalink: /projects/moonbot-navigation/
 excerpt: "Autonomous lunar rover navigation and interaction — winner of the TESP 2025 Competition."
 author_profile: true
 github: "https://github.com/alessioborgi/MoonBot-Navigation"
+tags:
+  - Navigation & Perception
+  - Onboard Planning
+  - Robotics Hardware
 ---
 
 <div class="notice--primary">
@@ -87,4 +91,3 @@ github: "https://github.com/alessioborgi/MoonBot-Navigation"
   </figcaption>
   <img src="{{ '/images/tesp_2025/readme_imgs/object_detection.png' | relative_url }}" alt="Object detection" style="width:100%;border-radius:10px;">
 </figure>
-
