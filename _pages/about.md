@@ -112,17 +112,18 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   <div class="grid" style="margin-top:1rem">
     <div class="card">
       <div class="pad">
-        <h3>Top Languages</h3>
-        <p class="lab" style="margin-bottom:0">
-          {% if gh and gh.top_languages %}
-            <!-- if later you make your action dump languages, render them here -->
+        <h3>Top Languages <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
+        {% if gh and gh.top_languages %}
+          <p class="lab" style="margin-bottom:0">
             {% for lang in gh.top_languages %}
               <span class="chip">{{ lang.name }} ({{ lang.percent }}%)</span>
             {% endfor %}
-          {% else %}
-            Not available (build step didn’t export languages).
-          {% endif %}
-        </p>
+          </p>
+        {% else %}
+          <div class="lab" style="margin-bottom:0">
+            <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=compact&hide_border=true&title_color=133844&text_color=133844" alt="Top languages chart" style="width:100%;max-width:420px;border-radius:8px;">
+          </div>
+        {% endif %}
       </div>
     </div>
 
@@ -139,12 +140,12 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   <!-- Popular Repositories -->
   <div class="card" style="margin-top:1rem">
     <div class="pad">
-      <h3>Popular Repositories</h3>
+      <h3>Popular Repositories <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
       <p class="lab">
         {% if gh and gh.popular_repos %}
           <!-- if your action writes them -->
           <div class="repos">
-            {% for repo in gh.popular_repos %}
+            {% for repo in gh.popular_repos limit:12 %}
               <div class="repo card">
                 <div class="pad">
                   <h4><a href="{{ repo.html_url }}" target="_blank" rel="noopener">{{ repo.name }}</a></h4>
