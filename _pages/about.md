@@ -113,17 +113,9 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     <div class="card">
       <div class="pad">
         <h3>Top Languages <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
-        {% if gh and gh.top_languages %}
-          <p class="lab" style="margin-bottom:0">
-            {% for lang in gh.top_languages %}
-              <span class="chip">{{ lang.name }} ({{ lang.percent }}%)</span>
-            {% endfor %}
-          </p>
-        {% else %}
-          <div class="lab" style="margin-bottom:0">
-            <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=compact&hide_border=true&title_color=133844&text_color=133844" alt="Top languages chart" style="width:100%;max-width:420px;border-radius:8px;">
-          </div>
-        {% endif %}
+        <div class="lab" style="margin-bottom:0">
+          <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=donut&hide_border=true&title_color=133844&text_color=133844&bg_color=f5f7fb&langs_count=8" alt="Top languages chart" style="width:100%;max-width:420px;border-radius:8px;">
+        </div>
       </div>
     </div>
 
@@ -133,6 +125,15 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
         <img id="gh-heatmap" alt="GitHub contribution heatmap"
              src="https://github-readme-activity-graph.vercel.app/graph?username=alessioborgi&hide_border=true&radius=8&area=true&theme=github-light"/>
         <div class="lab" style="margin-top:.4rem">Source: GitHub contributions (last 1y)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="pad">
+      <h3>GitHub Stats <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
+      <div class="lab" style="margin-bottom:0">
+        <img src="https://github-readme-stats.vercel.app/api?username=alessioborgi&show_icons=true&hide_border=true&title_color=00bdb6&icon_color=00bdb6&text_color=133844&bg_color=f5f7fb&rank_icon=github" alt="GitHub stats card" style="width:100%;max-width:500px;border-radius:8px;">
       </div>
     </div>
   </div>
