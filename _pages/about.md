@@ -214,7 +214,7 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 <p><a class="btn" href="/publications/">View all publications →</a></p>
 
 ---
-## A few things I’m exploring next
+<!-- ## A few things I’m exploring next
 <div class="chips">
   <span class="chip">Equivariant Sheaf Diffusion</span>
   <span class="chip">Protein/Graph Generation</span>
@@ -223,7 +223,7 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   <span class="chip">Mechanistic interpretability for GNNs</span>
 </div>
 
----
+--- -->
 <!-- Optional JSON-LD to strengthen SEO; harmless if jekyll-seo-tag is already present -->
 <script type="application/ld+json">
 {
