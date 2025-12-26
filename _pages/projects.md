@@ -100,10 +100,10 @@ author_profile: true
   }
 </style>
 
-<div class="notice--primary">
+<!-- <div class="notice--primary">
   <h3>Selected Projects</h3>
   <p>A snapshot of hands-on builds, research prototypes, and demos.</p>
-</div>
+</div> -->
 
 {% assign items = site.projects | sort: 'title' %}
 {% if items and items.size > 0 %}
@@ -167,7 +167,7 @@ author_profile: true
 
 
 
-<section class="tesp-section">
+<!-- <section class="tesp-section">
     <div class="moonbot-header">
       <div>
         <h2>MoonBot Navigation</h2>
@@ -194,4 +194,4 @@ author_profile: true
       <span class="tesp-pill pill-green">Onboard Planning</span>
       <span class="tesp-pill pill-amber">Robotics Hardware</span>
     </div>
-  </section>
+  </section> -->
