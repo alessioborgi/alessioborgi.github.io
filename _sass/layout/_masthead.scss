@@ -28,10 +28,15 @@
     @include container;
     @include clearfix;
     padding: 0.5em 1em;
+    width: 100%;
+    max-width: 100%;
+    background: inherit;
+    margin-left: 0;
+    margin-right: 0;
     font-family: $sans-serif-narrow;
 
     @include breakpoint($x-large) {
-      max-width: $x-large;
+      max-width: 100%;
     }
 
     nav {

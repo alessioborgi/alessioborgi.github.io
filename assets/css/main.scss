@@ -56,6 +56,10 @@ body {
   background: linear-gradient(135deg, #7a0026, #5a001c);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 
+  .masthead__inner-wrap {
+    background: linear-gradient(135deg, #7a0026, #5a001c);
+  }
+
   &::after {
     background: rgba(255, 255, 255, 0.16);
   }
