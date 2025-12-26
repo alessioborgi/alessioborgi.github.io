@@ -137,7 +137,7 @@ author_profile: true
           <p class="project-excerpt">
             {% if post.excerpt %}
               {{ post.excerpt | strip_html | strip_newlines | truncate: 240 }}
-            {% elif post.description %}
+            {% elsif post.description %}
               {{ post.description | strip_html | strip_newlines | truncate: 240 }}
             {% else %}
               Project details coming soon.
