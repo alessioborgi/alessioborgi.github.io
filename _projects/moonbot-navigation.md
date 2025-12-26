@@ -70,7 +70,7 @@ github: "https://github.com/alessioborgi/MoonBot-Navigation"
 <figure>
   <figcaption class="demo-callout">
     <i class="fa-brands fa-youtube" aria-hidden="true"></i>
-    <a href="https://www.youtube.com/watch?v=3jToJo4PlYQ" target="_blank" rel="noopener">See the Demo: ROS2 Simulator - Fidning the Optimal Path on the Moon 🌕 </a>
+    <a href="https://www.youtube.com/watch?v=3jToJo4PlYQ" target="_blank" rel="noopener">See the Demo: ROS2 Simulator - Finding the Optimal Path on the Moon 🌕 </a>
   </figcaption>
   <img src="{{ '/images/tesp_2025/readme_imgs/path_planning.png' | relative_url }}" alt="Path planning" style="width:100%;border-radius:10px;">
 </figure>
@@ -81,8 +81,10 @@ github: "https://github.com/alessioborgi/MoonBot-Navigation"
 - **Flow:** Short-range visual servoing keeps targets centered; gripper actuates once aligned.
 
 <figure>
+  <figcaption class="demo-callout">
+    <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+    <a href="https://www.youtube.com/watch?v=YZeRK4v5kP4" target="_blank" rel="noopener">See the Demo: Camera Object Detection and Classification on the Moon🌕 </a>
+  </figcaption>
   <img src="{{ '/images/tesp_2025/readme_imgs/object_detection.png' | relative_url }}" alt="Object detection" style="width:100%;border-radius:10px;">
-  <a href="https://www.youtube.com/watch?v=YZeRK4v5kP4" target="_blank" rel="noopener">See the Demo: ROS2 Simulator - Fidning the Optimal Path on the Moon 🌕 </a>
-  <figcaption><a href="" target="_blank" rel="noopener">See the Demo: Camera Object Detection and Classification on the Moon🌕</a></figcaption>
 </figure>
 
