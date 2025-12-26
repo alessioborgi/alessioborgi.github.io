@@ -43,13 +43,14 @@ redirect_from:
 - **Space Robotics** — Tohoku University, Space Robotics Lab, Sendai, Japan 🇯🇵 — *June–July 2025*  
   **Supervisor:** [Prof. Kazuya Yoshida](https://astro.mech.tohoku.ac.jp/e/)  
   **Project:** *MoonBot Navigation* — Autonomous robot for lunar navigation & object interaction. Dijkstra-based path planning, object detection (vision), custom robot design, gripper control.  
-  **Repository:** [MoonBot Navigation (GitHub)](https://github.com/alessioborgi/MoonBot-Navigation)  
-  **Outcome:** Selected as top-1 student for the exchange; the **MoonBot Navigation** project (linked above) won the **TESP 2025 Competition**, and I received the **Research Certificate of Excellence**. See the [program notes](https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591) for details and view the official certificate on the [certificate page](/visiting-research/tohoku-2025/).
+  **Repository:** <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:14px;width:14px;vertical-align:middle;margin-right:4px;"> [MoonBot Navigation (GitHub)](https://github.com/alessioborgi/MoonBot-Navigation)  
+  **Outcome:** Selected as top-1 student for the exchange; developed the **MoonBot Navigation** project (linked above) which won the **TESP 2025 Competition**, and I received the **Research Certificate of Excellence**. 
+  **Project Page:** [Visiting Research Tohoku University Page](/visiting-research/tohoku-2025/).
 
 - **AI & Robotics in Healthcare** — Johannes Kepler Universität (JKU), Linz, Austria 🇦🇹 — *Aug–Sept 2024*  
   **Supervisor:** [Prof. Alexander Steinmaurer](https://it-u.at/en/persons/team/alexander-steinmaurer/)  
   **Project:** *CareConnect* — AI-driven system to query environmental/hospital data via chat, generate real-time graphs, and trigger notifications & robotic actions using LangChain.  
-  **Repository:** [CareConnect (GitHub)](https://github.com/alessioborgi/CareConnect)  
+  **Repository:** <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:14px;width:14px;vertical-align:middle;margin-right:4px;"> [CareConnect (GitHub)](https://github.com/alessioborgi/CareConnect)  
   **Achievement:** **Best Poster & Project Award** (program showcase). 
 
 ---

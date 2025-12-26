@@ -52,6 +52,21 @@ author_profile: true
     color: #1f2a36;
     line-height: 1.55;
   }
+  .project-lead {
+    margin: 0.35rem 0 0.75rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #24313f;
+  }
+  .project-details {
+    margin: 0 0 1rem 1.1rem;
+    padding: 0;
+    color: #2f3b4a;
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+  .project-details li { margin-bottom: 0.4rem; }
+  .project-details strong { font-weight: 700; }
   .project-tags {
     display: flex;
     flex-wrap: wrap;
@@ -98,7 +113,10 @@ author_profile: true
         <div class="project-header">
           <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
           <div class="project-links">
-            <a class="project-pill" href="{{ post.url | relative_url }}">Project Page</a>
+            <a class="project-pill" href="{{ post.url | relative_url }}">
+              <img src="{{ '/images/webpage.webp' | relative_url }}" alt="Project page icon">
+              <span>Project Page</span>
+            </a>
             {% if post.github %}
               <a class="project-pill" href="{{ post.github }}" target="_blank" rel="noopener">
                 <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub icon">
@@ -107,15 +125,24 @@ author_profile: true
             {% endif %}
           </div>
         </div>
-        <p class="project-excerpt">
-          {% if post.excerpt %}
-            {{ post.excerpt | strip_html | strip_newlines | truncate: 240 }}
-          {% elsif post.description %}
-            {{ post.description | strip_html | strip_newlines | truncate: 240 }}
-          {% else %}
-            Project details coming soon.
-          {% endif %}
-        </p>
+        {% if post.url contains "moonbot-navigation" %}
+          <p class="project-lead">An autonomous navigation and object-interaction stack for a lunar rover prototype.</p>
+          <ul class="project-details">
+            <li><strong>Planner:</strong> Dijkstra-based waypoint navigation with dynamic obstacle handling.</li>
+            <li><strong>Perception:</strong> Visual object detection and tracking to trigger tasks and avoid hazards.</li>
+            <li><strong>Hardware:</strong> Custom gripper actuation and onboard execution for reliable field operation.</li>
+          </ul>
+        {% else %}
+          <p class="project-excerpt">
+            {% if post.excerpt %}
+              {{ post.excerpt | strip_html | strip_newlines | truncate: 240 }}
+            {% elif post.description %}
+              {{ post.description | strip_html | strip_newlines | truncate: 240 }}
+            {% else %}
+              Project details coming soon.
+            {% endif %}
+          </p>
+        {% endif %}
         {% if post.tags %}
           <div class="project-tags">
             {% for tag in post.tags %}
@@ -123,12 +150,12 @@ author_profile: true
             {% endfor %}
           </div>
         {% endif %}
-        <div class="project-actions">
+        <!-- <div class="project-actions">
           <a class="btn btn--primary" href="{{ post.url | relative_url }}">Project Page</a>
           {% if post.github %}
             <a class="btn" href="{{ post.github }}" target="_blank" rel="noopener">GitHub</a>
           {% endif %}
-        </div>
+        </div> -->
       </article>
     {% endfor %}
   </div>
