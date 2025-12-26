@@ -13,11 +13,11 @@ author_profile: true
     gap: 1.25rem;
   }
   .project-card {
-    border: 1px solid #b7e4d9;
+    border: 1px solid #c7d4f2;
     border-radius: 14px;
-    padding: 1.25rem 1.4rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    background: linear-gradient(145deg, #d1f9f1 0%, #b7e4d9 100%); /* Cambridge Light Blue palette */
+    padding: 1.5rem;
+    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
+    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%); /* match Tohoku/tesp card */
   }
   .project-header {
     display: flex;
@@ -48,7 +48,7 @@ author_profile: true
   }
   .project-excerpt {
     margin: 0.6rem 0 0.9rem;
-    color: #374151;
+    color: #1f2a36;
     line-height: 1.55;
   }
   .project-tags {
@@ -59,8 +59,8 @@ author_profile: true
   }
   .project-tag {
     background: #fff;
-    border: 1px solid #9ccfc4;
-    color: #133844;
+    border: 1px solid #d9e2ec;
+    color: #374151;
     border-radius: 999px;
     padding: 0.3rem 0.7rem;
     font-size: 0.85rem;
