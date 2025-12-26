@@ -151,12 +151,6 @@ author_profile: true
             {% endfor %}
           </div>
         {% endif %}
-        <!-- <div class="project-actions">
-          <a class="btn btn--primary" href="{{ post.url | relative_url }}">Project Page</a>
-          {% if post.github %}
-            <a class="btn" href="{{ post.github }}" target="_blank" rel="noopener">GitHub</a>
-          {% endif %}
-        </div> -->
       </article>
     {% endfor %}
   </div>
