@@ -41,3 +41,28 @@
     "vendor/font-awesome/solid",
     "vendor/font-awesome/brands"
 ;
+
+/* Custom accents for masthead and sidebar */
+:root {
+  --global-masthead-link-color: #e8f2ff;
+  --global-masthead-link-color-hover: #ffffff;
+}
+
+.masthead {
+  background: linear-gradient(135deg, #0f375f, #0a2946);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+
+  &::after {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .masthead__menu-item {
+    background-color: transparent;
+  }
+}
+
+.sidebar {
+  background: #f5f1e8;
+  border-right: 1px solid #e5dfd3;
+  box-shadow: 8px 0 24px rgba(0, 0, 0, 0.05);
+}
