@@ -30,19 +30,20 @@ author_profile: true
     margin: 0;
     font-size: 1.3rem;
   }
-  .project-github {
+  .project-links { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .project-pill {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.35rem 0.55rem;
+    padding: 0.35rem 0.65rem;
     border-radius: 999px;
     border: 1px solid #d1d5db;
     background: #f9fafb;
     text-decoration: none;
     color: #111827;
-    font-weight: 600;
+    font-weight: 700;
   }
-  .project-github img {
+  .project-pill img {
     height: 18px;
     width: 18px;
   }
@@ -58,13 +59,24 @@ author_profile: true
     margin: 0.25rem 0 0.85rem;
   }
   .project-tag {
-    background: #fff;
-    border: 1px solid #d9e2ec;
-    color: #374151;
+    background: #e0f2ff;
+    border: 1px solid #bcdfff;
+    color: #0f4673;
     border-radius: 999px;
     padding: 0.3rem 0.7rem;
     font-size: 0.85rem;
     font-weight: 600;
+  }
+  /* rotate palette like the Tohoku/tesp pills */
+  .project-tag:nth-child(3n+2) {
+    background: #e4f9ef;
+    border-color: #c4eedc;
+    color: #1b6b3a;
+  }
+  .project-tag:nth-child(3n) {
+    background: #fff4e5;
+    border-color: #ffe4c7;
+    color: #8a5300;
   }
   .project-actions {
     display: flex;
@@ -85,12 +97,15 @@ author_profile: true
       <article class="project-card">
         <div class="project-header">
           <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-          {% if post.github %}
-            <a class="project-github" href="{{ post.github }}" target="_blank" rel="noopener">
-              <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub icon">
-              <span>GitHub</span>
-            </a>
-          {% endif %}
+          <div class="project-links">
+            <a class="project-pill" href="{{ post.url | relative_url }}">Project Page</a>
+            {% if post.github %}
+              <a class="project-pill" href="{{ post.github }}" target="_blank" rel="noopener">
+                <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub icon">
+                <span>GitHub</span>
+              </a>
+            {% endif %}
+          </div>
         </div>
         <p class="project-excerpt">
           {% if post.excerpt %}
