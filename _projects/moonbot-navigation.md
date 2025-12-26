@@ -49,9 +49,25 @@ github: "https://github.com/alessioborgi/MoonBot-Navigation"
   <img src="{{ '/images/tesp_2025/readme_imgs/retraction_map.png' | relative_url }}" alt="Retraction map" style="width:100%;border-radius:10px;">
 </div>
 
+<style>
+  .demo-callout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0 0 0.35rem 0;
+  }
+  .demo-callout i {
+    color: #ff0000;
+    font-size: 1.35rem;
+  }
+</style>
+
 <figure>
-  <figcaption style="font-weight:700;margin-bottom:0.35rem;">
-    ▶️ Watch the planning demo
+  <figcaption class="demo-callout">
+    <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+    <a href="https://www.youtube.com/watch?v=3jToJo4PlYQ" target="_blank" rel="noopener">See the demo</a>
   </figcaption>
   <img src="{{ '/images/tesp_2025/readme_imgs/path_planning.png' | relative_url }}" alt="Path planning" style="width:100%;border-radius:10px;">
   <figcaption><a href="https://www.youtube.com/watch?v=3jToJo4PlYQ" target="_blank" rel="noopener">Watch the planning demo</a></figcaption>

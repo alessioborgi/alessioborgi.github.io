@@ -242,55 +242,22 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 ---
 
 ## Recent publications
+{% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
+{% assign recent_pubs = site.publications | sort: "date" | reverse %}
 <ul>
-{% for pub in site.publications reversed limit:3 %}
-  {% include archive-single.html post=pub %}
-{% endfor %}
+  {% if z_pub %}
+    {% include archive-single.html post=z_pub %}
+  {% endif %}
+  {% for pub in recent_pubs %}
+    {% if z_pub and pub.slug == z_pub.slug %}
+      {% continue %}
+    {% endif %}
+    {% include archive-single.html post=pub %}
+    {% if forloop.index == 3 %}{% break %}{% endif %}
+  {% endfor %}
 </ul>
 
 <p><a class="btn" href="/publications/">View all publications →</a></p>
-
----
-
-## Open-source spotlights
-<div class="featured">
-  <div class="card">
-    <h4>Z-SASLM</h4>
-    Zero-shot, fine-tuning-free **style alignment** via SLI latent blending.
-    <p>
-      <a href="https://alessioborgi.github.io/Z-SASLM.github.io/">Project</a> ·
-      <a href="https://openaccess.thecvf.com/content/CVPR2025W/CVEU/papers/Borgi_Z-SASLM_Zero-Shot_Style-Aligned_SLI_Blending_Latent_Manipulation_CVPRW_2025_paper.pdf">Paper</a>
-    </p>
-  </div>
-  <div class="card">
-    <h4>CareConnect</h4>
-    Chat + graphs to orchestrate environment/hospital data and **robotic actions**.
-    <p>
-      <a href="https://github.com/alessioborgi/CareConnect">GitHub</a>
-      <img src="https://img.shields.io/github/stars/alessioborgi/CareConnect?style=social" alt="CareConnect stars">
-    </p>
-  </div>
-  <div class="card">
-    <h4>MoonBot Navigation</h4>
-    Autonomous lunar navigation & interaction; planning + onboard vision.
-    <p>
-      <a href="https://github.com/alessioborgi/MoonBot-Navigation">GitHub</a>
-      <img src="https://img.shields.io/github/stars/alessioborgi/MoonBot-Navigation?style=social" alt="MoonBot stars">
-    </p>
-  </div>
-  <div class="card">
-    <h4>XGNN GraphGenRL</h4>
-    Policy-based **model-level explanations** via graph generation.
-    <p>
-      <a href="https://github.com/alessioborgi/XGNN_GraphGenRL">GitHub</a>
-      <img src="https://img.shields.io/github/stars/alessioborgi/XGNN_GraphGenRL?style=social" alt="XGNN GraphGenRL stars">
-    </p>
-  </div>
-</div>
-
-<p style="margin-top:.5rem">
-  More code: <a href="https://github.com/alessioborgi">github.com/alessioborgi</a>
-</p>
 
 ---
 
