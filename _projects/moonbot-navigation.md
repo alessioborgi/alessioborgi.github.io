@@ -12,8 +12,11 @@ github: "https://github.com/alessioborgi/MoonBot-Navigation"
   <h2>MoonBot Navigation</h2>
   <p>Autonomous navigation and interaction stack for a lunar rover prototype. Built during my visiting research at Tohoku University’s Space Robotics Lab (TESP 2025); winner of the TESP 2025 Competition.</p>
   <p>
-    <a class="btn btn--primary" href="https://github.com/alessioborgi/MoonBot-Navigation" target="_blank" rel="noopener">GitHub Repository</a>
-    <a class="btn" href="{{ "/visiting-research/tohoku-2025/" | relative_url }}">Program & Certificate</a>
+    <a class="btn btn--primary" href="https://github.com/alessioborgi/MoonBot-Navigation" target="_blank" rel="noopener">
+      <img class="btn-icon" src="{{ '/images/github.png' | relative_url }}" alt="GitHub">
+      GitHub Repository
+    </a>
+    <a class="btn" href="{{ "/visiting-research/tohoku-2025/" | relative_url }}">📜 Program & Certificate</a>
   </p>
 </div>
 

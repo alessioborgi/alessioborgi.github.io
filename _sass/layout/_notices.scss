@@ -16,8 +16,8 @@
   font-family: $global-font-family;
   font-size: $type-size-6 !important;
   text-indent: initial; /* override*/
-  background-color: mix($notice-color, #fff, 30%);
-  border: 1px solid mix(#000, $notice-color, 10%);
+  background-color: mix($notice-color, #fff, 70%);
+  border: 1px solid mix(#000, $notice-color, 15%);
   border-radius: $border-radius;
   box-shadow: 0 8px 20px rgba($notice-color, 0.18);
   color: var(--global-code-text-color);
