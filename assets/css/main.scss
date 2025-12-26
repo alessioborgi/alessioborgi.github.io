@@ -44,17 +44,17 @@
 
 /* Custom accents for masthead and sidebar */
 :root {
-  --global-masthead-link-color: #e9f6ff;
+  --global-masthead-link-color: #ffe7f1;
   --global-masthead-link-color-hover: #ffffff;
 }
 
 body {
-  background: #e5efe8;
+  background: #f7f8fb;
 }
 
 .masthead {
-  background: linear-gradient(135deg, #0b3a52, #0f5a73);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  background: linear-gradient(135deg, #7a0026, #5a001c);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 
   &::after {
     background: rgba(255, 255, 255, 0.16);
@@ -69,6 +69,8 @@ body {
   background: #dfece4;
   border-right: 1px solid #c4d6c9;
   box-shadow: 8px 0 24px rgba(0, 0, 0, 0.07);
+  padding-left: 14px;
+  padding-right: 10px;
 
   @media screen and (min-width: 1024px) {
     left: 0;
