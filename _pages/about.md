@@ -150,12 +150,25 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     </div>
   </div>
 
+  <!-- Recent publications -->
   <div class="card" style="margin-top:1rem">
     <div class="pad">
-      <h3>GitHub Stats <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
-      <div class="lab" style="margin-bottom:0">
-        <img src="https://github-readme-stats.vercel.app/api?username=alessioborgi&show_icons=true&hide_border=true&title_color=00bdb6&icon_color=00bdb6&text_color=133844&bg_color=f5f7fb&rank_icon=github" alt="GitHub stats card" style="width:100%;max-width:500px;border-radius:8px;">
-      </div>
+      <h3>Recent publications</h3>
+      {% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
+      {% assign recent_pubs = site.publications | sort: "date" | reverse %}
+      <ul>
+        {% if z_pub %}
+          {% include archive-single.html post=z_pub %}
+        {% endif %}
+        {% for pub in recent_pubs %}
+          {% if z_pub and pub.slug == z_pub.slug %}
+            {% continue %}
+          {% endif %}
+          {% include archive-single.html post=pub %}
+          {% if forloop.index == 3 %}{% break %}{% endif %}
+        {% endfor %}
+      </ul>
+      <p><a class="btn" href="/publications/">View all publications →</a></p>
     </div>
   </div>
 
@@ -238,28 +251,6 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     </div>
   </div>
 </div>
-
----
-
-## Recent publications
-{% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
-{% assign recent_pubs = site.publications | sort: "date" | reverse %}
-<ul>
-  {% if z_pub %}
-    {% include archive-single.html post=z_pub %}
-  {% endif %}
-  {% for pub in recent_pubs %}
-    {% if z_pub and pub.slug == z_pub.slug %}
-      {% continue %}
-    {% endif %}
-    {% include archive-single.html post=pub %}
-    {% if forloop.index == 3 %}{% break %}{% endif %}
-  {% endfor %}
-</ul>
-
-<p><a class="btn" href="/publications/">View all publications →</a></p>
-
----
 
 ## How I like to collaborate
 - **Clear goals, fast iterations** — short sprints, public ablations, reproducible seeds.  

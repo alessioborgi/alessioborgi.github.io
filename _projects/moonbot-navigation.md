@@ -53,10 +53,13 @@ github: "https://github.com/alessioborgi/MoonBot-Navigation"
   .demo-callout {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.55rem;
     font-size: 1.15rem;
     font-weight: 800;
     margin: 0 0 0.35rem 0;
+    width: 100%;
+    text-align: center;
   }
   .demo-callout i {
     color: #ff0000;
@@ -67,10 +70,9 @@ github: "https://github.com/alessioborgi/MoonBot-Navigation"
 <figure>
   <figcaption class="demo-callout">
     <i class="fa-brands fa-youtube" aria-hidden="true"></i>
-    <a href="https://www.youtube.com/watch?v=3jToJo4PlYQ" target="_blank" rel="noopener">See the demo</a>
+    <a href="https://www.youtube.com/watch?v=3jToJo4PlYQ" target="_blank" rel="noopener">See the Demo: ROS2 Simulator - Fidning the Optimal Path on the Moon 🌕 </a>
   </figcaption>
   <img src="{{ '/images/tesp_2025/readme_imgs/path_planning.png' | relative_url }}" alt="Path planning" style="width:100%;border-radius:10px;">
-  <figcaption><a href="https://www.youtube.com/watch?v=3jToJo4PlYQ" target="_blank" rel="noopener">Watch the planning demo</a></figcaption>
 </figure>
 
 ## Object Detection & Interaction
@@ -80,13 +82,7 @@ github: "https://github.com/alessioborgi/MoonBot-Navigation"
 
 <figure>
   <img src="{{ '/images/tesp_2025/readme_imgs/object_detection.png' | relative_url }}" alt="Object detection" style="width:100%;border-radius:10px;">
-  <figcaption><a href="https://www.youtube.com/watch?v=YZeRK4v5kP4" target="_blank" rel="noopener">See the detection demo</a></figcaption>
+  <a href="https://www.youtube.com/watch?v=YZeRK4v5kP4" target="_blank" rel="noopener">See the Demo: ROS2 Simulator - Fidning the Optimal Path on the Moon 🌕 </a>
+  <figcaption><a href="" target="_blank" rel="noopener">See the Demo: Camera Object Detection and Classification on the Moon🌕</a></figcaption>
 </figure>
 
-## Team
-| Name | Affiliation | Country |
-| --- | --- | --- |
-| Andre Khoo | Nanyang Technological University | 🇸🇬 |
-| Alessio Borgi | Sapienza University of Rome (AI & Robotics) | 🇮🇹 |
-| Kristjan Jurij Tarantelli | Sapienza University of Rome (AI & Robotics) | 🇮🇹 |
-| Rasmus Börjesson Dahlstedt | Chalmers University of Technology | 🇸🇪 |
