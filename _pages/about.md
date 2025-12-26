@@ -150,27 +150,37 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     </div>
   </div>
 
-  <!-- Recent publications -->
-  <div class="card" style="margin-top:1rem">
-    <div class="pad">
-      <h3>Recent publications</h3>
-      {% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
-      {% assign recent_pubs = site.publications | sort: "date" | reverse %}
-      <ul>
-        {% if z_pub %}
-          {% include archive-single.html post=z_pub %}
-        {% endif %}
-        {% for pub in recent_pubs %}
-          {% if z_pub and pub.slug == z_pub.slug %}
-            {% continue %}
-          {% endif %}
-          {% include archive-single.html post=pub %}
-          {% if forloop.index == 3 %}{% break %}{% endif %}
-        {% endfor %}
-      </ul>
-      <p><a class="btn" href="/publications/">View all publications →</a></p>
-    </div>
-  </div>
+  ---
+
+## Recent publications
+{% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
+{% assign recent_pubs = site.publications | sort: "date" | reverse %}
+<ul>
+  {% if z_pub %}
+    {% include archive-single.html post=z_pub %}
+  {% endif %}
+  {% for pub in recent_pubs %}
+    {% if z_pub and pub.slug == z_pub.slug %}
+      {% continue %}
+    {% endif %}
+    {% include archive-single.html post=pub %}
+    {% if forloop.index == 3 %}{% break %}{% endif %}
+  {% endfor %}
+</ul>
+
+<p><a class="btn" href="/publications/">View all publications →</a></p>
+
+---
+## A few things I’m exploring next
+<div class="chips">
+  <span class="chip">Equivariant Sheaf Diffusion</span>
+  <span class="chip">Protein/Graph Generation</span>
+  <span class="chip">Sheaf-aware EEG Pipelines</span>
+  <span class="chip">Robotics + GenAI bridges</span>
+  <span class="chip">Mechanistic interpretability for GNNs</span>
+</div>
+
+---
 
   <!-- Popular Repositories -->
   <div class="card" style="margin-top:1rem">
@@ -216,69 +226,7 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   </script>
 </section>
 
-<!-- ====== /GITHUB STATS ====== -->
 
----
-
-## What I’m into right now
-<div class="focus-grid">
-  <div class="focus-card">
-    <h4>🧮 Equivariant Sheaf NNs</h4>
-    Fiber-aware transports, E(n)-equivariance, and **polynomial/sheaf diffusion** for controllable generation.
-    <div class="chips" style="margin-top:.5rem">
-      <span class="chip">Equivariance</span><span class="chip">Sheaf Theory</span><span class="chip">Spectral Filters</span>
-    </div>
-  </div>
-  <div class="focus-card">
-    <h4>🎨 Diffusion Models</h4>
-    Multi-style conditioning, **latent manipulation**, and stable **zero-shot style alignment**.
-    <div class="chips" style="margin-top:.5rem">
-      <span class="chip">Latent Space</span><span class="chip">Style Alignment</span><span class="chip">Zero-shot</span>
-    </div>
-  </div>
-  <div class="focus-card">
-    <h4>🧠 Graphs everywhere</h4>
-    Protein/structure generation, heterophily benchmarks, EEG/brain graphs & interpretability.
-    <div class="chips" style="margin-top:.5rem">
-      <span class="chip">GNNs</span><span class="chip">BioAI</span><span class="chip">Heterophily</span>
-    </div>
-  </div>
-  <div class="focus-card">
-    <h4>🤖 Robotics</h4>
-    Kinematics & dynamics, planning, simulation-to-real pipelines, and control under constraints.
-    <div class="chips" style="margin-top:.5rem">
-      <span class="chip">Planning</span><span class="chip">Control</span><span class="chip">SLAM</span>
-    </div>
-  </div>
-</div>
-
-## How I like to collaborate
-- **Clear goals, fast iterations** — short sprints, public ablations, reproducible seeds.  
-- **Transparent repos** — tidy READMEs, configs, and **W&B** (or similar) logs.  
-- **Strong baselines** — fair comparisons, stats tests, and error analysis over cherry-picked plots.  
-- **Write it as we build** — draft notes, figures, and bib entries early; keep LaTeX in sync with code.
-
-If that resonates, let’s build something together →  
-**<a href="mailto:borgialessio01@gmail.com">borgialessio01@gmail.com</a> · <a href="https://github.com/alessioborgi">GitHub</a> · <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">Google Scholar</a>**
-
----
-
-## A few things I’m exploring next
-<div class="chips">
-  <span class="chip">Equivariant Sheaf Diffusion</span>
-  <span class="chip">Protein/Graph Generation</span>
-  <span class="chip">Sheaf-aware EEG Pipelines</span>
-  <span class="chip">Robotics + GenAI bridges</span>
-  <span class="chip">Mechanistic interpretability for GNNs</span>
-</div>
-
----
-
-### Quick links
-- 📄 **CV** — <a href="/assets/Alessio_Borgi_CV_Short.pdf">download</a>  
-- 🧪 **Publications** — <a href="/publications/">browse</a>  
-- 🧱 **Projects** — <a href="/projects/">code & demos</a>  
-- 🎤 **Participation & Talks** — <a href="/participation-talks/">events & slides</a>  
 
 <!-- Optional JSON-LD to strengthen SEO; harmless if jekyll-seo-tag is already present -->
 <script type="application/ld+json">
