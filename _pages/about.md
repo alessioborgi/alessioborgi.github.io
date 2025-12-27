@@ -59,7 +59,10 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
         type: {{ p.type | default: "study" | jsonify }},
         lat: {{ p.lat | default: 0 }},
         lng: {{ p.lng | default: 0 }},
-        note: {{ p.note | default: "" | jsonify }}
+        note: {{ p.note | default: "" | jsonify }},
+        date: {{ p.date | default: "" | jsonify }},
+        radius: {{ p.radius | default: "null" | jsonify }},
+        zoom_min: {{ p.zoom_min | default: "null" | jsonify }}
       }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     ];
@@ -71,22 +74,43 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    var markers = [];
     places.forEach(function(p) {
       if (!p.lat || !p.lng) return;
       var color = typeColors[p.type] || typeColors.study;
+      var radius = p.radius ? Number(p.radius) : (p.type === 'home' ? 9 : 8);
+      var minZoom = p.zoom_min ? Number(p.zoom_min) : 2;
       var marker = L.circleMarker([p.lat, p.lng], {
-        radius: 8,
+        radius: radius,
         color: color,
         fillColor: color,
         fillOpacity: 0.9,
         weight: 2
       }).addTo(map);
+      marker._lpMeta = {
+        baseStyle: { radius: radius, color: color, fillColor: color, fillOpacity: 0.9, weight: 2, opacity: 1 },
+        hiddenStyle: { radius: radius, color: color, fillColor: color, fillOpacity: 0, opacity: 0 },
+        minZoom: minZoom
+      };
       var lines = [];
       if (p.name) lines.push('<strong>' + p.name + '</strong>');
       if (p.subtitle) lines.push(p.subtitle);
       if (p.note) lines.push(p.note);
+      if (p.date) lines.push('Years: ' + p.date);
       marker.bindTooltip(lines.join('<br>'), { direction: 'top', sticky: true, className: 'map-tooltip' });
+      markers.push(marker);
     });
+
+    function updateVisibility() {
+      var z = map.getZoom();
+      markers.forEach(function(m) {
+        var meta = m._lpMeta || {};
+        var visible = z >= (meta.minZoom || 2);
+        m.setStyle(visible ? meta.baseStyle : meta.hiddenStyle);
+      });
+    }
+    map.on('zoomend', updateVisibility);
+    updateVisibility();
   })();
 </script>
 
