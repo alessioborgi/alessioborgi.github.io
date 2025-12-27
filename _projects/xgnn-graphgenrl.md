@@ -1,5 +1,5 @@
 ---
-title: "XGNNs: GraphGen RL Explanations"
+title: "XGNNs: Model-level Explanation of Graph Neural Networks with RL through Graph Generation"
 collection: projects
 layout: single
 permalink: /projects/xgnn-graphgenrl/
@@ -13,7 +13,6 @@ tags:
   - Graph Generation
 ---
 
-# XGNNs: Model-level Explanation of Graph Neural Networks with RL through Graph Generation
 
 #### Copyright © 2024 Francesco Danese, Alessio Borgi
 

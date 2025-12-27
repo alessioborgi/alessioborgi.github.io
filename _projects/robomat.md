@@ -15,8 +15,6 @@ tags:
   - Path Planning
 ---
 
-# RoboMAT
-
 ### Copyright © 2024 Alessio Borgi
 
 RoboMAT is a comprehensive MATLAB library designed to address a variety of robotics tasks. This library offers a suite of tools and functions for robotic simulations, control systems, kinematics, dynamics, and path planning. With RoboMAT, researchers and engineers can easily implement and test robotic algorithms in a MATLAB environment.

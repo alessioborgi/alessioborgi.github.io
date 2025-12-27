@@ -1,5 +1,5 @@
 ---
-title: "BioHeat PINNs"
+title: "BioHeat PINNs: Temperature Estimation with Bio-Heat Equation using Physics-Informed Neural Networks"
 collection: projects
 layout: single
 permalink: /projects/bioheat-pinns/
@@ -12,8 +12,6 @@ tags:
   - Hyperthermia Therapy
   - Docker
 ---
-
-# BioHeat PINNs: Temperature Estimation with Bio-Heat Equation using Physics-Informed Neural Networks
 
 ### Copyright © 2024 Alessio Borgi, Eugenio Bugli, Alessandro De Luca
 

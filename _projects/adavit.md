@@ -13,7 +13,6 @@ tags:
   - Deep Learning
 ---
 
-# AdaViT (Adaptive Vision Transformers)
 
 **Copyright © 2024 Alessio Borgi**
 
