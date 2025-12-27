@@ -1,4 +1,5 @@
 # Add your places here. Types: home, study, holiday.
+################################ HOME ################################
 - name: "Civitavecchia"
   subtitle: "Home location"
   type: "home"
@@ -6,9 +7,124 @@
   lng: 11.7960
   note: "Where it all starts."
 
+################################ STUDY ################################
 - name: "Sapienza University of Rome"
-  subtitle: "MSc Artificial Intelligence & Robotics; BSc Applied CS & AI"
+  subtitle: "BSc Applied Computer Science & Artificial Intelligence & MSc Artificial Intelligence & Robotics. "
   type: "study"
   lat: 41.9032
   lng: 12.5156
-  note: "Rome, Italy 🇮🇹"
+  note: "Sapienza University of Rome, Rome, Italy 🇮🇹"
+
+- name: "Barcelona"
+  subtitle: "SEIO Workshop and PhD School: Precise Methods for Optimizing Vehicle Routing and Logistics"
+  type: "study"
+  lat: 41.3874
+  lng: 2.1686
+  note: "Universitat Pompeu Fabra, Barcelona, Spain 🇪🇸"
+
+- name: "Cambridge"
+  subtitle: "PhD Long Visiting in Graph Neural Networks and Generative AI"
+  type: "study"
+  lat: 52.2053
+  lng: 0.1218
+  note: "University of Cambridge, Cambridge,UK 🇬🇧"
+
+- name: "Oxford"
+  subtitle: "OxML 2025 - Oxford Machine Learning Summer School"
+  type: "study"
+  lat: 51.7520
+  lng: -1.2577
+  note: "University of Oxford, Oxford, UK 🇬🇧"
+
+- name: "London"
+  subtitle: "OxML 2025 - Oxford Machine Learning Summer School"
+  type: "study"
+  lat: 51.5074
+  lng: -0.1278
+  note: "London School of Economics, London, UK 🇬🇧"
+
+- name: "Linz"
+  subtitle: ""
+  type: "study"
+  lat: 48.3069
+  lng: 14.2858
+  note: "Update type/note"
+
+- name: "Sendai"
+  subtitle: ""
+  type: "study"
+  lat: 38.2682
+  lng: 140.8694
+  note: "Update type/note"
+
+- name: "Podgorica"
+  subtitle: ""
+  type: "study"
+  lat: 42.4304
+  lng: 19.2594
+  note: "Update type/note"
+
+- name: "Nashville"
+  subtitle: "Computer Vision and Pattern Recognition Conference 2025 (CVPR 2025)"
+  type: "study"
+  lat: 36.1627
+  lng: -86.7816
+  note: "CVPR 2025, Nasville, TN, USA 🇺🇸"
+
+################################ LEISURE ################################
+- name: "Vienna"
+  subtitle: ""
+  type: "study"
+  lat: 48.2082
+  lng: 16.3738
+  note: "Update type/note"
+
+- name: "Budapest"
+  subtitle: ""
+  type: "study"
+  lat: 47.4979
+  lng: 19.0402
+  note: "Update type/note"
+
+- name: "Copenhagen"
+  subtitle: ""
+  type: "study"
+  lat: 55.6761
+  lng: 12.5683
+  note: "Update type/note"
+
+- name: "Salzburg"
+  subtitle: ""
+  type: "study"
+  lat: 47.8095
+  lng: 13.0550
+  note: "Update type/note"
+
+- name: "Matsushima"
+  subtitle: ""
+  type: "holiday"
+  lat: 38.3720
+  lng: 141.0617
+  note: "Update type/note"
+
+- name: "Tokyo"
+  subtitle: ""
+  type: "study"
+  lat: 35.6762
+  lng: 139.6503
+  note: "Update type/note"
+
+
+- name: "Menton"
+  subtitle: ""
+  type: "holiday"
+  lat: 43.7745
+  lng: 7.4975
+  note: "Update type/note"
+
+- name: "Prague"
+  subtitle: ""
+  type: "study"
+  lat: 50.0755
+  lng: 14.4378
+  note: "Update type/note"

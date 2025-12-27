@@ -36,17 +36,21 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   .map-legend { display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 0.5rem; flex-wrap: wrap; }
   .map-legend .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; margin-right: 0.3rem; border: 1px solid rgba(0,0,0,0.12); }
 </style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-o9N1jI+VQ1BM8DT6vKrrfE0Yv7FpC18m0tHbdD+14Q6gttxyPjdvGKuGNTxjea1k" crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <div id="world-map"></div>
 <div class="map-legend">
   <span><span class="dot" style="background:#0d9488;"></span>Home</span>
   <span><span class="dot" style="background:#0a66c2;"></span>Study</span>
   <span><span class="dot" style="background:#f59e0b;"></span>Holiday</span>
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-ekG5IOzBSSMSmc5QwDFi1Cdm42Hcps225y7sY9qsK0kGugHgdGXN53BJ38qJNmPR" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
   (function() {
     if (!document.getElementById('world-map')) return;
+    if (!window.L) {
+      console.warn('Leaflet failed to load. Check network/extension blocks.');
+      return;
+    }
     var places = [
       {% for p in places %}
       {
