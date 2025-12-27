@@ -24,10 +24,11 @@ author_profile: true
   .pub-citation { margin: 0.5rem 0 0.75rem; font-size: 0.95rem; }
   .pub-actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem;
     flex-wrap: wrap;
     margin-top: 0.35rem;
+    width: 100%;
   }
   .pub-btn {
     display: inline-flex;
@@ -46,6 +47,13 @@ author_profile: true
   .pub-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 10px 20px rgba(10, 102, 194, 0.35);
+  }
+  .pub-btn--code {
+    background: #24292e;
+    box-shadow: 0 6px 16px rgba(36, 41, 46, 0.35);
+  }
+  .pub-btn--right {
+    margin-left: auto;
   }
 </style>
 
@@ -77,4 +85,3 @@ author_profile: true
     {% include archive-single.html type="pub-card" %}
   {% endfor %}
 {% endif %}
-

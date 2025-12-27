@@ -375,8 +375,26 @@
           images[current].classList.add('active');
         }
   
-        images[current].classList.add('active');
-        setInterval(showNextImage, 10000); // 10 seconds
+    images[current].classList.add('active');
+    setInterval(showNextImage, 10000); // 10 seconds
+  });
+});
+</script>
+
+<script>
+  // If this page is embedded (e.g., in the publications iframe), force external links to open in a new tab
+  (function() {
+    if (window.self !== window.top) {
+      document.addEventListener('click', function(event) {
+        const link = event.target.closest('a');
+        if (!link || !link.href) return;
+        const url = new URL(link.href, window.location.href);
+        const isExternal = url.origin !== window.location.origin;
+        if (isExternal) {
+          event.preventDefault();
+          window.open(link.href, '_blank', 'noopener');
+        }
       });
-    });
-  </script>
+    }
+  })();
+</script>

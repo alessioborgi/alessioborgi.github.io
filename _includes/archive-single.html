@@ -56,7 +56,11 @@
     {% endif %}
     
     {% assign link_items = "" %}
+    {% if post.webpageurl %}
+      {% assign link_items = link_items | append: '<a href="' | append: post.webpageurl | append: '">Go to the Webpage</a>' %}
+    {% endif %}
     {% if post.paperurl %}
+      {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
       {% assign link_items = link_items | append: '<a href="' | append: post.paperurl | append: '">Download Paper</a>' %}
     {% endif %}
     {% if post.posterurl %}
@@ -71,18 +75,21 @@
       {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
       {% assign link_items = link_items | append: '<a href="' | append: post.bibtexurl | append: '">Download Bibtex</a>' %}
     {% endif %}
+    {% if post.codeurl %}
+      {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
+      {% assign link_items = link_items | append: '<a href="' | append: post.codeurl | append: '">GitHub Code</a>' %}
+    {% endif %}
 
     {% if post.citation or link_items != "" %}
       {% if use_pub_card %}
-        {% if post.citation %}
-          <p class="pub-citation">Recommended citation: {{ post.citation }}</p>
-        {% endif %}
-        {% if post.paperurl or post.posterurl or post.slidesurl or post.bibtexurl %}
+        {% if post.webpageurl or post.paperurl or post.posterurl or post.slidesurl or post.bibtexurl or post.codeurl %}
           <div class="pub-actions">
+            {% if post.webpageurl %}<a class="pub-btn" href="{{ post.webpageurl }}">Go to the Webpage</a>{% endif %}
             {% if post.paperurl %}<a class="pub-btn" href="{{ post.paperurl }}">Download Paper</a>{% endif %}
             {% if post.posterurl %}<a class="pub-btn" href="{{ post.posterurl }}">Download Poster</a>{% endif %}
             {% if post.slidesurl %}<a class="pub-btn" href="{{ post.slidesurl }}">Download Slides</a>{% endif %}
             {% if post.bibtexurl %}<a class="pub-btn" href="{{ post.bibtexurl }}">Download Bibtex</a>{% endif %}
+            {% if post.codeurl %}<a class="pub-btn pub-btn--code pub-btn--right" href="{{ post.codeurl }}">GitHub Code</a>{% endif %}
           </div>
         {% endif %}
       {% else %}
