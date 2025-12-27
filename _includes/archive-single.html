@@ -56,26 +56,20 @@
     {% endif %}
     
     {% assign link_items = "" %}
-    {% assign actions = "" %}
-    {% assign actions_list = "" | split: "" %}
     {% if post.paperurl %}
       {% assign link_items = link_items | append: '<a href="' | append: post.paperurl | append: '">Download Paper</a>' %}
-      {% if use_pub_card %}{% assign actions_list = actions_list | push: '<a class="pub-btn" href="' | append: post.paperurl | append: '">Download Paper</a>' %}{% endif %}
     {% endif %}
     {% if post.posterurl %}
       {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
       {% assign link_items = link_items | append: '<a href="' | append: post.posterurl | append: '">Download Poster</a>' %}
-      {% if use_pub_card %}{% assign actions_list = actions_list | push: '<a class="pub-btn" href="' | append: post.posterurl | append: '">Download Poster</a>' %}{% endif %}
     {% endif %}
     {% if post.slidesurl %}
       {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
       {% assign link_items = link_items | append: '<a href="' | append: post.slidesurl | append: '">Download Slides</a>' %}
-      {% if use_pub_card %}{% assign actions_list = actions_list | push: '<a class="pub-btn" href="' | append: post.slidesurl | append: '">Download Slides</a>' %}{% endif %}
     {% endif %}
     {% if post.bibtexurl %}
       {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
       {% assign link_items = link_items | append: '<a href="' | append: post.bibtexurl | append: '">Download Bibtex</a>' %}
-      {% if use_pub_card %}{% assign actions_list = actions_list | push: '<a class="pub-btn" href="' | append: post.bibtexurl | append: '">Download Bibtex</a>' %}{% endif %}
     {% endif %}
 
     {% if post.citation or link_items != "" %}
@@ -83,9 +77,12 @@
         {% if post.citation %}
           <p class="pub-citation">Recommended citation: {{ post.citation }}</p>
         {% endif %}
-        {% if actions_list.size > 0 %}
+        {% if post.paperurl or post.posterurl or post.slidesurl or post.bibtexurl %}
           <div class="pub-actions">
-            {{ actions_list | join: '' | replace: '><', '>' | replace: '</a><a', '</a> <a' | raw }}
+            {% if post.paperurl %}<a class="pub-btn" href="{{ post.paperurl }}">Download Paper</a>{% endif %}
+            {% if post.posterurl %}<a class="pub-btn" href="{{ post.posterurl }}">Download Poster</a>{% endif %}
+            {% if post.slidesurl %}<a class="pub-btn" href="{{ post.slidesurl }}">Download Slides</a>{% endif %}
+            {% if post.bibtexurl %}<a class="pub-btn" href="{{ post.bibtexurl }}">Download Bibtex</a>{% endif %}
           </div>
         {% endif %}
       {% else %}
