@@ -24,7 +24,7 @@ redirect_from:
 
 <div class="cv-grid">
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Education
 
 - **Ph.D. in Engineering in Computer Science — Artificial Intelligence**, Sapienza University 🇮🇹 & University of Cambridge 🇬🇧 — *2025–present*  
@@ -49,7 +49,7 @@ redirect_from:
   **Thesis/Project:** *Electric Company: Ticketing System* — [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). 
 </div>
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Visiting Research
 
 - **Space Robotics** — Tohoku University, Space Robotics Lab, Sendai, Japan 🇯🇵 — *June–July 2025*  
@@ -67,7 +67,7 @@ redirect_from:
   **Achievement:** **Best Poster & Project Award** (program showcase). 
 </div>
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Work Experience
 
 - **AI & ML Software Research Engineer (Intern)** — Hewlett Packard Enterprise (HPE) — *Mar 2023 – Aug 2023*  
@@ -78,7 +78,7 @@ redirect_from:
   – Team **Best HPE 2023 Paper Award**.
 </div>
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Awards
 - **[G-Research Early Career Award](https://www.gresearch.com/news/g-research-november-2025-grant-winners/)**: Scholarship for promising young researchers (November, 2025).
 - **[Research Certificate of Excellence]({{ "/visiting-research/tohoku-2025/" | relative_url }})** - Selected as top-1 student for the visiting period, **won TESP 2025 Competition** and awarded with a **Certificate of Research Excellence**. (Tohoku University 2025, Japan).
@@ -88,7 +88,7 @@ redirect_from:
 - **Honourable Mention** — Hewlett Packard Enterprise Internal Hackaton, (2023).  
 </div>
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Skills
 **Programming Languages:** Python · Java · C++ · Matlab · Java-FX · Swing · FXML · RISC-V · GO · JavaScript · VueJS · OpenAPI · CSS · HTML · SQL · PHP · Flutter 
 
@@ -99,7 +99,7 @@ redirect_from:
 **Tooling:** CUDA · Git · Linux · Docker · LaTeX · Hydra/YAML · Streamlit · Figma · Arduino · Raspberry Pi · Docker · WordPress · Axios
 </div>
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Certifications
 - **Cambridge Assessment International Education** — First Certificate (B2) *(ID: B3329535)*  
 - **Instituto Cervantes** — **DELE A1** *(ID: S6516DL9BAHUJHY248TJ4V4KJ2)*  
@@ -110,14 +110,14 @@ redirect_from:
 - **IBM** — **Blockchain Essentials** Certification *(verified)*
 </div>
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Languages
 - **Italian** — C2 (*Mother tongue*)  
 - **English** — C1 
 - **Spanish** — A1
 </div>
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Publications
 <ul>
 {% for post in site.publications reversed %}

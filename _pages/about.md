@@ -16,7 +16,7 @@ redirect_from:
     box-shadow: 0 8px 20px rgba(19, 56, 68, 0.15);
     border: 1px solid rgba(19, 56, 68, 0.08);
   }
-  .collab-card h3 { margin-top: 0; margin-bottom: 0.5rem; color: #0f2a36; }
+  .collab-card h3 { margin-top: 0; margin-bottom: 0.5rem; color: #0f2a36; text-align: center; }
   .collab-card p { margin-bottom: 0.75rem; }
   .collab-card .cta {
     text-align: center;
