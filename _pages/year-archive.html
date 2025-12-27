@@ -15,6 +15,19 @@ redirect_from:
   <p>👉 <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a></p>
 </div>
 <hr />
+{% assign linkedin_posts = site.data.linkedin_posts | default: [] %}
+{% if linkedin_posts.size > 0 %}
+  <h2 id="linkedin-posts" class="archive__subtitle">LinkedIn posts</h2>
+  <ul>
+  {% for lp in linkedin_posts %}
+    <li>
+      {% if lp.date %}<span class="page__meta">{{ lp.date }}</span> {% endif %}
+      <a href="{{ lp.url }}" target="_blank" rel="noopener">{{ lp.title | default: lp.url }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+  <hr />
+{% endif %}
 {% capture written_year %}'None'{% endcapture %}
 {% for post in site.posts %}
   {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}

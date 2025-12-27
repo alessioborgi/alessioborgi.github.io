@@ -45,6 +45,7 @@ redirect_from:
   **Project:** *MoonBot Navigation* — Autonomous robot for lunar navigation & object interaction. Dijkstra-based path planning, object detection (vision), custom robot design, gripper control.  
   **Repository:** <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:14px;width:14px;vertical-align:middle;margin-right:4px;"> [MoonBot Navigation (GitHub)](https://github.com/alessioborgi/MoonBot-Navigation)  
   **Outcome:** Selected as top-1 student for the exchange; developed the **MoonBot Navigation** project (linked above) which won the **TESP 2025 Competition**, and I received the **Research Certificate of Excellence**. 
+
   **Project Page:** [Visiting Research Tohoku University Page](/visiting-research/tohoku-2025/).
 
 - **AI & Robotics in Healthcare** — Johannes Kepler Universität (JKU), Linz, Austria 🇦🇹 — *Aug–Sept 2024*  
@@ -68,7 +69,7 @@ redirect_from:
 
 ## Awards
 - **[G-Research Early Career Award](https://www.gresearch.com/news/g-research-november-2025-grant-winners/)**: Scholarship for promising young researchers (November, 2025).
-- **[Research Certificate of Excellence]({{ "/visiting-research/tohoku-2025/" | relative_url }})** - Selected as top-1 student for the visiting period and **won TESP 2025 Competition**, (Tohoku University 2025, Japan).
+- **[Research Certificate of Excellence]({{ "/visiting-research/tohoku-2025/" | relative_url }})** - Selected as top-1 student for the visiting period, **won TESP 2025 Competition** and awarded with a **Certificate of Research Excellence**. (Tohoku University 2025, Japan).
 - **Generative AI Safety Challenge** — *Privacy Violation Detection* (Individual Award) & *Attack on Data* (Team Award), (Sapienza University of Rome, Italy, 2025). 
 - **[Best Poster Award](https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024)** — Mediterranean Machine Learning (M2L) Summer School, (Milan, Italy, 2024).
 - **Best Paper Award (team)** — Hewlett Packard Enterprise PathFinder Team Recognition, (2023).
