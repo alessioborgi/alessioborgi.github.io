@@ -56,13 +56,13 @@ redirect_from:
 
 - **B.Sc. in Applied Computer Science and Artificial Intelligence**, Sapienza University 🇮🇹 — *2020–2023*  
   **Final mark:** 110/110 with Honours  
-  **Thesis:** *Building Real-Time Multivariate Anomaly Detection Systems in Industry’s 5G Networks: A Comprehensive Workflow* — [GitHub](https://github.com/alessioborgi/Bachelor-s-Thesis).  
+  **Thesis:** *Building Real-Time Multivariate Anomaly Detection Systems in Industry’s 5G Networks: A Comprehensive Workflow* — <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:14px;width:14px;vertical-align:middle;margin-right:4px;"> [GitHub](https://github.com/alessioborgi/Bachelor-s-Thesis).  
   **Courses:** Deep Learning, AI Lab & Computer Vision, Machine Learning, Artificial Intelligence, Web & Software Architecture, Cybersecurity, Programming I/II (+ Lab), Databases, HCI, Networking, Operating Systems, Algorithms, Statistics, Startup & Management, Business & CS, Computer Architecture, Calculus I/II/III, Linear Algebra, Physics, Probability, Foundations of CS.  
   **Membership:** [OmniAI Lab](https://omnai.di.uniroma1.it/undergrad/). 
 
 - **Secondary School — Information Technology**, I.I.S. Guglielmo Marconi, Civitavecchia 🇮🇹 — *2015–2020*  
   **Final mark:** 100/100  
-  **Thesis/Project:** *Electric Company: Ticketing System* — [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). 
+  **Thesis/Project:** *Electric Company: Ticketing System* — <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:14px;width:14px;vertical-align:middle;margin-right:4px;"> [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). 
 </div>
 
 <div class="cv-card" markdown="1">
@@ -73,7 +73,6 @@ redirect_from:
   **Project:** *MoonBot Navigation* — Autonomous robot for lunar navigation & object interaction. Dijkstra-based path planning, object detection (vision), custom robot design, gripper control.  
   **Repository:** <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:14px;width:14px;vertical-align:middle;margin-right:4px;"> [MoonBot Navigation (GitHub)](https://github.com/alessioborgi/MoonBot-Navigation)  
   **Outcome:** Selected as top-1 student for the exchange; developed the **MoonBot Navigation** project (linked above) which won the **TESP 2025 Competition**, and I received the **Research Certificate of Excellence**. 
-
   **Project Page:** [Visiting Research Tohoku University Page](/visiting-research/tohoku-2025/).
 
 - **AI & Robotics in Healthcare** — Johannes Kepler Universität (JKU), Linz, Austria 🇦🇹 — *Aug–Sept 2024*  
@@ -145,7 +144,7 @@ redirect_from:
 <div class="cv-card" markdown="1">
 ## Contact
 - 📧 **Email:** [alessio.borgi@uniroma1.it](mailto:alessio.borgi@uniroma1.it) · [borgialessio01@gmail.com](mailto:borgialessio01@gmail.com) · [ab3352@cam.ac.uk](mailto:ab3352@cam.ac.uk)
-- 🔗 **GitHub:** [alessioborgi](https://github.com/alessioborgi)
+- 🔗 **GitHub:** <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:14px;width:14px;vertical-align:middle;margin-right:4px;"> [alessioborgi](https://github.com/alessioborgi)
 - 🎓 **Scholar:** [profile](https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it)
 - 🆔 **ORCID:** [0009-0007-1979-0857](https://orcid.org/0009-0007-1979-0857)
 </div>
