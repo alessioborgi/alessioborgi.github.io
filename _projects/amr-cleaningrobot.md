@@ -1,5 +1,5 @@
 ---
-title: "AMR Cleaning Robot"
+title: "(AMR) Autonomous Mobile Robotics Cleaning Robot"
 collection: projects
 layout: single
 permalink: /projects/amr-cleaningrobot/
@@ -12,7 +12,6 @@ tags:
   - Autonomous Systems
 ---
 
-# Autonomous Mobile Robot: Cleaning Robot  
 #### Copyright © 2024 Alessio Borgi
 
 <div class="notice--primary">
@@ -33,29 +32,23 @@ Welcome to the Cleaning Robot project. It simulates an autonomous cleaning AMR o
 - **Planning Trajectories:** Uses NavfnROS and TrajectoryPlannerROS to compute optimal global/local paths accounting for static and dynamic obstacles.  
 - **Dynamic Obstacle Avoidance:** Sensors and planners cooperate to steer around obstacles for smooth navigation.
 
-## Instructions
-1. **Installations**
-   - Ubuntu 20.04.  
-   - ROS1 Noetic (follow the [official guide](https://www.ros.org/install/)).  
-   - Webots R2021a from the [official site](https://cyberbotics.com/#download).
-
-2. **Workspace Setup**
-   - `mkdir nameFolder && cd nameFolder`  
-   - `mkdir -p CleaningRobot_ws/src && cd CleaningRobot_ws/src`  
-   - `git clone https://github.com/alessioborgi/CleaningRobot_RP.git`
-
-3. **Dependencies and Packages Installation**
-   - In the workspace: `sudo apt-get install python3-rosdep`  
-   - `sudo rosdep init`  
-   - `rosdep update`  
-   - `cd robot_settings` then `rosdep install --from-paths src --ignore-src -y`  
-   - `cd ..` then `cd nav_plan_objavoid` and run `rosdep install --from-paths src --ignore-src -y`
-
-4. **Launching the Project**
-   - `cd nameFolder/CleaningRobot_ws`  
-   - `catkin build`  
-   - `source devel/setup.bash`  
-   - `roslaunch robot_settings master.launch` (opens Webots + RViz)
+<style>
+  .demo-callout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0 0 0.35rem 0;
+    width: 100%;
+    text-align: center;
+  }
+  .demo-callout i {
+    color: #ff0000;
+    font-size: 1.35rem;
+  }
+</style>
 
 ## Home Environment
 The robot operates in a Webots home world, showing both top view and onboard camera.
@@ -106,12 +99,13 @@ Builds a 2D occupancy grid and estimates pose using Rao-Blackwellized particle f
 - Terminal 2: run GMapping (replace topic with your scan):  
   `rosrun gmapping slam_gmapping scan:=/Cam_robot_xxxx_Ubuntu_22_04/Lidar/laser_scan/layer0`
 
-<div style="text-align: center">
-  <a href="https://www.youtube.com/watch?v=iSu1aiwxvLg">
-    <p style="font-size: 16px; margin-top: 5px;">Click the Photo to See the Video!</p>
-    <img src="{{ '/images/AMR_Cleaning/SLAM_Building_img.png' | relative_url }}" alt="SLAM building" width="1200">
-  </a>
-</div>
+<figure>
+  <figcaption class="demo-callout">
+    <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+    <a href="https://www.youtube.com/watch?v=iSu1aiwxvLg" target="_blank" rel="noopener">SLAM Building Demo</a>
+  </figcaption>
+  <img src="{{ '/images/AMR_Cleaning/SLAM_Building_img.png' | relative_url }}" alt="SLAM building" width="1200">
+</figure>
 
 ### Saving the Map
 Use map_server to save:  
@@ -126,19 +120,21 @@ The AMR navigates with a **Global Path** (NavfnROS, Dijkstra) over the global co
 
 Set a goal in RViz (2D Nav Goal); the robot plans and follows, handling new obstacles.
 
-<div style="text-align: center">
-  <a href="https://www.youtube.com/watch?v=JZtBGJTJ42g">
-    <p style="font-size: 16px; margin-top: 5px;">Click the Photo to See the Video!</p>
-    <img src="{{ '/images/AMR_Cleaning/Navigation_Planning_Object_Avoidance_img.png' | relative_url }}" alt="Navigation & planning" width="1200">
-  </a>
-</div>
+<figure>
+  <figcaption class="demo-callout">
+    <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+    <a href="https://www.youtube.com/watch?v=JZtBGJTJ42g" target="_blank" rel="noopener">Navigation & Planning Demo</a>
+  </figcaption>
+  <img src="{{ '/images/AMR_Cleaning/Navigation_Planning_Object_Avoidance_img.png' | relative_url }}" alt="Navigation & planning" width="1200">
+</figure>
 
-<div style="text-align: center">
-  <a href="https://www.youtube.com/watch?v=Vp21lLMRADQ">
-    <p style="font-size: 16px; margin-top: 5px;">Click the Photo to See the Video!</p>
-    <img src="{{ '/images/AMR_Cleaning/Object_Avoidance.png' | relative_url }}" alt="Object avoidance" width="1200">
-  </a>
-</div>
+<figure>
+  <figcaption class="demo-callout">
+    <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+    <a href="https://www.youtube.com/watch?v=Vp21lLMRADQ" target="_blank" rel="noopener">Obstacle Avoidance Demo</a>
+  </figcaption>
+  <img src="{{ '/images/AMR_Cleaning/Object_Avoidance.png' | relative_url }}" alt="Object avoidance" width="1200">
+</figure>
 
 Recovery: MoveBase will rotate and retry; if unsolvable it cancels. Clear noisy data via:  
 `rosservice call /move_base/clear_costmaps`
@@ -147,7 +143,47 @@ Recovery: MoveBase will rotate and retry; if unsolvable it cancels. Clear noisy 
   <img src="{{ '/images/AMR_Cleaning/Noisy_Map.jpg' | relative_url }}" alt="Noisy map clearing" width="400">
 </div>
 
+## Setup & Launch (Installation)
+1. **Installations**
+   - Ubuntu 20.04.  
+   - ROS1 Noetic ([official guide](https://www.ros.org/install/)).  
+   - Webots R2021a from the [official site](https://cyberbotics.com/#download).
+
+2. **Workspace Setup**
+   - `mkdir nameFolder && cd nameFolder`  
+   - `mkdir -p CleaningRobot_ws/src && cd CleaningRobot_ws/src`  
+   - `git clone https://github.com/alessioborgi/CleaningRobot_RP.git`
+
+3. **Dependencies and Packages Installation**
+   - In the workspace: `sudo apt-get install python3-rosdep`  
+   - `sudo rosdep init`  
+   - `rosdep update`  
+   - `cd robot_settings` then `rosdep install --from-paths src --ignore-src -y`  
+   - `cd ..` then `cd nav_plan_objavoid` and run `rosdep install --from-paths src --ignore-src -y`
+
+4. **Launching the Project**
+   - `cd nameFolder/CleaningRobot_ws`  
+   - `catkin build`  
+   - `source devel/setup.bash`  
+   - `roslaunch robot_settings master.launch` (opens Webots + RViz)
+
 ---
-### Other Similar Repositories
-- **MoonBot Navigation** — Autonomous lunar rover with Dijkstra planning, object detection, and gripper control.  
-  Repo: [https://github.com/alessioborgi/MoonBot-Navigation](https://github.com/alessioborgi/MoonBot-Navigation)
+### Other Project
+<article class="project-card" style="margin-top:0.6rem;">
+  <div class="project-header">
+    <h2 style="margin:0;"><a href="{{ '/projects/moonbot-navigation/' | relative_url }}">MoonBot Navigation</a></h2>
+    <div class="project-links">
+      <a class="project-pill" href="{{ '/projects/moonbot-navigation/' | relative_url }}">
+        <img src="{{ '/images/webpage.webp' | relative_url }}" alt="Project page icon" style="height:18px;width:18px;">
+        <span>Project Page</span>
+      </a>
+      <a class="project-pill" href="https://github.com/alessioborgi/MoonBot-Navigation" target="_blank" rel="noopener">
+        <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub icon" style="height:18px;width:18px;">
+        <span>GitHub</span>
+      </a>
+    </div>
+  </div>
+  <p class="project-excerpt" style="margin:0.5rem 0 0.6rem;">
+    Autonomous lunar rover with Dijkstra planning, visual object detection, and gripper control (TESP ’25, Space Robotics Lab).
+  </p>
+</article>

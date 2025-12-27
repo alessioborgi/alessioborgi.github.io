@@ -133,6 +133,13 @@ author_profile: true
             <li><strong>Perception:</strong> Visual object detection and tracking to trigger tasks and avoid hazards.</li>
             <li><strong>Hardware:</strong> Custom gripper actuation and onboard execution for reliable field operation.</li>
           </ul>
+        {% elsif project_key contains "amr" or post.url contains "amr-cleaningrobot" %}
+          <p class="project-lead">Autonomous indoor cleaning robot with ROS/Webots/RViz stack.</p>
+          <ul class="project-details">
+            <li><strong>SLAM:</strong> Builds a detailed map using Lidar and odometry for obstacle-aware navigation.</li>
+            <li><strong>Planning Trajectories:</strong> NavfnROS + TrajectoryPlannerROS for optimal global/local paths with static and dynamic obstacles.</li>
+            <li><strong>Dynamic Obstacle Avoidance:</strong> Sensors and planners cooperate to steer around obstacles smoothly.</li>
+          </ul>
         {% else %}
           <p class="project-excerpt">
             {% if post.excerpt %}

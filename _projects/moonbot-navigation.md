@@ -91,3 +91,24 @@ tags:
   </figcaption>
   <img src="{{ '/images/tesp_2025/readme_imgs/object_detection.png' | relative_url }}" alt="Object detection" style="width:100%;border-radius:10px;">
 </figure>
+
+---
+### Other Project
+<article class="project-card" style="margin-top:0.6rem;">
+  <div class="project-header">
+    <h2 style="margin:0;"><a href="{{ '/projects/amr-cleaningrobot/' | relative_url }}">AMR Cleaning Robot</a></h2>
+    <div class="project-links">
+      <a class="project-pill" href="{{ '/projects/amr-cleaningrobot/' | relative_url }}">
+        <img src="{{ '/images/webpage.webp' | relative_url }}" alt="Project page icon" style="height:18px;width:18px;">
+        <span>Project Page</span>
+      </a>
+      <a class="project-pill" href="https://github.com/alessioborgi/AMR_CleaningRobot" target="_blank" rel="noopener">
+        <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub icon" style="height:18px;width:18px;">
+        <span>GitHub</span>
+      </a>
+    </div>
+  </div>
+  <p class="project-excerpt" style="margin:0.5rem 0 0.6rem;">
+    Indoor autonomous cleaning robot with SLAM, navigation, and obstacle avoidance built on ROS, Webots, and RViz.
+  </p>
+</article>
