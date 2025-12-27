@@ -145,11 +145,55 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 </script>
 
 ---
-## Recent publications
+## Latest Publications
+<style>
+  .home-pub-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0 1rem 0;
+  }
+  .home-pub-list .pub-card {
+    border: 1px solid #c7d4f2;
+    border-radius: 14px;
+    padding: 1.2rem 1.35rem;
+    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
+    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+    margin-bottom: 0.75rem;
+  }
+  .home-pub-list .pub-card__body h2 { margin-top: 0; margin-bottom: 0.35rem; }
+  .home-pub-list .pub-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.35rem;
+  }
+  .home-pub-list .pub-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: #0a66c2;
+    color: #fff !important;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 6px 16px rgba(10, 102, 194, 0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .home-pub-list .pub-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(10, 102, 194, 0.35);
+  }
+  .home-pub-list .pub-btn--code {
+    background: #24292e;
+    box-shadow: 0 6px 16px rgba(36, 41, 46, 0.35);
+  }
+</style>
 {% assign recent_pubs = site.publications | sort: "date" | reverse | slice: 0, 3 %}
-<ul>
+<ul class="home-pub-list">
   {% for pub in recent_pubs %}
-    {% include archive-single.html post=pub %}
+    {% include archive-single.html post=pub type="pub-card" %}
   {% endfor %}
 </ul>
 

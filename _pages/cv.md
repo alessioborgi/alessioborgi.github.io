@@ -135,7 +135,8 @@ redirect_from:
 <div class="cv-card" markdown="1">
 ## Publications
 <ul>
-{% for post in site.publications reversed %}
+{% assign pubs = site.publications | sort: "date" | reverse %}
+{% for post in pubs %}
   {% include archive-single-cv.html %}
 {% endfor %}
 </ul>
