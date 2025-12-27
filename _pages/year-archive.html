@@ -9,40 +9,29 @@ redirect_from:
 ---
 
 {% include base_path %}
-<hr />
-<div class="notice--primary">
-  <h3>🚀 I’m always open to collaborate, exchange ideas or just talk about anything!</h3>
-  <p><strong>👨🏻‍💻 I’m eager to work with anyone who has great ideas, wants to learn more and more and also share their experience to others.</strong> Don’t hesitate to write me if you’d like to propose your help or ask for mine on a project, research, paper-idea, or a moonshot you’re cooking up.</p>
-  <p>👉 <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a></p>
-</div>
-<hr />
 {% assign linkedin_posts = site.data.linkedin_posts | default: [] %}
 {% if linkedin_posts.size > 0 %}
   <h2 id="linkedin-posts" class="archive__subtitle">LinkedIn posts</h2>
   {% for lp in linkedin_posts %}
-    <div class="linkedin-entry" style="margin-bottom: 2rem;">
-      <p style="margin-bottom: 0.5rem;">
-        {% if lp.date %}<span class="page__meta">{{ lp.date }}</span>{% endif %}
-        {% if lp.title %}
-          <strong>{{ lp.title }}</strong>
+    <div class="linkedin-entry" style="margin-bottom: 2rem; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem; background: #fff;">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
+        <div>
+          {% if lp.title %}<div style="font-weight: 700; font-size: 1.05rem;">{{ lp.title }}</div>{% endif %}
+          {% if lp.date %}<div class="page__meta">{{ lp.date }}</div>{% endif %}
+        </div>
+        {% if lp.url %}
+          <a href="{{ lp.url }}" target="_blank" rel="noopener"
+             style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0.9rem; background: #0a66c2; color: #fff; border-radius: 6px; text-decoration: none; font-weight: 700; letter-spacing: 0.01em; box-shadow: 0 4px 10px rgba(10,102,194,0.25); transition: transform 0.15s ease, box-shadow 0.15s ease;">
+            <i class="fab fa-linkedin" aria-hidden="true"></i>
+            <span>See on LinkedIn</span>
+          </a>
         {% endif %}
-      </p>
+      </div>
       {% if lp.embed_url %}
         <iframe src="{{ lp.embed_url }}" style="width: 100%; height: {{ lp.height | default: 600 }}px;" frameborder="0" allowfullscreen title="{{ lp.title | default: 'LinkedIn post' }}"></iframe>
-        <p style="margin-top: 0.5rem;"><a href="{{ lp.url }}" target="_blank" rel="noopener">Open on LinkedIn</a></p>
       {% else %}
         <a href="{{ lp.url }}" target="_blank" rel="noopener">{{ lp.title | default: lp.url }}</a>
       {% endif %}
     </div>
   {% endfor %}
-  <hr />
 {% endif %}
-{% capture written_year %}'None'{% endcapture %}
-{% for post in site.posts %}
-  {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-  {% if year != written_year %}
-    <h2 id="{{ year | slugify }}" class="archive__subtitle">{{ year }}</h2>
-    {% capture written_year %}{{ year }}{% endcapture %}
-  {% endif %}
-  {% include archive-single.html %}
-{% endfor %}
