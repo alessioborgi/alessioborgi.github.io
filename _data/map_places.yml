@@ -330,7 +330,7 @@
   type: "holiday"
   lat: 51.3758
   lng: -2.3599
-  date: 2025"
+  date: "2025"
   note: "The Romans' Baths are fascinating!"
 
 - name: "Sanremo"
@@ -402,3 +402,73 @@
   radius: 5
   zoom_min: 6
   note: "The beach is one of the most beautiful in Sardinia!"
+
+- name: "Siena"
+  subtitle: ""
+  type: "holiday"
+  lat: 43.3188
+  lng: 11.3308
+  date: ""
+  radius: 5
+  zoom_min: 6
+  note: ""
+
+- name: "Città di San Marino"
+  subtitle: ""
+  type: "holiday"
+  lat: 43.9333
+  lng: 12.4500
+  date: ""
+  radius: 5
+  zoom_min: 6
+  note: ""
+
+- name: "Pesaro"
+  subtitle: ""
+  type: "holiday"
+  lat: 43.9125
+  lng: 12.9133
+  date: ""
+  radius: 5
+  zoom_min: 6
+  note: ""
+
+- name: "Arezzo"
+  subtitle: ""
+  type: "holiday"
+  lat: 43.4633
+  lng: 11.8797
+  date: ""
+  radius: 5
+  zoom_min: 6
+  note: ""
+
+- name: "Lucca"
+  subtitle: ""
+  type: "holiday"
+  lat: 43.8425
+  lng: 10.5027
+  date: ""
+  radius: 5
+  zoom_min: 6
+  note: ""
+
+- name: "Gubbio"
+  subtitle: ""
+  type: "holiday"
+  lat: 43.3518
+  lng: 12.5737
+  date: ""
+  radius: 5
+  zoom_min: 6
+  note: ""
+
+- name: "Camogli"
+  subtitle: ""
+  type: "holiday"
+  lat: 44.3493
+  lng: 9.1559
+  date: ""
+  radius: 5
+  zoom_min: 6
+  note: ""
