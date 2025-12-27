@@ -74,7 +74,13 @@ redirect_from:
         <div class="linkedin-header">
           <div>
             {% if lp.title %}<div class="linkedin-title">{{ lp.title }}</div>{% endif %}
-            {% if lp.date %}<div class="page__meta linkedin-date">{{ lp.date }}</div>{% endif %}
+            {% if lp.date or lp.place %}
+              <div class="page__meta linkedin-date">
+                {% if lp.date %}{{ lp.date }}{% endif %}
+                {% if lp.date and lp.place %} • {% endif %}
+                {% if lp.place %}{{ lp.place }}{% endif %}
+              </div>
+            {% endif %}
           </div>
           {% if lp.url %}
             <a class="linkedin-btn" href="{{ lp.url }}" target="_blank" rel="noopener">
