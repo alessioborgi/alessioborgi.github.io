@@ -9,29 +9,86 @@ redirect_from:
 ---
 
 {% include base_path %}
+
+<style>
+  .linkedin-grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .linkedin-card {
+    border: 1px solid #c7d4f2;
+    border-radius: 14px;
+    padding: 1.25rem 1.35rem;
+    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
+    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+  }
+  .linkedin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .linkedin-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  .linkedin-date {
+    margin-top: 0.15rem;
+  }
+  .linkedin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.65rem 1rem;
+    background: linear-gradient(135deg, #0a66c2, #0f7ddf);
+    color: #fff;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    box-shadow: 0 6px 16px rgba(10, 102, 194, 0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .linkedin-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(10, 102, 194, 0.35);
+  }
+  .linkedin-embed {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+</style>
+
 {% assign linkedin_posts = site.data.linkedin_posts | default: [] %}
 {% if linkedin_posts.size > 0 %}
   <h2 id="linkedin-posts" class="archive__subtitle">LinkedIn posts</h2>
-  {% for lp in linkedin_posts %}
-    <div class="linkedin-entry" style="margin-bottom: 2rem; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem; background: #fff;">
-      <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
-        <div>
-          {% if lp.title %}<div style="font-weight: 700; font-size: 1.05rem;">{{ lp.title }}</div>{% endif %}
-          {% if lp.date %}<div class="page__meta">{{ lp.date }}</div>{% endif %}
+  <div class="linkedin-grid">
+    {% for lp in linkedin_posts %}
+      <div class="linkedin-card">
+        <div class="linkedin-header">
+          <div>
+            {% if lp.title %}<div class="linkedin-title">{{ lp.title }}</div>{% endif %}
+            {% if lp.date %}<div class="page__meta linkedin-date">{{ lp.date }}</div>{% endif %}
+          </div>
+          {% if lp.url %}
+            <a class="linkedin-btn" href="{{ lp.url }}" target="_blank" rel="noopener">
+              <i class="fab fa-linkedin" aria-hidden="true"></i>
+              <span>See on LinkedIn</span>
+            </a>
+          {% endif %}
         </div>
-        {% if lp.url %}
-          <a href="{{ lp.url }}" target="_blank" rel="noopener"
-             style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0.9rem; background: #0a66c2; color: #fff; border-radius: 6px; text-decoration: none; font-weight: 700; letter-spacing: 0.01em; box-shadow: 0 4px 10px rgba(10,102,194,0.25); transition: transform 0.15s ease, box-shadow 0.15s ease;">
-            <i class="fab fa-linkedin" aria-hidden="true"></i>
-            <span>See on LinkedIn</span>
-          </a>
+        {% if lp.embed_url %}
+          <iframe class="linkedin-embed" src="{{ lp.embed_url }}" style="height: {{ lp.height | default: 600 }}px;" frameborder="0" allowfullscreen title="{{ lp.title | default: 'LinkedIn post' }}"></iframe>
+        {% else %}
+          <a href="{{ lp.url }}" target="_blank" rel="noopener">{{ lp.title | default: lp.url }}</a>
         {% endif %}
       </div>
-      {% if lp.embed_url %}
-        <iframe src="{{ lp.embed_url }}" style="width: 100%; height: {{ lp.height | default: 600 }}px;" frameborder="0" allowfullscreen title="{{ lp.title | default: 'LinkedIn post' }}"></iframe>
-      {% else %}
-        <a href="{{ lp.url }}" target="_blank" rel="noopener">{{ lp.title | default: lp.url }}</a>
-      {% endif %}
-    </div>
-  {% endfor %}
+    {% endfor %}
+  </div>
 {% endif %}
