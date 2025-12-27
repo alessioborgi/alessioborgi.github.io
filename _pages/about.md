@@ -146,18 +146,10 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 
 ---
 ## Recent publications
-{% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
-{% assign recent_pubs = site.publications | sort: "date" | reverse %}
+{% assign recent_pubs = site.publications | sort: "date" | reverse | slice: 0, 3 %}
 <ul>
-  {% if z_pub %}
-    {% include archive-single.html post=z_pub %}
-  {% endif %}
   {% for pub in recent_pubs %}
-    {% if z_pub and pub.slug == z_pub.slug %}
-      {% continue %}
-    {% endif %}
     {% include archive-single.html post=pub %}
-    {% if forloop.index == 3 %}{% break %}{% endif %}
   {% endfor %}
 </ul>
 
