@@ -48,6 +48,100 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 <p><a class="btn" href="/publications/">View all publications →</a></p>
 
 ---
+## Latest Blog Post
+{% assign latest_lp = site.data.linkedin_posts | first %}
+<style>
+  .home-linkedin-card {
+    border: 1px solid #c7d4f2;
+    border-radius: 14px;
+    padding: 1.1rem 1.3rem;
+    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
+    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+    margin-bottom: 0.75rem;
+  }
+  .home-linkedin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.65rem;
+  }
+  .home-linkedin-title {
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  .home-linkedin-subtitle {
+    margin: 0.1rem 0 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: #123147;
+  }
+  .home-linkedin-meta {
+    margin-top: 0.15rem;
+  }
+  .home-linkedin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.65rem 1rem;
+    background: linear-gradient(135deg, #0a66c2, #0f7ddf);
+    color: #fff;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    box-shadow: 0 6px 16px rgba(10, 102, 194, 0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .home-linkedin-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(10, 102, 194, 0.35);
+  }
+  .home-linkedin-embed {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+</style>
+{% if latest_lp %}
+  <div class="home-linkedin-card">
+    <div class="home-linkedin-header">
+      <div>
+        {% if latest_lp.title %}<div class="home-linkedin-title">{{ latest_lp.title }}</div>{% endif %}
+        {% if latest_lp.subtitle %}<div class="home-linkedin-subtitle">{{ latest_lp.subtitle }}</div>{% endif %}
+        {% if latest_lp.date or latest_lp.place %}
+          <div class="page__meta home-linkedin-meta">
+            {% if latest_lp.date %}{{ latest_lp.date }}{% endif %}
+            {% if latest_lp.date and latest_lp.place %} • {% endif %}
+            {% if latest_lp.place %}{{ latest_lp.place }}{% endif %}
+          </div>
+        {% endif %}
+      </div>
+      {% if latest_lp.url %}
+        <a class="home-linkedin-btn" href="{{ latest_lp.url }}" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+          <span>See on LinkedIn</span>
+        </a>
+      {% endif %}
+    </div>
+    {% if latest_lp.embed_url %}
+      {% assign embed_height = latest_lp.height | default: '1300px' %}
+      <iframe class="home-linkedin-embed" src="{{ latest_lp.embed_url }}" style="height: {{ embed_height }};" height="{{ embed_height }}" frameborder="0" allowfullscreen title="{{ latest_lp.title | default: 'LinkedIn post' }}"></iframe>
+    {% else %}
+      <a href="{{ latest_lp.url }}" target="_blank" rel="noopener">{{ latest_lp.title | default: latest_lp.url }}</a>
+    {% endif %}
+  </div>
+{% else %}
+  <p>No blog posts yet.</p>
+{% endif %}
+
+<p><a class="btn" href="/blog/">View all Blog Posts →</a></p>
+
+---
 <!-- ====================== -->
 <!--  At-a-glance Stats     -->
 <!-- ====================== -->
