@@ -198,7 +198,9 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   {% endfor %}
 </ul>
 
-<p><a class="btn" style="font-size: 1.05rem; padding: 0.75rem 1.25rem;" href="/publications/">View all publications →</a></p>
+<p style="text-align: center;">
+  <a class="btn" style="font-size: 1.05rem; padding: 0.75rem 1.25rem;" href="/publications/">View all publications →</a>
+</p>
 
 ---
 ## Latest Blog Post
