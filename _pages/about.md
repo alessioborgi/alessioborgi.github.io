@@ -29,6 +29,64 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 
 
 ---
+## Places I've Been
+{% assign places = site.data.map_places | default: [] %}
+<style>
+  #world-map { height: 480px; border-radius: 12px; overflow: hidden; border: 1px solid #d5dfee; margin-top: 0.5rem; }
+  .map-legend { display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 0.5rem; flex-wrap: wrap; }
+  .map-legend .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; margin-right: 0.3rem; border: 1px solid rgba(0,0,0,0.12); }
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-o9N1jI+VQ1BM8DT6vKrrfE0Yv7FpC18m0tHbdD+14Q6gttxyPjdvGKuGNTxjea1k" crossorigin="">
+<div id="world-map"></div>
+<div class="map-legend">
+  <span><span class="dot" style="background:#0d9488;"></span>Home</span>
+  <span><span class="dot" style="background:#0a66c2;"></span>Study</span>
+  <span><span class="dot" style="background:#f59e0b;"></span>Holiday</span>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-ekG5IOzBSSMSmc5QwDFi1Cdm42Hcps225y7sY9qsK0kGugHgdGXN53BJ38qJNmPR" crossorigin=""></script>
+<script>
+  (function() {
+    if (!document.getElementById('world-map')) return;
+    var places = [
+      {% for p in places %}
+      {
+        name: {{ p.name | jsonify }},
+        subtitle: {{ p.subtitle | default: "" | jsonify }},
+        type: {{ p.type | default: "study" | jsonify }},
+        lat: {{ p.lat | default: 0 }},
+        lng: {{ p.lng | default: 0 }},
+        note: {{ p.note | default: "" | jsonify }}
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ];
+
+    var typeColors = { home: '#0d9488', study: '#0a66c2', holiday: '#f59e0b' };
+    var map = L.map('world-map', { zoomControl: true, scrollWheelZoom: false }).setView([25, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    places.forEach(function(p) {
+      if (!p.lat || !p.lng) return;
+      var color = typeColors[p.type] || typeColors.study;
+      var marker = L.circleMarker([p.lat, p.lng], {
+        radius: 8,
+        color: color,
+        fillColor: color,
+        fillOpacity: 0.9,
+        weight: 2
+      }).addTo(map);
+      var lines = [];
+      if (p.name) lines.push('<strong>' + p.name + '</strong>');
+      if (p.subtitle) lines.push(p.subtitle);
+      if (p.note) lines.push(p.note);
+      marker.bindTooltip(lines.join('<br>'), { direction: 'top', sticky: true, className: 'map-tooltip' });
+    });
+  })();
+</script>
+
+---
 ## Recent publications
 {% assign z_pub = site.publications | where: "slug", "z-saslm" | first %}
 {% assign recent_pubs = site.publications | sort: "date" | reverse %}
@@ -139,7 +197,9 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   <p>No blog posts yet.</p>
 {% endif %}
 
-<p><a class="btn" href="/blog/">View all Blog Posts →</a></p>
+<p style="text-align: center; margin: 1rem 0;">
+  <a class="btn" style="font-size: 1.05rem; padding: 0.75rem 1.25rem;" href="/blog/">View all Blog Posts →</a>
+</p>
 
 ---
 <!-- ====================== -->
