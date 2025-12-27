@@ -9,17 +9,33 @@ redirect_from:
 
 
 <style>
+  :root {
+    --cam-blue: #a3c1ad;
+    --cam-navy: #0f4b6e;
+    --cam-gold: #b6862c;
+    --cam-plum: #762057;
+    --cam-grey: #d0d0ce;
+  }
   .cv-grid { display: grid; gap: 1rem; }
   .cv-card {
-    border: 1px solid #c7d4f2;
+    border: 1px solid var(--cv-border, #c7d4f2);
     border-radius: 14px;
     padding: 1.2rem 1.4rem;
     box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
-    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+    background: linear-gradient(145deg, var(--cv-start, #e8fbfb) 0%, var(--cv-end, #b0b9f1) 100%);
   }
   .cv-card h2 { margin-top: 0; margin-bottom: 0.6rem; }
   .cv-card ul { margin-top: 0.4rem; }
   .cv-card hr { border: none; border-top: 1px solid rgba(19,56,68,0.12); margin: 0.8rem 0; }
+  .cv-card:nth-of-type(1) { --cv-start: #eef5f1; --cv-end: #c8ddcf; --cv-border: #8eb09a; } /* Cambridge Blue */
+  .cv-card:nth-of-type(2) { --cv-start: #e5eef5; --cv-end: #b7cfe5; --cv-border: #6f95b8; } /* Cambridge Navy tint */
+  .cv-card:nth-of-type(3) { --cv-start: #f8f2e7; --cv-end: #e2cfa3; --cv-border: #b6862c; } /* Cambridge Gold */
+  .cv-card:nth-of-type(4) { --cv-start: #f4ecf4; --cv-end: #d9b6d2; --cv-border: #762057; } /* Cambridge Plum */
+  .cv-card:nth-of-type(5) { --cv-start: #eef3f7; --cv-end: #cfd7df; --cv-border: #8a94a0; } /* Cambridge Grey */
+  .cv-card:nth-of-type(6) { --cv-start: #eef5f1; --cv-end: #c8ddcf; --cv-border: #8eb09a; }
+  .cv-card:nth-of-type(7) { --cv-start: #e5eef5; --cv-end: #b7cfe5; --cv-border: #6f95b8; }
+  .cv-card:nth-of-type(8) { --cv-start: #f4ecf4; --cv-end: #d9b6d2; --cv-border: #762057; }
+  .cv-card:nth-of-type(9) { --cv-start: #f8f2e7; --cv-end: #e2cfa3; --cv-border: #b6862c; }
 </style>
 
 <div class="cv-grid">
@@ -126,12 +142,12 @@ redirect_from:
 </ul>
 </div>
 
-<div class="cv-card">
+<div class="cv-card" markdown="1">
 ## Contact
-- 📧 **Email:** <a href="mailto:alessio.borgi@uniroma1.it">alessio.borgi@uniroma1.it</a> <a href="mailto:borgialessio01@gmail.com">borgialessio01@gmail.com</a>  <a href="mailto:ab3352@cam.ac.uk">ab3352@cam.ac.uk</a>
-- 🔗 **GitHub:** <a href="https://github.com/alessioborgi">alessioborgi</a> 
-- **Scholar:** <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">profile</a> 
-- **ORCID:** <a href="https://orcid.org/0009-0007-1979-0857">0009-0007-1979-0857</a>  
+- 📧 **Email:** [alessio.borgi@uniroma1.it](mailto:alessio.borgi@uniroma1.it) · [borgialessio01@gmail.com](mailto:borgialessio01@gmail.com) · [ab3352@cam.ac.uk](mailto:ab3352@cam.ac.uk)
+- 🔗 **GitHub:** [alessioborgi](https://github.com/alessioborgi)
+- 🎓 **Scholar:** [profile](https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it)
+- 🆔 **ORCID:** [0009-0007-1979-0857](https://orcid.org/0009-0007-1979-0857)
 </div>
 
 </div>
