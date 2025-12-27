@@ -84,8 +84,8 @@
 - name: "Milan"
   subtitle: "M2L - Mediterranean Machine Learning Summer School"
   type: "study"
-  lat: 45.4642
-  lng: 9.1900
+  lat: 45.5120
+  lng: 9.2140
   date: "2024"
   note: "Bicocca University, Milan, Italy 🇮🇹"
 
@@ -187,6 +187,8 @@
   lat: 45.4642
   lng: 9.1900
   date: "2023"
+  radius: 5
+  zoom_min: 6
   note: "The kiss from Hayez is better than Klimt's one!"
 
 - name: "Turin"

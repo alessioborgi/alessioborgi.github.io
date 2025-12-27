@@ -7,10 +7,35 @@ redirect_from:
   - /about.html
 ---
 
-<div class="notice--primary">
+<style>
+  .collab-card {
+    background: #38c1b7;
+    color: #0f2a36;
+    border-radius: 14px;
+    padding: 1.4rem;
+    box-shadow: 0 8px 20px rgba(19, 56, 68, 0.15);
+    border: 1px solid rgba(19, 56, 68, 0.08);
+  }
+  .collab-card h3 { margin-top: 0; margin-bottom: 0.5rem; color: #0f2a36; }
+  .collab-card p { margin-bottom: 0.75rem; }
+  .collab-card .cta {
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  .collab-card .cta .btn {
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.7rem 1.1rem;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(19, 56, 68, 0.18);
+  }
+</style>
+<div class="collab-card">
   <h3>🚀 I’m always open to collaborate, exchange ideas or just talk about anything!</h3>
   <p><strong>I’m eager to work with anyone who has great ideas, wants to learn more and more and also share their experience to others.</strong> Don’t hesitate to write me if you’d like to propose your help or ask for mine on a project, research, paper-idea, or a moonshot you’re cooking up.</p>
-  <p>👉 <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a></p>
+  <div class="cta">
+    <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a>
+  </div>
 </div>
 
 ---
