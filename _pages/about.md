@@ -193,11 +193,12 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 {% assign recent_pubs = site.publications | sort: "date" | reverse | slice: 0, 3 %}
 <ul class="home-pub-list">
   {% for pub in recent_pubs %}
-    {% include archive-single.html post=pub type="pub-card" %}
+    {% assign post = pub %}
+    {% include archive-single.html type="pub-card" %}
   {% endfor %}
 </ul>
 
-<p><a class="btn" href="/publications/">View all publications →</a></p>
+<p><a class="btn" style="font-size: 1.05rem; padding: 0.75rem 1.25rem;" href="/publications/">View all publications →</a></p>
 
 ---
 ## Latest Blog Post
