@@ -84,7 +84,8 @@ redirect_from:
           {% endif %}
         </div>
         {% if lp.embed_url %}
-          <iframe class="linkedin-embed" src="{{ lp.embed_url }}" style="height: {{ lp.height | default: 600 }}px;" frameborder="0" allowfullscreen title="{{ lp.title | default: 'LinkedIn post' }}"></iframe>
+          {% assign embed_height = lp.height | default: 1200 %}
+          <iframe class="linkedin-embed" src="{{ lp.embed_url }}" style="height: {{ embed_height }}px;" height="{{ embed_height }}" frameborder="0" allowfullscreen title="{{ lp.title | default: 'LinkedIn post' }}"></iframe>
         {% else %}
           <a href="{{ lp.url }}" target="_blank" rel="noopener">{{ lp.title | default: lp.url }}</a>
         {% endif %}
