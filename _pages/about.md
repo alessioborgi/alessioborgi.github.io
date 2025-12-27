@@ -32,6 +32,7 @@ redirect_from:
 </style>
 <div class="collab-card">
   <h3>🚀 I’m always open to collaborate, exchange ideas or just talk about anything!</h3>
+  
   <p><strong>I’m eager to work with anyone who has great ideas, wants to learn more and more and also share their experience to others.</strong> Don’t hesitate to write me if you’d like to propose your help or ask for mine on a project, research, paper-idea, or a moonshot you’re cooking up.</p>
   <div class="cta">
     <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a>
