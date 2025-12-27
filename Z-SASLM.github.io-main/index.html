@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation">
+  <meta name="keywords" content="Z-SASLM, Zero-Shot, Style-Aligned, SLI Blending, Latent Manipulation, CVPR 2025">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.ico">
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container" style="max-width: 1500px; margin: 0 auto;">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation</h1>
+            <h1 class="subtitle is-5 publication-title", style="margin: 10px;"><i>CVPR 2025, Workshop on AI for Creative Visual Content Generation, Editing, and Understanding</i></h1>
+            <h1 class="subtitle is-5 publication-title", style="margin: 10px;"><i>Published in 2025 IEEE-CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)</i></h1>
+            <h1 class="subtitle is-5 publication-title", style="margin: 10px;"><i>Official CVPR 2025 Workshop Procedings </i></h1>
+            <h1 class="subtitle is-6 publication-title"><i>Nashville, Tennesseee(TN), USA</i></h1>
+  
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?hl=it&user=Ds4ktdkAAAAJ">Alessio Borgi</a><sup>*</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=FZyBVqkAAAAJ&hl=it&oi=ao">Luca Maiano</a>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=4ZDhr6UAAAAJ&hl=it&oi=ao">Irene Amerini</a>
+              </span>
+            </div>
+  
+            <div class="content has-text-centered" style="margin-top: 1em;">
+              <a href="https://ieeexplore.ieee.org/document/11147719"><img src="https://img.shields.io/badge/CVPR%202025-IEEE CVF CVPRW-tomato" style="height: 30px; margin: 4px;"></a>
+              <a href="https://arxiv.org/abs/2503.23234"><img src="https://img.shields.io/badge/arXiv-2503.23234-orange" style="height: 30px; margin: 4px;"></a>
+              <a href="https://github.com/alessioborgi/Z-SASLM"><img src="https://img.shields.io/badge/GitHub-Code-black?logo=github" style="height: 30px; margin: 4px;"></a>
+              <a href="https://huggingface.co/papers/2503.23234"><img src="https://img.shields.io/badge/HuggingFace-Papers-blue?logo=huggingface" alt="Hugging Face" style="height: 30px; margin-right: 4px;"></a>
+              <a href="https://www.researchgate.net/publication/390303255_Z-SASLM_Zero-Shot_Style-Aligned_SLI_Blending_Latent_Manipulation"><img src="https://img.shields.io/badge/ResearchGate-Paper-00CCBB?logo=ResearchGate&logoColor=white" style="height: 30px; margin: 4px;"></a>
+              <a href="https://paperswithcode.com/paper/z-saslm-zero-shot-style-aligned-sli-blending"><img src="https://img.shields.io/badge/Papers%20with%20Code-Enabled-9cf?logo=paperswithcode&logoColor=white" style="height: 30px; margin: 4px;"></a>
+              <a href="https://www.academia.edu/128519694/Z_SASLM_Zero_Shot_Style_Aligned_SLI_Blending_Latent_Manipulation"><img src="https://img.shields.io/badge/Academia-Visit-paleturquoise" style="height: 30px; margin: 4px;"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+
+<section class="section has-background-white">
+  <div class="container" style="max-width: 1500px; margin: 0 auto;">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <div class="fade-slider" style="width: 100%; height: 600px; margin: 0 auto;">
+          <img class="fade-image" src="./static/images/blending/SLERP_2_Styles_Blending_MedCub.png" alt="MedCub">
+          <img class="fade-image" src="./static/images/blending/SLERP_2_Styles_Blending_PurpleMacro.png" alt="PurpleMacro">
+          <img class="fade-image" src="./static/images/blending/SLERP_2_Styles_Blending_VanGoghEgyptian.png" alt="VanGoghEgyptian">
+          <img class="fade-image" src="./static/images/blending/SLERP_3_Styles_Blending_EgyPurpleMacro.png" alt="EgyPurpleMacro">
+          <img class="fade-image" src="./static/images/blending/SLERP_3_Styles_Blending_EgyVanGoghMacro.png" alt="EgyVanGoghMacro">
+          <img class="fade-image" src="./static/images/multimodal/Audio_Mode.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Images_Audio_Modes.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Images_Weather_Mode.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Img_Audio_Music_Mode.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Img_Mode.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Img_Weather_AblationWeather.png" alt="Multi-Modal Context">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section has-background-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We introduce <b>Z-SASLM</b>, a <b>Zero-Shot Style-Aligned SLI (Spherical Linear Interpolation) Blending Latent Manipulation</b> pipeline that overcomes the limitations of current <i>blending methods</i>. Conventional approaches rely on linear blending, assuming a flat latent space leading to suboptimal results when integrating multiple reference styles. In contrast, our framework leverages the non-linear geometry of the latent space by using SLI Blending to combine weighted style representations. By interpolating along the geodesic on the hypersphere, Z-SASLM preserves the intrinsic structure of the latent space, ensuring high-fidelity and coherent blending of diverse styles—all <i>without the need for fine-tuning</i>. We further propose a new metric, <b>Weighted Multi-Style DINO VIT-B/8</b>, designed to quantitatively evaluate the consistency of the blended styles. While our primary focus is on the theoretical and practical advantages of SLI Blending for style manipulation, we also demonstrate its effectiveness in a <b>multi-modal content fusion</b> setting through comprehensive experimental studies. Experimental results show that Z-SASLM achieves enhanced and robust style alignment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  
+<section class="section has-background-white">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Features</h2>
+        <div class="content has-text-justified">
+          <ul>
+            <li><b>Zero-Shot Versatility:</b> Unlock infinite style possibilities without any fine-tuning.</li>
+            <li><b>SLI Blending for Multi-Reference Style Conditioning:</b> Introduces a novel architecture that leverages spherical linear interpolation to seamlessly blend multiple reference styles without any fine-tuning.</li>
+            <li><b>Latent Space Mastery:</b> Capitalizes on the intrinsic non-linearity of the latent manifold for optimal style integration.</li>
+            <li><b>Innovative Evaluation Metric:</b> Proposes the Weighted Multi-Style DINO VIT-B/8 metric to rigorously quantify style consistency across generated images.</li>
+            <li><b>Multi-Modal Content Fusion:</b> Demonstrates the framework’s robustness by integrating diverse modalities—such as image, audio, and weather data—into a unified content fusion approach.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  
+<section class="section has-background-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Architecture</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our framework is built as a modular pipeline that efficiently combines diverse style references and multi-modal cues without fine-tuning. The architecture comprises four main components:
+          </p>
+          <ol>
+            <li><b>Reference Image Encoding & Blending:</b>
+              <ul>
+                <li>A Variational Autoencoder (VAE) extracts latent representations from each reference style image.</li>
+                <li>Our novel Spherical Linear Interpolation (SLI) Blending module then fuses these latent codes along the geodesic of the hypersphere, ensuring smooth and coherent style transitions.</li>
+              </ul>
+            </li>
+            <li><b>Text Encoding:</b>
+              <ul>
+                <li>Textual prompts are encoded using a CLIP-based module, capturing semantic cues and aligning them with visual features.</li>
+                <li>This stage supports both simple captions and richer prompts derived from multiple modalities.</li>
+              </ul>
+            </li>
+            <li><b>Style-Aligned Image Generation:</b>
+              <ul>
+                <li>The blended style representation is combined with the text embeddings to condition a diffusion-based generation process.</li>
+                <li>A style-aligned attention mechanism reinforces consistent style propagation throughout the image generation.</li>
+              </ul>
+            </li>
+            <li><b>Optional Multi-Modal Content Fusion:</b>
+              <ul>
+                <li>Additional inputs such as audio, music, or weather data are first transformed into text.</li>
+                <li>These are fused into a single “Multi-Content Textual Prompt” via a T5-based rephrasing module, further enriching the conditioning signal for improved creative synthesis.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/images/method/architecture.png" alt="Architecture" style="max-width: 1500px; width: 100%; margin-top: 2em;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section has-background-white">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Image Results</h2>
+        <div class="content has-text-justified">
+          <p>Our experimental evaluation confirms the effectiveness of <b>Z-SASLM</b> across various style blending scenarios:</p>
+          <ul>
+            <li><b>Style Consistency:</b> Quantitative comparisons using our <i>Weighted Multi-Style DINO VIT-B/8</i> metric show that SLI Blending significantly outperforms conventional linear interpolation, producing images with robust and coherent style alignment.</li>
+            <li><b>Visual Quality:</b> Z-SASLM preserves fine stylistic details and avoids abrupt transitions common in linear blending, delivering high-fidelity visuals even under challenging multi-reference conditions.</li>
+            <li><b>Multi-Modal Fusion:</b> Ablation studies reveal that incorporating diverse content (e.g., audio and weather data) enriches outputs and enhances the richness and contextuality of generated images.</li>
+          </ul>
+        </div>
+        <div class="fade-slider" style="width: 100%; height: 700px; margin: 0 auto;">
+          <img class="fade-image" src="./static/images/blending/SLERP_2_Styles_Blending_MedCub.png" alt="MedCub">
+          <img class="fade-image" src="./static/images/blending/SLERP_2_Styles_Blending_PurpleMacro.png" alt="PurpleMacro">
+          <img class="fade-image" src="./static/images/blending/SLERP_2_Styles_Blending_VanGoghEgyptian.png" alt="VanGoghEgyptian">
+          <img class="fade-image" src="./static/images/blending/SLERP_3_Styles_Blending_EgyPurpleMacro.png" alt="EgyPurpleMacro">
+          <img class="fade-image" src="./static/images/blending/SLERP_3_Styles_Blending_EgyVanGoghMacro.png" alt="EgyVanGoghMacro">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section has-background-white">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Results</h2>
+        <div class="content has-text-justified">
+          <p>We compare our <b>SLI Blending</b> method to traditional <b>Linear Blending</b> adapted from StyleGAN2-ADA. We conduct experiments across multiple blending weights using two reference styles (Medieval and Cubism), evaluating with both our <b>Weighted Multi-Style DINO VIT-B/8</b> metric and <b>CLIP Score</b>. Our results show that Z-SASLM's SLI Blending provides improved style consistency and image-text alignment, especially under equal or near-equal style weights.</p>
+        </div>
+
+        <div class="content">
+          <table class="table is-bordered is-striped is-fullwidth">
+            <thead>
+              <tr>
+                <th>Style Weights</th>
+                <th colspan="2">Linear (StyleGAN2-ADA)</th>
+                <th colspan="2">Z-SASLM (Ours)</th>
+              </tr>
+              <tr>
+                <th>{w<sub>med</sub>, w<sub>cub</sub>}</th>
+                <th>WMSDINO-VIT-B/8</th>
+                <th>CLIP Score</th>
+                <th>WMSDINO-VIT-B/8</th>
+                <th>CLIP Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>{0, 1}*</td><td>0.47552</td><td>0.30280</td><td>0.47552</td><td>0.30280</td></tr>
+              <tr><td>{0.15, 0.85}</td><td>0.41151</td><td>0.31534</td><td>0.44900</td><td>0.31049</td></tr>
+              <tr><td>{0.25, 0.75}</td><td>0.40575</td><td>0.31420</td><td>0.42347</td><td>0.31657</td></tr>
+              <tr><td>{0.5, 0.5}</td><td>0.36393</td><td>0.29232</td><td>0.39153</td><td>0.31434</td></tr>
+              <tr><td>{0.75, 0.25}</td><td>0.36430</td><td>0.31752</td><td>0.34760</td><td>0.31911</td></tr>
+              <tr><td>{0.85, 0.15}</td><td>0.36315</td><td>0.32381</td><td>0.36779</td><td>0.31499</td></tr>
+              <tr><td>{1, 0}*</td><td>0.29891</td><td>0.30570</td><td>0.29891</td><td>0.30570</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.9em;"><i>* No blending: single-style reference (as in StyleAligned).</i></p>
+        </div>
+
+        <div class="content has-text-justified">
+          <p>SLI consistently improves Weighted Multi-Style DINO scores compared to linear interpolation. For balanced blending ({0.5, 0.5}), Z-SASLM achieves a notable boost in both metrics. This confirms that respecting the geometry of the latent space via SLI leads to better multi-style integration and high-fidelity outputs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section has-background-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Multi-Modality Ablation</h2>
+        <div class="content has-text-justified">
+          <ul>
+            <li><b>Enhanced Context:</b> Fusing multi-modal data (e.g., image, audio, weather) enriches the textual prompt, leading to more contextually informed and creative outputs.</li>
+            <li><b>Improved Style Consistency:</b> The integration of diverse modalities boosts the robustness of style alignment across generated images.</li>
+            <li><b>Comparative Advantage:</b> Multi-modal fusion outperforms single-modal baselines in both quantitative metrics and visual quality.</li>
+          </ul>
+        </div>
+        <div class="fade-slider" style="width: 100%; height: 700px; margin: 0 auto;">
+          <img class="fade-image" src="./static/images/multimodal/Audio_Mode.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Images_Audio_Modes.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Images_Weather_Mode.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Img_Audio_Music_Mode.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Img_Mode.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/multimodal/Img_Weather_AblationWeather.png" alt="Multi-Modal Context">
+          <img class="fade-image" src="./static/images/eval_&_experiments/multicontext.png" alt="Multi-Modal Context">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section has-background-white">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Guidance Ablation</h2>
+        <div class="content has-text-justified">
+          <ul>
+            <li><b>Low Guidance:</b> Yields images closely aligned to the textual prompt but with less pronounced stylistic details.</li>
+            <li><b>High Guidance:</b> Emphasizes style characteristics more aggressively, sometimes at the expense of prompt adherence.</li>
+            <li><b>Optimal Range:</b> A balanced range (15–20) achieves the best trade-off between style fidelity and semantic alignment.</li>
+          </ul>
+        </div>
+        <div class="fade-slider" style="width: 100%; height: 700px; margin: 0 auto;">
+          <img class="fade-image" src="./static/images/eval_&_experiments/Guidance_Ablation.png" alt="Guidance Ablation">
+          <img class="fade-image" src="./static/images/eval_&_experiments/SLERP_Guidance_Ablation.png" alt="Guidance Ablation">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section has-background-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Scaling Ablation</h2>
+        <div class="content has-text-justified">
+          <ul>
+            <li><b>Problem of Style Dominance:</b> Styles with higher latent activation norms (e.g., “famous” styles like Cubism) tend to dominate blending results by skewing attention scores in their favor.</li>
+            <li><b>Rescaling Strategy:</b> We identify dominant styles by checking the norm of their key vectors and apply a normalization that dampens their attention contribution while slightly boosting "normal" styles.</li>
+            <li><b>Improved Balance:</b> Experiments show that our attention rescaling technique significantly reduces the style imbalance, enabling more faithful and balanced multi-style blending.</li>
+          </ul>
+        </div>
+        <div class="fade-slider" style="width: 100%; height: 700px; margin: 0 auto;">
+          <img class="fade-image" src="./static/images/scaling/Attention_Rescaling.png" alt="Attention Rescaling Effect">
+          <img class="fade-image" src="./static/images/scaling/Egyptian_Scaling_Non_Scaling.png" alt="Scaling vs Non-Scaling">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section has-background-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">BibTeX</h2>
+        <div class="content has-text-justified">
+          <pre><code>
+            @INPROCEEDINGS{11147719,
+  author={Borgi, Alessio and Maiano, Luca and Amerini, Irene},
+  booktitle={2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)}, 
+  title={Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={6247-6256},
+  keywords={Measurement;Geometry;Manifolds;Interpolation;Navigation;Pipelines;Focusing;Diffusion models;Pattern recognition;Meteorology;style;Alignment;zero-shot;spherical;interpolation;multi-style;blending;latent;space;manipulation;weighted;DINO VIT-B/8},
+  doi={10.1109/CVPRW67362.2025.00622}}, 
+        }
+          </code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
+
+
+
+
+
+<style>
+  .fade-slider {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+  }
+  .fade-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    z-index: 0;
+  }
+  .fade-image.active {
+    opacity: 1;
+    z-index: 1;
+  }
+  </style>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const allSliders = document.querySelectorAll('.fade-slider');
+  
+      allSliders.forEach(slider => {
+        const images = slider.querySelectorAll('.fade-image');
+        let current = 0;
+  
+        function showNextImage() {
+          images[current].classList.remove('active');
+          current = (current + 1) % images.length;
+          images[current].classList.add('active');
+        }
+  
+        images[current].classList.add('active');
+        setInterval(showNextImage, 10000); // 10 seconds
+      });
+    });
+  </script>
