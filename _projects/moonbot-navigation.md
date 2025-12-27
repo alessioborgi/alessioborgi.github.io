@@ -94,7 +94,40 @@ tags:
 
 ---
 ### Other Project
-<article class="project-card" style="margin-top:0.6rem;">
+<style>
+  .project-card {
+    border: 1px solid #c7d4f2;
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
+    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+    margin-top: 0.6rem;
+  }
+  .project-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .project-header h2 { margin: 0; font-size: 1.3rem; }
+  .project-links { display: inline-flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .project-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    text-decoration: none;
+    color: #111827;
+    font-weight: 700;
+  }
+  .project-pill img { height: 18px; width: 18px; }
+  .project-excerpt { margin: 0.5rem 0 0.6rem; color: #1f2a36; line-height: 1.55; }
+</style>
+<article class="project-card">
   <div class="project-header">
     <h2 style="margin:0;"><a href="{{ '/projects/amr-cleaningrobot/' | relative_url }}">AMR Cleaning Robot</a></h2>
     <div class="project-links">
