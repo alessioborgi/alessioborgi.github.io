@@ -472,3 +472,103 @@
   radius: 5
   zoom_min: 6
   note: "Beautiful coastal town with stunning views and a rich history."
+
+- name: "Tivoli"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 41.9631
+  lng: 12.8021
+  date: "2020"
+  radius: 5
+  zoom_min: 6
+  note: "The gardens of Villa d'Este are breathtaking!"
+
+- name: "Isola del Liri"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 41.6939
+  lng: 13.5803
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "Wonderful waterfalls right in the town center!"
+
+- name: "Anagni"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 41.7499
+  lng: 13.1500
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "Beautiful medieval town with rich history!"
+
+- name: "Sora"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 41.7195
+  lng: 13.6115
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "Amazing views and great food!"
+
+- name: "Foligno"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 42.9542
+  lng: 12.7020
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "Cool medieval town with beautiful architecture!"
+
+- name: "Todi"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 42.7803
+  lng: 12.4068
+  date: "2024"
+  radius: 5
+  zoom_min: 6
+  note: "Amazing views and peaceful atmosphere!"
+
+- name: "Triora"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 43.9901
+  lng: 7.7677
+  date: "2002-2025"
+  radius: 5
+  zoom_min: 6
+  note: "Amazing medieval village known as the 'Witch Village'!"
+
+- name: "Portofino"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.3030
+  lng: 9.2098
+  date: "2024"
+  radius: 5
+  zoom_min: 6
+  note: "Beautiful coastal town with stunning views and a rich history."
+
+- name: "Rapallo"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.3516
+  lng: 9.2277
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "Beautiful coastal town with stunning views and a rich history."
+
+- name: "Porto Venere"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.0477
+  lng: 9.8367
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "The colorful houses and stunning sea views are unforgettable!"
