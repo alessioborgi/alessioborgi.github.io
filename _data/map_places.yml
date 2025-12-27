@@ -44,8 +44,8 @@
 - name: "London"
   subtitle: "OxML - Oxford Machine Learning Summer School"
   type: "study"
-  lat: 51.5074
-  lng: -0.1278
+  lat: 51.5145
+  lng: -0.1165
   date: "2025"
   note: "London School of Economics, London, UK 🇬🇧"
 
