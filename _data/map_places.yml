@@ -404,71 +404,71 @@
   note: "The beach is one of the most beautiful in Sardinia!"
 
 - name: "Siena"
-  subtitle: ""
+  subtitle: "Holiday"
   type: "holiday"
   lat: 43.3188
   lng: 11.3308
-  date: ""
+  date: "2020"
   radius: 5
   zoom_min: 6
-  note: ""
+  note: "Wonderful City!"
 
 - name: "Città di San Marino"
-  subtitle: ""
+  subtitle: "Holiday"
   type: "holiday"
   lat: 43.9333
   lng: 12.4500
-  date: ""
+  date: "2020"
   radius: 5
   zoom_min: 6
-  note: ""
+  note: "Amazing castles and views!"
 
 - name: "Pesaro"
   subtitle: ""
   type: "holiday"
   lat: 43.9125
   lng: 12.9133
-  date: ""
+  date: "2020"
   radius: 5
   zoom_min: 6
-  note: ""
+  note: "Amazing beaches and nice city!"
 
 - name: "Arezzo"
-  subtitle: ""
+  subtitle: "Holiday"
   type: "holiday"
   lat: 43.4633
   lng: 11.8797
-  date: ""
+  date: "2020"
   radius: 5
   zoom_min: 6
-  note: ""
+  note: "Amazing frescoes by Piero della Francesca!"
 
 - name: "Lucca"
-  subtitle: ""
+  subtitle: "Holiday"
   type: "holiday"
   lat: 43.8425
   lng: 10.5027
-  date: ""
+  date: "2020"
   radius: 5
   zoom_min: 6
-  note: ""
+  note: "There are amazing walls surrounding the city and the view from the top of towers is breathtaking!"
 
 - name: "Gubbio"
-  subtitle: ""
+  subtitle: "Holiday"
   type: "holiday"
   lat: 43.3518
   lng: 12.5737
   date: ""
   radius: 5
   zoom_min: 6
-  note: ""
+  note: "Wonderful city and amazing views!"
 
 - name: "Camogli"
-  subtitle: ""
+  subtitle: "Holiday"
   type: "holiday"
   lat: 44.3493
   lng: 9.1559
-  date: ""
+  date: "2025"
   radius: 5
   zoom_min: 6
-  note: ""
+  note: "Beautiful coastal town with stunning views and a rich history."

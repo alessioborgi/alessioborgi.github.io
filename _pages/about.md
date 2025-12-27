@@ -68,18 +68,22 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     ];
 
     var typeColors = { home: '#0d9488', study: '#0a66c2', holiday: '#f59e0b' };
-    var map = L.map('world-map', { zoomControl: true, scrollWheelZoom: false }).setView([25, 0], 2);
+    var map = L.map('world-map', { zoomControl: true, scrollWheelZoom: false }).setView([20, 5], 3);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
     var markers = [];
+    function num(val, fallback) {
+      var n = Number(val);
+      return isNaN(n) ? fallback : n;
+    }
     places.forEach(function(p) {
       if (!p.lat || !p.lng) return;
       var color = typeColors[p.type] || typeColors.study;
-      var radius = p.radius ? Number(p.radius) : (p.type === 'home' ? 9 : 8);
-      var minZoom = p.zoom_min ? Number(p.zoom_min) : 2;
+      var radius = p.radius ? num(p.radius, (p.type === 'home' ? 9 : 8)) : (p.type === 'home' ? 9 : 8);
+      var minZoom = (p.zoom_min || p.zoom_min === 0) ? num(p.zoom_min, 2) : 2;
       var marker = L.circleMarker([p.lat, p.lng], {
         radius: radius,
         color: color,
@@ -111,6 +115,7 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     }
     map.on('zoomend', updateVisibility);
     updateVisibility();
+    console.log('Map pins loaded:', markers.length);
   })();
 </script>
 
