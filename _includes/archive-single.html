@@ -12,8 +12,11 @@
   {% assign title = post.title %}
 {% endif %}
 
-<div class="{{ include.type | default: "list" }}__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+{% assign wrapper_class = include.type | default: "list" %}
+{% assign use_pub_card = include.type == "pub-card" %}
+
+<div class="{{ wrapper_class }}__item{% if use_pub_card %} pub-card{% endif %}">
+  <article class="archive__item{% if use_pub_card %} pub-card__body{% endif %}" itemscope itemtype="http://schema.org/CreativeWork">
     {% if include.type == "grid" and teaser %}
       <div class="archive__item-teaser">
         <img src=
@@ -53,28 +56,44 @@
     {% endif %}
     
     {% assign link_items = "" %}
+    {% assign actions = "" %}
     {% if post.paperurl %}
       {% assign link_items = link_items | append: '<a href="' | append: post.paperurl | append: '">Download Paper</a>' %}
+      {% if use_pub_card %}{% assign actions = actions | append: '<a class="pub-btn" href="' | append: post.paperurl | append: '">Download Paper</a>' %}{% endif %}
     {% endif %}
     {% if post.posterurl %}
       {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
       {% assign link_items = link_items | append: '<a href="' | append: post.posterurl | append: '">Download Poster</a>' %}
+      {% if use_pub_card %}{% assign actions = actions | append: '<a class="pub-btn" href="' | append: post.posterurl | append: '">Download Poster</a>' %}{% endif %}
     {% endif %}
     {% if post.slidesurl %}
       {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
       {% assign link_items = link_items | append: '<a href="' | append: post.slidesurl | append: '">Download Slides</a>' %}
+      {% if use_pub_card %}{% assign actions = actions | append: '<a class="pub-btn" href="' | append: post.slidesurl | append: '">Download Slides</a>' %}{% endif %}
     {% endif %}
     {% if post.bibtexurl %}
       {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
       {% assign link_items = link_items | append: '<a href="' | append: post.bibtexurl | append: '">Download Bibtex</a>' %}
+      {% if use_pub_card %}{% assign actions = actions | append: '<a class="pub-btn" href="' | append: post.bibtexurl | append: '">Download Bibtex</a>' %}{% endif %}
     {% endif %}
 
     {% if post.citation or link_items != "" %}
-      <p>
-        {% if post.citation %}Recommended citation: {{ post.citation }}{% endif %}
-        {% if post.citation and link_items != "" %}<br />{% endif %}
-        {% if link_items != "" %}{{ link_items | raw }}{% endif %}
-      </p>
+      {% if use_pub_card %}
+        {% if post.citation %}
+          <p class="pub-citation">Recommended citation: {{ post.citation }}</p>
+        {% endif %}
+        {% if actions != "" %}
+          <div class="pub-actions">
+            {{ actions | replace: '><', '>' | replace: '</a><a', '</a> <a' | raw }}
+          </div>
+        {% endif %}
+      {% else %}
+        <p>
+          {% if post.citation %}Recommended citation: {{ post.citation }}{% endif %}
+          {% if post.citation and link_items != "" %}<br />{% endif %}
+          {% if link_items != "" %}{{ link_items | raw }}{% endif %}
+        </p>
+      {% endif %}
     {% endif %}
 
   </article>

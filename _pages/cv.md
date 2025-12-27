@@ -8,13 +8,23 @@ redirect_from:
 ---
 
 
-<!-- <div class="notice--primary">
-  <h3>🚀 I’m always open to collaborate, exchange ideas or just talk about anything!</h3>
-  <p><strong>I’m eager to work with anyone who has great ideas, wants to learn more and more and also share their experience to others.</strong> Don’t hesitate to write me if you’d like to propose your help or ask for mine on a project, research, paper-idea, or a moonshot you’re cooking up.</p>
-  <p>👉 <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a></p>
-</div> -->
+<style>
+  .cv-grid { display: grid; gap: 1rem; }
+  .cv-card {
+    border: 1px solid #c7d4f2;
+    border-radius: 14px;
+    padding: 1.2rem 1.4rem;
+    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
+    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+  }
+  .cv-card h2 { margin-top: 0; margin-bottom: 0.6rem; }
+  .cv-card ul { margin-top: 0.4rem; }
+  .cv-card hr { border: none; border-top: 1px solid rgba(19,56,68,0.12); margin: 0.8rem 0; }
+</style>
 
+<div class="cv-grid">
 
+<div class="cv-card">
 ## Education
 
 - **Ph.D. in Engineering in Computer Science — Artificial Intelligence**, Sapienza University 🇮🇹 & University of Cambridge 🇬🇧 — *2025–present*  
@@ -37,7 +47,9 @@ redirect_from:
 - **Secondary School — Information Technology**, I.I.S. Guglielmo Marconi, Civitavecchia 🇮🇹 — *2015–2020*  
   **Final mark:** 100/100  
   **Thesis/Project:** *Electric Company: Ticketing System* — [GitHub](https://github.com/alessioborgi/ElectricCompany-TicketingSystem). 
+</div>
 
+<div class="cv-card">
 ## Visiting Research
 
 - **Space Robotics** — Tohoku University, Space Robotics Lab, Sendai, Japan 🇯🇵 — *June–July 2025*  
@@ -53,9 +65,9 @@ redirect_from:
   **Project:** *CareConnect* — AI-driven system to query environmental/hospital data via chat, generate real-time graphs, and trigger notifications & robotic actions using LangChain.  
   **Repository:** <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:14px;width:14px;vertical-align:middle;margin-right:4px;"> [CareConnect (GitHub)](https://github.com/alessioborgi/CareConnect)  
   **Achievement:** **Best Poster & Project Award** (program showcase). 
+</div>
 
----
-
+<div class="cv-card">
 ## Work Experience
 
 - **AI & ML Software Research Engineer (Intern)** — Hewlett Packard Enterprise (HPE) — *Mar 2023 – Aug 2023*  
@@ -64,9 +76,9 @@ redirect_from:
   – Validated with a **major network customer**, reducing models to train/maintain and lowering design/inference resource/time requirements while **preserving overall metrics**.  
   – **Honourable Mention** in an internal HPE Hackathon.  
   – Team **Best HPE 2023 Paper Award**.
+</div>
 
----
-
+<div class="cv-card">
 ## Awards
 - **[G-Research Early Career Award](https://www.gresearch.com/news/g-research-november-2025-grant-winners/)**: Scholarship for promising young researchers (November, 2025).
 - **[Research Certificate of Excellence]({{ "/visiting-research/tohoku-2025/" | relative_url }})** - Selected as top-1 student for the visiting period, **won TESP 2025 Competition** and awarded with a **Certificate of Research Excellence**. (Tohoku University 2025, Japan).
@@ -74,10 +86,9 @@ redirect_from:
 - **[Best Poster Award](https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024)** — Mediterranean Machine Learning (M2L) Summer School, (Milan, Italy, 2024).
 - **Best Paper Award (team)** — Hewlett Packard Enterprise PathFinder Team Recognition, (2023).
 - **Honourable Mention** — Hewlett Packard Enterprise Internal Hackaton, (2023).  
+</div>
 
-
----
-
+<div class="cv-card">
 ## Skills
 **Programming Languages:** Python · Java · C++ · Matlab · Java-FX · Swing · FXML · RISC-V · GO · JavaScript · VueJS · OpenAPI · CSS · HTML · SQL · PHP · Flutter 
 
@@ -86,9 +97,9 @@ redirect_from:
 **Robotics & Systems:** ROS · Rviz · WeBots · GMapping
 
 **Tooling:** CUDA · Git · Linux · Docker · LaTeX · Hydra/YAML · Streamlit · Figma · Arduino · Raspberry Pi · Docker · WordPress · Axios
+</div>
 
----
-
+<div class="cv-card">
 ## Certifications
 - **Cambridge Assessment International Education** — First Certificate (B2) *(ID: B3329535)*  
 - **Instituto Cervantes** — **DELE A1** *(ID: S6516DL9BAHUJHY248TJ4V4KJ2)*  
@@ -97,28 +108,30 @@ redirect_from:
 - **COMAU** — “Use and Programming” **Robotic License** *(ID: kDHqAdhwAT)*  
 - **IBM** — **Cloud Core** Certification *(verified)*  
 - **IBM** — **Blockchain Essentials** Certification *(verified)*
+</div>
 
----
-
+<div class="cv-card">
 ## Languages
 - **Italian** — C2 (*Mother tongue*)  
 - **English** — C1 
 - **Spanish** — A1
+</div>
 
----
-
+<div class="cv-card">
 ## Publications
 <ul>
 {% for post in site.publications reversed %}
   {% include archive-single-cv.html %}
 {% endfor %}
 </ul>
----
+</div>
 
-
-
+<div class="cv-card">
 ## Contact
 - 📧 **Email:** <a href="mailto:alessio.borgi@uniroma1.it">alessio.borgi@uniroma1.it</a> <a href="mailto:borgialessio01@gmail.com">borgialessio01@gmail.com</a>  <a href="mailto:ab3352@cam.ac.uk">ab3352@cam.ac.uk</a>
 - 🔗 **GitHub:** <a href="https://github.com/alessioborgi">alessioborgi</a> 
 - **Scholar:** <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">profile</a> 
 - **ORCID:** <a href="https://orcid.org/0009-0007-1979-0857">0009-0007-1979-0857</a>  
+</div>
+
+</div>

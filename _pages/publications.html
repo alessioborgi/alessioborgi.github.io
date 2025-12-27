@@ -11,6 +11,44 @@ author_profile: true
 
 {% include base_path %}
 
+<style>
+  .pub-card {
+    border: 1px solid #c7d4f2;
+    border-radius: 14px;
+    padding: 1.2rem 1.35rem;
+    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
+    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+    margin-bottom: 1rem;
+  }
+  .pub-card__body h2 { margin-top: 0; }
+  .pub-citation { margin: 0.5rem 0 0.75rem; font-size: 0.95rem; }
+  .pub-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.35rem;
+  }
+  .pub-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.95rem;
+    border-radius: 999px;
+    background: #0a66c2;
+    color: #fff !important;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 6px 16px rgba(10, 102, 194, 0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .pub-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(10, 102, 194, 0.35);
+  }
+</style>
+
 <!-- <hr />
 <div class="notice--primary">
   <h3>🚀 I’m always open to collaborate, exchange ideas or just talk about anything!</h3>
@@ -31,14 +69,12 @@ author_profile: true
         <h2>{{ category[1].title }}</h2><hr />
         {% assign title_shown = true %}
       {% endunless %}
-      {% include archive-single.html %}
+        {% include archive-single.html type="pub-card" %}
     {% endfor %}
   {% endfor %}
 {% else %}
   {% for post in site.publications reversed %}
-    {% include archive-single.html %}
+    {% include archive-single.html type="pub-card" %}
   {% endfor %}
 {% endif %}
-
-
 
