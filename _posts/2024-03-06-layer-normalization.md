@@ -173,3 +173,9 @@ There are two layer norms per block: one before attention, one before the FFN. F
 ## Summary
 
 Layer norm is not cosmetic. It controls how information flows and how gradients propagate through the network. The choice between Pre-LN and Post-LN explains many practical differences between model families — and Pre-LN's superior stability is why it dominates modern large language model training.
+
+## References
+
+- Ba, J. L., Kiros, J. R., & Hinton, G. E. (2016). [Layer Normalization](https://arxiv.org/abs/1607.06450). *arXiv 2016* (LayerNorm: normalises across the feature dimension rather than the batch dimension, enabling stable training of sequence models).
+- Xiong, R., Yang, Y., He, D., Zheng, K., Zheng, S., Xing, C., Zhang, H., Lan, Y., Wang, L., & Liu, T.-Y. (2020). [On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745). *ICML 2020* (Pre-LN vs Post-LN: theoretical and empirical comparison showing Pre-LN (before attention) improves gradient flow and training stability).
+- Zhang, B., & Sennrich, R. (2019). [Root Mean Square Layer Normalization](https://arxiv.org/abs/1910.07467). *NeurIPS 2019* (RMSNorm: removes the mean-centering step from LayerNorm — used in LLaMA, Mistral, and most modern open-weight LLMs).

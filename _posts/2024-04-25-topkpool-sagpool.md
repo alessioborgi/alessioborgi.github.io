@@ -126,3 +126,9 @@ At each level, the graph shrinks. The final global pooling (mean/sum/max) operat
 ## Summary
 
 TopKPool and SAGPool trade off DiffPool's expressiveness for scalability: by selecting a sparse subset of nodes rather than soft-assigning all nodes to all clusters, they achieve linear-time pooling at the cost of discarding unselected nodes entirely. SAGPool's GNN-based scoring closes much of the quality gap with DiffPool while maintaining scalability.
+
+## References
+
+- Gao, H., & Ji, S. (2019). [Graph U-Nets](https://arxiv.org/abs/1905.05178). *ICML 2019* (TopKPool / gPool).
+- Lee, J., Lee, I., & Kang, J. (2019). [Self-Attention Graph Pooling](https://arxiv.org/abs/1904.08082). *ICML 2019* (SAGPool).
+- Ying, R., You, J., Morris, C., Ren, X., Hamilton, W. L., & Leskovec, J. (2018). [Hierarchical Graph Representation Learning with Differentiable Pooling](https://arxiv.org/abs/1806.08804). *NeurIPS 2018* (DiffPool — the alternative approach).

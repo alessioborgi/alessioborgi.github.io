@@ -116,3 +116,9 @@ Sheaf gauge equivariance is **strictly stronger** than global equivariance — i
 | Gauge transformation | Local O(d) at each node | Change of local frame |
 
 Equivariant sheaf GNNs sit at the intersection of algebraic topology, differential geometry, and graph learning — providing a principled framework for processing data with local frame structure on graphs.
+
+## References
+
+- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: introduces orthogonal restriction maps and their connection to O(d) gauge symmetry on graphs).
+- Singer, A. (2011). [Angular Synchronization by Eigenvectors and Semidefinite Programming](https://arxiv.org/abs/0911.3448). *Applied and Computational Harmonic Analysis 2011* (connection Laplacian for angular synchronisation — foundational work showing the link between sheaf Laplacians and gauge fields on graphs).
+- de Lara, N., & Pineau, E. (2018). [A Simple Baseline Algorithm for Graph Classification](https://arxiv.org/abs/1810.09155). *arXiv 2018* (theoretical treatment of the connection Laplacian as the gauge-equivariant analogue of the graph Laplacian, motivating orthogonal sheaf maps).

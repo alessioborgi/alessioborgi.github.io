@@ -109,3 +109,9 @@ Sheaf-based GNNs can:
 4. Connect to topological data analysis, providing interpretability
 
 The next posts build this intuition into concrete architectures: the Sheaf Laplacian, Neural Sheaf Diffusion, and Polynomial Neural Sheaf Diffusion.
+
+## References
+
+- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (first application of cellular sheaves to graph neural networks, showing how sheaves resolve heterophily).
+- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: learning sheaf maps from data to build the Sheaf Laplacian, with theoretical analysis of heterophily and oversmoothing).
+- Zhu, M., Wang, X., Shi, C., Ji, H., & Cui, P. (2020). [Interpreting and Unifying Graph Neural Networks with An Optimization Framework](https://arxiv.org/abs/2101.11859). *WWW 2021* (unified GNN analysis showing that oversmoothing corresponds to feature homogenisation by the graph Laplacian).

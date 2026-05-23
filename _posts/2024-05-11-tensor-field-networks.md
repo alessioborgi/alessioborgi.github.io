@@ -126,3 +126,9 @@ Norm is invariant; normalised direction is equivariant. Applying σ to the norm 
 | MACE | Many-body interactions + tensor pooling | Current SOTA |
 
 TFN's contribution is not just an architecture — it is the mathematical language in which geometric deep learning is now written. Understanding spherical harmonics, CG products, and irreducible representations is prerequisite knowledge for reading the current state-of-the-art in equivariant GNNs.
+
+## References
+
+- Thomas, N., Smidt, T., Kearnes, S., Yang, L., Li, L., Kohlhoff, K., & Riley, P. (2018). [Tensor Field Networks: Rotation- and Translation-Equivariant Neural Networks for 3D Point Clouds](https://arxiv.org/abs/1802.08219). *arXiv 2018* (TFN: the original SE(3)-equivariant MPNN using spherical harmonics and Clebsch-Gordan tensor products for arbitrary-order geometric features).
+- Batzner, S., Musaelian, A., Sun, L., Geiger, M., Mailoa, J. P., Kornbluth, M., Molinari, N., Smidt, T. E., & Kozinsky, B. (2022). [E(3)-Equivariant Graph Neural Networks for Data-Efficient and Accurate Interatomic Potentials](https://arxiv.org/abs/2101.03164). *Nature Communications 2022* (NequIP: TFN + MPNN architecture achieving state-of-the-art accuracy and data efficiency on molecular force fields).
+- Batatia, I., Kovacs, D. P., Simm, G., Ortner, C., & Csányi, G. (2022). [MACE: Higher Order Equivariant Message Passing Neural Networks for Fast and Accurate Force Fields](https://arxiv.org/abs/2206.07697). *NeurIPS 2022* (MACE: many-body interactions via equivariant tensor products enabling higher-order correlations).

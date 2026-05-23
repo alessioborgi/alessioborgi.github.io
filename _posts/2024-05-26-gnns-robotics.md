@@ -109,3 +109,9 @@ Lidar sensors produce 3D point clouds — unordered sets of 3D points. GNNs can 
 | Point cloud perception | k-NN graph | Unordered 3D data |
 
 Robotics is one of the most natural application domains for GNNs — physical and relational structure is explicit and actionable. The field is rapidly adopting GNN-based representations for perception, dynamics modelling, planning, and multi-agent control.
+
+## References
+
+- Wang, T., Liao, R., Ba, J., & Fidler, S. (2018). [NerveNet: Learning Structured Policy with Graph Neural Networks](https://openreview.net/forum?id=S1sqHMZCb). *ICLR 2018* (NerveNet: kinematic graph GNNs for robot locomotion policies that generalise across morphologies).
+- Battaglia, P., Pascanu, R., Lai, M., Rezende, D. J., & Kavukcuoglu, K. (2016). [Interaction Networks for Learning about Objects, Relations and Physics](https://arxiv.org/abs/1612.00222). *NeurIPS 2016* (Interaction Networks: object-relation graphs for physics simulation — foundational for GNN robotics applications).
+- Tolstaya, E., Gama, F., Paulos, J., Pappas, G., Kumar, V., & Ribeiro, A. (2020). [Learning Decentralized Controllers for Robot Swarms with Graph Neural Networks](https://arxiv.org/abs/1903.10527). *CoRL 2020* (GNN-based decentralised multi-robot coordination that scales to large swarms without per-robot retraining).

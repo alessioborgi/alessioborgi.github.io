@@ -130,3 +130,9 @@ Standard task: 15/30/60-minute horizon prediction. Metrics: MAE, MAPE, RMSE.
 | GMAN | Spatial attention | Temporal attention | Yes |
 
 Spatio-temporal GNNs are the dominant framework for sensor network prediction — wherever measurements at graph nodes evolve over time and spatial correlations matter. The field is rapidly incorporating Transformer-style attention to replace both spatial and temporal convolutions.
+
+## References
+
+- Li, Y., Yu, R., Shahabi, C., & Liu, Y. (2018). [Diffusion Convolutional Recurrent Neural Network: Data-Driven Traffic Forecasting](https://arxiv.org/abs/1707.01926). *ICLR 2018* (DCRNN: bidirectional diffusion GCN with GRU encoder-decoder for traffic prediction).
+- Yu, B., Yin, H., & Zhu, Z. (2018). [Spatio-Temporal Graph Convolutional Networks: A Deep Learning Framework for Traffic Forecasting](https://arxiv.org/abs/1709.04875). *IJCAI 2018* (STGCN: gated 1D temporal convolution + Chebyshev spatial convolution, fully parallelisable).
+- Wu, Z., Pan, S., Long, G., Jiang, J., Chang, X., & Zhang, C. (2020). [Connecting the Dots: Multivariate Time Series Forecasting with Graph Neural Networks](https://arxiv.org/abs/2005.11650). *KDD 2020* (GWaveNet: adaptive adjacency matrix + dilated causal convolution for long-range temporal patterns).

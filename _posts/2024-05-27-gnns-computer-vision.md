@@ -120,3 +120,9 @@ This post-detection relation module improves mAP by 2-3% on COCO — a significa
 | Object detection | Spatial proximity graph | Context-aware refinement |
 
 GNNs bring relational reasoning to computer vision — moving beyond "what objects are present" to "how do objects relate." This shift is enabling vision systems that answer compositional questions, understand actions, and reason about 3D spatial structure — capabilities that are increasingly central to real-world visual intelligence.
+
+## References
+
+- Yan, S., Xiong, Y., & Lin, D. (2018). [Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition](https://arxiv.org/abs/1801.07455). *AAAI 2018* (ST-GCN: spatio-temporal GNN on human skeleton joint graphs for action recognition from pose sequences).
+- Wang, Y., Sun, Y., Liu, Z., Sarma, S. E., Bronstein, M. M., & Solomon, J. M. (2019). [Dynamic Graph CNN for Learning on Point Clouds](https://arxiv.org/abs/1801.07829). *ACM Transactions on Graphics 2019* (DGCNN: EdgeConv on dynamically recomputed k-NN graphs in feature space for 3D point cloud classification).
+- Yang, J., Lu, J., Lee, S., Batra, D., & Parikh, D. (2018). [Graph R-CNN for Scene Graph Generation](https://arxiv.org/abs/1808.00191). *ECCV 2018* (Graph R-CNN: end-to-end scene graph generation using GNNs to reason over detected object relations).

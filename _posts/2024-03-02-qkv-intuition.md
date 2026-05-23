@@ -145,3 +145,8 @@ Classic databases return one result (hard lookup). Attention returns a different
 | **Weighted V** | Output | Blend of values, weighted by attention |
 
 QKV is a learned, differentiable, soft database lookup. Once you see it this way, the rest of the Transformer follows naturally.
+
+## References
+
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (source of the QKV formulation: W_Q, W_K, W_V projection matrices for scaled dot-product attention).
+- Elhage, N., Nanda, N., Olsson, C., Henighan, T., et al. (2021). [A Mathematical Framework for Transformer Circuits](https://transformer-circuits.pub/2021/framework/index.html). *Anthropic 2021* (mechanistic interpretability analysis of how QKV matrices implement composition and information routing in Transformers).

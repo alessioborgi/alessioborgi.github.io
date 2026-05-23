@@ -134,3 +134,8 @@ The core operation: each node aggregates information from its neighbours, combin
 | Graph label | y_G | Molecule toxicity |
 
 Graphs are the natural language of relational data. GNNs are the deep learning architectures that speak it.
+
+## References
+
+- Bondy, J. A., & Murty, U. S. R. (2008). *Graph Theory*. Springer. — Standard reference for graph theory fundamentals.
+- Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv preprint*.

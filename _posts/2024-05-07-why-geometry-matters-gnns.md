@@ -105,3 +105,9 @@ Process 3D vectors as vectors — not just their magnitudes. EGNN, SE(3)-Transfo
 ## Summary
 
 Adding geometry to GNNs is not optional for applications where 3D structure matters. The challenge is doing so while respecting the symmetries of 3D space — translation, rotation, reflection. The subsequent posts in this section cover the architectures (EGNN, SE(3)-Transformers, TFN) that solve this systematically using group theory.
+
+## References
+
+- Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv 2021* (the unifying geometric deep learning blueprint: symmetry groups, equivariance, and the 5G framework).
+- Schütt, K. T., Kindermans, P.-J., Sauceda Felix, H. E., Chmiela, S., Tkatchenko, A., & Müller, K.-R. (2017). [SchNet: A Continuous-Filter Convolutional Neural Network for Modeling Quantum Interactions](https://arxiv.org/abs/1706.08566). *NeurIPS 2017* (SchNet: distance-based interaction filters for molecular property prediction).
+- Klicpera, J., Groß, J., & Günnemann, S. (2020). [Directional Message Passing for Molecular Graphs](https://arxiv.org/abs/2003.03123). *ICLR 2020* (DimeNet: bond angles enable chirality-aware message passing beyond pure distances).

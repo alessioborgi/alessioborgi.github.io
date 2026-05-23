@@ -133,3 +133,10 @@ Solutions:
 | Over-squashing | Yes | No |
 
 Graph Transformers trade O(N²) computation for the ability to directly connect any pair of nodes. For small graphs (molecules, proteins, small networks), this is the current state of the art. For large graphs, GPS-style hybrid approaches (local MPNN + global attention) are the practical frontier.
+
+## References
+
+- Dwivedi, V. P., & Bresson, X. (2021). [A Generalization of Transformers to Graphs](https://arxiv.org/abs/2012.09699). *arXiv preprint*.
+- Kreuzer, D., Beaini, D., Hamilton, W. L., Létourneau, V., & Tossou, P. (2021). [Rethinking Graph Transformers with Spectral Attention](https://arxiv.org/abs/2106.03893). *NeurIPS 2021*.
+- Rampasek, L., Galkin, M., Dwivedi, V. P., Lim, A. T., Wolf, G., & Beaini, D. (2022). [Recipe for a General, Powerful, Scalable Graph Transformer](https://arxiv.org/abs/2205.12454). *NeurIPS 2022* (GPS).
+- Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017*.

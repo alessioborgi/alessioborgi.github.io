@@ -127,3 +127,10 @@ Oversmoothing is not a bug in implementation — it is a mathematical property o
 4. **Fix:** prevent repeated averaging (residuals, separate propagation) or use global attention (Graph Transformers)
 
 Understanding oversmoothing is the first step to understanding why GNN depth scaling is fundamentally different from Transformer depth scaling — and why simply adding more layers is not the solution.
+
+## References
+
+- Li, Q., Han, Z., & Wu, X.-M. (2018). [Deeper Insights Into Graph Convolutional Networks for Semi-Supervised Classification](https://arxiv.org/abs/1801.07606). *AAAI 2018*.
+- Oono, K., & Suzuki, T. (2020). [Graph Neural Networks Exponentially Lose Expressive Power for Node Classification](https://arxiv.org/abs/1905.10947). *ICLR 2020*.
+- Chen, M., Wei, Z., Huang, Z., Ding, B., & Li, Y. (2020). [Simple and Deep Graph Convolutional Networks](https://arxiv.org/abs/2007.02133). *ICML 2020* (GCNII — addresses oversmoothing).
+- Zhao, L., & Akoglu, L. (2020). [PairNorm: Tackling Oversmoothing in GNNs](https://arxiv.org/abs/1909.12223). *ICLR 2020*.

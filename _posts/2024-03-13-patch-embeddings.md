@@ -147,3 +147,9 @@ Patch embeddings are the minimal, elegant bridge between 2D images and 1D Transf
 5. **Feed** to any standard Transformer
 
 The simplicity is the point. Once the image is a token sequence, every Transformer technique — multi-head attention, pre-training objectives, fine-tuning, scaling laws — applies directly.
+
+## References
+
+- Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., Uszkoreit, J., & Houlsby, N. (2020). [An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929). *ICLR 2021* (ViT: introduces patch embeddings — flattening 16×16 image patches into a token sequence fed to a standard Transformer).
+- He, K., Chen, X., Xie, S., Li, Y., Dollár, P., & Girshick, R. (2022). [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377). *CVPR 2022* (MAE: applies masked autoencoding to ViT patch tokens for self-supervised pre-training).
+- Touvron, H., Cord, M., Douze, M., Massa, F., Sablayrolles, A., & Jégou, H. (2021). [Training Data-Efficient Image Transformers & Distillation through Attention](https://arxiv.org/abs/2012.12877). *ICML 2021* (DeiT: shows patch-based ViT can be trained effectively on ImageNet alone without JFT-300M).

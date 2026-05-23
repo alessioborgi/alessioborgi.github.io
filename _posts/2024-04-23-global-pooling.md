@@ -122,3 +122,8 @@ For graphs where structure at different scales matters (molecules with atoms and
 | Concat(all) | [mean; sum; max] | Partial | Combined | General tasks |
 
 The choice of readout is as important as the choice of message passing architecture. On graph classification benchmarks, switching from mean to sum pooling alone can change accuracy by 5-10 percentage points.
+
+## References
+
+- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826). *ICLR 2019* (proves sum readout is strictly more expressive than mean or max).
+- Zaheer, M., Kottur, S., Ravanbakhsh, S., Poczos, B., Salakhutdinov, R., & Smola, A. J. (2017). [Deep Sets](https://arxiv.org/abs/1703.06114). *NeurIPS 2017* (theory of permutation-invariant functions over sets).

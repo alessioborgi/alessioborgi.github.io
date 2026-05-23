@@ -124,3 +124,8 @@ There is a deep connection: over-smoothing (all node embeddings converging to th
 | Fix | Standard GNN | H2GCN, FAGCN, Graph Transformers, Sheaves |
 
 Homophily is not a property of graphs in general — it is a property of specific datasets that early GNN work happened to focus on. Real-world graphs are often heterophilic. Understanding whether your graph is homophilic or heterophilic is the single most important diagnostic before choosing a GNN architecture.
+
+## References
+
+- Zhu, J., Yan, Y., Zhao, L., Heimann, M., Akoglu, L., & Koutra, D. (2020). [Beyond Homophily in Graph Neural Networks: Current Limitations and Effective Designs](https://arxiv.org/abs/2006.11468). *NeurIPS 2020*.
+- McPherson, M., Smith-Lovin, L., & Cook, J. M. (2001). Birds of a Feather: Homophily in Social Networks. *Annual Review of Sociology*.

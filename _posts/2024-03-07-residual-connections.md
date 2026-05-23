@@ -147,3 +147,9 @@ Adding them back is cheap — it is a single addition with no parameters — but
 | Performance degrades with depth | Performance improves with depth |
 
 Residual connections are the single most important structural element that allows Transformers to scale to hundreds of layers. They cost almost nothing (one addition) but change everything.
+
+## References
+
+- He, K., Zhang, X., Ren, S., & Sun, J. (2016). [Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385). *CVPR 2016* (ResNets: introduced residual skip connections to train very deep networks; adopted directly into Transformers by Vaswani et al.).
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (Transformer: uses Add & Norm (residual + layer norm) after both attention and FFN sublayers in each block).
+- Veit, A., Wilber, M., & Belongie, S. (2016). [Residual Networks Behave Like Ensembles of Relatively Shallow Networks](https://arxiv.org/abs/1605.06431). *NeurIPS 2016* (shows residual networks create exponentially many paths of varying length, explaining their robustness to layer removal).

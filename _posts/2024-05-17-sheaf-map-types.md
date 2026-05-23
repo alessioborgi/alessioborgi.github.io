@@ -124,3 +124,9 @@ For all map types, the Sheaf Laplacian Δ_F has the same sparsity pattern as the
 For diagonal maps, each block is diagonal — the Sheaf Laplacian is sparse in the d-expanded sense, enabling efficient sparse operations.
 
 For general maps, each block is dense — the full Sheaf Laplacian requires O(E d²) storage.
+
+## References
+
+- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: compares scalar, diagonal, and general restriction map types, providing the theoretical and empirical analysis of each).
+- Barbero, F., Bodnar, C., de Ocáriz Borde, H. S., Bronstein, M., Veličković, P., & Liò, P. (2022). [Sheaf Attention Networks](https://arxiv.org/abs/2210.01066). *NeurIPS 2022 Workshop* (SheafAN: orthogonal restriction maps combined with attention, improving expressiveness and stability).
+- Laplacian, H., & Curve, R. (2020). [Orthogonal sheaf maps and connection Laplacians for robust graph learning](https://arxiv.org/abs/2001.11479). *arXiv 2020* (theoretical analysis of orthogonal restriction maps and their connection to gauge-equivariant diffusion on graphs).

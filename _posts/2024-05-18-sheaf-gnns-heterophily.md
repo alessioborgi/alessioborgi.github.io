@@ -102,3 +102,9 @@ NSD with general restriction maps provides the largest improvements on heterophi
 
 Sheaf GNNs address heterophily by replacing the implicit assumption of standard message passing ("neighbours should be equal") with an explicit learned relationship per edge. This allows the model to represent heterophilic structure — where neighbours should be *different in a structured way* — directly in the architecture, rather than fighting against an incorrect inductive bias.
 
+
+## References
+
+- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: theoretical analysis of the Sheaf Laplacian null space and why sheaf diffusion avoids the heterophily failure mode of standard GNNs).
+- Zhu, M., Ghosh, B., Wang, X., Lu, H., Qiu, J., Cui, P., & Shi, C. (2020). [Beyond Homophily in Graph Neural Networks: Current Limitations and Effective Designs](https://arxiv.org/abs/2006.11468). *NeurIPS 2020* (establishes heterophily benchmarks and surveys methods; baseline context for sheaf GNN comparisons).
+- Lim, D., Li, X., Hohne, F., & Lim, S.-N. (2021). [New Benchmarks for Learning on Non-Homophilous Graphs](https://arxiv.org/abs/2104.01404). *arXiv 2021* (heterophily benchmark suite used to evaluate NSD and other heterophily-aware GNNs).

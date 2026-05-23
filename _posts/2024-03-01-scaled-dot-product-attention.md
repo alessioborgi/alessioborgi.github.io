@@ -143,3 +143,8 @@ The √d_k formula hits the theoretical optimum for variance normalisation with 
 | Larger models train worse | Larger models train fine |
 
 The √d_k is a single division that makes Transformers scalable. It is easy to overlook, but foundational to why the architecture works at all.
+
+## References
+
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (the original Transformer paper introducing scaled dot-product attention and multi-head attention).
+- Bahdanau, D., Cho, K., & Bengio, Y. (2015). [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473). *ICLR 2015* (the additive attention mechanism that preceded scaled dot-product attention and motivated the QKV formulation).

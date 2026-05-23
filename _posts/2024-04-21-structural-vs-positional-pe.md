@@ -94,3 +94,9 @@ SignNet and similar approaches attempt to make LapPE (which is technically posit
 | Best for | Tasks needing unique node IDs | Tasks needing role classification |
 
 The distinction is not academic — choosing the wrong type of encoding is a common source of suboptimal performance in GNN and Graph Transformer design.
+
+## References
+
+- Dwivedi, V. P., Lim, A. T., Beaini, D., & Lió, P. (2021). [Graph Neural Networks with Learnable Structural and Positional Representations](https://arxiv.org/abs/2110.07875). *ICLR 2022*.
+- Zhao, L., Jin, W., Akoglu, L., & Shah, N. (2021). [Stars, Paths, and Triangles: Better Structural Encodings for GNNs via Subgraph Counts](https://arxiv.org/abs/2204.03589). *arXiv preprint*.
+- Srinivasan, B., & Ribeiro, B. (2020). [On the Equivalence between Positional Node Embeddings and Structural Graph Representations](https://arxiv.org/abs/1910.00452). *ICLR 2020*.

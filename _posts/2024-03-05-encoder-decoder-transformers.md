@@ -170,3 +170,10 @@ The three architectures are not better or worse in absolute terms — they are o
 - **Transforming one sequence into another?** → Encoder-decoder
 
 Modern LLMs (GPT-4, Claude, LLaMA) are decoder-only, using scale and prompting to cover all three use cases. But for specialised tasks with a clear input-output structure and limited compute, encoder-decoder models remain competitive.
+
+## References
+
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (original encoder-decoder Transformer for machine translation).
+- Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2018). [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805). *NAACL 2019* (BERT: the canonical encoder-only Transformer for classification and understanding tasks).
+- Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., Zhou, Y., Li, W., & Liu, P. J. (2020). [Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/abs/1910.10683). *JMLR 2020* (T5: unifies NLP tasks under a single encoder-decoder text-to-text format).
+- Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., et al. (2020). [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165). *NeurIPS 2020* (GPT-3: decoder-only architecture at 175B parameters demonstrating few-shot learning).

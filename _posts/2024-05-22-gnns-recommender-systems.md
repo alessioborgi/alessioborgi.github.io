@@ -124,3 +124,9 @@ Benefit: cold-start items with no interactions can leverage KG features (genre, 
 | SR-GNN | Session graph + GCN | Millions |
 
 GNNs are now the dominant paradigm for production recommendation systems at scale — deployed by Pinterest, Alibaba, Amazon, Netflix, and most major e-commerce platforms.
+
+## References
+
+- Ying, R., He, R., Chen, K., Eksombatchai, P., Hamilton, W. L., & Leskovec, J. (2018). [Graph Convolutional Neural Networks for Web-Scale Recommender Systems](https://arxiv.org/abs/1806.01973). *KDD 2018* (PinSage: GraphSAGE-based GNN for Pinterest's 3-billion-node pin-board graph at production scale).
+- He, X., Deng, K., Wang, X., Li, Y., Zhang, Y., & Wang, M. (2020). [LightGCN: Simplifying and Powering Graph Convolution Network for Recommendation](https://arxiv.org/abs/2002.02126). *SIGIR 2020* (LightGCN: ablation study showing that removing feature transformation and activation from GCN improves collaborative filtering).
+- Wu, S., Tang, Y., Zhu, Y., Wang, L., Xie, X., & Tan, T. (2019). [Session-Based Recommendation with Graph Neural Networks](https://arxiv.org/abs/1811.00855). *AAAI 2019* (SR-GNN: models session sequences as directed graphs for next-item prediction with GNN).

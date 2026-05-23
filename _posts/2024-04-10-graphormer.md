@@ -128,3 +128,8 @@ A follow-up extends Graphormer to 3D molecular structures — using Euclidean di
 | Edge information | Path-edge feature aggregation | Bond type, relation quality |
 
 Graphormer is the canonical example of how to inject graph structure into a Transformer cleanly. Its three structural biases are now standard components in the Graph Transformer design space.
+
+## References
+
+- Ying, C., Cai, T., Luo, S., Zheng, S., Ke, G., He, D., Shen, Y., & Liu, T.-Y. (2021). [Do Transformers Really Perform Bad for Graph Representation?](https://arxiv.org/abs/2106.05234). *NeurIPS 2021*.
+- Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017*.

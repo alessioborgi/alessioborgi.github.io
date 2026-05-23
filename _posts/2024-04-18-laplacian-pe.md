@@ -118,3 +118,9 @@ LapPE makes GNNs strictly more expressive than 1-WL — at the cost of a precomp
 | Used by | SAN, GPS, many Graph Transformer papers |
 
 LapPE is the gold standard for graph positional encodings when global structural position matters and computational cost is manageable.
+
+## References
+
+- Belkin, M., & Niyogi, P. (2003). [Laplacian Eigenmaps for Dimensionality Reduction and Data Representation](https://www2.imm.dtu.dk/projects/manifold/Papers/Laplacian.pdf). *Neural Computation*.
+- Dwivedi, V. P., Lim, A. T., Beaini, D., & Lió, P. (2021). [Graph Neural Networks with Learnable Structural and Positional Representations](https://arxiv.org/abs/2110.07875). *ICLR 2022*.
+- Kreuzer, D., Beaini, D., Hamilton, W. L., Létourneau, V., & Tossou, P. (2021). [Rethinking Graph Transformers with Spectral Attention](https://arxiv.org/abs/2106.03893). *NeurIPS 2021* (SAN).

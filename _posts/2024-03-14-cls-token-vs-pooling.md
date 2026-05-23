@@ -145,3 +145,9 @@ Some models use both: the [CLS] token representation and the mean-pooled patch t
 | Used by | ViT, DeiT, DINO, CLIP | MAE, some CNN hybrids |
 
 The [CLS] token is the dominant convention in Transformer-based vision models. Understanding it — and its alternative — clarifies how image representations are formed and why ViT attention maps can serve as segmentation signals without any spatial supervision.
+
+## References
+
+- Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., Uszkoreit, J., & Houlsby, N. (2020). [An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929). *ICLR 2021* (ViT: introduces the [CLS] token prepended to patch sequences; the final [CLS] embedding is used for image classification).
+- He, K., Chen, X., Xie, S., Li, Y., Dollár, P., & Girshick, R. (2022). [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377). *CVPR 2022* (MAE: uses global average pooling of patch tokens instead of [CLS] for its encoder — the canonical pooling approach).
+- Caron, M., Touvron, H., Misra, I., Jégou, H., Mairal, J., Bojanowski, P., & Joulin, A. (2021). [Emerging Properties in Self-Supervised Vision Transformers](https://arxiv.org/abs/2104.14294). *ICCV 2021* (DINO: self-supervised ViT with [CLS] token; shows that [CLS] attention maps form interpretable segmentation maps without spatial supervision).

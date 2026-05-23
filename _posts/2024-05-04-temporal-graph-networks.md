@@ -142,3 +142,9 @@ Online event processing is not directly compatible with batched GPU training. TG
 | Link decoder | Interaction probability from embeddings |
 
 TGN is the standard baseline for continuous-time dynamic graph link prediction. Its modular design (memory + embedding + decoder) allows ablation studies and component swapping — making it a useful research framework as well as a practical model.
+
+## References
+
+- Rossi, E., Chamberlain, B., Frasca, F., Eynard, D., Monti, F., & Bronstein, M. (2020). [Temporal Graph Networks for Deep Learning on Dynamic Graphs](https://arxiv.org/abs/2006.10637). *ICML GRL+ Workshop 2020* (TGN: memory modules + temporal graph attention for continuous-time dynamic graphs).
+- Xu, D., Ruan, C., Körpeoglu, E., Kumar, S., & Achan, K. (2020). [Inductive Representation Learning on Temporal Graphs](https://arxiv.org/abs/2002.07962). *ICLR 2020* (TGAT: temporal attention without memory; time-encoding via Bochner's theorem).
+- Kumar, S., Zhang, X., & Leskovec, J. (2019). [Predicting Dynamic Embedding Trajectory in Temporal Interaction Networks](https://arxiv.org/abs/1908.01207). *KDD 2019* (JODIE: bipartite temporal interaction model using RNN projections).

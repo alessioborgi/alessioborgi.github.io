@@ -147,3 +147,9 @@ The attention pattern learned by a well-trained translation model tends to align
 | Role | Contextualise within sequence | Bridge two sequences |
 
 Cross-attention is the fundamental building block for any model that needs to condition generation on a separate encoded representation — translation, captioning, diffusion, and multimodal understanding all rely on it.
+
+## References
+
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (introduces cross-attention in the decoder: queries from the target sequence attend over encoder keys and values).
+- Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., Zhou, Y., Li, W., & Liu, P. J. (2020). [Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/abs/1910.10683). *JMLR 2020* (T5: encoder-decoder model built entirely around cross-attention for text-to-text transfer learning).
+- Rombach, R., Blattmann, A., Lorenz, D., Esser, P., & Ommer, B. (2022). [High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752). *CVPR 2022* (Stable Diffusion: cross-attention between text and image latents for text-conditioned image generation).

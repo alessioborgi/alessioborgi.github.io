@@ -140,3 +140,9 @@ The polynomial filter provides ~2-3% improvement over fixed diffusion on each be
 | Heterophily handling | Structural (sheaf maps) | Structural + spectral |
 
 PNSD is the current strongest sheaf-based architecture for node classification on heterophilic graphs. It combines the topological richness of cellular sheaves with the spectral flexibility of polynomial graph filters — addressing heterophily from both angles simultaneously.
+
+## References
+
+- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: the base architecture that PNSD extends with a learnable polynomial diffusion filter).
+- Zaghen, O., Quak, M., & Bronstein, M. M. (2024). [Polynomial Neural Sheaf Diffusion](https://openreview.net/forum?id=KGPmqVFEW4). *ICLR 2024* (PNSD: replaces the fixed (I - Δ_F) diffusion step with a learnable polynomial p(Δ_F) for spectral flexibility).
+- He, M., Wei, Z., Huang, Z., & Xu, H. (2021). [BernNet: Learning Arbitrary Graph Spectral Filters via Bernstein Approximation](https://arxiv.org/abs/2106.10994). *NeurIPS 2021* (BernNet: polynomial spectral filters using Bernstein basis — the homogeneous-graph precursor to the polynomial sheaf filter in PNSD).

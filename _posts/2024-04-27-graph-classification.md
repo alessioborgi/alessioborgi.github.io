@@ -137,3 +137,9 @@ The entire pipeline (GNN + readout + MLP) is trained end-to-end with a single lo
 | Layer combination | JK-Net style concatenation before readout |
 
 Graph classification ties together all the concepts in the pooling section: the choice of message passing determines per-node expressiveness; the readout determines what graph-level information is preserved; the MLP maps the graph summary to the prediction. Getting all three right is what separates random-chance performance from state-of-the-art.
+
+## References
+
+- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826). *ICLR 2019* (GIN — most expressive MPNN for graph classification).
+- Xu, K., Li, C., Tian, Y., Sonobe, T., Kawarabayashi, K., & Jegelka, S. (2018). [Representation Learning on Graphs with Jumping Knowledge Networks](https://arxiv.org/abs/1806.03536). *ICML 2018* (JK-Net readout).
+- Hu, W., Fey, M., Zitnik, M., Dong, Y., Ren, H., Liu, B., Catasta, M., & Leskovec, J. (2020). [Open Graph Benchmark: Datasets for Machine Learning on Graphs](https://arxiv.org/abs/2005.00687). *NeurIPS 2020* (OGB benchmarks).

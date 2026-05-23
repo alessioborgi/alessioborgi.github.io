@@ -134,3 +134,9 @@ Not all past events are equally relevant. A social interaction from 3 years ago 
 | Memory module | Fixed-size state capturing interaction history |
 
 Dynamic graph learning adds the temporal dimension to all GNN tasks: link prediction becomes "will u and v interact in the future?", node classification becomes "what is v's state now?", and graph-level tasks must account for structural evolution. The field is rapidly developing, with TGN as the current dominant framework for CTDG.
+
+## References
+
+- Kazemi, S. M., Goel, R., Jain, K., Kobyzev, I., Sethi, A., Forsyth, P., & Poupart, P. (2020). [Representation Learning for Dynamic Graphs: A Survey](https://arxiv.org/abs/1905.11485). *JMLR 2020* (comprehensive survey of DTDG and CTDG methods, taxonomy of tasks and models).
+- Rossi, E., Chamberlain, B., Frasca, F., Eynard, D., Monti, F., & Bronstein, M. (2020). [Temporal Graph Networks for Deep Learning on Dynamic Graphs](https://arxiv.org/abs/2006.10637). *ICML GRL+ Workshop 2020* (TGN framework introducing the memory module abstraction).
+- Xu, D., Ruan, C., Körpeoglu, E., Kumar, S., & Achan, K. (2020). [Inductive Representation Learning on Temporal Graphs](https://arxiv.org/abs/2002.07962). *ICLR 2020* (TGAT: temporal graph attention for CTDG without memory modules).

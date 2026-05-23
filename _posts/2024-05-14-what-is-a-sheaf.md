@@ -121,3 +121,9 @@ The sheaf framework provides:
 | Global sections | Constant functions | ker(δ₀): consistent assignments |
 
 The sheaf framework generalises the standard graph to a richer structure that can encode per-edge relational information. The Sheaf Laplacian, covered in the next post, is the key operator that makes this actionable for graph learning.
+
+## References
+
+- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (introduces cellular sheaves for graph learning; defines stalks, restriction maps, coboundary operator, and global sections in the GNN context).
+- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: learns sheaf restriction maps from node features, building on the cellular sheaf theory from Hansen & Gebhart).
+- Curry, J. (2014). [Sheaves, Cosheaves and Applications](https://arxiv.org/abs/1303.3255). *PhD Thesis, University of Pennsylvania 2014* (mathematical foundation of cellular sheaf theory underlying sheaf neural networks).

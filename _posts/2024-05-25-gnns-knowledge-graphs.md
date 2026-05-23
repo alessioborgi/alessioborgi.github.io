@@ -111,3 +111,9 @@ This requires a chain of reasoning:
 | Question answering | KG subgraph + text | GRAFT-Net |
 
 GNNs are the backbone of modern knowledge graph systems — enabling inductive, structure-aware entity representations that power reasoning, completion, and alignment tasks at scale.
+
+## References
+
+- Schlichtkrull, M., Kipf, T. N., Bloem, P., van den Berg, R., Titov, I., & Welling, M. (2018). [Modeling Relational Data with Graph Convolutional Networks](https://arxiv.org/abs/1703.06103). *ESWC 2018* (R-GCN: relation-specific weight matrices for entity classification and link prediction in knowledge graphs).
+- Sun, Z., Deng, Z.-H., Nie, J.-Y., & Tang, J. (2019). [RotatE: Knowledge Graph Embedding by Relational Rotation in Complex Space](https://arxiv.org/abs/1902.10197). *ICLR 2019* (RotatE: relations as rotations in complex space, handling symmetry, antisymmetry, inversion, and composition patterns).
+- Das, R., Dhuliawala, S., Zaheer, M., Vilnis, L., Durugkar, I., Krishnamurthy, A., Smola, A., & McCallum, A. (2018). [Go for a Walk and Arrive at the Answer: Reasoning over Paths in Knowledge Bases using Reinforcement Learning](https://arxiv.org/abs/1711.05851). *ICLR 2018* (MINERVA: RL-based multi-hop path traversal for knowledge base question answering).

@@ -148,3 +148,10 @@ Each geometric level roughly halves the error. Chemical accuracy is ~0.04 eV —
 | Full equivariance | 3D vectors | NequIP, MACE | ~0.01 eV |
 
 For industrial drug discovery, 2D GNNs suffice for fast virtual screening. For physics-accurate property prediction and force fields, equivariant models are the only option.
+
+## References
+
+- Gilmer, J., Schütt, K. T., Ramsundar, B., Ramakrishnan, R., Bronskill, M., Gomes, C., & Dahl, G. E. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017* (MPNN: unified message passing framework for quantum chemistry, benchmarked on QM9).
+- Schütt, K. T., Kindermans, P.-J., Sauceda Felix, H. E., Chmiela, S., Tkatchenko, A., & Müller, K.-R. (2017). [SchNet: A Continuous-Filter Convolutional Neural Network for Modeling Quantum Interactions](https://arxiv.org/abs/1706.08566). *NeurIPS 2017* (SchNet: continuous-filter convolutions over interatomic distances for E(3)-invariant molecular property prediction).
+- Klicpera, J., Groß, J., & Günnemann, S. (2020). [Directional Message Passing for Molecular Graphs](https://arxiv.org/abs/2003.03123). *ICLR 2020* (DimeNet: adds bond angles to message passing, enabling chirality-aware representations beyond pure distances).
+- Liu, Y., Wang, L., Liu, M., Lin, Y., Zhang, X., Oztekin, B., & Ji, S. (2022). [Spherical Message Passing for 3D Molecular Graphs](https://arxiv.org/abs/2102.05013). *ICLR 2022* (SphereNet: extends DimeNet with torsion angles for full 3D geometry encoding).

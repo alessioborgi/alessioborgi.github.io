@@ -111,3 +111,9 @@ Compared to standard GCN O(E · d) per layer, NSD is O(d) more expensive. For d=
 | Readout | MLP(h_v) | Node classification |
 
 NSD provides a principled connection between algebraic topology (cellular sheaves) and graph neural networks — offering a theoretical explanation for why standard GNNs fail on heterophilic graphs and a mathematically grounded fix.
+
+## References
+
+- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: the full framework for learning sheaf restriction maps from data via MLP predictors and applying sheaf diffusion for node classification).
+- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (the foundational sheaf GNN paper that NSD extends with learned instead of fixed restriction maps).
+- Chamberlain, B. P., Rowbottom, J., Gorinova, M., Webb, S., Rossi, E., & Bronstein, M. M. (2021). [GRAND: Graph Neural Diffusion](https://arxiv.org/abs/2106.10934). *ICML 2021* (GRAND: continuous graph diffusion framing of GNNs, which NSD extends to the sheaf setting).

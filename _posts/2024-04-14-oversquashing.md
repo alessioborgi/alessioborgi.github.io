@@ -124,3 +124,9 @@ Adding edges at negative-curvature bottlenecks (SDRF) provably reduces oversquas
 | Relation to oversmoothing | Distinct: affects different nodes, different depth regime |
 
 Oversquashing explains why GNNs fail on long-range reasoning tasks even when depth is not the bottleneck. Solving it requires either changing the graph (rewiring) or bypassing message passing altogether (Graph Transformers).
+
+## References
+
+- Alon, U., & Yahav, E. (2021). [On the Bottleneck of Graph Neural Networks and Its Practical Implications](https://arxiv.org/abs/2006.05205). *ICLR 2021*.
+- Topping, J., Di Giovanni, F., Chamberlain, B. P., Dong, X., & Bronstein, M. M. (2022). [Understanding over-squashing and Bottlenecks on Graphs via Curvature](https://arxiv.org/abs/2111.14522). *ICLR 2022*.
+- Di Giovanni, F., Giusti, L., Barbero, F., Maschi, G., Lio, P., & Bronstein, M. M. (2023). [On Over-Squashing in Message Passing Neural Networks: The Impact of Width, Depth, and Topology](https://arxiv.org/abs/2302.02941). *ICML 2023*.

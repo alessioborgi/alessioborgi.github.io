@@ -121,3 +121,9 @@ Standard splits: train on t ≤ T, validate on T < t ≤ T', test on t > T'.
 | TGAT | Temporal attention | Recency-weighted neighbourhood |
 
 Temporal knowledge graphs are a stepping stone from static relational reasoning to full temporal graph learning (covered in the Dynamic Graphs section). The key insight: facts have lifetimes, and reasoning about the world requires reasoning about when facts were true — not just whether they are true.
+
+## References
+
+- Lacroix, T., Obozinski, G., & Usunier, N. (2020). [Tensor Decompositions for Temporal Knowledge Base Completion](https://arxiv.org/abs/2004.04926). *ICLR 2020* (TNTComplEx).
+- Jin, W., Qu, M., Jin, X., & Ren, X. (2020). [Recurrent Event Network: Autoregressive Structure Inference over Temporal Knowledge Graphs](https://arxiv.org/abs/1904.05530). *EMNLP 2020* (RE-NET).
+- Xu, D., Ruan, C., Körpeoglu, E., Kumar, S., & Achan, K. (2020). [Inductive Representation Learning on Temporal Graphs](https://arxiv.org/abs/2002.07962). *ICLR 2020* (TGAT).

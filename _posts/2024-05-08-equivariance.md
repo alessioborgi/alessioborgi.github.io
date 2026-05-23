@@ -126,3 +126,9 @@ is equivariant. The key constraint: **never mix coordinates directly with scalar
 | Vector (l=1) | Rotates with molecule | Force, velocity |
 
 Equivariance is the mathematical foundation of geometric deep learning. Every architecture in the next posts — EGNN, SE(3)-Transformers, TFN — is a concrete instantiation of these principles.
+
+## References
+
+- Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv 2021* (comprehensive treatment of group symmetries, equivariance, and irreducible representations in deep learning).
+- Cohen, T. S., & Welling, M. (2016). [Group Equivariant Convolutional Networks](https://arxiv.org/abs/1602.07576). *ICML 2016* (G-CNNs: first systematic framework for equivariant networks on discrete symmetry groups).
+- Kondor, R., & Trivedi, S. (2018). [On the Generalization of Equivariance and Convolution in Neural Networks to the Action of Compact Groups](https://arxiv.org/abs/1802.03690). *ICML 2018* (theoretical foundation for equivariant neural networks over compact groups).

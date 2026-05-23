@@ -135,3 +135,9 @@ This is the same range as the standard normalised Laplacian. The difference: wit
 | Diffusion step | X ← (I - Δ_F) X | Reduces inconsistency, GCN generalisation |
 
 The Sheaf Laplacian is the central object for sheaf-based graph learning. It generalises the standard graph Laplacian by incorporating edge-level structure — making it possible to define diffusion that respects per-edge feature transformations rather than forcing raw feature equality.
+
+## References
+
+- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (defines the Sheaf Laplacian Δ_F = δ₀^T δ₀ and Sheaf Dirichlet energy for graph learning; shows GCN is the scalar-sheaf special case).
+- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: analyses oversmoothing via the null space of Δ_F and shows learnable sheaf maps prevent convergence to trivial solutions).
+- Ebli, S., Defferrard, M., & Spreemann, G. (2020). [Simplicial Neural Networks](https://arxiv.org/abs/2010.03633). *NeurIPS 2020 TDA & Beyond Workshop* (related Hodge Laplacian approach on simplicial complexes, providing topological context for the Sheaf Laplacian).

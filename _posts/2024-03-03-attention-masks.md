@@ -176,3 +176,9 @@ The `masked_fill` replaces masked positions with −∞. After softmax, those po
 | Combined | Intersection of rules | Encoder-decoder models |
 
 Attention masks are the simplest mechanism in the Transformer, but they define the entire generative capability of the architecture. Change the mask, change the model family.
+
+## References
+
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (introduces causal masking in the decoder to enforce autoregressive generation).
+- Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2018). [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805). *NAACL 2019* (BERT: encoder-only model using bidirectional (non-causal) attention with padding masks for variable-length inputs).
+- Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., & Sutskever, I. (2019). [Language Models are Unsupervised Multitask Learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf). *OpenAI 2019* (GPT-2: decoder-only causal masking applied at scale for generative language modelling).

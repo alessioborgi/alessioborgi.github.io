@@ -113,3 +113,9 @@ On Twitter/Instagram-scale graphs (billions of nodes), neighbourhood sampling (P
 | Bot detection | Follow/retweet graph | GCN + temporal features |
 
 Social networks demonstrate that GNNs are not just machine learning tools — they are instruments for understanding and intervening in sociotechnical systems. The structural patterns they capture determine how information, influence, and misinformation propagate through society.
+
+## References
+
+- Bian, T., Xiao, X., Xu, T., Zhao, P., Huang, W., Rong, Y., & Huang, J. (2020). [Rumor Detection on Social Media with Bi-Directional Graph Convolutional Networks](https://arxiv.org/abs/2001.06362). *AAAI 2020* (GNN-FakeNews: bidirectional propagation tree GCN for rumour and fake news detection on Twitter).
+- Kipf, T. N., & Welling, M. (2016). [Variational Graph Auto-Encoders](https://arxiv.org/abs/1611.07308). *arXiv 2016* (VGAE: variational autoencoder on graphs for unsupervised community detection and link prediction).
+- Hamilton, W. L., Ying, R., & Leskovec, J. (2017). [Inductive Representation Learning on Large Graphs](https://arxiv.org/abs/1706.02216). *NeurIPS 2017* (GraphSAGE: inductive node embedding by neighbourhood sampling, widely used for social network tasks including friend recommendation).

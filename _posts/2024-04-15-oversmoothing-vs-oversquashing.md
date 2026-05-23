@@ -113,3 +113,9 @@ The resolution: **decouple propagation from transformation** (APPNP, SGC) and/or
 | Key fix | Residuals, less aggregation | Rewiring, global attention |
 
 These two pathologies define the fundamental challenges of deep GNNs. Understanding both — and distinguishing them — is essential for diagnosing GNN failures and choosing appropriate solutions.
+
+## References
+
+- Li, Q., Han, Z., & Wu, X.-M. (2018). [Deeper Insights Into Graph Convolutional Networks for Semi-Supervised Classification](https://arxiv.org/abs/1801.07606). *AAAI 2018* (oversmoothing).
+- Alon, U., & Yahav, E. (2021). [On the Bottleneck of Graph Neural Networks and Its Practical Implications](https://arxiv.org/abs/2006.05205). *ICLR 2021* (oversquashing).
+- Topping, J., Di Giovanni, F., Chamberlain, B. P., Dong, X., & Bronstein, M. M. (2022). [Understanding over-squashing and Bottlenecks on Graphs via Curvature](https://arxiv.org/abs/2111.14522). *ICLR 2022*.

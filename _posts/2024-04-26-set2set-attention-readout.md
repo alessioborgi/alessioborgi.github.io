@@ -136,3 +136,9 @@ Each head learns to attend to a different subset of important nodes. This gives 
 | Multi-head attention | Multiple independent attention pools | Balanced expressiveness/cost |
 
 For small graphs (molecules, proteins), Set2Set and multi-head attention provide meaningful improvements over flat pooling. For large graphs, the O(T N d) cost of Set2Set may be prohibitive, making single-pass attention readout the preferred choice.
+
+## References
+
+- Vinyals, O., Bengio, S., & Kudlur, M. (2015). [Order Matters: Sequence to Sequence for Sets](https://arxiv.org/abs/1511.06391). *ICLR 2016* (Set2Set).
+- Li, Y., Tarlow, D., Brockschmidt, M., & Zemel, R. (2016). [Gated Graph Sequence Neural Networks](https://arxiv.org/abs/1511.05493). *ICLR 2016* (global attention readout).
+- Gilmer, J., Schütt, K. T., Matera, G., Deisenroth, M. P., & Müller, K.-R. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017* (uses Set2Set for molecular property prediction).

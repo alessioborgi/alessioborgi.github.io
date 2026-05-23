@@ -117,3 +117,11 @@ Neural LP (Lao & Cohen) and MINERVA (Das et al.) take this further with explicit
 ## Summary
 
 Shallow KG embeddings are fast, scalable, and well-understood. GNN-based methods are inductive, structure-aware, and better for multi-hop patterns. The trend in the field is hybrid: use a GNN encoder to produce structure-aware entity embeddings, then score with a shallow decoder (DistMult, RotatE). This combines structural awareness with score function expressiveness.
+
+## References
+
+- Bordes, A., Usunier, N., Garcia-Durán, A., Weston, J., & Yakhnenko, O. (2013). [Translating Embeddings for Modeling Multi-relational Data](https://papers.nips.cc/paper/2013/hash/1cecc7a77928ca8133fa24680a88d2f9-Abstract.html). *NeurIPS 2013* (TransE).
+- Yang, B., Yih, W.-T., He, X., Gao, J., & Deng, L. (2015). [Embedding Entities and Relations for Learning and Inference in Knowledge Bases](https://arxiv.org/abs/1412.6575). *ICLR 2015* (DistMult).
+- Trouillon, T., Welbl, J., Riedel, S., Gaussier, É., & Bouchard, G. (2016). [Complex Embeddings for Simple Link Prediction](https://arxiv.org/abs/1606.06357). *ICML 2016* (ComplEx).
+- Sun, Z., Deng, Z.-H., Nie, J.-Y., & Tang, J. (2019). [RotatE: Knowledge Graph Embedding by Relational Rotation in Complex Space](https://arxiv.org/abs/1902.10197). *ICLR 2019*.
+- Vashishth, S., Sanyal, S., Nitin, V., & Talukdar, P. (2020). [Composition-based Multi-Relational Graph Convolutional Networks](https://arxiv.org/abs/1911.03082). *ICLR 2020* (CompGCN).

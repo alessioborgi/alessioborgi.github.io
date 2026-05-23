@@ -90,3 +90,9 @@ If sign ambiguity is problematic for your use case, switch to RWPE — random wa
 | Implementation complexity | Requires special handling | Use RWPE (no ambiguity) |
 
 Sign ambiguity is the main practical obstacle to using LapPE. For most graph learning applications, either random sign flipping during training (simple and effective) or switching to RWPE (no ambiguity) is sufficient.
+
+## References
+
+- Lim, D., Robinson, J., Zhao, L., Smidt, T., Sra, S., Maron, H., & Jegelka, S. (2022). [Sign and Basis Invariant Networks for Spectral Graph Neural Networks](https://arxiv.org/abs/2202.13013). *ICLR 2023*.
+- Belkin, M., & Niyogi, P. (2003). [Laplacian Eigenmaps for Dimensionality Reduction and Data Representation](https://www2.imm.dtu.dk/projects/manifold/Papers/Laplacian.pdf). *Neural Computation*.
+- Kreuzer, D., Beaini, D., Hamilton, W. L., Létourneau, V., & Tossou, P. (2021). [Rethinking Graph Transformers with Spectral Attention](https://arxiv.org/abs/2106.03893). *NeurIPS 2021*.

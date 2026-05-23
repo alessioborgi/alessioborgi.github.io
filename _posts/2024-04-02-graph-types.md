@@ -114,3 +114,8 @@ A **dynamic graph** evolves over time: nodes and edges appear and disappear.
 | Dynamic | Graph changes over time | Communication networks | Temporal modeling |
 
 Recognising which graph type your data is determines which GNN variant to use. Starting with a homogeneous GNN on a heterogeneous graph is a common and costly mistake.
+
+## References
+
+- Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv preprint*.
+- Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.

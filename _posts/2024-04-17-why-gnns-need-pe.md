@@ -85,3 +85,8 @@ With Laplacian eigenvector PEs: the model can compute attention scores that refl
 | Limited to 1-WL expressiveness | Can exceed 1-WL |
 
 The next posts cover specific PE methods: Laplacian eigenvectors, random walk PEs, shortest-path encodings, and the challenges they introduce.
+
+## References
+
+- Dwivedi, V. P., Lim, A. T., Beaini, D., & Lió, P. (2021). [Graph Neural Networks with Learnable Structural and Positional Representations](https://arxiv.org/abs/2110.07875). *ICLR 2022*.
+- Srinivasan, B., & Ribeiro, B. (2020). [On the Equivalence between Positional Node Embeddings and Structural Graph Representations](https://arxiv.org/abs/1910.00452). *ICLR 2020*.

@@ -165,3 +165,9 @@ This allows vastly more total parameters (stored in expert FFNs) while keeping c
 | Attention role comparison | Attention mixes positions; FFN refines each position |
 
 The FFN is not attention's sidekick. It is an equal partner — the knowledge storage and processing unit that sits beside attention's information-routing mechanism.
+
+## References
+
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (Transformer FFN: two-layer MLP with ReLU, dimension 4d hidden, applied position-wise after each attention sublayer).
+- Geva, M., Schuster, R., Berant, J., & Levy, O. (2021). [Transformer Feed-Forward Layers Are Key-Value Memories](https://arxiv.org/abs/2012.14913). *EMNLP 2021* (shows that FFN keys activate for human-interpretable input patterns and values store associated output information — FFN as learned key-value memory).
+- Shazeer, N. (2020). [GLU Variants Improve Transformer](https://arxiv.org/abs/2002.05202). *arXiv 2020* (SwiGLU: gated linear units replacing ReLU in the FFN — now the dominant activation in LLaMA, Mistral, PaLM, and Gemini).

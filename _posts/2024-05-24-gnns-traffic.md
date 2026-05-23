@@ -117,3 +117,9 @@ Also uses **dilated causal convolutions** (like WaveNet) for temporal modelling 
 | Graph Wave Net | Adaptive adjacency | Dilated causal conv | Fast |
 
 Traffic forecasting is the canonical spatio-temporal GNN application — clean problem definition, public benchmarks, and real-world deployment at scale. Progress here has directly translated into improved navigation systems, logistics optimisation, and urban planning tools.
+
+## References
+
+- Li, Y., Yu, R., Shahabi, C., & Liu, Y. (2018). [Diffusion Convolutional Recurrent Neural Network: Data-Driven Traffic Forecasting](https://arxiv.org/abs/1707.01926). *ICLR 2018* (DCRNN: bidirectional diffusion convolution on road graphs combined with GRU encoder-decoder for traffic speed prediction).
+- Yu, B., Yin, H., & Zhu, Z. (2018). [Spatio-Temporal Graph Convolutional Networks: A Deep Learning Framework for Traffic Forecasting](https://arxiv.org/abs/1709.04875). *IJCAI 2018* (STGCN: fully convolutional approach replacing recurrent temporal processing with gated 1D convolution for faster training).
+- Wu, Z., Pan, S., Long, G., Jiang, J., Chang, X., & Zhang, C. (2020). [Connecting the Dots: Multivariate Time Series Forecasting with Graph Neural Networks](https://arxiv.org/abs/2005.11650). *KDD 2020* (GWaveNet: learns the graph structure adaptively alongside dilated causal convolutions for long-range traffic patterns).

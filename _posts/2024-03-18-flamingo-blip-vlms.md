@@ -178,3 +178,9 @@ Current state-of-the-art VLMs (GPT-4V, Gemini, Claude's vision, Qwen-VL) follow 
 | LLaVA | Linear projection suffices; visual instruction tuning |
 
 The evolution shows a clear trend: **less architectural complexity, more training data quality**. The modern VLM is a CLIP encoder, a small projection, and an LLM — the intelligence comes from scale and data, not from elaborate fusion mechanisms.
+
+## References
+
+- Alayrac, J.-B., Donahue, J., Luc, P., Miech, A., Barr, I., Hasson, Y., Lenc, K., Mensch, A., Millican, K., Reynolds, M., Ring, R., Rutherford, E., Cabi, S., Han, T., Grangier, D., Anthropic, S. Z., McClelland, J., Turski, L., Caluwaerts, K., & Zisserman, A. (2022). [Flamingo: a Visual Language Model for Few-Shot Learning](https://arxiv.org/abs/2204.14198). *NeurIPS 2022* (Flamingo: cross-attention gating between a frozen vision encoder and a frozen LLM enables few-shot visual question answering).
+- Li, J., Li, D., Xiong, C., & Hoi, S. (2022). [BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation](https://arxiv.org/abs/2201.12086). *ICML 2022* (BLIP: unified VLM with a captioner-filter bootstrapping pipeline to clean noisy web image-text pairs).
+- Liu, H., Li, C., Wu, Q., & Lee, Y. J. (2023). [Visual Instruction Tuning](https://arxiv.org/abs/2304.08485). *NeurIPS 2023* (LLaVA: visual instruction tuning with a simple linear projection from CLIP to an LLM; GPT-4-generated instruction data enables strong multimodal reasoning).

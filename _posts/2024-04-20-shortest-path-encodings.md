@@ -76,3 +76,8 @@ This converts pairwise distances into node features (by fixing anchor nodes), ma
 ## Summary
 
 SPD encoding directly injects graph metric structure into Graph Transformer attention. It is simple, interpretable, and effective for small graphs. For large graphs, it is too expensive — use RWPE or LapPE instead, which capture distance information implicitly through local structure.
+
+## References
+
+- Ying, C., Cai, T., Luo, S., Zheng, S., Ke, G., He, D., Shen, Y., & Liu, T.-Y. (2021). [Do Transformers Really Perform Bad for Graph Representation?](https://arxiv.org/abs/2106.05234). *NeurIPS 2021* (Graphormer — introduces SPD and edge-distance encodings).
+- Li, P., Wang, Y., Wang, H., & Leskovec, J. (2020). [Distance Encoding: Design Provably More Powerful Graph Neural Networks for Structural Representation Learning](https://arxiv.org/abs/2009.00142). *NeurIPS 2020*.

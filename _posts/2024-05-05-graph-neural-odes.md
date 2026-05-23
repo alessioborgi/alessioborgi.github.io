@@ -115,3 +115,9 @@ This is the approach taken by NDCG (Neural Dynamics on Complex Graphs) and simil
 | Physical interpretation | Message passing | Coupled dynamical systems |
 
 Graph Neural ODEs are not universally better than discrete GNNs — they are a more natural fit for physical and temporal systems where dynamics are inherently continuous. For standard graph classification or node classification on static graphs, discrete GNNs remain preferred.
+
+## References
+
+- Chen, R. T. Q., Rubanova, Y., Bettencourt, J., & Duvenaud, D. (2018). [Neural Ordinary Differential Equations](https://arxiv.org/abs/1806.07366). *NeurIPS 2018* (Neural ODEs: replacing discrete residual layers with continuous ODE solvers via the adjoint method).
+- Poli, M., Massaroli, S., Park, J., Yamashita, A., Asama, H., & Park, J. (2019). [Graph Neural Ordinary Differential Equations](https://arxiv.org/abs/1911.07532). *arXiv 2019* (Graph Neural ODEs: combining ODE dynamics with GNN spatial aggregation for continuous-time graphs).
+- Rubanova, Y., Chen, R. T. Q., & Duvenaud, D. (2019). [Latent ODEs for Irregularly-Sampled Time Series](https://arxiv.org/abs/1907.03907). *NeurIPS 2019* (Latent ODEs handling irregular observation times — foundational for temporal graph ODEs).

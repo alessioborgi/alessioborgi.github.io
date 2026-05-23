@@ -140,3 +140,8 @@ Predict a continuous value for the whole graph.
 | Graph regression | Graph | Scalar | MSE | Graph readout |
 
 All tasks share the same GNN backbone. Mastering graph-level tasks requires understanding pooling (next: the Pooling section). Understanding node-level tasks requires understanding message passing (GCN, GAT, GIN posts). Edge tasks bridge both.
+
+## References
+
+- Hamilton, W. L., Ying, R., & Leskovec, J. (2017). [Inductive Representation Learning on Large Graphs](https://arxiv.org/abs/1706.02216). *NeurIPS 2017* (GraphSAGE — introduces the node/link/graph task taxonomy).
+- Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv preprint*.

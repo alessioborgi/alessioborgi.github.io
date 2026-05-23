@@ -132,3 +132,9 @@ For **link prediction** in a regular graph:
 | CSL graphs | Engineered to fool 1-WL | Benchmark for expressivity |
 
 Knowing which graphs fool GNNs is not just academic — it directly predicts where standard GNNs will fail on real tasks, and which architectural upgrades are needed.
+
+## References
+
+- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826). *ICLR 2019*.
+- Murphy, R. L., Srinivasan, B., Rao, V., & Ribeiro, B. (2019). [Relational Pooling for Graph Representations](https://arxiv.org/abs/1903.02541). *ICML 2019* (on k-WL and beyond-1-WL methods).
+- Maron, H., Ben-Hamu, H., Serviansky, H., & Lipman, Y. (2019). [Provably Powerful Graph Networks](https://arxiv.org/abs/1905.11136). *NeurIPS 2019*.

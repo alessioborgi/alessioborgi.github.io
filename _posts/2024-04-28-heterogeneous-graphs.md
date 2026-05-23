@@ -120,3 +120,10 @@ A separate linear projection W_{τ(v)} per node type ensures all nodes live in t
 | Type projection | Map all types to common space | HGT |
 
 Heterogeneous GNNs extend the MPNN framework to handle the multi-relational, multi-typed structure of real knowledge graphs, recommendation systems, and biomedical networks — domains where the type structure is often as important as the graph topology.
+
+## References
+
+- Sun, Y., Han, J., Yan, X., Yu, P. S., & Wu, T. (2011). PathSim: Meta Path-Based Top-K Similarity Search in Heterogeneous Information Networks. *VLDB 2011*.
+- Schlichtkrull, M., Kipf, T. N., Bloem, P., van den Berg, R., Titov, I., & Welling, M. (2018). [Modeling Relational Data with Graph Convolutional Networks](https://arxiv.org/abs/1703.06103). *ESWC 2018* (R-GCN).
+- Wang, X., Ji, H., Shi, C., Wang, B., Ye, Y., Cui, P., & Yu, P. S. (2019). [Heterogeneous Graph Attention Network](https://arxiv.org/abs/1903.07293). *WWW 2019* (HAN).
+- Hu, Z., Dong, Y., Wang, K., & Sun, Y. (2020). [Heterogeneous Graph Transformer](https://arxiv.org/abs/2003.01332). *WWW 2020* (HGT).

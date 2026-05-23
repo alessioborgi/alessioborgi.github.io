@@ -120,3 +120,9 @@ Beyond single-molecule property prediction: predicting how a small molecule (lig
 ## Summary
 
 GNNs have become the default molecular representation learning method in computational drug discovery, replacing handcrafted Morgan fingerprints. The key advantages: end-to-end learning, generalisation across chemical space, and compatibility with both 2D connectivity and 3D geometric information. With pre-training on large unlabelled databases, GNN-based models now approach expert-level performance on standard ADMET prediction benchmarks.
+
+## References
+
+- Gilmer, J., Schütt, K. T., Ramsundar, B., Ramakrishnan, R., Bronskill, M., Gomes, C., & Dahl, G. E. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017* (MPNN: unified framework for molecular GNNs, benchmarked on QM9 properties).
+- Rong, Y., Bian, Y., Xu, T., Xie, W., Wei, Y., Huang, W., & Huang, J. (2020). [Self-Supervised Graph Transformer on Large-Scale Molecular Data](https://arxiv.org/abs/2007.02835). *NeurIPS 2020* (GROVER: large-scale pre-training of molecular GNNs on 10M unlabelled molecules for drug property prediction).
+- Hu, W., Liu, B., Gomes, J., Zitnik, M., Liang, P., Pande, V., & Leskovec, J. (2020). [Strategies for Pre-training Graph Neural Networks](https://arxiv.org/abs/1905.12265). *ICLR 2020* (systematic study of GNN pre-training strategies for molecular property prediction and other biological tasks).

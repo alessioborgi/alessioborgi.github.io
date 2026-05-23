@@ -123,3 +123,9 @@ For molecular tasks, L=2 or L=3 typically provides diminishing returns beyond L=
 ## Summary
 
 SE(3)-Transformers provide the full power of equivariant geometric deep learning: attention mechanisms that respect 3D symmetry, and geometric features that encode information at arbitrary tensor degree. The price is computational complexity scaling as O(L³) in feature degree. For tasks where L=1 suffices, EGNN is preferred; for tasks requiring higher-order geometric information, SE(3)-Transformers or their successors (NequIP, MACE) are the right choice.
+
+## References
+
+- Fuchs, F. B., Worrall, D. E., Fischer, V., & Welling, M. (2020). [SE(3)-Transformers: 3D Roto-Translation Equivariant Attention Networks](https://arxiv.org/abs/2006.10503). *NeurIPS 2020* (SE(3)-Transformers: invariant attention weights with equivariant geometric value aggregation via spherical harmonics).
+- Thomas, N., Smidt, T., Kearnes, S., Yang, L., Li, L., Kohlhoff, K., & Riley, P. (2018). [Tensor Field Networks: Rotation- and Translation-Equivariant Neural Networks for 3D Point Clouds](https://arxiv.org/abs/1802.08219). *arXiv 2018* (TFN: the foundational SE(3)-equivariant MPNN using Clebsch-Gordan tensor products).
+- Liao, Y.-L., & Smidt, T. (2022). [Equiformer: Equivariant Graph Attention Transformer for 3D Atomistic Graphs](https://arxiv.org/abs/2206.11990). *ICLR 2023* (Equiformer: successor integrating SE(3)-equivariant attention into a Transformer architecture).

@@ -139,3 +139,9 @@ This is why GCN works well for homophilic graphs (smooth label signals) and poor
 | High-pass filter | Removes low ω | Accentuates edge differences |
 
 The Graph Fourier Transform is the mathematical foundation of spectral GNNs. Even if you use spatial GNNs (which avoid eigendecomposition), understanding this spectral view helps diagnose why GNNs succeed or fail on specific graph types.
+
+## References
+
+- Shuman, D. I., Narang, S. K., Frossard, P., Ortega, A., & Vandergheynst, P. (2013). [The Emerging Field of Signal Processing on Graphs](https://arxiv.org/abs/1211.0053). *IEEE Signal Processing Magazine*.
+- Defferrard, M., Bresson, X., & Vandergheynst, P. (2016). [Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](https://arxiv.org/abs/1606.09375). *NeurIPS 2016*.
+- Bruna, J., Zaremba, W., Szlam, A., & LeCun, Y. (2014). [Spectral Networks and Locally Connected Networks on Graphs](https://arxiv.org/abs/1312.6203). *ICLR 2014*.

@@ -139,3 +139,9 @@ This is zero-cost for short sequences and automatically extends context for long
 | Relation to linear interpolation | Complementary — fixes what interpolation breaks |
 
 NTK-Aware Scaling is the simplest way to extend the context of an existing RoPE model. For more sophisticated extension, see YaRN.
+
+## References
+
+- Su, J., Lu, Y., Pan, S., Murtadha, A., Wen, B., & Liu, Y. (2021). [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864). *arXiv 2021* (RoPE: rotary position embeddings that encode relative positions; the basis for NTK-Aware Scaling).
+- Bloc97 (2023). [NTK-Aware Scaled RoPE allows LLaMA models to have extended (8k+) context size without any fine-tuning and minimal perplexity degradation](https://www.reddit.com/r/LocalLLaMA/comments/14lz7j5/ntkaware_scaled_rope_allows_llama_models_to_have/). *Reddit r/LocalLLaMA 2023* (original NTK-Aware Scaling proposal: rescales RoPE base to preserve high-frequency information during context extension).
+- Chen, S., Wong, S., Chen, L., & Tian, Y. (2023). [Extending Context Window of Large Language Models via Positional Interpolation](https://arxiv.org/abs/2306.15595). *arXiv 2023* (Position Interpolation: the alternative to NTK scaling that linearly rescales positions — requires fine-tuning but more stable).
