@@ -143,6 +143,7 @@ author_profile: true
 
 {% assign transformer_posts = site.posts | where: "book", "transformers" | sort: "date" %}
 {% assign gnn_posts         = site.posts | where: "book", "gnn"          | sort: "date" %}
+{% assign sheaf_posts       = site.posts | where: "book", "sheaf"        | sort: "date" %}
 
 {% assign t_overview  = transformer_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
@@ -161,6 +162,13 @@ author_profile: true
 {% assign g_geometric     = gnn_posts | where: "subsection", "geometric" %}
 {% assign g_sheaf         = gnn_posts | where: "subsection", "sheaf" %}
 {% assign g_applications  = gnn_posts | where: "subsection", "applications" %}
+
+{% assign s_overview      = sheaf_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign s_foundations   = sheaf_posts | where: "subsection", "foundations" %}
+{% assign s_core_papers   = sheaf_posts | where: "subsection", "core-papers" %}
+{% assign s_theory        = sheaf_posts | where: "subsection", "theory" %}
+{% assign s_extensions    = sheaf_posts | where: "subsection", "extensions" %}
+{% assign s_applications  = sheaf_posts | where: "subsection", "applications" %}
 
 
 <!-- ════════════════════════════════════════════════════════ -->
@@ -442,6 +450,119 @@ author_profile: true
     <div class="subsection-label">🚀 Applications</div>
     <div class="chapters-grid">
       {% for post in g_applications %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  BOOK III · SHEAF NEURAL NETWORKS                        -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book">
+  <div class="book-banner">
+    <span class="book-icon">🌿</span>
+    <div>
+      <h2>Book III — Sheaf Neural Networks</h2>
+      <p>From cellular sheaf theory to neural diffusion, attention, and topological deep learning</p>
+    </div>
+  </div>
+  <div class="book-body">
+
+    {% if s_overview %}
+    <a class="blog-overview-card" href="{{ s_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ s_overview.title }}</h3>
+      <p>{{ s_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 5 min read</span>
+        <span>The complete picture in one post</span>
+      </div>
+    </a>
+    {% endif %}
+
+    {% if s_foundations.size > 0 %}
+    <div class="subsection-label">🧱 Mathematical Foundations</div>
+    <div class="chapters-grid">
+      {% for post in s_foundations %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if s_core_papers.size > 0 %}
+    <div class="subsection-label">📄 Core Papers</div>
+    <div class="chapters-grid">
+      {% for post in s_core_papers %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if s_theory.size > 0 %}
+    <div class="subsection-label">🔬 Theory</div>
+    <div class="chapters-grid">
+      {% for post in s_theory %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if s_extensions.size > 0 %}
+    <div class="subsection-label">🔭 Extensions</div>
+    <div class="chapters-grid">
+      {% for post in s_extensions %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if s_applications.size > 0 %}
+    <div class="subsection-label">🚀 Applications & Open Problems</div>
+    <div class="chapters-grid">
+      {% for post in s_applications %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
           <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
           <h4>{{ post.title }}</h4>
