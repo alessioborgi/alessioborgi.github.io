@@ -150,9 +150,17 @@ author_profile: true
 {% assign t_variants  = transformer_posts | where: "subsection", "variants" %}
 {% assign t_vision = transformer_posts | where: "subsection", "vision" %}
 
-{% assign g_overview  = gnn_posts | where_exp: "p", "p.is_overview" | first %}
-{% assign g_fund      = gnn_posts | where: "subsection", "fundamentals" %}
-{% assign g_arch      = gnn_posts | where: "subsection", "architectures" %}
+{% assign g_overview      = gnn_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign g_fund          = gnn_posts | where: "subsection", "fundamentals" %}
+{% assign g_arch          = gnn_posts | where: "subsection", "architectures" %}
+{% assign g_expressivity  = gnn_posts | where: "subsection", "expressivity" %}
+{% assign g_graph_pe      = gnn_posts | where: "subsection", "graph-pe" %}
+{% assign g_pooling       = gnn_posts | where: "subsection", "pooling" %}
+{% assign g_heterogeneous = gnn_posts | where: "subsection", "heterogeneous" %}
+{% assign g_dynamic       = gnn_posts | where: "subsection", "dynamic" %}
+{% assign g_geometric     = gnn_posts | where: "subsection", "geometric" %}
+{% assign g_sheaf         = gnn_posts | where: "subsection", "sheaf" %}
+{% assign g_applications  = gnn_posts | where: "subsection", "applications" %}
 
 
 <!-- ════════════════════════════════════════════════════════ -->
@@ -298,6 +306,142 @@ author_profile: true
     <div class="subsection-label">🏗️ Architectures</div>
     <div class="chapters-grid">
       {% for post in g_arch %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if g_expressivity.size > 0 %}
+    <div class="subsection-label">🔬 Expressivity & Limitations</div>
+    <div class="chapters-grid">
+      {% for post in g_expressivity %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if g_graph_pe.size > 0 %}
+    <div class="subsection-label">📍 Graph Positional & Structural Encodings</div>
+    <div class="chapters-grid">
+      {% for post in g_graph_pe %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if g_pooling.size > 0 %}
+    <div class="subsection-label">🧺 Pooling & Graph-Level Learning</div>
+    <div class="chapters-grid">
+      {% for post in g_pooling %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if g_heterogeneous.size > 0 %}
+    <div class="subsection-label">🎨 Heterogeneous & Relational Graphs</div>
+    <div class="chapters-grid">
+      {% for post in g_heterogeneous %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if g_dynamic.size > 0 %}
+    <div class="subsection-label">🌊 Dynamic & Temporal Graphs</div>
+    <div class="chapters-grid">
+      {% for post in g_dynamic %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if g_geometric.size > 0 %}
+    <div class="subsection-label">🔮 Geometric & Equivariant GNNs</div>
+    <div class="chapters-grid">
+      {% for post in g_geometric %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if g_sheaf.size > 0 %}
+    <div class="subsection-label">🔭 Sheaf Neural Networks</div>
+    <div class="chapters-grid">
+      {% for post in g_sheaf %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if g_applications.size > 0 %}
+    <div class="subsection-label">🚀 Applications</div>
+    <div class="chapters-grid">
+      {% for post in g_applications %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
           <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
           <h4>{{ post.title }}</h4>
