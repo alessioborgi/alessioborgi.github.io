@@ -45,5 +45,7 @@ main:
     url: "/partecipations_and_talks/"
   - title: "Projects"
     url: "/projects/"
-  - title: "Blog"
+  - title: "Personal Blog"
     url: "/blog/"
+  - title: "ML Blog"
+    url: "/ml-blog/"
