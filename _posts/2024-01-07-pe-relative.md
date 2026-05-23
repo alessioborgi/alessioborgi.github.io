@@ -3,6 +3,7 @@ layout: single
 title: "Relative Positional Encodings: It's All About Distance"
 date: 2024-01-07
 categories: [transformers]
+book: transformers
 tags: [positional-encoding, relative]
 excerpt: "Instead of asking 'where am I?', relative PEs ask 'how far are these two tokens apart?' Shaw et al. and T5 both use this idea to build models that generalise better to variable-length inputs."
 author_profile: true

@@ -3,6 +3,7 @@ layout: single
 title: "Swin Transformer: Hierarchical Vision with Shifted Windows"
 date: 2024-01-14
 categories: [transformers]
+book: transformers
 tags: [swin, vision-transformer, hierarchical]
 excerpt: "ViT's global attention is expensive. Swin Transformer computes attention within local windows, then shifts those windows to allow cross-window connections. The result: a hierarchical backbone competitive with CNNs on all dense vision tasks."
 author_profile: true

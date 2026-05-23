@@ -3,6 +3,7 @@ layout: single
 title: "Positional Encodings: Why Position Matters"
 date: 2024-01-04
 categories: [transformers]
+book: transformers
 tags: [positional-encoding, overview]
 excerpt: "Transformers see all tokens at once — which means without help they'd treat 'cat ate mouse' and 'mouse ate cat' the same. Positional encodings fix this. Here's the full landscape."
 author_profile: true

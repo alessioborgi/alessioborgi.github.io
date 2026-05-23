@@ -3,6 +3,7 @@ layout: single
 title: "The Graph Laplacian: Spectral Graph Theory Explained Simply"
 date: 2024-02-03
 categories: [gnn]
+book: gnn
 tags: [graph, laplacian, spectral]
 excerpt: "The Graph Laplacian is L = D - A. Its eigenvectors reveal the graph's community structure; its eigenvalues tell you how well-connected the graph is. It's also the mathematical bridge from spectral theory to GNNs like GCN."
 author_profile: true

@@ -3,6 +3,7 @@ layout: single
 title: "Graph Neural Networks: Learning on Graphs"
 date: 2024-02-01
 categories: [gnn]
+book: gnn
 tags: [graph, neural-network, overview]
 excerpt: "Graphs are everywhere — molecules, social networks, road maps, knowledge bases. Graph Neural Networks learn from this relational structure by propagating information between connected nodes. Here's the complete picture."
 author_profile: true

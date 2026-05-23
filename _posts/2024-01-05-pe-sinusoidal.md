@@ -3,6 +3,7 @@ layout: single
 title: "Sinusoidal Positional Encodings: The Original Solution"
 date: 2024-01-05
 categories: [transformers]
+book: transformers
 tags: [positional-encoding, sinusoidal]
 excerpt: "The PE method from the 2017 'Attention Is All You Need' paper uses sine and cosine waves at different frequencies. Learn why this elegant choice encodes position without any training."
 author_profile: true

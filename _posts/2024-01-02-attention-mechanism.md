@@ -3,6 +3,7 @@ layout: single
 title: "Self-Attention: Teaching Machines to Focus"
 date: 2024-01-02
 categories: [transformers]
+book: transformers
 tags: [attention, mechanism]
 excerpt: "Self-attention is the core of every Transformer. Learn how Query, Key, and Value vectors let every token directly attend to every other — and why that matters."
 author_profile: true

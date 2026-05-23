@@ -3,6 +3,7 @@ layout: single
 title: "The Graph Adjacency Matrix: A Graph in Matrix Form"
 date: 2024-02-02
 categories: [gnn]
+book: gnn
 tags: [graph, adjacency-matrix, fundamentals]
 excerpt: "Before understanding GNNs, you need to understand how graphs are represented mathematically. The adjacency matrix is the foundation — a simple grid that tells you which nodes are connected."
 author_profile: true

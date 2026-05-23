@@ -3,6 +3,7 @@ layout: single
 title: "Multi-Head Attention: Many Eyes on the Data"
 date: 2024-01-03
 categories: [transformers]
+book: transformers
 tags: [attention, multi-head]
 excerpt: "One attention head sees one relationship. Multiple heads running in parallel let the model capture syntax, semantics, and coreference simultaneously — here's how."
 author_profile: true

@@ -3,6 +3,7 @@ layout: single
 title: "Learned Positional Encodings: Data-Driven Position"
 date: 2024-01-06
 categories: [transformers]
+book: transformers
 tags: [positional-encoding, learned]
 excerpt: "Instead of a fixed formula, why not just train position embeddings from scratch — like word embeddings? That's exactly what BERT and GPT-1 do. Here's how and when it works."
 author_profile: true

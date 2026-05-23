@@ -141,15 +141,15 @@ author_profile: true
   Welcome to my research blog — structured like a <strong>library of books</strong>. Each book covers a major AI topic; every chapter is a short, self-contained post you can read in 3–5 minutes. Start with the <em>Start Here</em> overview of any book, then dive into whichever chapters interest you most.
 </p>
 
-{% assign transformer_posts = site.posts | where_exp: "p", "p.categories contains 'transformers'" | sort: "date" %}
-{% assign gnn_posts         = site.posts | where_exp: "p", "p.categories contains 'gnn'"          | sort: "date" %}
+{% assign transformer_posts = site.posts | where: "book", "transformers" | sort: "date" %}
+{% assign gnn_posts         = site.posts | where: "book", "gnn"          | sort: "date" %}
 
-{% assign t_overview  = transformer_posts | where: "is_overview", true  | first %}
+{% assign t_overview  = transformer_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
 {% assign t_pe        = transformer_posts | where: "subsection", "positional-encodings" %}
 {% assign t_variants  = transformer_posts | where: "subsection", "variants" %}
 
-{% assign g_overview  = gnn_posts | where: "is_overview", true      | first %}
+{% assign g_overview  = gnn_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign g_fund      = gnn_posts | where: "subsection", "fundamentals" %}
 {% assign g_arch      = gnn_posts | where: "subsection", "architectures" %}
 

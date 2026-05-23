@@ -3,6 +3,7 @@ layout: single
 title: "Transformers: The Architecture That Changed AI"
 date: 2024-01-01
 categories: [transformers]
+book: transformers
 tags: [architecture, deep-learning, nlp]
 excerpt: "A self-contained guide to the Transformer — the engine behind GPT, BERT, and modern AI. Learn how attention replaces recurrence and why every major AI system uses it."
 author_profile: true
