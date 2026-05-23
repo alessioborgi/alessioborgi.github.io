@@ -148,6 +148,7 @@ author_profile: true
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
 {% assign t_pe        = transformer_posts | where: "subsection", "positional-encodings" %}
 {% assign t_variants  = transformer_posts | where: "subsection", "variants" %}
+{% assign t_vision = transformer_posts | where: "subsection", "vision" %}
 
 {% assign g_overview  = gnn_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign g_fund      = gnn_posts | where: "subsection", "fundamentals" %}
@@ -217,6 +218,23 @@ author_profile: true
     <div class="subsection-label">🚀 Modern Variants</div>
     <div class="chapters-grid">
       {% for post in t_variants %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if t_vision.size > 0 %}
+    <div class="subsection-label">🖼️ Vision & Multimodal</div>
+    <div class="chapters-grid">
+      {% for post in t_vision %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
           <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
           <h4>{{ post.title }}</h4>
