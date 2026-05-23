@@ -87,7 +87,7 @@ h_G[i] = max_{v ∈ V} h^{(K)}_v[i]   (elementwise maximum)
 **Failure case:** cannot distinguish {1, 2} from {2} — max pooling drops information about non-maximal elements.
 
 <div class="insight-box">
-<strong>The multiset analogy:</strong> Think of pooling as summarising a multiset of vectors. Mean collapses {{1,1,1}} and {{1}} to the same value. Max collapses {{1,2}} and {{2}}. Sum distinguishes all three — but loses ordering (which is intended for permutation invariance).
+<strong>The multiset analogy:</strong> Think of pooling as summarising a multiset of vectors. Mean collapses {1,1,1} and {1} to the same value. Max collapses {1,2} and {2}. Sum distinguishes all three — but loses ordering (which is intended for permutation invariance).
 </div>
 
 ## Expressivity Ranking
