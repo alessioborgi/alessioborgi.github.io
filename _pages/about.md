@@ -204,7 +204,7 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 </p>
 
 ---
-## Latest Blog Post
+## Latest LinkedIn Post
 {% assign latest_lp = site.data.linkedin_posts | first %}
 <style>
   .home-linkedin-card {
