@@ -47,6 +47,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> The [CLS] token learns to aggregate global image information through attention. Global average pooling (GAP) simply averages all patch token outputs. Both work; [CLS] tends to better capture discriminative global features, while GAP spreads gradient signal across all patches and trains more stably. Modern self-supervised ViTs often use both.
 </div>
+{% include figure image_path="/images/blog/transformers/dosovitskiy2020_vit.png" alt="CLS token in ViT" caption="CLS token for global image representation in ViT (Dosovitskiy et al., 2020)" %}
+
 
 ## The Problem: From Patches to Image
 

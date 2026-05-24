@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> The sheaf cochain complex 0 → C⁰ →^{δ₀} C¹ → 0 gives two cohomology groups: H⁰ = ker(δ₀) (global sections — consistent signals) and H¹ = C¹/im(δ₀) (obstruction — edge disagreements that cannot be explained by any node assignment). For graph learning: H⁰ is the attractor of sheaf diffusion; dim(H⁰) controls the long-range information retained; H¹ captures topological obstructions to global consistency.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Sheaf cohomology H0 H1" caption="Sheaf cohomology: global sections H⁰ and obstructions H¹ (Bodnar et al., 2022)" %}
+
 
 ## The Cochain Complex
 

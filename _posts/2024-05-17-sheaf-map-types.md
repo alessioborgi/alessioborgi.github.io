@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Sheaf restriction maps F_{u→e} can be scalars (d=1), diagonal (d parameters), orthogonal (d(d-1)/2 parameters), or general d×d matrices (d² parameters). General maps are most expressive but expensive. Orthogonal maps offer a good trade-off: they can represent rotations and reflections (enough for most geometric relationships) at lower cost than general maps.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Sheaf map types comparison" caption="Restriction map types in neural sheaf diffusion (Bodnar et al., 2022)" %}
+
 
 ## The Design Space of Restriction Maps
 

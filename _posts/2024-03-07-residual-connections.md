@@ -47,6 +47,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A residual connection adds the input of a sub-layer directly to its output: y = x + f(x). This creates a highway for gradients to bypass any sub-layer during backpropagation, enabling very deep networks to train stably. It also encourages each layer to learn small refinements rather than full transformations.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Residual connections" caption="Residual (skip) connections in the Transformer block (Vaswani et al., 2017)" %}
+
 
 ## The Problem with Deep Networks
 

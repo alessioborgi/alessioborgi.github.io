@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A cellular sheaf F on a graph assigns a vector space (stalk) to each node and edge, plus a linear map (restriction map) per incidence pair. 0-cochains are node-level signals; the coboundary δ₀ measures edge-level disagreement. The Sheaf Laplacian Δ_F = δ₀ᵀδ₀ is an (Nd)×(Nd) positive semidefinite block matrix generalising the standard graph Laplacian. Its null space = space of global sections = signals with zero disagreement everywhere.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Sheaf Laplacian construction" caption="Cellular sheaf structure and Sheaf Laplacian construction (Bodnar et al., 2022)" %}
+
 
 ## Setup: A Worked Example
 

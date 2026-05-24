@@ -54,6 +54,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Q (query) is what you're looking for. K (key) is what each token advertises about itself. V (value) is the information that gets retrieved when a match is found. Together they implement a soft, differentiable information lookup.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Query Key Value attention" caption="Query, Key, Value projections in Multi-Head Attention (Vaswani et al., 2017)" %}
+
 
 ## The Analogy: A Smart Library
 

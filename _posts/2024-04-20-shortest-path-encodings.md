@@ -25,6 +25,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> For Graph Transformers, the shortest path distance dist(i,j) between every node pair can be used as an attention bias — biasing attention scores to decrease with distance, encoding the graph's metric structure without message passing.
 </div>
+{% include figure image_path="/images/blog/gnn/ying2021_graphormer.png" alt="Shortest path distance bias" caption="Spatial encoding via shortest path distances in Graphormer (Ying et al., 2021)" %}
+
 
 ## Why Shortest Paths?
 

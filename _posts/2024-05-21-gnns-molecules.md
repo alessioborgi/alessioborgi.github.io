@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Drug discovery requires predicting how molecules interact with biological targets — a task that historically required either expensive experiments or domain-expert features. GNNs learn directly from molecular graphs, outperforming Morgan fingerprints on most property prediction benchmarks and enabling virtual screening of billions of compounds.
 </div>
+{% include figure image_path="/images/blog/gnn/gilmer2017_mpnn.png" alt="MPNN for molecular property prediction" caption="MPNN for molecular property prediction on QM9 (Gilmer et al., 2017)" %}
+
 
 ## The Drug Discovery Pipeline
 

@@ -47,6 +47,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Every Transformer block has two sub-layers: multi-head attention and a two-layer MLP (the FFN). The FFN is applied independently to each token, expands the dimension by 4×, applies a nonlinearity, then contracts back. It accounts for ~2/3 of total parameters and is where most factual knowledge is stored.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Feed-forward sub-layer" caption="Position-wise feed-forward network in the Transformer (Vaswani et al., 2017)" %}
+
 
 ## The FFN Is Half the Block
 

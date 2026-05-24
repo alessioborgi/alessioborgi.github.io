@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> NSD (Bodnar et al., 2022) jointly learns restriction maps F_{u→e} (via an MLP on node features) and performs sheaf diffusion with the resulting Sheaf Laplacian. At each layer: (1) predict restriction maps from current features; (2) build the Sheaf Laplacian; (3) diffuse. This is a principled, topology-aware alternative to standard GNNs that is theoretically grounded in algebraic topology.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="NSD architecture" caption="Neural Sheaf Diffusion: learned restriction maps on the graph (Bodnar et al., 2022)" %}
+
 
 ## The NSD Architecture
 

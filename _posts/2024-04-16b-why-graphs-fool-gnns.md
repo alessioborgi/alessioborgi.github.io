@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Two non-isomorphic graphs can fool every MPNN into assigning identical graph-level embeddings. This is not a training failure — it is a mathematical limit. The canonical examples are regular graphs, cycle vs. path pairs, and specific small non-isomorphic graphs. Understanding which structures fool GNNs motivates beyond-1-WL architectures.
 </div>
+{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Non-isomorphic graphs that fool GNNs" caption="Non-isomorphic graphs indistinguishable by 1-WL / standard MPNNs (Xu et al., 2019)" %}
+
 
 ## The Expressivity Ceiling
 

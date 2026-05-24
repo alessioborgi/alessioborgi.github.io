@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Δ_F is an (Nd)×(Nd) positive semidefinite matrix with eigenvalues 0 ≤ λ₁ ≤ ... ≤ λ_{Nd}. The zero eigenspace = global sections = H⁰. The spectral gap λ_{dim(H⁰)+1} controls mixing speed. For normalised Δ_F, eigenvalues lie in [0, 2]. Sheaf diffusion X(t) = exp(−Δ_F t)X(0) converges to the projection onto H⁰ — not to a constant, but to the space of globally consistent signals. Learned restriction maps reshape this spectrum to fit the task.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_laplacian.png" alt="Sheaf Laplacian spectrum" caption="Spectrum of the Sheaf Laplacian and diffusion dynamics (Bodnar et al., 2022)" %}
+
 
 ## Spectral Properties of Δ_F
 

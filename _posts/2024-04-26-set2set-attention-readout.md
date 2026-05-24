@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Attention readout weights node embeddings by learned importance scores before summing — nodes that matter more for the task contribute more to the graph embedding. Set2Set extends this with an LSTM that makes T passes over the node set, each time computing a different attention query. This yields a richer, order-invariant graph summary.
 </div>
+{% include figure image_path="/images/blog/gnn/vinyals2016_set2set.png" alt="Set2Set order-invariant readout" caption="Set2Set: order-invariant sequence-to-sequence readout (Vinyals et al., 2016)" %}
+
 
 ## Beyond Uniform Pooling
 

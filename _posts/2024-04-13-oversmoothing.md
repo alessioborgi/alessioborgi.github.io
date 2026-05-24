@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Oversmoothing occurs when repeated graph convolution (averaging over neighbours) causes all node embeddings to converge to the same values, erasing the distinction between nodes. It is mathematically equivalent to low-pass filtering: infinite iterations → DC component only → constant signal over the graph.
 </div>
+{% include figure image_path="/images/blog/gnn/li2018_oversmoothing.png" alt="Over-smoothing in deep GNNs" caption="Over-smoothing: node representations converge with depth (Li et al., 2018)" %}
+
 
 ## The Problem: Deep GNNs Fail
 

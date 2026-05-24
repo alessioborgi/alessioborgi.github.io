@@ -32,6 +32,8 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Self-attention lets each token in a sequence ask "who else here is relevant to me?" It uses three learned projections — Query, Key, and Value — to compute a weighted mixture of all token representations in one shot.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="The Transformer model architecture" caption="The Transformer model architecture (Vaswani et al., 2017)" %}
+
 
 ## The Focusing Analogy
 

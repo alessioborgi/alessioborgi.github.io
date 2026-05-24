@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A sheaf convolution replaces the graph Laplacian L with the Sheaf Laplacian Δ_F in any spectral filter h(L). The resulting filter h(Δ_F) acts on Nd-dimensional node signals, with the Sheaf Laplacian's eigenvectors as the Fourier basis. Polynomial filters h(Δ_F) = Σ_k a_k Δ_F^k are computed by K sparse matrix-vector products, with cost O(K·E·d²). This generalises ChebNet, GCN, and GPRGNN to the sheaf setting.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_laplacian.png" alt="Spectral sheaf convolution" caption="Spectral convolution using the Sheaf Laplacian eigenbasis (Bodnar et al., 2022)" %}
+
 
 ## Graph Signal Processing Recap
 

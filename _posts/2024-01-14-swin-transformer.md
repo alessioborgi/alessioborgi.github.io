@@ -31,6 +31,8 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Swin Transformer (Liu et al., Microsoft, 2021) constrains self-attention to non-overlapping local windows of patches, then <em>shifts</em> those windows each layer to allow connections across boundaries. Hierarchical feature maps (like a CNN) make it ideal for detection and segmentation — not just classification.
 </div>
+{% include figure image_path="/images/blog/transformers/liu2021_swin.png" alt="Swin Transformer hierarchical design" caption="Swin Transformer: hierarchical shifted-window architecture (Liu et al., 2021)" %}
+
 
 ## ViT's Limitation
 

@@ -25,6 +25,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Positional encoding: "node v is at position (x,y) in graph space" — globally unique identifiers. Structural encoding: "node v is a hub/leaf/bridge" — role descriptors independent of global position. Two nodes can have the same structural role in different positions, or the same position with different roles. Both types of information matter for different tasks.
 </div>
+{% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Structural vs positional PE" caption="Structural vs positional graph encodings (Dwivedi et al., 2022)" %}
+
 
 ## The Conceptual Distinction
 

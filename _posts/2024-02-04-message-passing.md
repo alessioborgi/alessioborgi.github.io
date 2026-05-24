@@ -32,6 +32,8 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Message Passing Neural Networks (Gilmer et al., 2017) provide a unified framework for all GNNs. Each layer runs three steps: <strong>MESSAGE</strong> (what each neighbour sends), <strong>AGGREGATE</strong> (collect all messages), <strong>UPDATE</strong> (compute new node representation). Choosing different functions for each step gives you different GNN architectures.
 </div>
+{% include figure image_path="/images/blog/gnn/gilmer2017_mpnn.png" alt="Message Passing Neural Network" caption="Message Passing Neural Network (MPNN) framework (Gilmer et al., 2017)" %}
+
 
 ## The Framework
 

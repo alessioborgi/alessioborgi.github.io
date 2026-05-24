@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A Graph Transformer treats each node as a token and runs full self-attention across all N nodes — every node can attend to every other node directly. Graph structure is injected via positional encodings (Laplacian eigenvectors, random walks) or attention biases. This overcomes over-squashing and long-range dependency limits of local message passing.
 </div>
+{% include figure image_path="/images/blog/gnn/dwivedi2021_graph_transformer.png" alt="Graph Transformer" caption="Generalised Graph Transformer with Laplacian PE (Dwivedi & Bresson, 2021)" %}
+
 
 ## The Limits of Local Message Passing
 

@@ -32,6 +32,8 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Sinusoidal PE assigns each position a unique vector made of alternating sin/cos values at geometrically spaced frequencies. It requires no training, generalises gracefully, and was the default for early Transformers.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Sinusoidal PE diagram" caption="Sinusoidal positional encodings (Vaswani et al., 2017)" %}
+
 
 ## The Formula
 

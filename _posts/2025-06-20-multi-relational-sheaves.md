@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A multi-relational sheaf assigns different restriction maps to different relation types: for relation type r, the map is F^r_{v▷e}. The Sheaf Laplacian sums over all relation types, weighted by their restriction maps. This generalises R-GCN (relation-specific weight matrices in aggregation) while adding the topological structure of sheaf diffusion. For knowledge graphs, sheaf maps encode the geometric meaning of relations — translations (TransE), rotations (RotatE), or arbitrary linear maps.
 </div>
+{% include figure image_path="/images/blog/gnn/schlichtkrull2018_rgcn.png" alt="Multi-relational sheaf maps" caption="Multi-relational sheaves: per-relation restriction maps generalise R-GCN (Schlichtkrull et al., 2018)" %}
+
 
 ## The Multi-Relational Setting
 

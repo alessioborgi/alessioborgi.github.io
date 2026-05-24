@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>What this series covers:</strong> Sheaf Neural Networks replace the implicit assumption of standard GNNs ("neighbours should agree") with explicit, learned linear maps per edge. This gives a principled way to handle heterophily, avoid oversmoothing, and encode richer relational structure. The series runs from foundational topology through all major architectures and open research problems.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Sheaf Neural Networks overview" caption="Neural Sheaf Diffusion: the central framework of this book (Bodnar et al., 2022)" %}
+
 
 ## Why Sheaf Neural Networks?
 

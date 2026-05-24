@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A molecule is a graph with typed atoms (nodes) and bonds (edges). Molecular graphs are naturally heterophilic — carbon bonds to oxygen, which bonds to hydrogen — and have geometric structure (bond angles, 3D positions). Sheaf restriction maps can encode bond-type-specific relational geometry: different maps for C-C vs C-O vs C-N bonds. This provides a principled alternative to hand-designed bond angle features (DimeNet) while retaining the sheaf's theoretical guarantees.
 </div>
+{% include figure image_path="/images/blog/gnn/gilmer2017_mpnn.png" alt="Molecular sheaf GNN" caption="Molecular graph MPNN: basis for sheaf GNN extensions (Gilmer et al., 2017)" %}
+
 
 ## Why Molecular Graphs Are Heterophilic
 

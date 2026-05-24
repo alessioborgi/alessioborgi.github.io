@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A sheaf assigns data (vectors, functions, sets) to the parts of a space, plus <em>restriction maps</em> that say how data on larger pieces relates to data on smaller pieces. A <em>global section</em> is a consistent assignment across the whole space — one where all the local pieces agree. On a graph, nodes and edges are the "pieces", restriction maps encode inter-node relationships, and the Sheaf Laplacian measures how inconsistent a signal is.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Cellular sheaf on a graph" caption="A cellular sheaf on a graph: stalks at nodes/edges and restriction maps (Bodnar et al., 2022)" %}
+
 
 ## The Intuition: Consistent Local Information
 

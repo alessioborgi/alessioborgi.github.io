@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Standard sheaf GNNs (NSD, PNSD, SheafAN) use local aggregation — only direct neighbours contribute to a node's update. Graph Transformers add global attention — all pairs of nodes can interact. Sheaf Transformers combine sheaf-based local aggregation with global attention by: (1) using sheaf maps as structural biases in the attention matrix, (2) transporting attention values through sheaf restriction maps, or (3) alternating sheaf diffusion and global attention layers.
 </div>
+{% include figure image_path="/images/blog/sheaf/rampasek2022_gps.png" alt="Sheaf Transformer GPS design" caption="GPS: alternating local (sheaf) and global (attention) layers (Rampášek et al., 2022)" %}
+
 
 ## The Local vs Global Trade-off
 

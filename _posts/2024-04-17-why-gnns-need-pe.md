@@ -26,6 +26,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> GNNs are permutation-equivariant: relabelling nodes does not change the output. This means two structurally identical but geometrically different nodes get the same embedding. Positional encodings break this symmetry — injecting node-specific structural information that message passing alone cannot provide.
 </div>
+{% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Why GNNs need positional encodings" caption="Positional encodings as graph structure signals (Dwivedi et al., 2022)" %}
+
 
 ## Permutation Equivariance: A Double-Edged Sword
 

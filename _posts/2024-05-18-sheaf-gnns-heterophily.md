@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Standard GCN on heterophilic graphs averages across class boundaries, producing uninformative embeddings. Sheaf GNNs learn restriction maps that can "anti-align" features of different classes — so diffusion actually separates classes rather than merging them. Theoretically, the optimal sheaf for a heterophilic graph has maps that make cross-class edges "maximally inconsistent" under the sheaf.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Sheaf GNNs for heterophily" caption="Sheaf GNNs handle heterophilic edges via anti-aligned restriction maps (Bodnar et al., 2022)" %}
+
 
 ## The Heterophily Problem Revisited
 

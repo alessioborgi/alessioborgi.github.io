@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Four main restriction map types: (1) scalar (1 param/map — recovers signed attention), (2) diagonal (d params/map — feature-wise scaling, best cost-accuracy tradeoff), (3) orthogonal (d(d-1)/2 params/map — gauge-equivariant, no scaling), (4) general (d² params/map — most expressive, prone to overfitting). The Sheaf Laplacian's block structure changes qualitatively with each choice, affecting null space dimension, spectral gap, and what relational patterns the model can represent.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Restriction map parameterisations" caption="Restriction map types: scalar, diagonal, symmetric, orthogonal (Bodnar et al., 2022)" %}
+
 
 ## The Core Choice
 

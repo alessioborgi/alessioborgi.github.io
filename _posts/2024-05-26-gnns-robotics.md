@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Robotics problems are inherently relational: robot links form kinematic graphs, objects on a table have spatial proximity graphs, multiple robots form communication graphs. GNNs that process these graphs generalise across different numbers of objects, different robot morphologies, and different team sizes — enabling compositionality that flat neural networks cannot achieve.
 </div>
+{% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="Equivariant GNN for robotics" caption="Equivariant GNNs for 3D robot perception and manipulation (Satorras et al., 2021)" %}
+
 
 ## Why Graphs in Robotics
 

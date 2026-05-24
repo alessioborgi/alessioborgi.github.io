@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A cellular sheaf on a graph assigns a vector space ("stalk") to each node and each edge, with linear "restriction maps" from node stalks to adjacent edge stalks. A global section is an assignment of vectors to all nodes that is "consistent" — the restriction maps agree at every edge. The Sheaf Laplacian measures the degree of global inconsistency.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Sheaf structure on a graph" caption="Cellular sheaf on a graph: node/edge stalks and restriction maps (Bodnar et al., 2022)" %}
+
 
 ## Sheaves in Ordinary Mathematics
 

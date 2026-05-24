@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Standard message passing computes h_v = UPDATE(h_v, AGG({h_u : u ∈ N(v)})). This assumes neighbours' features are directly comparable — the same "type" of information. On heterophilic graphs, this assumption fails: neighbours have different labels, different semantics, different feature spaces. Sheaves replace this flat comparison with per-edge linear maps that transform features before comparison.
 </div>
+{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="MPNN limitations" caption="Graph structures that standard MPNNs cannot distinguish (Xu et al., 2019)" %}
+
 
 ## The Fundamental Assumption of Message Passing
 

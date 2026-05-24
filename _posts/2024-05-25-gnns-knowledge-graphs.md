@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Knowledge graphs (Freebase, Wikidata, ConceptNet) are massive multi-relational graphs. GNNs power three key tasks: link prediction (fill missing triples), entity alignment (match entities across KGs), and multi-hop reasoning (answer questions requiring several reasoning steps). The key advantage over shallow methods: GNNs are inductive and capture neighbourhood context.
 </div>
+{% include figure image_path="/images/blog/gnn/schlichtkrull2018_rgcn.png" alt="R-GCN for knowledge graph completion" caption="Relational GCN for knowledge graph link prediction (Schlichtkrull et al., 2018)" %}
+
 
 ## Knowledge Graphs in Production
 

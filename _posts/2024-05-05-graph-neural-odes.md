@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A GNN with K discrete layers applies K rounds of message passing. A Graph Neural ODE replaces this with a differential equation dH/dt = f(H, A, t). The solution H(T) after integration from t=0 to T is the output. This allows irregular timesteps, adaptive depth, and principled modelling of continuous graph dynamics.
 </div>
+{% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="Graph neural ODE dynamics" caption="Continuous-depth GNN dynamics — EGNN equivariant evolution (Satorras et al., 2021)" %}
+
 
 ## Neural ODEs: A Quick Refresher
 

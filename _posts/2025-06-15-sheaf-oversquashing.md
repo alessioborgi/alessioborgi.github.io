@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Oversquashing measures how much influence node u has on node v's representation after K layers — quantified by the Jacobian ∂h_v^{(K)}/∂x_u. For GCNs, this Jacobian decays exponentially with the graph distance dist(u,v) on bottleneck graphs. Sheaf structure modifies the effective resistance between nodes via the Sheaf Laplacian — changing the Cheeger constant and hence the Jacobian decay rate. Learned sheaf maps can improve information flow by increasing the spectral gap of Δ_F, but cannot resolve oversquashing when the graph itself has structural bottlenecks.
 </div>
+{% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Sheaf Cheeger and oversquashing" caption="Sheaf Cheeger constant controls oversquashing via spectral gap (Topping et al., 2022)" %}
+
 
 ## What Is Oversquashing?
 

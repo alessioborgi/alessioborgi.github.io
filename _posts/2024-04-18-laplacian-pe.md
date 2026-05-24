@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> The k smallest eigenvectors of the graph Laplacian form a k-dimensional coordinate system where distance in embedding space approximates graph distance. Nodes with similar structural positions get similar Laplacian PE vectors. This is the most theoretically grounded graph PE — but sign ambiguity requires careful handling.
 </div>
+{% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Laplacian eigenvector PE" caption="Laplacian eigenvector positional encodings (Dwivedi et al., 2022)" %}
+
 
 ## The Graph Laplacian Eigen-Embedding
 

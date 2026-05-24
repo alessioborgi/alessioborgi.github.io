@@ -31,6 +31,8 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Multi-Head Attention runs several self-attention operations in parallel, each in a smaller subspace. Each "head" independently learns what to attend to, capturing different aspects of the input. Their outputs are concatenated and projected back.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Multi-Head Attention" caption="Scaled Dot-Product and Multi-Head Attention (Vaswani et al., 2017)" %}
+
 
 ## Why One Head Isn't Enough
 

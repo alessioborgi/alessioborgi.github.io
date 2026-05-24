@@ -30,6 +30,8 @@ toc_label: "Contents"
 <strong>Paper:</strong> Hansen, J., & Gebhart, T. (2020). <a href="https://arxiv.org/abs/2012.06333">Sheaf Neural Networks</a>. <em>NeurIPS 2020 GRL+ Workshop.</em><br>
 <strong>Contribution:</strong> First application of cellular sheaves to graph neural networks. Establishes that GCN is the trivial (identity) sheaf case. Demonstrates sheaf diffusion on citation networks with fixed maps.
 </div>
+{% include figure image_path="/images/blog/sheaf/hansen2020_sheaf_gnns.png" alt="Fixed sheaf GNNs Hansen 2020" caption="Sheaf neural networks with fixed restriction maps (Hansen & Gebhart, 2020)" %}
+
 
 ## Context and Motivation
 

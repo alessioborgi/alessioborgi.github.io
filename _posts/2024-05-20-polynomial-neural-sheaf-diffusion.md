@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> NSD uses the fixed filter h(λ) = 1 - λ (simple low-pass). PNSD replaces this with a learnable polynomial p(Δ_F) = Σ_k a_k Δ_F^k — the graph spectral equivalent of designing a custom frequency filter. Combined with the richer sheaf structure, PNSD achieves state-of-the-art on heterophilic benchmarks by learning the right spectral profile per task.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Polynomial sheaf diffusion" caption="Polynomial spectral filters on the Sheaf Laplacian (Bodnar et al., 2022)" %}
+
 
 ## From Fixed Diffusion to Polynomial Filters
 

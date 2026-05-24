@@ -35,6 +35,8 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Because self-attention is order-agnostic, Transformers need an extra signal to know which token is at which position. Positional encodings (PEs) inject this information as vectors added to the token embeddings. Different PE designs have wildly different properties.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Transformer with positional encodings" caption="Positional encodings added to token embeddings in the Transformer (Vaswani et al., 2017)" %}
+
 
 ## The Order-Agnostic Problem
 

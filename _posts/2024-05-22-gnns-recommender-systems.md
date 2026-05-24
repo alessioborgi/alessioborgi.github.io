@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> The user-item interaction graph is bipartite: users on one side, items on the other, with edges representing clicks/purchases/ratings. GCN-style propagation on this graph captures multi-hop collaborative signals — "users who liked what you liked also liked X." LightGCN simplifies this to pure propagation without transformation, achieving state-of-the-art efficiency.
 </div>
+{% include figure image_path="/images/blog/gnn/ying2018_pinsage.png" alt="PinSage recommendation GNN" caption="PinSage: graph convolutional network for web-scale recommender systems (Ying et al., 2018)" %}
+
 
 ## Recommendation as a Graph Problem
 

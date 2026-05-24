@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> TopKPool selects the top-k nodes by a learned importance score and subgraphs on them. SAGPool improves this by computing scores using a GNN — so the importance of a node depends on its neighbourhood, not just its features. Both avoid DiffPool's quadratic memory cost at the expense of losing unselected nodes entirely.
 </div>
+{% include figure image_path="/images/blog/gnn/lee2019_sagpool.png" alt="SAGPool self-attention pooling" caption="SAGPool: self-attention graph pooling for hierarchical classification (Lee et al., 2019)" %}
+
 
 ## The Motivation for Sparse Pooling
 

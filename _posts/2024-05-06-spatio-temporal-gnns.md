@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> In spatio-temporal GNNs, the graph structure is fixed (road network, sensor grid) but node features evolve over time as time series. The model combines a GNN (spatial: neighbours influence each other) with a sequence model (temporal: past influences future). Two architectures — DCRNN (GNN inside RNN) and STGCN (GNN + 1D conv) — dominate traffic forecasting benchmarks.
 </div>
+{% include figure image_path="/images/blog/gnn/yu2018_stgcn.png" alt="STGCN spatio-temporal GNN" caption="Spatio-Temporal Graph Convolutional Network (STGCN) for traffic forecasting (Yu et al., 2018)" %}
+
 
 ## The Spatio-Temporal Setting
 

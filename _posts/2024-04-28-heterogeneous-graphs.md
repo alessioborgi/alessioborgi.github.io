@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A heterogeneous graph has multiple node types and edge types. Standard GNNs use a single message function and aggregation — they cannot differentiate a "cites" edge from an "is-authored-by" edge. Handling heterogeneity requires type-specific message functions, meta-path decomposition, or relation-aware aggregation.
 </div>
+{% include figure image_path="/images/blog/gnn/wang2019_han.png" alt="Heterogeneous attention network" caption="Heterogeneous graph with multiple node and edge types (Wang et al., 2019)" %}
+
 
 ## What Is a Heterogeneous Graph?
 

@@ -30,6 +30,8 @@ toc_label: "Contents"
 <strong>Paper:</strong> Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). <a href="https://arxiv.org/abs/2202.04579">Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs</a>. <em>NeurIPS 2022.</em><br>
 <strong>Contribution:</strong> Learns sheaf restriction maps end-to-end via MLP predictors. Proves that learned sheaf diffusion avoids oversmoothing (non-trivial H⁰) and handles heterophily (maps can encode anti-alignment). Achieves state-of-the-art on heterophilic benchmarks at the time of publication.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="NSD learned restriction maps" caption="Neural Sheaf Diffusion: per-edge MLP predicts restriction maps (Bodnar et al., 2022)" %}
+
 
 ## The Central Idea
 

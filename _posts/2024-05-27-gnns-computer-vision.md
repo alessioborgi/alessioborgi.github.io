@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Vision tasks require relational understanding: "the cat is sitting on the mat," "the person is holding a cup," "joint 3 moves because joint 1 moved." Scene graph generation, VQA, skeleton action recognition, and 3D point cloud analysis all use GNNs to encode these relations — going beyond the pixel-level features that CNNs provide.
 </div>
+{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="GNNs for computer vision" caption="GNNs for scene graph generation and visual reasoning (Xu et al., 2019)" %}
+
 
 ## Vision Is Relational
 

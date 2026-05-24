@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A temporal sheaf F_t assigns stalks and restriction maps that vary continuously with time t. The sheaf Laplacian Δ_{F_t} is itself time-dependent — encoding the evolving relational geometry of the graph. The natural dynamics are given by a sheaf ODE: dH/dt = −Δ_{F_t} H, where both H (node states) and F_t (restriction maps) evolve. This subsumes both standard graph neural ODEs (when F_t = I) and TGN (when maps are updated by a memory module).
 </div>
+{% include figure image_path="/images/blog/gnn/rossi2020_tgn.png" alt="Temporal sheaf evolution" caption="Time-varying sheaf structure on a dynamic graph (Rossi et al., 2020)" %}
+
 
 ## Why Temporal Sheaves?
 

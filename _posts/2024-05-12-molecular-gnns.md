@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A molecule is a graph (atoms = nodes, bonds = edges). Molecular GNNs replace hand-crafted fingerprints with learned embeddings. The progression: 2D graphs (connectivity only) to 3D with distances (SchNet) to 3D with angles (DimeNet) to fully equivariant (EGNN, NequIP). Each step adds geometric information and improves accuracy on quantum chemistry benchmarks.
 </div>
+{% include figure image_path="/images/blog/gnn/schutt2017_schnet.png" alt="SchNet molecular GNN" caption="SchNet: continuous-filter convolutional neural network for molecular properties (Schütt et al., 2017)" %}
+
 
 ## Molecules as Graphs
 

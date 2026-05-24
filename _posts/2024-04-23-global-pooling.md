@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> After message passing, a readout function aggregates all node embeddings into a single graph embedding. Mean pooling is permutation-invariant and size-normalised. Sum pooling retains count information. Max pooling captures extremes. Each has different expressivity — sum is the most expressive for distinguishing graph sizes and multisets.
 </div>
+{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Graph-level readout" caption="Graph classification via global pooling of node representations (Xu et al., 2019)" %}
+
 
 ## The Readout Problem
 

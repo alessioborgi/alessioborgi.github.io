@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> The Sheaf Laplacian Δ_F = δ₀^T δ₀ is a block matrix built from the restriction maps of a sheaf. Each (u,v) off-diagonal block is -F_{u→e}^T F_{v→e}. It is positive semi-definite, its null space is the global sections, and sheaf diffusion H ← (I - Δ_F) H generalises GCN to accommodate feature transformations at edges.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_laplacian.png" alt="Sheaf Laplacian block matrix" caption="The Sheaf Laplacian block-matrix structure (Bodnar et al., 2022)" %}
+
 
 ## Constructing the Sheaf Laplacian
 

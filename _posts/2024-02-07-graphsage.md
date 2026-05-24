@@ -31,6 +31,8 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> GraphSAGE (SAmple and aggreGatE) learns to aggregate features from a <em>sampled</em> subset of neighbours. Because it learns the aggregation function (not per-node embeddings), it generalises to new nodes never seen during training — making it <em>inductive</em>.
 </div>
+{% include figure image_path="/images/blog/gnn/hamilton2017_graphsage.png" alt="GraphSAGE inductive learning" caption="GraphSAGE: inductive representation learning via neighbourhood sampling (Hamilton et al., 2017)" %}
+
 
 ## The Inductive vs. Transductive Distinction
 

@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Graphormer (Ying et al., Microsoft, 2021) takes a standard Transformer and injects three graph-structural signals: (1) degree centrality encoded in node embeddings, (2) shortest-path distance encoded as attention biases, (3) edge features along paths encoded in attention. The result: a Transformer that provably subsumes message-passing GNNs and achieves state-of-the-art on molecular benchmarks.
 </div>
+{% include figure image_path="/images/blog/gnn/ying2021_graphormer.png" alt="Graphormer architecture" caption="Graphormer: Transformer for graph representation learning (Ying et al., 2021)" %}
+
 
 ## The Bridge Between Transformers and GNNs
 

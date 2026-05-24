@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> GCN's aggregation minimises the Dirichlet energy E(H) = Σ_{(u,v)} ||h_u − h_v||², penalising all feature differences across edges. On heterophilic graphs (adjacent nodes of different class), this forces features to become similar — exactly wrong. Sheaf diffusion minimises the Sheaf Dirichlet energy E_F(H) = Σ_{(u,v)} ||F_{u▷e}h_u − F_{v▷e}h_v||², which — with learned restriction maps — penalises inconsistency with the relational structure, not raw feature differences. Adjacent nodes of different classes can be consistent (zero sheaf energy) while being different.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_accuracy.png" alt="Sheaf handles heterophily" caption="Sheaf GNN accuracy on heterophilic benchmarks vs baselines (Bodnar et al., 2022)" %}
+
 
 ## The Homophily Assumption in GCN
 

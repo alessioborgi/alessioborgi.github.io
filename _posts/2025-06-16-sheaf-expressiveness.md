@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Standard MPNNs ≤ 1-WL in expressiveness for graph isomorphism. Sheaf GNNs operate on Nd-dimensional signals (not N-dimensional) — each node has a d-dimensional stalk. This gives them strictly more capacity to distinguish nodes with identical 1-WL colours but different sheaf-global-section structure. However, sheaf expressiveness depends on what maps are learned: with identity maps, sheaf GNNs collapse to standard MPNNs.
 </div>
+{% include figure image_path="/images/blog/sheaf/xu2019_expressiveness.png" alt="Sheaf expressiveness beyond WL" caption="GNN expressiveness hierarchy: sheaf-WL strictly more powerful than 1-WL (Xu et al., 2019)" %}
+
 
 ## The WL Test Recap
 

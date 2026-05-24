@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Standard GCN oversmoothing: iterating h ← (I−L̃)h collapses all node features to constants (dim 1 per component). Cause: null space of L is span{1_N}. Fix: replace L with the Sheaf Laplacian Δ_F, whose null space is H⁰(G, F) — a richer space determined by the restriction maps. When maps are learned, H⁰ is adapted to the task, preserving discriminative features at large depth.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_accuracy.png" alt="Sheaf avoids oversmoothing" caption="Sheaf GNNs avoid oversmoothing: non-trivial ker(Δ_F) preserves signal (Bodnar et al., 2022)" %}
+
 
 ## The Classical Oversmoothing Result
 

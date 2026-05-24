@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A static graph has fixed topology throughout learning. A dynamic graph changes over time: edges form and dissolve, nodes arrive and depart, features drift. Dynamic graphs come in two forms — discrete-time (snapshots) and continuous-time (event streams). Each requires different modelling assumptions.
 </div>
+{% include figure image_path="/images/blog/gnn/rossi2020_tgn.png" alt="Dynamic graph evolution" caption="Continuous-time dynamic graph: event stream processed by TGN (Rossi et al., 2020)" %}
+
 
 ## Why Graphs Change Over Time
 

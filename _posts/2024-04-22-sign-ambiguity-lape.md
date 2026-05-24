@@ -25,6 +25,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> If Lu = λu, then L(-u) = λ(-u) also. Eigenvectors are only defined up to a ±1 sign flip (and up to rotation within multiplicity > 1 eigenspaces). Two runs of the same eigenvector computation can produce u and -u — giving nodes opposite PE vectors. SignNet handles this by using a sign-invariant neural network: f(u) + f(-u).
 </div>
+{% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Sign ambiguity in LapPE" caption="Sign ambiguity in Laplacian eigenvectors and its impact on PE (Dwivedi et al., 2022)" %}
+
 
 ## The Sign Problem
 

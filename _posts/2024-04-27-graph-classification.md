@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A graph classifier has three stages: (1) message passing to build node embeddings; (2) readout to collapse node embeddings into a graph embedding; (3) an MLP to predict from the graph embedding. The expressiveness bottleneck is usually the readout step, not the message passing. Choosing sum readout + GIN + MLP achieves 1-WL expressiveness for graph-level tasks.
 </div>
+{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Graph classification with GNNs" caption="Graph classification via GIN with sum aggregation (Xu et al., 2019)" %}
+
 
 ## The Graph Classification Pipeline
 

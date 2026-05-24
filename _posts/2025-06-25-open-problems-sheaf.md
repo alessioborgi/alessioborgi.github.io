@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> The field of sheaf neural networks is young (2020–2024) and several foundational questions remain open: (1) scalability to graphs with millions of nodes, (2) stochastic and probabilistic sheaves for uncertainty quantification, (3) sheaf autoencoders for generative models, (4) formal connections to persistent homology and TDA, (5) unified Sheaf Transformer architectures, and (6) sheaf-based explanation methods. This post maps the open landscape.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Open problems in sheaf GNNs" caption="Neural Sheaf Diffusion — the foundation for all open research directions (Bodnar et al., 2022)" %}
+
 
 ## Open Problem 1: Scalability
 

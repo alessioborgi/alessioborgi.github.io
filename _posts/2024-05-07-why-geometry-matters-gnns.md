@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A molecule is not just a graph of atoms and bonds — it is a 3D geometric object. The same chemical formula with different 3D arrangements (stereoisomers) can have completely different properties. A GNN that ignores 3D coordinates cannot distinguish them. Geometric GNNs incorporate position data while respecting the symmetries of 3D space.
 </div>
+{% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="Geometric structure in molecules" caption="E(n) Equivariant GNN captures 3D molecular geometry (Satorras et al., 2021)" %}
+
 
 ## The Geometric Setting
 

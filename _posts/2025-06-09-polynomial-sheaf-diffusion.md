@@ -30,6 +30,8 @@ toc_label: "Contents"
 <strong>Paper:</strong> Zaghen, O., Quak, M., & Bronstein, M. M. (2024). <a href="https://openreview.net/forum?id=KGPmqVFEW4">Polynomial Neural Sheaf Diffusion</a>. <em>ICLR 2024.</em><br>
 <strong>Contribution:</strong> Replaces NSD's fixed (I − Δ_F) filter with a learnable polynomial in Δ_F. Addresses NSD's spectral rigidity while retaining all its topological structure. New state-of-the-art on heterophilic benchmarks.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_laplacian.png" alt="Polynomial NSD filter" caption="Polynomial sheaf diffusion: Bernstein basis spectral filter on Δ_F (Bodnar et al., 2022)" %}
+
 
 ## The Limitation of NSD's Fixed Filter
 

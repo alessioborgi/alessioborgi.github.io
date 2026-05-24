@@ -62,6 +62,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A Transformer block = LN → MHA → residual → LN → FFN → residual. This unit is stacked N times. Understanding one block means understanding the entire architecture. Every modern LLM is just this pattern repeated at scale.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Complete Transformer block" caption="The complete Transformer encoder and decoder blocks (Vaswani et al., 2017)" %}
+
 
 ## The Block is the Atom
 

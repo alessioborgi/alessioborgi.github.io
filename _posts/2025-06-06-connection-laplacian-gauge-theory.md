@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A cellular sheaf with orthogonal restriction maps O_{u▷e} ∈ O(d) is called a connection or <em>vector bundle with connection</em> on G. Its Sheaf Laplacian is the Connection Laplacian L_C, which appears in angular synchronisation, cryo-EM reconstruction, and 3D point cloud alignment. Gauge transformations act as O(d) rotations at each node; gauge-invariant quantities (spectrum of L_C, holonomy around cycles) are the only physically meaningful ones. Equivariant sheaf GNNs are exactly gauge-equivariant models on vector bundles over graphs.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_transport.png" alt="Connection Laplacian gauge theory" caption="Connection Laplacian and gauge equivariance in sheaf GNNs (Bodnar et al., 2022)" %}
+
 
 ## From General Sheaves to Connections
 

@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A cosheaf assigns vector spaces to parts of a space but with <em>extension maps</em> (corestriction maps) going from smaller to larger: G_{e→v} : G(e) → G(v). Instead of asking "can we consistently restrict data from nodes to edges?", cosheaves ask "can we consistently extend data from edges to nodes?" The dual boundary operator ∂₀ = δ₀ᵀ gives rise to cosheaf homology H₀, H₁, ... — different from sheaf cohomology. Cosheaves are natural for data that aggregates (distributions, measures, flows) rather than restricts (sections, fields).
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Cosheaf vs sheaf duality" caption="Sheaf and cosheaf duality: restriction vs corestriction maps (Bodnar et al., 2022)" %}
+
 
 ## Sheaves vs Cosheaves: The Duality
 

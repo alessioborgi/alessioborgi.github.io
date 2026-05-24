@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> NSD and PNSD achieve state-of-the-art on all major heterophilic benchmarks (Cornell, Texas, Wisconsin, Chameleon, Squirrel, Actor) as of 2022–2024. The gains are largest on datasets with low homophily ratio (Cornell h=0.11, Texas h=0.11) and smallest on datasets where high-pass filtering alone is sufficient (Actor h=0.22). Stalk dimension d=2 is optimal on most datasets; d>5 rarely helps and increases overfitting.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_accuracy.png" alt="NSD benchmark results" caption="NSD vs baselines on heterophilic benchmarks (Bodnar et al., 2022)" %}
+
 
 ## The Heterophilic Benchmark Suite
 

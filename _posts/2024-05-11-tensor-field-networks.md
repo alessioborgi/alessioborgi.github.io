@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> TFN (Thomas et al., 2018) builds node features as collections of spherical harmonic coefficients at multiple degrees l. Message passing uses CG tensor products to combine features from different degrees. This is the rigorous algebraic foundation for SE(3) equivariance — EGNN and SE(3)-Transformers are both simplifications or extensions of this framework.
 </div>
+{% include figure image_path="/images/blog/gnn/thomas2018_tfn.png" alt="Tensor Field Network" caption="Tensor Field Networks: SE(3)-equivariant graph neural networks (Thomas et al., 2018)" %}
+
 
 ## The TFN Framework
 

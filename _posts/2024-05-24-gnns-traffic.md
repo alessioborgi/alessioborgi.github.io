@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A city's sensor network is a fixed graph (sensors = nodes, road connections = edges). At each timestamp, sensors report speed/volume. The task: given the last T timesteps, predict the next H timesteps. GNNs capture "traffic jam propagates downstream" (spatial); RNNs/convolutions capture "rush hour occurs every morning" (temporal). The best models combine both.
 </div>
+{% include figure image_path="/images/blog/gnn/li2018_dcrnn.png" alt="DCRNN traffic forecasting" caption="Diffusion Convolutional Recurrent Neural Network for traffic speed forecasting (Li et al., 2018)" %}
+
 
 ## The Traffic Forecasting Task
 

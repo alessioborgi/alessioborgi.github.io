@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Any flow y on the edges of a simplicial complex decomposes as y = δ₀x + δ₁ᵀz + h where x is a node potential (gradient flow), z is a face potential (curl/rotational flow), and h is harmonic (non-exact, non-co-exact — topologically non-trivial). For graph sheaves, the decomposition uses the sheaf coboundary δ₀ and gives: node signals → sheaf gradient flows on edges; edge signals → sheaf-harmonic components; these components separate topological from geometric structure in graph data.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2021_mpsn.png" alt="Hodge Laplacians on simplicial complex" caption="Hodge Laplacians on a simplicial complex: gradient, curl, harmonic (Bodnar et al., 2021)" %}
+
 
 ## The Classical Hodge Decomposition
 

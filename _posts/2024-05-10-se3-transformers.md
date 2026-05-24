@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> SE(3)-Transformers (Fuchs et al., 2020) combine Transformer-style self-attention with SE(3)-equivariant features (spherical harmonics). Queries and keys are invariant scalars (for attention weights); values are equivariant feature fields of multiple degrees. The result is an equivariant attention mechanism that attends to the right neighbours while maintaining 3D symmetry.
 </div>
+{% include figure image_path="/images/blog/gnn/fuchs2020_se3.png" alt="SE(3)-Transformer" caption="SE(3)-Transformer: equivariant self-attention for 3D point clouds (Fuchs et al., 2020)" %}
+
 
 ## The Gap SE(3)-Transformers Fill
 

@@ -30,6 +30,8 @@ toc_label: "Contents"
 <strong>Paper:</strong> Barbero, F., Bodnar, C., de Ocáriz Borde, H. S., Bronstein, M., Veličković, P., & Liò, P. (2022). <a href="https://arxiv.org/abs/2210.01066">Sheaf Attention Networks</a>. <em>NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations.</em><br>
 <strong>Contribution:</strong> Introduces attention into the sheaf GNN framework. Orthogonal restriction maps combined with attention weights yield a model that is both gauge-equivariant and selectively aggregating.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_transport.png" alt="SheafAN transported attention" caption="Sheaf Attention Network: gauge-equivariant attention via parallel transport (Bodnar et al., 2022)" %}
+
 
 ## Motivation: What NSD Cannot Do
 

@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> When restriction maps are orthogonal matrices, the sheaf defines a "gauge connection" on the graph — a rule for parallel transporting vectors between nodes along edges. The resulting Sheaf Laplacian is the Connection Laplacian, which has rich symmetry properties. This framework unifies sheaf GNNs with geometric deep learning on graphs.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_transport.png" alt="Gauge-equivariant sheaf GNN" caption="Gauge-equivariant sheaf diffusion and parallel transport (Bodnar et al., 2022)" %}
+
 
 ## From Sheaves to Connections
 

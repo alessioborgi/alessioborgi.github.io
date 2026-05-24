@@ -47,6 +47,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A 224×224 RGB image is split into 16×16 patches (196 patches total). Each patch is flattened to a 768-dimensional vector and passed through a linear projection. These 196 vectors become the token sequence fed to the Transformer — identical in format to word embeddings.
 </div>
+{% include figure image_path="/images/blog/transformers/dosovitskiy2020_vit.png" alt="Patch embedding in ViT" caption="Image patch embeddings as input tokens (Dosovitskiy et al., 2020)" %}
+
 
 ## The Core Problem: Transformers Expect Sequences
 

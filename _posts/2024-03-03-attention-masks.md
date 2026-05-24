@@ -57,6 +57,8 @@ pre.mask-grid .block  { color: #f87171; }
 <div class="tldr-box">
 <strong>TL;DR:</strong> Attention masks control which pairs of tokens can attend to each other. Bidirectional masking (BERT) sees everything. Causal masking (GPT) sees only the past. Padding masks ignore filler tokens. The mask choice determines the model's fundamental capability.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Masked attention" caption="Masked Multi-Head Attention in the Transformer decoder (Vaswani et al., 2017)" %}
+
 
 ## Why Masks Exist
 

@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> In K-layer message passing, node v's embedding must summarise information from its K-hop neighbourhood — which grows exponentially with K. If the path to a distant important node passes through a single bottleneck edge, the information from that distant node is diluted by exponentially many competing signals. This is oversquashing — distinct from oversmoothing.
 </div>
+{% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Over-squashing bottleneck" caption="Over-squashing and graph curvature as an information bottleneck (Topping et al., 2022)" %}
+
 
 ## Two Different Problems
 

@@ -4,7 +4,7 @@ title: "Sheaves on Simplicial Complexes: Topological Deep Learning"
 date: 2025-06-18
 categories: [sheaf]
 book: sheaf
-subsection: extensions
+subsection: topological-dl
 tags: [simplicial-complex, topological-deep-learning, MPSN, CW-complex, higher-order, Bodnar]
 excerpt: "Graphs are 1-dimensional CW complexes. The sheaf framework extends naturally to higher-dimensional simplicial complexes — adding triangles, tetrahedra, and higher cells — enabling message passing across cells of different dimensions. This is the foundation of Topological Deep Learning: a unifying framework for GNNs, simplicial networks, and sheaf networks."
 author_profile: true
@@ -29,6 +29,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Sheaves can be defined on simplicial complexes K by assigning stalks to every simplex (node, edge, triangle, ...) and restriction maps between incident simplices. This gives a sheaf cochain complex 0 → C⁰ → C¹ → C² → ... with Hodge Laplacians at each level. Message Passing Simplicial Networks (MPSN) are a special case; full sheaf networks on simplicial complexes learn restriction maps across all dimensions simultaneously.
 </div>
+{% include figure image_path="/images/blog/sheaf/bodnar2021_cwnetworks.png" alt="CW complex sheaf" caption="CW Networks: message passing on CW complexes with sheaf structure (Bodnar et al., 2021)" %}
+
 
 ## From Graphs to Simplicial Complexes
 

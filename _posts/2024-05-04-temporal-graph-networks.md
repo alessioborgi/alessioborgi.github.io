@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> TGN (Rossi et al., 2020) processes a continuous stream of interaction events. Each node maintains a memory vector s_v that is updated by a memory updater (GRU-based) when v participates in an event. When node embeddings are needed, a temporal graph attention module aggregates from recent neighbours using time-aware features. This combines persistent memory with structural context.
 </div>
+{% include figure image_path="/images/blog/gnn/rossi2020_tgn.png" alt="TGN memory module" caption="Temporal Graph Network (TGN): memory module and interaction processing (Rossi et al., 2020)" %}
+
 
 ## TGN's Design Philosophy
 

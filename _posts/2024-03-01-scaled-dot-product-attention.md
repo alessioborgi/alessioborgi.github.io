@@ -50,6 +50,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Without the √d_k scaling factor, dot products grow large in high dimensions → softmax outputs near 0 or 1 everywhere → gradients vanish and training stalls. Dividing by √d_k keeps dot products well-conditioned regardless of model size.
 </div>
+{% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled Dot-Product Attention" caption="Scaled Dot-Product Attention (Vaswani et al., 2017)" %}
+
 
 ## The Formula
 

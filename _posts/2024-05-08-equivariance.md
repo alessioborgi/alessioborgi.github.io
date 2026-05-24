@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A function f is G-equivariant if f(g · x) = g · f(x) for all transformations g in group G. Invariance is the special case where f(g · x) = f(x). Geometric deep learning builds equivariance into model architecture by design — this is more sample-efficient than learning it from augmented data.
 </div>
+{% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="Equivariance illustration" caption="Equivariance under rotation and translation in 3D graphs (Satorras et al., 2021)" %}
+
 
 ## Groups and Symmetry
 

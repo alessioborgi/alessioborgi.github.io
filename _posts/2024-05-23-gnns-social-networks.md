@@ -27,6 +27,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Social networks are massive sparse graphs where structure carries as much signal as content. GNNs unify both: node features (posts, profile) and graph structure (followers, retweets) are jointly processed. Key applications: fake news detection (exploit propagation tree structure), community detection (cluster embedding space), influence prediction, and friend recommendation.
 </div>
+{% include figure image_path="/images/blog/gnn/hamilton2017_graphsage.png" alt="GraphSAGE for social networks" caption="GraphSAGE inductive learning on social network graphs (Hamilton et al., 2017)" %}
+
 
 ## Why Graphs for Social Networks?
 

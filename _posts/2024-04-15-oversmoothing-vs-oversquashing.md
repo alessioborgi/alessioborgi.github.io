@@ -26,6 +26,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Oversmoothing = forward-pass feature collapse from too much averaging (nearby nodes become identical). Oversquashing = gradient/information collapse at bottleneck edges for long-range communication. Both increase with depth but in different ways, on different nodes, and need different fixes.
 </div>
+{% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Oversmoothing vs oversquashing" caption="Over-smoothing vs over-squashing — two distinct failure modes in deep GNNs (Topping et al., 2022)" %}
+
 
 ## The Confusion
 
