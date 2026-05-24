@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
       contents: write
       pages: write
@@ -121,7 +123,7 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add _data/github.json
-          git diff --quiet && echo "No changes" || git commit -m "Update GitHub stats"
+          git diff --cached --quiet && echo "No changes" || git commit -m "Update GitHub stats"
           git push
 
       # ---- build & deploy Pages ----
@@ -142,6 +144,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
       pages: write
       id-token: write

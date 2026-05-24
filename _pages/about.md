@@ -8,60 +8,540 @@ redirect_from:
 ---
 
 <style>
-  .collab-card {
-    background: #38c1b7;
-    color: #0f2a36;
-    border-radius: 14px;
-    padding: 1.4rem;
-    box-shadow: 0 8px 20px rgba(19, 56, 68, 0.15);
-    border: 1px solid rgba(19, 56, 68, 0.08);
-  }
-  .collab-card h3 { margin-top: 0; margin-bottom: 0.5rem; color: #0f2a36; text-align: center; }
-  .collab-card p { margin-bottom: 0.75rem; }
-  .collab-card .cta {
-    text-align: center;
-    margin-top: 0.5rem;
-  }
-  .collab-card .cta .btn {
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 0.7rem 1.1rem;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(19, 56, 68, 0.18);
-  }
+/* ============================================================
+   DESIGN SYSTEM
+   ============================================================ */
+:root {
+  --ab-navy:      #0f2a36;
+  --ab-navy-mid:  #133844;
+  --ab-teal:      #38c1b7;
+  --ab-teal-lt:   #6de8e0;
+  --ab-blue:      #0a66c2;
+  --ab-border:    rgba(19,56,68,0.10);
+  --ab-shadow-sm: 0 2px 8px rgba(19,56,68,0.08);
+  --ab-shadow-md: 0 6px 22px rgba(19,56,68,0.13);
+  --ab-shadow-lg: 0 14px 40px rgba(19,56,68,0.17);
+  --ab-radius:    16px;
+  --ab-text:      #133844;
+  --ab-muted:     rgba(19,56,68,0.58);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.ab-hero {
+  background: linear-gradient(135deg, #0b1f28 0%, #133844 50%, #1a5f6e 100%);
+  border-radius: 22px;
+  padding: 3rem 2.8rem 3.2rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: var(--ab-shadow-lg);
+}
+
+/* Decorative blobs */
+.ab-hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(56,193,183,.22) 0%, transparent 65%);
+  pointer-events: none;
+}
+.ab-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -90px; left: 25%;
+  width: 340px; height: 340px;
+  background: radial-gradient(circle, rgba(10,102,194,.14) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.ab-hero__inner { position: relative; z-index: 1; }
+
+.ab-hero__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ab-teal-lt);
+  margin-bottom: 0.65rem;
+}
+
+.ab-hero__name {
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.08;
+  margin: 0 0 0.45rem;
+  color: #fff;
+}
+
+.ab-hero__title {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,.78);
+  margin: 0 0 1.5rem;
+  line-height: 1.65;
+}
+.ab-hero__title strong { color: var(--ab-teal-lt); font-weight: 700; }
+
+.ab-hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 2rem;
+}
+
+.ab-hero__tag {
+  background: rgba(56,193,183,.14);
+  border: 1px solid rgba(56,193,183,.38);
+  color: var(--ab-teal-lt);
+  padding: 0.28rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background .15s, border-color .15s;
+}
+.ab-hero__tag:hover {
+  background: rgba(56,193,183,.28);
+  border-color: rgba(56,193,183,.6);
+}
+
+.ab-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.ab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none !important;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.ab-btn--teal {
+  background: var(--ab-teal);
+  color: var(--ab-navy) !important;
+  box-shadow: 0 6px 20px rgba(56,193,183,.38);
+}
+.ab-btn--teal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(56,193,183,.52);
+  color: var(--ab-navy) !important;
+}
+
+.ab-btn--glass {
+  background: rgba(255,255,255,.10);
+  color: #fff !important;
+  border: 1.5px solid rgba(255,255,255,.24);
+  backdrop-filter: blur(6px);
+}
+.ab-btn--glass:hover {
+  background: rgba(255,255,255,.20);
+  transform: translateY(-2px);
+  color: #fff !important;
+}
+
+.ab-btn--outline {
+  background: #fff;
+  color: var(--ab-text) !important;
+  border: 1.5px solid var(--ab-border);
+  box-shadow: var(--ab-shadow-sm);
+}
+.ab-btn--outline:hover {
+  border-color: var(--ab-teal);
+  box-shadow: var(--ab-shadow-md);
+  transform: translateY(-1px);
+  color: var(--ab-text) !important;
+}
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+.ab-section {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 2.8rem 0 1.4rem;
+}
+.ab-section__title {
+  font-size: 1.28rem;
+  font-weight: 800;
+  color: var(--ab-text);
+  margin: 0;
+  white-space: nowrap;
+}
+.ab-section__bar {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, var(--ab-teal), transparent);
+  border: none;
+  border-radius: 1px;
+}
+
+/* ============================================================
+   COLLAB CARD
+   ============================================================ */
+.ab-collab {
+  background: linear-gradient(135deg, #133844 0%, #1b5f6e 100%);
+  color: #fff;
+  border-radius: var(--ab-radius);
+  padding: 1.7rem 2rem;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: var(--ab-shadow-md);
+}
+.ab-collab::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(56,193,183,.20) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ab-collab__title {
+  font-size: 1.12rem;
+  font-weight: 800;
+  margin: 0 0 0.55rem;
+  color: #fff;
+  position: relative; z-index: 1;
+}
+.ab-collab__body {
+  color: rgba(255,255,255,.84);
+  margin-bottom: 1.2rem;
+  position: relative; z-index: 1;
+  line-height: 1.65;
+  font-size: 0.97rem;
+}
+.ab-collab__cta { position: relative; z-index: 1; }
+
+/* ============================================================
+   ABOUT INTRO BOX
+   ============================================================ */
+.ab-intro {
+  background: #fff;
+  border-radius: var(--ab-radius);
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--ab-border);
+  border-left: 4px solid var(--ab-teal);
+  box-shadow: var(--ab-shadow-sm);
+  line-height: 1.8;
+  font-size: 0.98rem;
+  color: var(--ab-text);
+}
+
+/* ============================================================
+   MAP
+   ============================================================ */
+#world-map {
+  height: 440px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--ab-border);
+  box-shadow: var(--ab-shadow-sm);
+  margin-top: 0.5rem;
+}
+.map-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.55rem;
+  flex-wrap: wrap;
+  font-size: 0.88rem;
+  color: var(--ab-muted);
+}
+.map-legend .dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.3rem;
+  border: 1.5px solid rgba(0,0,0,.12);
+  vertical-align: middle;
+}
+
+/* ============================================================
+   PUBLICATION CARDS
+   ============================================================ */
+.home-pub-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 1rem 0;
+}
+.home-pub-list .pub-card {
+  background: #fff;
+  border: 1px solid var(--ab-border);
+  border-left: 4px solid var(--ab-blue);
+  border-radius: var(--ab-radius);
+  padding: 1.3rem 1.6rem;
+  box-shadow: var(--ab-shadow-sm);
+  margin-bottom: 0.8rem;
+  transition: box-shadow .22s, transform .22s;
+}
+.home-pub-list .pub-card:hover {
+  box-shadow: var(--ab-shadow-md);
+  transform: translateY(-2px);
+}
+.home-pub-list .pub-card__body h2 {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  font-size: 1.02rem;
+}
+.home-pub-list .pub-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+.home-pub-list .pub-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.42rem 0.88rem;
+  border-radius: 999px;
+  background: var(--ab-blue);
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 12px rgba(10,102,194,.22);
+  transition: transform .15s, box-shadow .15s;
+}
+.home-pub-list .pub-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(10,102,194,.34);
+}
+.home-pub-list .pub-btn--code {
+  background: #24292e;
+  box-shadow: 0 4px 12px rgba(36,41,46,.28);
+}
+
+/* ============================================================
+   LINKEDIN CARD
+   ============================================================ */
+.home-linkedin-card {
+  background: #fff;
+  border: 1px solid var(--ab-border);
+  border-top: 4px solid var(--ab-blue);
+  border-radius: var(--ab-radius);
+  padding: 1.3rem 1.6rem;
+  box-shadow: var(--ab-shadow-sm);
+  transition: box-shadow .22s;
+}
+.home-linkedin-card:hover { box-shadow: var(--ab-shadow-md); }
+
+.home-linkedin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+.home-linkedin-title  { font-weight: 800; font-size: 1.04rem; margin: 0; }
+.home-linkedin-subtitle { margin: 0.1rem 0 0; font-size: 0.93rem; font-weight: 600; color: var(--ab-text); }
+.home-linkedin-meta { margin-top: 0.2rem; font-size: 0.85rem; color: var(--ab-muted); }
+
+.home-linkedin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.1rem;
+  background: var(--ab-blue);
+  color: #fff;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.86rem;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(10,102,194,.28);
+  transition: transform .15s, box-shadow .15s;
+}
+.home-linkedin-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(10,102,194,.38);
+}
+.home-linkedin-embed {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f5f7fb;
+}
+
+/* ============================================================
+   GITHUB STATS
+   ============================================================ */
+#gh-stats { margin: 0; }
+
+#gh-stats .grid { display: grid; gap: 1rem; }
+#gh-stats .grid.cols-4 { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+
+#gh-stats .card {
+  background: #fff;
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius);
+  box-shadow: var(--ab-shadow-sm);
+  transition: transform .22s, box-shadow .22s;
+  overflow: hidden;
+}
+#gh-stats .card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ab-shadow-md);
+}
+#gh-stats .kpi-card { border-top: 3px solid var(--ab-teal); }
+
+#gh-stats .pad { padding: 1.2rem 1.3rem; }
+#gh-stats h3 { margin: 0.3rem 0 0.75rem; font-size: 1rem; font-weight: 700; color: var(--ab-text); }
+
+#gh-stats .stat { display: flex; align-items: baseline; gap: 0.5rem; }
+#gh-stats .num  { font-size: 2.4rem; font-weight: 900; line-height: 1; color: var(--ab-text); }
+#gh-stats .lab  { font-size: 0.84rem; color: var(--ab-muted); }
+
+#gh-stats .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+#gh-stats .chip  {
+  border: 1px solid var(--ab-border);
+  border-radius: 999px;
+  padding: 0.18rem 0.65rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: var(--ab-text);
+  transition: border-color .15s;
+}
+#gh-stats .chip:hover { border-color: var(--ab-teal); }
+
+#gh-stats .langs { display: flex; flex-direction: column; gap: 0.7rem; }
+#gh-stats .lang-row { display: flex; align-items: center; gap: 0.75rem; }
+#gh-stats .lang-name { min-width: 110px; font-weight: 600; font-size: 0.88rem; color: var(--ab-text); }
+#gh-stats .lang-bar {
+  flex: 1; height: 7px; border-radius: 999px;
+  background: #eef0f5; position: relative; overflow: hidden;
+}
+#gh-stats .lang-bar span {
+  display: block; height: 100%;
+  background: linear-gradient(to right, var(--ab-teal), #0a9991);
+  border-radius: 999px;
+}
+#gh-stats .lang-percent {
+  min-width: 36px; text-align: right; font-size: 0.8rem;
+  color: var(--ab-muted); font-variant-numeric: tabular-nums;
+}
+
+#gh-stats .heatmap img {
+  max-width: 100%; height: auto;
+  border-radius: 10px; border: 1px solid var(--ab-border);
+}
+@media (prefers-color-scheme: dark) {
+  #gh-stats .heatmap img { filter: invert(1) hue-rotate(180deg) contrast(1.1); }
+}
+
+#gh-stats .repos { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 0.75rem; }
+#gh-stats .repo h4   { margin: 0 0 0.4rem; font-size: 0.93rem; }
+#gh-stats .repo p    { margin: 0.2rem 0 0.55rem; font-size: 0.86rem; color: var(--ab-muted); }
+#gh-stats .meta      { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.84rem; color: var(--ab-muted); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 640px) {
+  .ab-hero          { padding: 2rem 1.6rem 2.2rem; border-radius: 16px; }
+  .ab-hero__name    { font-size: 2rem; }
+  .ab-collab        { padding: 1.3rem 1.4rem; }
+  .ab-intro         { padding: 1.2rem 1.4rem; }
+  .ab-section       { margin: 2rem 0 1.2rem; }
+}
 </style>
-<div class="collab-card">
-  <h3>🚀 I’m always open to collaborate, exchange ideas or just talk about anything!</h3>
-  
-  <p><strong>I’m eager to work with anyone who has great ideas, wants to learn more and more and also share their experience to others.</strong> Don’t hesitate to write me if you’d like to propose your help or ask for mine on a project, research, paper-idea, or a moonshot you’re cooking up.</p>
-  <div class="cta">
-    <a href="mailto:alessio.borgi@uniroma1.it" class="btn btn--primary">Email Me ✉️</a>
+
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<div class="ab-hero">
+  <div class="ab-hero__inner">
+    <div class="ab-hero__eyebrow">Welcome to my corner of the web</div>
+    <h1 class="ab-hero__name">Alessio Borgi</h1>
+    <p class="ab-hero__title">
+      PhD Researcher &middot; <strong>Graph Neural Networks</strong> &amp; Generative AI<br>
+      Sapienza University of Rome &nbsp;&middot;&nbsp; University of Cambridge
+    </p>
+    <div class="ab-hero__tags">
+      <span class="ab-hero__tag">Graph Neural Networks</span>
+      <span class="ab-hero__tag">Geometric Deep Learning</span>
+      <span class="ab-hero__tag">Topological Deep Learning</span>
+      <span class="ab-hero__tag">Diffusion Models</span>
+      <span class="ab-hero__tag">Robotics</span>
+      <span class="ab-hero__tag">Biomedical AI</span>
+      <span class="ab-hero__tag">Vision</span>
+    </div>
+    <div class="ab-hero__ctas">
+      <a class="ab-btn ab-btn--teal" href="mailto:alessio.borgi@uniroma1.it">
+        <i class="fas fa-envelope" aria-hidden="true"></i> Email Me
+      </a>
+      <a class="ab-btn ab-btn--glass" href="/cv/">
+        <i class="fas fa-file-alt" aria-hidden="true"></i> View CV
+      </a>
+      <a class="ab-btn ab-btn--glass" href="https://github.com/alessioborgi" target="_blank" rel="noopener">
+        <i class="fab fa-github" aria-hidden="true"></i> GitHub
+      </a>
+      <a class="ab-btn ab-btn--glass" href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar" aria-hidden="true"></i> Scholar
+      </a>
+    </div>
   </div>
 </div>
 
----
 
-## Hi, I’m Alessio 👋
-I’m a PhD student in **Graph Neural Networks and Generative AI**, under the supervision of [Prof. Pietro Liò](https://www.cst.cam.ac.uk/people/pl219) (University of Cambridge) and co-supervised by [Prof. Fabrizio Silvestri](https://sites.google.com/diag.uniroma1.it/fabriziosilvestri) (Sapienza University of Rome). I have obtained my Master of Engineering in *Artificial Intelligence & Robotics* and my Bachelor of Engineering in *Applied Computer Science and Artificial Intelligence* at Sapienza University of Rome, both with the highest marks. My research sits at the intersection of *Graph Neural Networks*, *Geometric Deep Learning*, *Topological Deep Learning* and *Diffusion Models*, with applications to *Robotics*, *Vision*, and *Biomedical AI*.
+<!-- ============================================================
+     COLLAB CARD
+     ============================================================ -->
+<div class="ab-collab">
+  <h3 class="ab-collab__title">🚀 Open to Collaborate!</h3>
+  <p class="ab-collab__body">
+    I'm eager to work with anyone who has great ideas, wants to learn and share their experience.
+    Don't hesitate to reach out if you'd like to collaborate on a project, research, paper idea, or a moonshot you're cooking up.
+  </p>
+  <div class="ab-collab__cta">
+    <a href="mailto:alessio.borgi@uniroma1.it" class="ab-btn ab-btn--teal">
+      <i class="fas fa-envelope" aria-hidden="true"></i> Let's talk
+    </a>
+  </div>
+</div>
 
-<!-- ====================== -->
-<!--  At-a-glance Stats     -->
-<!-- ====================== -->
 
-<!-- {% assign pubs = site.publications | size | default: 0 %}
-{% assign talks = site.talks | size | default: 0 %}
-{% assign posts = site.posts | size | default: 0 %}
-{% assign projects = site.projects | size | default: 0 %} -->
+<!-- ============================================================
+     ABOUT ME
+     ============================================================ -->
+<div class="ab-section">
+  <h2 class="ab-section__title">👋 About Me</h2>
+  <div class="ab-section__bar"></div>
+</div>
+
+<div class="ab-intro">
+I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, under the supervision of <a href="https://www.cst.cam.ac.uk/people/pl219">Prof. Pietro Liò</a> (University of Cambridge) and co-supervised by <a href="https://sites.google.com/diag.uniroma1.it/fabriziosilvestri">Prof. Fabrizio Silvestri</a> (Sapienza University of Rome). I obtained my Master of Engineering in <em>Artificial Intelligence &amp; Robotics</em> and my Bachelor of Engineering in <em>Applied Computer Science and Artificial Intelligence</em> at Sapienza, both with the highest marks. My research sits at the intersection of <em>Graph Neural Networks</em>, <em>Geometric Deep Learning</em>, <em>Topological Deep Learning</em> and <em>Diffusion Models</em>, with applications to <em>Robotics</em>, <em>Vision</em>, and <em>Biomedical AI</em>.
+</div>
 
 
----
-## Places I've Been
+<!-- ============================================================
+     MAP
+     ============================================================ -->
+<div class="ab-section">
+  <h2 class="ab-section__title">🗺️ Places I've Been</h2>
+  <div class="ab-section__bar"></div>
+</div>
+
 {% assign places = site.data.map_places | default: [] %}
-<style>
-  #world-map { height: 480px; border-radius: 12px; overflow: hidden; border: 1px solid #d5dfee; margin-top: 0.5rem; }
-  .map-legend { display: inline-flex; align-items: center; gap: 0.7rem; margin-top: 0.5rem; flex-wrap: wrap; }
-  .map-legend .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; margin-right: 0.3rem; border: 1px solid rgba(0,0,0,0.12); }
-</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <div id="world-map"></div>
 <div class="map-legend">
@@ -145,52 +625,15 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   })();
 </script>
 
----
-## Latest Publications
-<style>
-  .home-pub-list {
-    list-style: none;
-    padding-left: 0;
-    margin: 0 0 1rem 0;
-  }
-  .home-pub-list .pub-card {
-    border: 1px solid #c7d4f2;
-    border-radius: 14px;
-    padding: 1.2rem 1.35rem;
-    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
-    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
-    margin-bottom: 0.75rem;
-  }
-  .home-pub-list .pub-card__body h2 { margin-top: 0; margin-bottom: 0.35rem; }
-  .home-pub-list .pub-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    margin-top: 0.35rem;
-  }
-  .home-pub-list .pub-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.55rem 0.9rem;
-    border-radius: 999px;
-    background: #0a66c2;
-    color: #fff !important;
-    text-decoration: none;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    box-shadow: 0 6px 16px rgba(10, 102, 194, 0.3);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  .home-pub-list .pub-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 20px rgba(10, 102, 194, 0.35);
-  }
-  .home-pub-list .pub-btn--code {
-    background: #24292e;
-    box-shadow: 0 6px 16px rgba(36, 41, 46, 0.35);
-  }
-</style>
+
+<!-- ============================================================
+     PUBLICATIONS
+     ============================================================ -->
+<div class="ab-section">
+  <h2 class="ab-section__title">📄 Latest Publications</h2>
+  <div class="ab-section__bar"></div>
+</div>
+
 {% assign recent_pubs = site.publications | sort: "date" | reverse | slice: 0, 3 %}
 <ul class="home-pub-list">
   {% for pub in recent_pubs %}
@@ -199,70 +642,20 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
   {% endfor %}
 </ul>
 
-<p style="text-align: center;">
-  <a class="btn" style="font-size: 1.05rem; padding: 0.75rem 1.25rem;" href="/publications/">View all publications →</a>
+<p style="text-align:center;margin:0.5rem 0 2.5rem;">
+  <a class="ab-btn ab-btn--outline" href="/publications/">View all publications &rarr;</a>
 </p>
 
----
-## Latest LinkedIn Post
+
+<!-- ============================================================
+     LINKEDIN
+     ============================================================ -->
+<div class="ab-section">
+  <h2 class="ab-section__title">💼 Latest LinkedIn Post</h2>
+  <div class="ab-section__bar"></div>
+</div>
+
 {% assign latest_lp = site.data.linkedin_posts | first %}
-<style>
-  .home-linkedin-card {
-    border: 1px solid #c7d4f2;
-    border-radius: 14px;
-    padding: 1.1rem 1.3rem;
-    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
-    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
-    margin-bottom: 0.75rem;
-  }
-  .home-linkedin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.65rem;
-  }
-  .home-linkedin-title {
-    font-weight: 800;
-    font-size: 1.1rem;
-    margin: 0;
-  }
-  .home-linkedin-subtitle {
-    margin: 0.1rem 0 0;
-    font-size: 0.98rem;
-    font-weight: 600;
-    color: #123147;
-  }
-  .home-linkedin-meta {
-    margin-top: 0.15rem;
-  }
-  .home-linkedin-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.65rem 1rem;
-    background: linear-gradient(135deg, #0a66c2, #0f7ddf);
-    color: #fff;
-    border-radius: 999px;
-    text-decoration: none;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    box-shadow: 0 6px 16px rgba(10, 102, 194, 0.3);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  .home-linkedin-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 20px rgba(10, 102, 194, 0.35);
-  }
-  .home-linkedin-embed {
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #fff;
-  }
-</style>
 {% if latest_lp %}
   <div class="home-linkedin-card">
     <div class="home-linkedin-header">
@@ -272,7 +665,7 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
         {% if latest_lp.date or latest_lp.place %}
           <div class="page__meta home-linkedin-meta">
             {% if latest_lp.date %}{{ latest_lp.date }}{% endif %}
-            {% if latest_lp.date and latest_lp.place %} • {% endif %}
+            {% if latest_lp.date and latest_lp.place %} &middot; {% endif %}
             {% if latest_lp.place %}{{ latest_lp.place }}{% endif %}
           </div>
         {% endif %}
@@ -286,109 +679,69 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
     </div>
     {% if latest_lp.embed_url %}
       {% assign embed_height = latest_lp.height | default: '1300px' %}
-      <iframe class="home-linkedin-embed" src="{{ latest_lp.embed_url }}" style="height: {{ embed_height }};" height="{{ embed_height }}" frameborder="0" allowfullscreen title="{{ latest_lp.title | default: 'LinkedIn post' }}"></iframe>
+      <iframe class="home-linkedin-embed" src="{{ latest_lp.embed_url }}" style="height:{{ embed_height }};" height="{{ embed_height }}" frameborder="0" allowfullscreen title="{{ latest_lp.title | default: 'LinkedIn post' }}"></iframe>
     {% else %}
       <a href="{{ latest_lp.url }}" target="_blank" rel="noopener">{{ latest_lp.title | default: latest_lp.url }}</a>
     {% endif %}
   </div>
 {% else %}
-  <p>No blog posts yet.</p>
+  <p>No LinkedIn posts yet.</p>
 {% endif %}
 
-<p style="text-align: center; margin: 1rem 0;">
-  <a class="btn" style="font-size: 1.05rem; padding: 0.75rem 1.25rem;" href="/blog/">View all Blog Posts →</a>
+<p style="text-align:center;margin:1rem 0 2.5rem;">
+  <a class="ab-btn ab-btn--outline" href="/blog/">View all Blog Posts &rarr;</a>
 </p>
 
----
-<!-- ====================== -->
-<!--  At-a-glance Stats     -->
-<!-- ====================== -->
+
+<!-- ============================================================
+     GITHUB STATS
+     ============================================================ -->
+<div class="ab-section">
+  <h2 class="ab-section__title">🐙 GitHub Activity</h2>
+  <div class="ab-section__bar"></div>
+</div>
 
 {% assign gh = site.data.github %}
 
 <section id="gh-stats">
-  <style>
-    #gh-stats{margin:1.25rem 0}
-    #gh-stats .grid{display:grid;gap:1rem}
-    #gh-stats .grid.cols-4{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
-    #gh-stats .card{border:1px solid var(--mm-grey-300,#e6e6e6);border-radius:14px;background:var(--mm-bg,#fff);
-      box-shadow:0 1px 0 rgba(0,0,0,.04)}
-    #gh-stats .pad{padding:1rem}
-    #gh-stats h3{margin:.35rem 0 .75rem 0}
-    #gh-stats .stat{display:flex;align-items:baseline;gap:.5rem}
-    #gh-stats .num{font-size:2.1rem;font-weight:800;line-height:1}
-    #gh-stats .lab{opacity:.8}
-    /* chips */
-    #gh-stats .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
-    #gh-stats .chip{border:1px solid var(--mm-grey-300,#ddd);border-radius:999px;padding:.18rem .6rem;font-size:.8rem;text-decoration:none}
-    #gh-stats .chip:hover{border-color:currentColor;text-decoration:none}
-    /* repo grid */
-    #gh-stats .repos{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
-    #gh-stats .repo h4{margin:0 0 .4rem 0;font-size:1.05rem}
-    #gh-stats .repo p{margin:.2rem 0 .6rem 0}
-    #gh-stats .meta{display:flex;gap:.75rem;flex-wrap:wrap;opacity:.85}
-    /* languages */
-    #gh-stats .langs{display:flex;flex-direction:column;gap:.65rem}
-    #gh-stats .lang-row{display:flex;align-items:center;gap:.75rem}
-    #gh-stats .lang-name{min-width:120px;font-weight:600}
-    #gh-stats .lang-bar{flex:1;height:10px;border-radius:999px;background:var(--mm-grey-200,#e9ecf0);position:relative;overflow:hidden}
-    #gh-stats .lang-bar span{display:block;height:100%;background:#00bdb6;}
-    #gh-stats .lang-percent{min-width:40px;text-align:right;font-variant-numeric:tabular-nums}
-    /* heatmap */
-    #gh-stats .heatmap img{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--mm-grey-300,#e6e6e6)}
-    @media (prefers-color-scheme: dark){
-      #gh-stats .heatmap img{filter: invert(1) hue-rotate(180deg) contrast(1.1)}
-    }
-  </style>
 
-  <!-- KPI Cards -->
+  <!-- KPI row -->
   <div class="grid cols-4">
-    <div class="card">
+    <div class="card kpi-card">
       <div class="pad">
         <div class="lab">Total Stars</div>
         <div class="stat">
-          <div class="num">
-            {% if gh and gh.total_stars %}{{ gh.total_stars }}{% else %}—{% endif %}
-          </div>
+          <div class="num">{% if gh and gh.total_stars %}{{ gh.total_stars }}{% else %}—{% endif %}</div>
         </div>
       </div>
     </div>
-
-    <div class="card">
+    <div class="card kpi-card">
       <div class="pad">
         <div class="lab">Total Forks</div>
         <div class="stat">
-          <div class="num">
-            {% if gh and gh.total_forks %}{{ gh.total_forks }}{% else %}—{% endif %}
-          </div>
+          <div class="num">{% if gh and gh.total_forks %}{{ gh.total_forks }}{% else %}—{% endif %}</div>
         </div>
       </div>
     </div>
-
-    <div class="card">
+    <div class="card kpi-card">
       <div class="pad">
         <div class="lab">Public Repos</div>
         <div class="stat">
-          <div class="num">
-            {% if gh and gh.public_repos %}{{ gh.public_repos }}{% else %}—{% endif %}
-          </div>
+          <div class="num">{% if gh and gh.public_repos %}{{ gh.public_repos }}{% else %}—{% endif %}</div>
         </div>
       </div>
     </div>
-
-    <div class="card">
+    <div class="card kpi-card">
       <div class="pad">
         <div class="lab">Followers</div>
         <div class="stat">
-          <div class="num">
-            {% if gh and gh.followers %}{{ gh.followers }}{% else %}—{% endif %}
-          </div>
+          <div class="num">{% if gh and gh.followers %}{{ gh.followers }}{% else %}—{% endif %}</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Top Languages + Heatmap -->
+  <!-- Languages + Heatmap -->
   <div class="grid" style="margin-top:1rem">
     <div class="card">
       <div class="pad">
@@ -398,15 +751,15 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
             {% for lang in gh.top_languages %}
               <div class="lang-row">
                 <div class="lang-name">{{ lang.name }}</div>
-                <div class="lang-bar"><span style="width: {{ lang.percent }}%"></span></div>
+                <div class="lang-bar"><span style="width:{{ lang.percent }}%"></span></div>
                 <div class="lang-percent">{{ lang.percent }}%</div>
               </div>
             {% endfor %}
           </div>
         {% else %}
-          <div class="lab" style="margin-bottom:0">
+          <div class="lab">
             <a href="https://github.com/alessioborgi" target="_blank" rel="noopener">
-              <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=donut-vertical&hide_border=true&title_color=133844&text_color=133844&bg_color=f5f7fb&langs_count=8" alt="Top languages chart for alessioborgi" style="width:100%;max-width:420px;border-radius:8px;">
+              <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=donut-vertical&hide_border=true&title_color=133844&text_color=133844&bg_color=f5f7fb&langs_count=8" alt="Top languages" style="width:100%;max-width:420px;border-radius:8px;">
             </a>
           </div>
         {% endif %}
@@ -418,41 +771,37 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
         <h3>Contribution Heatmap</h3>
         <img id="gh-heatmap" alt="GitHub contribution heatmap"
              src="https://github-readme-activity-graph.vercel.app/graph?username=alessioborgi&hide_border=true&radius=8&area=true&theme=github-light"/>
-        <div class="lab" style="margin-top:.4rem">Source: GitHub contributions (last 1y)</div>
+        <div class="lab" style="margin-top:.45rem">Source: GitHub contributions (last 1 year)</div>
       </div>
     </div>
   </div>
-  
-  <!-- Popular Repositories -->
+
+  <!-- Popular Repos -->
   <div class="card" style="margin-top:1rem">
     <div class="pad">
       <h3>Popular Repositories <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
-      <p class="lab">
-        {% if gh and gh.popular_repos %}
-          <!-- if your action writes them -->
-          <div class="repos">
-            {% for repo in gh.popular_repos limit:12 %}
-              <div class="repo card">
-                <div class="pad">
-                  <h4><a href="{{ repo.html_url }}" target="_blank" rel="noopener">{{ repo.name }}</a></h4>
-                  <p>{{ repo.description }}</p>
-                  <div class="meta">
-                    <span>⭐ {{ repo.stars }}</span>
-                    <span>🍴 {{ repo.forks }}</span>
-                  </div>
+      {% if gh and gh.popular_repos %}
+        <div class="repos">
+          {% for repo in gh.popular_repos limit:12 %}
+            <div class="repo card">
+              <div class="pad">
+                <h4><a href="{{ repo.html_url }}" target="_blank" rel="noopener">{{ repo.name }}</a></h4>
+                <p>{{ repo.description }}</p>
+                <div class="meta">
+                  <span>⭐ {{ repo.stars }}</span>
+                  <span>🍴 {{ repo.forks }}</span>
                 </div>
               </div>
-            {% endfor %}
-          </div>
-        {% else %}
-          You can make the GitHub Action also dump a list of repos to <code>_data/github.json</code> and it will show here.
-        {% endif %}
-      </p>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="lab">Configure a GitHub Action to populate <code>_data/github.json</code> with repo data.</p>
+      {% endif %}
     </div>
   </div>
 
   <script>
-    // keep just the light/dark swap for the external SVG
     (function() {
       const heat = document.getElementById('gh-heatmap');
       if (!heat) return;
@@ -468,17 +817,7 @@ I’m a PhD student in **Graph Neural Networks and Generative AI**, under the su
 </section>
 
 
-<!-- ## A few things I’m exploring next
-<div class="chips">
-  <span class="chip">Equivariant Sheaf Diffusion</span>
-  <span class="chip">Protein/Graph Generation</span>
-  <span class="chip">Sheaf-aware EEG Pipelines</span>
-  <span class="chip">Robotics + GenAI bridges</span>
-  <span class="chip">Mechanistic interpretability for GNNs</span>
-</div>
-
---- -->
-<!-- Optional JSON-LD to strengthen SEO; harmless if jekyll-seo-tag is already present -->
+<!-- JSON-LD structured data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

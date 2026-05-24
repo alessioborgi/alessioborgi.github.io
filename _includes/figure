@@ -1,0 +1,22 @@
+{% if include.image_path %}
+  <figure class="{{ include.class }}">
+    {% if include.popup %}
+      <a href="{{ include.image_path | relative_url }}" title="{{ include.caption | markdownify | strip_html }}">
+        <img src="{{ include.image_path | relative_url }}"
+             alt="{% if include.alt %}{{ include.alt }}{% endif %}"
+             loading="lazy"
+             style="max-width:100%;height:auto;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+      </a>
+    {% else %}
+      <img src="{{ include.image_path | relative_url }}"
+           alt="{% if include.alt %}{{ include.alt }}{% endif %}"
+           loading="lazy"
+           style="max-width:100%;height:auto;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+    {% endif %}
+    {% if include.caption %}
+      <figcaption style="text-align:center;font-size:0.88rem;color:#555;margin-top:0.4rem;">
+        {{ include.caption | markdownify | remove: "<p>" | remove: "</p>" }}
+      </figcaption>
+    {% endif %}
+  </figure>
+{% endif %}
