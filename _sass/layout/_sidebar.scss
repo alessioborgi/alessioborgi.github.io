@@ -7,8 +7,37 @@
    ========================================================================== */
 
 .sidebar {
-  background: #fd8153 !important; /* Crest color */
-  border-right: 1px solid #f46f40;
+  background: #0d1340 !important; /* Deep cosmic indigo */
+  border-right: 1px solid #1e2a6a;
+
+  /* ── Light text on dark sidebar ── */
+  color: rgba(255,255,255,0.88) !important;
+
+  h2, h3, h4, h5, h6,
+  .author__name,
+  .author__bio,
+  .author__pronouns,
+  p, li, span {
+    color: rgba(255,255,255,0.88) !important;
+  }
+
+  a {
+    color: rgba(255,255,255,0.78) !important;
+    &:hover { color: #38c1b7 !important; text-decoration: none; }
+  }
+
+  /* Avatar ring */
+  .author__avatar img {
+    border-color: rgba(56,193,183,0.5) !important;
+  }
+
+  /* Follow button */
+  .btn--inverse {
+    background: rgba(56,193,183,0.15) !important;
+    color: #fff !important;
+    border: 1.5px solid rgba(56,193,183,0.45) !important;
+    &:hover { background: rgba(56,193,183,0.30) !important; }
+  }
   -webkit-transform: translate3d(0, 0 , 0);
           transform: translate3d(0, 0 , 0);
 

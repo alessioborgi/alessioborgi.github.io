@@ -30,35 +30,44 @@ redirect_from:
    HERO
    ============================================================ */
 .ab-hero {
-  background: linear-gradient(135deg, #0b1f28 0%, #133844 50%, #1a5f6e 100%);
+  background:
+    linear-gradient(135deg, rgba(10,14,30,0.93) 0%, rgba(13,19,64,0.82) 55%, rgba(13,19,64,0.60) 100%),
+    url('/images/WallPaper.jpg') center 20% / cover no-repeat;
   border-radius: 22px;
   padding: 3rem 2.8rem 3.2rem;
   margin-bottom: 2.5rem;
   position: relative;
   overflow: hidden;
   color: #fff;
-  box-shadow: var(--ab-shadow-lg);
+  box-shadow: var(--ab-shadow-lg), 0 0 0 1px rgba(56,193,183,0.18);
 }
 
-/* Decorative blobs */
-.ab-hero::before {
-  content: '';
-  position: absolute;
-  top: -80px; right: -80px;
-  width: 420px; height: 420px;
-  background: radial-gradient(circle, rgba(56,193,183,.22) 0%, transparent 65%);
-  pointer-events: none;
-}
-.ab-hero::after {
-  content: '';
-  position: absolute;
-  bottom: -90px; left: 25%;
-  width: 340px; height: 340px;
-  background: radial-gradient(circle, rgba(10,102,194,.14) 0%, transparent 65%);
-  pointer-events: none;
+.ab-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
 }
 
-.ab-hero__inner { position: relative; z-index: 1; }
+.ab-hero__content { flex: 1; min-width: 0; }
+
+.ab-hero__portrait {
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.ab-hero__portrait img {
+  width: 100%;
+  border-radius: 20px;
+  display: block;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.65), 0 0 0 2px rgba(56,193,183,0.45);
+}
+
+@media (max-width: 700px) {
+  .ab-hero__inner      { flex-direction: column-reverse; gap: 1.5rem; }
+  .ab-hero__portrait   { width: 140px; margin: 0 auto; }
+}
 
 .ab-hero__eyebrow {
   font-size: 0.75rem;
@@ -456,11 +465,11 @@ redirect_from:
    RESPONSIVE
    ============================================================ */
 @media (max-width: 640px) {
-  .ab-hero          { padding: 2rem 1.6rem 2.2rem; border-radius: 16px; }
-  .ab-hero__name    { font-size: 2rem; }
-  .ab-collab        { padding: 1.3rem 1.4rem; }
-  .ab-intro         { padding: 1.2rem 1.4rem; }
-  .ab-section       { margin: 2rem 0 1.2rem; }
+  .ab-hero        { padding: 2rem 1.6rem 2.2rem; border-radius: 16px; }
+  .ab-hero__name  { font-size: 2rem; }
+  .ab-collab      { padding: 1.3rem 1.4rem; }
+  .ab-intro       { padding: 1.2rem 1.4rem; }
+  .ab-section     { margin: 2rem 0 1.2rem; }
 }
 </style>
 
@@ -470,34 +479,39 @@ redirect_from:
      ============================================================ -->
 <div class="ab-hero">
   <div class="ab-hero__inner">
-    <div class="ab-hero__eyebrow">Welcome to my corner of the web</div>
-    <h1 class="ab-hero__name">Alessio Borgi</h1>
-    <p class="ab-hero__title">
-      PhD Researcher &middot; <strong>Graph Neural Networks</strong> &amp; Generative AI<br>
-      Sapienza University of Rome &nbsp;&middot;&nbsp; University of Cambridge
-    </p>
-    <div class="ab-hero__tags">
-      <span class="ab-hero__tag">Graph Neural Networks</span>
-      <span class="ab-hero__tag">Geometric Deep Learning</span>
-      <span class="ab-hero__tag">Topological Deep Learning</span>
-      <span class="ab-hero__tag">Diffusion Models</span>
-      <span class="ab-hero__tag">Robotics</span>
-      <span class="ab-hero__tag">Biomedical AI</span>
-      <span class="ab-hero__tag">Vision</span>
+    <div class="ab-hero__content">
+      <div class="ab-hero__eyebrow">Welcome to my corner of the web</div>
+      <h1 class="ab-hero__name">Alessio Borgi</h1>
+      <p class="ab-hero__title">
+        PhD Researcher &middot; <strong>Graph Neural Networks</strong> &amp; Generative AI<br>
+        Sapienza University of Rome &nbsp;&middot;&nbsp; University of Cambridge
+      </p>
+      <div class="ab-hero__tags">
+        <span class="ab-hero__tag">Graph Neural Networks</span>
+        <span class="ab-hero__tag">Geometric Deep Learning</span>
+        <span class="ab-hero__tag">Topological Deep Learning</span>
+        <span class="ab-hero__tag">Diffusion Models</span>
+        <span class="ab-hero__tag">Robotics</span>
+        <span class="ab-hero__tag">Biomedical AI</span>
+        <span class="ab-hero__tag">Vision</span>
+      </div>
+      <div class="ab-hero__ctas">
+        <a class="ab-btn ab-btn--teal" href="mailto:alessio.borgi@uniroma1.it">
+          <i class="fas fa-envelope" aria-hidden="true"></i> Email Me
+        </a>
+        <a class="ab-btn ab-btn--glass" href="/cv/">
+          <i class="fas fa-file-alt" aria-hidden="true"></i> View CV
+        </a>
+        <a class="ab-btn ab-btn--glass" href="https://github.com/alessioborgi" target="_blank" rel="noopener">
+          <i class="fab fa-github" aria-hidden="true"></i> GitHub
+        </a>
+        <a class="ab-btn ab-btn--glass" href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it" target="_blank" rel="noopener">
+          <i class="ai ai-google-scholar" aria-hidden="true"></i> Scholar
+        </a>
+      </div>
     </div>
-    <div class="ab-hero__ctas">
-      <a class="ab-btn ab-btn--teal" href="mailto:alessio.borgi@uniroma1.it">
-        <i class="fas fa-envelope" aria-hidden="true"></i> Email Me
-      </a>
-      <a class="ab-btn ab-btn--glass" href="/cv/">
-        <i class="fas fa-file-alt" aria-hidden="true"></i> View CV
-      </a>
-      <a class="ab-btn ab-btn--glass" href="https://github.com/alessioborgi" target="_blank" rel="noopener">
-        <i class="fab fa-github" aria-hidden="true"></i> GitHub
-      </a>
-      <a class="ab-btn ab-btn--glass" href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it" target="_blank" rel="noopener">
-        <i class="ai ai-google-scholar" aria-hidden="true"></i> Scholar
-      </a>
+    <div class="ab-hero__portrait">
+      <img src="/images/Alessio_Wizard.png" alt="Alessio Borgi — AI Researcher" />
     </div>
   </div>
 </div>

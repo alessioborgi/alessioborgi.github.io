@@ -42,8 +42,8 @@
     "vendor/font-awesome/brands"
 ;
 
-/* Custom accents for masthead and sidebar */
-$cambridge-dark-blue: #133844;
+/* ── Color system ── */
+$cosmic-indigo: #0d1340;
 
 :root {
   --global-masthead-link-color: #e6f5ff;
@@ -54,27 +54,27 @@ body {
   background: #f5f7fb;
 }
 
+/* ── Masthead ── */
 .masthead {
-  background: $cambridge-dark-blue;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  background: $cosmic-indigo;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 
   .masthead__inner-wrap {
-    background: $cambridge-dark-blue;
+    background: $cosmic-indigo;
     max-width: 100%;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
 
-  /* Keep the navigation bar on Cambridge Dark Blue rather than falling back to white */
   #site-nav,
   #site-nav.greedy-nav,
   .greedy-nav,
   .masthead__menu {
-    background: $cambridge-dark-blue;
+    background: $cosmic-indigo;
   }
 
   &::after {
-    background: rgba(255, 255, 255, 0.16);
+    background: rgba(56, 193, 183, 0.20);
   }
 
   .masthead__menu-item {
@@ -82,10 +82,9 @@ body {
   }
 }
 
+/* ── Sidebar ── */
 .sidebar {
-  background: #fd8153 !important; /* Crest Pantone 2026 */
-  border-right: 1px solid #f46f40;
-  box-shadow: 8px 0 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 8px 0 28px rgba(0, 0, 0, 0.28);
   padding-left: 18px;
   padding-right: 14px;
 

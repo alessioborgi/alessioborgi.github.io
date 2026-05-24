@@ -37,6 +37,8 @@
 main:
   - title: "Home"
     url: "/"
+  - title: "ML Blog"
+    url: "/ml-blog/"
   - title: "CV"
     url: "/cv/"
   - title: "Publications"
@@ -47,5 +49,3 @@ main:
     url: "/projects/"
   - title: "Personal Blog"
     url: "/blog/"
-  - title: "ML Blog"
-    url: "/ml-blog/"
