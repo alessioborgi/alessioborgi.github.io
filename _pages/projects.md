@@ -17,20 +17,26 @@ author_profile: true
     border-radius: 14px;
     padding: 1.5rem;
     box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
-    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%); /* match Tohoku/tesp card */
+    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+    position: relative;
   }
   .project-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+    display: block;
   }
   .project-header h2 {
-    margin: 0;
+    margin: 0 0 0.6rem;
     font-size: 1.3rem;
+    padding-right: 240px; /* keep title clear of the pinned buttons */
   }
-  .project-links { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .project-links {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
   .project-pill {
     display: inline-flex;
     align-items: center;

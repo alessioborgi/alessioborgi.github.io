@@ -141,15 +141,16 @@ author_profile: true
   Welcome to my research blog — structured like a <strong>library of books</strong>. Each book covers a major AI topic; every chapter is a short, self-contained post you can read in 3–5 minutes. Start with the <em>Start Here</em> overview of any book, then dive into whichever chapters interest you most.
 </p>
 
-{% assign transformer_posts = site.posts | where: "book", "transformers" | sort: "date" %}
-{% assign gnn_posts         = site.posts | where: "book", "gnn"          | sort: "date" %}
-{% assign sheaf_posts       = site.posts | where: "book", "sheaf"        | sort: "date" %}
+{% assign transformer_posts = site.posts | where: "book", "transformers"         | sort: "date" %}
+{% assign gnn_posts         = site.posts | where: "book", "gnn"                  | sort: "date" %}
+{% assign sheaf_posts       = site.posts | where: "book", "sheaf"                | sort: "date" %}
+{% assign ph_posts          = site.posts | where: "book", "persistent-homology"  | sort: "date" %}
 
 {% assign t_overview  = transformer_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
 {% assign t_pe        = transformer_posts | where: "subsection", "positional-encodings" %}
 {% assign t_variants  = transformer_posts | where: "subsection", "variants" %}
-{% assign t_vision = transformer_posts | where: "subsection", "vision" %}
+{% assign t_vision    = transformer_posts | where: "subsection", "vision" %}
 
 {% assign g_overview      = gnn_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign g_fund          = gnn_posts | where: "subsection", "fundamentals" %}
@@ -160,7 +161,6 @@ author_profile: true
 {% assign g_heterogeneous = gnn_posts | where: "subsection", "heterogeneous" %}
 {% assign g_dynamic       = gnn_posts | where: "subsection", "dynamic" %}
 {% assign g_geometric     = gnn_posts | where: "subsection", "geometric" %}
-{% assign g_sheaf         = gnn_posts | where: "subsection", "sheaf" %}
 {% assign g_applications  = gnn_posts | where: "subsection", "applications" %}
 
 {% assign s_overview      = sheaf_posts | where_exp: "p", "p.is_overview" | first %}
@@ -169,6 +169,13 @@ author_profile: true
 {% assign s_theory        = sheaf_posts | where: "subsection", "theory" %}
 {% assign s_extensions    = sheaf_posts | where: "subsection", "extensions" %}
 {% assign s_applications  = sheaf_posts | where: "subsection", "applications" %}
+
+{% assign ph_overview     = ph_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign ph_foundations  = ph_posts | where: "subsection", "foundations" %}
+{% assign ph_core         = ph_posts | where: "subsection", "core" %}
+{% assign ph_computation  = ph_posts | where: "subsection", "computation" %}
+{% assign ph_ml           = ph_posts | where: "subsection", "ml-integration" %}
+{% assign ph_applications = ph_posts | where: "subsection", "applications" %}
 
 
 <!-- ════════════════════════════════════════════════════════ -->
@@ -429,23 +436,6 @@ author_profile: true
     </div>
     {% endif %}
 
-    {% if g_sheaf.size > 0 %}
-    <div class="subsection-label">🔭 Sheaf Neural Networks</div>
-    <div class="chapters-grid">
-      {% for post in g_sheaf %}
-        <a class="chapter-card" href="{{ post.url | relative_url }}">
-          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
-          <h4>{{ post.title }}</h4>
-          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
-          <div class="ch-meta">
-            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
-            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
-          </div>
-        </a>
-      {% endfor %}
-    </div>
-    {% endif %}
-
     {% if g_applications.size > 0 %}
     <div class="subsection-label">🚀 Applications</div>
     <div class="chapters-grid">
@@ -474,7 +464,7 @@ author_profile: true
     <span class="book-icon">🌿</span>
     <div>
       <h2>Book III — Sheaf Neural Networks</h2>
-      <p>From cellular sheaf theory to neural diffusion, attention, and topological deep learning</p>
+      <p>From cellular sheaf theory to neural diffusion and attention</p>
     </div>
   </div>
   <div class="book-body">
@@ -563,6 +553,122 @@ author_profile: true
     <div class="subsection-label">🚀 Applications & Open Problems</div>
     <div class="chapters-grid">
       {% for post in s_applications %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  BOOK IV · PERSISTENT HOMOLOGY                           -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book">
+  <div class="book-banner">
+    <span class="book-icon">🔁</span>
+    <div>
+      <h2>Book IV — Persistent Homology</h2>
+      <p>From simplicial complexes and homology groups to barcodes, stability, and TDA for machine learning</p>
+    </div>
+  </div>
+  <div class="book-body">
+
+    {% if ph_overview %}
+    <a class="blog-overview-card" href="{{ ph_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ ph_overview.title }}</h3>
+      <p>{{ ph_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 5 min read</span>
+        <span>The complete picture in one post</span>
+      </div>
+    </a>
+    {% endif %}
+
+    {% if ph_foundations.size > 0 %}
+    <div class="subsection-label">🧱 Mathematical Foundations</div>
+    <div class="chapters-grid">
+      {% for post in ph_foundations %}
+        {% unless post.is_overview %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+        {% endunless %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if ph_core.size > 0 %}
+    <div class="subsection-label">🔁 Persistent Homology Core</div>
+    <div class="chapters-grid">
+      {% for post in ph_core %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if ph_computation.size > 0 %}
+    <div class="subsection-label">🧮 Computational Methods</div>
+    <div class="chapters-grid">
+      {% for post in ph_computation %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if ph_ml.size > 0 %}
+    <div class="subsection-label">🤖 Machine Learning Integration</div>
+    <div class="chapters-grid">
+      {% for post in ph_ml %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if ph_applications.size > 0 %}
+    <div class="subsection-label">🚀 Applications & Open Problems</div>
+    <div class="chapters-grid">
+      {% for post in ph_applications %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
           <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
           <h4>{{ post.title }}</h4>
