@@ -8,101 +8,151 @@ author_profile: true
 {% include base_path %}
 
 <style>
+  /* ── Project page design tokens ── */
+  :root {
+    --prj-navy:   #0d1340;
+    --prj-teal:   #38c1b7;
+    --prj-blue:   #0a66c2;
+    --prj-border: rgba(56,193,183,0.20);
+    --prj-shadow: 0 6px 28px rgba(13,19,64,0.28);
+  }
+
+  /* ── Grid ── */
   .projects-grid {
     display: grid;
-    gap: 1.25rem;
+    gap: 1.4rem;
   }
+
+  /* ── Dark cosmic card ── */
   .project-card {
-    border: 1px solid #c7d4f2;
-    border-radius: 14px;
-    padding: 1.5rem;
-    box-shadow: 0 6px 16px rgba(19, 56, 68, 0.1);
-    background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
+    background: linear-gradient(135deg, #0d1340 0%, #151e55 100%);
+    border: 1px solid var(--prj-border);
+    border-radius: 16px;
+    padding: 1.5rem 1.6rem;
+    box-shadow: var(--prj-shadow);
     position: relative;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+    overflow: hidden;
   }
+  .project-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at 0% 0%, rgba(56,193,183,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .project-card:hover {
+    box-shadow: 0 12px 40px rgba(56,193,183,0.18), 0 4px 16px rgba(13,19,64,0.4);
+    transform: translateY(-2px);
+    border-color: rgba(56,193,183,0.45);
+  }
+
+  /* ── Card header row ── */
   .project-header {
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.7rem;
   }
   .project-header h2 {
-    margin: 0 0 0.6rem;
-    font-size: 1.3rem;
-    padding-right: 240px; /* keep title clear of the pinned buttons */
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    flex: 1;
   }
+  .project-header h2 a {
+    color: #e2e8f0;
+    text-decoration: none;
+  }
+  .project-header h2 a:hover { color: var(--prj-teal); }
+
+  /* ── Link pills ── */
   .project-links {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
+    flex-shrink: 0;
     flex-wrap: nowrap;
   }
   .project-pill {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.35rem 0.65rem;
+    padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    border: 1px solid #d1d5db;
-    background: #f9fafb;
+    border: 1px solid rgba(56,193,183,0.35);
+    background: rgba(56,193,183,0.10);
     text-decoration: none;
-    color: #111827;
+    color: var(--prj-teal) !important;
+    font-size: 0.82rem;
     font-weight: 700;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .project-pill:hover {
+    background: rgba(56,193,183,0.20);
+    border-color: rgba(56,193,183,0.6);
   }
   .project-pill img {
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
+    filter: brightness(0) saturate(100%) invert(72%) sepia(51%) saturate(477%) hue-rotate(140deg) brightness(97%) contrast(90%);
   }
-  .project-excerpt {
-    margin: 0.6rem 0 0.9rem;
-    color: #1f2a36;
-    line-height: 1.55;
-  }
+
+  /* ── Body text ── */
+  .project-excerpt,
   .project-lead {
-    margin: 0.35rem 0 0.75rem;
-    font-size: 1.05rem;
+    margin: 0.5rem 0 0.8rem;
+    font-size: 0.97rem;
     line-height: 1.6;
-    color: #24313f;
+    color: rgba(200,215,235,0.88);
   }
+
+  /* ── Detail bullet list ── */
   .project-details {
-    margin: 0 0 1rem 1.1rem;
+    margin: 0.3rem 0 0.9rem 1.1rem;
     padding: 0;
-    color: #2f3b4a;
-    font-size: 1.02rem;
-    line-height: 1.6;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: rgba(180,200,225,0.85);
   }
-  .project-details li { margin-bottom: 0.4rem; }
-  .project-details strong { font-weight: 700; }
+  .project-details li { margin-bottom: 0.35rem; }
+  .project-details strong { color: #e2e8f0; font-weight: 700; }
+
+  /* ── Tech tags ── */
   .project-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
-    margin: 0.25rem 0 0.85rem;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
   }
   .project-tag {
-    background: #e0f2ff;
-    border: 1px solid #bcdfff;
-    color: #0f4673;
+    background: rgba(10,102,194,0.18);
+    border: 1px solid rgba(10,102,194,0.35);
+    color: #93c5fd;
     border-radius: 999px;
-    padding: 0.3rem 0.7rem;
-    font-size: 0.85rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.82rem;
     font-weight: 600;
   }
-  /* rotate palette like the Tohoku/tesp pills */
   .project-tag:nth-child(3n+2) {
-    background: #e4f9ef;
-    border-color: #c4eedc;
-    color: #1b6b3a;
+    background: rgba(56,193,183,0.14);
+    border-color: rgba(56,193,183,0.32);
+    color: #5eead4;
   }
   .project-tag:nth-child(3n) {
-    background: #fff4e5;
-    border-color: #ffe4c7;
-    color: #8a5300;
+    background: rgba(124,58,237,0.15);
+    border-color: rgba(124,58,237,0.32);
+    color: #c4b5fd;
   }
+
   .project-actions {
     display: flex;
     gap: 0.65rem;
     flex-wrap: wrap;
+    margin-top: 0.5rem;
   }
 </style>
 
