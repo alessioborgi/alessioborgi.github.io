@@ -1,0 +1,147 @@
+{
+  "username": "alessioborgi",
+  "total_stars": 49,
+  "total_forks": 13,
+  "public_repos": 29,
+  "followers": 16,
+  "top_languages": [
+    {
+      "name": "Jupyter Notebook",
+      "bytes": 610065129,
+      "percent": 95.1
+    },
+    {
+      "name": "Python",
+      "bytes": 28304629,
+      "percent": 4.4
+    },
+    {
+      "name": "Go",
+      "bytes": 369119,
+      "percent": 0.1
+    },
+    {
+      "name": "MATLAB",
+      "bytes": 354604,
+      "percent": 0.1
+    },
+    {
+      "name": "Vue",
+      "bytes": 328794,
+      "percent": 0.1
+    },
+    {
+      "name": "Mathematica",
+      "bytes": 293236,
+      "percent": 0.0
+    },
+    {
+      "name": "C++",
+      "bytes": 290351,
+      "percent": 0.0
+    },
+    {
+      "name": "Cython",
+      "bytes": 228560,
+      "percent": 0.0
+    }
+  ],
+  "popular_repos": [
+    {
+      "name": "AMR_CleaningRobot",
+      "html_url": "https://github.com/alessioborgi/AMR_CleaningRobot",
+      "description": "Simulation of a Cleaning Robot with the capability of performing SLAM of the environment the robot is navigating, Planning Trajectories to calculate optimal paths considering static and dynamic obstacles, and Dynamic Obstacle Avoidance to detect and navigate around obstacles.",
+      "stars": 16,
+      "forks": 1,
+      "language": "C++"
+    },
+    {
+      "name": "BioHeat-PINNs",
+      "html_url": "https://github.com/alessioborgi/BioHeat-PINNs",
+      "description": " Improving hyperthermia treatment by controlling temperature distribution in both 1D and 2D domains and thermal energy applied to cutaneous and subcutaneous tissues, through Bio-Heat equation with Physics-Informed Neural Networks (PINNs).",
+      "stars": 7,
+      "forks": 1,
+      "language": "Mathematica"
+    },
+    {
+      "name": "RealTime-VLM",
+      "html_url": "https://github.com/alessioborgi/RealTime-VLM",
+      "description": "RealTime-VLM brings real-time VLM inference to the browser. It continuously captures webcam frames, sends image+text to an OpenAI-compatible API, and displays responses with sub-second latency. Works with local or hosted VLMs.",
+      "stars": 5,
+      "forks": 0,
+      "language": "JavaScript"
+    },
+    {
+      "name": "RoboMAT",
+      "html_url": "https://github.com/alessioborgi/RoboMAT",
+      "description": "A comprehensive MATLAB library for solving a wide range of robotics tasks, providing tools and functions for robotic simulations, control systems, kinematics, and path planning.",
+      "stars": 5,
+      "forks": 0,
+      "language": "MATLAB"
+    },
+    {
+      "name": "MoonBot-Navigation",
+      "html_url": "https://github.com/alessioborgi/MoonBot-Navigation",
+      "description": "Autonomous robot for lunar navigation and object interaction, developed during TESP '25 at the Space Robotics Lab (Tohoku University). Features custom robot design, Dijkstra-based path planning, object detection with vision, and gripper control.",
+      "stars": 4,
+      "forks": 0,
+      "language": "C++"
+    },
+    {
+      "name": "Z-SASLM",
+      "html_url": "https://github.com/alessioborgi/Z-SASLM",
+      "description": "[CVPR 2025]  Z-SASLM is a zero-shot framework for multi-style image synthesis leveraging Spherical Linear Interpolation (SLI) to achieve smooth, coherent blending\u2014without any fine-tuning.",
+      "stars": 2,
+      "forks": 0,
+      "language": "Jupyter Notebook"
+    },
+    {
+      "name": "AdaViT",
+      "html_url": "https://github.com/alessioborgi/AdaViT",
+      "description": "Adaptive Vision Transformer for efficient image classification, implementing dynamic token sparsification to reduce computational costs while maintaining accuracy.",
+      "stars": 2,
+      "forks": 1,
+      "language": "Python"
+    },
+    {
+      "name": "Z-SAMB_StyleAligned_MultiReference-MultiModal",
+      "html_url": "https://github.com/alessioborgi/Z-SAMB_StyleAligned_MultiReference-MultiModal",
+      "description": "Novel framework for Zero-Shot Style Alignment in Text-to-Image generation, incorporating Multi-Modal Context-Awareness and Multi-Reference Style Alignment, using minimal attention sharing, ensuring consistent style transfer without fine-tuning.",
+      "stars": 2,
+      "forks": 0,
+      "language": "Jupyter Notebook"
+    },
+    {
+      "name": "XGNN-GraphGenRL",
+      "html_url": "https://github.com/alessioborgi/XGNN-GraphGenRL",
+      "description": " Explainable Graph Neural Networks (XGNNs) and Reinforcement Learning (RL) techniques for graph generation and optimization tasks. The project aims to explore and validate the use of explainable AI for creating interpretable graph structures.",
+      "stars": 1,
+      "forks": 1,
+      "language": "Jupyter Notebook"
+    },
+    {
+      "name": "SkinMe",
+      "html_url": "https://github.com/alessioborgi/SkinMe",
+      "description": "A deep learning-based application for skin disease detection and classification. ",
+      "stars": 1,
+      "forks": 2,
+      "language": "Jupyter Notebook"
+    },
+    {
+      "name": "ALPR-Automatic-License-Plate-Recognition",
+      "html_url": "https://github.com/alessioborgi/ALPR-Automatic-License-Plate-Recognition",
+      "description": "A comprehensive system for detecting and recognizing license plates in real-time, combining image processing, object detection, and optical character recognition (OCR) to provide an accurate and efficient solution for automatic license plate recognition, with also double GUI, both for the Security Manager and for the Car User.",
+      "stars": 1,
+      "forks": 2,
+      "language": "Python"
+    },
+    {
+      "name": "Clustering-Deepening",
+      "html_url": "https://github.com/alessioborgi/Clustering-Deepening",
+      "description": "An in-depth exploration of clustering algorithms and techniques in machine learning, with applications focus on Object Tracking and Image Segmentation.",
+      "stars": 1,
+      "forks": 1,
+      "language": "Jupyter Notebook"
+    }
+  ]
+}
