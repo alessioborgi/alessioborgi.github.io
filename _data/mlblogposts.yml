@@ -1,0 +1,304 @@
+# ════════════════════════════════════════════════════════════════════════════
+# ML BLOG POSTS HANDLER
+# ════════════════════════════════════════════════════════════════════════════
+# One entry per post. Set published to "online" to show the post,
+# or "offline" to hide it from all listings (add `published: false` in the
+# post's own frontmatter too for Jekyll to skip building it entirely).
+#
+# Structure:  book → section → posts (one line each)
+# ════════════════════════════════════════════════════════════════════════════
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# BOOK I — TRANSFORMERS
+# ────────────────────────────────────────────────────────────────────────────
+transformers:
+  label: "Book I: Transformers"
+  icon:  "🤖"
+  color: "#4f46e5"
+
+  overview:
+    - { slug: "2024-01-01-transformers-overview", title: "Transformers: The Architecture That Changed AI", published: online }
+
+  sections:
+
+    core:
+      label: "Core Components"
+      posts:
+        - { slug: "2024-01-02-attention-mechanism",           title: "Self-Attention: Teaching Machines to Focus",                    published: online }
+        - { slug: "2024-01-03-multi-head-attention",          title: "Multi-Head Attention: Many Eyes on the Data",                   published: online }
+        - { slug: "2024-03-01-scaled-dot-product-attention",  title: "Scaled Dot-Product Attention: Why the √d Matters",             published: online }
+        - { slug: "2024-03-02-qkv-intuition",                 title: "Query, Key, Value: The Intuition Behind QKV",                   published: online }
+        - { slug: "2024-03-03-attention-masks",               title: "Attention Masks: Causal, Padding, and Bidirectional",           published: online }
+        - { slug: "2024-03-04-cross-attention",               title: "Cross-Attention: How Models Attend to Another Sequence",        published: online }
+        - { slug: "2024-03-05-encoder-decoder-transformers",  title: "Encoder vs Decoder vs Encoder-Decoder Transformers",           published: online }
+        - { slug: "2024-03-06-layer-normalization",           title: "Layer Normalization in Transformers",                           published: online }
+        - { slug: "2024-03-07-residual-connections",          title: "Residual Connections: Why Transformers Can Be Deep",            published: online }
+        - { slug: "2024-03-08-feed-forward-networks",         title: "Feed-Forward Networks: The Forgotten Half of Transformers",     published: online }
+        - { slug: "2024-03-09-transformer-block",             title: "The Transformer Block: Putting It All Together",                published: online }
+
+    positional-encodings:
+      label: "Positional Encodings"
+      posts:
+        - { slug: "2024-01-04-positional-encodings",  title: "Positional Encodings: Why Position Matters",                  published: online }
+        - { slug: "2024-01-05-pe-sinusoidal",         title: "Sinusoidal Positional Encodings: The Original Solution",       published: online }
+        - { slug: "2024-01-06-pe-learned",            title: "Learned Positional Encodings: Data-Driven Position",          published: online }
+        - { slug: "2024-01-07-pe-relative",           title: "Relative Positional Encodings: It's All About Distance",      published: online }
+        - { slug: "2024-01-08-pe-rope",               title: "RoPE: Rotary Position Embeddings",                            published: online }
+        - { slug: "2024-01-09-pe-alibi",              title: "ALiBi: Attention with Linear Biases",                         published: online }
+        - { slug: "2024-03-10-ntk-scaling",           title: "NTK-Aware Scaling: Extending Context Without Fine-Tuning",    published: online }
+        - { slug: "2024-03-11-yarn",                  title: "YaRN: Yet Another RoPE Extension Method",                     published: online }
+        - { slug: "2024-03-12-longrope",              title: "LongRoPE: Extending Context to 2 Million Tokens",             published: online }
+
+    vision:
+      label: "Vision Transformers"
+      posts:
+        - { slug: "2024-03-13-patch-embeddings",       title: "Patch Embeddings: How Images Become Tokens",                       published: online }
+        - { slug: "2024-03-14-cls-token-vs-pooling",   title: "Class Token vs Pooling in Vision Transformers",                    published: online }
+        - { slug: "2024-03-15-deit",                   title: "DeiT: Training ViTs Efficiently Without Large Datasets",           published: online }
+        - { slug: "2024-03-16-mae",                    title: "MAE: Masked Autoencoders Are Scalable Vision Learners",            published: online }
+        - { slug: "2024-03-17-clip",                   title: "CLIP: Connecting Images and Text with Contrastive Learning",       published: online }
+        - { slug: "2024-03-18-flamingo-blip-vlms",     title: "Flamingo, BLIP, and the Rise of Vision-Language Models",          published: online }
+
+    variants:
+      label: "Architecture Variants"
+      posts:
+        - { slug: "2024-01-10-bert",               title: "BERT: Bidirectional Transformers for Language Understanding",    published: online }
+        - { slug: "2024-01-11-gpt",                title: "GPT: Autoregressive Language Modelling at Scale",               published: online }
+        - { slug: "2024-01-12-t5",                 title: "T5: Every NLP Task as Text-to-Text",                            published: online }
+        - { slug: "2024-01-13-vit",                title: "ViT: Vision Transformer — Images as Sequences of Patches",      published: online }
+        - { slug: "2024-01-14-swin-transformer",   title: "Swin Transformer: Hierarchical Vision with Shifted Windows",    published: online }
+        - { slug: "2024-01-15-looped-transformers", title: "Looped Transformers: Thinking More with the Same Weights",     published: online }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# BOOK II — GRAPH NEURAL NETWORKS
+# ────────────────────────────────────────────────────────────────────────────
+gnn:
+  label: "Book II: Graph Neural Networks"
+  icon:  "🕸️"
+  color: "#0d9488"
+
+  overview:
+    - { slug: "2024-02-01-gnn-overview", title: "Graph Neural Networks: Learning on Graphs", published: online }
+
+  sections:
+
+    fundamentals:
+      label: "Graph Fundamentals"
+      posts:
+        - { slug: "2024-02-02-adjacency-matrix",           title: "The Graph Adjacency Matrix: A Graph in Matrix Form",                       published: online }
+        - { slug: "2024-02-03-graph-laplacian",            title: "The Graph Laplacian: Spectral Graph Theory Explained Simply",              published: online }
+        - { slug: "2024-04-01-what-is-a-graph",            title: "What Is a Graph? Nodes, Edges, Features, and Labels",                     published: online }
+        - { slug: "2024-04-02-graph-types",                title: "Directed, Undirected, Weighted, and Heterogeneous Graphs",                 published: online }
+        - { slug: "2024-04-03-homophily-heterophily",      title: "Homophily vs Heterophily: When Neighbours Are Similar or Different",      published: online }
+        - { slug: "2024-04-04-graph-tasks",                title: "Graph Tasks: Node, Edge, and Graph-Level Prediction",                      published: online }
+        - { slug: "2024-04-05-graph-fourier-transform",    title: "Graph Fourier Transform: The Spectral View of Graphs",                    published: online }
+
+    architectures:
+      label: "Core Architectures"
+      posts:
+        - { slug: "2024-02-04-message-passing",     title: "Message Passing: The Universal GNN Framework",                         published: online }
+        - { slug: "2024-02-05-gcn",                 title: "GCN: Graph Convolutional Networks",                                    published: online }
+        - { slug: "2024-02-06-gat",                 title: "GAT: Graph Attention Networks",                                        published: online }
+        - { slug: "2024-02-07-graphsage",           title: "GraphSAGE: Inductive Learning on Large Graphs",                       published: online }
+        - { slug: "2024-02-08-gin",                 title: "GIN: Graph Isomorphism Network — The Most Expressive GNN",            published: online }
+        - { slug: "2024-04-06-chebnet",             title: "ChebNet: Spectral Graph Convolutions via Chebyshev Polynomials",      published: online }
+        - { slug: "2024-04-07-sgc",                 title: "SGC: Simple Graph Convolution",                                        published: online }
+        - { slug: "2024-04-08-appnp",               title: "APPNP: Personalized PageRank Meets Graph Neural Networks",            published: online }
+        - { slug: "2024-04-09-graph-transformers",  title: "Graph Transformers: Bringing Attention to Graphs",                    published: online }
+        - { slug: "2024-04-10-graphormer",          title: "Graphormer: Transformers with Structural Biases for Graphs",          published: online }
+        - { slug: "2024-04-11-mpnn",                title: "MPNN: The General Message Passing Neural Network Framework",          published: online }
+
+    expressivity:
+      label: "Expressivity & Limitations"
+      posts:
+        - { slug: "2024-04-12-wl-test",                          title: "The Weisfeiler-Lehman Test: How Powerful Are GNNs?",                         published: online }
+        - { slug: "2024-04-13-oversmoothing",                    title: "Oversmoothing: When All Node Embeddings Become the Same",                    published: online }
+        - { slug: "2024-04-14-oversquashing",                    title: "Oversquashing: When Too Much Information Passes Through Bottlenecks",        published: online }
+        - { slug: "2024-04-15-oversmoothing-vs-oversquashing",   title: "Over-smoothing vs Over-squashing: The Difference",                           published: online }
+        - { slug: "2024-04-16-gnn-depth",                        title: "Depth in GNNs: Why Deeper Is Not Always Better",                             published: online }
+        - { slug: "2024-04-16b-why-graphs-fool-gnns",            title: "Why Some Graphs Fool GNNs: The Structural Indistinguishability Problem",     published: online }
+
+    graph-pe:
+      label: "Graph Positional Encodings"
+      posts:
+        - { slug: "2024-04-17-why-gnns-need-pe",             title: "Why GNNs Need Positional Encodings",                          published: online }
+        - { slug: "2024-04-18-laplacian-pe",                 title: "Laplacian Eigenvectors as Graph Positional Encodings",        published: online }
+        - { slug: "2024-04-19-rwpe",                         title: "Random Walk Positional Encodings",                            published: online }
+        - { slug: "2024-04-20-shortest-path-encodings",      title: "Shortest-Path Encodings for Graph Transformers",              published: online }
+        - { slug: "2024-04-21-structural-vs-positional-pe",  title: "Structural vs Positional Encodings in Graphs",               published: online }
+        - { slug: "2024-04-22-sign-ambiguity-lape",          title: "Sign Ambiguity in Laplacian Eigenvectors",                   published: online }
+
+    pooling:
+      label: "Graph Pooling & Readout"
+      posts:
+        - { slug: "2024-04-23-global-pooling",          title: "Global Pooling in GNNs: Mean, Sum, and Max",                         published: online }
+        - { slug: "2024-04-24-diffpool",                title: "DiffPool: Learning Hierarchical Graph Pooling",                      published: online }
+        - { slug: "2024-04-25-topkpool-sagpool",        title: "TopKPool and SAGPool: Sparse Graph Pooling",                         published: online }
+        - { slug: "2024-04-26-set2set-attention-readout", title: "Set2Set and Attention Readout: Order-Invariant Graph Summaries",   published: online }
+        - { slug: "2024-04-27-graph-classification",    title: "Graph Classification: From Node Embeddings to Graph Embeddings",     published: online }
+
+    heterogeneous:
+      label: "Heterogeneous Graphs"
+      posts:
+        - { slug: "2024-04-28-heterogeneous-graphs",      title: "Heterogeneous Graphs: When Nodes and Edges Have Types",          published: online }
+        - { slug: "2024-04-29-rgcn",                      title: "R-GCN: Relational Graph Convolutional Networks",                 published: online }
+        - { slug: "2024-04-30-han",                       title: "HAN: Heterogeneous Graph Attention Networks",                    published: online }
+        - { slug: "2024-05-01-kg-embeddings-vs-gnns",     title: "Knowledge Graph Embeddings vs GNNs",                            published: online }
+        - { slug: "2024-05-02-temporal-knowledge-graphs", title: "Temporal Knowledge Graphs: Facts That Change Over Time",        published: online }
+
+    dynamic:
+      label: "Dynamic Graphs"
+      posts:
+        - { slug: "2024-05-03-static-vs-dynamic-graphs", title: "Static vs Dynamic Graphs: When Structure Changes Over Time",   published: online }
+        - { slug: "2024-05-04-temporal-graph-networks",  title: "Temporal Graph Networks: Learning from Events",                published: online }
+        - { slug: "2024-05-05-graph-neural-odes",        title: "Graph Neural ODEs: Continuous-Time Graph Dynamics",           published: online }
+        - { slug: "2024-05-06-spatio-temporal-gnns",     title: "Spatio-Temporal GNNs: Learning on Graphs Through Time",       published: online }
+
+    geometric:
+      label: "Geometric Deep Learning"
+      posts:
+        - { slug: "2024-05-07-why-geometry-matters-gnns", title: "Why Geometry Matters in Graph Neural Networks",              published: online }
+        - { slug: "2024-05-08-equivariance",               title: "Equivariance: What It Means and Why It Matters",            published: online }
+        - { slug: "2024-05-09-egnn",                       title: "EGNN: E(n)-Equivariant Graph Neural Networks",              published: online }
+        - { slug: "2024-05-10-se3-transformers",           title: "SE(3)-Transformers: Attention with 3D Symmetry",            published: online }
+        - { slug: "2024-05-11-tensor-field-networks",      title: "Tensor Field Networks and Geometric Deep Learning",         published: online }
+        - { slug: "2024-05-12-molecular-gnns",             title: "Molecular GNNs: Learning on Atoms and Bonds",               published: online }
+
+    sheaf:
+      label: "Sheaf Neural Networks"
+      posts:
+        - { slug: "2024-05-13-why-message-passing-not-enough", title: "Why Message Passing Is Not Enough: The Case for Sheaves", published: online }
+        - { slug: "2024-05-14-what-is-a-sheaf",                title: "What Is a Sheaf? From Topology to Graph Learning",        published: online }
+        - { slug: "2024-05-15-sheaf-laplacian",                title: "The Sheaf Laplacian: Spectral Theory for Sheaves",        published: online }
+        - { slug: "2024-05-16-neural-sheaf-diffusion",         title: "Neural Sheaf Diffusion: Learning Sheaves End-to-End",     published: online }
+        - { slug: "2024-05-17-sheaf-map-types",                title: "Diagonal, Orthogonal, and General Sheaf Maps",            published: online }
+        - { slug: "2024-05-18-sheaf-gnns-heterophily",         title: "Sheaf Neural Networks and Heterophily",                   published: online }
+        - { slug: "2024-05-19-equivariant-sheaf-gnns",         title: "Equivariant Sheaf Neural Networks",                       published: online }
+        - { slug: "2024-05-20-polynomial-neural-sheaf-diffusion", title: "Polynomial Neural Sheaf Diffusion",                    published: online }
+
+    applications:
+      label: "Applications"
+      posts:
+        - { slug: "2024-05-21-gnns-molecules",           title: "GNNs for Molecules: Drug Discovery and Material Design",              published: online }
+        - { slug: "2024-05-22-gnns-recommender-systems", title: "GNNs for Recommender Systems",                                       published: online }
+        - { slug: "2024-05-23-gnns-social-networks",     title: "GNNs for Social Networks: Influence, Communities, and Misinformation", published: online }
+        - { slug: "2024-05-24-gnns-traffic",             title: "GNNs for Traffic Forecasting",                                        published: online }
+        - { slug: "2024-05-25-gnns-knowledge-graphs",    title: "GNNs for Knowledge Graphs: Reasoning and Completion",                 published: online }
+        - { slug: "2024-05-26-gnns-robotics",            title: "GNNs for Robotics: Planning, Manipulation, and Multi-Agent Systems",  published: online }
+        - { slug: "2024-05-27-gnns-computer-vision",     title: "GNNs for Computer Vision: Scene Graphs and Beyond",                  published: online }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# BOOK III — SHEAF NEURAL NETWORKS (standalone series)
+# ────────────────────────────────────────────────────────────────────────────
+sheaf:
+  label: "Book III: Sheaf Neural Networks"
+  icon:  "🔷"
+  color: "#7c3aed"
+
+  overview:
+    - { slug: "2025-06-01-sheaf-book-overview", title: "Sheaf Neural Networks: A Complete Research Guide", published: online }
+
+  sections:
+
+    foundations:
+      label: "Mathematical Foundations"
+      posts:
+        - { slug: "2025-06-02-what-is-a-sheaf",                    title: "What Is a Sheaf? From Topology to Graph Learning",                  published: online }
+        - { slug: "2025-06-03-cellular-sheaves-on-graphs",          title: "Cellular Sheaves on Graphs: A Rigorous Construction",               published: online }
+        - { slug: "2025-06-04-sheaf-cohomology",                    title: "Sheaf Cohomology: Sections, Cochains, and What H⁰ and H¹ Mean",    published: online }
+        - { slug: "2025-06-05-sheaf-laplacian-spectrum",            title: "The Sheaf Laplacian: Spectrum, Hodge Decomposition, and Diffusion", published: online }
+        - { slug: "2025-06-06-connection-laplacian-gauge-theory",   title: "Connection Laplacians and Gauge Theory on Graphs",                  published: online }
+
+    core-papers:
+      label: "Core Papers"
+      posts:
+        - { slug: "2025-06-07-hansen-gebhart-2020",       title: "Sheaf Neural Networks (Hansen & Gebhart, 2020): The First Sheaf GNN",                            published: online }
+        - { slug: "2025-06-08-neural-sheaf-diffusion",    title: "Neural Sheaf Diffusion (Bodnar et al., NeurIPS 2022): Learning the Relational Geometry",         published: online }
+        - { slug: "2025-06-09-polynomial-sheaf-diffusion", title: "Polynomial Neural Sheaf Diffusion (Zaghen et al., ICLR 2024): Learnable Spectral Filters",      published: online }
+        - { slug: "2025-06-10-sheaf-attention-networks",  title: "Sheaf Attention Networks (Barbero et al., 2022)",                                                 published: online }
+        - { slug: "2025-06-11-sheaf-map-parameterisation", title: "Learning Sheaf Maps: Parameterisation Strategies Compared",                                      published: online }
+        - { slug: "2025-06-12-spectral-sheaf-convolution", title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves",                                       published: online }
+
+    theory:
+      label: "Theory"
+      posts:
+        - { slug: "2025-06-13-sheaf-oversmoothing-theory",  title: "Why Sheaf Diffusion Doesn't Oversmooth: The Null Space Account",          published: online }
+        - { slug: "2025-06-14-sheaf-heterophily-theory",    title: "Sheaves and Heterophily: A Complete Theoretical Account",                 published: online }
+        - { slug: "2025-06-15-sheaf-oversquashing",         title: "Sheaves and Oversquashing: Topology, Curvature, and Information Flow",   published: online }
+        - { slug: "2025-06-16-sheaf-expressiveness",        title: "Expressiveness of Sheaf GNNs: Beyond the WL Hierarchy",                  published: online }
+        - { slug: "2025-06-17-hodge-decomposition-gnns",    title: "Hodge Decomposition for Graph Signals: Curl, Gradient, and Harmonic Flows", published: online }
+
+    topological-dl:
+      label: "Topological Deep Learning"
+      posts:
+        - { slug: "2025-06-18-simplicial-sheaves", title: "Sheaves on Simplicial Complexes: Topological Deep Learning", published: online }
+
+    extensions:
+      label: "Extensions"
+      posts:
+        - { slug: "2025-06-19-cosheaves",              title: "Cosheaves: The Dual Perspective on Graph Data",                              published: online }
+        - { slug: "2025-06-20-multi-relational-sheaves", title: "Multi-Relational Sheaves for Heterogeneous and Knowledge Graphs",         published: online }
+        - { slug: "2025-06-21-temporal-sheaves",       title: "Temporal Sheaves: Extending Sheaf GNNs to Dynamic Graphs",                 published: online }
+        - { slug: "2025-06-22-sheaf-transformers",     title: "Sheaves Meet Attention: Transformer-Inspired Sheaf Models",                published: online }
+
+    applications:
+      label: "Applications"
+      posts:
+        - { slug: "2025-06-23-sheaf-heterophily-benchmarks", title: "Sheaf GNNs for Heterophilic Node Classification: Benchmarks and Results", published: online }
+        - { slug: "2025-06-24-sheaf-molecular",              title: "Sheaf GNNs for Molecular Property Prediction",                           published: online }
+        - { slug: "2025-06-25-open-problems-sheaf",          title: "Open Problems and Future Directions in Sheaf Neural Networks",            published: online }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# BOOK IV — PERSISTENT HOMOLOGY & TDA
+# ────────────────────────────────────────────────────────────────────────────
+persistent-homology:
+  label: "Book IV: Persistent Homology & TDA"
+  icon:  "🔵"
+  color: "#e11d48"
+
+  overview:
+    - { slug: "2025-07-01-ph-overview", title: "Persistent Homology: A Complete Guide to Topological Data Analysis", published: online }
+
+  sections:
+
+    foundations:
+      label: "Topological Foundations"
+      posts:
+        - { slug: "2025-07-02-topological-spaces",    title: "Topological Spaces: The Language of Shape",                      published: online }
+        - { slug: "2025-07-03-simplicial-complexes",  title: "Simplicial Complexes: Combinatorial Topology for Data",          published: online }
+        - { slug: "2025-07-04-homology-groups",       title: "Homology Groups and Betti Numbers: Counting Holes",              published: online }
+        - { slug: "2025-07-05-filtrations",           title: "Filtrations: Watching Topology Evolve with Scale",               published: online }
+
+    core:
+      label: "Persistent Homology Core"
+      posts:
+        - { slug: "2025-07-06-persistent-homology-core", title: "Persistent Homology: Tracking Topological Features Across Scales",    published: online }
+        - { slug: "2025-07-07-persistence-diagrams",     title: "Persistence Diagrams and Barcodes: Visualising Multi-Scale Topology", published: online }
+        - { slug: "2025-07-08-stability-theorems",       title: "Stability Theorems: Why Persistent Homology Is Robust to Noise",      published: online }
+        - { slug: "2025-07-09-distances-ph",             title: "Wasserstein and Bottleneck Distances Between Persistence Diagrams",    published: online }
+
+    computation:
+      label: "Algorithms & Computation"
+      posts:
+        - { slug: "2025-07-10-boundary-matrix",        title: "The Boundary Matrix and Reduction Algorithm",                          published: online }
+        - { slug: "2025-07-11-vietoris-rips-cech",     title: "Vietoris-Rips and Čech Complexes: Building Topology from Point Clouds", published: online }
+        - { slug: "2025-07-12-ripser-gudhi",           title: "Ripser, Gudhi, and the Computational Landscape of TDA",               published: online }
+
+    ml-integration:
+      label: "TDA meets Machine Learning"
+      posts:
+        - { slug: "2025-07-13-persistence-images",    title: "Persistence Images: From Diagrams to Vectors",                        published: online }
+        - { slug: "2025-07-14-persistence-landscapes", title: "Persistence Landscapes: Statistical Topological Data Analysis",      published: online }
+        - { slug: "2025-07-15-topological-layers",    title: "Topological Layers in Neural Networks: Differentiable TDA",           published: online }
+        - { slug: "2025-07-16-tda-graphs",            title: "TDA for Graphs: Persistent Homology Meets GNNs",                     published: online }
+
+    applications:
+      label: "Applications"
+      posts:
+        - { slug: "2025-07-17-tda-biology",       title: "TDA for Biology and Genomics: Shape in the Life Sciences",              published: online }
+        - { slug: "2025-07-18-tda-neuroscience",  title: "TDA for Neuroscience: Topology of Brain Connectivity",                  published: online }
+        - { slug: "2025-07-19-open-problems-ph",  title: "Open Problems in Topological Machine Learning",                         published: online }

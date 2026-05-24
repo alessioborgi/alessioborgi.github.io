@@ -2,7 +2,7 @@
 title: "Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves"
 collection: publications
 slug: polynomial-sheaf-diffusion
-category: manuscripts
+category: preprints
 excerpt: "ArXiv preprint on Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves."
 date: 2025-12-02
 venue: "arXiv preprint arXiv:2512.00242"

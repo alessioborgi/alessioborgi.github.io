@@ -38,7 +38,7 @@ redirect_from:
 }
 .cv-section__hd-icon { font-size: 1.15rem; }
 .cv-section__hd-title {
-  color: #fff;
+  color: #fff !important;
   font-size: 0.9rem;
   font-weight: 800;
   margin: 0;

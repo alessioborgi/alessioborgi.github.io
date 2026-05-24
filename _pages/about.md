@@ -513,9 +513,10 @@ redirect_from:
 }
 .ab-repo-card__header { display: flex; align-items: center; gap: 0.5rem; }
 .ab-repo-card__header i { color: rgba(255,255,255,0.35); font-size: 0.9rem; }
+.ab-repo-card__emoji { margin-left: auto; font-size: 1.1rem; line-height: 1; flex-shrink: 0; }
 .ab-repo-card__name {
   font-size: 0.96rem; font-weight: 700;
-  color: var(--ab-teal); word-break: break-word;
+  color: #ffffff; word-break: break-word;
 }
 .ab-repo-card__desc {
   font-size: 0.83rem; color: rgba(255,255,255,0.6);
@@ -898,6 +899,23 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
             <div class="ab-repo-card__header">
               <i class="fab fa-github" aria-hidden="true"></i>
               <span class="ab-repo-card__name">{{ repo.name }}</span>
+              <span class="ab-repo-card__emoji" aria-hidden="true">
+                {%- assign rn = repo.name | downcase -%}
+                {%- assign rl = repo.language | downcase -%}
+                {%- if rn contains "sheaf" -%}🔷
+                {%- elsif rn contains "gnn" or rn contains "graph" -%}🕸️
+                {%- elsif rn contains "transformer" -%}🤖
+                {%- elsif rn contains "robot" or rn contains "moon" or rn contains "amr" -%}🦾
+                {%- elsif rn contains "diffusion" -%}💨
+                {%- elsif rn contains "style" or rn contains "clip" or rn contains "vision" -%}🎨
+                {%- elsif rn contains "z-saslm" or rn contains "saslm" -%}🎨
+                {%- elsif rl == "jupyter notebook" -%}📓
+                {%- elsif rl == "python" -%}🐍
+                {%- elsif rl == "c++" -%}⚙️
+                {%- elsif rl == "matlab" -%}📊
+                {%- else -%}💻
+                {%- endif -%}
+              </span>
             </div>
             {% if repo.description %}
               <p class="ab-repo-card__desc">{{ repo.description }}</p>
@@ -906,8 +924,8 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
               {% if repo.language %}
                 <span class="ab-repo-card__lang">{{ repo.language }}</span>
               {% endif %}
-              <span class="ab-repo-card__stat"><i class="fas fa-star"></i> {{ repo.stars }}</span>
-              <span class="ab-repo-card__stat"><i class="fas fa-code-branch"></i> {{ repo.forks }}</span>
+              <span class="ab-repo-card__stat" style="color:#f59e0b;"><i class="fas fa-star"></i> {{ repo.stars }}</span>
+              <span class="ab-repo-card__stat" style="color:#34d399;"><i class="fas fa-code-branch"></i> {{ repo.forks }}</span>
             </div>
           </a>
         {% endfor %}

@@ -235,7 +235,7 @@ author_profile: true
 <div class="pt-section">
   <div class="pt-section__hd">
     <span class="pt-bar"></span>
-    Summer Schools &amp; Intensive Courses
+    Summer Schools
   </div>
   <div class="pt-section__body">
     <div class="pt-timeline">
@@ -320,7 +320,7 @@ author_profile: true
 <div class="pt-section">
   <div class="pt-section__hd">
     <span class="pt-bar"></span>
-    Maker Faire Rome
+    Participations
   </div>
   <div class="pt-section__body">
     <div class="pt-timeline">
