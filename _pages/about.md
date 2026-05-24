@@ -431,35 +431,113 @@ redirect_from:
 }
 #gh-stats .chip:hover { border-color: var(--ab-teal); }
 
-#gh-stats .langs { display: flex; flex-direction: column; gap: 0.7rem; }
-#gh-stats .lang-row { display: flex; align-items: center; gap: 0.75rem; }
-#gh-stats .lang-name { min-width: 110px; font-weight: 600; font-size: 0.88rem; color: var(--ab-text); }
-#gh-stats .lang-bar {
-  flex: 1; height: 7px; border-radius: 999px;
-  background: #eef0f5; position: relative; overflow: hidden;
+/* ============================================================
+   ML BLOG CARDS
+   ============================================================ */
+.ab-ml-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
-#gh-stats .lang-bar span {
-  display: block; height: 100%;
-  background: linear-gradient(to right, var(--ab-teal), #0a9991);
+.ab-ml-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.3rem 1.4rem;
+  border-radius: 14px;
+  text-decoration: none !important;
+  transition: transform .2s, box-shadow .2s;
+  background: #fff;
+  border: 1px solid var(--ab-border);
+  box-shadow: var(--ab-shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.ab-ml-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--bk-color, var(--ab-teal));
+}
+.ab-ml-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ab-shadow-md);
+  text-decoration: none !important;
+}
+.ab-ml-card--trans { --bk-color: #4f46e5; }
+.ab-ml-card--gnn   { --bk-color: #0d9488; }
+.ab-ml-card--sheaf { --bk-color: #7c3aed; }
+.ab-ml-card--ph    { --bk-color: #e11d48; }
+.ab-ml-card__badge {
+  align-self: flex-start;
+  background: rgba(0,0,0,0.05);
   border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--bk-color, var(--ab-teal));
 }
-#gh-stats .lang-percent {
-  min-width: 36px; text-align: right; font-size: 0.8rem;
-  color: var(--ab-muted); font-variant-numeric: tabular-nums;
-}
+.ab-ml-card__icon    { font-size: 1.6rem; line-height: 1; }
+.ab-ml-card__title   { font-size: 0.93rem; font-weight: 700; color: var(--ab-text); line-height: 1.35; }
+.ab-ml-card__excerpt { font-size: 0.82rem; color: var(--ab-muted); line-height: 1.5; flex: 1; }
+.ab-ml-card__meta    { font-size: 0.77rem; color: var(--ab-muted); margin-top: auto; padding-top: 0.4rem; }
 
-#gh-stats .heatmap img {
-  max-width: 100%; height: auto;
-  border-radius: 10px; border: 1px solid var(--ab-border);
+/* ============================================================
+   REPO CARDS — dark GitHub-style
+   ============================================================ */
+.ab-repo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.9rem;
 }
-@media (prefers-color-scheme: dark) {
-  #gh-stats .heatmap img { filter: invert(1) hue-rotate(180deg) contrast(1.1); }
+.ab-repo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.3rem 1.4rem;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #0d1340 0%, #151e55 100%);
+  border: 1px solid rgba(56,193,183,0.18);
+  text-decoration: none !important;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  box-shadow: 0 4px 18px rgba(13,19,64,0.18);
 }
-
-#gh-stats .repos { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 0.75rem; }
-#gh-stats .repo h4   { margin: 0 0 0.4rem; font-size: 0.93rem; }
-#gh-stats .repo p    { margin: 0.2rem 0 0.55rem; font-size: 0.86rem; color: var(--ab-muted); }
-#gh-stats .meta      { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.84rem; color: var(--ab-muted); }
+.ab-repo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(13,19,64,0.30), 0 0 0 1px rgba(56,193,183,0.45);
+  border-color: rgba(56,193,183,0.45);
+  text-decoration: none !important;
+}
+.ab-repo-card__header { display: flex; align-items: center; gap: 0.5rem; }
+.ab-repo-card__header i { color: rgba(255,255,255,0.35); font-size: 0.9rem; }
+.ab-repo-card__name {
+  font-size: 0.96rem; font-weight: 700;
+  color: var(--ab-teal); word-break: break-word;
+}
+.ab-repo-card__desc {
+  font-size: 0.83rem; color: rgba(255,255,255,0.6);
+  line-height: 1.5; margin: 0; flex: 1;
+}
+.ab-repo-card__footer {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 0.6rem; margin-top: auto; padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+.ab-repo-card__lang {
+  background: rgba(56,193,183,0.12);
+  border: 1px solid rgba(56,193,183,0.28);
+  color: var(--ab-teal);
+  border-radius: 999px; padding: 0.15rem 0.6rem;
+  font-size: 0.74rem; font-weight: 600;
+}
+.ab-repo-card__stat {
+  display: flex; align-items: center; gap: 0.28rem;
+  font-size: 0.8rem; color: rgba(255,255,255,0.5);
+}
+.ab-repo-card__stat i { font-size: 0.72rem; }
 
 /* ============================================================
    RESPONSIVE
@@ -662,6 +740,63 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
 
 
 <!-- ============================================================
+     ML BLOG
+     ============================================================ -->
+<div class="ab-section">
+  <h2 class="ab-section__title">🧠 Latest ML Blog Posts</h2>
+  <div class="ab-section__bar"></div>
+</div>
+
+{% assign t_latest  = site.posts | where: "book", "transformers"        | sort: "date" | last %}
+{% assign g_latest  = site.posts | where: "book", "gnn"                 | sort: "date" | last %}
+{% assign s_latest  = site.posts | where: "book", "sheaf"               | sort: "date" | last %}
+{% assign ph_latest = site.posts | where: "book", "persistent-homology" | sort: "date" | last %}
+
+<div class="ab-ml-grid">
+  {% if t_latest %}
+  <a class="ab-ml-card ab-ml-card--trans" href="{{ t_latest.url }}">
+    <div class="ab-ml-card__badge">Transformers</div>
+    <div class="ab-ml-card__icon">🔄</div>
+    <div class="ab-ml-card__title">{{ t_latest.title }}</div>
+    {% if t_latest.excerpt %}<div class="ab-ml-card__excerpt">{{ t_latest.excerpt | strip_html | truncate: 110 }}</div>{% endif %}
+    <div class="ab-ml-card__meta">{{ t_latest.date | date: "%b %d, %Y" }}</div>
+  </a>
+  {% endif %}
+  {% if g_latest %}
+  <a class="ab-ml-card ab-ml-card--gnn" href="{{ g_latest.url }}">
+    <div class="ab-ml-card__badge">Graph Neural Networks</div>
+    <div class="ab-ml-card__icon">🕸️</div>
+    <div class="ab-ml-card__title">{{ g_latest.title }}</div>
+    {% if g_latest.excerpt %}<div class="ab-ml-card__excerpt">{{ g_latest.excerpt | strip_html | truncate: 110 }}</div>{% endif %}
+    <div class="ab-ml-card__meta">{{ g_latest.date | date: "%b %d, %Y" }}</div>
+  </a>
+  {% endif %}
+  {% if s_latest %}
+  <a class="ab-ml-card ab-ml-card--sheaf" href="{{ s_latest.url }}">
+    <div class="ab-ml-card__badge">Sheaf Neural Networks</div>
+    <div class="ab-ml-card__icon">🔷</div>
+    <div class="ab-ml-card__title">{{ s_latest.title }}</div>
+    {% if s_latest.excerpt %}<div class="ab-ml-card__excerpt">{{ s_latest.excerpt | strip_html | truncate: 110 }}</div>{% endif %}
+    <div class="ab-ml-card__meta">{{ s_latest.date | date: "%b %d, %Y" }}</div>
+  </a>
+  {% endif %}
+  {% if ph_latest %}
+  <a class="ab-ml-card ab-ml-card--ph" href="{{ ph_latest.url }}">
+    <div class="ab-ml-card__badge">Persistent Homology</div>
+    <div class="ab-ml-card__icon">🔵</div>
+    <div class="ab-ml-card__title">{{ ph_latest.title }}</div>
+    {% if ph_latest.excerpt %}<div class="ab-ml-card__excerpt">{{ ph_latest.excerpt | strip_html | truncate: 110 }}</div>{% endif %}
+    <div class="ab-ml-card__meta">{{ ph_latest.date | date: "%b %d, %Y" }}</div>
+  </a>
+  {% endif %}
+</div>
+
+<p style="text-align:center;margin:0.5rem 0 2.5rem;">
+  <a class="ab-btn ab-btn--outline" href="/ml-blog/">Explore the ML Blog &rarr;</a>
+</p>
+
+
+<!-- ============================================================
      LINKEDIN
      ============================================================ -->
 <div class="ab-section">
@@ -755,79 +890,36 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
     </div>
   </div>
 
-  <!-- Languages + Heatmap -->
-  <div class="grid" style="margin-top:1rem">
-    <div class="card">
-      <div class="pad">
-        <h3>Top Languages <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
-        {% if gh and gh.top_languages %}
-          <div class="langs">
-            {% for lang in gh.top_languages %}
-              <div class="lang-row">
-                <div class="lang-name">{{ lang.name }}</div>
-                <div class="lang-bar"><span style="width:{{ lang.percent }}%"></span></div>
-                <div class="lang-percent">{{ lang.percent }}%</div>
-              </div>
-            {% endfor %}
-          </div>
-        {% else %}
-          <div class="lab">
-            <a href="https://github.com/alessioborgi" target="_blank" rel="noopener">
-              <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alessioborgi&layout=donut-vertical&hide_border=true&title_color=133844&text_color=133844&bg_color=f5f7fb&langs_count=8" alt="Top languages" style="width:100%;max-width:420px;border-radius:8px;">
-            </a>
-          </div>
-        {% endif %}
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="pad heatmap">
-        <h3>Contribution Heatmap</h3>
-        <img id="gh-heatmap" alt="GitHub contribution heatmap"
-             src="https://github-readme-activity-graph.vercel.app/graph?username=alessioborgi&hide_border=true&radius=8&area=true&theme=github-light"/>
-        <div class="lab" style="margin-top:.45rem">Source: GitHub contributions (last 1 year)</div>
-      </div>
-    </div>
-  </div>
-
   <!-- Popular Repos -->
-  <div class="card" style="margin-top:1rem">
-    <div class="pad">
-      <h3>Popular Repositories <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub" style="height:18px;vertical-align:middle;margin-left:6px;"></h3>
+  <div style="margin-top:1rem;">
+    <div class="ab-repo-grid">
       {% if gh and gh.popular_repos %}
-        <div class="repos">
-          {% for repo in gh.popular_repos limit:12 %}
-            <div class="repo card">
-              <div class="pad">
-                <h4><a href="{{ repo.html_url }}" target="_blank" rel="noopener">{{ repo.name }}</a></h4>
-                <p>{{ repo.description }}</p>
-                <div class="meta">
-                  <span>⭐ {{ repo.stars }}</span>
-                  <span>🍴 {{ repo.forks }}</span>
-                </div>
-              </div>
+        {% for repo in gh.popular_repos limit:12 %}
+          <a class="ab-repo-card" href="{{ repo.html_url }}" target="_blank" rel="noopener">
+            <div class="ab-repo-card__header">
+              <i class="fab fa-github" aria-hidden="true"></i>
+              <span class="ab-repo-card__name">{{ repo.name }}</span>
             </div>
-          {% endfor %}
-        </div>
+            {% if repo.description %}
+              <p class="ab-repo-card__desc">{{ repo.description }}</p>
+            {% endif %}
+            <div class="ab-repo-card__footer">
+              {% if repo.language %}
+                <span class="ab-repo-card__lang">{{ repo.language }}</span>
+              {% endif %}
+              <span class="ab-repo-card__stat"><i class="fas fa-star"></i> {{ repo.stars }}</span>
+              <span class="ab-repo-card__stat"><i class="fas fa-code-branch"></i> {{ repo.forks }}</span>
+            </div>
+          </a>
+        {% endfor %}
       {% else %}
-        <p class="lab">Configure a GitHub Action to populate <code>_data/github.json</code> with repo data.</p>
+        <p class="lab" style="color:rgba(255,255,255,0.5);padding:1rem 0;">
+          Configure a GitHub Action to populate <code>_data/github.json</code> with repo data.
+        </p>
       {% endif %}
     </div>
   </div>
 
-  <script>
-    (function() {
-      const heat = document.getElementById('gh-heatmap');
-      if (!heat) return;
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
-      const update = () => {
-        const theme = prefersDark.matches ? 'github-dark' : 'github-light';
-        heat.src = `https://github-readme-activity-graph.vercel.app/graph?username=alessioborgi&hide_border=true&radius=8&area=true&theme=${theme}`;
-      };
-      update();
-      prefersDark && prefersDark.addEventListener('change', update);
-    })();
-  </script>
 </section>
 
 
