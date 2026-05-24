@@ -43,7 +43,7 @@
 ;
 
 /* ── Color system ── */
-$cosmic-indigo: #0d1340;
+$cambridge-navy: #003E74;
 
 :root {
   --global-masthead-link-color: #e6f5ff;
@@ -56,11 +56,11 @@ body {
 
 /* ── Masthead ── */
 .masthead {
-  background: $cosmic-indigo;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  background: $cambridge-navy;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
 
   .masthead__inner-wrap {
-    background: $cosmic-indigo;
+    background: $cambridge-navy;
     max-width: 100%;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -70,11 +70,11 @@ body {
   #site-nav.greedy-nav,
   .greedy-nav,
   .masthead__menu {
-    background: $cosmic-indigo;
+    background: $cambridge-navy;
   }
 
   &::after {
-    background: rgba(56, 193, 183, 0.20);
+    background: rgba(56, 193, 183, 0.22);
   }
 
   .masthead__menu-item {

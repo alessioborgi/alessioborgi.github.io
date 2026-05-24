@@ -10,13 +10,13 @@ author_profile: true
 <style>
   /* ── Design tokens ── */
   :root {
-    --pt-navy:   #0d1340;
+    --pt-navy:   #003E74;
     --pt-teal:   #38c1b7;
     --pt-blue:   #0a66c2;
     --pt-amber:  #d97706;
     --pt-purple: #7c3aed;
-    --pt-border: rgba(56,193,183,0.20);
-    --pt-shadow: 0 4px 18px rgba(13,19,64,0.11);
+    --pt-border: rgba(0,62,116,0.14);
+    --pt-shadow: 0 4px 18px rgba(0,62,116,0.11);
   }
 
   /* ── Section block ── */

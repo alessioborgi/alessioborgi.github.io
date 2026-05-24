@@ -12,18 +12,18 @@ redirect_from:
    DESIGN SYSTEM
    ============================================================ */
 :root {
-  --ab-navy:      #0f2a36;
-  --ab-navy-mid:  #133844;
+  --ab-navy:      #003E74;
+  --ab-navy-mid:  #1a5f9a;
   --ab-teal:      #38c1b7;
   --ab-teal-lt:   #6de8e0;
   --ab-blue:      #0a66c2;
-  --ab-border:    rgba(19,56,68,0.10);
-  --ab-shadow-sm: 0 2px 8px rgba(19,56,68,0.08);
-  --ab-shadow-md: 0 6px 22px rgba(19,56,68,0.13);
-  --ab-shadow-lg: 0 14px 40px rgba(19,56,68,0.17);
+  --ab-border:    rgba(0,62,116,0.12);
+  --ab-shadow-sm: 0 2px 8px rgba(0,62,116,0.08);
+  --ab-shadow-md: 0 6px 22px rgba(0,62,116,0.13);
+  --ab-shadow-lg: 0 14px 40px rgba(0,62,116,0.17);
   --ab-radius:    16px;
-  --ab-text:      #133844;
-  --ab-muted:     rgba(19,56,68,0.58);
+  --ab-text:      #003E74;
+  --ab-muted:     rgba(0,62,116,0.60);
 }
 
 /* ============================================================
@@ -31,7 +31,7 @@ redirect_from:
    ============================================================ */
 .ab-hero {
   background:
-    linear-gradient(135deg, rgba(10,14,30,0.93) 0%, rgba(13,19,64,0.82) 55%, rgba(13,19,64,0.60) 100%),
+    linear-gradient(135deg, rgba(0,20,55,0.93) 0%, rgba(0,50,110,0.80) 55%, rgba(0,62,116,0.58) 100%),
     url('/images/WallPaper.jpg') center 20% / cover no-repeat;
   border-radius: 22px;
   padding: 3rem 2.8rem 3.2rem;
@@ -204,7 +204,7 @@ redirect_from:
    COLLAB CARD
    ============================================================ */
 .ab-collab {
-  background: linear-gradient(135deg, #133844 0%, #1b5f6e 100%);
+  background: linear-gradient(135deg, #003E74 0%, #0f5a92 100%);
   color: #fff;
   border-radius: var(--ab-radius);
   padding: 1.7rem 2rem;
@@ -499,15 +499,15 @@ redirect_from:
   gap: 0.55rem;
   padding: 1.3rem 1.4rem;
   border-radius: 14px;
-  background: linear-gradient(145deg, #0d1340 0%, #151e55 100%);
-  border: 1px solid rgba(56,193,183,0.18);
+  background: linear-gradient(145deg, #003E74 0%, #0f5282 100%);
+  border: 1px solid rgba(56,193,183,0.20);
   text-decoration: none !important;
   transition: transform .2s, box-shadow .2s, border-color .2s;
-  box-shadow: 0 4px 18px rgba(13,19,64,0.18);
+  box-shadow: 0 4px 18px rgba(0,62,116,0.22);
 }
 .ab-repo-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 36px rgba(13,19,64,0.30), 0 0 0 1px rgba(56,193,183,0.45);
+  box-shadow: 0 14px 36px rgba(0,62,116,0.32), 0 0 0 1px rgba(56,193,183,0.45);
   border-color: rgba(56,193,183,0.45);
   text-decoration: none !important;
 }
@@ -596,9 +596,21 @@ redirect_from:
 
 
 <!-- ============================================================
-     COLLAB CARD
+     ABOUT ME
      ============================================================ -->
-<div class="ab-collab">
+<div class="ab-section">
+  <h2 class="ab-section__title">👋 About Me</h2>
+  <div class="ab-section__bar"></div>
+</div>
+
+<div class="ab-intro">
+I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, under the supervision of <a href="https://www.cst.cam.ac.uk/people/pl219">Prof. Pietro Liò</a> (University of Cambridge) and co-supervised by <a href="https://sites.google.com/diag.uniroma1.it/fabriziosilvestri">Prof. Fabrizio Silvestri</a> (Sapienza University of Rome). I obtained my Master of Engineering in <em>Artificial Intelligence &amp; Robotics</em> and my Bachelor of Engineering in <em>Applied Computer Science and Artificial Intelligence</em> at Sapienza, both with the highest marks. My research sits at the intersection of <em>Graph Neural Networks</em>, <em>Geometric Deep Learning</em>, <em>Topological Deep Learning</em> and <em>Diffusion Models</em>, with applications to <em>Robotics</em>, <em>Vision</em>, and <em>Biomedical AI</em>.
+</div>
+
+<!-- ============================================================
+     COLLAB CARD (inside About Me)
+     ============================================================ -->
+<div class="ab-collab" style="margin-top:1rem;">
   <h3 class="ab-collab__title">🚀 Open to Collaborate!</h3>
   <p class="ab-collab__body">
     I'm eager to work with anyone who has great ideas, wants to learn and share their experience.
@@ -609,19 +621,6 @@ redirect_from:
       <i class="fas fa-envelope" aria-hidden="true"></i> Let's talk
     </a>
   </div>
-</div>
-
-
-<!-- ============================================================
-     ABOUT ME
-     ============================================================ -->
-<div class="ab-section">
-  <h2 class="ab-section__title">👋 About Me</h2>
-  <div class="ab-section__bar"></div>
-</div>
-
-<div class="ab-intro">
-I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, under the supervision of <a href="https://www.cst.cam.ac.uk/people/pl219">Prof. Pietro Liò</a> (University of Cambridge) and co-supervised by <a href="https://sites.google.com/diag.uniroma1.it/fabriziosilvestri">Prof. Fabrizio Silvestri</a> (Sapienza University of Rome). I obtained my Master of Engineering in <em>Artificial Intelligence &amp; Robotics</em> and my Bachelor of Engineering in <em>Applied Computer Science and Artificial Intelligence</em> at Sapienza, both with the highest marks. My research sits at the intersection of <em>Graph Neural Networks</em>, <em>Geometric Deep Learning</em>, <em>Topological Deep Learning</em> and <em>Diffusion Models</em>, with applications to <em>Robotics</em>, <em>Vision</em>, and <em>Biomedical AI</em>.
 </div>
 
 

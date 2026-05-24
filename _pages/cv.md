@@ -10,14 +10,14 @@ redirect_from:
 <style>
 /* ── Design tokens ── */
 :root {
-  --cv-navy:   #0d1340;
+  --cv-navy:   #003E74;
   --cv-teal:   #38c1b7;
   --cv-blue:   #0a66c2;
-  --cv-border: rgba(19,56,68,.10);
-  --cv-shadow: 0 4px 20px rgba(19,56,68,.10);
+  --cv-border: rgba(0,62,116,.12);
+  --cv-shadow: 0 4px 20px rgba(0,62,116,.10);
   --cv-radius: 16px;
-  --cv-text:   #133844;
-  --cv-muted:  rgba(19,56,68,.58);
+  --cv-text:   #003E74;
+  --cv-muted:  rgba(0,62,116,.60);
 }
 
 /* ── Section card ── */
@@ -30,7 +30,7 @@ redirect_from:
   margin-bottom: 1.4rem;
 }
 .cv-section__hd {
-  background: linear-gradient(135deg, var(--cv-navy) 0%, #151e55 100%);
+  background: linear-gradient(135deg, var(--cv-navy) 0%, #1a5f9a 100%);
   padding: 0.85rem 1.5rem;
   display: flex;
   align-items: center;

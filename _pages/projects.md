@@ -10,11 +10,11 @@ author_profile: true
 <style>
   /* ── Project page design tokens ── */
   :root {
-    --prj-navy:   #0d1340;
+    --prj-navy:   #003E74;
     --prj-teal:   #38c1b7;
     --prj-blue:   #0a66c2;
     --prj-border: rgba(56,193,183,0.20);
-    --prj-shadow: 0 6px 28px rgba(13,19,64,0.28);
+    --prj-shadow: 0 6px 28px rgba(0,62,116,0.22);
   }
 
   /* ── Grid ── */
@@ -25,7 +25,7 @@ author_profile: true
 
   /* ── Dark cosmic card ── */
   .project-card {
-    background: linear-gradient(135deg, #0d1340 0%, #151e55 100%);
+    background: linear-gradient(135deg, #003E74 0%, #0f5282 100%);
     border: 1px solid var(--prj-border);
     border-radius: 16px;
     padding: 1.5rem 1.6rem;
@@ -39,11 +39,11 @@ author_profile: true
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(ellipse at 0% 0%, rgba(56,193,183,0.08) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 0% 0%, rgba(56,193,183,0.10) 0%, transparent 60%);
     pointer-events: none;
   }
   .project-card:hover {
-    box-shadow: 0 12px 40px rgba(56,193,183,0.18), 0 4px 16px rgba(13,19,64,0.4);
+    box-shadow: 0 12px 40px rgba(56,193,183,0.20), 0 4px 16px rgba(0,62,116,0.35);
     transform: translateY(-2px);
     border-color: rgba(56,193,183,0.45);
   }
