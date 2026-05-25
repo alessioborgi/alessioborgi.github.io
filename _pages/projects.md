@@ -62,12 +62,22 @@ author_profile: true
     font-weight: 700;
     color: #e2e8f0;
     flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    flex-wrap: wrap;
   }
   .project-header h2 a {
     color: #e2e8f0;
     text-decoration: none;
   }
   .project-header h2 a:hover { color: var(--prj-teal); }
+  .prj-emoji {
+    font-size: 1.3rem;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
+  }
 
   /* ── Link pills ── */
   .project-links {
@@ -166,8 +176,36 @@ author_profile: true
   <div class="projects-grid">
     {% for post in items %}
       <article class="project-card">
+        {%- assign pk = post.title | downcase -%}
+        {%- assign prj_emoji = "💡" -%}
+        {%- if pk contains "moonbot" or pk contains "moon" -%}{%- assign prj_emoji = "🌙" -%}
+        {%- elsif pk contains "amr" or pk contains "cleaning robot" or pk contains "robomat" -%}{%- assign prj_emoji = "🤖" -%}
+        {%- elsif pk contains "autodrive" or pk contains "unidrive" or pk contains "alpr" or pk contains "license plate" -%}{%- assign prj_emoji = "🚗" -%}
+        {%- elsif pk contains "polysheaf" or pk contains "xgnn" or pk contains "graph" or pk contains "sheaf" -%}{%- assign prj_emoji = "🕸️" -%}
+        {%- elsif pk contains "style" or pk contains "z-saslm" or pk contains "z-samb" or pk contains "stylealigned" -%}{%- assign prj_emoji = "🎨" -%}
+        {%- elsif pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime-vlm" or pk contains "clip" -%}{%- assign prj_emoji = "👁️" -%}
+        {%- elsif pk contains "skin" -%}{%- assign prj_emoji = "🩺" -%}
+        {%- elsif pk contains "bioheat" or pk contains "pinn" -%}{%- assign prj_emoji = "🌡️" -%}
+        {%- elsif pk contains "careconnect" or pk contains "hospital" -%}{%- assign prj_emoji = "🏥" -%}
+        {%- elsif pk contains "rtad" or pk contains "anomaly" or pk contains "5g" -%}{%- assign prj_emoji = "📡" -%}
+        {%- elsif pk contains "email" or pk contains "spam" -%}{%- assign prj_emoji = "📧" -%}
+        {%- elsif pk contains "home-automation" or pk contains "smart home" or pk contains "iot" -%}{%- assign prj_emoji = "🏠" -%}
+        {%- elsif pk contains "insta" or pk contains "social" or pk contains "photo" -%}{%- assign prj_emoji = "📸" -%}
+        {%- elsif pk contains "railway" or pk contains "train" or pk contains "passenger" -%}{%- assign prj_emoji = "🚂" -%}
+        {%- elsif pk contains "qrcode" or pk contains "qr code" -%}{%- assign prj_emoji = "📱" -%}
+        {%- elsif pk contains "ticketing" or pk contains "helpdesk" or pk contains "support" -%}{%- assign prj_emoji = "🎫" -%}
+        {%- elsif pk contains "electric" -%}{%- assign prj_emoji = "⚡" -%}
+        {%- elsif pk contains "cluster" or pk contains "segmentation" -%}{%- assign prj_emoji = "🎯" -%}
+        {%- elsif pk contains "category theory" or pk contains "java-category" -%}{%- assign prj_emoji = "📐" -%}
+        {%- elsif pk contains "pipeline" or pk contains "mlpipeline" -%}{%- assign prj_emoji = "⚙️" -%}
+        {%- elsif pk contains "performance" or pk contains "monitoring" or pk contains "pc-performance" -%}{%- assign prj_emoji = "📊" -%}
+        {%- elsif pk contains "nsio" or pk contains "search index" -%}{%- assign prj_emoji = "🔍" -%}
+        {%- endif -%}
         <div class="project-header">
-          <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+          <h2>
+            <span class="prj-emoji" aria-hidden="true">{{ prj_emoji }}</span>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </h2>
           <div class="project-links">
             <a class="project-pill" href="{{ post.url | relative_url }}">
               <img src="{{ '/images/webpage.webp' | relative_url }}" alt="Project page icon">

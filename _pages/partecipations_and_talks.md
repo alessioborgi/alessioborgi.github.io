@@ -193,7 +193,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period">June – July 2025</div>
           <div class="pt-title">Visiting Researcher — Tohoku University</div>
-          <div class="pt-org">Sendai, Japan &nbsp;·&nbsp; Prof. Masayuki Numao &amp; Prof. Ken-ichi Fukui</div>
+          <div class="pt-org">🇯🇵 Sendai, Japan &nbsp;·&nbsp; Prof. Masayuki Numao &amp; Prof. Ken-ichi Fukui</div>
           <div class="pt-body">
             <p>Conducted research on <strong>Sheaf Neural Networks</strong> and their application to neuroscience data, collaborating with the AI Lab at Tohoku University.</p>
             <p>Selected winner of the <strong>TESP 2025 (Tohoku Engineering Summer Program)</strong>.</p>
@@ -212,7 +212,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period pt-period--blue">August – September 2024</div>
           <div class="pt-title">Visiting Researcher — Johannes Kepler University Linz</div>
-          <div class="pt-org">Linz, Austria &nbsp;·&nbsp; Prof. Sepp Hochreiter</div>
+          <div class="pt-org">🇦🇹 Linz, Austria &nbsp;·&nbsp; Prof. Sepp Hochreiter</div>
           <div class="pt-body">
             <p>Research stay focused on <strong>xLSTM architectures</strong> and modern sequence modelling under the supervision of Prof. Sepp Hochreiter (inventor of LSTM).</p>
             <p>Awarded <strong>Best Poster Award</strong> at the JKU AI Research Symposium.</p>
@@ -246,7 +246,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period">June 2025</div>
           <div class="pt-title">SEIO Summer School — Statistical Learning &amp; AI</div>
-          <div class="pt-org">Barcelona, Spain &nbsp;·&nbsp; Sociedad Española de Investigación Operativa</div>
+          <div class="pt-org">🇪🇸 Barcelona, Spain &nbsp;·&nbsp; Sociedad Española de Investigación Operativa</div>
           <div class="pt-body">
             <p>Intensive school covering statistical learning theory, probabilistic graphical models, and AI methods with applications to operations research and decision making.</p>
           </div>
@@ -263,7 +263,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period pt-period--purple">Summer 2025</div>
           <div class="pt-title">OxML Summer School — Oxford Machine Learning</div>
-          <div class="pt-org">London / Oxford, United Kingdom &nbsp;·&nbsp; AI for Global Goals</div>
+          <div class="pt-org">🇬🇧 London / Oxford, United Kingdom &nbsp;·&nbsp; AI for Global Goals</div>
           <div class="pt-body">
             <p>Selective programme covering deep learning theory, geometric deep learning, probabilistic ML, NLP, computer vision, and ML for social impact.</p>
           </div>
@@ -281,7 +281,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period pt-period--amber">Spring 2025</div>
           <div class="pt-title">DL 2025 — Deep Learning School</div>
-          <div class="pt-org">Rome, Italy</div>
+          <div class="pt-org">🇮🇹 Rome, Italy</div>
           <div class="pt-body">
             <p>Intensive deep learning school covering modern architectures, optimisation theory, generative models, and applications in vision and language.</p>
           </div>
@@ -298,7 +298,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period pt-period--blue">Summer 2023</div>
           <div class="pt-title">Google BUCA Summer School — ML &amp; Cloud</div>
-          <div class="pt-org">Como, Italy &nbsp;·&nbsp; Google</div>
+          <div class="pt-org">🇮🇹 Como, Italy &nbsp;·&nbsp; Google</div>
           <div class="pt-body">
             <p>Google-hosted summer school focused on machine learning at scale, cloud infrastructure (Google Cloud Platform), and responsible AI principles. Covered topics including distributed training, MLOps, and production ML pipelines.</p>
           </div>
@@ -331,7 +331,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period">October 2019</div>
           <div class="pt-title">Maker Faire Rome — The European Edition</div>
-          <div class="pt-org">Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
+          <div class="pt-org">🇮🇹 Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
           <div class="pt-body">
             <p>Exhibited a hardware robotics project at one of Europe's largest innovation fairs, showcasing maker culture and open-source engineering to a broad public audience.</p>
           </div>
@@ -348,7 +348,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period pt-period--amber">October 2018</div>
           <div class="pt-title">Maker Faire Rome — The European Edition</div>
-          <div class="pt-org">Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
+          <div class="pt-org">🇮🇹 Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
           <div class="pt-body">
             <p>Returned as exhibitor with an updated project iteration, engaging with the international maker community and receiving feedback from engineers and innovators.</p>
           </div>
@@ -365,7 +365,7 @@ author_profile: true
         <div class="pt-content">
           <div class="pt-period pt-period--purple">October 2017</div>
           <div class="pt-title">Maker Faire Rome — The European Edition</div>
-          <div class="pt-org">Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
+          <div class="pt-org">🇮🇹 Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
           <div class="pt-body">
             <p>First participation as a young maker, presenting an electronics and embedded systems project and sparking a long-standing passion for building things.</p>
           </div>

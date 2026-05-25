@@ -359,7 +359,7 @@ redirect_from:
       <div class="cv-award__icon">🚀</div>
       <div>
         <div class="cv-award__title"><a href="/visiting-research/tohoku-2025/">Research Certificate of Excellence — TESP 2025 Winner</a></div>
-        <div class="cv-award__meta">Selected as top-1 student for the exchange period · Tohoku University, Japan 2025</div>
+        <div class="cv-award__meta">Selected as top-1 student for the exchange period · Tohoku University, 🇯🇵 Japan 2025</div>
       </div>
     </div>
 
@@ -375,7 +375,7 @@ redirect_from:
       <div class="cv-award__icon">🧠</div>
       <div>
         <div class="cv-award__title"><a href="https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024">Best Poster Award — M2L Summer School</a></div>
-        <div class="cv-award__meta">Mediterranean Machine Learning Summer School · Milan, Italy 2024</div>
+        <div class="cv-award__meta">Mediterranean Machine Learning Summer School · 🇮🇹 Milan, Italy 2024</div>
       </div>
     </div>
 
