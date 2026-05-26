@@ -200,6 +200,24 @@ author_profile: true
   <div class="pt-section__body">
     <div class="pt-timeline">
 
+      <!-- NEUREASON 2026 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--blue"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--blue">March 2026</div>
+          <div class="pt-title"><a href="https://neurmad.github.io/" target="_blank" rel="noopener">NEUREASON'26 — Neural Reasoning for Scientific and Mathematical Discovery</a></div>
+          <div class="pt-org">🇬🇧 Cambridge, United Kingdom &nbsp;·&nbsp; Department of Computer Science and Technology, University of Cambridge</div>
+          <div class="pt-body">
+            <p>Participated in the 2026 workshop on neural reasoning for scientific and mathematical discovery, held on <strong>March 23-24, 2026</strong> at the University of Cambridge.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--blue pt-badge">NEUREASON'26</span>
+            <span class="pt-badge">Neural Reasoning</span>
+            <span class="pt-badge--blue pt-badge">Scientific Discovery</span>
+          </div>
+        </div>
+      </div>
+
       <!-- MMLW 2025 -->
       <div class="pt-item">
         <div class="pt-dot pt-dot--purple"><span></span></div>
@@ -269,24 +287,6 @@ author_profile: true
             <span class="pt-badge--gold pt-badge">TESP 2025 Winner</span>
             <span class="pt-badge--amber pt-badge">Robotics Course</span>
             <span class="pt-badge">4 ECTS</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- NEUREASON 2026 -->
-      <div class="pt-item">
-        <div class="pt-dot pt-dot--blue"><span></span></div>
-        <div class="pt-content">
-          <div class="pt-period pt-period--blue">March 2026</div>
-          <div class="pt-title"><a href="https://neurmad.github.io/" target="_blank" rel="noopener">NEUREASON'26 — Neural Reasoning for Scientific and Mathematical Discovery</a></div>
-          <div class="pt-org">🇬🇧 Cambridge, United Kingdom &nbsp;·&nbsp; Department of Computer Science and Technology, University of Cambridge</div>
-          <div class="pt-body">
-            <p>Participated in the 2026 workshop on neural reasoning for scientific and mathematical discovery, held on <strong>March 23-24, 2026</strong> at the University of Cambridge.</p>
-          </div>
-          <div class="pt-badges">
-            <span class="pt-badge--blue pt-badge">NEUREASON'26</span>
-            <span class="pt-badge">Neural Reasoning</span>
-            <span class="pt-badge--blue pt-badge">Scientific Discovery</span>
           </div>
         </div>
       </div>

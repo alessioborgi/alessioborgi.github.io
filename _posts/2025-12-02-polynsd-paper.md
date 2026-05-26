@@ -37,6 +37,23 @@ toc_label: "Contents"
   font-size: 0.93rem;
 }
 .paper-meta strong { color: #003E74; }
+.paper-insight {
+  margin: 1.25rem 0;
+  padding: 1rem 1.15rem;
+  border-radius: 10px;
+  border: 1px solid #dbeafe;
+  background: linear-gradient(145deg, #f8fbff, #eef6ff);
+}
+.paper-insight h3 {
+  margin: 0 0 0.45rem;
+  color: #0f2a36;
+  font-size: 1rem;
+}
+.paper-insight p {
+  margin: 0;
+  color: #334155;
+  font-size: 0.95rem;
+}
 .key-takeaways {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
@@ -66,6 +83,12 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/papers/polynsd-paper.png" alt="First page of the Polynomial Neural Sheaf Diffusion paper" caption="Paper preview — Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves (Borgi and Liò, 2025)." %}
 </div>
 
+## Why This Paper Exists
+
+PolyNSD starts from a practical frustration: **Neural Sheaf Diffusion** is powerful, but it is harder to train and scale than it should be. The original formulation asks the model to repeatedly build and normalise a sheaf diffusion operator with dense restriction maps and expensive matrix machinery. That is a strong theoretical framework, but not always a friendly engineering one.
+
+This paper asks a sharper question: can we keep the geometric benefits of sheaf diffusion while making the propagation rule behave more like a stable, interpretable spectral GNN?
+
 ## Background: Neural Sheaf Diffusion
 
 A **Sheaf Neural Network** enriches a graph with a cellular sheaf: each node and edge gets a vector space (a *stalk*), and each endpoint of each edge gets a *restriction map* encoding how node signals relate to edge signals. The **sheaf Laplacian** encodes this relational geometry and replaces the standard graph Laplacian in the diffusion operator.
@@ -90,25 +113,25 @@ This gives:
 - **No SVD** needed: the recurrence only requires sparse matrix-vector products.
 - **Stability** via convex mixtures (coefficients sum to 1) + spectral rescaling to [−1, 1] + residual/gated paths.
 
-<div class="blog-figure">
-<figure>
-<img src="https://ar5iv.labs.arxiv.org/html/2512.00242/assets/img/polynsd_layer.png" alt="PolyNSD Layer: Chebyshev recurrence, high-pass correction, gated residual">
-<figcaption>Figure 1 — A single PolyNSD layer. The sheaf Laplacian polynomial is evaluated via Chebyshev three-term recurrence (left), followed by a high-pass correction gate and a gated residual connection for stable training.</figcaption>
-</figure>
+<div class="paper-insight">
+  <h3>Figure 1 — The Core PolyNSD Layer</h3>
+  <p>The paper’s central diagram shows a single layer built around a Chebyshev recurrence on the normalised sheaf Laplacian. The key point is not just speed: the recurrence gives a controlled spectral filter, while the residual and gating pieces keep optimisation stable instead of letting deep sheaf propagation drift numerically.</p>
 </div>
 
 ## Architecture Overview
 
-<div class="blog-figure">
-<figure>
-<img src="https://ar5iv.labs.arxiv.org/html/2512.00242/assets/img/1_Entire_Flow.png" alt="PolyNSD end-to-end architecture overview">
-<figcaption>Figure 2 — End-to-end PolyNSD. Input features are projected into stalk spaces using diagonal restriction maps; the polynomial sheaf diffusion layers run the Chebyshev recurrence over the normalised sheaf Laplacian; the output heads perform node classification or regression.</figcaption>
-</figure>
+<div class="paper-insight">
+  <h3>Figure 2 — End-to-End Pipeline</h3>
+  <p>The full architecture is deliberately clean. Node features are lifted into stalk spaces, diffusion is performed through polynomial filtering on the sheaf Laplacian, and the output head reads the result back for prediction. That simplicity is part of the contribution: the model becomes easier to reason about than earlier sheaf pipelines with heavier normalisation machinery.</p>
 </div>
 
 ### Diagonal Restriction Maps
 
 The key parameter-reduction insight: **diagonal restriction maps** (a vector of *d* scalars per node-edge pair instead of a *d × d* matrix) are sufficient for strong performance. This reduces per-edge parameter count from O(d²) to O(d) and decouples performance from large stalk dimensions.
+
+## The Practical Win
+
+This is where the paper becomes especially useful. Many sheaf models implicitly suggest that more expressive geometry requires larger dense restriction maps. PolyNSD shows that this is often the wrong tradeoff. If the spectral filter is doing the right global work, the local maps can stay lightweight and still capture the anisotropic behavior that matters.
 
 ## Why Diagonal Maps Are Enough
 
@@ -116,11 +139,9 @@ This is one of the paper's most useful empirical findings. Earlier sheaf models 
 
 ## Results
 
-<div class="blog-figure">
-<figure>
-<img src="https://ar5iv.labs.arxiv.org/html/2512.00242/assets/img/experiments/Accuracy_vs_StalkDim_2x2.png" alt="Test accuracy vs. stalk dimension on Cora, PubMed, Texas, Film">
-<figcaption>Figure 3 — Test accuracy vs. stalk dimension on four benchmarks (Cora, PubMed, Texas, Film). PolyNSD (solid) maintains strong accuracy across all stalk dimensions; standard NSD (dashed) degrades with large stalk dimensions due to numerical instability. PolyNSD achieves its best results with <em>diagonal</em> maps at small stalk dimensions.</figcaption>
-</figure>
+<div class="paper-insight">
+  <h3>Figure 3 — Accuracy vs. Stalk Dimension</h3>
+  <p>The benchmark plot makes the message concrete: PolyNSD stays strong across stalk dimensions, while standard NSD degrades as the dimension grows and the numerics become less forgiving. The surprising result is that the best regime is often the small, cheap one: diagonal maps with modest stalk sizes.</p>
 </div>
 
 Key results vs. NSD and spectral GNN baselines:
@@ -129,6 +150,10 @@ Key results vs. NSD and spectral GNN baselines:
 - **Diagonal maps + small *d*** match or exceed NSD with dense maps + large *d*.
 - **Lower runtime and memory**: no SVD, sparse recurrence, small stalk dimensions.
 - Spectral filter shape is interpretable: the model learns when to apply low-pass (homophilic) vs. high-pass (heterophilic) filters.
+
+## Why the Result Is Interesting Beyond This Paper
+
+PolyNSD is more than a performance bump over NSD. It suggests a better recipe for future sheaf models: keep the geometric inductive bias, but move expensive expressivity away from fragile local parameterisations and into stable global filtering mechanisms. That is a useful design lesson whether the next step is node classification, heterophily, or more general geometric deep learning.
 
 ## Why This Paper Matters
 

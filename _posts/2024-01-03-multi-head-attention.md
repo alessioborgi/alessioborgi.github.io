@@ -32,7 +32,7 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Multi-Head Attention runs several self-attention operations in parallel, each in a smaller subspace. Each "head" independently learns what to attend to, capturing different aspects of the input. Their outputs are concatenated and projected back.
 </div>
-{% include figure image_path="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Multi-Head Attention" caption="Scaled Dot-Product and Multi-Head Attention (Vaswani et al., 2017)" %}
+{% include figure image_path="/images/blog/transformers/slides/slide-19-multi-head.png" alt="Slide visualizing multi-head attention" caption="From the lecture slides: multi-head attention repeats the same attention pattern across several learned subspaces before concatenating the results. Source: Simone Scardapane, Transformer models lecture, 2023." %}
 
 
 ## Why One Head Isn't Enough
@@ -130,6 +130,8 @@ The formula is simply:
 **MultiHead(Q, K, V) = Concat(head₁, …, headₕ) · W_O**
 
 where **headᵢ = Attention(Q·Wᵢ_Q, K·Wᵢ_K, V·Wᵢ_V)**
+
+{% include figure image_path="/images/blog/transformers/slides/slide-14-attention-op.png" alt="Attention operation reused as the building block inside each head" caption="Each head is still just standard scaled dot-product attention. Multi-head attention becomes powerful because the model learns several such views at once." %}
 
 ## What Each Head Learns
 

@@ -14,6 +14,11 @@
 
 {% assign wrapper_class = include.type | default: "list" %}
 {% assign use_pub_card = include.type == "pub-card" %}
+{% if use_pub_card and post.blogurl %}
+  {% assign primary_url = post.blogurl %}
+{% else %}
+  {% assign primary_url = post.url | prepend: base_path %}
+{% endif %}
 
 <div class="{{ wrapper_class }}__item{% if use_pub_card %} pub-card{% endif %}">
   <article class="archive__item{% if use_pub_card %} pub-card__body{% endif %}" itemscope itemtype="http://schema.org/CreativeWork">
@@ -47,7 +52,7 @@
       {% if post.link %}
         <a href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
       {% else %}
-        <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+        <a href="{{ primary_url }}" rel="permalink">{{ title }}</a>
       {% endif %}
     </h2>
     
@@ -66,7 +71,7 @@
     {% if post.excerpt and site.read_more != 'enabled' %}
     <p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify }}</p>
     {% elsif post.excerpt and site.read_more == 'enabled' %}
-    <p class="archive__item-excerpt" itemprop="description"><p>{{ post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}<strong><a href="{{ base_path }}{{ post.url }}" rel="permalink"> Read more</a></strong></p></p>
+    <p class="archive__item-excerpt" itemprop="description"><p>{{ post.excerpt | markdownify | remove: '<p>' | remove: '</p>' }}<strong><a href="{{ primary_url }}" rel="permalink"> Read more</a></strong></p></p>
     {% endif %}
     
     {% assign link_items = "" %}

@@ -37,7 +37,7 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Because self-attention is order-agnostic, Transformers need an extra signal to know which token is at which position. Positional encodings (PEs) inject this information as vectors added to the token embeddings. Different PE designs have wildly different properties.
 </div>
-{% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Transformer with positional encodings" caption="Positional encodings added to token embeddings in the Transformer (Vaswani et al., 2017)" %}
+{% include figure image_path="/images/blog/transformers/slides/slide-34-positional-heatmap.png" alt="Slide visualizing sinusoidal positional encodings across positions" caption="From the lecture slides: sinusoidal positional encodings create a multi-frequency pattern across sequence positions rather than a single scalar counter. Source: Simone Scardapane, Transformer models lecture, 2023." %}
 
 
 ## The Order-Agnostic Problem
@@ -129,7 +129,7 @@ Fixed methods (sinusoidal, ALiBi) use a deterministic formula — no extra param
 **3. Extrapolation**
 Can the model handle sequences *longer* than those seen during training? This is the key practical question for LLMs serving long documents. ALiBi and RoPE generally win here; standard learned absolute PEs fail badly.
 
-{% include figure image_path="/images/blog/transformers/su2021_rope.png" alt="RoPE as a modern positional encoding approach" caption="Modern long-context Transformers often move from simple absolute encodings to rotary or bias-based schemes such as RoPE and ALiBi (Su et al., 2021)." %}
+{% include figure image_path="/images/blog/transformers/press2022_alibi.png" alt="ALiBi as linear biases added to attention scores" caption="ALiBi changes the attention logits directly with a distance-dependent bias instead of adding explicit positional vectors at the input layer (Press et al., 2022)." %}
 
 ## Which PE Should You Reach For?
 
@@ -146,6 +146,7 @@ Can the model handle sequences *longer* than those seen during training? This is
 - Raffel, C., et al. (2020). [Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/abs/1910.10683).
 - Su, J., et al. (2021). [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864).
 - Press, O., Smith, N. A., & Lewis, M. (2022). [Train Short, Test Long: Attention with Linear Biases](https://arxiv.org/abs/2108.12409).
+- Simone Scardapane. *Transformer (attention-based) models*, lecture slides, 2023.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
