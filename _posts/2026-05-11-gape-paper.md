@@ -15,7 +15,6 @@ permalink: /blog/transformers/gape-paper/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { max-width: 100%; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }

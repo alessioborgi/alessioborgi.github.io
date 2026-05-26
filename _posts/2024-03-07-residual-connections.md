@@ -16,8 +16,9 @@ permalink: /blog/transformers/residual-connections/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -48,6 +49,10 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> A residual connection adds the input of a sub-layer directly to its output: y = x + f(x). This creates a highway for gradients to bypass any sub-layer during backpropagation, enabling very deep networks to train stably. It also encourages each layer to learn small refinements rather than full transformations.
 </div>
 {% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Residual connections" caption="Residual (skip) connections in the Transformer block (Vaswani et al., 2017)" %}
+
+<div class="insight-box">
+<strong>Simple mental model:</strong> a residual connection tells every sub-layer, "improve the representation if you can, but do not destroy what is already there."
+</div>
 
 
 ## The Problem with Deep Networks

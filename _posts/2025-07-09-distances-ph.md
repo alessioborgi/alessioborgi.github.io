@@ -14,5 +14,4 @@ icon: "📏"
 read_mins: 4
 permalink: /blog/persistent-homology/distances-ph/
 ---
-
 {% include figure image_path="/images/blog/tdl/hofer2020_topological_layers.png" alt="Distances between persistence diagrams" caption="Topological distance representations (Hofer et al., 2020)" %}

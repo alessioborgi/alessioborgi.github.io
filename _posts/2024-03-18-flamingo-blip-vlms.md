@@ -16,7 +16,6 @@ permalink: /blog/transformers/flamingo-blip-vlms/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);

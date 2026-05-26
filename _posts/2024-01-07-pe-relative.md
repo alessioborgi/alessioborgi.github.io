@@ -16,12 +16,13 @@ permalink: /blog/transformers/pe-relative/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
 .tldr-box strong { color: #0f2a36; }
+.insight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px; padding: .95rem 1.1rem; margin: 1.25rem 0; }
 .key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
 .key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
 .key-takeaways ul { margin: 0; padding-left: 1.2rem; }
@@ -31,6 +32,11 @@ toc_label: "Contents"
 
 <div class="tldr-box">
   <strong>TL;DR:</strong> Relative PE encodes how far apart two tokens are rather than where each one sits. Shaw et al. (2018) add learnable distance vectors to the attention computation; T5 adds a simpler learned scalar bias per distance bucket. Both approaches generalise better than absolute PE.
+</div>
+{% include figure image_path="/images/blog/transformers/raffel2020_t5.png" alt="T5 and relative positional bias" caption="T5 popularised a lightweight learned relative attention bias instead of absolute positional vectors (Raffel et al., 2020)." %}
+
+<div class="insight-box">
+<strong>What relative PE gets right:</strong> for many language tasks, distance matters more than absolute index. "one token back" is often reusable; "position 387" usually is not.
 </div>
 
 ## The Problem with Absolute Position

@@ -16,8 +16,9 @@ permalink: /blog/transformers/qkv-intuition/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -107,6 +108,12 @@ Two reasons:
 <div class="insight-box">
 <strong>Key insight:</strong> Q and K are both in the same "matching space" (so their dot product is meaningful). V lives in a different "content space" (what actually gets mixed into the output). These are distinct roles, and the model learns each separately.
 </div>
+
+{% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention as lookup over Q, K, V" caption="Q and K decide the lookup weights; V provides the content that gets mixed into the output (Vaswani et al., 2017)." %}
+
+## The Most Common Beginner Confusion
+
+A lot of people think V is just "K later in the pipeline." It is not. K is optimized to be matched against queries; V is optimized to carry useful information once a match has been found.
 
 ## The Full Attention Computation Step by Step
 

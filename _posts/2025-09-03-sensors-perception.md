@@ -16,7 +16,6 @@ permalink: /blog/robotics/sensors-perception/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .tldr-box strong { color: #0d9488; }

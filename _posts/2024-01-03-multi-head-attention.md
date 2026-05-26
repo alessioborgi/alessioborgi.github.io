@@ -16,9 +16,9 @@ permalink: /blog/transformers/multi-head-attention/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
 .tldr-box strong { color: #0f2a36; }
@@ -26,6 +26,7 @@ toc_label: "Contents"
 .key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
 .key-takeaways ul { margin: 0; padding-left: 1.2rem; }
 .key-takeaways li { margin-bottom: .3rem; font-size: .95rem; }
+.insight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px; padding: .95rem 1.1rem; margin: 1.25rem 0; }
 </style>
 
 <div class="tldr-box">
@@ -39,6 +40,10 @@ toc_label: "Contents"
 A single self-attention head computes one set of relevance scores across all token pairs. But language is rich: in one sentence, "bank" might need to attend to "river" for its meaning AND to "withdrew" for its syntactic role — simultaneously.
 
 With a single head, the model must average these signals into one distribution, losing specificity. Multiple heads solve this by each specialising in a different type of relationship.
+
+<div class="insight-box">
+<strong>Intuition:</strong> one head is one lens. Multi-head attention gives the model several lenses at once: one may track syntax, another semantics, another long-range reference.
+</div>
 
 ## The Idea: Parallel Subspaces
 

@@ -16,8 +16,9 @@ permalink: /blog/transformers/feed-forward-networks/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -48,6 +49,10 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> Every Transformer block has two sub-layers: multi-head attention and a two-layer MLP (the FFN). The FFN is applied independently to each token, expands the dimension by 4×, applies a nonlinearity, then contracts back. It accounts for ~2/3 of total parameters and is where most factual knowledge is stored.
 </div>
 {% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Feed-forward sub-layer" caption="Position-wise feed-forward network in the Transformer (Vaswani et al., 2017)" %}
+
+<div class="insight-box">
+<strong>Why the FFN is underrated:</strong> attention decides who talks to whom; the FFN is where each token actually gets nonlinearly transformed and enriched.
+</div>
 
 
 ## The FFN Is Half the Block

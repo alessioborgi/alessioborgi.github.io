@@ -14,5 +14,4 @@ icon: "💻"
 read_mins: 4
 permalink: /blog/persistent-homology/ripser-gudhi/
 ---
-
 {% include figure image_path="/images/blog/tdl/bauer2021_ripser_x2.png" alt="Ripser algorithm" caption="Ripser: efficient persistent homology computation (Bauer, 2021)" %}

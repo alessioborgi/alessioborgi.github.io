@@ -14,5 +14,4 @@ icon: "🧮"
 read_mins: 5
 permalink: /blog/persistent-homology/boundary-matrix/
 ---
-
 {% include figure image_path="/images/blog/tdl/gabrielsson2020_gfl.png" alt="Boundary matrix computation" caption="Simplicial complex structure for boundary computation (Gabrielsson et al., 2020)" %}

@@ -16,9 +16,9 @@ permalink: /blog/transformers/scaled-dot-product-attention/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
@@ -113,6 +113,10 @@ Now the inputs to softmax live in a reasonable range regardless of d_k. Softmax 
 <div class="insight-box">
 <strong>Key insight:</strong> The √d_k term is not a hyperparameter to tune. It is a mathematical consequence of how dot product variance scales with dimension. It keeps the model trainable as d_k grows.
 </div>
+
+## Why This Is So Easy to Miss
+
+If you only read the attention formula once, the scaling term looks cosmetic. In reality it is a stability device: attention is not just about matching tokens, it is also about keeping those matches in a numerical regime where softmax can still learn.
 
 ## Visualising the Effect
 

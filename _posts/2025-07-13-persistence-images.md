@@ -14,5 +14,4 @@ icon: "🖼️"
 read_mins: 4
 permalink: /blog/persistent-homology/persistence-images/
 ---
-
 {% include figure image_path="/images/blog/tdl/carriere2020_perslay.png" alt="Persistence images vectorisation" caption="Persistence vectorisation for ML (Carrière et al., 2020)" %}

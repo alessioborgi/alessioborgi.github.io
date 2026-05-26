@@ -16,8 +16,9 @@ permalink: /blog/transformers/layer-normalization/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -58,6 +59,10 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> Layer norm rescales each token's feature vector to have zero mean and unit variance, then applies learned scale (γ) and shift (β). Post-LN (original Transformer) is less stable; Pre-LN (used by GPT-2, LLaMA) allows training without warmup and scales more reliably.
 </div>
 {% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Layer normalisation in Transformer" caption="Layer normalisation position in the Transformer block (Vaswani et al., 2017)" %}
+
+<div class="insight-box">
+<strong>Why people care about Pre-LN vs Post-LN:</strong> this is one of those seemingly small design choices that decides whether very deep Transformers train smoothly or become unstable.
+</div>
 
 
 ## Why Normalisation at All?

@@ -14,5 +14,4 @@ icon: "🕸️"
 read_mins: 5
 permalink: /blog/persistent-homology/tda-graphs/
 ---
-
 {% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="TDA applied to graphs" caption="Topological methods for graph analysis (Hensel et al., 2021)" %}

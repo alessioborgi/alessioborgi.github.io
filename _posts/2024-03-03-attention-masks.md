@@ -16,8 +16,9 @@ permalink: /blog/transformers/attention-masks/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -72,6 +73,10 @@ Masks solve all of these. They are applied to the raw attention scores *before* 
 
 <div class="math-box">
 masked_scores = scores + mask &nbsp;&nbsp; where mask[i,j] = 0 (attend) or −∞ (block)
+</div>
+
+<div class="insight-box">
+<strong>Why masks matter so much:</strong> GPT, BERT, and T5 do not mainly differ in the attention equation. They differ in what that equation is allowed to see.
 </div>
 
 ## 1. Bidirectional Mask (BERT-style)

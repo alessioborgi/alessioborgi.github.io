@@ -270,7 +270,7 @@ author_profile: true
 <!-- ════════════════════════════════════════════════════════ -->
 <!--  BOOK I · TRANSFORMERS                                   -->
 <!-- ════════════════════════════════════════════════════════ -->
-<div class="blog-book">
+<div class="blog-book" data-book="transformers">
   <div class="book-banner">
     <span class="book-icon">🤖</span>
     <div>
@@ -293,7 +293,7 @@ author_profile: true
     {% endif %}
 
     {% if t_core.size > 0 %}
-    <div class="subsection-label">🧩 Core Components</div>
+    <div class="subsection-label" data-section="core">🧩 Core Components</div>
     <div class="chapters-grid">
       {% for post in t_core %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -310,7 +310,7 @@ author_profile: true
     {% endif %}
 
     {% if t_pe.size > 0 %}
-    <div class="subsection-label">📐 Positional Encodings</div>
+    <div class="subsection-label" data-section="positional-encodings">📐 Positional Encodings</div>
     <div class="chapters-grid">
       {% for post in t_pe %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -327,7 +327,7 @@ author_profile: true
     {% endif %}
 
     {% if t_variants.size > 0 %}
-    <div class="subsection-label">🚀 Modern Variants</div>
+    <div class="subsection-label" data-section="variants">🚀 Modern Variants</div>
     <div class="chapters-grid">
       {% for post in t_variants %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -344,7 +344,7 @@ author_profile: true
     {% endif %}
 
     {% if t_vision.size > 0 %}
-    <div class="subsection-label">🖼️ Vision & Multimodal</div>
+    <div class="subsection-label" data-section="vision">🖼️ Vision & Multimodal</div>
     <div class="chapters-grid">
       {% for post in t_vision %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -367,7 +367,7 @@ author_profile: true
 <!-- ════════════════════════════════════════════════════════ -->
 <!--  BOOK II · GRAPH NEURAL NETWORKS                         -->
 <!-- ════════════════════════════════════════════════════════ -->
-<div class="blog-book">
+<div class="blog-book" data-book="gnn">
   <div class="book-banner">
     <span class="book-icon">🕸️</span>
     <div>
@@ -390,7 +390,7 @@ author_profile: true
     {% endif %}
 
     {% if g_fund.size > 0 %}
-    <div class="subsection-label">📊 Graph Fundamentals</div>
+    <div class="subsection-label" data-section="fundamentals">📊 Graph Fundamentals</div>
     <div class="chapters-grid">
       {% for post in g_fund %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -407,7 +407,7 @@ author_profile: true
     {% endif %}
 
     {% if g_arch.size > 0 %}
-    <div class="subsection-label">🏗️ Architectures</div>
+    <div class="subsection-label" data-section="architectures">🏗️ Architectures</div>
     <div class="chapters-grid">
       {% for post in g_arch %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -424,7 +424,7 @@ author_profile: true
     {% endif %}
 
     {% if g_expressivity.size > 0 %}
-    <div class="subsection-label">🔬 Expressivity & Limitations</div>
+    <div class="subsection-label" data-section="expressivity">🔬 Expressivity & Limitations</div>
     <div class="chapters-grid">
       {% for post in g_expressivity %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -441,7 +441,7 @@ author_profile: true
     {% endif %}
 
     {% if g_graph_pe.size > 0 %}
-    <div class="subsection-label">📍 Graph Positional & Structural Encodings</div>
+    <div class="subsection-label" data-section="graph-pe">📍 Graph Positional & Structural Encodings</div>
     <div class="chapters-grid">
       {% for post in g_graph_pe %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -458,7 +458,7 @@ author_profile: true
     {% endif %}
 
     {% if g_pooling.size > 0 %}
-    <div class="subsection-label">🧺 Pooling & Graph-Level Learning</div>
+    <div class="subsection-label" data-section="pooling">🧺 Pooling & Graph-Level Learning</div>
     <div class="chapters-grid">
       {% for post in g_pooling %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -475,7 +475,7 @@ author_profile: true
     {% endif %}
 
     {% if g_heterogeneous.size > 0 %}
-    <div class="subsection-label">🎨 Heterogeneous & Relational Graphs</div>
+    <div class="subsection-label" data-section="heterogeneous">🎨 Heterogeneous & Relational Graphs</div>
     <div class="chapters-grid">
       {% for post in g_heterogeneous %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -492,7 +492,7 @@ author_profile: true
     {% endif %}
 
     {% if g_dynamic.size > 0 %}
-    <div class="subsection-label">🌊 Dynamic & Temporal Graphs</div>
+    <div class="subsection-label" data-section="dynamic">🌊 Dynamic & Temporal Graphs</div>
     <div class="chapters-grid">
       {% for post in g_dynamic %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -509,7 +509,7 @@ author_profile: true
     {% endif %}
 
     {% if g_geometric.size > 0 %}
-    <div class="subsection-label">🔮 Geometric & Equivariant GNNs</div>
+    <div class="subsection-label" data-section="geometric">🔮 Geometric & Equivariant GNNs</div>
     <div class="chapters-grid">
       {% for post in g_geometric %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -526,7 +526,7 @@ author_profile: true
     {% endif %}
 
     {% if g_applications.size > 0 %}
-    <div class="subsection-label">🚀 Applications</div>
+    <div class="subsection-label" data-section="applications">🚀 Applications</div>
     <div class="chapters-grid">
       {% for post in g_applications %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -548,7 +548,7 @@ author_profile: true
 <!-- ════════════════════════════════════════════════════════ -->
 <!--  BOOK III · SHEAF NEURAL NETWORKS                        -->
 <!-- ════════════════════════════════════════════════════════ -->
-<div class="blog-book">
+<div class="blog-book" data-book="sheaf">
   <div class="book-banner">
     <span class="book-icon">🌿</span>
     <div>
@@ -571,7 +571,7 @@ author_profile: true
     {% endif %}
 
     {% if s_foundations.size > 0 %}
-    <div class="subsection-label">🧱 Mathematical Foundations</div>
+    <div class="subsection-label" data-section="foundations">🧱 Mathematical Foundations</div>
     <div class="chapters-grid">
       {% for post in s_foundations %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -588,7 +588,7 @@ author_profile: true
     {% endif %}
 
     {% if s_core_papers.size > 0 %}
-    <div class="subsection-label">📄 Core Papers</div>
+    <div class="subsection-label" data-section="core-papers">📄 Core Papers</div>
     <div class="chapters-grid">
       {% for post in s_core_papers %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -605,7 +605,7 @@ author_profile: true
     {% endif %}
 
     {% if s_theory.size > 0 %}
-    <div class="subsection-label">🔬 Theory</div>
+    <div class="subsection-label" data-section="theory">🔬 Theory</div>
     <div class="chapters-grid">
       {% for post in s_theory %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -622,7 +622,7 @@ author_profile: true
     {% endif %}
 
     {% if s_extensions.size > 0 %}
-    <div class="subsection-label">🔭 Extensions</div>
+    <div class="subsection-label" data-section="extensions">🔭 Extensions</div>
     <div class="chapters-grid">
       {% for post in s_extensions %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -639,7 +639,7 @@ author_profile: true
     {% endif %}
 
     {% if s_applications.size > 0 %}
-    <div class="subsection-label">🚀 Applications & Open Problems</div>
+    <div class="subsection-label" data-section="applications">🚀 Applications & Open Problems</div>
     <div class="chapters-grid">
       {% for post in s_applications %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -662,7 +662,7 @@ author_profile: true
 <!-- ════════════════════════════════════════════════════════ -->
 <!--  BOOK IV · PERSISTENT HOMOLOGY                           -->
 <!-- ════════════════════════════════════════════════════════ -->
-<div class="blog-book">
+<div class="blog-book" data-book="tdl">
   <div class="book-banner">
     <span class="book-icon">🔺</span>
     <div>
@@ -685,7 +685,7 @@ author_profile: true
     {% endif %}
 
     {% if ph_foundations.size > 0 %}
-    <div class="subsection-label">🧱 Mathematical Foundations</div>
+    <div class="subsection-label" data-section="foundations">🧱 Mathematical Foundations</div>
     <div class="chapters-grid">
       {% for post in ph_foundations %}
         {% unless post.is_overview %}
@@ -704,7 +704,7 @@ author_profile: true
     {% endif %}
 
     {% if ph_core.size > 0 %}
-    <div class="subsection-label">🔁 Persistent Homology Core</div>
+    <div class="subsection-label" data-section="core">🔁 Persistent Homology Core</div>
     <div class="chapters-grid">
       {% for post in ph_core %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -721,7 +721,7 @@ author_profile: true
     {% endif %}
 
     {% if ph_computation.size > 0 %}
-    <div class="subsection-label">🧮 Computational Methods</div>
+    <div class="subsection-label" data-section="computation">🧮 Computational Methods</div>
     <div class="chapters-grid">
       {% for post in ph_computation %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -738,7 +738,7 @@ author_profile: true
     {% endif %}
 
     {% if ph_ml.size > 0 %}
-    <div class="subsection-label">🤖 Machine Learning Integration</div>
+    <div class="subsection-label" data-section="ml-integration">🤖 Machine Learning Integration</div>
     <div class="chapters-grid">
       {% for post in ph_ml %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -755,7 +755,7 @@ author_profile: true
     {% endif %}
 
     {% if ph_applications.size > 0 %}
-    <div class="subsection-label">🚀 Applications & Open Problems</div>
+    <div class="subsection-label" data-section="applications">🚀 Applications & Open Problems</div>
     <div class="chapters-grid">
       {% for post in ph_applications %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -777,7 +777,7 @@ author_profile: true
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- Book V — Reinforcement Learning                         -->
 <!-- ════════════════════════════════════════════════════════ -->
-<div class="blog-book">
+<div class="blog-book" data-book="rl">
   <div class="book-banner">
     <span class="book-icon">🎮</span>
     <div>
@@ -800,7 +800,7 @@ author_profile: true
     {% endif %}
 
     {% if rl_foundations.size > 0 %}
-    <div class="subsection-label">🧱 Foundations</div>
+    <div class="subsection-label" data-section="foundations">🧱 Foundations</div>
     <div class="chapters-grid">
       {% for post in rl_foundations %}
         {% unless post.is_overview %}
@@ -819,7 +819,7 @@ author_profile: true
     {% endif %}
 
     {% if rl_value_based.size > 0 %}
-    <div class="subsection-label">📊 Value-Based Methods</div>
+    <div class="subsection-label" data-section="value-based">📊 Value-Based Methods</div>
     <div class="chapters-grid">
       {% for post in rl_value_based %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -836,7 +836,7 @@ author_profile: true
     {% endif %}
 
     {% if rl_policy_gradient.size > 0 %}
-    <div class="subsection-label">🎯 Policy Gradient Methods</div>
+    <div class="subsection-label" data-section="policy-gradient">🎯 Policy Gradient Methods</div>
     <div class="chapters-grid">
       {% for post in rl_policy_gradient %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -853,7 +853,7 @@ author_profile: true
     {% endif %}
 
     {% if rl_model_based.size > 0 %}
-    <div class="subsection-label">🌍 Model-Based RL</div>
+    <div class="subsection-label" data-section="model-based">🌍 Model-Based RL</div>
     <div class="chapters-grid">
       {% for post in rl_model_based %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -870,7 +870,7 @@ author_profile: true
     {% endif %}
 
     {% if rl_multi_agent.size > 0 %}
-    <div class="subsection-label">👥 Multi-Agent RL</div>
+    <div class="subsection-label" data-section="multi-agent">👥 Multi-Agent RL</div>
     <div class="chapters-grid">
       {% for post in rl_multi_agent %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -887,7 +887,7 @@ author_profile: true
     {% endif %}
 
     {% if rl_applications.size > 0 %}
-    <div class="subsection-label">🚀 Applications</div>
+    <div class="subsection-label" data-section="applications">🚀 Applications</div>
     <div class="chapters-grid">
       {% for post in rl_applications %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -909,7 +909,7 @@ author_profile: true
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- Book VI — Robotics                                      -->
 <!-- ════════════════════════════════════════════════════════ -->
-<div class="blog-book">
+<div class="blog-book" data-book="robotics">
   <div class="book-banner">
     <span class="book-icon">🤖</span>
     <div>
@@ -932,7 +932,7 @@ author_profile: true
     {% endif %}
 
     {% if rob_foundations.size > 0 %}
-    <div class="subsection-label">🧱 Foundations</div>
+    <div class="subsection-label" data-section="foundations">🧱 Foundations</div>
     <div class="chapters-grid">
       {% for post in rob_foundations %}
         {% unless post.is_overview %}
@@ -951,7 +951,7 @@ author_profile: true
     {% endif %}
 
     {% if rob_planning.size > 0 %}
-    <div class="subsection-label">🗺️ Planning & Navigation</div>
+    <div class="subsection-label" data-section="planning">🗺️ Planning & Navigation</div>
     <div class="chapters-grid">
       {% for post in rob_planning %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -968,7 +968,7 @@ author_profile: true
     {% endif %}
 
     {% if rob_learning.size > 0 %}
-    <div class="subsection-label">🎓 Learning for Robots</div>
+    <div class="subsection-label" data-section="learning">🎓 Learning for Robots</div>
     <div class="chapters-grid">
       {% for post in rob_learning %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -985,7 +985,7 @@ author_profile: true
     {% endif %}
 
     {% if rob_perception.size > 0 %}
-    <div class="subsection-label">👁️ Perception</div>
+    <div class="subsection-label" data-section="perception">👁️ Perception</div>
     <div class="chapters-grid">
       {% for post in rob_perception %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -1002,7 +1002,7 @@ author_profile: true
     {% endif %}
 
     {% if rob_frontier.size > 0 %}
-    <div class="subsection-label">🔮 Frontier & Open Problems</div>
+    <div class="subsection-label" data-section="frontier">🔮 Frontier & Open Problems</div>
     <div class="chapters-grid">
       {% for post in rob_frontier %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
@@ -1023,10 +1023,12 @@ author_profile: true
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  var mlBlogCatalog = {{ site.data.mlblogposts | jsonify }};
+
   function createSoonNote(copy) {
     var note = document.createElement('div');
     note.className = 'coming-soon-note';
-    note.innerHTML = '<strong>Soon to be published...</strong><br>' + copy;
+    note.innerHTML = '<strong>Soon to be Published...</strong><br>' + copy;
     return note;
   }
 
@@ -1042,25 +1044,34 @@ document.addEventListener('DOMContentLoaded', function () {
     next.replaceWith(createSoonNote(copy));
   }
 
-  var books = Array.from(document.querySelectorAll('.blog-book'));
-  books.forEach(function (book, index) {
-    var body = book.querySelector('.book-body');
-    if (!body) return;
+  function hasOnlineOverview(bookKey) {
+    var book = mlBlogCatalog[bookKey];
+    if (!book || !Array.isArray(book.overview)) return false;
+    return book.overview.some(function (entry) {
+      return entry && entry.published === 'online';
+    });
+  }
 
-    if (index === 0) {
-      replaceOverview(body, 'The overview for this book is being revised and will be republished in the same short, visual format.');
-      body.querySelectorAll('.subsection-label').forEach(function (label) {
-        var text = label.textContent || '';
-        var keepLive = text.indexOf('Core Components') !== -1 || text.indexOf('Positional Encodings') !== -1;
-        if (!keepLive) {
-          replaceGridAfterLabel(label, 'This subsection is currently offline while it is being rewritten for clarity, stronger visuals, and a tighter 3–5 minute reading flow.');
-        }
-      });
-      return;
+  function hasOnlineSection(bookKey, sectionKey) {
+    var book = mlBlogCatalog[bookKey];
+    if (!book || !book.sections || !book.sections[sectionKey]) return false;
+    var posts = book.sections[sectionKey].posts || [];
+    return posts.some(function (entry) {
+      return entry && entry.published === 'online';
+    });
+  }
+
+  Array.from(document.querySelectorAll('.blog-book')).forEach(function (book) {
+    var bookKey = book.dataset.book;
+    var body = book.querySelector('.book-body');
+    if (!body || !bookKey) return;
+
+    if (!hasOnlineOverview(bookKey)) {
+      replaceOverview(body, 'This overview is currently offline while the book is being rebuilt with clearer structure, richer figures, and shorter chapter flows.');
     }
 
-    replaceOverview(body, 'This overview is currently offline while the book is being rebuilt with clearer structure, richer figures, and shorter chapter flows.');
     body.querySelectorAll('.subsection-label').forEach(function (label) {
+      if (hasOnlineSection(bookKey, label.dataset.section)) return;
       replaceGridAfterLabel(label, 'This subsection is currently offline and will be republished soon in the same concise, image-rich style.');
     });
   });

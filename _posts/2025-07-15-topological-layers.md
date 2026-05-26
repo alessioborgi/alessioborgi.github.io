@@ -14,5 +14,4 @@ icon: "🧠"
 read_mins: 5
 permalink: /blog/persistent-homology/topological-layers/
 ---
-
 {% include figure image_path="/images/blog/tdl/hofer2020_topological_layers.png" alt="Topological layers in neural networks" caption="Topological layers for deep learning (Hofer et al., 2020)" %}

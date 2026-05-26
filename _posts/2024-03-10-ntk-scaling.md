@@ -16,8 +16,9 @@ permalink: /blog/transformers/ntk-scaling/
 toc: true
 toc_label: "Contents"
 ---
-
 <style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -98,6 +99,8 @@ This larger base stretches all frequencies proportionally. High-frequency dimens
 <div class="insight-box">
 <strong>Why NTK?</strong> The NTK connection comes from viewing the Transformer as a kernel machine in function space. When you change context length, you are effectively changing the kernel's support. The frequency scaling ensures the kernel remains well-conditioned — similar in spirit to how NTK theory analyzes function space behaviour under parameter changes.
 </div>
+
+{% include figure image_path="/images/blog/transformers/su2021_rope.png" alt="RoPE as the basis that NTK scaling modifies" caption="NTK-aware scaling is a way to retune RoPE so its frequency spectrum remains useful at longer context lengths." %}
 
 ## NTK vs Linear Interpolation
 

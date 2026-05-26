@@ -14,5 +14,4 @@ icon: "☁️"
 read_mins: 5
 permalink: /blog/persistent-homology/vietoris-rips-cech/
 ---
-
 {% include figure image_path="/images/blog/tdl/gabrielsson2020_gfl.png" alt="Vietoris-Rips complex" caption="Geometric filtration constructions (Gabrielsson et al., 2020)" %}

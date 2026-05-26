@@ -14,5 +14,4 @@ icon: "🧬"
 read_mins: 5
 permalink: /blog/persistent-homology/tda-biology/
 ---
-
 {% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="TDA in biology" caption="Topological data analysis applications in biology (Hensel et al., 2021)" %}
