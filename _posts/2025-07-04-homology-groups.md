@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Homology Groups: Counting Holes in Shapes"
-date: 2025-07-04
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [homology, Betti-numbers, chain-complex, boundary-operator, cycle]
+published: false
 excerpt: "Homology groups are algebraic invariants that count topological holes of every dimension: β₀ counts connected components, β₁ counts loops, β₂ counts voids. Computed via chain complexes and boundary operators, they are the language in which persistent homology speaks."
 author_profile: true
 read_time: true

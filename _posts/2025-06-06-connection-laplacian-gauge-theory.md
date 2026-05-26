@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Connection Laplacians and Gauge Theory on Graphs"
-date: 2025-06-06
 categories: [sheaf]
 book: sheaf
 subsection: foundations
 tags: [connection-Laplacian, gauge-theory, orthogonal-maps, holonomy, angular-synchronisation, O(d)]
+published: false
 excerpt: "When all restriction maps are orthogonal matrices, the Sheaf Laplacian becomes the Connection Laplacian — the graph analogue of the gauge-covariant Laplacian in differential geometry. This post covers the O(d) gauge group, holonomy, curvature on graphs, and the angular synchronisation problem that motivates orthogonal sheaf maps."
 author_profile: true
 read_time: true

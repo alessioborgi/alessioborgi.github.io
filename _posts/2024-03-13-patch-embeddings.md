@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Patch Embeddings: How Images Become Tokens"
-date: 2024-03-13
 categories: [transformers]
 book: transformers
 subsection: vision
 tags: [ViT, patch-embeddings, vision-transformer, tokenization]
+published: false
 excerpt: "ViT's key insight: split an image into fixed-size patches, flatten each patch into a vector, and project it linearly. The image is now a sequence of tokens — and any Transformer can handle it."
 author_profile: true
 read_time: true

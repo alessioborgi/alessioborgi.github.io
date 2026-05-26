@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Residual Connections: Why Transformers Can Be Deep"
-date: 2024-03-07
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: core

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sim-to-Real Transfer: Bridging the Reality Gap"
-date: 2025-09-09
 categories: [robotics]
 book: robotics
 subsection: learning
 tags: [sim-to-real, domain-randomisation, reality-gap, OpenAI-Dactyl, transfer]
+published: false
 excerpt: "Physics simulators are cheap and safe, but policies trained in them often fail on real hardware. Domain randomisation, domain adaptation, and system identification are the main strategies to close the reality gap."
 author_profile: true
 read_time: true

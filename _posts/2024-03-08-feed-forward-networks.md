@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Feed-Forward Networks: The Forgotten Half of Transformers"
-date: 2024-03-08
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: core

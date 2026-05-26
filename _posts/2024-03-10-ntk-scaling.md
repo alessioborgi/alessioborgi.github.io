@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "NTK-Aware Scaling: Extending Context Without Fine-Tuning"
-date: 2024-03-10
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: positional-encodings

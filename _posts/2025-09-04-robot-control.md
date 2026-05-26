@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Robot Control: PID, Impedance, and Whole-Body Control"
-date: 2025-09-04
 categories: [robotics]
 book: robotics
 subsection: foundations
 tags: [control, PID, impedance-control, whole-body-control, MPC]
+published: false
 excerpt: "From PID position loops to impedance control and hierarchical whole-body control, robot controllers span a spectrum from simple reactive feedback to sophisticated model-based optimisation."
 author_profile: true
 read_time: true

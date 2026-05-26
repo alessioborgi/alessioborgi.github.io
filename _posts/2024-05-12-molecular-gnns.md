@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Molecular GNNs: Learning on Atoms and Bonds"
-date: 2024-05-12
 categories: [gnn]
 book: gnn
 subsection: geometric
 tags: [molecular, drug-discovery, SchNet, DimeNet, QM9, HOMO-LUMO]
+published: false
 excerpt: "Molecules are graphs. Molecular GNNs predict chemical properties from structure. The best models use 3D coordinates and bond angles — not just connectivity."
 author_profile: true
 read_time: true

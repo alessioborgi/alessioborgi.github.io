@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaf GNNs for Heterophilic Node Classification: Benchmarks and Results"
-date: 2025-06-23
 categories: [sheaf]
 book: sheaf
 subsection: applications
 tags: [heterophily, benchmark, Chameleon, Squirrel, Cornell, Texas, node-classification, empirical]
+published: false
 excerpt: "A systematic comparison of sheaf GNNs against baselines on standard heterophilic node classification benchmarks. Which datasets benefit most from sheaf structure? How does stalk dimension d affect performance? When do sheaves win — and when don't they?"
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Object Pose Estimation for Robot Manipulation"
-date: 2025-09-14
 categories: [robotics]
 book: robotics
 subsection: perception
 tags: [pose-estimation, 6DOF, PoseNet, FoundPose, object-detection]
+published: false
 excerpt: "6-DOF object pose estimation gives robots the precise spatial knowledge needed for grasping and manipulation. From direct regression with PoseCNN to keypoint-based and category-level methods, pose estimation is a cornerstone of robot perception."
 author_profile: true
 read_time: true

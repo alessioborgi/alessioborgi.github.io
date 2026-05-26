@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Reeb Graphs: Topological Skeletons of Functions"
-date: 2025-09-25
 categories: [tdl]
 book: tdl
 subsection: ml-integration
 tags: [reeb-graph, contour-tree, merge-tree, scalar-fields, topological-skeletons]
+published: false
 excerpt: "The Reeb graph of a scalar function f: M → ℝ on a manifold contracts each connected component of each level set f⁻¹(t) to a point, producing a graph that captures the topology of the function's sublevel sets. Reeb graphs and their variants (merge trees, contour trees) are fundamental tools in scientific visualisation and TDA."
 author_profile: true
 read_time: true

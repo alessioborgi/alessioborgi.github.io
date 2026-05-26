@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Z-SASLM: Zero-Shot Style Blending via Spherical Interpolation"
-date: 2025-06-17
 categories: [research]
 book: generative-ai
 subsection: style-transfer
 tags: [style-transfer, diffusion-models, latent-space, generative-ai, cvpr]
+published: false
 excerpt: "Z-SASLM is a zero-shot, fine-tuning-free style blending pipeline that replaces linear latent interpolation with SLERP along the geodesic of the hypersphere, preserving latent manifold structure when blending multiple styles. Published at CVPR 2025 Workshop."
 author_profile: true
 read_time: true
@@ -17,8 +17,9 @@ toc_label: "Contents"
 ---
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { max-width: 100%; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure img { width: min(100%, 780px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .6rem; font-style: italic; }
+.paper-preview img { width: min(100%, 620px); }
 .tldr-box {
   background: linear-gradient(145deg,#fef3c7,#fde68a);
   border-left: 4px solid #d97706;
@@ -68,7 +69,9 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2503.23234" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
+<div class="paper-preview">
 {% include figure image_path="/images/blog/papers/zsaslm-paper.png" alt="First page of the Z-SASLM paper" caption="Paper preview — Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation (Borgi et al., 2025)." %}
+</div>
 
 ## The Problem: Linear Blending in a Non-Linear Space
 

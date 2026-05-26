@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Robot Locomotion: Walking, Running, and Jumping"
-date: 2025-09-11
 categories: [robotics]
 book: robotics
 subsection: learning
 tags: [locomotion, legged-robots, Anymal, MuJoCo, terrain-adaptation]
+published: false
 excerpt: "Reinforcement learning has transformed legged locomotion: from MuJoCo benchmarks and ANYmal quadruped RL to bipedal Cassie and parkour-capable robots trained with terrain curriculum."
 author_profile: true
 read_time: true

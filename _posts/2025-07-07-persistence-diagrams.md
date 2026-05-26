@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Persistence Diagrams and Barcodes: Visualising Topological Shape"
-date: 2025-07-07
 categories: [tdl]
 book: tdl
 subsection: core
 tags: [persistence-diagram, barcode, birth-death, multiset, off-diagonal]
+published: false
 excerpt: "A persistence diagram plots every topological feature as a point (birth, death) in the plane. Equivalently, a barcode draws each feature as an interval [birth, death] on the real line. Points far from the diagonal represent significant, robust features; near-diagonal points are noise. Together, they turn a topological computation into an interpretable visualisation."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaf Neural Networks (Hansen & Gebhart, 2020): The First Sheaf GNN"
-date: 2025-06-07
 categories: [sheaf]
 book: sheaf
 subsection: core-papers
 tags: [Hansen, Gebhart, SNN, sheaf-neural-network, NeurIPS2020, fixed-sheaf]
+published: false
 excerpt: "Hansen & Gebhart (2020) introduced the first sheaf-based graph neural network, showing that cellular sheaves provide a natural framework for graph signal processing. Their architecture uses fixed (not learned) restriction maps and demonstrates that sheaf diffusion generalises GCN while offering principled control over the null space."
 author_profile: true
 read_time: true

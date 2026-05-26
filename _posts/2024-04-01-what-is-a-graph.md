@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "What Is a Graph? Nodes, Edges, Features, and Labels"
-date: 2024-04-01
 categories: [gnn]
 book: gnn
 subsection: fundamentals
 tags: [graph-theory, nodes, edges, features, labels]
+published: false
 excerpt: "A graph is a set of nodes connected by edges — but the power of GNNs comes from the features attached to nodes and edges, and the labels we want to predict."
 author_profile: true
 read_time: true

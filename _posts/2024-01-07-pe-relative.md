@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Relative Positional Encodings: It's All About Distance"
-date: 2024-01-07
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [positional-encoding, relative]

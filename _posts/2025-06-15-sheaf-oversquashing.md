@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaves and Oversquashing: Topology, Curvature, and Information Flow"
-date: 2025-06-15
 categories: [sheaf]
 book: sheaf
 subsection: theory
 tags: [oversquashing, curvature, Ricci, topology, Jacobian, bottleneck, Cheeger]
+published: false
 excerpt: "Oversquashing — the failure of GNNs to propagate information across distant nodes — is a topological phenomenon caused by bottlenecks in the graph. Sheaf structure changes the effective topology by modifying the Sheaf Laplacian's Cheeger constant and Jacobian behaviour. This post analyses how sheaves affect oversquashing and when they help."
 author_profile: true
 read_time: true

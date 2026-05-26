@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Smooth Morse Theory: Critical Points and Topology"
-date: 2025-09-26
 categories: [tdl]
 book: tdl
 subsection: ml-integration
 tags: [morse-theory, critical-points, handle-decomposition, morse-inequalities, smooth-topology]
+published: false
 excerpt: "Smooth Morse theory relates the critical points of a function f: M → ℝ to the topology of M. The Morse inequalities bound Betti numbers by critical point counts; the handle decomposition builds M by attaching handles at each critical point. Discrete Morse theory (Forman) lifts these results to simplicial complexes, enabling efficient homology computation."
 author_profile: true
 read_time: true

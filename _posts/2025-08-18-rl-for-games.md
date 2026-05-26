@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "RL for Games: From Atari to AlphaGo"
-date: 2025-08-18
 categories: [rl]
 book: rl
 subsection: applications
 tags: [DQN, AlphaGo, AlphaStar, games, superhuman-performance]
+published: false
 excerpt: "Games have been the proving ground for RL breakthroughs — from DQN's human-level Atari play to AlphaGo defeating world champions, AlphaStar mastering StarCraft II, and OpenAI Five conquering Dota 2."
 author_profile: true
 read_time: true

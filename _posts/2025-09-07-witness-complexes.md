@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Witness Complexes: Sparse Topology at Scale"
-date: 2025-09-07
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [witness-complex, landmark, sparse-topology, large-scale-tda]
+published: false
 excerpt: "Witness complexes reduce the cost of persistent homology on large datasets by separating landmarks (a small subset that defines the complex) from witnesses (all data points that vote for including simplices). The result is a much smaller complex that still faithfully captures the global topology."
 author_profile: true
 read_time: true

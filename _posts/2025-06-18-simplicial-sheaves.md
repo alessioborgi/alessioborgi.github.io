@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaves on Simplicial Complexes: Topological Deep Learning"
-date: 2025-06-18
 categories: [sheaf]
 book: sheaf
 subsection: topological-dl
 tags: [simplicial-complex, topological-deep-learning, MPSN, CW-complex, higher-order, Bodnar]
+published: false
 excerpt: "Graphs are 1-dimensional CW complexes. The sheaf framework extends naturally to higher-dimensional simplicial complexes — adding triangles, tetrahedra, and higher cells — enabling message passing across cells of different dimensions. This is the foundation of Topological Deep Learning: a unifying framework for GNNs, simplicial networks, and sheaf networks."
 author_profile: true
 read_time: true

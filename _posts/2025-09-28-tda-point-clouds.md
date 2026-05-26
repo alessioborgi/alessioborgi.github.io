@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "TDA for Point Clouds: Shape Analysis at Every Scale"
-date: 2025-09-28
 categories: [tdl]
 book: tdl
 subsection: applications
 tags: [tda-point-clouds, shape-analysis, 3d-shapes, vietoris-rips, persistent-homology-applications]
+published: false
 excerpt: "Persistent homology is the natural tool for analysing point clouds sampled from geometric objects. The persistence diagram of a Rips filtration captures connected components (H₀), tunnels and loops (H₁), and enclosed voids (H₂) at all scales — giving a multi-scale shape descriptor that is stable under noise and subsampling."
 author_profile: true
 read_time: true

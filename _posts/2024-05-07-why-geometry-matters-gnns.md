@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Why Geometry Matters in Graph Neural Networks"
-date: 2024-05-07
 categories: [gnn]
 book: gnn
 subsection: geometric
 tags: [geometry, 3D, molecular, coordinates, symmetry]
+published: false
 excerpt: "Many real-world graphs are embedded in 3D space — molecules, proteins, point clouds, crystal structures. Standard GNNs ignore coordinates and only use connectivity. Geometric GNNs incorporate spatial positions and must respect physical symmetries."
 author_profile: true
 read_time: true

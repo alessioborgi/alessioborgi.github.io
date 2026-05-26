@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Polynomial Neural Sheaf Diffusion (Zaghen et al., ICLR 2024): Learnable Spectral Filters"
-date: 2025-06-09
 categories: [sheaf]
 book: sheaf
 subsection: core-papers
 tags: [PNSD, polynomial-sheaf-diffusion, Zaghen, ICLR2024, spectral-filter, Bernstein]
+published: false
 excerpt: "PNSD replaces NSD's fixed low-pass filter (I − Δ_F) with a learnable polynomial p(Δ_F) = Σ_k a_k Δ_F^k. This adds spectral flexibility — the model can act as a low-pass, high-pass, or band-pass filter depending on the task — while retaining all the structural advantages of sheaf diffusion."
 author_profile: true
 read_time: true

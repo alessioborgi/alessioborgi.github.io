@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Bellman Equations: Recursive Structure of Optimal Value"
-date: 2025-08-03
 categories: [rl]
 book: rl
 subsection: foundations
 tags: [bellman, dynamic-programming, optimal-value, contraction-mapping, policy-iteration]
+published: false
 excerpt: "The Bellman optimality equations characterise the unique optimal value functions V* and Q*, and the contraction mapping theorem guarantees that dynamic programming algorithms converge to them."
 author_profile: true
 read_time: true

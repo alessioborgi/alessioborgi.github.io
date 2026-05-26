@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Oversquashing: When Too Much Information Passes Through Bottlenecks"
-date: 2024-04-14
 categories: [gnn]
 book: gnn
 subsection: expressivity
 tags: [oversquashing, bottleneck, Jacobian, graph-rewiring, long-range]
+published: false
 excerpt: "Oversquashing occurs when exponentially many node features must be compressed into a fixed-size embedding through a bottleneck edge. It is the reason GNNs struggle with long-range dependencies — not just oversmoothing."
 author_profile: true
 read_time: true

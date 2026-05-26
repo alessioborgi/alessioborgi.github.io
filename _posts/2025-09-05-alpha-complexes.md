@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Alpha Complexes and Delaunay Triangulations"
-date: 2025-09-05
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [alpha-complex, delaunay, voronoi, filtration, computational-geometry]
+published: false
 excerpt: "Alpha complexes are the geometrically natural filtration for point clouds in Euclidean space — they grow from the Delaunay triangulation and are typically much smaller than Vietoris-Rips while computing the same persistent homology."
 author_profile: true
 read_time: true

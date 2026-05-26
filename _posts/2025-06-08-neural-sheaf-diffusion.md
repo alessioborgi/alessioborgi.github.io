@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Neural Sheaf Diffusion (Bodnar et al., NeurIPS 2022): Learning the Relational Geometry"
-date: 2025-06-08
 categories: [sheaf]
 book: sheaf
 subsection: core-papers
 tags: [NSD, neural-sheaf-diffusion, Bodnar, NeurIPS2022, learned-maps, heterophily, oversmoothing]
+published: false
 excerpt: "Neural Sheaf Diffusion (NSD) learns the sheaf restriction maps from data via MLP predictors, making the Sheaf Laplacian itself trainable. This enables principled handling of both homophily and heterophily, with theoretical guarantees on oversmoothing avoidance and an empirical state-of-the-art on heterophilic benchmarks."
 author_profile: true
 read_time: true

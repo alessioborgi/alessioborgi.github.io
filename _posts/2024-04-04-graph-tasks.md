@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Graph Tasks: Node, Edge, and Graph-Level Prediction"
-date: 2024-04-04
 categories: [gnn]
 book: gnn
 subsection: fundamentals
 tags: [node-classification, link-prediction, graph-classification, graph-regression]
+published: false
 excerpt: "GNNs can predict at three levels: properties of individual nodes, existence or type of edges, or properties of entire graphs. Each level requires a different output head and training setup."
 author_profile: true
 read_time: true

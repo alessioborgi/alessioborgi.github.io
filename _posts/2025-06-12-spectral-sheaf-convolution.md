@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves"
-date: 2025-06-12
 categories: [sheaf]
 book: sheaf
 subsection: core-papers
 tags: [spectral-filter, sheaf-convolution, Chebyshev, graph-signal-processing, GSP]
+published: false
 excerpt: "Just as ChebNet and GCN are spectral convolutions on the graph Laplacian, sheaf GNNs can be viewed as spectral convolutions on the Sheaf Laplacian. This post develops the spectral sheaf convolution framework, shows how standard graph filters generalise to sheaves, and explains the computational trade-offs."
 author_profile: true
 read_time: true

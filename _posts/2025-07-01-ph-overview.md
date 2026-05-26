@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Topological Data Analysis and Persistent Homology: A Complete Guide"
-date: 2025-07-01
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [persistent-homology, TDA, topology, barcodes, filtration]
+published: false
 excerpt: "Persistent Homology is the mathematical backbone of Topological Data Analysis. It extracts multi-scale shape information from data — holes, loops, and voids — and encodes their birth and death into stable, noise-robust signatures called barcodes. This guide covers everything from the foundational topology to computational algorithms and machine learning integration."
 author_profile: true
 read_time: true

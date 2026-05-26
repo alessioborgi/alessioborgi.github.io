@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Cellular Sheaves on Graphs: A Rigorous Construction"
-date: 2025-06-03
 categories: [sheaf]
 book: sheaf
 subsection: foundations
 tags: [cellular-sheaf, coboundary, cochain, section, sheaf-Laplacian]
+published: false
 excerpt: "Cellular sheaves give a precise algebraic structure to the idea of 'consistent data on a graph'. This post builds the full construction from scratch — stalks, cochains, coboundary operators, the Sheaf Laplacian — with worked examples at each step."
 author_profile: true
 read_time: true

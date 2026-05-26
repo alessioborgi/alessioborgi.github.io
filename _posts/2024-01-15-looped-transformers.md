@@ -1,10 +1,10 @@
 ---
 layout: single
 title: "Looped Transformers: Thinking More with the Same Weights"
-date: 2024-01-15
 categories: [transformers]
 book: transformers
 tags: [looped-transformer, weight-tying, inference-time-compute]
+published: false
 excerpt: "What if instead of making the model wider, you ran the same block multiple times? Looped Transformers tie weights across layers and iterate, trading compute for depth without extra parameters — and they're behind modern 'thinking' models."
 author_profile: true
 read_time: true

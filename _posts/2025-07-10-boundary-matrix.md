@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "The Boundary Matrix and Reduction Algorithm"
-date: 2025-07-10
 categories: [persistent-homology]
 book: persistent-homology
 subsection: computation
 tags: [boundary-matrix, reduction-algorithm, persistence-pairs, left-to-right-reduction, Gaussian-elimination]
+published: false
 excerpt: "Persistent homology computation reduces to column operations on the boundary matrix ∂ — a sparse binary matrix encoding which simplices bound which. The standard reduction algorithm applies left-to-right column elimination (analogous to Gaussian elimination over GF(2)) to reveal all persistence pairs. This post explains the algorithm step by step with a worked example."
 author_profile: true
 read_time: true

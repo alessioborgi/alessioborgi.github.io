@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Layer Normalization in Transformers"
-date: 2024-03-06
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: core

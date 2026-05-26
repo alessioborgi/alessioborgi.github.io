@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Foundation Models for Robotics: RT-1, RT-2, and Beyond"
-date: 2025-09-16
 categories: [robotics]
 book: robotics
 subsection: frontier
 tags: [RT-1, RT-2, foundation-models, Transformer, robot-learning]
+published: false
 excerpt: "Large-scale pre-training on diverse robot data is transforming robot learning. RT-1 trained a Transformer on 130k real demonstrations; RT-2 directly fine-tuned a vision-language model as a robot policy; Octo and OpenVLA open-source these ideas to the research community."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "TDA in Drug Discovery: Molecular Topology"
-date: 2025-09-30
 categories: [tdl]
 book: tdl
 subsection: applications
 tags: [tda-drug-discovery, molecular-topology, protein-structure, drug-design, cheminformatics]
+published: false
 excerpt: "Persistent homology provides multi-scale topological fingerprints of molecular structures — capturing rings, cavities, and protein pockets that traditional cheminformatics descriptors miss. Applications include binding site detection, ADMET property prediction, and protein-ligand interaction modelling."
 author_profile: true
 read_time: true

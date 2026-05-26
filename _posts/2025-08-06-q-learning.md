@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Q-Learning: Off-Policy TD Control"
-date: 2025-08-06
 categories: [rl]
 book: rl
 subsection: value-based
 tags: [q-learning, off-policy, td-control, sarsa, tabular-rl]
+published: false
 excerpt: "Q-learning is a model-free, off-policy TD algorithm that directly learns the optimal action-value function Q* without requiring a model of the environment — the algorithm underlying DQN and much of modern RL."
 author_profile: true
 read_time: true

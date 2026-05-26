@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Multi-Agent Reinforcement Learning"
-date: 2025-08-17
 categories: [rl]
 book: rl
 subsection: multi-agent
 tags: [MARL, cooperative, competitive, CTDE, QMIX, MADDPG]
+published: false
 excerpt: "Multi-agent RL studies how multiple agents learn simultaneously in a shared environment, raising fundamental challenges in non-stationarity, credit assignment, and emergent coordination."
 author_profile: true
 read_time: true

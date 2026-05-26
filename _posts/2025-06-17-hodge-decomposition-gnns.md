@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Hodge Decomposition for Graph Signals: Curl, Gradient, and Harmonic Flows"
-date: 2025-06-17
 categories: [sheaf]
 book: sheaf
 subsection: theory
 tags: [Hodge-decomposition, curl, gradient, harmonic, flow, simplicial-complex, edge-flow]
+published: false
 excerpt: "The Hodge decomposition splits any graph signal into three orthogonal components: gradient (from node potentials), curl (circulating around triangles), and harmonic (topologically non-trivial). This decomposition, extended to sheaves via the Sheaf Laplacian, provides a principled way to analyse, filter, and learn from edge-level and higher-order signals on graphs."
 author_profile: true
 read_time: true

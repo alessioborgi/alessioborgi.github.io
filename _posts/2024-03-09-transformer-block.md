@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "The Transformer Block: Putting It All Together"
-date: 2024-03-09
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: core

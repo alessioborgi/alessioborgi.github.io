@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "SE(3)-Transformers: Attention with 3D Symmetry"
-date: 2024-05-10
 categories: [gnn]
 book: gnn
 subsection: geometric
 tags: [SE3-transformer, equivariant, attention, spherical-harmonics, irreps]
+published: false
 excerpt: "SE(3)-Transformers extend self-attention to 3D point clouds and molecular graphs while maintaining SE(3) equivariance. Attention weights are learned between node pairs; values are equivariant features built from spherical harmonics."
 author_profile: true
 read_time: true

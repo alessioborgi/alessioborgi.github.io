@@ -23,6 +23,80 @@ layout: default
     {% if page.date %}<meta itemprop="datePublished" content="{{ page.date | date: "%B %d, %Y" }}">{% endif %}
     {% if page.modified %}<meta itemprop="dateModified" content="{{ page.modified | date: "%B %d, %Y" }}">{% endif %}
 
+    {% if page.book or page.categories contains "research" or page.categories contains "transformers" %}
+    <style>
+      .page__content .blog-media,
+      .page__content .blog-figure figure,
+      .page__content > figure {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.9rem;
+        align-items: center;
+        max-width: 980px;
+        margin: 1.75rem auto;
+      }
+
+      .page__content .blog-media img,
+      .page__content .blog-figure figure img,
+      .page__content > figure img,
+      .page__content .blog-figure figure svg,
+      .page__content > figure svg {
+        width: min(100%, 720px) !important;
+        max-width: 100%;
+        display: block;
+        margin: 0 auto;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 62, 116, 0.14);
+      }
+
+      .page__content .blog-media a,
+      .page__content .blog-figure figure a,
+      .page__content > figure a {
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+
+      .page__content .blog-media figcaption,
+      .page__content .blog-figure figure figcaption,
+      .page__content > figure figcaption {
+        margin: 0 !important;
+        padding: 0.95rem 1rem;
+        border-left: 4px solid #0d9488;
+        border-radius: 10px;
+        background: linear-gradient(160deg, #f8fbff 0%, #eef7ff 100%);
+        color: #475569 !important;
+        font-size: 0.92rem !important;
+        line-height: 1.6;
+        text-align: left !important;
+        font-style: normal !important;
+      }
+
+      .page__content .paper-preview img {
+        width: min(100%, 560px) !important;
+      }
+
+      .page__content .paper-preview figcaption {
+        border-left-color: #3b82f6;
+        background: linear-gradient(160deg, #f8fbff 0%, #f1f5ff 100%);
+      }
+
+      @media (min-width: 980px) {
+        .page__content .blog-media,
+        .page__content .blog-figure figure,
+        .page__content > figure {
+          grid-template-columns: minmax(0, 1fr) 260px;
+        }
+
+        .page__content .paper-preview {
+          grid-template-columns: minmax(0, 560px) 240px;
+          justify-content: center;
+        }
+      }
+    </style>
+    {% endif %}
+
     <div class="page__inner-wrap">
       {% unless page.header.overlay_color or page.header.overlay_image %}
         <header>

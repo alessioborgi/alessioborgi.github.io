@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Attention Masks: Causal, Padding, and Bidirectional"
-date: 2024-03-03
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: core

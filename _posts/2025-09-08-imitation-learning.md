@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Imitation Learning: Behaviour Cloning and DAgger"
-date: 2025-09-08
 categories: [robotics]
 book: robotics
 subsection: learning
 tags: [imitation-learning, behaviour-cloning, DAgger, dataset-aggregation, covariate-shift]
+published: false
 excerpt: "Learning robot policies from expert demonstrations: behaviour cloning, the covariate shift problem, DAgger's interactive fix, and adversarial imitation via GAIL."
 author_profile: true
 read_time: true

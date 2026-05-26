@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "The Interleaving Distance and Algebraic Stability"
-date: 2025-09-13
 categories: [tdl]
 book: tdl
 subsection: core
 tags: [interleaving-distance, stability, persistence-module, algebraic-stability]
+published: false
 excerpt: "The interleaving distance measures how similar two persistence modules are at the algebraic level — generalising the bottleneck distance to arbitrary modules. The algebraic stability theorem states that the interleaving distance between modules equals the bottleneck distance between their diagrams, unifying all stability results in TDA."
 author_profile: true
 read_time: true

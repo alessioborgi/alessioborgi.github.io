@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Temporal Sheaves: Extending Sheaf GNNs to Dynamic Graphs"
-date: 2025-06-21
 categories: [sheaf]
 book: sheaf
 subsection: extensions
 tags: [temporal-sheaf, dynamic-graph, CTDG, TGN, time-varying, sheaf-ODE]
+published: false
 excerpt: "Dynamic graphs have time-varying topology and features. A temporal sheaf extends cellular sheaves to graphs that change over time: stalks evolve, restriction maps change, and the Sheaf Laplacian itself is time-dependent. This post develops the temporal sheaf framework and shows how sheaf ODEs provide a principled continuous-time generalisation of both TGN and graph neural ODEs."
 author_profile: true
 read_time: true

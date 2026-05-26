@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Relative Homology, Excision, and Long Exact Sequences"
-date: 2025-09-04
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [relative-homology, excision, long-exact-sequence, mayer-vietoris]
+published: false
 excerpt: "Relative homology H_n(X, A) measures topology in X modulo the subspace A — essential for local feature detection and for proving the fundamental theorems (excision, Mayer-Vietoris) that underpin computational topology."
 author_profile: true
 read_time: true

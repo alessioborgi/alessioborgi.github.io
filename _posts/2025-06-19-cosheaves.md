@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Cosheaves: The Dual Perspective on Graph Data"
-date: 2025-06-19
 categories: [sheaf]
 book: sheaf
 subsection: extensions
 tags: [cosheaf, pushforward, dual, corestriction, homology, distribution]
+published: false
 excerpt: "A cosheaf is the categorical dual of a sheaf: instead of restriction maps (pulling data from larger to smaller), cosheaves have extension maps (pushing data from smaller to larger). This dual perspective leads to different consistency conditions, different homology groups, and different neural network architectures — better suited for data that 'integrates' over regions rather than restricts to them."
 author_profile: true
 read_time: true

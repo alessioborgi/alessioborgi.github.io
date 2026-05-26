@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Learned Positional Encodings: Data-Driven Position"
-date: 2024-01-06
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [positional-encoding, learned]

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sparse Filtrations: Scaling Persistent Homology to Large Data"
-date: 2025-09-16
 categories: [tdl]
 book: tdl
 subsection: computation
 tags: [sparse-filtrations, vietoris-rips, sparse-rips, sparsification, scalability]
+published: false
 excerpt: "The Vietoris-Rips complex grows exponentially with point count. Sparse filtrations — particularly the sparse Rips construction of Sheehy and Cavanna et al. — produce O(n)-simplex complexes that approximate the full Rips persistence diagram up to a controlled multiplicative error."
 author_profile: true
 read_time: true

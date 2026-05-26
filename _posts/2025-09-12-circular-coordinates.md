@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Circular Coordinates: Parameterising Periodic Structure in Data"
-date: 2025-09-12
 categories: [tdl]
 book: tdl
 subsection: core
 tags: [circular-coordinates, persistent-cohomology, harmonic-cocycles, periodic-data]
+published: false
 excerpt: "When persistent H¹ detects a long-lived loop in data, cohomology lets us build an explicit map from the data to a circle — a circular coordinate. This gives a continuous parameterisation of periodic structure without assumptions on the data's geometry or distribution."
 author_profile: true
 read_time: true

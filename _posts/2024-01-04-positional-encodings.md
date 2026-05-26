@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Positional Encodings: Why Position Matters"
-date: 2024-01-04
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [positional-encoding, overview]

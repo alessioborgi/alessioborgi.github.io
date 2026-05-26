@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Structural vs Positional Encodings in Graphs"
-date: 2024-04-21
 categories: [gnn]
 book: gnn
 subsection: graph-pe
 tags: [structural-encoding, positional-encoding, role, position, distinction]
+published: false
 excerpt: "Positional encodings say where a node is in the graph. Structural encodings say what role it plays. They are complementary — and confusing them leads to poor design choices."
 author_profile: true
 read_time: true

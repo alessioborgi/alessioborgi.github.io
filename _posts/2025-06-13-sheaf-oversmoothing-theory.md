@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Why Sheaf Diffusion Doesn't Oversmooth: The Null Space Account"
-date: 2025-06-13
 categories: [sheaf]
 book: sheaf
 subsection: theory
 tags: [oversmoothing, null-space, global-section, Dirichlet-energy, depth, convergence]
+published: false
 excerpt: "Standard GNN oversmoothing is a collapse of node features to a d-dimensional constant subspace — a consequence of the graph Laplacian's null space being exactly the constant functions. Sheaf diffusion replaces this with convergence to the space of global sections, which can be much larger and task-relevant. This post makes the full theoretical argument precise."
 author_profile: true
 read_time: true

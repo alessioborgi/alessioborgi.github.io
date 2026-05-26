@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves"
-date: 2024-09-12
 categories: [research]
 book: sheaf
 subsection: extensions
 tags: [sheaf-neural-networks, heterogeneous-graphs, graph-neural-networks]
+published: false
 excerpt: "HetSheaf encodes graph heterogeneity directly in the sheaf data structure — type-aware stalks and restriction maps conditioned on node and edge types — instead of specialised architectural components, achieving +2pp on HGB with 10× fewer parameters."
 author_profile: true
 read_time: true
@@ -17,8 +17,9 @@ toc_label: "Contents"
 ---
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { max-width: 100%; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure img { width: min(100%, 780px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .6rem; font-style: italic; }
+.paper-preview img { width: min(100%, 620px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -59,7 +60,9 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2409.08036" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
+<div class="paper-preview">
 {% include figure image_path="/images/blog/papers/hetsheaf-paper.png" alt="First page of the Heterogeneous Sheaf Neural Networks paper" caption="Paper preview — Heterogeneous Sheaf Neural Networks (Braithwaite et al., 2024)." %}
+</div>
 
 ## The Problem: Heterogeneity is Expensive
 

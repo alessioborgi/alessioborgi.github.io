@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Learning Filtrations: Task-Optimised Topology"
-date: 2025-09-22
 categories: [tdl]
 book: tdl
 subsection: ml-integration
 tags: [learning-filtrations, graph-filtration-learning, task-specific-topology, parametric-filtration]
+published: false
 excerpt: "Standard TDA uses pre-defined filtrations (Rips, sublevel sets). Learning filtrations optimises the filtration function jointly with a downstream task — so the persistent homology computed reflects features that are actually discriminative for the task, not just geometric proximity."
 author_profile: true
 read_time: true

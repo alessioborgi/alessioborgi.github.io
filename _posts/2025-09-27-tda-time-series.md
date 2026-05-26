@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "TDA for Time Series: Topology of Dynamical Systems"
-date: 2025-09-27
 categories: [tdl]
 book: tdl
 subsection: applications
 tags: [tda-time-series, sliding-window, dynamical-systems, winding-number, takens-theorem]
+published: false
 excerpt: "Persistent homology applied to time series via sliding window embeddings detects periodicity, chaos, and dynamical transitions. The winding number of H₁ generators captures frequency; the persistence of loops measures how clearly periodic a signal is. Applications span EEG, ECG, climate data, and financial time series."
 author_profile: true
 read_time: true

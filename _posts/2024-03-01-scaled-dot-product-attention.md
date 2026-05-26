@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Scaled Dot-Product Attention: Why the √d Matters"
-date: 2024-03-01
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: core

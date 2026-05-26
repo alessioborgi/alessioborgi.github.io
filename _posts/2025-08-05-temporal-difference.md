@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Temporal Difference Learning: Bootstrapping from Experience"
-date: 2025-08-05
 categories: [rl]
 book: rl
 subsection: foundations
 tags: [temporal-difference, td-learning, bootstrapping, eligibility-traces, td-lambda]
+published: false
 excerpt: "Temporal Difference learning bridges dynamic programming and Monte Carlo methods by updating value estimates from incomplete experience using bootstrapped targets — enabling sample-efficient online learning."
 author_profile: true
 read_time: true

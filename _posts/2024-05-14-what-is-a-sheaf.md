@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "What Is a Sheaf? From Topology to Graph Learning"
-date: 2024-05-14
 categories: [gnn]
 book: gnn
 subsection: sheaf
 tags: [sheaf, cellular-sheaf, stalk, restriction-map, global-sections]
+published: false
 excerpt: "A sheaf is a mathematical object from algebraic topology that assigns vector spaces to cells and linear maps between them. On graphs, sheaves assign feature spaces to nodes and edges, with restriction maps encoding how node features relate across edges."
 author_profile: true
 read_time: true

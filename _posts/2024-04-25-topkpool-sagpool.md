@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "TopKPool and SAGPool: Sparse Graph Pooling"
-date: 2024-04-25
 categories: [gnn]
 book: gnn
 subsection: pooling
 tags: [topkpool, sagpool, sparse-pooling, graph-classification, node-selection]
+published: false
 excerpt: "Instead of soft cluster assignment (DiffPool), TopKPool and SAGPool select a subset of the most important nodes — producing a smaller but sparser graph at each level. Hard selection is scalable but requires careful score learning."
 author_profile: true
 read_time: true

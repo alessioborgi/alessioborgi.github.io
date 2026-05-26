@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Shortest-Path Encodings for Graph Transformers"
-date: 2024-04-20
 categories: [gnn]
 book: gnn
 subsection: graph-pe
 tags: [shortest-path, distance-encoding, Graphormer, SPD]
+published: false
 excerpt: "Shortest-path distances between nodes can be encoded as attention biases or node features — directly informing the model about graph proximity without requiring message passing."
 author_profile: true
 read_time: true

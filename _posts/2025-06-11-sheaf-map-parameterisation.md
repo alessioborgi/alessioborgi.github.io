@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Learning Sheaf Maps: Parameterisation Strategies Compared"
-date: 2025-06-11
 categories: [sheaf]
 book: sheaf
 subsection: core-papers
 tags: [restriction-map, parameterisation, scalar, diagonal, orthogonal, general, expressiveness]
+published: false
 excerpt: "The choice of restriction map type — scalar, diagonal, orthogonal, or general — is the most consequential hyperparameter in a sheaf GNN. Each type trades off expressiveness, parameter count, computational cost, and geometric interpretation. This post gives a complete comparison to guide practical architecture decisions."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sign Ambiguity in Laplacian Eigenvectors"
-date: 2024-04-22
 categories: [gnn]
 book: gnn
 subsection: graph-pe
 tags: [sign-ambiguity, LapPE, eigenvectors, SignNet, equivariance]
+published: false
 excerpt: "Laplacian eigenvectors are only defined up to sign: if u is an eigenvector, so is -u. This seemingly minor issue creates a fundamental problem for learning with LapPE. Here is the problem, its consequences, and how SignNet solves it."
 author_profile: true
 read_time: true

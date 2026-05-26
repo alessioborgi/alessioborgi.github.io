@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Encoder vs Decoder vs Encoder-Decoder Transformers"
-date: 2024-03-05
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: core

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Graph Classification: From Node Embeddings to Graph Embeddings"
-date: 2024-04-27
 categories: [gnn]
 book: gnn
 subsection: pooling
 tags: [graph-classification, readout, end-to-end, GIN, benchmarks]
+published: false
 excerpt: "Graph classification is the task of predicting a label for an entire graph. It requires composing message passing (node embeddings), readout (graph embedding), and a classifier — and all three choices interact to determine model expressiveness."
 author_profile: true
 read_time: true

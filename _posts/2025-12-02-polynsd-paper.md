@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "PolyNSD: Polynomial Neural Sheaf Diffusion"
-date: 2025-12-02
 categories: [research]
 book: sheaf
 subsection: core-papers
 tags: [sheaf-neural-networks, spectral-gnn, polynomial-filters, graph-neural-networks]
+published: false
 excerpt: "PolyNSD replaces the NSD propagation operator with a degree-K Chebyshev polynomial in the normalised sheaf Laplacian, achieving SOTA on homo- and heterophilic benchmarks with only diagonal restriction maps and dramatically lower memory usage."
 author_profile: true
 read_time: true
@@ -17,8 +17,9 @@ toc_label: "Contents"
 ---
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { max-width: 100%; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure img { width: min(100%, 780px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .6rem; font-style: italic; }
+.paper-preview img { width: min(100%, 620px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -59,7 +60,9 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2512.00242" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
+<div class="paper-preview">
 {% include figure image_path="/images/blog/papers/polynsd-paper.png" alt="First page of the Polynomial Neural Sheaf Diffusion paper" caption="Paper preview — Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves (Borgi and Liò, 2025)." %}
+</div>
 
 ## Background: Neural Sheaf Diffusion
 

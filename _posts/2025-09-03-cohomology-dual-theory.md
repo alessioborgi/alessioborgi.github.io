@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Cohomology: The Dual Theory and Its Uses in TDA"
-date: 2025-09-03
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [cohomology, cochain, cup-product, persistent-cohomology, circular-coordinates]
+published: false
 excerpt: "Cohomology is the dual of homology: instead of chains going down in dimension, cochains go up. It carries additional algebraic structure (the cup product) and enables TDA applications like circular coordinates that homology alone cannot deliver."
 author_profile: true
 read_time: true

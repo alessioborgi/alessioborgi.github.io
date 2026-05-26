@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaves Meet Attention: Transformer-Inspired Sheaf Models"
-date: 2025-06-22
 categories: [sheaf]
 book: sheaf
 subsection: extensions
 tags: [sheaf-transformer, attention, graph-transformer, scalability, long-range, Graphormer]
+published: false
 excerpt: "Graph Transformers use global attention to capture long-range dependencies that local message passing misses. Sheaf Transformers combine sheaf-based local aggregation (with learnable relational geometry) with global attention (for long-range dependencies). This post surveys the design space of sheaf-augmented attention models."
 author_profile: true
 read_time: true

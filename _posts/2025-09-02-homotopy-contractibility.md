@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Homotopy, Contractibility, and Deformation Retracts"
-date: 2025-09-02
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [homotopy, contractibility, deformation-retract, homotopy-equivalence]
+published: false
 excerpt: "Homotopy formalises 'continuous deformation' between maps and spaces. Two spaces are homotopy equivalent if they can be continuously deformed into each other — a relation weaker than homeomorphism but sufficient to preserve all homological invariants used in TDA."
 author_profile: true
 read_time: true

@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Self-Attention: Teaching Machines to Focus"
-date: 2024-01-02
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [attention, mechanism]

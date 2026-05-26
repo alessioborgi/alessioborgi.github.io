@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Tensor Field Networks and Geometric Deep Learning"
-date: 2024-05-11
 categories: [gnn]
 book: gnn
 subsection: geometric
 tags: [TFN, tensor-field-networks, geometric-deep-learning, SO3, NequIP, MACE]
+published: false
 excerpt: "Tensor Field Networks (TFN) were the first architecture to achieve SE(3) equivariance using spherical harmonics and Clebsch-Gordan tensor products. They laid the theoretical foundation for NequIP and MACE — the current state-of-the-art in equivariant molecular force fields."
 author_profile: true
 read_time: true

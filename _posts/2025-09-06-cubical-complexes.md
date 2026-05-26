@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Cubical Complexes: Topology on Grids and Images"
-date: 2025-09-06
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [cubical-complex, cubical-homology, image-analysis, grid-topology]
+published: false
 excerpt: "Cubical complexes tile space with hypercubes instead of simplices — the natural choice for image data, time series, and voxel grids. Their homology captures the same topological invariants as simplicial homology, but with a structure perfectly adapted to pixel/voxel data."
 author_profile: true
 read_time: true

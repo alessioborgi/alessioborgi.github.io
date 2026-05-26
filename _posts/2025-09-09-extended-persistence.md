@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Extended Persistence: Capturing Topology Across the Full Range"
-date: 2025-09-09
 categories: [tdl]
 book: tdl
 subsection: core
 tags: [extended-persistence, relative-homology, poincare-duality, long-bars]
+published: false
 excerpt: "Standard persistence misses features that never die within a finite filtration — typically the top-dimensional class of a closed manifold. Extended persistence augments the filtration with its dual to capture all features, using relative homology and Poincaré duality to produce complete pairings."
 author_profile: true
 read_time: true

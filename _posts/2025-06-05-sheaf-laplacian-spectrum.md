@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "The Sheaf Laplacian: Spectrum, Hodge Decomposition, and Diffusion"
-date: 2025-06-05
 categories: [sheaf]
 book: sheaf
 subsection: foundations
 tags: [sheaf-Laplacian, spectrum, eigenvalue, Hodge, diffusion, Cheeger]
+published: false
 excerpt: "The Sheaf Laplacian Δ_F is the central operator of sheaf-based graph learning. This post analyses its eigenvalue structure, the Hodge decomposition it induces on node signals, its spectral gap, and the continuous-time diffusion it drives — showing how each property shapes the behaviour of sheaf GNNs."
 author_profile: true
 read_time: true

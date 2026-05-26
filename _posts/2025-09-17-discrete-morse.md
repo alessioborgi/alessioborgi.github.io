@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Discrete Morse Theory and Persistence"
-date: 2025-09-17
 categories: [tdl]
 book: tdl
 subsection: computation
 tags: [discrete-morse-theory, morse-complex, critical-simplices, homology-computation]
+published: false
 excerpt: "Discrete Morse theory (Forman) assigns gradient vector fields to simplicial complexes, collapsing non-critical simplices without changing homotopy type. This reduces the complex to a much smaller Morse complex, dramatically speeding up persistence computation."
 author_profile: true
 read_time: true

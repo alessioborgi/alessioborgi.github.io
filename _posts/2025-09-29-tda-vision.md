@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "TDA for Computer Vision: Topology in Images and Shapes"
-date: 2025-09-29
 categories: [tdl]
 book: tdl
 subsection: applications
 tags: [tda-vision, image-analysis, texture-classification, object-recognition, topological-features]
+published: false
 excerpt: "Topological methods in computer vision extract features that are invariant to rotation, scaling, and illumination — while capturing structural properties like the number of holes, loops, and connected regions that standard CNN features miss. Applications include texture discrimination, medical image analysis, and topologically-constrained segmentation."
 author_profile: true
 read_time: true

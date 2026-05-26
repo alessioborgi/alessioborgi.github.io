@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "RL for Robotics: From Simulation to Real Hardware"
-date: 2025-08-20
 categories: [rl]
 book: rl
 subsection: applications
 tags: [rl-robotics, sim-to-real, continuous-control, dexterous-manipulation, locomotion]
+published: false
 excerpt: "RL for robotics must overcome the sim-to-real gap, sparse rewards, and safety constraints. Domain randomisation and careful reward shaping let policies trained in simulation transfer to physical robots."
 author_profile: true
 read_time: true

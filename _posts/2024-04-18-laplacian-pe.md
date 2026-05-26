@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Laplacian Eigenvectors as Graph Positional Encodings"
-date: 2024-04-18
 categories: [gnn]
 book: gnn
 subsection: graph-pe
 tags: [Laplacian, eigenvectors, positional-encoding, LapPE, graph-transformer]
+published: false
 excerpt: "The k smallest eigenvectors of the graph Laplacian form a natural positional embedding space — the graph's own coordinate system. They capture global structure, symmetry, and community membership."
 author_profile: true
 read_time: true

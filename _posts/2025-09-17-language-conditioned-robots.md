@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Language-Conditioned Robot Policies"
-date: 2025-09-17
 categories: [robotics]
 book: robotics
 subsection: frontier
 tags: [language-conditioned, SayCan, CLIP-robotics, instruction-following, LLM-planning]
+published: false
 excerpt: "Grounding natural language to robot actions: from SayCan's affordance-weighted LLM planning to CLIP-based manipulation with CLIPort, and VLMs that directly condition robot execution on rich language instructions."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Diffusion Policy: Generative Imitation Learning"
-date: 2025-09-15
 categories: [robotics]
 book: robotics
 subsection: frontier
 tags: [diffusion-policy, score-matching, DDPM, imitation-learning, multi-modal]
+published: false
 excerpt: "Diffusion Policy applies denoising diffusion probabilistic models to robot action generation, naturally handling multi-modal action distributions that confound behaviour cloning with MSE loss. Results on manipulation benchmarks substantially exceed BC and ACT."
 author_profile: true
 read_time: true

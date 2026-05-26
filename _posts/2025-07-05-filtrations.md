@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Filtrations: Growing Simplicial Complexes Across Scales"
-date: 2025-07-05
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [filtration, sublevel-set, scale-parameter, Vietoris-Rips, Čech-complex]
+published: false
 excerpt: "A filtration is a nested sequence of topological spaces indexed by a scale parameter. As the parameter grows, new simplices appear and topological features are born and die. Persistent homology tracks exactly this evolution — turning a one-shot snapshot into a multi-scale portrait of shape."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Multidimensional Persistence: Topology with Multiple Parameters"
-date: 2025-09-11
 categories: [tdl]
 book: tdl
 subsection: core
 tags: [multidimensional-persistence, bifiltration, rank-invariant, multiparameter]
+published: false
 excerpt: "When data has multiple meaningful scale parameters (e.g., scale and density), a single filtration parameter is insufficient. Multidimensional persistence indexes complexes by tuples of parameters — but the elegant barcode theorem no longer holds, and only weaker invariants (rank functions, fibered barcodes) are computable."
 author_profile: true
 read_time: true

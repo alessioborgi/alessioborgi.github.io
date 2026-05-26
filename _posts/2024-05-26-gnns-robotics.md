@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "GNNs for Robotics: Planning, Manipulation, and Multi-Agent Systems"
-date: 2024-05-26
 categories: [gnn]
 book: gnn
 subsection: applications
 tags: [robotics, planning, manipulation, multi-agent, simulation]
+published: false
 excerpt: "Robots interact with structured environments: objects have relationships, joints form kinematic chains, agents communicate through interaction graphs. GNNs encode these relational structures — enabling generalisation across object configurations, robot morphologies, and multi-agent scenarios."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "The Elder Rule and Pairing Uniqueness in Persistent Homology"
-date: 2025-09-14
 categories: [tdl]
 book: tdl
 subsection: core
 tags: [elder-rule, pairing-uniqueness, persistence-algorithm, birth-death]
+published: false
 excerpt: "The elder rule describes exactly how the standard persistence algorithm pairs simplices: when a simplex kills a class, it pairs with the 'youngest' class it could kill. The pairing uniqueness theorem guarantees this assignment is canonical — independent of the reduction algorithm used."
 author_profile: true
 read_time: true

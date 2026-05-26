@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Learning-Based Robotics: A Complete Guide"
-date: 2025-09-01
 categories: [robotics]
 book: robotics
 subsection: foundations
 tags: [robotics, overview, learning, perception, planning, control]
+published: false
 excerpt: "A comprehensive map of modern learning-based robotics: from the sense-plan-act loop and core challenges to the full book structure spanning perception, planning, learning, and frontier topics."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Zigzag Persistence: Topology Along a Non-Monotone Path"
-date: 2025-09-10
 categories: [tdl]
 book: tdl
 subsection: core
 tags: [zigzag-persistence, quiver, interval-decomposition, dynamic-topology]
+published: false
 excerpt: "Standard persistence tracks topology as we grow a complex monotonically. Zigzag persistence generalises this to sequences where simplices can be added AND removed — enabling TDA for time-varying data, sliding windows, and data with changing membership."
 author_profile: true
 read_time: true

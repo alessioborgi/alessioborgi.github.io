@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Robot Kinematics: Forward and Inverse"
-date: 2025-09-02
 categories: [robotics]
 book: robotics
 subsection: foundations
 tags: [kinematics, DH-parameters, jacobian, inverse-kinematics, singularities]
+published: false
 excerpt: "Forward kinematics maps joint angles to end-effector pose via DH parameters, while inverse kinematics — and its learning-based variants — solves the harder reverse problem."
 author_profile: true
 read_time: true

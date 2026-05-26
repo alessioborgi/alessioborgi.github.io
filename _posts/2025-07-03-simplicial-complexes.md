@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Simplicial Complexes: Discrete Topology for Data"
-date: 2025-07-03
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [simplicial-complex, simplex, CW-complex, Vietoris-Rips, nerve]
+published: false
 excerpt: "Simplicial complexes are the primary combinatorial structure used in computational topology. Built from vertices, edges, triangles, and higher-dimensional simplices, they provide a finite representation of topological spaces that computers can store and process. This post covers the construction, key examples, and the nerve theorem that links geometry to topology."
 author_profile: true
 read_time: true

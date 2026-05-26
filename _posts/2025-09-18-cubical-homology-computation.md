@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Cubical Homology Computation: Persistence on Images"
-date: 2025-09-18
 categories: [tdl]
 book: tdl
 subsection: computation
 tags: [cubical-homology, image-persistence, cubical-complex, pixel-filtration]
+published: false
 excerpt: "For image data, cubical complexes — built from pixels, edges, and faces on regular grids — are the natural setting for persistent homology. Cubical persistence avoids the combinatorial explosion of simplicial complexes and enables direct filtration by pixel intensity values."
 author_profile: true
 read_time: true

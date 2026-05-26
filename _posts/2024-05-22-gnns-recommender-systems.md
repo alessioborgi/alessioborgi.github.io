@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "GNNs for Recommender Systems"
-date: 2024-05-22
 categories: [gnn]
 book: gnn
 subsection: applications
 tags: [recommender-systems, collaborative-filtering, PinSage, LightGCN, bipartite-graph]
+published: false
 excerpt: "Recommendation is naturally a graph problem: users and items are nodes, interactions are edges. GNNs on bipartite user-item graphs capture higher-order collaborative filtering signals — friends of friends liked this — that matrix factorisation cannot represent."
 author_profile: true
 read_time: true

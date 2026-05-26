@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Reinforcement Learning: A Complete Guide"
-date: 2025-08-01
 categories: [rl]
 book: rl
 subsection: foundations
 tags: [reinforcement-learning, overview, agent, environment, reward]
+published: false
 excerpt: "A comprehensive map of reinforcement learning: from the agent-environment loop and core mathematical objects to major algorithm families and how this book is structured."
 author_profile: true
 read_time: true

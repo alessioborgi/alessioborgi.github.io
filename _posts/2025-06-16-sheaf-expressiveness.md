@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Expressiveness of Sheaf GNNs: Beyond the WL Hierarchy"
-date: 2025-06-16
 categories: [sheaf]
 book: sheaf
 subsection: theory
 tags: [expressiveness, WL-test, 1-WL, 2-WL, graph-isomorphism, sheaf-WL]
+published: false
 excerpt: "Standard GNNs are at most as expressive as the 1-WL test for graph isomorphism. Sheaf GNNs — because their node representations are d-dimensional stalks rather than scalars — operate in a higher-dimensional space that can distinguish some graphs that fool 1-WL. This post analyses sheaf expressiveness precisely and shows when sheaves go beyond WL and when they don't."
 author_profile: true
 read_time: true

@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Sinusoidal Positional Encodings: The Original Solution"
-date: 2024-01-05
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [positional-encoding, sinusoidal]

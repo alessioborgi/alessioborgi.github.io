@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "World Models: Learning Latent Dynamics"
-date: 2025-08-14
 categories: [rl]
 book: rl
 subsection: model-based
 tags: [world-models, model-based-rl, VAE, RSSM, latent-dynamics]
+published: false
 excerpt: "World Models learns a compressed latent representation of the environment and a recurrent transition model, enabling an agent to plan and even train entirely inside an imagined simulation."
 author_profile: true
 read_time: true

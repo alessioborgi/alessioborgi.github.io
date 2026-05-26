@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Over-smoothing vs Over-squashing: The Difference"
-date: 2024-04-15
 categories: [gnn]
 book: gnn
 subsection: expressivity
 tags: [oversmoothing, oversquashing, GNN, depth, comparison]
+published: false
 excerpt: "Oversmoothing and oversquashing are both problems with deep GNNs, but they affect different nodes, have different causes, and require different fixes. Confusing them leads to applying the wrong solution."
 author_profile: true
 read_time: true

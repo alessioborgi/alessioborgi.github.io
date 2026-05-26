@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Differentiable Persistence: Backpropagating Through Topology"
-date: 2025-09-20
 categories: [tdl]
 book: tdl
 subsection: ml-integration
 tags: [differentiable-persistence, topological-loss, gradient-topology, end-to-end-learning]
+published: false
 excerpt: "Computing a persistence diagram is a piecewise-linear function of the input filtration values, so it is differentiable almost everywhere. This enables topological losses: penalty terms on persistence diagrams that can be minimised by gradient descent, directly shaping the topology of learned representations."
 author_profile: true
 read_time: true

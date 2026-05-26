@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "GAPE: Remember to Forget — Gated Adaptive Positional Encoding"
-date: 2026-05-11
+date: 2026-05-26
 categories: [research]
 book: transformers
 subsection: positional-encodings
@@ -17,8 +17,9 @@ toc_label: "Contents"
 ---
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { max-width: 100%; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure img { width: min(100%, 780px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .6rem; font-style: italic; }
+.paper-preview img { width: min(100%, 620px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -59,7 +60,9 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2605.10414" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
+<div class="paper-preview">
 {% include figure image_path="/images/blog/papers/gape-paper.png" alt="First page of the GAPE paper" caption="Paper preview — Remember to Forget: Gated Adaptive Positional Encoding (Ali et al., 2026)." %}
+</div>
 
 ## The RoPE Long-Context Problem
 

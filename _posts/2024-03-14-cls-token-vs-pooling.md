@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Class Token vs Pooling in Vision Transformers"
-date: 2024-03-14
 categories: [transformers]
 book: transformers
 subsection: vision
 tags: [ViT, CLS-token, pooling, classification, representation]
+published: false
 excerpt: "The [CLS] token and global average pooling are two competing strategies for aggregating patch representations into a single image embedding. Understanding when each works — and why — reveals something fundamental about how ViTs learn."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Open Problems in Robot Learning"
-date: 2025-09-19
 categories: [robotics]
 book: robotics
 subsection: frontier
 tags: [open-problems, robot-learning, generalisation, data-collection, embodied-AI]
+published: false
 excerpt: "Despite dramatic recent progress, robot learning faces fundamental open challenges: the data bottleneck, generalisation vs. specialisation, tactile sensing, long-horizon reasoning, and the dream of embodied AI that matches human versatility."
 author_profile: true
 read_time: true

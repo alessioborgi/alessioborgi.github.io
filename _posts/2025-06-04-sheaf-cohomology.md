@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaf Cohomology: Sections, Cochains, and What H⁰ and H¹ Mean"
-date: 2025-06-04
 categories: [sheaf]
 book: sheaf
 subsection: foundations
 tags: [sheaf-cohomology, H0, H1, global-section, obstruction, cochain]
+published: false
 excerpt: "Sheaf cohomology measures how much a sheaf 'fails to be globally consistent'. H⁰ counts global sections (consistent assignments), H¹ measures the obstruction to consistency. Both carry direct interpretations for graph learning — as attractors of diffusion and as topological features of the relational structure."
 author_profile: true
 read_time: true

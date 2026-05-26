@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Directed, Undirected, Weighted, and Heterogeneous Graphs"
-date: 2024-04-02
 categories: [gnn]
 book: gnn
 subsection: fundamentals
 tags: [graph-types, directed, heterogeneous, weighted, multigraph]
+published: false
 excerpt: "Not all graphs are equal. Directed edges, edge weights, multiple node/edge types — each variant requires different GNN design choices."
 author_profile: true
 read_time: true

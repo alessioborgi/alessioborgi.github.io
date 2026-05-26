@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Graph Neural ODEs: Continuous-Time Graph Dynamics"
-date: 2024-05-05
 categories: [gnn]
 book: gnn
 subsection: dynamic
 tags: [neural-ODE, continuous-time, graph-dynamics, latent-ODE, CGODE]
+published: false
 excerpt: "Neural ODEs replace discrete layer-by-layer computation with continuous dynamics governed by a differential equation. Graph Neural ODEs apply this to graph data — treating node embeddings as a dynamical system evolving in continuous time."
 author_profile: true
 read_time: true

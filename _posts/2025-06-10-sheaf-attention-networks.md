@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaf Attention Networks (Barbero et al., 2022)"
-date: 2025-06-10
 categories: [sheaf]
 book: sheaf
 subsection: core-papers
 tags: [SheafAN, sheaf-attention, Barbero, orthogonal-maps, attention, NeurIPS2022-workshop]
+published: false
 excerpt: "Sheaf Attention Networks combine orthogonal restriction maps with attention-weighted aggregation. The result is a model that is both gauge-equivariant and selectively aggregating — bringing together the best of GAT and sheaf diffusion."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "The Twist Algorithm and Clearing Optimisation"
-date: 2025-09-15
 categories: [tdl]
 book: tdl
 subsection: computation
 tags: [twist-algorithm, clearing-optimisation, boundary-matrix, persistence-computation]
+published: false
 excerpt: "The standard persistence algorithm runs in O(n³) in the worst case. The twist algorithm exploits Poincaré duality to halve the computation on manifolds. The clearing optimisation avoids redundant reductions by zeroing out columns whose pivots are already known. Together, they make Ripser 10–100× faster."
 author_profile: true
 read_time: true

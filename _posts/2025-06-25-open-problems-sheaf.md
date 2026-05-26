@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Open Problems and Future Directions in Sheaf Neural Networks"
-date: 2025-06-25
 categories: [sheaf]
 book: sheaf
 subsection: applications
 tags: [open-problems, future-directions, research, scalability, stochastic-sheaves, sheaf-autoencoder]
+published: false
 excerpt: "Sheaf Neural Networks are a young field with many open research problems. This post surveys the most important unsolved questions: scalability to million-node graphs, stochastic sheaves for uncertainty quantification, sheaf autoencoders for generative models, connections to persistent homology, and unification with other topological deep learning frameworks."
 author_profile: true
 read_time: true

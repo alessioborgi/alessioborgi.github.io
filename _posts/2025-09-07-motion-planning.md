@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Motion Planning: Task and Motion Planning"
-date: 2025-09-07
 categories: [robotics]
 book: robotics
 subsection: planning
 tags: [motion-planning, TAMP, trajectory-optimisation, iLQR, MPC]
+published: false
 excerpt: "From high-level symbolic task planning to continuous trajectory optimisation: a unified view of task and motion planning, iLQR, DDP, and model predictive control."
 author_profile: true
 read_time: true

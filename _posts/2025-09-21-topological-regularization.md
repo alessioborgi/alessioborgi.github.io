@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Topological Regularisation in Deep Learning"
-date: 2025-09-21
 categories: [tdl]
 book: tdl
 subsection: ml-integration
 tags: [topological-regularization, topology-loss, betti-numbers, connectivity-constraints]
+published: false
 excerpt: "Topological regularisation adds topology-based penalty terms to neural network training objectives. Unlike L1/L2 regularisation that constrain parameter magnitudes, topological regularisers constrain the geometry and topology of learned representations, decision boundaries, or output segmentations."
 author_profile: true
 read_time: true

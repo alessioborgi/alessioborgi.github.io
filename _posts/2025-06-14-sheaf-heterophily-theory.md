@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaves and Heterophily: A Complete Theoretical Account"
-date: 2025-06-14
 categories: [sheaf]
 book: sheaf
 subsection: theory
 tags: [heterophily, homophily, sheaf-theory, node-classification, signed-maps, anti-alignment]
+published: false
 excerpt: "Why does standard GCN fail on heterophilic graphs? And why do sheaf GNNs succeed? This post gives the complete theoretical account: the homophily assumption encoded in L, how sheaf restriction maps can represent heterophilic structure, and the formal conditions under which sheaf diffusion correctly handles heterophilic node classification."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Skill Learning and Hierarchical Robot Policies"
-date: 2025-09-12
 categories: [robotics]
 book: robotics
 subsection: learning
 tags: [skill-learning, hierarchical-rl, options, primitives, SPiRL]
+published: false
 excerpt: "Hierarchical robot learning decomposes long-horizon tasks into reusable skills. The options framework, skill discovery methods, SPiRL, and SayCan all tackle the challenge of structured policy learning at multiple time scales."
 author_profile: true
 read_time: true

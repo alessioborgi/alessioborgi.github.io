@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Why Some Graphs Fool GNNs: The Structural Indistinguishability Problem"
-date: 2024-04-16
 categories: [gnn]
 book: gnn
 subsection: expressivity
 tags: [expressivity, WL-test, regular-graphs, indistinguishability, GNN-limits]
+published: false
 excerpt: "Certain graph structures are invisible to message-passing GNNs — not because of bad training, but because of fundamental mathematical limits. Two structurally distinct graphs can produce identical embeddings in any MPNN."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Rainbow DQN: Combining Six Improvements"
-date: 2025-08-08
 categories: [rl]
 book: rl
 subsection: value-based
 tags: [rainbow, double-dqn, dueling, prioritised-replay, distributional-rl, noisy-nets]
+published: false
 excerpt: "Rainbow combines six independently proposed DQN improvements — double Q-learning, dueling architecture, prioritised replay, multi-step returns, distributional RL, and noisy networks — achieving state-of-the-art performance with an ablation showing each component contributes."
 author_profile: true
 read_time: true

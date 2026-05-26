@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Neural Sheaf Diffusion: Learning Sheaves End-to-End"
-date: 2024-05-16
 categories: [gnn]
 book: gnn
 subsection: sheaf
 tags: [neural-sheaf-diffusion, NSD, learned-sheaf, heterophily, Bodnar]
+published: false
 excerpt: "Neural Sheaf Diffusion (Bodnar et al., 2022) learns the sheaf restriction maps from data using a neural network, then performs diffusion with the learned Sheaf Laplacian. This gives a principled, topology-grounded GNN that handles heterophily without heuristic fixes."
 author_profile: true
 read_time: true

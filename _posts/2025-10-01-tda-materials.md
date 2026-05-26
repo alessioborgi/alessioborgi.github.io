@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "TDA in Materials Science: Topology of Structure and Phase"
-date: 2025-10-01
 categories: [tdl]
 book: tdl
 subsection: applications
 tags: [tda-materials, porous-materials, crystal-structure, phase-transitions, materials-informatics]
+published: false
 excerpt: "Persistent homology characterises the multi-scale structure of materials — from pore geometry in catalysts to glass transition in amorphous materials. H₀ captures connectivity, H₁ captures channels and rings, H₂ captures enclosed voids. These topological descriptors predict mechanical properties, adsorption capacity, and phase transitions more accurately than geometric averages."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Why Message Passing Is Not Enough: The Case for Sheaves"
-date: 2024-05-13
 categories: [gnn]
 book: gnn
 subsection: sheaf
 tags: [sheaf, message-passing, heterophily, limitations, cellular-sheaf]
+published: false
 excerpt: "Standard message passing aggregates neighbour features and averages. On heterophilic graphs (where neighbours often disagree), this is harmful. Cellular sheaves provide a mathematically principled framework to model per-edge relationships between node features — going beyond mere averaging."
 author_profile: true
 read_time: true

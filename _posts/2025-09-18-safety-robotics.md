@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Safety in Robot Learning: Constraints and Guarantees"
-date: 2025-09-18
 categories: [robotics]
 book: robotics
 subsection: frontier
 tags: [safety, constrained-RL, control-barrier-functions, safe-exploration, human-robot-interaction]
+published: false
 excerpt: "As robots enter human environments, safety becomes non-negotiable. This post covers safe RL with constrained MDPs, control barrier functions for hard safety guarantees, reachability analysis, and human-robot safety standards."
 author_profile: true
 read_time: true

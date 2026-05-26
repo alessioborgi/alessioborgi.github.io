@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "The Mapper Algorithm: Topological Summaries of High-Dimensional Data"
-date: 2025-09-24
 categories: [tdl]
 book: tdl
 subsection: ml-integration
 tags: [mapper, topological-data-analysis, simplicial-complex, high-dimensional-data, clustering]
+published: false
 excerpt: "The Mapper algorithm (Singh, Mémoli & Carlsson 2007) converts a point cloud into a simplicial complex (graph) that summarises its topological structure. It applies a filter function, clusters the preimages, and connects clusters that share points — producing an interpretable 1-complex that reveals loops, flares, and branching structure."
 author_profile: true
 read_time: true

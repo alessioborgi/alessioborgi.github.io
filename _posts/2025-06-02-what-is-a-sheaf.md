@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "What Is a Sheaf? From Topology to Graph Learning"
-date: 2025-06-02
 categories: [sheaf]
 book: sheaf
 subsection: foundations
 tags: [sheaf, topology, cellular-sheaf, stalk, restriction-map, section]
+published: false
 excerpt: "A sheaf is a mathematical device for consistently gluing local data together into global information. This post explains the concept from first principles — no topology background required — and builds the intuition that carries through the entire series."
 author_profile: true
 read_time: true

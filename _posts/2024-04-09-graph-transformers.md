@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Graph Transformers: Bringing Attention to Graphs"
-date: 2024-04-09
 categories: [gnn]
 book: gnn
 subsection: architectures
 tags: [graph-transformer, attention, positional-encoding, global-attention]
+published: false
 excerpt: "Graph Transformers replace or augment local message passing with full pairwise attention — every node attends to every other node. This solves long-range dependencies and over-squashing at the cost of O(N²) computation."
 author_profile: true
 read_time: true

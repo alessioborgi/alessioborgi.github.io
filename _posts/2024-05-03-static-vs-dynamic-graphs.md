@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Static vs Dynamic Graphs: When Structure Changes Over Time"
-date: 2024-05-03
 categories: [gnn]
 book: gnn
 subsection: dynamic
 tags: [dynamic-graph, temporal, snapshot, streaming, continuous-time]
+published: false
 excerpt: "Most GNN research assumes a fixed graph. Real graphs evolve: edges appear and disappear, node features drift, new nodes arrive. Dynamic graph learning addresses how to model and predict on graphs whose structure changes over time."
 author_profile: true
 read_time: true

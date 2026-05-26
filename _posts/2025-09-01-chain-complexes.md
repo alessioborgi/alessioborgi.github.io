@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Chain Complexes and Boundary Maps"
-date: 2025-09-01
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [chain-complex, boundary-map, homology, algebra, topology]
+published: false
 excerpt: "Chain complexes formalise how pieces of a space fit together. The boundary map encodes which faces bound which cells, and homology is born from its kernel and image — the algebraic engine underneath all of TDA."
 author_profile: true
 read_time: true

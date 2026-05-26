@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Path Planning: A*, RRT, and Learned Planners"
-date: 2025-09-06
 categories: [robotics]
 book: robotics
 subsection: planning
 tags: [path-planning, A-star, RRT, sampling-based, motion-planning]
+published: false
 excerpt: "A survey of classical and modern path planning algorithms: from A* search and Dijkstra to sampling-based RRT/RRT* and learned planners like MPNet."
 author_profile: true
 read_time: true

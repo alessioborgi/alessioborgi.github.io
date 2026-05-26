@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "The Nerve Theorem: Why Simplicial Complexes Represent Data"
-date: 2025-09-08
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [nerve-theorem, cech-complex, cover, nerve, good-cover]
+published: false
 excerpt: "The nerve theorem is the topological backbone of TDA: it justifies why the Čech complex built from balls around data points faithfully represents the topology of the union of those balls. Without it, we'd have no reason to trust that simplicial complexes capture the true shape of data."
 author_profile: true
 read_time: true

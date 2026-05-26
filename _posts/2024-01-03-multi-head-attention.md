@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Multi-Head Attention: Many Eyes on the Data"
-date: 2024-01-03
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [attention, multi-head]

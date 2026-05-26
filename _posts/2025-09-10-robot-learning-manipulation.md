@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Robot Manipulation: Grasping and Dexterous Control"
-date: 2025-09-10
 categories: [robotics]
 book: robotics
 subsection: learning
 tags: [manipulation, grasping, dexterous, GraspNet, RL-manipulation]
+published: false
 excerpt: "From classical antipodal grasp analysis to deep 6-DOF grasp prediction with GraspNet and GQ-CNN, and reinforcement learning for dexterous multi-fingered manipulation."
 author_profile: true
 read_time: true

@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaf GNNs for Molecular Property Prediction"
-date: 2025-06-24
 categories: [sheaf]
 book: sheaf
 subsection: applications
 tags: [molecular, QM9, drug-discovery, force-field, SchNet, DimeNet, sheaf-molecular]
+published: false
 excerpt: "Molecular graphs are naturally heterophilic — atoms of different types bonded together — and have rich geometric structure (bond angles, torsion angles). Sheaf GNNs can encode this structure via restriction maps that represent the relational geometry between bonded atoms. This post explores how sheaf theory applies to molecular property prediction."
 author_profile: true
 read_time: true

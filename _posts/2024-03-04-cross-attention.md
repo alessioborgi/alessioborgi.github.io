@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Cross-Attention: How Models Attend to Another Sequence"
-date: 2024-03-04
+date: 2026-05-26
 categories: [transformers]
 book: transformers
 subsection: core

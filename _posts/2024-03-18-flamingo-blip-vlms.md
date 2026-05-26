@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Flamingo, BLIP, and the Rise of Vision-Language Models"
-date: 2024-03-18
 categories: [transformers]
 book: transformers
 subsection: vision
 tags: [Flamingo, BLIP, LLaVA, VLM, multimodal, vision-language]
+published: false
 excerpt: "From Flamingo's frozen LLM + cross-attention vision interface, to BLIP's bootstrapped captioning, to LLaVA's minimalist projector — three generations of vision-language model design, each with a distinct philosophy."
 author_profile: true
 read_time: true

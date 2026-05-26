@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Robot Sensors: Cameras, LiDAR, and IMUs"
-date: 2025-09-03
 categories: [robotics]
 book: robotics
 subsection: foundations
 tags: [sensors, cameras, lidar, imu, sensor-fusion, pointcloud]
+published: false
 excerpt: "Modern robots fuse data from cameras, LiDAR, and IMUs to perceive their environment — understanding sensor noise models and calibration is essential for reliable robot perception."
 author_profile: true
 read_time: true

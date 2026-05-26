@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Multi-Relational Sheaves for Heterogeneous and Knowledge Graphs"
-date: 2025-06-20
 categories: [sheaf]
 book: sheaf
 subsection: extensions
 tags: [multi-relational, knowledge-graph, heterogeneous, R-GCN, TransE, sheaf-KG]
+published: false
 excerpt: "Knowledge graphs have multiple relation types — each edge type encodes a different relationship. Multi-relational sheaves assign different restriction maps to different relation types, giving a principled framework for heterogeneous graph learning. This generalises R-GCN (separate weight per relation) and TransE (relation as translation) to the sheaf setting."
 author_profile: true
 read_time: true

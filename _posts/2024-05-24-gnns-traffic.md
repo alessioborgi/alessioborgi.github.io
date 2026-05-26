@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "GNNs for Traffic Forecasting"
-date: 2024-05-24
 categories: [gnn]
 book: gnn
 subsection: applications
 tags: [traffic, forecasting, DCRNN, STGCN, spatio-temporal, road-network]
+published: false
 excerpt: "Traffic prediction is a canonical spatio-temporal graph task: sensors on roads form a fixed graph, and speed/volume measurements evolve over time. GNNs capture spatial correlations between sensors; RNNs or convolutions capture temporal patterns. Together they achieve state-of-the-art traffic forecasting."
 author_profile: true
 read_time: true

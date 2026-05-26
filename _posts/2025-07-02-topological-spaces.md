@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Topological Spaces and Continuous Maps"
-date: 2025-07-02
 categories: [tdl]
 book: tdl
 subsection: foundations
 tags: [topology, topological-space, open-sets, continuity, homeomorphism]
+published: false
 excerpt: "Topology studies properties of spaces preserved under continuous deformations. This post introduces topological spaces, open sets, continuous maps, and homeomorphisms — building the vocabulary needed to formalise what it means for two shapes to be 'the same' without metrics."
 author_profile: true
 read_time: true

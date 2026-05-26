@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaf Neural Networks: A Complete Research Guide"
-date: 2025-06-01
 categories: [sheaf]
 book: sheaf
 subsection: foundations
 tags: [sheaf, overview, cellular-sheaf, graph-learning, heterophily]
+published: false
 excerpt: "Sheaf Neural Networks extend standard GNNs by attaching vector spaces to every node and edge and learning linear maps that relate them. This series covers everything from the foundational topology to state-of-the-art architectures, theory, and open problems."
 author_profile: true
 read_time: true

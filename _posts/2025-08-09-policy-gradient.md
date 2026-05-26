@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Policy Gradient Methods: REINFORCE and Beyond"
-date: 2025-08-09
 categories: [rl]
 book: rl
 subsection: policy-gradient
 tags: [policy-gradient, REINFORCE, score-function, baseline, variance-reduction]
+published: false
 excerpt: "The policy gradient theorem and REINFORCE algorithm let us directly optimise a stochastic policy by following the gradient of expected return — no value function required."
 author_profile: true
 read_time: true

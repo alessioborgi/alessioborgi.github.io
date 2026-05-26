@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Topological Autoencoders: Preserving Shape in Latent Space"
-date: 2025-09-23
 categories: [tdl]
 book: tdl
 subsection: ml-integration
 tags: [topological-autoencoders, latent-space-topology, dimensionality-reduction, topology-preserving]
+published: false
 excerpt: "Topological autoencoders (Moor et al. 2020) add a topology-preserving regularisation term to standard autoencoders: the persistent homology of the latent space should match the persistent homology of the input space. This ensures that dimensionality reduction preserves the topological structure of the data manifold."
 author_profile: true
 read_time: true

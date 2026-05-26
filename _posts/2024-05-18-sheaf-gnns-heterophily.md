@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Sheaf Neural Networks and Heterophily"
-date: 2024-05-18
 categories: [gnn]
 book: gnn
 subsection: sheaf
 tags: [sheaf, heterophily, oversmoothing, node-classification, H2GCN]
+published: false
 excerpt: "Sheaf GNNs are the principled solution to heterophily: by learning per-edge maps that transform features before comparison, they can perform diffusion that converges within classes and diverges across classes — the exact opposite of standard GCN's collapse."
 author_profile: true
 read_time: true

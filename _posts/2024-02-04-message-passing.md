@@ -1,10 +1,10 @@
 ---
 layout: single
 title: "Message Passing: The Universal GNN Framework"
-date: 2024-02-04
 categories: [gnn]
 book: gnn
 tags: [message-passing, mpnn, framework]
+published: false
 excerpt: "Every GNN — GCN, GAT, GraphSAGE, GIN — is a special case of message passing. Learn the three-step loop that defines them all: compute messages, aggregate, update."
 author_profile: true
 read_time: true

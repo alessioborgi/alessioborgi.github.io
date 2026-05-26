@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "Graphormer: Transformers with Structural Biases for Graphs"
-date: 2024-04-10
 categories: [gnn]
 book: gnn
 subsection: architectures
 tags: [Graphormer, graph-transformer, structural-encoding, molecular, OGB]
+published: false
 excerpt: "Graphormer encodes graph structure directly into Transformer attention via three biases: node centrality, spatial encoding (shortest paths), and edge encoding. It won the OGB-LSC 2021 competition on molecular property prediction."
 author_profile: true
 read_time: true
