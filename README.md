@@ -1,18 +1,30 @@
-<a href="https://alessioborgi.github.io">
-  <img alt="Alessio Borgi Homepage Hero Card" src="./images/themes/homepage-light.png" width="100%"/>
-</a>
+<p align="center">
+  <a href="https://alessioborgi.github.io">
+    <img alt="Alessio Borgi Homepage Hero Card" src="./images/readme-homepage-card.png" width="100%"/>
+  </a>
+</p>
 
-<div align="center">
-  # Alessio Borgi
-  
-  **PhD Student in Graph Neural Networks & Generative AI**  
+<h1 align="center">Alessio Borgi</h1>
+
+<p align="center">
+  <strong>PhD Researcher in Graph Neural Networks &amp; Generative AI</strong><br>
   Sapienza University of Rome 🇮🇹 · University of Cambridge 🇬🇧
-  
-  [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alessio-borgi/)
-  [![Email](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:borgialessio01@gmail.com)
-  [![Website](https://img.shields.io/badge/Website-0d9488?style=for-the-badge&logo=safari&logoColor=white)](https://alessioborgi.github.io)
-  [![Google Scholar](https://img.shields.io/badge/Google_Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white)](https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it)
-</div>
+</p>
+
+<p align="center">
+  <a href="mailto:alessio.borgi@uniroma1.it">
+    <img alt="Email" src="https://img.shields.io/badge/Email%20Me-2ec4c7?style=for-the-badge&logo=gmail&logoColor=white">
+  </a>
+  <a href="https://alessioborgi.github.io/cv/">
+    <img alt="View CV" src="https://img.shields.io/badge/View%20CV-4c6694?style=for-the-badge&logo=readthedocs&logoColor=white">
+  </a>
+  <a href="https://github.com/alessioborgi">
+    <img alt="GitHub" src="https://img.shields.io/badge/GitHub-4c6694?style=for-the-badge&logo=github&logoColor=white">
+  </a>
+  <a href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it">
+    <img alt="Scholar" src="https://img.shields.io/badge/Scholar-4c6694?style=for-the-badge&logo=google-scholar&logoColor=white">
+  </a>
+</p>
 
 ---
 
