@@ -34,7 +34,7 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Self-attention lets each token in a sequence ask "who else here is relevant to me?" It uses three learned projections — Query, Key, and Value — to compute a weighted mixture of all token representations in one shot.
 </div>
-{% include figure image_path="/images/blog/transformers/slides/slide-14-attention-op.png" alt="Slide visualizing the attention operation with Q K transpose softmax and V" caption="From the lecture slides: attention is easiest to understand as a pipeline from Queries and Keys to a row-normalized weighting pattern that mixes the Values. Source: Simone Scardapane, Transformer models lecture, 2023." %}
+{% include figure image_path="/images/blog/transformers/slides/slide-14-attention-op.png" alt="Slide visualizing the attention operation with Q K transpose softmax and V" caption="Attention is easiest to understand as a pipeline from Queries and Keys to a row-normalized weighting pattern that mixes the Values. Source: [2]." %}
 
 
 ## The Focusing Analogy
@@ -175,7 +175,7 @@ Critically, this computation is **fully differentiable** — the model learns wh
 
 - Vaswani, A., et al. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017*.
 - Bahdanau, D., Cho, K., & Bengio, Y. (2014). [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473).
-- Simone Scardapane. *Transformer (attention-based) models*, lecture slides, 2023.
+- [2] https://www.sscardapane.it/alice-book/
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

@@ -32,7 +32,7 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Multi-Head Attention runs several self-attention operations in parallel, each in a smaller subspace. Each "head" independently learns what to attend to, capturing different aspects of the input. Their outputs are concatenated and projected back.
 </div>
-{% include figure image_path="/images/blog/transformers/slides/slide-19-multi-head.png" alt="Slide visualizing multi-head attention" caption="From the lecture slides: multi-head attention repeats the same attention pattern across several learned subspaces before concatenating the results. Source: Simone Scardapane, Transformer models lecture, 2023." %}
+{% include figure image_path="/images/blog/transformers/slides/slide-19-multi-head.png" alt="Slide visualizing multi-head attention" caption="Multi-head attention repeats the same attention pattern across several learned subspaces before concatenating the results. Source: [2]." %}
 
 
 ## Why One Head Isn't Enough

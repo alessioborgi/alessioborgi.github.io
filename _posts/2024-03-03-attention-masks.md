@@ -58,7 +58,7 @@ pre.mask-grid .block  { color: #f87171; }
 <div class="tldr-box">
 <strong>TL;DR:</strong> Attention masks control which pairs of tokens can attend to each other. Bidirectional masking (BERT) sees everything. Causal masking (GPT) sees only the past. Padding masks ignore filler tokens. The mask choice determines the model's fundamental capability.
 </div>
-{% include figure image_path="/images/blog/transformers/slides/slide-41-masking.png" alt="Slide visualizing the masking operation before softmax" caption="From the lecture slides: masking only works correctly when forbidden positions are suppressed before softmax, not after it. Source: Simone Scardapane, Transformer models lecture, 2023." %}
+{% include figure image_path="/images/blog/transformers/slides/slide-41-masking.png" alt="Slide visualizing the masking operation before softmax" caption="Masking only works correctly when forbidden positions are suppressed before softmax, not after it. Source: [2]." %}
 
 
 ## Why Masks Exist
@@ -189,4 +189,4 @@ Attention masks are the simplest mechanism in the Transformer, but they define t
 - Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (introduces causal masking in the decoder to enforce autoregressive generation).
 - Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2018). [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805). *NAACL 2019* (BERT: encoder-only model using bidirectional (non-causal) attention with padding masks for variable-length inputs).
 - Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., & Sutskever, I. (2019). [Language Models are Unsupervised Multitask Learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf). *OpenAI 2019* (GPT-2: decoder-only causal masking applied at scale for generative language modelling).
-- Simone Scardapane. *Transformer (attention-based) models*, lecture slides, 2023.
+- [2] https://www.sscardapane.it/alice-book/

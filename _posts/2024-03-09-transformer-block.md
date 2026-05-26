@@ -64,7 +64,7 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A Transformer block = LN → MHA → residual → LN → FFN → residual. This unit is stacked N times. Understanding one block means understanding the entire architecture. Every modern LLM is just this pattern repeated at scale.
 </div>
-{% include figure image_path="/images/blog/transformers/slides/slide-22-blocks.png" alt="Slide comparing post-normalized and pre-normalized Transformer blocks" caption="From the lecture slides: the post-norm and pre-norm block layouts. Modern large models usually prefer pre-norm because it is easier to optimize deeply. Source: Simone Scardapane, Transformer models lecture, 2023." %}
+{% include figure image_path="/images/blog/transformers/slides/slide-22-blocks.png" alt="Slide comparing post-normalized and pre-normalized Transformer blocks" caption="The post-norm and pre-norm block layouts show why modern large models usually prefer pre-norm: it is easier to optimize deeply. Source: [2]." %}
 
 
 ## The Block is the Atom
@@ -247,4 +247,4 @@ Everything else in a Transformer — BERT, GPT, T5, ViT, LLaMA — is a combinat
 - Xiong, R., Yang, Y., He, D., Zheng, K., Zheng, S., Xing, C., Zhang, H., Lan, Y., Wang, L., & Liu, T.-Y. (2020). [On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745). *ICML 2020* (Pre-LN block variant: LN before each sublayer instead of after — improves gradient flow and dominates modern LLM architectures).
 - Geva, M., et al. (2021). [Transformer Feed-Forward Layers Are Key-Value Memories](https://arxiv.org/abs/2012.14913).
 - Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M.-A., Lacroix, T., Rozière, B., Goyal, N., Hambro, E., Azhar, F., Rodriguez, A., Joulin, A., Grave, E., & Lample, G. (2023). [LLaMA: Open and Efficient Foundation Language Models](https://arxiv.org/abs/2302.13971). *arXiv 2023* (LLaMA: uses Pre-LN block with RMSNorm, SwiGLU FFN, and RoPE — the dominant open-weight Transformer block design).
-- Simone Scardapane. *Transformer (attention-based) models*, lecture slides, 2023.
+- [2] https://www.sscardapane.it/alice-book/

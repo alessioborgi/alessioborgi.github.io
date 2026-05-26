@@ -94,7 +94,7 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> The Transformer dropped sequential processing in favour of parallel attention over all tokens at once. This simple shift unlocked GPT, BERT, Whisper, AlphaFold, ViT — essentially all of modern AI.
 </div>
 
-{% include figure image_path="/images/blog/transformers/slides/slide-09-schematic.png" alt="Slide showing short-term versus long-term interactions in convolution and non-local models" caption="From the lecture slides: the key jump is from fixed local interactions to dynamic non-local interactions, which is the conceptual door that attention walks through. Source: Simone Scardapane, Transformer models lecture, 2023." %}
+{% include figure image_path="/images/blog/transformers/slides/slide-09-schematic.png" alt="Slide showing short-term versus long-term interactions in convolution and non-local models" caption="The key jump is from fixed local interactions to dynamic non-local interactions, which is the conceptual door that attention walks through. Source: [2]." %}
 
 <div class="chapter-grid">
   <div class="chapter-card">
@@ -198,7 +198,7 @@ If you strip away the implementation details, a Transformer does five things:
 
 That recipe is simple enough to reuse across domains, which is why the same core architecture reappears in language, vision, audio, biology, robotics, and multi-modal systems.
 
-{% include figure image_path="/images/blog/transformers/slides/slide-37-full-model.png" alt="Slide showing the complete Transformer model with positional encodings and stacked blocks" caption="From the lecture slides: the full Transformer is not many unrelated ideas, but one repeated block sitting on top of embeddings plus position information. Source: Simone Scardapane, Transformer models lecture, 2023." %}
+{% include figure image_path="/images/blog/transformers/slides/slide-37-full-model.png" alt="Slide showing the complete Transformer model with positional encodings and stacked blocks" caption="The full Transformer is not many unrelated ideas, but one repeated block sitting on top of embeddings plus position information. Source: [2]." %}
 
 ## Architecture Walk-Through
 
@@ -281,7 +281,7 @@ The Transformer is not one trick. It is a **clean composition of simple blocks**
   <li>Vaswani, A. et al. (2017). <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>.</li>
   <li>Devlin, J. et al. (2018). <a href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a>.</li>
   <li>Dosovitskiy, A. et al. (2020). <a href="https://arxiv.org/abs/2010.11929">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a>.</li>
-  <li>Simone Scardapane. <em>Transformer (attention-based) models</em>, lecture slides, 2023.</li>
+  <li>[2] <a href="https://www.sscardapane.it/alice-book/">https://www.sscardapane.it/alice-book/</a></li>
   <li>Zhang, Lipton, Li, and Smola. <em>Dive into Deep Learning</em>, chapters on attention and Transformers.</li>
 </ul>
 </div>

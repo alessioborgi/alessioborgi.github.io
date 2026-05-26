@@ -37,7 +37,7 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Because self-attention is order-agnostic, Transformers need an extra signal to know which token is at which position. Positional encodings (PEs) inject this information as vectors added to the token embeddings. Different PE designs have wildly different properties.
 </div>
-{% include figure image_path="/images/blog/transformers/slides/slide-34-positional-heatmap.png" alt="Slide visualizing sinusoidal positional encodings across positions" caption="From the lecture slides: sinusoidal positional encodings create a multi-frequency pattern across sequence positions rather than a single scalar counter. Source: Simone Scardapane, Transformer models lecture, 2023." %}
+{% include figure image_path="/images/blog/transformers/slides/slide-34-positional-heatmap.png" alt="Slide visualizing sinusoidal positional encodings across positions" caption="Sinusoidal positional encodings create a multi-frequency pattern across sequence positions rather than a single scalar counter. Source: [2]." %}
 
 
 ## The Order-Agnostic Problem
@@ -146,7 +146,7 @@ Can the model handle sequences *longer* than those seen during training? This is
 - Raffel, C., et al. (2020). [Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/abs/1910.10683).
 - Su, J., et al. (2021). [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864).
 - Press, O., Smith, N. A., & Lewis, M. (2022). [Train Short, Test Long: Attention with Linear Biases](https://arxiv.org/abs/2108.12409).
-- Simone Scardapane. *Transformer (attention-based) models*, lecture slides, 2023.
+- [2] https://www.sscardapane.it/alice-book/
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
