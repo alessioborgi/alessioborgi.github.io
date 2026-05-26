@@ -2,17 +2,17 @@
   "username": "alessioborgi",
   "total_stars": 49,
   "total_forks": 13,
-  "public_repos": 29,
+  "public_repos": 28,
   "followers": 16,
   "top_languages": [
     {
       "name": "Jupyter Notebook",
-      "bytes": 610065129,
+      "bytes": 599929401,
       "percent": 95.1
     },
     {
       "name": "Python",
-      "bytes": 28304629,
+      "bytes": 27714794,
       "percent": 4.4
     },
     {
