@@ -58,6 +58,8 @@ toc_label: "Contents"
   <strong>Authors:</strong> L. Braithwaite, <em>A. Borgi</em>, G. Onorato, K. Tarantelli, F. Restuccia, F. Silvestri, P. Liò<br>
   <strong>Venue:</strong> arXiv preprint, 2024 &nbsp;·&nbsp;
   <a href="https://arxiv.org/abs/2409.08036" target="_blank" rel="noopener">📄 Read the paper</a>
+  &nbsp;·&nbsp;
+  <a href="/publications/2024-09-12-heterogeneous-sheaf-neural-networks/">🔗 Publication page</a>
 </div>
 
 <div class="paper-preview">

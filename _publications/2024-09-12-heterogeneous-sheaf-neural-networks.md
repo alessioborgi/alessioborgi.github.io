@@ -10,6 +10,7 @@ paperurl: "https://arxiv.org/abs/2409.08036"
 bibtexurl: "https://arxiv.org/bibtex/2409.08036"
 citation: 'Braithwaite, L.; Borgi, A.; Onorato, G.; Tarantelli, K.; Restuccia, F.; Silvestri, F.; Liò, P. (2024). "Heterogeneous Sheaf Neural Networks." <i>arXiv:2409.08036</i>.'
 webpageurl: "/publications/2024-09-12-heterogeneous-sheaf-neural-networks/"
+blogurl: "/blog/sheaf/hetsheaf-paper/"
 ---
 
 ## Abstract

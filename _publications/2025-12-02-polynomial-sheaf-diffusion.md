@@ -10,6 +10,7 @@ paperurl: "https://arxiv.org/abs/2512.00242"
 bibtexurl: "https://arxiv.org/bib/2512.00242"
 citation: 'Borgi, A.; Silvestri F.; Liò P. (2025). "Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves.'
 webpageurl: "/publications/2025-12-02-polynomial-sheaf-diffusion/"
+blogurl: "/blog/sheaf/polynsd-paper/"
 ---
 
 ## Abstract (snapshot)

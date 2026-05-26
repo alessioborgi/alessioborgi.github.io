@@ -37,6 +37,23 @@ toc_label: "Contents"
   font-size: 0.93rem;
 }
 .paper-meta strong { color: #003E74; }
+.paper-insight {
+  margin: 1.25rem 0;
+  padding: 1rem 1.15rem;
+  border-radius: 10px;
+  border: 1px solid #dbeafe;
+  background: linear-gradient(145deg, #f8fbff, #eef6ff);
+}
+.paper-insight h3 {
+  margin: 0 0 0.45rem;
+  color: #0f2a36;
+  font-size: 1rem;
+}
+.paper-insight p {
+  margin: 0;
+  color: #334155;
+  font-size: 0.95rem;
+}
 .key-takeaways {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
@@ -58,6 +75,8 @@ toc_label: "Contents"
   <strong>Authors:</strong> R. Ali, <em>A. Borgi</em>, C. Irwin, M. Severino, P. Liò<br>
   <strong>Venue:</strong> arXiv preprint, 2026 &nbsp;·&nbsp;
   <a href="https://arxiv.org/abs/2605.10414" target="_blank" rel="noopener">📄 Read the paper</a>
+  &nbsp;·&nbsp;
+  <a href="/publications/2026-05-11-gape/">🔗 Publication page</a>
 </div>
 
 <div class="paper-preview">
@@ -97,11 +116,9 @@ The decoupling is critical: the query gate controls *forgetting* (global distanc
 
 If the bias were only query-dependent, the model could suppress distance but would have no mechanism to rescue rare important tokens. If it were only key-dependent, salient keys could be marked, but irrelevant long-range attention would still remain too diffuse. The product structure gives both effects at once: broad contraction plus selective preservation.
 
-<div class="blog-figure">
-<figure>
-<img src="https://arxiv.org/html/2605.10414/2605.10414v1/x1.png" alt="GAPE mechanism: content-aware attention logit bias separating contraction from token survival">
-<figcaption>Figure 1 — GAPE adds a factored logit bias after the rotary dot-product. The query gate (left path) suppresses irrelevant long-range context; the key gate (right path) preserves salient distant tokens. The rotary geometry remains unchanged.</figcaption>
-</figure>
+<div class="paper-insight">
+  <h3>Figure 1 — Mechanism Overview</h3>
+  <p>GAPE adds a factored logit bias after the rotary dot-product. The query gate contracts irrelevant long-range context, while the key gate protects salient distant tokens. The important design choice is that RoPE itself is left untouched: geometry stays positional, gating stays content-aware.</p>
 </div>
 
 ## Theoretical Guarantee
@@ -114,31 +131,25 @@ The paper proves that protected tokens (high *g_k* value) remain accessible rega
 
 The Needle-in-a-Haystack (NIAH) benchmark places a critical fact (the "needle") at various positions in a long context and asks the model to retrieve it. GAPE consistently places sharper attention on the needle token at all context lengths and needle positions, even at 4× training context length.
 
-<div class="blog-figure">
-<figure>
-<img src="https://arxiv.org/html/2605.10414/2605.10414v1/x2.png" alt="NIAH retrieval: needle near vs. far, 1x/2x/4x context">
-<figcaption>Figure 2 — NIAH retrieval scores at 1×, 2×, and 4× training context. GAPE (blue) maintains high recall at all context extensions; the RoPE baseline (orange) degrades significantly at 2× and collapses at 4×.</figcaption>
-</figure>
+<div class="paper-insight">
+  <h3>Figure 2 — NIAH Retrieval</h3>
+  <p>On Needle-in-a-Haystack retrieval, the paper shows that GAPE keeps recall high at 1×, 2×, and 4× training context. The RoPE baseline progressively loses the needle as the context grows, while GAPE keeps the attention mass anchored on the relevant token.</p>
 </div>
 
 ### Attention Sharpness
 
 The key gate's mechanistic effect is visible directly in the attention maps: GAPE produces sharper, more focused attention patterns compared to the vanilla RoPE baseline.
 
-<div class="blog-figure">
-<figure>
-<img src="https://arxiv.org/html/2605.10414/2605.10414v1/x3.png" alt="Mechanistic behavior of GAPE gates in NIAH task">
-<figcaption>Figure 3 — Attention maps on the NIAH task. With GAPE (right), attention concentrates tightly on the needle token; without GAPE (left), attention diffuses across the haystack at long ranges.</figcaption>
-</figure>
+<div class="paper-insight">
+  <h3>Figure 3 — Attention Sharpness</h3>
+  <p>The mechanistic attention maps are the clearest intuition for the method: vanilla RoPE diffuses attention across the haystack at long range, whereas GAPE sharpens it and keeps the model focused on the useful distant token instead of spreading mass over distractors.</p>
 </div>
 
 ### OOD Perplexity
 
-<div class="blog-figure">
-<figure>
-<img src="https://arxiv.org/html/2605.10414/2605.10414v1/x4.png" alt="OOD perplexity under context extension">
-<figcaption>Figure 4 — Perplexity as context length increases beyond the training window. GAPE (blue) shows slower perplexity growth compared to the RoPE baseline, confirming improved out-of-distribution robustness for language modelling.</figcaption>
-</figure>
+<div class="paper-insight">
+  <h3>Figure 4 — OOD Perplexity</h3>
+  <p>As context extends beyond the training window, GAPE shows slower perplexity growth than RoPE. That result matters because it says the gain is not just a benchmark trick: the model remains more stable under the exact distribution shift that long-context inference creates.</p>
 </div>
 
 ## Practical Interpretation

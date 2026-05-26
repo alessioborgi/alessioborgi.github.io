@@ -121,6 +121,126 @@ layout: default
       <section class="page__content" itemprop="text">
         {{ content }}
 
+        {% if page.book %}
+          {% assign _page_file = page.path | split: '/' | last | remove: '.md' %}
+          <div id="ml-blog-next-cta" class="ml-blog-next-cta" hidden></div>
+          <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            var mlBlogCatalog = {{ site.data.mlblogposts | jsonify }};
+            var allPosts = [
+              {% for p in site.posts %}
+              {
+                slug: {{ p.path | split: '/' | last | remove: '.md' | jsonify }},
+                url: {{ p.url | relative_url | jsonify }},
+                title: {{ p.title | jsonify }},
+                book: {{ p.book | jsonify }}
+              }{% unless forloop.last %},{% endunless %}
+              {% endfor %}
+            ];
+
+            var bookKey = {{ page.book | jsonify }};
+            var currentSlug = {{ _page_file | jsonify }};
+            var target = document.getElementById('ml-blog-next-cta');
+            var book = mlBlogCatalog[bookKey];
+            if (!target || !book) return;
+
+            var ordered = [];
+            if (Array.isArray(book.overview)) {
+              book.overview.forEach(function (entry) {
+                if (entry && entry.published === 'online') ordered.push(entry.slug);
+              });
+            }
+            if (book.sections) {
+              Object.keys(book.sections).forEach(function (sectionKey) {
+                var posts = (book.sections[sectionKey] && book.sections[sectionKey].posts) || [];
+                posts.forEach(function (entry) {
+                  if (entry && entry.published === 'online') ordered.push(entry.slug);
+                });
+              });
+            }
+
+            var currentIndex = ordered.indexOf(currentSlug);
+            if (currentIndex === -1) return;
+
+            var nextSlug = ordered[currentIndex + 1];
+            if (!nextSlug) return;
+
+            var nextPost = allPosts.find(function (post) {
+              return post.slug === nextSlug;
+            });
+            if (!nextPost) return;
+
+            target.hidden = false;
+            target.innerHTML =
+              '<a class="ml-blog-next-btn" href="' + nextPost.url + '">' +
+              '<span class="ml-blog-next-label">Continue with the next blog...</span>' +
+              '<strong>' + nextPost.title + '</strong>' +
+              '<span class="ml-blog-next-arrow">→</span>' +
+              '</a>';
+          });
+          </script>
+          <style>
+            .ml-blog-next-cta {
+              display: flex;
+              justify-content: flex-end;
+              margin: 2rem 0 0.5rem;
+            }
+
+            .ml-blog-next-btn {
+              display: inline-flex;
+              align-items: center;
+              gap: 0.85rem;
+              max-width: 460px;
+              padding: 0.95rem 1.1rem;
+              border-radius: 14px;
+              text-decoration: none;
+              color: #ecfeff !important;
+              background: linear-gradient(135deg, #0f2a36 0%, #164e63 100%);
+              border: 1px solid rgba(56, 193, 183, 0.28);
+              box-shadow: 0 10px 24px rgba(15, 42, 54, 0.14);
+              transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            }
+
+            .ml-blog-next-btn:hover {
+              transform: translateY(-1px);
+              box-shadow: 0 14px 30px rgba(15, 42, 54, 0.18);
+              border-color: rgba(153, 246, 228, 0.5);
+              text-decoration: none;
+            }
+
+            .ml-blog-next-label {
+              display: block;
+              font-size: 0.78rem;
+              letter-spacing: 0.04em;
+              text-transform: uppercase;
+              color: #99f6e4;
+              font-weight: 700;
+            }
+
+            .ml-blog-next-btn strong {
+              display: block;
+              color: #ffffff;
+              font-size: 0.98rem;
+              line-height: 1.35;
+              font-weight: 800;
+              flex: 1;
+            }
+
+            .ml-blog-next-arrow {
+              font-size: 1.25rem;
+              color: #99f6e4;
+              flex-shrink: 0;
+            }
+
+            @media (max-width: 720px) {
+              .ml-blog-next-btn {
+                width: 100%;
+                max-width: none;
+              }
+            }
+          </style>
+        {% endif %}
+
         {% if page.citation and page.paperurl and page.slidesurl and page.bibtexurl %}
           <p style="font-size: smaller">Recommended citation: {{ page.citation }}<br /><a href="{{ page.paperurl }}">Download Paper</a> | <a href="{{ page.slidesurl }}">Download Slides</a> | <a href="{{ page.bibtexurl }}">Download Bibtex</a></p>
         {% elsif page.citation and page.paperurl and page.slidesurl %}

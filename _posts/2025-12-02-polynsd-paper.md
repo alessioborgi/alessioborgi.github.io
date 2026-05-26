@@ -58,6 +58,8 @@ toc_label: "Contents"
   <strong>Authors:</strong> <em>A. Borgi</em>, P. Liò<br>
   <strong>Venue:</strong> arXiv preprint, 2025 &nbsp;·&nbsp;
   <a href="https://arxiv.org/abs/2512.00242" target="_blank" rel="noopener">📄 Read the paper</a>
+  &nbsp;·&nbsp;
+  <a href="/publications/2025-12-02-polynomial-sheaf-diffusion/">🔗 Publication page</a>
 </div>
 
 <div class="paper-preview">
