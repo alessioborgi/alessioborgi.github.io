@@ -726,7 +726,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
   <div class="ab-section__bar"></div>
 </div>
 
-{% assign recent_pubs = site.publications | sort: "date" | reverse | slice: 0, 3 %}
+{% assign recent_pubs = site.publications | sort: "date" | reverse | slice: 0, 5 %}
 <ul class="home-pub-list">
   {% for pub in recent_pubs %}
     {% assign post = pub %}

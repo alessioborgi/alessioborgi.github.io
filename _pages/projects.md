@@ -17,10 +17,51 @@ author_profile: true
     --prj-shadow: 0 6px 28px rgba(0,62,116,0.22);
   }
 
+  /* ── Category section ── */
+  .projects-category {
+    margin-bottom: 2.4rem;
+  }
+  .projects-category__hd {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: linear-gradient(135deg, var(--prj-navy) 0%, #1a5f9a 100%);
+    color: #fff;
+    padding: 0.55rem 1.1rem;
+    border-radius: 10px 10px 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .projects-category__hd .cat-bar {
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    border-radius: 2px;
+    background: var(--prj-teal);
+    flex-shrink: 0;
+  }
+  .projects-category__hd .cat-count {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    opacity: 0.9;
+  }
+
   /* ── Grid ── */
   .projects-grid {
     display: grid;
-    gap: 1.4rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    border: 1px solid var(--prj-border);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    background: rgba(0,10,30,0.03);
+    padding: 1rem;
   }
 
   /* ── Dark cosmic card ── */
@@ -166,127 +207,188 @@ author_profile: true
   }
 </style>
 
-<!-- <div class="notice--primary">
-  <h3>Selected Projects</h3>
-  <p>A snapshot of hands-on builds, research prototypes, and demos.</p>
-</div> -->
-
 {% assign items = site.projects | sort: 'title' %}
 {% if items and items.size > 0 %}
+
+{%- comment -%}Helper macro — renders one project card{%- endcomment -%}
+{%- assign _rendered_ = "" -%}
+
+{%- comment -%}
+  Categories (keyword-matched on title | downcase):
+  1. graph-topo   — sheaf, graph, polysheaf, xgnn
+  2. genai-vision — style, adavit, vision transformer, vlm, realtime-vlm, clip, skin, alpr, license plate, z-saslm, z-samb
+  3. robotics     — moonbot, moon, amr, cleaning robot, robomat, autodrive, unidrive, autonomous, rover
+  4. sci-health   — bioheat, pinn, careconnect, hospital, cluster, segmentation, rtad, anomaly, 5g
+  5. software     — everything else
+{%- endcomment -%}
+
+<!-- ── 1. Graph & Topological ML ──────────────────────── -->
+<div class="projects-category">
+  <div class="projects-category__hd">
+    <span class="cat-bar"></span>
+    🕸️ Graph &amp; Topological ML
+    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{% if _pk contains "sheaf" or _pk contains "graph" or _pk contains "polysheaf" or _pk contains "xgnn" %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
+  </div>
   <div class="projects-grid">
     {% for post in items %}
+      {%- assign pk = post.title | downcase -%}
+      {%- if pk contains "sheaf" or pk contains "graph" or pk contains "polysheaf" or pk contains "xgnn" -%}
       <article class="project-card">
-        {%- assign pk = post.title | downcase -%}
-        {%- assign prj_emoji = "💡" -%}
-        {%- if pk contains "moonbot" or pk contains "moon" -%}{%- assign prj_emoji = "🌙" -%}
-        {%- elsif pk contains "amr" or pk contains "cleaning robot" or pk contains "robomat" -%}{%- assign prj_emoji = "🤖" -%}
-        {%- elsif pk contains "autodrive" or pk contains "unidrive" or pk contains "alpr" or pk contains "license plate" -%}{%- assign prj_emoji = "🚗" -%}
-        {%- elsif pk contains "polysheaf" or pk contains "xgnn" or pk contains "graph" or pk contains "sheaf" -%}{%- assign prj_emoji = "🕸️" -%}
-        {%- elsif pk contains "style" or pk contains "z-saslm" or pk contains "z-samb" or pk contains "stylealigned" -%}{%- assign prj_emoji = "🎨" -%}
-        {%- elsif pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime-vlm" or pk contains "clip" -%}{%- assign prj_emoji = "👁️" -%}
-        {%- elsif pk contains "skin" -%}{%- assign prj_emoji = "🩺" -%}
-        {%- elsif pk contains "bioheat" or pk contains "pinn" -%}{%- assign prj_emoji = "🌡️" -%}
-        {%- elsif pk contains "careconnect" or pk contains "hospital" -%}{%- assign prj_emoji = "🏥" -%}
-        {%- elsif pk contains "rtad" or pk contains "anomaly" or pk contains "5g" -%}{%- assign prj_emoji = "📡" -%}
-        {%- elsif pk contains "email" or pk contains "spam" -%}{%- assign prj_emoji = "📧" -%}
-        {%- elsif pk contains "home-automation" or pk contains "smart home" or pk contains "iot" -%}{%- assign prj_emoji = "🏠" -%}
-        {%- elsif pk contains "insta" or pk contains "social" or pk contains "photo" -%}{%- assign prj_emoji = "📸" -%}
-        {%- elsif pk contains "railway" or pk contains "train" or pk contains "passenger" -%}{%- assign prj_emoji = "🚂" -%}
-        {%- elsif pk contains "qrcode" or pk contains "qr code" -%}{%- assign prj_emoji = "📱" -%}
-        {%- elsif pk contains "ticketing" or pk contains "helpdesk" or pk contains "support" -%}{%- assign prj_emoji = "🎫" -%}
-        {%- elsif pk contains "electric" -%}{%- assign prj_emoji = "⚡" -%}
-        {%- elsif pk contains "cluster" or pk contains "segmentation" -%}{%- assign prj_emoji = "🎯" -%}
-        {%- elsif pk contains "category theory" or pk contains "java-category" -%}{%- assign prj_emoji = "📐" -%}
-        {%- elsif pk contains "pipeline" or pk contains "mlpipeline" -%}{%- assign prj_emoji = "⚙️" -%}
-        {%- elsif pk contains "performance" or pk contains "monitoring" or pk contains "pc-performance" -%}{%- assign prj_emoji = "📊" -%}
-        {%- elsif pk contains "nsio" or pk contains "search index" -%}{%- assign prj_emoji = "🔍" -%}
-        {%- endif -%}
+        {%- assign prj_emoji = "🕸️" -%}
+        {%- if pk contains "railway" or pk contains "train" -%}{%- assign prj_emoji = "🚂" -%}{%- endif -%}
         <div class="project-header">
-          <h2>
-            <span class="prj-emoji" aria-hidden="true">{{ prj_emoji }}</span>
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-          </h2>
+          <h2><span class="prj-emoji" aria-hidden="true">{{ prj_emoji }}</span><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
           <div class="project-links">
-            <a class="project-pill" href="{{ post.url | relative_url }}">
-              <img src="{{ '/images/webpage.webp' | relative_url }}" alt="Project page icon">
-              <span>Project Page</span>
-            </a>
-            {% if post.github %}
-              <a class="project-pill" href="{{ post.github }}" target="_blank" rel="noopener">
-                <img src="{{ '/images/github.png' | relative_url }}" alt="GitHub icon">
-                <span>GitHub</span>
-              </a>
-            {% endif %}
+            <a class="project-pill" href="{{ post.url | relative_url }}"><img src="{{ '/images/webpage.webp' | relative_url }}" alt=""><span>Page</span></a>
+            {% if post.github %}<a class="project-pill" href="{{ post.github }}" target="_blank" rel="noopener"><img src="{{ '/images/github.png' | relative_url }}" alt=""><span>Code</span></a>{% endif %}
           </div>
         </div>
-        {% assign project_key = post.slug | default: post.title | downcase %}
-        {% if project_key contains "moonbot" or post.url contains "moonbot-navigation" %}
-          <p class="project-lead">An autonomous navigation and object-interaction stack for a lunar rover prototype.</p>
-          <ul class="project-details">
-            <li><strong>Planner:</strong> Dijkstra-based waypoint navigation with dynamic obstacle handling.</li>
-            <li><strong>Perception:</strong> Visual object detection and tracking to trigger tasks and avoid hazards.</li>
-            <li><strong>Hardware:</strong> Custom gripper actuation and onboard execution for reliable field operation.</li>
-          </ul>
-        {% elsif project_key contains "amr" or post.url contains "amr-cleaningrobot" %}
-          <p class="project-lead">Autonomous indoor cleaning robot with ROS/Webots/RViz stack.</p>
-          <ul class="project-details">
-            <li><strong>SLAM:</strong> Builds a detailed map using Lidar and odometry for obstacle-aware navigation.</li>
-            <li><strong>Planning Trajectories:</strong> NavfnROS + TrajectoryPlannerROS for optimal global/local paths with static and dynamic obstacles.</li>
-            <li><strong>Dynamic Obstacle Avoidance:</strong> Sensors and planners cooperate to steer around obstacles smoothly.</li>
-          </ul>
-        {% else %}
-          <p class="project-excerpt">
-            {% if post.excerpt %}
-              {{ post.excerpt | strip_html | strip_newlines | truncate: 240 }}
-            {% elsif post.description %}
-              {{ post.description | strip_html | strip_newlines | truncate: 240 }}
-            {% else %}
-              Project details coming soon.
-            {% endif %}
-          </p>
-        {% endif %}
-        {% if post.tags %}
-          <div class="project-tags">
-            {% for tag in post.tags %}
-              <span class="project-tag">{{ tag }}</span>
-            {% endfor %}
-          </div>
-        {% endif %}
+        <p class="project-excerpt">{{ post.excerpt | strip_html | strip_newlines | truncate: 180 }}</p>
+        {% if post.tags %}<div class="project-tags">{% for tag in post.tags limit:4 %}<span class="project-tag">{{ tag }}</span>{% endfor %}</div>{% endif %}
       </article>
+      {%- endif -%}
     {% endfor %}
   </div>
+</div>
+
+<!-- ── 2. Generative AI & Vision ─────────────────────── -->
+<div class="projects-category">
+  <div class="projects-category__hd">
+    <span class="cat-bar"></span>
+    🎨 Generative AI &amp; Vision
+    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{% if _pk contains "style" or _pk contains "adavit" or _pk contains "vision transformer" or _pk contains "vlm" or _pk contains "realtime" or _pk contains "clip" or _pk contains "skin" or _pk contains "alpr" or _pk contains "license plate" %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
+  </div>
+  <div class="projects-grid">
+    {% for post in items %}
+      {%- assign pk = post.title | downcase -%}
+      {%- if pk contains "style" or pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime" or pk contains "clip" or pk contains "skin" or pk contains "alpr" or pk contains "license plate" -%}
+      <article class="project-card">
+        {%- assign prj_emoji = "🎨" -%}
+        {%- if pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime" or pk contains "clip" -%}{%- assign prj_emoji = "👁️" -%}
+        {%- elsif pk contains "skin" -%}{%- assign prj_emoji = "🩺" -%}
+        {%- elsif pk contains "alpr" or pk contains "license plate" -%}{%- assign prj_emoji = "🚗" -%}
+        {%- endif -%}
+        <div class="project-header">
+          <h2><span class="prj-emoji" aria-hidden="true">{{ prj_emoji }}</span><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+          <div class="project-links">
+            <a class="project-pill" href="{{ post.url | relative_url }}"><img src="{{ '/images/webpage.webp' | relative_url }}" alt=""><span>Page</span></a>
+            {% if post.github %}<a class="project-pill" href="{{ post.github }}" target="_blank" rel="noopener"><img src="{{ '/images/github.png' | relative_url }}" alt=""><span>Code</span></a>{% endif %}
+          </div>
+        </div>
+        <p class="project-excerpt">{{ post.excerpt | strip_html | strip_newlines | truncate: 180 }}</p>
+        {% if post.tags %}<div class="project-tags">{% for tag in post.tags limit:4 %}<span class="project-tag">{{ tag }}</span>{% endfor %}</div>{% endif %}
+      </article>
+      {%- endif -%}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ── 3. Robotics & Autonomous Systems ──────────────── -->
+<div class="projects-category">
+  <div class="projects-category__hd">
+    <span class="cat-bar"></span>
+    🤖 Robotics &amp; Autonomous Systems
+    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{% if _pk contains "moonbot" or _pk contains "moon" or _pk contains "amr" or _pk contains "robomat" or _pk contains "autodrive" or _pk contains "unidrive" or _pk contains "autonomous" or _pk contains "rover" or _pk contains "cleaning robot" %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
+  </div>
+  <div class="projects-grid">
+    {% for post in items %}
+      {%- assign pk = post.title | downcase -%}
+      {%- if pk contains "moonbot" or pk contains "moon" or pk contains "amr" or pk contains "robomat" or pk contains "autodrive" or pk contains "unidrive" or pk contains "autonomous" or pk contains "rover" or pk contains "cleaning robot" -%}
+      <article class="project-card">
+        {%- assign prj_emoji = "🤖" -%}
+        {%- if pk contains "moonbot" or pk contains "moon" or pk contains "rover" -%}{%- assign prj_emoji = "🌙" -%}
+        {%- elsif pk contains "autodrive" or pk contains "unidrive" -%}{%- assign prj_emoji = "🚗" -%}
+        {%- endif -%}
+        <div class="project-header">
+          <h2><span class="prj-emoji" aria-hidden="true">{{ prj_emoji }}</span><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+          <div class="project-links">
+            <a class="project-pill" href="{{ post.url | relative_url }}"><img src="{{ '/images/webpage.webp' | relative_url }}" alt=""><span>Page</span></a>
+            {% if post.github %}<a class="project-pill" href="{{ post.github }}" target="_blank" rel="noopener"><img src="{{ '/images/github.png' | relative_url }}" alt=""><span>Code</span></a>{% endif %}
+          </div>
+        </div>
+        <p class="project-excerpt">{{ post.excerpt | strip_html | strip_newlines | truncate: 180 }}</p>
+        {% if post.tags %}<div class="project-tags">{% for tag in post.tags limit:4 %}<span class="project-tag">{{ tag }}</span>{% endfor %}</div>{% endif %}
+      </article>
+      {%- endif -%}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ── 4. Scientific & Healthcare ML ─────────────────── -->
+<div class="projects-category">
+  <div class="projects-category__hd">
+    <span class="cat-bar"></span>
+    🔬 Scientific &amp; Healthcare ML
+    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{% if _pk contains "bioheat" or _pk contains "pinn" or _pk contains "careconnect" or _pk contains "hospital" or _pk contains "cluster" or _pk contains "segmentation" or _pk contains "rtad" or _pk contains "anomaly" or _pk contains "5g" %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
+  </div>
+  <div class="projects-grid">
+    {% for post in items %}
+      {%- assign pk = post.title | downcase -%}
+      {%- if pk contains "bioheat" or pk contains "pinn" or pk contains "careconnect" or pk contains "hospital" or pk contains "cluster" or pk contains "segmentation" or pk contains "rtad" or pk contains "anomaly" or pk contains "5g" -%}
+      <article class="project-card">
+        {%- assign prj_emoji = "🔬" -%}
+        {%- if pk contains "bioheat" or pk contains "pinn" -%}{%- assign prj_emoji = "🌡️" -%}
+        {%- elsif pk contains "careconnect" or pk contains "hospital" -%}{%- assign prj_emoji = "🏥" -%}
+        {%- elsif pk contains "rtad" or pk contains "anomaly" or pk contains "5g" -%}{%- assign prj_emoji = "📡" -%}
+        {%- elsif pk contains "cluster" or pk contains "segmentation" -%}{%- assign prj_emoji = "🎯" -%}
+        {%- endif -%}
+        <div class="project-header">
+          <h2><span class="prj-emoji" aria-hidden="true">{{ prj_emoji }}</span><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+          <div class="project-links">
+            <a class="project-pill" href="{{ post.url | relative_url }}"><img src="{{ '/images/webpage.webp' | relative_url }}" alt=""><span>Page</span></a>
+            {% if post.github %}<a class="project-pill" href="{{ post.github }}" target="_blank" rel="noopener"><img src="{{ '/images/github.png' | relative_url }}" alt=""><span>Code</span></a>{% endif %}
+          </div>
+        </div>
+        <p class="project-excerpt">{{ post.excerpt | strip_html | strip_newlines | truncate: 180 }}</p>
+        {% if post.tags %}<div class="project-tags">{% for tag in post.tags limit:4 %}<span class="project-tag">{{ tag }}</span>{% endfor %}</div>{% endif %}
+      </article>
+      {%- endif -%}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ── 5. Software Engineering & Tools ───────────────── -->
+<div class="projects-category">
+  <div class="projects-category__hd">
+    <span class="cat-bar"></span>
+    ⚙️ Software Engineering &amp; Tools
+    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{%- assign _is_other = true -%}{%- if _pk contains "sheaf" or _pk contains "graph" or _pk contains "polysheaf" or _pk contains "xgnn" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "style" or _pk contains "adavit" or _pk contains "vision transformer" or _pk contains "vlm" or _pk contains "realtime" or _pk contains "clip" or _pk contains "skin" or _pk contains "alpr" or _pk contains "license plate" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "moonbot" or _pk contains "moon" or _pk contains "amr" or _pk contains "robomat" or _pk contains "autodrive" or _pk contains "unidrive" or _pk contains "autonomous" or _pk contains "rover" or _pk contains "cleaning robot" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "bioheat" or _pk contains "pinn" or _pk contains "careconnect" or _pk contains "hospital" or _pk contains "cluster" or _pk contains "segmentation" or _pk contains "rtad" or _pk contains "anomaly" or _pk contains "5g" -%}{%- assign _is_other = false -%}{%- endif -%}{% if _is_other %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
+  </div>
+  <div class="projects-grid">
+    {% for post in items %}
+      {%- assign pk = post.title | downcase -%}
+      {%- assign is_graph  = false -%}{%- if pk contains "sheaf" or pk contains "graph" or pk contains "polysheaf" or pk contains "xgnn" -%}{%- assign is_graph = true -%}{%- endif -%}
+      {%- assign is_vision = false -%}{%- if pk contains "style" or pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime" or pk contains "clip" or pk contains "skin" or pk contains "alpr" or pk contains "license plate" -%}{%- assign is_vision = true -%}{%- endif -%}
+      {%- assign is_robot  = false -%}{%- if pk contains "moonbot" or pk contains "moon" or pk contains "amr" or pk contains "robomat" or pk contains "autodrive" or pk contains "unidrive" or pk contains "autonomous" or pk contains "rover" or pk contains "cleaning robot" -%}{%- assign is_robot = true -%}{%- endif -%}
+      {%- assign is_sci    = false -%}{%- if pk contains "bioheat" or pk contains "pinn" or pk contains "careconnect" or pk contains "hospital" or pk contains "cluster" or pk contains "segmentation" or pk contains "rtad" or pk contains "anomaly" or pk contains "5g" -%}{%- assign is_sci = true -%}{%- endif -%}
+      {%- unless is_graph or is_vision or is_robot or is_sci -%}
+      <article class="project-card">
+        {%- assign prj_emoji = "💡" -%}
+        {%- if pk contains "email" or pk contains "spam" -%}{%- assign prj_emoji = "📧" -%}
+        {%- elsif pk contains "home" or pk contains "iot" -%}{%- assign prj_emoji = "🏠" -%}
+        {%- elsif pk contains "insta" or pk contains "social" -%}{%- assign prj_emoji = "📸" -%}
+        {%- elsif pk contains "qr" -%}{%- assign prj_emoji = "📱" -%}
+        {%- elsif pk contains "ticketing" or pk contains "helpdesk" or pk contains "support" or pk contains "electric" -%}{%- assign prj_emoji = "🎫" -%}
+        {%- elsif pk contains "category theory" or pk contains "java" -%}{%- assign prj_emoji = "📐" -%}
+        {%- elsif pk contains "pipeline" or pk contains "mlpipeline" -%}{%- assign prj_emoji = "⚙️" -%}
+        {%- elsif pk contains "performance" or pk contains "monitoring" -%}{%- assign prj_emoji = "📊" -%}
+        {%- elsif pk contains "nsio" or pk contains "search" -%}{%- assign prj_emoji = "🔍" -%}
+        {%- endif -%}
+        <div class="project-header">
+          <h2><span class="prj-emoji" aria-hidden="true">{{ prj_emoji }}</span><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+          <div class="project-links">
+            <a class="project-pill" href="{{ post.url | relative_url }}"><img src="{{ '/images/webpage.webp' | relative_url }}" alt=""><span>Page</span></a>
+            {% if post.github %}<a class="project-pill" href="{{ post.github }}" target="_blank" rel="noopener"><img src="{{ '/images/github.png' | relative_url }}" alt=""><span>Code</span></a>{% endif %}
+          </div>
+        </div>
+        <p class="project-excerpt">{{ post.excerpt | strip_html | strip_newlines | truncate: 180 }}</p>
+        {% if post.tags %}<div class="project-tags">{% for tag in post.tags limit:4 %}<span class="project-tag">{{ tag }}</span>{% endfor %}</div>{% endif %}
+      </article>
+      {%- endunless -%}
+    {% endfor %}
+  </div>
+</div>
+
 {% else %}
   <p>No projects published yet.</p>
 {% endif %}
-
-
-
-
-<!-- <section class="tesp-section">
-    <div class="moonbot-header">
-      <div>
-        <h2>MoonBot Navigation</h2>
-        <p class="moonbot-sub">An autonomous navigation and object-interaction stack for a lunar rover prototype.</p>
-      </div>
-      <div class="moonbot-actions">
-        <a class="tesp-pill-btn" href="{{ "/projects/moonbot-navigation/" | relative_url }}">
-          <img class="btn-icon" src="{{ '/images/webpage.webp' | relative_url }}" alt="Project Page">
-          Project page
-        </a>
-        <a class="tesp-pill-btn" href="https://github.com/alessioborgi/MoonBot-Navigation" target="_blank" rel="noopener">
-          <img class="btn-icon" src="{{ '/images/github.png' | relative_url }}" alt="GitHub">
-          GitHub Repository
-        </a>
-      </div>
-    </div>
-    <ul class="tesp-list">
-      <li><strong>Planner:</strong> Dijkstra-based waypoint navigation with dynamic obstacle handling.</li>
-      <li><strong>Perception:</strong> Visual object detection and tracking to trigger tasks and avoid hazards.</li>
-      <li><strong>Hardware:</strong> Custom gripper actuation and onboard execution for reliable field operation.</li>
-    </ul>
-    <div class="tesp-meta tesp-meta-compact" style="margin-top:0.6rem;">
-      <span class="tesp-pill pill-blue">Navigation & Perception</span>
-      <span class="tesp-pill pill-green">Onboard Planning</span>
-      <span class="tesp-pill pill-amber">Robotics Hardware</span>
-    </div>
-  </section> -->

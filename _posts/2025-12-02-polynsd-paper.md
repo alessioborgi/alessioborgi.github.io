@@ -1,0 +1,127 @@
+---
+layout: single
+title: "PolyNSD: Polynomial Neural Sheaf Diffusion"
+date: 2025-12-02
+categories: [research]
+book: sheaf
+subsection: core-papers
+tags: [sheaf-neural-networks, spectral-gnn, polynomial-filters, graph-neural-networks]
+excerpt: "PolyNSD replaces the NSD propagation operator with a degree-K Chebyshev polynomial in the normalised sheaf Laplacian, achieving SOTA on homo- and heterophilic benchmarks with only diagonal restriction maps and dramatically lower memory usage."
+author_profile: true
+read_time: true
+icon: "📐"
+read_mins: 8
+permalink: /blog/sheaf/polynsd-paper/
+toc: true
+toc_label: "Contents"
+---
+
+<style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { max-width: 100%; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .6rem; font-style: italic; }
+.tldr-box {
+  background: linear-gradient(145deg,#e8fbfb,#dbeafe);
+  border-left: 4px solid #0d9488;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.tldr-box strong { color: #0f2a36; }
+.paper-meta {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.93rem;
+}
+.paper-meta strong { color: #003E74; }
+.key-takeaways {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-top: 1.5rem;
+}
+.key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
+.key-takeaways ul { margin: 0; padding-left: 1.2rem; }
+.key-takeaways li { margin-bottom: .3rem; font-size: .95rem; }
+</style>
+
+<div class="tldr-box">
+  <strong>TL;DR:</strong> Neural Sheaf Diffusion works but has problems — SVD-based normalisation, dense restriction maps, and fragile gradients. PolyNSD fixes all three by using a degree-K polynomial in the normalised sheaf Laplacian (via a stable three-term recurrence), with only diagonal restriction maps, achieving SOTA on both homophilic and heterophilic benchmarks while being cheaper to run.
+</div>
+
+<div class="paper-meta">
+  <strong>Paper:</strong> "Polynomial Neural Sheaf Diffusion" &nbsp;·&nbsp; arXiv:2512.00242<br>
+  <strong>Authors:</strong> <em>A. Borgi</em>, P. Liò<br>
+  <strong>Venue:</strong> arXiv preprint, 2025 &nbsp;·&nbsp;
+  <a href="https://arxiv.org/abs/2512.00242" target="_blank" rel="noopener">📄 Read the paper</a>
+</div>
+
+## Background: Neural Sheaf Diffusion
+
+A **Sheaf Neural Network** enriches a graph with a cellular sheaf: each node and edge gets a vector space (a *stalk*), and each endpoint of each edge gets a *restriction map* encoding how node signals relate to edge signals. The **sheaf Laplacian** encodes this relational geometry and replaces the standard graph Laplacian in the diffusion operator.
+
+**Neural Sheaf Diffusion (NSD)** — the dominant sheaf GNN approach — learns restriction maps end-to-end and runs diffusion on the sheaf Laplacian. It handles heterophily well and resists oversmoothing, but has three practical problems:
+
+1. **SVD-based normalisation**: requires expensive SVD decomposition of the sheaf Laplacian at every layer, making Laplacian rebuilds slow.
+2. **Dense restriction maps**: one *d × d* matrix per node-edge pair, scaling quadratically with stalk dimension *d*.
+3. **Brittle gradients**: the normalised sheaf Laplacian construction is numerically unstable for large *d*, leading to gradient issues.
+
+## The PolyNSD Fix
+
+PolyNSD replaces the NSD propagation operator with a **degree-K polynomial** of a *spectrally rescaled* normalised sheaf Laplacian, evaluated via a **stable three-term Chebyshev recurrence**.
+
+This gives:
+- **Explicit K-hop receptive field** in a single layer (independently of the stalk dimension *d*).
+- **Trainable spectral response** as a convex mixture of K+1 orthogonal polynomial basis responses — the model learns which frequency components to amplify or suppress.
+- **No SVD** needed: the recurrence only requires sparse matrix-vector products.
+- **Stability** via convex mixtures (coefficients sum to 1) + spectral rescaling to [−1, 1] + residual/gated paths.
+
+<div class="blog-figure">
+<figure>
+<img src="https://ar5iv.labs.arxiv.org/html/2512.00242/assets/img/polynsd_layer.png" alt="PolyNSD Layer: Chebyshev recurrence, high-pass correction, gated residual">
+<figcaption>Figure 1 — A single PolyNSD layer. The sheaf Laplacian polynomial is evaluated via Chebyshev three-term recurrence (left), followed by a high-pass correction gate and a gated residual connection for stable training.</figcaption>
+</figure>
+</div>
+
+## Architecture Overview
+
+<div class="blog-figure">
+<figure>
+<img src="https://ar5iv.labs.arxiv.org/html/2512.00242/assets/img/1_Entire_Flow.png" alt="PolyNSD end-to-end architecture overview">
+<figcaption>Figure 2 — End-to-end PolyNSD. Input features are projected into stalk spaces using diagonal restriction maps; the polynomial sheaf diffusion layers run the Chebyshev recurrence over the normalised sheaf Laplacian; the output heads perform node classification or regression.</figcaption>
+</figure>
+</div>
+
+### Diagonal Restriction Maps
+
+The key parameter-reduction insight: **diagonal restriction maps** (a vector of *d* scalars per node-edge pair instead of a *d × d* matrix) are sufficient for strong performance. This reduces per-edge parameter count from O(d²) to O(d) and decouples performance from large stalk dimensions.
+
+## Results
+
+<div class="blog-figure">
+<figure>
+<img src="https://ar5iv.labs.arxiv.org/html/2512.00242/assets/img/experiments/Accuracy_vs_StalkDim_2x2.png" alt="Test accuracy vs. stalk dimension on Cora, PubMed, Texas, Film">
+<figcaption>Figure 3 — Test accuracy vs. stalk dimension on four benchmarks (Cora, PubMed, Texas, Film). PolyNSD (solid) maintains strong accuracy across all stalk dimensions; standard NSD (dashed) degrades with large stalk dimensions due to numerical instability. PolyNSD achieves its best results with <em>diagonal</em> maps at small stalk dimensions.</figcaption>
+</figure>
+</div>
+
+Key results vs. NSD and spectral GNN baselines:
+
+- **New SOTA** on both homophilic (Cora, CiteSeer, PubMed) and heterophilic (Texas, Film, Wisconsin) benchmarks — inverting the NSD trend that required large stalk dimensions for heterophilic gains.
+- **Diagonal maps + small *d*** match or exceed NSD with dense maps + large *d*.
+- **Lower runtime and memory**: no SVD, sparse recurrence, small stalk dimensions.
+- Spectral filter shape is interpretable: the model learns when to apply low-pass (homophilic) vs. high-pass (heterophilic) filters.
+
+<div class="key-takeaways">
+<h3>✅ Key Takeaways</h3>
+<ul>
+  <li>PolyNSD replaces the NSD diffusion operator with a degree-K Chebyshev polynomial in the normalised sheaf Laplacian, evaluated via a stable three-term recurrence.</li>
+  <li>Diagonal restriction maps are sufficient — decoupling performance from stalk dimension and reducing parameters from O(d²) to O(d) per edge.</li>
+  <li>Stable by design: convex mixture coefficients + spectral rescaling + residual paths prevent gradient collapse.</li>
+  <li>SOTA on homo- and heterophilic benchmarks with lower runtime and memory than NSD.</li>
+</ul>
+</div>

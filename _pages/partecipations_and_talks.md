@@ -177,59 +177,6 @@ author_profile: true
 </style>
 
 <!-- ═══════════════════════════════════════════════════════
-     VISITING RESEARCH
-     ═══════════════════════════════════════════════════════ -->
-<div class="pt-section">
-  <div class="pt-section__hd">
-    <span class="pt-bar"></span>
-    Visiting Research
-  </div>
-  <div class="pt-section__body">
-    <div class="pt-timeline">
-
-      <!-- Tohoku University -->
-      <div class="pt-item">
-        <div class="pt-dot"><span></span></div>
-        <div class="pt-content">
-          <div class="pt-period">June – July 2025</div>
-          <div class="pt-title">Visiting Researcher — Tohoku University</div>
-          <div class="pt-org">🇯🇵 Sendai, Japan &nbsp;·&nbsp; Prof. Masayuki Numao &amp; Prof. Ken-ichi Fukui</div>
-          <div class="pt-body">
-            <p>Conducted research on <strong>Sheaf Neural Networks</strong> and their application to neuroscience data, collaborating with the AI Lab at Tohoku University.</p>
-            <p>Selected winner of the <strong>TESP 2025 (Tohoku Engineering Summer Program)</strong>.</p>
-          </div>
-          <div class="pt-badges">
-            <span class="pt-badge--gold pt-badge">TESP 2025 Winner</span>
-            <span class="pt-badge">Sheaf Neural Networks</span>
-            <span class="pt-badge--blue pt-badge">Neuroscience × AI</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- JKU Linz -->
-      <div class="pt-item">
-        <div class="pt-dot pt-dot--blue"><span></span></div>
-        <div class="pt-content">
-          <div class="pt-period pt-period--blue">August – September 2024</div>
-          <div class="pt-title">Visiting Researcher — Johannes Kepler University Linz</div>
-          <div class="pt-org">🇦🇹 Linz, Austria &nbsp;·&nbsp; Prof. Sepp Hochreiter</div>
-          <div class="pt-body">
-            <p>Research stay focused on <strong>xLSTM architectures</strong> and modern sequence modelling under the supervision of Prof. Sepp Hochreiter (inventor of LSTM).</p>
-            <p>Awarded <strong>Best Poster Award</strong> at the JKU AI Research Symposium.</p>
-          </div>
-          <div class="pt-badges">
-            <span class="pt-badge--gold pt-badge">Best Poster Award</span>
-            <span class="pt-badge--blue pt-badge">xLSTM</span>
-            <span class="pt-badge--blue pt-badge">Sequence Modelling</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
      SCHOOLS & COURSES
      ═══════════════════════════════════════════════════════ -->
 <div class="pt-section">
@@ -306,6 +253,59 @@ author_profile: true
             <span class="pt-badge--blue pt-badge">Google Cloud</span>
             <span class="pt-badge">MLOps</span>
             <span class="pt-badge--blue pt-badge">Responsible AI</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     VISITING RESEARCH
+     ═══════════════════════════════════════════════════════ -->
+<div class="pt-section">
+  <div class="pt-section__hd">
+    <span class="pt-bar"></span>
+    Visiting Research
+  </div>
+  <div class="pt-section__body">
+    <div class="pt-timeline">
+
+      <!-- Tohoku University -->
+      <div class="pt-item">
+        <div class="pt-dot"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period">June – July 2025</div>
+          <div class="pt-title">Visiting Researcher — Tohoku University</div>
+          <div class="pt-org">🇯🇵 Sendai, Japan &nbsp;·&nbsp; Prof. Masayuki Numao &amp; Prof. Ken-ichi Fukui</div>
+          <div class="pt-body">
+            <p>Conducted research on <strong>Sheaf Neural Networks</strong> and their application to neuroscience data, collaborating with the AI Lab at Tohoku University.</p>
+            <p>Selected winner of the <strong>TESP 2025 (Tohoku Engineering Summer Program)</strong>.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--gold pt-badge">TESP 2025 Winner</span>
+            <span class="pt-badge">Sheaf Neural Networks</span>
+            <span class="pt-badge--blue pt-badge">Neuroscience × AI</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- JKU Linz -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--blue"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--blue">August – September 2024</div>
+          <div class="pt-title">Visiting Researcher — Johannes Kepler University Linz</div>
+          <div class="pt-org">🇦🇹 Linz, Austria &nbsp;·&nbsp; Prof. Sepp Hochreiter</div>
+          <div class="pt-body">
+            <p>Research stay focused on <strong>xLSTM architectures</strong> and modern sequence modelling under the supervision of Prof. Sepp Hochreiter (inventor of LSTM).</p>
+            <p>Awarded <strong>Best Poster Award</strong> at the JKU AI Research Symposium.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--gold pt-badge">Best Poster Award</span>
+            <span class="pt-badge--blue pt-badge">xLSTM</span>
+            <span class="pt-badge--blue pt-badge">Sequence Modelling</span>
           </div>
         </div>
       </div>

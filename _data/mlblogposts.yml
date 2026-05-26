@@ -49,6 +49,7 @@ transformers:
         - { slug: "2024-03-10-ntk-scaling",           title: "NTK-Aware Scaling: Extending Context Without Fine-Tuning",    published: online }
         - { slug: "2024-03-11-yarn",                  title: "YaRN: Yet Another RoPE Extension Method",                     published: online }
         - { slug: "2024-03-12-longrope",              title: "LongRoPE: Extending Context to 2 Million Tokens",             published: online }
+        - { slug: "2026-05-11-gape-paper",            title: "GAPE: Remember to Forget — Gated Adaptive Positional Encoding",  published: online }
 
     vision:
       label: "Vision Transformers"
@@ -218,6 +219,7 @@ sheaf:
         - { slug: "2025-06-07-hansen-gebhart-2020",       title: "Sheaf Neural Networks (Hansen & Gebhart, 2020): The First Sheaf GNN",                            published: online }
         - { slug: "2025-06-08-neural-sheaf-diffusion",    title: "Neural Sheaf Diffusion (Bodnar et al., NeurIPS 2022): Learning the Relational Geometry",         published: online }
         - { slug: "2025-06-09-polynomial-sheaf-diffusion", title: "Polynomial Neural Sheaf Diffusion (Zaghen et al., ICLR 2024): Learnable Spectral Filters",      published: online }
+        - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi & Liò)",                                       published: online }
         - { slug: "2025-06-10-sheaf-attention-networks",  title: "Sheaf Attention Networks (Barbero et al., 2022)",                                                 published: online }
         - { slug: "2025-06-11-sheaf-map-parameterisation", title: "Learning Sheaf Maps: Parameterisation Strategies Compared",                                      published: online }
         - { slug: "2025-06-12-spectral-sheaf-convolution", title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves",                                       published: online }
@@ -243,6 +245,7 @@ sheaf:
         - { slug: "2025-06-20-multi-relational-sheaves", title: "Multi-Relational Sheaves for Heterogeneous and Knowledge Graphs",         published: online }
         - { slug: "2025-06-21-temporal-sheaves",       title: "Temporal Sheaves: Extending Sheaf GNNs to Dynamic Graphs",                 published: online }
         - { slug: "2025-06-22-sheaf-transformers",     title: "Sheaves Meet Attention: Transformer-Inspired Sheaf Models",                published: online }
+        - { slug: "2024-09-12-hetsheaf-paper",         title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves (Borgi et al.)",      published: online }
 
     applications:
       label: "Applications"
@@ -302,3 +305,21 @@ persistent-homology:
         - { slug: "2025-07-17-tda-biology",       title: "TDA for Biology and Genomics: Shape in the Life Sciences",              published: online }
         - { slug: "2025-07-18-tda-neuroscience",  title: "TDA for Neuroscience: Topology of Brain Connectivity",                  published: online }
         - { slug: "2025-07-19-open-problems-ph",  title: "Open Problems in Topological Machine Learning",                         published: online }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# BOOK V — GENERATIVE AI & STYLE TRANSFER
+# ────────────────────────────────────────────────────────────────────────────
+generative-ai:
+  label: "Book V: Generative AI & Style Transfer"
+  icon:  "🎨"
+  color: "#d97706"
+
+  overview: []
+
+  sections:
+
+    style-transfer:
+      label: "Style Transfer & Latent Manipulation"
+      posts:
+        - { slug: "2025-06-17-zsaslm-paper",  title: "Z-SASLM: Zero-Shot Style Blending via Spherical Interpolation (CVPR 2025)",  published: online }
