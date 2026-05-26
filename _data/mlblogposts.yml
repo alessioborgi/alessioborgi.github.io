@@ -256,11 +256,11 @@ sheaf:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK IV — PERSISTENT HOMOLOGY & TDA
+# BOOK IV — TOPOLOGICAL DEEP LEARNING
 # ────────────────────────────────────────────────────────────────────────────
-persistent-homology:
-  label: "Book IV: Persistent Homology & TDA"
-  icon:  "🔵"
+tdl:
+  label: "Book IV: Topological Deep Learning"
+  icon:  "🔺"
   color: "#e11d48"
 
   overview:
@@ -308,10 +308,119 @@ persistent-homology:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK V — GENERATIVE AI & STYLE TRANSFER
+# BOOK V — REINFORCEMENT LEARNING
+# ────────────────────────────────────────────────────────────────────────────
+rl:
+  label: "Book V: Reinforcement Learning"
+  icon:  "🎮"
+  color: "#059669"
+
+  overview:
+    - { slug: "2025-08-01-rl-overview", title: "Reinforcement Learning: A Complete Guide", published: online }
+
+  sections:
+
+    foundations:
+      label: "Foundations"
+      posts:
+        - { slug: "2025-08-02-mdp",                    title: "Markov Decision Processes: The Framework of RL",                   published: online }
+        - { slug: "2025-08-03-bellman-equations",       title: "Bellman Equations: Recursive Structure of Optimal Value",         published: online }
+        - { slug: "2025-08-04-exploration-exploitation", title: "Exploration vs Exploitation: The Core Dilemma of RL",           published: online }
+        - { slug: "2025-08-05-temporal-difference",     title: "Temporal Difference Learning: Bootstrapping from Experience",    published: online }
+
+    value-based:
+      label: "Value-Based Methods"
+      posts:
+        - { slug: "2025-08-06-q-learning",   title: "Q-Learning: Off-Policy TD Control",         published: online }
+        - { slug: "2025-08-07-dqn",          title: "DQN: Deep Q-Networks for Atari",            published: online }
+        - { slug: "2025-08-08-rainbow-dqn",  title: "Rainbow DQN: Combining Six Improvements",  published: online }
+
+    policy-gradient:
+      label: "Policy Gradient Methods"
+      posts:
+        - { slug: "2025-08-09-policy-gradient", title: "Policy Gradient Methods: REINFORCE and Beyond",          published: online }
+        - { slug: "2025-08-10-a3c",             title: "A3C: Asynchronous Advantage Actor-Critic",               published: online }
+        - { slug: "2025-08-11-ppo",             title: "PPO: Proximal Policy Optimisation",                      published: online }
+        - { slug: "2025-08-12-sac",             title: "SAC: Soft Actor-Critic and Maximum Entropy RL",          published: online }
+        - { slug: "2025-08-13-trpo-npg",        title: "TRPO and Natural Policy Gradient",                       published: online }
+
+    model-based:
+      label: "Model-Based RL"
+      posts:
+        - { slug: "2025-08-14-world-models", title: "World Models: Learning Latent Dynamics",               published: online }
+        - { slug: "2025-08-15-muzero",       title: "MuZero: Planning Without a Ground-Truth Model",        published: online }
+        - { slug: "2025-08-16-dyna",         title: "Dyna: Integrating Planning and Learning",              published: online }
+
+    multi-agent:
+      label: "Multi-Agent RL"
+      posts:
+        - { slug: "2025-08-17-multi-agent-rl", title: "Multi-Agent Reinforcement Learning", published: online }
+
+    applications:
+      label: "Applications"
+      posts:
+        - { slug: "2025-08-18-rl-for-games", title: "RL for Games: From Atari to AlphaGo",                      published: online }
+        - { slug: "2025-08-19-rlhf",         title: "RLHF: Reinforcement Learning from Human Feedback",         published: online }
+        - { slug: "2025-08-20-rl-robotics",  title: "RL for Robotics: From Simulation to Real Hardware",        published: online }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# BOOK VI — LEARNING-BASED ROBOTICS
+# ────────────────────────────────────────────────────────────────────────────
+robotics:
+  label: "Book VI: Learning-Based Robotics"
+  icon:  "🤖"
+  color: "#7c3aed"
+
+  overview:
+    - { slug: "2025-09-01-robotics-overview", title: "Learning-Based Robotics: A Complete Guide", published: online }
+
+  sections:
+
+    foundations:
+      label: "Foundations"
+      posts:
+        - { slug: "2025-09-02-robot-kinematics",   title: "Robot Kinematics: Forward and Inverse",      published: online }
+        - { slug: "2025-09-03-sensors-perception",  title: "Robot Sensors: Cameras, LiDAR, and IMUs",   published: online }
+        - { slug: "2025-09-04-robot-control",       title: "Robot Control: PID, Impedance, and Beyond",  published: online }
+
+    planning:
+      label: "Planning & Navigation"
+      posts:
+        - { slug: "2025-09-05-slam",          title: "SLAM: Simultaneous Localisation and Mapping",           published: online }
+        - { slug: "2025-09-06-path-planning",  title: "Path Planning: A*, RRT, and Learned Planners",         published: online }
+        - { slug: "2025-09-07-motion-planning", title: "Motion Planning: Task and Motion Planning",           published: online }
+
+    learning:
+      label: "Learning for Robots"
+      posts:
+        - { slug: "2025-09-08-imitation-learning",           title: "Imitation Learning: Behaviour Cloning and DAgger",          published: online }
+        - { slug: "2025-09-09-sim-to-real",                  title: "Sim-to-Real Transfer: Bridging the Reality Gap",            published: online }
+        - { slug: "2025-09-10-robot-learning-manipulation",  title: "Robot Manipulation: Grasping and Dexterous Control",        published: online }
+        - { slug: "2025-09-11-locomotion",                   title: "Robot Locomotion: Walking, Running, and Jumping",           published: online }
+        - { slug: "2025-09-12-skill-learning",               title: "Skill Learning and Hierarchical Robot Policies",            published: online }
+
+    perception:
+      label: "Perception"
+      posts:
+        - { slug: "2025-09-13-3d-vision",       title: "3D Vision for Robotics: Point Clouds and Depth",      published: online }
+        - { slug: "2025-09-14-pose-estimation",  title: "Object Pose Estimation for Robot Manipulation",       published: online }
+
+    frontier:
+      label: "Frontier & Open Problems"
+      posts:
+        - { slug: "2025-09-15-diffusion-policy",              title: "Diffusion Policy: Generative Imitation Learning",          published: online }
+        - { slug: "2025-09-16-foundation-models-robotics",    title: "Foundation Models for Robotics: RT-1, RT-2, and Beyond",   published: online }
+        - { slug: "2025-09-17-language-conditioned-robots",   title: "Language-Conditioned Robot Policies",                      published: online }
+        - { slug: "2025-09-18-safety-robotics",               title: "Safety in Robot Learning: Constraints and Guarantees",     published: online }
+        - { slug: "2025-09-19-open-problems-robotics",        title: "Open Problems in Robot Learning",                          published: online }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# BOOK VII — GENERATIVE AI & STYLE TRANSFER
 # ────────────────────────────────────────────────────────────────────────────
 generative-ai:
-  label: "Book V: Generative AI & Style Transfer"
+  label: "Book VII: Generative AI & Style Transfer"
   icon:  "🎨"
   color: "#d97706"
 
