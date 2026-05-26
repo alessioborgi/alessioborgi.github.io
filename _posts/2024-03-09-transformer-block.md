@@ -18,6 +18,9 @@ toc_label: "Contents"
 ---
 
 <style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 780px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -219,6 +222,17 @@ Token + Positional Embeddings
 
 GPT-3 at 175B parameters is 96 of these blocks, each with d_model=12288, 96 attention heads, and d_ff=49152. The architecture is the same as described here. The only differences are scale and a few engineering choices (RoPE, SwiGLU, grouped-query attention in modern models).
 
+{% include figure image_path="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Multi-head attention inside the transformer block" caption="Inside the block, multi-head attention is the cross-token mixing stage; the FFN then refines each token independently (Vaswani et al., 2017)." %}
+
+## Why This Block Scales So Well
+
+- The **attention** sub-layer mixes information globally across the sequence.
+- The **FFN** sub-layer increases per-token expressivity without changing sequence length.
+- **Residuals** let gradients bypass either sub-layer if needed.
+- **Layer norm** keeps the statistics stable enough to stack dozens or hundreds of blocks.
+
+That division of labor is why the same blueprint works from tiny classroom models to frontier LLMs.
+
 ## Summary
 
 The Transformer block is:
@@ -232,4 +246,5 @@ Everything else in a Transformer — BERT, GPT, T5, ViT, LLaMA — is a combinat
 
 - Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (original Transformer block: MHA → Add&Norm → FFN → Add&Norm, stacked L times).
 - Xiong, R., Yang, Y., He, D., Zheng, K., Zheng, S., Xing, C., Zhang, H., Lan, Y., Wang, L., & Liu, T.-Y. (2020). [On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745). *ICML 2020* (Pre-LN block variant: LN before each sublayer instead of after — improves gradient flow and dominates modern LLM architectures).
+- Geva, M., et al. (2021). [Transformer Feed-Forward Layers Are Key-Value Memories](https://arxiv.org/abs/2012.14913).
 - Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M.-A., Lacroix, T., Rozière, B., Goyal, N., Hambro, E., Azhar, F., Rodriguez, A., Joulin, A., Grave, E., & Lample, G. (2023). [LLaMA: Open and Efficient Foundation Language Models](https://arxiv.org/abs/2302.13971). *arXiv 2023* (LLaMA: uses Pre-LN block with RMSNorm, SwiGLU FFN, and RoPE — the dominant open-weight Transformer block design).

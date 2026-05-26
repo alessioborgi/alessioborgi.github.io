@@ -19,6 +19,7 @@ toc_label: "Contents"
 
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
 .tldr-box strong { color: #0f2a36; }
@@ -30,6 +31,8 @@ toc_label: "Contents"
 .pe-table th { background: #0f2a36; color: #fff; padding: .5rem .75rem; text-align: left; }
 .pe-table td { padding: .45rem .75rem; border-bottom: 1px solid #e2e8f0; }
 .pe-table tr:hover td { background: #f0fdf4; }
+.insight-box { background: #fff7ed; border-left: 4px solid #f97316; border-radius: 8px; padding: .95rem 1.1rem; margin: 1.25rem 0; }
+.insight-box strong { color: #9a3412; }
 </style>
 
 <div class="tldr-box">
@@ -43,6 +46,10 @@ toc_label: "Contents"
 Self-attention computes pairwise scores between all tokens. It doesn't matter if token A is first or last — the attention equation treats both identically. Shuffle the sentence and the model gets the exact same output (just with rows permuted).
 
 This is catastrophic for language: "**dog bites man**" and "**man bites dog**" have opposite meanings.
+
+<div class="insight-box">
+  <strong>Core intuition:</strong> positional encodings are not a small implementation detail. They decide whether a Transformer understands sequence as an ordered structure or as an unordered bag of tokens.
+</div>
 
 ## The Solution: Inject Position into the Embedding
 
@@ -122,6 +129,24 @@ Fixed methods (sinusoidal, ALiBi) use a deterministic formula — no extra param
 
 **3. Extrapolation**
 Can the model handle sequences *longer* than those seen during training? This is the key practical question for LLMs serving long documents. ALiBi and RoPE generally win here; standard learned absolute PEs fail badly.
+
+{% include figure image_path="/images/blog/transformers/su2021_rope.png" alt="RoPE as a modern positional encoding approach" caption="Modern long-context Transformers often move from simple absolute encodings to rotary or bias-based schemes such as RoPE and ALiBi (Su et al., 2021)." %}
+
+## Which PE Should You Reach For?
+
+- If you want the **historical baseline**, start with sinusoidal PE.
+- If you care about **simple pretraining on fixed lengths**, learned absolute PE is easy.
+- If you care about **relative order and text-to-text transfer**, T5-style relative bias is strong.
+- If you care about **modern LLMs and long context**, RoPE is the default starting point.
+- If you care about **extreme extrapolation with minimal machinery**, ALiBi is still conceptually elegant.
+
+## References
+
+- Vaswani, A., et al. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762).
+- Shaw, P., Uszkoreit, J., & Vaswani, A. (2018). [Self-Attention with Relative Position Representations](https://arxiv.org/abs/1803.02155).
+- Raffel, C., et al. (2020). [Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/abs/1910.10683).
+- Su, J., et al. (2021). [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864).
+- Press, O., Smith, N. A., & Lewis, M. (2022). [Train Short, Test Long: Attention with Linear Biases](https://arxiv.org/abs/2108.12409).
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

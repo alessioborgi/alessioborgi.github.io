@@ -183,6 +183,19 @@ author_profile: true
   font-weight: 600;
 }
 .ch-time { font-size: .72rem; color: #9ca3af; }
+.coming-soon-note {
+  border: 1px dashed #bfd4ea;
+  background: linear-gradient(145deg, #ffffff 0%, #f3f8ff 100%);
+  color: #4b5563;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: .9rem;
+  font-size: .92rem;
+  line-height: 1.55;
+}
+.coming-soon-note strong {
+  color: #003E74;
+}
 
 @media (max-width: 640px) {
   .book-banner {
@@ -1010,6 +1023,48 @@ author_profile: true
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  function createSoonNote(copy) {
+    var note = document.createElement('div');
+    note.className = 'coming-soon-note';
+    note.innerHTML = '<strong>Soon to be published...</strong><br>' + copy;
+    return note;
+  }
+
+  function replaceOverview(body, copy) {
+    var overview = body.querySelector('.blog-overview-card');
+    if (!overview) return;
+    overview.replaceWith(createSoonNote(copy));
+  }
+
+  function replaceGridAfterLabel(label, copy) {
+    var next = label.nextElementSibling;
+    if (!next || !next.classList.contains('chapters-grid')) return;
+    next.replaceWith(createSoonNote(copy));
+  }
+
+  var books = Array.from(document.querySelectorAll('.blog-book'));
+  books.forEach(function (book, index) {
+    var body = book.querySelector('.book-body');
+    if (!body) return;
+
+    if (index === 0) {
+      replaceOverview(body, 'The overview for this book is being revised and will be republished in the same short, visual format.');
+      body.querySelectorAll('.subsection-label').forEach(function (label) {
+        var text = label.textContent || '';
+        var keepLive = text.indexOf('Core Components') !== -1 || text.indexOf('Positional Encodings') !== -1;
+        if (!keepLive) {
+          replaceGridAfterLabel(label, 'This subsection is currently offline while it is being rewritten for clarity, stronger visuals, and a tighter 3–5 minute reading flow.');
+        }
+      });
+      return;
+    }
+
+    replaceOverview(body, 'This overview is currently offline while the book is being rebuilt with clearer structure, richer figures, and shorter chapter flows.');
+    body.querySelectorAll('.subsection-label').forEach(function (label) {
+      replaceGridAfterLabel(label, 'This subsection is currently offline and will be republished soon in the same concise, image-rich style.');
+    });
+  });
+
   /* ── Book-level collapse ── */
   document.querySelectorAll('.blog-book').forEach(function (book) {
     var banner = book.querySelector('.book-banner');

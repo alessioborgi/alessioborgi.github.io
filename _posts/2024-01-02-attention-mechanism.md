@@ -19,6 +19,7 @@ toc_label: "Contents"
 
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
 .tldr-box strong { color: #0f2a36; }
@@ -27,6 +28,8 @@ toc_label: "Contents"
 .key-takeaways ul { margin: 0; padding-left: 1.2rem; }
 .key-takeaways li { margin-bottom: .3rem; font-size: .95rem; }
 .formula-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: .8rem 1.1rem; font-family: 'Georgia', serif; font-size: 1.05rem; margin: 1rem 0; text-align: center; color: #1e3a5f; }
+.insight-box { background: #fff7ed; border-left: 4px solid #f97316; border-radius: 8px; padding: .95rem 1.1rem; margin: 1.25rem 0; }
+.insight-box strong { color: #9a3412; }
 </style>
 
 <div class="tldr-box">
@@ -42,6 +45,10 @@ Imagine reading a paper and highlighting sentences that are relevant to your cur
 Consider: *"The animal didn't cross the street because **it** was too tired."*
 
 What does "it" refer to? To understand this, the model needs to relate "it" to "animal" (not "street"). Self-attention learns to assign a high score to that pair.
+
+<div class="insight-box">
+<strong>Why this changed everything:</strong> before Transformers, sequence models mostly passed information step by step through recurrence or convolution. Self-attention made it possible for any token to directly inspect any other token in a single layer.
+</div>
 
 ## Query, Key, and Value
 
@@ -146,6 +153,8 @@ Each of Q, K, V is produced by multiplying the token's embedding by a learned we
 
 **Step 4 — Mix:** Multiply the attention weights by V. Each token's output is a weighted average of all value vectors — heavily weighted towards the tokens it found most relevant.
 
+{% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention equation and computation flow" caption="Scaled dot-product attention: queries score keys, softmax turns scores into weights, and values are mixed accordingly (Vaswani et al., 2017)." %}
+
 ## Why Divide by √dₖ?
 
 Without scaling, the dot products grow large as dimensionality dₖ increases (because they're sums of dₖ products). Large values push softmax into regions where gradients are tiny, slowing training. Dividing by √dₖ keeps the variance stable regardless of model size.
@@ -155,6 +164,18 @@ Without scaling, the dot products grow large as dimensionality dₖ increases (b
 The attention matrix has a score for every (query-token, key-token) pair. High score = "I find you useful." After softmax, these are weights that determine how much each token borrows from each other token when forming its output representation.
 
 Critically, this computation is **fully differentiable** — the model learns which token pairs should have high attention purely from training signal, with no hand-crafted rules.
+
+## What Self-Attention Gives You That RNNs Do Not
+
+- **Direct long-range access:** the last token can attend to the first token immediately.
+- **Parallelism:** all token pairs are processed at once on modern hardware.
+- **Task-specific structure:** the model learns what counts as a useful dependency instead of relying on fixed linguistic rules.
+- **Flexible context mixing:** the same mechanism can capture syntax, coreference, topic, and retrieval-like behavior.
+
+## References
+
+- Vaswani, A., et al. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017*.
+- Bahdanau, D., Cho, K., & Bengio, Y. (2014). [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473).
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
