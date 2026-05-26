@@ -19,14 +19,36 @@ author_profile: true
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: linear-gradient(135deg, #0f2a36 0%, #133844 100%);
+  background: linear-gradient(135deg, #003E74 0%, #0f5a92 100%);
   border-radius: 14px 14px 0 0;
   padding: 1.25rem 1.5rem;
   color: #fff;
 }
 .book-banner .book-icon { font-size: 2.2rem; line-height: 1; }
+.book-banner .book-info { flex: 1; }
 .book-banner h2 { margin: 0 0 0.2rem; color: #fff; font-size: 1.4rem; }
 .book-banner p  { margin: 0; font-size: 0.93rem; opacity: 0.8; }
+.book-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(255,255,255,0.12);
+  border: 1.5px solid rgba(255,255,255,0.28);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+  user-select: none;
+}
+.book-toggle-btn:hover { background: rgba(255,255,255,0.22); }
+.book-toggle-btn .btn-arrow { transition: transform 0.2s ease; display: inline-block; }
+.book-body.collapsed { display: none; }
+.blog-book.collapsed .book-banner { border-radius: 14px; }
+.blog-book.collapsed .book-toggle-btn .btn-arrow { transform: rotate(-90deg); }
 .book-body {
   border: 1px solid #c7d4f2;
   border-top: none;
@@ -95,6 +117,28 @@ author_profile: true
   height: 1px;
   background: #e5e7eb;
 }
+.subsection-label.has-toggle::after { display: none; }
+.sub-line { flex: 1; height: 1px; background: #e5e7eb; }
+.subsection-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: rgba(0,62,116,0.07);
+  border: 1px solid rgba(0,62,116,0.18);
+  border-radius: 50%;
+  color: #003E74;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  line-height: 1;
+  padding: 0;
+}
+.subsection-toggle:hover { background: rgba(0,62,116,0.16); }
+.chapters-grid.collapsed { display: none; }
 
 /* Chapter card grid */
 .chapters-grid {
@@ -144,7 +188,9 @@ author_profile: true
 {% assign transformer_posts = site.posts | where: "book", "transformers"         | sort: "date" %}
 {% assign gnn_posts         = site.posts | where: "book", "gnn"                  | sort: "date" %}
 {% assign sheaf_posts       = site.posts | where: "book", "sheaf"                | sort: "date" %}
-{% assign ph_posts          = site.posts | where: "book", "persistent-homology"  | sort: "date" %}
+{% assign ph_posts          = site.posts | where: "book", "tdl"                   | sort: "date" %}
+{% assign rl_posts          = site.posts | where: "book", "rl"                    | sort: "date" %}
+{% assign robotics_posts    = site.posts | where: "book", "robotics"              | sort: "date" %}
 
 {% assign t_overview  = transformer_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
@@ -176,6 +222,21 @@ author_profile: true
 {% assign ph_computation  = ph_posts | where: "subsection", "computation" %}
 {% assign ph_ml           = ph_posts | where: "subsection", "ml-integration" %}
 {% assign ph_applications = ph_posts | where: "subsection", "applications" %}
+
+{% assign rl_overview        = rl_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign rl_foundations     = rl_posts | where: "subsection", "foundations" %}
+{% assign rl_value_based     = rl_posts | where: "subsection", "value-based" %}
+{% assign rl_policy_gradient = rl_posts | where: "subsection", "policy-gradient" %}
+{% assign rl_model_based     = rl_posts | where: "subsection", "model-based" %}
+{% assign rl_multi_agent     = rl_posts | where: "subsection", "multi-agent" %}
+{% assign rl_applications    = rl_posts | where: "subsection", "applications" %}
+
+{% assign rob_overview    = robotics_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign rob_foundations = robotics_posts | where: "subsection", "foundations" %}
+{% assign rob_planning    = robotics_posts | where: "subsection", "planning" %}
+{% assign rob_learning    = robotics_posts | where: "subsection", "learning" %}
+{% assign rob_perception  = robotics_posts | where: "subsection", "perception" %}
+{% assign rob_frontier    = robotics_posts | where: "subsection", "frontier" %}
 
 
 <!-- ════════════════════════════════════════════════════════ -->
@@ -575,10 +636,10 @@ author_profile: true
 <!-- ════════════════════════════════════════════════════════ -->
 <div class="blog-book">
   <div class="book-banner">
-    <span class="book-icon">🔁</span>
+    <span class="book-icon">🔺</span>
     <div>
-      <h2>Book IV — Persistent Homology</h2>
-      <p>From simplicial complexes and homology groups to barcodes, stability, and TDA for machine learning</p>
+      <h2>Book IV — Topological Deep Learning</h2>
+      <p>From simplicial complexes and homology groups to barcodes, stability theorems, and TDA for machine learning</p>
     </div>
   </div>
   <div class="book-body">
@@ -684,3 +745,298 @@ author_profile: true
 
   </div>
 </div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- Book V — Reinforcement Learning                         -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book">
+  <div class="book-banner">
+    <span class="book-icon">🎮</span>
+    <div>
+      <h2>Book V — Reinforcement Learning</h2>
+      <p>From MDPs and Bellman equations through deep RL, policy gradients, model-based methods, MARL, and RLHF</p>
+    </div>
+  </div>
+  <div class="book-body">
+
+    {% if rl_overview %}
+    <a class="blog-overview-card" href="{{ rl_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ rl_overview.title }}</h3>
+      <p>{{ rl_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 5 min read</span>
+        <span>The complete picture in one post</span>
+      </div>
+    </a>
+    {% endif %}
+
+    {% if rl_foundations.size > 0 %}
+    <div class="subsection-label">🧱 Foundations</div>
+    <div class="chapters-grid">
+      {% for post in rl_foundations %}
+        {% unless post.is_overview %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+        {% endunless %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rl_value_based.size > 0 %}
+    <div class="subsection-label">📊 Value-Based Methods</div>
+    <div class="chapters-grid">
+      {% for post in rl_value_based %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rl_policy_gradient.size > 0 %}
+    <div class="subsection-label">🎯 Policy Gradient Methods</div>
+    <div class="chapters-grid">
+      {% for post in rl_policy_gradient %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rl_model_based.size > 0 %}
+    <div class="subsection-label">🌍 Model-Based RL</div>
+    <div class="chapters-grid">
+      {% for post in rl_model_based %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rl_multi_agent.size > 0 %}
+    <div class="subsection-label">👥 Multi-Agent RL</div>
+    <div class="chapters-grid">
+      {% for post in rl_multi_agent %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rl_applications.size > 0 %}
+    <div class="subsection-label">🚀 Applications</div>
+    <div class="chapters-grid">
+      {% for post in rl_applications %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- Book VI — Robotics                                      -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book">
+  <div class="book-banner">
+    <span class="book-icon">🤖</span>
+    <div>
+      <h2>Book VI — Learning-Based Robotics</h2>
+      <p>From kinematics and sensors through SLAM, imitation learning, sim-to-real, diffusion policy, and foundation models</p>
+    </div>
+  </div>
+  <div class="book-body">
+
+    {% if rob_overview %}
+    <a class="blog-overview-card" href="{{ rob_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ rob_overview.title }}</h3>
+      <p>{{ rob_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 5 min read</span>
+        <span>The complete picture in one post</span>
+      </div>
+    </a>
+    {% endif %}
+
+    {% if rob_foundations.size > 0 %}
+    <div class="subsection-label">🧱 Foundations</div>
+    <div class="chapters-grid">
+      {% for post in rob_foundations %}
+        {% unless post.is_overview %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+        {% endunless %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rob_planning.size > 0 %}
+    <div class="subsection-label">🗺️ Planning & Navigation</div>
+    <div class="chapters-grid">
+      {% for post in rob_planning %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rob_learning.size > 0 %}
+    <div class="subsection-label">🎓 Learning for Robots</div>
+    <div class="chapters-grid">
+      {% for post in rob_learning %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rob_perception.size > 0 %}
+    <div class="subsection-label">👁️ Perception</div>
+    <div class="chapters-grid">
+      {% for post in rob_perception %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if rob_frontier.size > 0 %}
+    <div class="subsection-label">🔮 Frontier & Open Problems</div>
+    <div class="chapters-grid">
+      {% for post in rob_frontier %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  /* ── Book-level collapse ── */
+  document.querySelectorAll('.blog-book').forEach(function (book) {
+    var banner = book.querySelector('.book-banner');
+    var body   = book.querySelector('.book-body');
+    if (!banner || !body) return;
+
+    var btn = document.createElement('button');
+    btn.className   = 'book-toggle-btn';
+    btn.innerHTML   = '<span class="btn-arrow">▼</span>&nbsp;Collapse';
+    btn.addEventListener('click', function () {
+      var isNowCollapsed = !body.classList.contains('collapsed');
+      body.classList.toggle('collapsed');
+      book.classList.toggle('collapsed');
+      btn.innerHTML = isNowCollapsed
+        ? '<span class="btn-arrow" style="transform:rotate(-90deg)">▼</span>&nbsp;Expand'
+        : '<span class="btn-arrow">▼</span>&nbsp;Collapse';
+    });
+    banner.appendChild(btn);
+  });
+
+  /* ── Subsection-level collapse ── */
+  document.querySelectorAll('.subsection-label').forEach(function (label) {
+    var grid = label.nextElementSibling;
+    if (!grid || !grid.classList.contains('chapters-grid')) return;
+
+    var line = document.createElement('span');
+    line.className = 'sub-line';
+    label.appendChild(line);
+
+    var btn = document.createElement('button');
+    btn.className = 'subsection-toggle';
+    btn.textContent = '－';
+    btn.title = 'Collapse section';
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isNowCollapsed = !grid.classList.contains('collapsed');
+      grid.classList.toggle('collapsed');
+      btn.textContent = isNowCollapsed ? '＋' : '－';
+      btn.title = isNowCollapsed ? 'Expand section' : 'Collapse section';
+    });
+    label.appendChild(btn);
+    label.classList.add('has-toggle');
+  });
+});
+</script>

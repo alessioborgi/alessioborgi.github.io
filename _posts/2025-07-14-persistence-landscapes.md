@@ -14,3 +14,5 @@ icon: "📉"
 read_mins: 4
 permalink: /blog/persistent-homology/persistence-landscapes/
 ---
+
+{% include figure image_path="/images/blog/tdl/carriere2020_perslay.png" alt="Persistence landscapes" caption="Landscape-based persistence representation (Carrière et al., 2020)" %}

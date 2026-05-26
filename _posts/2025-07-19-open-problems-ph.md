@@ -14,3 +14,5 @@ icon: "🚀"
 read_mins: 4
 permalink: /blog/persistent-homology/open-problems-ph/
 ---
+
+{% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="Open problems in TDA" caption="Current frontiers in topological machine learning (Hensel et al., 2021)" %}
