@@ -23,12 +23,26 @@ toc_label: "Contents"
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.summary-table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 1rem 0 1.35rem; }
+.summary-table th { background: #0f2a36; color: #fff; padding: .55rem .75rem; text-align: left; }
+.summary-table td { padding: .5rem .75rem; border-bottom: 1px solid #e2e8f0; }
 </style>
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> Δ_F is an (Nd)×(Nd) positive semidefinite matrix with eigenvalues 0 ≤ λ₁ ≤ ... ≤ λ_{Nd}. The zero eigenspace = global sections = H⁰. The spectral gap λ_{dim(H⁰)+1} controls mixing speed. For normalised Δ_F, eigenvalues lie in [0, 2]. Sheaf diffusion X(t) = exp(−Δ_F t)X(0) converges to the projection onto H⁰ — not to a constant, but to the space of globally consistent signals. Learned restriction maps reshape this spectrum to fit the task.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_laplacian.png" alt="Sheaf Laplacian spectrum" caption="Spectrum of the Sheaf Laplacian and diffusion dynamics (Bodnar et al., 2022)" %}
+
+<table class="summary-table">
+<thead>
+<tr><th>If you know graph Laplacians...</th><th>Then for sheaves...</th></tr>
+</thead>
+<tbody>
+<tr><td>The null space is constants.</td><td>The null space is the space of global sections.</td></tr>
+<tr><td>The spectral gap controls mixing.</td><td>The spectral gap still controls mixing, but now mixing is toward relational consistency.</td></tr>
+<tr><td>Low-pass filtering smooths neighbours together.</td><td>Low-pass filtering smooths after transport through restriction maps.</td></tr>
+</tbody>
+</table>
 
 
 ## Spectral Properties of Δ_F
@@ -46,6 +60,12 @@ For the normalised Sheaf Laplacian Δ_F^{norm} = D_F^{-1/2}Δ_FD_F^{-1/2} (where
 </div>
 
 This mirrors the standard normalised graph Laplacian bound λ_{max} ≤ 2.
+
+## Why This Operator Is the Real Core of Sheaf GNNs
+
+Most sheaf-GNN papers look different on the surface: some learn restriction maps, some use orthogonal maps, some use polynomial filters, some add attention. But the central object is always the same. Once the sheaf is specified, the learning problem becomes: **what should the spectrum of Δ_F look like for the task I care about?**
+
+That is why the Sheaf Laplacian is not just one component among many. It is the object that decides what counts as smooth, what gets preserved, and what gets damped away.
 
 ## Spectral Gap and Mixing
 
@@ -93,6 +113,10 @@ where x_harm ∈ ker(Δ_F) (the harmonic / global-section component) and x_grad 
 - x_grad decays: at time t, the gradient component is exp(−Δ_F t) x_grad → 0
 
 So diffusion retains the harmonic component and attenuates the gradient component. This is the sheaf analogue of low-pass filtering — but "low" means "in ker(Δ_F)", not "in span{1}".
+
+<div class="insight-box">
+<strong>This is the practical payoff:</strong> in a vanilla GCN, deep diffusion pushes everything toward constants. In a sheaf model, deep diffusion pushes signals toward whatever the learned restrictions define as globally compatible. That is a much better target when the graph is heterophilic or direction-sensitive.
+</div>
 
 ## Comparing Standard and Sheaf Laplacians
 
@@ -179,6 +203,14 @@ Standard GCN oversmoothing: applying (I − L)^K x repeatedly drives x toward ke
 Sheaf diffusion: applying (I − Δ_F^{norm})^K x drives x toward ker(Δ_F) = H⁰(G, F). This is a collapse to an m-dimensional space where m = dim H⁰. Since m can be >> d (and is determined by the learned restriction maps), this collapse is far less destructive — and can be tuned to preserve task-relevant features.
 
 In the limit, as the restriction maps are learned end-to-end, the model can implicitly choose m to balance expressiveness and smoothness.
+
+## The One Question to Keep in Mind
+
+Whenever you read a sheaf GNN paper, ask this:
+
+> What kind of signals are being made smooth by this choice of restriction maps?
+
+That question is usually more informative than the raw architecture diagram, because it tells you what the model believes the graph's hidden relational geometry looks like.
 
 ## References
 

@@ -23,6 +23,20 @@ toc_label: "Contents"
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.nsd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: .8rem;
+  margin: 1.2rem 0 1.5rem;
+}
+.nsd-card {
+  background: linear-gradient(160deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dbe7f5;
+  border-radius: 12px;
+  padding: .95rem 1rem;
+}
+.nsd-card h3 { margin: 0 0 .35rem; font-size: .98rem; color: #0f2a36; }
+.nsd-card p { margin: 0; font-size: .9rem; color: #4b5563; line-height: 1.5; }
 </style>
 
 <div class="paper-box">
@@ -30,6 +44,21 @@ toc_label: "Contents"
 <strong>Contribution:</strong> Learns sheaf restriction maps end-to-end via MLP predictors. Proves that learned sheaf diffusion avoids oversmoothing (non-trivial H⁰) and handles heterophily (maps can encode anti-alignment). Achieves state-of-the-art on heterophilic benchmarks at the time of publication.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="NSD learned restriction maps" caption="Neural Sheaf Diffusion: per-edge MLP predicts restriction maps (Bodnar et al., 2022)" %}
+
+<div class="nsd-grid">
+  <div class="nsd-card">
+    <h3>What changed from 2020</h3>
+    <p>Hansen and Gebhart gave the framework. NSD made the restriction maps trainable, which is what turned the idea into a competitive model.</p>
+  </div>
+  <div class="nsd-card">
+    <h3>What is learned</h3>
+    <p>The model does not only learn node embeddings. It also learns the relational geometry edge by edge through the restriction maps.</p>
+  </div>
+  <div class="nsd-card">
+    <h3>Why people still cite it</h3>
+    <p>It is the reference paper that connects sheaves, heterophily, oversmoothing, and trainable diffusion in one coherent story.</p>
+  </div>
+</div>
 
 
 ## The Central Idea
@@ -51,6 +80,12 @@ H^{(k+1)} = (I − Δ_F^{norm}) H^{(k)} W^{(k)}
 </div>
 
 The maps are re-predicted at each layer (or shared across layers as a hyperparameter choice).
+
+## The Mechanistic Picture
+
+It helps to think of NSD as learning a tiny local coordinate system on every edge. When node <em>u</em> talks to node <em>v</em>, the model first learns how <em>u</em>'s features should be transformed before they are considered compatible with <em>v</em>. Only after that does diffusion happen.
+
+That is exactly why the model helps on heterophily. It does not force neighbours to match in raw feature space. It learns the transformation under which they should match.
 
 ## The Full NSD Architecture
 
@@ -110,6 +145,10 @@ Proof sketch: Consider edge (u, v) where u and v have different labels. Choose F
 
 **Informal summary:** Standard GCN minimises Σ_{(u,v)∈E} ||h_u − h_v||². This penalises heterophilic pairs — neighbours with different features pay a high energy cost. Sheaf diffusion minimises Σ_{(u,v)∈E} ||F_{u▷e}h_u − F_{v▷e}h_v||². With learned maps, this can reward heterophilic pairs (F_{u▷e}x_u = F_{v▷e}x_v with x_u ≠ x_v) — the model learns that "consistent" means "different in this structured way".
 
+## Why This Paper Felt New
+
+A lot of heterophily work before NSD still lived in the mindset of "fix message passing with a better architecture." NSD changes the object being learned. The graph is no longer just a support over which messages move. It becomes a space equipped with trainable local linear relations. That is a deeper change than swapping one aggregator for another.
+
 ## Connection to FAGCN and Signed Attention
 
 FAGCN (Bo et al., 2021) uses signed attention: edge weights a_{uv} ∈ [−1, +1]. This is equivalent to a sheaf with scalar restriction maps: F_{u▷e} = 1, F_{v▷e} = a_{uv} (a scalar ±1 per edge).
@@ -142,6 +181,16 @@ NSD consistently outperforms all prior methods on heterophilic benchmarks, with 
 **Computational cost:** O(E·d²) for map prediction + O(N·d²) for Sheaf Laplacian application. For large d, this becomes expensive. In practice d=2 or d=3 keeps cost manageable.
 
 **Regularisation:** L2 regularisation on restriction map magnitudes prevents the maps from becoming degenerate (all-zero or all-identity).
+
+## Practical Reading of the Results
+
+The benchmark wins matter, but the more durable contribution is the explanatory framework:
+
+- oversmoothing becomes a statement about convergence to <em>H⁰</em>,
+- heterophily becomes a statement about what restrictions define compatibility,
+- map parameterisation becomes a first-class modelling decision.
+
+That is why later papers such as PNSD, SheafAN, HetSheaf, and PolyNSD all feel like variations on NSD's core thesis rather than isolated architectures.
 
 ## Limitations
 

@@ -31,6 +31,10 @@ toc_label: "Contents"
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_transport.png" alt="SheafAN transported attention" caption="Sheaf Attention Network: gauge-equivariant attention via parallel transport (Bodnar et al., 2022)" %}
 
+<div class="insight-box">
+<strong>The elevator pitch:</strong> NSD tells you <em>how</em> neighbours should be related. SheafAN adds a second question: <em>which</em> neighbours should matter more for this node right now?
+</div>
+
 
 ## Motivation: What NSD Cannot Do
 
@@ -39,6 +43,8 @@ NSD aggregates from all neighbours equally (weighted only by the Sheaf Laplacian
 - GAT: simple aggregation (no relational maps), adaptive weighting
 
 SheafAN combines both: **orthogonal restriction maps** (for gauge equivariance and relational structure) + **attention weights** (for adaptive aggregation).
+
+That makes it one of the most intuitive sheaf extensions to explain to someone who already understands GAT: instead of attending to raw neighbour features, you attend to neighbour features <em>after transporting them into the right local frame</em>.
 
 ## The SheafAN Aggregation
 
@@ -85,6 +91,10 @@ If a is taken as a linear map that commutes with g_v (e.g., a scalar dot-product
 <div class="insight-box">
 <strong>Design insight:</strong> True gauge invariance of attention requires the score function to be invariant under O(d) rotations. The simplest such function is the inner product h_vᵀ O_{uv} h_u (no concatenation). SheafAN uses concatenation-based attention (like GAT) which is gauge-equivariant but not invariant; the paper notes this as a limitation and a direction for improvement.
 </div>
+
+## Why This Post Matters in the Series
+
+SheafAN is where the sheaf literature stops looking like "just diffusion with fancy maps" and starts looking like a broader design language. Once transport, gauge structure, and attention are all in play, the field becomes much closer to modern deep learning practice rather than a purely spectral construction.
 
 ## Relation to Standard GAT
 

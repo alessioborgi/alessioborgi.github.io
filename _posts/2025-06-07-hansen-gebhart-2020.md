@@ -31,6 +31,10 @@ toc_label: "Contents"
 </div>
 {% include figure image_path="/images/blog/sheaf/hansen2020_sheaf_gnns.png" alt="Fixed sheaf GNNs Hansen 2020" caption="Sheaf neural networks with fixed restriction maps (Hansen & Gebhart, 2020)" %}
 
+<div class="insight-box">
+<strong>Why this paper matters historically:</strong> it did not win the field with raw benchmark gains. It changed the vocabulary. After this paper, GCN could be seen as one very special point inside a much larger sheaf-based design space.
+</div>
+
 
 ## Context and Motivation
 
@@ -57,6 +61,10 @@ The standard graph Laplacian L = D − A is the Sheaf Laplacian for the **consta
 **Consequence:** every pathology of GCN can be diagnosed in terms of the restriction maps being too rigid:
 - Oversmoothing: the null space is just constants; diffusion collapses all information to d dimensions
 - Heterophily failure: identity maps force adjacent nodes to have equal features; this is the wrong inductive bias for heterophilic graphs
+
+This is what makes the paper still useful to read. It gives the first clean statement of the main idea behind the entire area:
+
+> message passing is not the only thing you can generalise; the notion of <em>agreement</em> itself can be generalised.
 
 ## The Architecture
 

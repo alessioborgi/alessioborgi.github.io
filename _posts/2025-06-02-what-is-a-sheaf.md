@@ -23,12 +23,41 @@ toc_label: "Contents"
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: .8rem;
+  margin: 1.2rem 0 1.5rem;
+}
+.step-card {
+  background: linear-gradient(160deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dbe7f5;
+  border-radius: 12px;
+  padding: .95rem 1rem;
+}
+.step-card h3 { margin: 0 0 .35rem; font-size: .98rem; color: #0f2a36; }
+.step-card p { margin: 0; font-size: .9rem; color: #4b5563; line-height: 1.5; }
 </style>
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> A sheaf assigns data (vectors, functions, sets) to the parts of a space, plus <em>restriction maps</em> that say how data on larger pieces relates to data on smaller pieces. A <em>global section</em> is a consistent assignment across the whole space — one where all the local pieces agree. On a graph, nodes and edges are the "pieces", restriction maps encode inter-node relationships, and the Sheaf Laplacian measures how inconsistent a signal is.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Cellular sheaf on a graph" caption="A cellular sheaf on a graph: stalks at nodes/edges and restriction maps (Bodnar et al., 2022)" %}
+
+<div class="step-grid">
+  <div class="step-card">
+    <h3>Local data</h3>
+    <p>Every part of the space gets its own data container: on graphs, node stalks and edge stalks.</p>
+  </div>
+  <div class="step-card">
+    <h3>Restriction</h3>
+    <p>Maps tell you how information should move from one local place to another before you compare it.</p>
+  </div>
+  <div class="step-card">
+    <h3>Consistency</h3>
+    <p>A global section is the assignment that makes all those local comparisons agree simultaneously.</p>
+  </div>
+</div>
 
 
 ## The Intuition: Consistent Local Information
@@ -42,6 +71,10 @@ Imagine a weather network: temperature sensors at every city (nodes), with the u
 A **global section** is an assignment of readings to all cities such that every road's restriction is satisfied — the whole network is self-consistent.
 
 This is exactly the structure a Sheaf Neural Network learns: not just node features, but the *relational geometry* between them.
+
+<div class="insight-box">
+<strong>If one sentence is enough:</strong> a sheaf is a way to say "these local pieces of information live in different coordinate systems, and here is how you compare them correctly."
+</div>
 
 ## Sheaves in Classical Topology
 
@@ -95,6 +128,11 @@ F_{u→e} x_u = F_{v→e} x_v
 </div>
 
 In words: the data at u, projected to the edge stalk, equals the data at v, projected to the edge stalk. The system is globally consistent.
+
+This is the object that later shows up everywhere in sheaf GNN theory:
+- it is the null space of the Sheaf Laplacian,
+- it is the asymptotic destination of diffusion,
+- and it is the reason oversmoothing in sheaf models is qualitatively different from oversmoothing in vanilla GCNs.
 
 The space of global sections, denoted H⁰(G, F) = ker(δ₀), is the analogue of the null space of the standard graph Laplacian. For standard GCN, H⁰ consists of constant functions. For a sheaf with non-trivial maps, H⁰ is much richer — it can contain functions that vary across nodes while still satisfying the relational constraints imposed by the restriction maps.
 

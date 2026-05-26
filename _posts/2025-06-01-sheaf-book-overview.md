@@ -23,12 +23,52 @@ toc_label: "Contents"
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: .8rem;
+  margin: 1.2rem 0 1.5rem;
+}
+.chapter-card {
+  background: linear-gradient(160deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dbe7f5;
+  border-radius: 12px;
+  padding: .95rem 1rem;
+  box-shadow: 0 4px 16px rgba(15,42,54,.06);
+}
+.chapter-card h3 { margin: 0 0 .35rem; font-size: .98rem; color: #0f2a36; }
+.chapter-card p { margin: 0; font-size: .9rem; color: #4b5563; line-height: 1.5; }
+.roadmap-box {
+  background: linear-gradient(160deg, #0f2a36 0%, #164e63 100%);
+  color: #ecfeff;
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  margin: 1.5rem 0;
+}
+.roadmap-box h3 { margin-top: 0; color: #99f6e4; font-size: 1rem; }
+.roadmap-box ol { margin: 0; padding-left: 1.2rem; }
+.roadmap-box li { margin-bottom: .45rem; }
 </style>
 
 <div class="tldr-box">
 <strong>What this series covers:</strong> Sheaf Neural Networks replace the implicit assumption of standard GNNs ("neighbours should agree") with explicit, learned linear maps per edge. This gives a principled way to handle heterophily, avoid oversmoothing, and encode richer relational structure. The series runs from foundational topology through all major architectures and open research problems.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Sheaf Neural Networks overview" caption="Neural Sheaf Diffusion: the central framework of this book (Bodnar et al., 2022)" %}
+
+<div class="chapter-grid">
+  <div class="chapter-card">
+    <h3>Big idea</h3>
+    <p>Do not force neighbouring nodes to be equal. Learn how they should be related through edge-wise linear maps.</p>
+  </div>
+  <div class="chapter-card">
+    <h3>Why it matters</h3>
+    <p>That single change gives a natural language for heterophily, directional relations, and richer diffusion than a plain graph Laplacian.</p>
+  </div>
+  <div class="chapter-card">
+    <h3>What this book does</h3>
+    <p>Start from the topology, then move to the architectures, then to the theory, then to benchmarks, papers, and open research problems.</p>
+  </div>
+</div>
 
 
 ## Why Sheaf Neural Networks?
@@ -52,6 +92,10 @@ The **coboundary operator** δ₀ measures disagreement between adjacent nodes:
 
 The **Sheaf Laplacian** Δ_F = δ₀ᵀ δ₀ is a block matrix that generalises the standard graph Laplacian L = DˉA. When all restriction maps are the identity, Δ_F = L ⊗ I_d — recovering exactly GCN's aggregation operator.
 
+<div class="insight-box">
+<strong>The mental shift:</strong> a sheaf GNN does not ask whether neighbours are similar. It asks how one neighbour should be transported into another neighbour's local frame before comparison. That is the conceptual jump that makes the whole area worth learning.
+</div>
+
 ## What Changes Compared to Standard GNNs
 
 | Standard GCN | Sheaf GNN |
@@ -61,6 +105,10 @@ The **Sheaf Laplacian** Δ_F = δ₀ᵀ δ₀ is a block matrix that generalises
 | Oversmoothing: converges to constants | Converges to global sections (richer null space) |
 | Fails on heterophily | Handles heterophily via signed/rotating maps |
 | Graph Laplacian L | Sheaf Laplacian Δ_F |
+
+## The Whole Story in One Paragraph
+
+If you want the shortest correct summary, it is this: **a sheaf equips every node and edge with a vector space, and every incidence with a linear map; the Sheaf Laplacian then measures inconsistency after transporting signals through those maps**. Once you accept that formulation, many things that look like separate research problems in GNNs begin to unify: heterophily, sign structure, gauge symmetry, directional flow, and even some forms of oversmoothing analysis.
 
 ## Series Structure
 
@@ -75,6 +123,16 @@ This book is organised into five parts:
 **Part 4 — Extensions** (posts 18–22): Sheaves on simplicial complexes, cosheaves, multi-relational sheaves for knowledge graphs, temporal sheaves, and sheaves combined with attention.
 
 **Part 5 — Applications** (posts 23–25): Empirical results on heterophilic benchmarks, molecular property prediction, social networks, and open problems.
+
+<div class="roadmap-box">
+<h3>Suggested Reading Order</h3>
+<ol>
+  <li>Read <strong>What Is a Sheaf?</strong> if the language of stalks, sections, and restrictions is still unfamiliar.</li>
+  <li>Then read <strong>The Sheaf Laplacian</strong> and <strong>Sheaf Cohomology</strong> to understand what diffusion is actually doing.</li>
+  <li>Move to <strong>Hansen &amp; Gebhart</strong> and <strong>Neural Sheaf Diffusion</strong> to see how the theory becomes a trainable GNN.</li>
+  <li>Use <strong>Parameterisation Strategies</strong>, <strong>Benchmarks</strong>, and the paper posts for the practical side.</li>
+</ol>
+</div>
 
 <div class="insight-box">
 <strong>How to read this series:</strong> If you already know GNNs but not sheaf theory, start with post 2 (topology primer) then skip to post 8 (Neural Sheaf Diffusion) — the architecture posts are largely self-contained. If you want the full theoretical treatment, read sequentially through Part 1 before Part 3. If you just want practical guidance, read posts 11 (parameterisation strategies) and 23 (benchmarks).
