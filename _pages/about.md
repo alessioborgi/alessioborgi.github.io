@@ -307,6 +307,13 @@ redirect_from:
   margin-top: 0;
   margin-bottom: 0.35rem;
   font-size: 1.02rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pub-emoji {
+  font-size: 1.3rem;
+  flex-shrink: 0;
 }
 .home-pub-list .pub-actions {
   display: flex;

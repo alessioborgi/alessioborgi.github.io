@@ -95,6 +95,7 @@ author_profile: true
   .pt-dot--blue span  { background: var(--pt-blue);   box-shadow: 0 0 0 3px rgba(10,102,194,0.22); }
   .pt-dot--amber span { background: var(--pt-amber);  box-shadow: 0 0 0 3px rgba(217,119,6,0.22); }
   .pt-dot--purple span{ background: var(--pt-purple); box-shadow: 0 0 0 3px rgba(124,58,237,0.22); }
+  .pt-dot--gold span  { background: var(--pt-amber);  box-shadow: 0 0 0 3px rgba(217,119,6,0.22); }
 
   /* Content */
   .pt-content {}
@@ -116,6 +117,13 @@ author_profile: true
     color: var(--pt-navy);
     margin: 0 0 0.15rem;
     line-height: 1.3;
+  }
+  .pt-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .pt-title a:hover {
+    text-decoration: underline;
   }
   .pt-org {
     font-size: 0.93rem;
@@ -159,6 +167,11 @@ author_profile: true
     border-color: rgba(217,119,6,0.30);
     color: #92400e;
   }
+  .pt-badge--amber {
+    background: rgba(217,119,6,0.10);
+    border-color: rgba(217,119,6,0.30);
+    color: #92400e;
+  }
   .pt-badge--blue {
     background: rgba(10,102,194,0.10);
     border-color: rgba(10,102,194,0.28);
@@ -186,6 +199,23 @@ author_profile: true
   </div>
   <div class="pt-section__body">
     <div class="pt-timeline">
+
+      <!-- MMLW 2025 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--purple"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--purple">November 2025</div>
+          <div class="pt-title"><a href="https://workshops.eeml.eu/" target="_blank" rel="noopener">MMLW 2025 — Montenegrin Machine Learning Workshop</a></div>
+          <div class="pt-org">🇲🇪 Podgorica, Montenegro &nbsp;·&nbsp; EEML Workshops / MAIA</div>
+          <div class="pt-body">
+            <p>Participated in the one-day Montenegrin Machine Learning Workshop, a satellite event of the EEML summer school series focused on bringing top-tier AI talks and community building to Eastern Europe.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--purple pt-badge">EEML Workshop</span>
+            <span class="pt-badge--blue pt-badge">ML Community</span>
+          </div>
+        </div>
+      </div>
 
       <!-- SEIO School -->
       <div class="pt-item">
@@ -222,6 +252,43 @@ author_profile: true
         </div>
       </div>
 
+      <!-- TESP 2025 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--amber"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--amber">July 2025</div>
+          <div class="pt-title"><a href="https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591" target="_blank" rel="noopener">TESP 2025 — Tohoku Engineering Summer Program</a></div>
+          <div class="pt-org">🇯🇵 Sendai, Japan &nbsp;·&nbsp; Tohoku University</div>
+          <div class="pt-body">
+            <p>Participated in the 16-day international summer program at Tohoku University, following the Robotics Course through lectures, laboratory activities, cultural events, and an oral presentation component equivalent to 4 ECTS.</p>
+            <p>Built on this experience during the robotics track and later received recognition as <strong>TESP 2025 Winner</strong>.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--gold pt-badge">TESP 2025 Winner</span>
+            <span class="pt-badge--amber pt-badge">Robotics Course</span>
+            <span class="pt-badge">4 ECTS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEURMAD AAAI 2025 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--blue"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--blue">March 2025</div>
+          <div class="pt-title"><a href="https://neurmad.github.io/2025_index.html" target="_blank" rel="noopener">NEURMAD@AAAI 2025 — Neural Reasoning and Mathematical Discovery</a></div>
+          <div class="pt-org">🇺🇸 Philadelphia, United States &nbsp;·&nbsp; AAAI 2025 Workshop</div>
+          <div class="pt-body">
+            <p>Participated in the first NEURMAD workshop on neural reasoning and mathematical discovery, an interdisciplinary venue at AAAI 2025 connecting neural networks, scientific discovery, and rigorous reasoning.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--blue pt-badge">AAAI 2025</span>
+            <span class="pt-badge">Neural Reasoning</span>
+            <span class="pt-badge--blue pt-badge">Scientific Discovery</span>
+          </div>
+        </div>
+      </div>
+
       <!-- DL2025 -->
       <div class="pt-item">
         <div class="pt-dot pt-dot--amber"><span></span></div>
@@ -235,6 +302,43 @@ author_profile: true
           <div class="pt-badges">
             <span class="pt-badge--amber pt-badge">Deep Learning</span>
             <span class="pt-badge">Generative Models</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- M2L 2024 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--gold"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period">September 2024</div>
+          <div class="pt-title"><a href="https://www.m2lschool.org/past-editions/m2l-2024-italy" target="_blank" rel="noopener">M2L 2024 — Mediterranean Machine Learning Summer School</a></div>
+          <div class="pt-org">🇮🇹 Milan, Italy &nbsp;·&nbsp; Universita di Milano-Bicocca</div>
+          <div class="pt-body">
+            <p>Participated in the 9-13 September 2024 edition of M2L, covering current machine learning topics through lectures, poster sessions, and interactions with researchers across the Mediterranean ML community.</p>
+            <p>Received the <strong>Best Poster Award</strong> for the poster <a href="https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024" target="_blank" rel="noopener">A Multi-Reference Style and Multi-Modal Context-Awareness Zero-Shot Style Alignment in Image Generation</a>.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--gold pt-badge">Best Poster Award</span>
+            <span class="pt-badge">Machine Learning</span>
+            <span class="pt-badge--blue pt-badge">Poster Session</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- IT:U Summer School 2024 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--purple"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--purple">August – September 2024</div>
+          <div class="pt-title"><a href="https://it-u.at/en/programs/summer-school-2024/projects/care-connect/" target="_blank" rel="noopener">IT:U Summer School 2024 — Care Connect</a></div>
+          <div class="pt-org">🇦🇹 Linz, Austria &nbsp;·&nbsp; Interdisciplinary Transformation University Austria</div>
+          <div class="pt-body">
+            <p>Selected for IT:U’s two-week Summer School 2024 and contributed to <strong>Care Connect</strong>, an AI-powered assistant platform for hospital staff that monitors environmental variables such as air quality, temperature, and humidity through a database-informed LLM and an interactive robotic component.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--purple pt-badge">Care Connect</span>
+            <span class="pt-badge">LLM Application</span>
+            <span class="pt-badge--blue pt-badge">Human-Centered AI</span>
           </div>
         </div>
       </div>

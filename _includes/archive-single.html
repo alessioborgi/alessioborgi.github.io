@@ -30,6 +30,20 @@
     {% endif %}
 
     <h2 class="archive__item-title" itemprop="headline">
+      {% if use_pub_card %}
+        <span class="pub-emoji" aria-hidden="true">
+          {%- assign lt = title | downcase -%}
+          {%- if lt contains "sheaf" -%}🔷
+          {%- elsif lt contains "diffusion" -%}💨
+          {%- elsif lt contains "saslm" or lt contains "style" -%}🎨
+          {%- elsif lt contains "gape" or lt contains "pattern" -%}🚀
+          {%- elsif lt contains "graph" or lt contains "gnn" -%}🕸️
+          {%- elsif lt contains "robot" or lt contains "manipulation" -%}🦾
+          {%- elsif lt contains "vision" or lt contains "visual" -%}👁️
+          {%- else -%}📄
+          {%- endif -%}
+        </span>
+      {% endif %}
       {% if post.link %}
         <a href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
       {% else %}

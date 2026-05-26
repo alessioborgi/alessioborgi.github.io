@@ -16,19 +16,23 @@ author_profile: true
 
 /* Book banner */
 .book-banner {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
   background: linear-gradient(135deg, #003E74 0%, #0f5a92 100%);
   border-radius: 14px 14px 0 0;
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 6.5rem 1.25rem 1.5rem;
   color: #fff;
 }
-.book-banner .book-icon { font-size: 2.2rem; line-height: 1; }
-.book-banner .book-info { flex: 1; }
+.book-banner .book-icon { font-size: 2.2rem; line-height: 1; flex-shrink: 0; }
+.book-banner > div { flex: 1; min-width: 0; }
 .book-banner h2 { margin: 0 0 0.2rem; color: #fff; font-size: 1.4rem; }
 .book-banner p  { margin: 0; font-size: 0.93rem; opacity: 0.8; }
 .book-toggle-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -40,9 +44,9 @@ author_profile: true
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
-  flex-shrink: 0;
   transition: background 0.15s ease;
   user-select: none;
+  z-index: 1;
 }
 .book-toggle-btn:hover { background: rgba(255,255,255,0.22); }
 .book-toggle-btn .btn-arrow { transition: transform 0.2s ease; display: inline-block; }
@@ -179,6 +183,17 @@ author_profile: true
   font-weight: 600;
 }
 .ch-time { font-size: .72rem; color: #9ca3af; }
+
+@media (max-width: 640px) {
+  .book-banner {
+    padding: 4.25rem 1rem 1rem;
+  }
+
+  .book-toggle-btn {
+    top: 0.9rem;
+    right: 0.9rem;
+  }
+}
 </style>
 
 <p class="blog-library-intro">
