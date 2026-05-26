@@ -271,33 +271,59 @@ tdl:
     foundations:
       label: "Topological Foundations"
       posts:
-        - { slug: "2025-07-02-topological-spaces",    title: "Topological Spaces: The Language of Shape",                      published: online }
-        - { slug: "2025-07-03-simplicial-complexes",  title: "Simplicial Complexes: Combinatorial Topology for Data",          published: online }
-        - { slug: "2025-07-04-homology-groups",       title: "Homology Groups and Betti Numbers: Counting Holes",              published: online }
-        - { slug: "2025-07-05-filtrations",           title: "Filtrations: Watching Topology Evolve with Scale",               published: online }
+        - { slug: "2025-07-02-topological-spaces",         title: "Topological Spaces: The Language of Shape",                          published: online }
+        - { slug: "2025-07-03-simplicial-complexes",       title: "Simplicial Complexes: Combinatorial Topology for Data",              published: online }
+        - { slug: "2025-07-04-homology-groups",            title: "Homology Groups and Betti Numbers: Counting Holes",                  published: online }
+        - { slug: "2025-07-05-filtrations",                title: "Filtrations: Watching Topology Evolve with Scale",                   published: online }
+        - { slug: "2025-09-01-chain-complexes",            title: "Chain Complexes and Boundary Maps",                                  published: online }
+        - { slug: "2025-09-02-homotopy-contractibility",   title: "Homotopy and Contractibility",                                       published: online }
+        - { slug: "2025-09-03-cohomology-dual-theory",     title: "Cohomology: The Dual Theory",                                        published: online }
+        - { slug: "2025-09-04-relative-homology",          title: "Relative Homology and Long Exact Sequences",                         published: online }
+        - { slug: "2025-09-05-alpha-complexes",            title: "Alpha Complexes and Delaunay Triangulations",                        published: online }
+        - { slug: "2025-09-06-cubical-complexes",          title: "Cubical Complexes: Topology on Grids",                               published: online }
+        - { slug: "2025-09-07-witness-complexes",          title: "Witness Complexes: Sparse Topology at Scale",                        published: online }
+        - { slug: "2025-09-08-nerve-theorem",              title: "The Nerve Theorem",                                                  published: online }
 
     core:
       label: "Persistent Homology Core"
       posts:
-        - { slug: "2025-07-06-persistent-homology-core", title: "Persistent Homology: Tracking Topological Features Across Scales",    published: online }
-        - { slug: "2025-07-07-persistence-diagrams",     title: "Persistence Diagrams and Barcodes: Visualising Multi-Scale Topology", published: online }
-        - { slug: "2025-07-08-stability-theorems",       title: "Stability Theorems: Why Persistent Homology Is Robust to Noise",      published: online }
-        - { slug: "2025-07-09-distances-ph",             title: "Wasserstein and Bottleneck Distances Between Persistence Diagrams",    published: online }
+        - { slug: "2025-07-06-persistent-homology-core",   title: "Persistent Homology: Tracking Topological Features Across Scales",    published: online }
+        - { slug: "2025-07-07-persistence-diagrams",       title: "Persistence Diagrams and Barcodes: Visualising Multi-Scale Topology", published: online }
+        - { slug: "2025-07-08-stability-theorems",         title: "Stability Theorems: Why Persistent Homology Is Robust to Noise",      published: online }
+        - { slug: "2025-07-09-distances-ph",               title: "Wasserstein and Bottleneck Distances Between Persistence Diagrams",    published: online }
+        - { slug: "2025-09-09-extended-persistence",       title: "Extended Persistence",                                                published: online }
+        - { slug: "2025-09-10-zigzag-persistence",         title: "Zigzag Persistence",                                                  published: online }
+        - { slug: "2025-09-11-multidimensional-persistence", title: "Multidimensional Persistence: Topology with Multiple Parameters",  published: online }
+        - { slug: "2025-09-12-circular-coordinates",       title: "Circular Coordinates: Parameterising Periodic Structure in Data",     published: online }
+        - { slug: "2025-09-13-interleaving-distance",      title: "The Interleaving Distance and Algebraic Stability",                   published: online }
+        - { slug: "2025-09-14-elder-rule",                 title: "The Elder Rule and Pairing Uniqueness in Persistent Homology",        published: online }
 
     computation:
       label: "Algorithms & Computation"
       posts:
-        - { slug: "2025-07-10-boundary-matrix",        title: "The Boundary Matrix and Reduction Algorithm",                          published: online }
-        - { slug: "2025-07-11-vietoris-rips-cech",     title: "Vietoris-Rips and Čech Complexes: Building Topology from Point Clouds", published: online }
-        - { slug: "2025-07-12-ripser-gudhi",           title: "Ripser, Gudhi, and the Computational Landscape of TDA",               published: online }
+        - { slug: "2025-07-10-boundary-matrix",              title: "The Boundary Matrix and Reduction Algorithm",                           published: online }
+        - { slug: "2025-07-11-vietoris-rips-cech",           title: "Vietoris-Rips and Čech Complexes: Building Topology from Point Clouds", published: online }
+        - { slug: "2025-07-12-ripser-gudhi",                 title: "Ripser, Gudhi, and the Computational Landscape of TDA",                published: online }
+        - { slug: "2025-09-15-twist-algorithm",              title: "The Twist Algorithm and Clearing Optimisation",                        published: online }
+        - { slug: "2025-09-16-sparse-filtrations",           title: "Sparse Filtrations: Scaling Persistent Homology to Large Data",        published: online }
+        - { slug: "2025-09-17-discrete-morse",               title: "Discrete Morse Theory and Persistence",                               published: online }
+        - { slug: "2025-09-18-cubical-homology-computation", title: "Cubical Homology Computation: Persistence on Images",                 published: online }
 
     ml-integration:
       label: "TDA meets Machine Learning"
       posts:
-        - { slug: "2025-07-13-persistence-images",    title: "Persistence Images: From Diagrams to Vectors",                        published: online }
-        - { slug: "2025-07-14-persistence-landscapes", title: "Persistence Landscapes: Statistical Topological Data Analysis",      published: online }
-        - { slug: "2025-07-15-topological-layers",    title: "Topological Layers in Neural Networks: Differentiable TDA",           published: online }
-        - { slug: "2025-07-16-tda-graphs",            title: "TDA for Graphs: Persistent Homology Meets GNNs",                     published: online }
+        - { slug: "2025-07-13-persistence-images",      title: "Persistence Images: From Diagrams to Vectors",                          published: online }
+        - { slug: "2025-07-14-persistence-landscapes",  title: "Persistence Landscapes: Statistical Topological Data Analysis",         published: online }
+        - { slug: "2025-07-15-topological-layers",      title: "Topological Layers in Neural Networks: Differentiable TDA",             published: online }
+        - { slug: "2025-07-16-tda-graphs",              title: "TDA for Graphs: Persistent Homology Meets GNNs",                       published: online }
+        - { slug: "2025-09-19-perslay",                 title: "PersLay: A Neural Network Layer for Persistence Diagrams",              published: online }
+        - { slug: "2025-09-20-differentiable-persistence", title: "Differentiable Persistence: Backpropagating Through Topology",      published: online }
+        - { slug: "2025-09-21-topological-regularization", title: "Topological Regularisation in Deep Learning",                      published: online }
+        - { slug: "2025-09-22-learning-filtrations",    title: "Learning Filtrations: Task-Optimised Topology",                         published: online }
+        - { slug: "2025-09-23-topological-autoencoders", title: "Topological Autoencoders: Preserving Shape in Latent Space",          published: online }
+        - { slug: "2025-09-24-mapper-algorithm",        title: "The Mapper Algorithm: Topological Summaries of High-Dimensional Data", published: online }
+        - { slug: "2025-09-25-reeb-graphs",             title: "Reeb Graphs: Topological Skeletons of Functions",                      published: online }
+        - { slug: "2025-09-26-morse-theory",            title: "Smooth Morse Theory: Critical Points and Topology",                    published: online }
 
     applications:
       label: "Applications"
@@ -305,6 +331,11 @@ tdl:
         - { slug: "2025-07-17-tda-biology",       title: "TDA for Biology and Genomics: Shape in the Life Sciences",              published: online }
         - { slug: "2025-07-18-tda-neuroscience",  title: "TDA for Neuroscience: Topology of Brain Connectivity",                  published: online }
         - { slug: "2025-07-19-open-problems-ph",  title: "Open Problems in Topological Machine Learning",                         published: online }
+        - { slug: "2025-09-27-tda-time-series",   title: "TDA for Time Series: Topology of Dynamical Systems",                    published: online }
+        - { slug: "2025-09-28-tda-point-clouds",  title: "TDA for Point Clouds: Shape Analysis at Every Scale",                   published: online }
+        - { slug: "2025-09-29-tda-vision",        title: "TDA for Computer Vision: Topology in Images and Shapes",                published: online }
+        - { slug: "2025-09-30-tda-drug-discovery", title: "TDA in Drug Discovery: Molecular Topology",                           published: online }
+        - { slug: "2025-10-01-tda-materials",     title: "TDA in Materials Science: Topology of Structure and Phase",             published: online }
 
 
 # ────────────────────────────────────────────────────────────────────────────
