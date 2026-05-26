@@ -612,7 +612,7 @@ redirect_from:
 </div>
 
 <div class="ab-intro">
-I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, under the supervision of <a href="https://www.cst.cam.ac.uk/people/pl219">Prof. Pietro Liò</a> (🇬🇧 University of Cambridge) and co-supervised by <a href="https://sites.google.com/diag.uniroma1.it/fabriziosilvestri">Prof. Fabrizio Silvestri</a> (🇮🇹 Sapienza University of Rome). I obtained my Master of Engineering in <em>Artificial Intelligence &amp; Robotics</em> and my Bachelor of Engineering in <em>Applied Computer Science and Artificial Intelligence</em> at Sapienza, both with the highest marks. My research sits at the intersection of <em>Graph Neural Networks</em>, <em>Geometric Deep Learning</em>, <em>Topological Deep Learning</em> and <em>Diffusion Models</em>, with applications to <em>Robotics</em>, <em>Vision</em>, and <em>Biomedical AI</em>.
+I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, under the supervision of <a href="https://www.cst.cam.ac.uk/people/pl219">Prof. Pietro Liò</a> (🇬🇧 University of Cambridge) and co-supervised by <a href="https://fabsilvestri.github.io/">Prof. Fabrizio Silvestri</a> (🇮🇹 Sapienza University of Rome). I obtained my Master of Engineering in <em>Artificial Intelligence &amp; Robotics</em> and my Bachelor of Engineering in <em>Applied Computer Science and Artificial Intelligence</em> at Sapienza, both with the highest marks. My research sits at the intersection of <em>Graph Neural Networks</em>, <em>Geometric Deep Learning</em>, <em>Topological Deep Learning</em> and <em>Diffusion Models</em>, with applications to <em>Robotics</em>, <em>Vision</em>, and <em>Biomedical AI</em>.
 </div>
 
 <!-- ============================================================

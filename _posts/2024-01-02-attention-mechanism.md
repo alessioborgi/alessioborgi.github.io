@@ -20,6 +20,7 @@ toc_label: "Contents"
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
+.blog-figure--compact { max-width: 620px; margin-left: auto; margin-right: auto; }
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
 .tldr-box strong { color: #0f2a36; }
 .key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
@@ -152,7 +153,9 @@ Each of Q, K, V is produced by multiplying the token's embedding by a learned we
 
 **Step 4 — Mix:** Multiply the attention weights by V. Each token's output is a weighted average of all value vectors — heavily weighted towards the tokens it found most relevant.
 
+<div class="blog-figure--compact">
 {% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention equation and computation flow" caption="Scaled dot-product attention: queries score keys, softmax turns scores into weights, and values are mixed accordingly (Vaswani et al., 2017)." %}
+</div>
 
 ## Why Divide by √dₖ?
 

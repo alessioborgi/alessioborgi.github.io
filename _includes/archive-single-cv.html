@@ -12,6 +12,12 @@
   {% assign title = post.title %}
 {% endif %}
 
+{% if post.blogurl %}
+  {% assign primary_url = post.blogurl %}
+{% else %}
+  {% assign primary_url = base_path | append: post.url %}
+{% endif %}
+
 <div class="{{ include.type | default: "list" }}__item">
   <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
     <li>
@@ -30,7 +36,7 @@
       {% if post.link %}
         <a href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
       {% else %}
-        <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+        <a href="{{ primary_url }}" rel="permalink">{{ title }}</a>
       {% endif %}
     </h3>
     {% if post.read_time %}

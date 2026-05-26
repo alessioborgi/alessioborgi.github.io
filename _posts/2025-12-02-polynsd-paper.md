@@ -1,11 +1,12 @@
 ---
 layout: single
 title: "PolyNSD: Polynomial Neural Sheaf Diffusion"
+date: 2026-05-26
 categories: [research]
 book: sheaf
 subsection: core-papers
 tags: [sheaf-neural-networks, spectral-gnn, polynomial-filters, graph-neural-networks]
-published: false
+published: true
 excerpt: "PolyNSD replaces the NSD propagation operator with a degree-K Chebyshev polynomial in the normalised sheaf Laplacian, achieving SOTA on homo- and heterophilic benchmarks with only diagonal restriction maps and dramatically lower memory usage."
 author_profile: true
 read_time: true

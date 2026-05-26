@@ -20,6 +20,7 @@ toc_label: "Contents"
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
+.blog-figure--compact { max-width: 440px; margin-left: auto; margin-right: auto; }
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
 .tldr-box strong { color: #0f2a36; }
 .key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
@@ -53,6 +54,10 @@ Instead of computing attention once in the full d-dimensional space, Multi-Head 
 2. **Runs** scaled dot-product attention independently on each piece (each piece = one "head").
 3. **Concatenates** the h output matrices.
 4. **Projects** the concatenated result back to the original dimension with a final weight matrix W_O.
+
+<div class="blog-figure--compact">
+{% include figure image_path="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Multi-head attention diagram from Attention Is All You Need" caption="The original Vaswani et al. multi-head diagram makes the core idea explicit: project Q, K, and V several times, run attention independently in parallel, concatenate the head outputs, then mix them through a final linear layer. Source: [1]." %}
+</div>
 
 <div class="blog-figure">
 <figure>
@@ -157,3 +162,8 @@ The total compute is the same as one big attention head (d² operations), but sp
   <li>Total compute ≈ single-head attention; expressive power is strictly greater.</li>
 </ul>
 </div>
+
+## References
+
+- [1] Vaswani, A., et al. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762).
+- [2] https://www.sscardapane.it/alice-book/

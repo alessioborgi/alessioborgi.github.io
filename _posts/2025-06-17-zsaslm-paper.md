@@ -1,11 +1,12 @@
 ---
 layout: single
 title: "Z-SASLM: Zero-Shot Style Blending via Spherical Interpolation"
+date: 2026-05-26
 categories: [research]
 book: generative-ai
 subsection: style-transfer
 tags: [style-transfer, diffusion-models, latent-space, generative-ai, cvpr]
-published: false
+published: true
 excerpt: "Z-SASLM is a zero-shot, fine-tuning-free style blending pipeline that replaces linear latent interpolation with SLERP along the geodesic of the hypersphere, preserving latent manifold structure when blending multiple styles. Published at CVPR 2025 Workshop."
 author_profile: true
 read_time: true

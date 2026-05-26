@@ -225,7 +225,7 @@ redirect_from:
         <div class="cv-tl-title">Ph.D. — Engineering in Computer Science · Artificial Intelligence</div>
         <div class="cv-tl-org">🇮🇹 Sapienza University of Rome &nbsp;·&nbsp; 🇬🇧 University of Cambridge</div>
         <div class="cv-tl-body">
-          <p><strong>Supervisor:</strong> <a href="https://www.cst.cam.ac.uk/people/pl219">Prof. Pietro Liò</a> (Cambridge) &nbsp;·&nbsp; <strong>Co-Supervisor:</strong> <a href="https://sites.google.com/diag.uniroma1.it/fabriziosilvestri">Prof. Fabrizio Silvestri</a> (Sapienza)</p>
+          <p><strong>Supervisor:</strong> <a href="https://www.cst.cam.ac.uk/people/pl219">Prof. Pietro Liò</a> (Cambridge) &nbsp;·&nbsp; <strong>Co-Supervisor:</strong> <a href="https://fabsilvestri.github.io/">Prof. Fabrizio Silvestri</a> (Sapienza)</p>
           <p><strong>Focus:</strong> Graph Neural Networks &amp; Generative AI</p>
           <p><strong>Teaching Assistant:</strong> Supervising 7 MPhil students — Geometric Deep Learning, University of Cambridge</p>
         </div>
@@ -238,7 +238,7 @@ redirect_from:
         <div class="cv-tl-body">
           <p><strong>Final mark:</strong> 110 / 110 &nbsp;<span class="cv-badge">🏅 Top marks</span></p>
           <p><strong>Thesis:</strong> <a href="https://arxiv.org/abs/2512.00242"><em>Polynomial Sheaf Diffusion and Equivariant Sheaf Neural Networks</em></a></p>
-          <p><strong>Memberships:</strong> <a href="https://alcorlab.diag.uniroma1.it/">ALCOR Lab</a> · <a href="https://sites.google.com/uniroma1.it/ispamm/">ISPAMM Lab</a></p>
+          <p><strong>Memberships:</strong> <a href="https://alcorlab.diag.uniroma1.it/">ALCOR Lab</a> · <a href="https://sites.google.com/uniroma1.it/ispamm/">ISPAMM Lab</a> · <a href="https://rstless.it/">RSTLess Group</a> · <a href="https://caraml-group.github.io/">CaRAML Group</a></p>
           <p><strong>Courses:</strong> AI, Machine Learning, Neural Networks, Robot Programming, Robotics I &amp; II, NeuroEngineering, Computer Vision, Medical Robotics, Reinforcement Learning, Autonomous &amp; Mobile Robotics, Deep Learning, Advanced ML, Generative AI Safety, HRI, Robot Benchmarking &amp; Competitions, Multilingual NLP.</p>
         </div>
       </div>
@@ -260,7 +260,7 @@ redirect_from:
         <div class="cv-tl-title">Secondary School — Information Technology</div>
         <div class="cv-tl-org">🇮🇹 I.I.S. Guglielmo Marconi, Civitavecchia (Rome)</div>
         <div class="cv-tl-body">
-          <p><strong>Final mark:</strong> 100 / 100</p>
+          <p><strong>Final mark:</strong> 100 / 100 &nbsp;<span class="cv-badge">🏅 Top marks</span></p>
           <p><strong>Project:</strong> <em>Electric Company: Ticketing System</em> — <a href="https://github.com/alessioborgi/ElectricCompany-TicketingSystem">GitHub</a></p>
         </div>
       </div>

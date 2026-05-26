@@ -1,11 +1,12 @@
 ---
 layout: single
 title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves"
+date: 2026-05-26
 categories: [research]
 book: sheaf
 subsection: extensions
 tags: [sheaf-neural-networks, heterogeneous-graphs, graph-neural-networks]
-published: false
+published: true
 excerpt: "HetSheaf encodes graph heterogeneity directly in the sheaf data structure — type-aware stalks and restriction maps conditioned on node and edge types — instead of specialised architectural components, achieving +2pp on HGB with 10× fewer parameters."
 author_profile: true
 read_time: true

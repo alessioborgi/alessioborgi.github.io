@@ -219,7 +219,7 @@ sheaf:
         - { slug: "2025-06-07-hansen-gebhart-2020",       title: "Sheaf Neural Networks (Hansen & Gebhart, 2020): The First Sheaf GNN",                            published: offline }
         - { slug: "2025-06-08-neural-sheaf-diffusion",    title: "Neural Sheaf Diffusion (Bodnar et al., NeurIPS 2022): Learning the Relational Geometry",         published: offline }
         - { slug: "2025-06-09-polynomial-sheaf-diffusion", title: "Polynomial Neural Sheaf Diffusion (Zaghen et al., ICLR 2024): Learnable Spectral Filters",      published: offline }
-        - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi & Liò)",                                       published: offline }
+        - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi & Liò)",                                       published: online }
         - { slug: "2025-06-10-sheaf-attention-networks",  title: "Sheaf Attention Networks (Barbero et al., 2022)",                                                 published: offline }
         - { slug: "2025-06-11-sheaf-map-parameterisation", title: "Learning Sheaf Maps: Parameterisation Strategies Compared",                                      published: offline }
         - { slug: "2025-06-12-spectral-sheaf-convolution", title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves",                                       published: offline }
@@ -245,7 +245,7 @@ sheaf:
         - { slug: "2025-06-20-multi-relational-sheaves", title: "Multi-Relational Sheaves for Heterogeneous and Knowledge Graphs",         published: offline }
         - { slug: "2025-06-21-temporal-sheaves",       title: "Temporal Sheaves: Extending Sheaf GNNs to Dynamic Graphs",                 published: offline }
         - { slug: "2025-06-22-sheaf-transformers",     title: "Sheaves Meet Attention: Transformer-Inspired Sheaf Models",                published: offline }
-        - { slug: "2024-09-12-hetsheaf-paper",         title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves (Borgi et al.)",      published: offline }
+        - { slug: "2024-09-12-hetsheaf-paper",         title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves (Borgi et al.)",      published: online }
 
     applications:
       label: "Applications"
@@ -462,4 +462,4 @@ generative-ai:
     style-transfer:
       label: "Style Transfer & Latent Manipulation"
       posts:
-        - { slug: "2025-06-17-zsaslm-paper",  title: "Z-SASLM: Zero-Shot Style Blending via Spherical Interpolation (CVPR 2025)",  published: offline }
+        - { slug: "2025-06-17-zsaslm-paper",  title: "Z-SASLM: Zero-Shot Style Blending via Spherical Interpolation (CVPR 2025)",  published: online }
