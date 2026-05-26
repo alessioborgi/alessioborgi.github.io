@@ -221,15 +221,17 @@ author_profile: true
       <div class="pt-item">
         <div class="pt-dot"><span></span></div>
         <div class="pt-content">
-          <div class="pt-period">June 2025</div>
-          <div class="pt-title">SEIO Summer School — Statistical Learning &amp; AI</div>
-          <div class="pt-org">🇪🇸 Barcelona, Spain &nbsp;·&nbsp; Sociedad Española de Investigación Operativa</div>
+          <div class="pt-period">December 2025</div>
+          <div class="pt-title"><a href="https://seio-transporte.github.io/workshop-2025-en/" target="_blank" rel="noopener">SEIO Workshop and PhD School 2025</a></div>
+          <div class="pt-org">🇪🇸 Barcelona, Spain &nbsp;·&nbsp; SEIO / Universitat Pompeu Fabra</div>
           <div class="pt-body">
-            <p>Intensive school covering statistical learning theory, probabilistic graphical models, and AI methods with applications to operations research and decision making.</p>
+            <p>Participated in the SEIO Workshop and PhD School 2025 focused on <strong>exact methods for vehicle routing and logistics optimisation</strong>, hosted with support from SEIO and Universitat Pompeu Fabra.</p>
+            <p>Presented the talk <strong>From Graphs to Sheaves: Modeling Spatial Heterophily in Transportation Networks</strong> during the workshop session on <strong>December 2, 2025</strong>.</p>
           </div>
           <div class="pt-badges">
-            <span class="pt-badge">Statistical Learning</span>
-            <span class="pt-badge--blue pt-badge">Graphical Models</span>
+            <span class="pt-badge">Transportation Networks</span>
+            <span class="pt-badge--blue pt-badge">Workshop Talk</span>
+            <span class="pt-badge">Optimisation</span>
           </div>
         </div>
       </div>
@@ -271,18 +273,18 @@ author_profile: true
         </div>
       </div>
 
-      <!-- NEURMAD AAAI 2025 -->
+      <!-- NEUREASON 2026 -->
       <div class="pt-item">
         <div class="pt-dot pt-dot--blue"><span></span></div>
         <div class="pt-content">
-          <div class="pt-period pt-period--blue">March 2025</div>
-          <div class="pt-title"><a href="https://neurmad.github.io/2025_index.html" target="_blank" rel="noopener">NEURMAD@AAAI 2025 — Neural Reasoning and Mathematical Discovery</a></div>
-          <div class="pt-org">🇺🇸 Philadelphia, United States &nbsp;·&nbsp; AAAI 2025 Workshop</div>
+          <div class="pt-period pt-period--blue">March 2026</div>
+          <div class="pt-title"><a href="https://neurmad.github.io/" target="_blank" rel="noopener">NEUREASON'26 — Neural Reasoning for Scientific and Mathematical Discovery</a></div>
+          <div class="pt-org">🇬🇧 Cambridge, United Kingdom &nbsp;·&nbsp; Department of Computer Science and Technology, University of Cambridge</div>
           <div class="pt-body">
-            <p>Participated in the first NEURMAD workshop on neural reasoning and mathematical discovery, an interdisciplinary venue at AAAI 2025 connecting neural networks, scientific discovery, and rigorous reasoning.</p>
+            <p>Participated in the 2026 workshop on neural reasoning for scientific and mathematical discovery, held on <strong>March 23-24, 2026</strong> at the University of Cambridge.</p>
           </div>
           <div class="pt-badges">
-            <span class="pt-badge--blue pt-badge">AAAI 2025</span>
+            <span class="pt-badge--blue pt-badge">NEUREASON'26</span>
             <span class="pt-badge">Neural Reasoning</span>
             <span class="pt-badge--blue pt-badge">Scientific Discovery</span>
           </div>

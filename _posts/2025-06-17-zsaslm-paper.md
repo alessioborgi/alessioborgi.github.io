@@ -69,6 +69,8 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2503.23234" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
+{% include figure image_path="/images/blog/papers/zsaslm-paper.png" alt="First page of the Z-SASLM paper" caption="Paper preview — Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation (Borgi et al., 2025)." %}
+
 ## The Problem: Linear Blending in a Non-Linear Space
 
 Latent diffusion models (like Stable Diffusion) encode styles as vectors in a high-dimensional latent space. When you want a generated image that combines *two or more reference styles*, the intuitive approach is to take a weighted average: **blend = α·style₁ + β·style₂ + …**
@@ -76,6 +78,10 @@ Latent diffusion models (like Stable Diffusion) encode styles as vectors in a hi
 This is **linear interpolation (LERP)**, and it has a fundamental flaw: it assumes the latent space is Euclidean — that style representations live on a flat plane and midpoints are simply averages. But latent spaces of diffusion models are curved; style representations live on (or near) a hypersphere.
 
 Linear blending of unit vectors produces a result that is *shorter* than the originals — it falls *inside* the sphere, into a low-density region of the latent space. The result: blended styles lose structure, introduce artifacts, and fail to faithfully combine the reference styles.
+
+## Why This Is a Real Failure Mode
+
+When style blending fails, the output usually does not fail in an obvious binary way. Instead, one reference style dominates, another becomes washed out, or the image acquires unstable artifacts in the regions where the styles should interact. That is why the geometry matters: even if the prompt and the base diffusion model are unchanged, the interpolation rule alone can move generation into a part of latent space where the model has much weaker semantic support.
 
 ## Z-SASLM: Geodesic Blending
 
@@ -105,6 +111,17 @@ For **multiple styles**, Z-SASLM extends SLERP iteratively: blend style₁ and s
 
 The pipeline leverages **StyleAligned** attention sharing for style injection: at generation time, the blended style vector influences the self-attention maps of the UNet decoder, imprinting the fused style onto the generated image without retraining.
 
+## What Actually Makes Z-SASLM Practical
+
+The method is not just "use SLERP instead of LERP." The practical contribution is the combination of:
+
+- a zero-shot pipeline, so no style-specific fine-tuning is needed;
+- multi-reference blending, not only two-style interpolation;
+- context-aware weighting, so different reference modalities can contribute differently;
+- an evaluation protocol that checks whether *all* styles remain visible in the result.
+
+That combination makes the method usable as an actual generation workflow rather than a one-off interpolation demo.
+
 ## Results
 
 ### 2-Style Blending
@@ -130,6 +147,10 @@ The pipeline leverages **StyleAligned** attention sharing for style injection: a
 Standard style-transfer metrics (CLIP score, DINO similarity) evaluate similarity to a *single* reference style. For multi-style blending, you need to measure consistency with *all* styles simultaneously.
 
 Z-SASLM introduces **Weighted Multi-Style DINO VIT-B/8 (WMS-DINO)**: a weighted average of pairwise DINO similarities between the generated image and each style reference, using the same weights as the blend. This metric quantitatively captures whether all input styles are faithfully represented in the output.
+
+## The Core Takeaway
+
+Z-SASLM is a paper about respecting representation geometry. If the latent space behaves like a curved manifold, then interpolation should follow that geometry. Once that is enforced, the rest of the style-alignment pipeline becomes noticeably more stable.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

@@ -60,6 +60,8 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2409.08036" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
+{% include figure image_path="/images/blog/papers/hetsheaf-paper.png" alt="First page of the Heterogeneous Sheaf Neural Networks paper" caption="Paper preview — Heterogeneous Sheaf Neural Networks (Braithwaite et al., 2024)." %}
+
 ## The Problem: Heterogeneity is Expensive
 
 Real-world graphs are rarely uniform. In a knowledge graph, nodes can be *people*, *organisations*, or *concepts*; edges can be *authored*, *affiliated with*, or *cited*. This is **heterogeneity**: multiple node types and edge types, each with its own feature space.
@@ -67,6 +69,10 @@ Real-world graphs are rarely uniform. In a knowledge graph, nodes can be *people
 Existing heterogeneous GNNs — R-GCN, HAN, HGT — handle this by adding type-specific modules: one transformation matrix per relation type, one attention head per meta-path, or separate encoders per node type. The result is parameter bloat and architectural complexity that grows with the number of types.
 
 **HetSheaf** asks: can we encode heterogeneity in the *structure* rather than the *architecture*?
+
+## The Intuition in One Sentence
+
+HetSheaf treats node type and edge type not as a reason to build a different neural layer for every relation, but as a reason to build a richer local geometry: different stalk sizes, different restriction maps, same global propagation rule.
 
 ## The Core Idea: Type-Aware Sheaves
 
@@ -117,6 +123,10 @@ On the **Heterogeneous Graph Benchmark (HGB)** — covering node classification,
 - Up to **99.62% F1** on link prediction benchmarks.
 - **10× parameter reduction** vs. type-specialised baselines while maintaining competitive performance.
 - SheafPool delivers **+42pp** over mean pooling on graph classification tasks.
+
+## Why This Matters
+
+The important shift is conceptual. Most heterogeneous GNNs ask: "what new neural block do I need for this new graph type?" HetSheaf asks: "what local compatibility structure does this graph already have?" Once that structure is encoded in the sheaf, the downstream model becomes simpler, more principled, and easier to scale as the number of types grows.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

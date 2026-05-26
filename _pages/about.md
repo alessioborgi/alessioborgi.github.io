@@ -673,7 +673,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
     ];
 
     var typeColors = { home: '#0d9488', study: '#0a66c2', holiday: '#f59e0b' };
-    var map = L.map('world-map', { zoomControl: true, scrollWheelZoom: false }).setView([20, 5], 3);
+    var map = L.map('world-map', { zoomControl: true, scrollWheelZoom: false }).setView([42.5, 12.5], 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; OpenStreetMap contributors'

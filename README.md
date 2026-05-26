@@ -1,8 +1,8 @@
-<img alt="Alessio Borgi Banner" src="./images/WallPaper.jpg" width="100%"/>
+<a href="https://alessioborgi.github.io">
+  <img alt="Alessio Borgi Homepage Hero Card" src="./images/themes/homepage-light.png" width="100%"/>
+</a>
 
 <div align="center">
-  <img src="./images/Alessio_Wizard.png" alt="Alessio Borgi" width="150" style="border-radius: 50%; margin-bottom: 20px;"/>
-  
   # Alessio Borgi
   
   **PhD Student in Graph Neural Networks & Generative AI**  

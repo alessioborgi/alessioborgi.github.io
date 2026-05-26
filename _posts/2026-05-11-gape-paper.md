@@ -60,6 +60,8 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2605.10414" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
+{% include figure image_path="/images/blog/papers/gape-paper.png" alt="First page of the GAPE paper" caption="Paper preview — Remember to Forget: Gated Adaptive Positional Encoding (Ali et al., 2026)." %}
+
 ## The RoPE Long-Context Problem
 
 **Rotary Positional Encoding (RoPE)** is the positional scheme used in almost every modern LLM — LLaMA, Mistral, Gemma, Qwen. It encodes position by rotating query and key vectors in frequency-specific planes, so the dot-product between a query at position *m* and a key at position *n* depends only on their relative distance *m−n*.
@@ -71,6 +73,10 @@ This works beautifully within the training range. But when you extend context be
 - **Spurious long-range alignments** emerge: distant tokens with "accidentally" matching OOD rotary phases receive high attention.
 
 Existing fixes (RoPE scaling, YaRN, LONGROPE) mostly rescale frequencies to handle longer ranges, but they trade local positional resolution for global stability. None target the *content* mismatch between relevant and irrelevant distant tokens.
+
+## The Key Observation
+
+RoPE failures at long context are not only positional. They are *selective-attention* failures. The model does not simply lose all distant information; it loses the ability to distinguish useful distant tokens from distracting distant tokens. GAPE targets exactly that failure mode by modifying the logits with content-aware gates rather than reparameterising the rotary angles themselves.
 
 ## GAPE: Two Gates on the Logits
 
@@ -84,6 +90,10 @@ The two gates are:
 - **Key gate** *g_k(k_n)*: a scalar function of the key vector. Learns to output a *positive* value for keys that carry salient content — this *protects* important distant tokens from being suppressed.
 
 The decoupling is critical: the query gate controls *forgetting* (global distance-based suppression), while the key gate controls *remembering* (token-specific survival). The rotary geometry is untouched.
+
+## Why the Factorisation Matters
+
+If the bias were only query-dependent, the model could suppress distance but would have no mechanism to rescue rare important tokens. If it were only key-dependent, salient keys could be marked, but irrelevant long-range attention would still remain too diffuse. The product structure gives both effects at once: broad contraction plus selective preservation.
 
 <div class="blog-figure">
 <figure>
@@ -128,6 +138,10 @@ The key gate's mechanistic effect is visible directly in the attention maps: GAP
 <figcaption>Figure 4 — Perplexity as context length increases beyond the training window. GAPE (blue) shows slower perplexity growth compared to the RoPE baseline, confirming improved out-of-distribution robustness for language modelling.</figcaption>
 </figure>
 </div>
+
+## Practical Interpretation
+
+The cleanest way to think about GAPE is as an attention sharpener for long context. RoPE still provides the positional geometry. GAPE then decides, token by token, whether long-range attention should be damped or protected. That makes it a pragmatic drop-in modification rather than a replacement for the whole positional encoding stack.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

@@ -60,6 +60,8 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2512.00242" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
+{% include figure image_path="/images/blog/papers/polynsd-paper.png" alt="First page of the Polynomial Neural Sheaf Diffusion paper" caption="Paper preview — Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves (Borgi and Liò, 2025)." %}
+
 ## Background: Neural Sheaf Diffusion
 
 A **Sheaf Neural Network** enriches a graph with a cellular sheaf: each node and edge gets a vector space (a *stalk*), and each endpoint of each edge gets a *restriction map* encoding how node signals relate to edge signals. The **sheaf Laplacian** encodes this relational geometry and replaces the standard graph Laplacian in the diffusion operator.
@@ -69,6 +71,10 @@ A **Sheaf Neural Network** enriches a graph with a cellular sheaf: each node and
 1. **SVD-based normalisation**: requires expensive SVD decomposition of the sheaf Laplacian at every layer, making Laplacian rebuilds slow.
 2. **Dense restriction maps**: one *d × d* matrix per node-edge pair, scaling quadratically with stalk dimension *d*.
 3. **Brittle gradients**: the normalised sheaf Laplacian construction is numerically unstable for large *d*, leading to gradient issues.
+
+## The Main Design Choice
+
+PolyNSD takes the perspective of spectral GNNs seriously: instead of repeatedly applying a fragile diffusion operator layer after layer, it learns a polynomial filter directly on the normalised sheaf Laplacian. That means the network can shape the frequency response explicitly, while keeping the computation sparse and stable.
 
 ## The PolyNSD Fix
 
@@ -100,6 +106,10 @@ This gives:
 
 The key parameter-reduction insight: **diagonal restriction maps** (a vector of *d* scalars per node-edge pair instead of a *d × d* matrix) are sufficient for strong performance. This reduces per-edge parameter count from O(d²) to O(d) and decouples performance from large stalk dimensions.
 
+## Why Diagonal Maps Are Enough
+
+This is one of the paper's most useful empirical findings. Earlier sheaf models tended to assume that expressive sheaf learning required large dense restriction matrices. PolyNSD shows that this is often unnecessary: once the spectral filter itself is strong enough, diagonal maps can already encode the right anisotropic behaviour while being much cheaper to train and much less numerically delicate.
+
 ## Results
 
 <div class="blog-figure">
@@ -115,6 +125,10 @@ Key results vs. NSD and spectral GNN baselines:
 - **Diagonal maps + small *d*** match or exceed NSD with dense maps + large *d*.
 - **Lower runtime and memory**: no SVD, sparse recurrence, small stalk dimensions.
 - Spectral filter shape is interpretable: the model learns when to apply low-pass (homophilic) vs. high-pass (heterophilic) filters.
+
+## Why This Paper Matters
+
+PolyNSD is important because it makes sheaf GNNs more usable. It preserves the geometric advantages of sheaf diffusion, but removes several implementation bottlenecks that previously made these models expensive or unstable. In practice, that is what turns a promising theory into something researchers can run, compare, and build on.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
