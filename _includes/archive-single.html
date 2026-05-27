@@ -75,8 +75,8 @@
     {% endif %}
     
     {% assign link_items = "" %}
-    {% if post.webpageurl %}
-      {% assign link_items = link_items | append: '<a href="' | append: post.webpageurl | append: '">Go to the Webpage</a>' %}
+    {% if post.webpageurl or post.blogurl %}
+      {% assign link_items = link_items | append: '<a href="' | append: primary_url | append: '">Go to the Webpage</a>' %}
     {% endif %}
     {% if post.paperurl %}
       {% if link_items != "" %}{% assign link_items = link_items | append: ' | ' %}{% endif %}
@@ -103,7 +103,7 @@
       {% if use_pub_card %}
         {% if post.webpageurl or post.blogurl or post.paperurl or post.posterurl or post.slidesurl or post.bibtexurl or post.codeurl %}
           <div class="pub-actions">
-            {% if post.webpageurl %}<a class="pub-btn" href="{{ post.webpageurl }}">Go to the Webpage</a>{% endif %}
+            {% if post.webpageurl or post.blogurl %}<a class="pub-btn" href="{{ primary_url }}">Go to the Webpage</a>{% endif %}
             {% if post.blogurl %}<a class="pub-btn" href="{{ post.blogurl }}">Read Blog Post</a>{% endif %}
             {% if post.paperurl %}<a class="pub-btn" href="{{ post.paperurl }}">Download Paper</a>{% endif %}
             {% if post.posterurl %}<a class="pub-btn" href="{{ post.posterurl }}">Download Poster</a>{% endif %}
