@@ -19,6 +19,8 @@ toc_label: "Contents"
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 820px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
+.blog-figure--compact img { width: min(100%, 620px); }
+.paper-preview img { width: min(100%, 520px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -27,6 +29,15 @@ toc_label: "Contents"
   margin-bottom: 1.5rem;
 }
 .tldr-box strong { color: #0f2a36; }
+.paper-meta {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.93rem;
+}
+.paper-meta strong { color: #003E74; }
 .key-takeaways {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
@@ -94,7 +105,23 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> The Transformer dropped sequential processing in favour of parallel attention over all tokens at once. This simple shift unlocked GPT, BERT, Whisper, AlphaFold, ViT — essentially all of modern AI.
 </div>
 
-{% include figure image_path="/images/blog/transformers/slides/slide-37-full-model.png" alt="Diagram of the full Transformer model with positional encoding and stacked blocks" caption="The full Transformer is not many unrelated ideas, but one repeated block sitting on top of embeddings plus position information. Source: [2]." %}
+<div class="paper-meta">
+  <strong>Paper:</strong> "Attention Is All You Need" &nbsp;·&nbsp; arXiv:1706.03762<br>
+  <strong>Authors:</strong> A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, I. Polosukhin<br>
+  <strong>Venue:</strong> NeurIPS 2017 &nbsp;·&nbsp;
+  <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">📄 Read the paper</a>
+</div>
+
+<div class="paper-preview">
+{% include figure image_path="/images/blog/papers/vaswani2017-paper.png" alt="First page of the Attention Is All You Need paper" caption="Paper preview — Attention Is All You Need (Vaswani et al., 2017)." %}
+</div>
+
+<div class="blog-figure blog-figure--compact">
+<figure>
+<img src="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Original Transformer encoder-decoder architecture from Attention Is All You Need">
+<figcaption>Figure 1 — The original Transformer diagram is still the best high-level map of the architecture: token embeddings and positional information enter stacked encoder and decoder blocks, while masked self-attention and cross-attention let generation stay autoregressive without losing access to the encoded source sequence. Source: [1].</figcaption>
+</figure>
+</div>
 
 <div class="chapter-grid">
   <div class="chapter-card">
@@ -127,6 +154,13 @@ The 2017 paper *Attention Is All You Need* (Vaswani et al.) asked: what if you l
 
 That's **self-attention**. Each token computes a score with every other token, learns which ones are relevant, and mixes their information together — in one parallel step. No sequential dependency. No forgetting.
 
+<div class="blog-figure blog-figure--compact">
+<figure>
+<img src="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention pipeline from Attention Is All You Need">
+<figcaption>Figure 2 — Scaled dot-product attention is the core computation inside the Transformer: queries score keys, scaling keeps those scores numerically well behaved, softmax turns them into weights, and values are mixed accordingly. Source: [1].</figcaption>
+</figure>
+</div>
+
 ## The Big Picture in One Pass
 
 If you strip away the implementation details, a Transformer does five things:
@@ -151,6 +185,13 @@ Because attention sees all tokens simultaneously, the model would otherwise have
 
 ### 3. Multi-Head Self-Attention
 This is the heart of the Transformer. Each token computes three vectors — a **Query** (what I'm looking for), a **Key** (what I offer), and a **Value** (what I'll contribute). The model computes pairwise relevance scores, normalises them with a softmax, then mixes the value vectors accordingly. Running this process in parallel across *h* heads lets the model capture different types of relationships simultaneously.
+
+<div class="blog-figure blog-figure--compact">
+<figure>
+<img src="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Multi-head attention architecture from Attention Is All You Need">
+<figcaption>Figure 3 — Multi-head attention repeats the same attention computation in parallel with different learned projections. Afterward, the heads are concatenated and remixed through one final linear layer, which lets the model combine several relational views of the same sequence at once. Source: [1].</figcaption>
+</figure>
+</div>
 
 ### 4. Add & Layer Norm
 A residual connection adds the attention output back to the input, then layer normalisation stabilises training. This pattern repeats after every sub-layer and is crucial for training deep stacks.
@@ -196,6 +237,13 @@ Transformers won not because attention is mathematically elegant, but because th
 
 That combination made Transformers less like a one-off NLP model and more like a general-purpose interface between data and computation.
 
+<div class="blog-figure blog-figure--compact">
+<figure>
+<img src="/images/blog/transformers/vaswani2017_attention_complexity_table.png" alt="Comparison table of self-attention, recurrent, and convolutional layers from Attention Is All You Need">
+<figcaption>Figure 4 — This comparison table captures why the design scaled so well in practice: self-attention keeps the path length between any two tokens at O(1), and unlike recurrent layers it avoids sequential dependence during the main computation. That combination is exactly what made long-range reasoning easier and GPU training far more efficient. Source: [1].</figcaption>
+</figure>
+</div>
+
 ## What This Overview Should Leave You With
 
 The Transformer is not one trick. It is a **clean composition of simple blocks** that together solve three hard problems at once:
@@ -217,7 +265,7 @@ The Transformer is not one trick. It is a **clean composition of simple blocks**
 <div class="reference-box">
 <h3>References</h3>
 <ul>
-  <li>Vaswani, A. et al. (2017). <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>.</li>
+  <li>[1] Vaswani, A. et al. (2017). <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>.</li>
   <li>Devlin, J. et al. (2018). <a href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a>.</li>
   <li>Dosovitskiy, A. et al. (2020). <a href="https://arxiv.org/abs/2010.11929">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a>.</li>
   <li>[2] <a href="https://www.sscardapane.it/alice-book/">https://www.sscardapane.it/alice-book/</a></li>

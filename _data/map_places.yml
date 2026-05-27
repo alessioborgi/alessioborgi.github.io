@@ -89,6 +89,14 @@
   date: "2024"
   note: "Bicocca University, Milan, Italy 🇮🇹"
 
+- name: "Varenna"
+  subtitle: "BUCa Summer School"
+  type: "study"
+  lat: 46.0097
+  lng: 9.2837
+  date: "2024"
+  note: "Challenges in Building User Cloud Applications summer school on Lake Como."
+
 
 ################################ LEISURE ################################
 - name: "London"
@@ -96,8 +104,16 @@
   type: "holiday"
   lat: 51.5074
   lng: -0.1278
-  date: "2015, 2025"
+  date: "2015, 2025, 2026"
   note: "Natural History Museum is my Favourite Museum! I love dinosaurs 🦖."
+
+- name: "Ely"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 52.3995
+  lng: 0.2624
+  date: "2026"
+  note: "Ely Cathedral is stunning, and the cannon in front of the cathedral is amazing!"
 
 - name: "Vienna"
   subtitle: "Holiday"
@@ -483,7 +499,7 @@
   date: "2020"
   radius: 5
   zoom_min: 6
-  note: "The gardens of Villa d'Este are breathtaking!"
+  note: "Villa d'Este and Villa Adriana are both so beautiful!"
 
 - name: "Isola del Liri"
   subtitle: "Holiday"
@@ -574,3 +590,163 @@
   radius: 5
   zoom_min: 6
   note: "The colorful houses and stunning sea views are unforgettable!"
+
+- name: "Nervi"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.3797
+  lng: 9.0372
+  date: "2024"
+  radius: 5
+  zoom_min: 6
+  note: "Wonderful promenade by the sea and one of the loveliest corners of Genoa."
+
+- name: "Taggia"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 43.8484
+  lng: 7.8527
+  date: "2024"
+  radius: 5
+  zoom_min: 6
+  note: "Beautiful Ligurian town with a lovely historic center."
+
+- name: "Bellagio"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.9873
+  lng: 9.2615
+  date: "2024"
+  radius: 5
+  zoom_min: 6
+  note: "Lake Como looks incredible from here. Such an elegant and scenic place!"
+
+- name: "Pescasseroli"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 41.8080
+  lng: 13.7875
+  date: "2016"
+  radius: 5
+  zoom_min: 6
+  note: "Beautiful mountain town in Abruzzo with amazing nature all around."
+
+- name: "Certaldo"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 43.5472
+  lng: 11.0407
+  date: "2024"
+  radius: 5
+  zoom_min: 6
+  note: "Beautiful medieval Tuscan town with a wonderful historic upper village."
+
+- name: "Poggibonsi"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 43.4700
+  lng: 11.1487
+  date: "2024"
+  radius: 5
+  zoom_min: 6
+  note: "A great stop in Tuscany with beautiful surroundings."
+
+- name: "Cortona"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 43.2747
+  lng: 11.9850
+  date: "2024"
+  radius: 5
+  zoom_min: 6
+  note: "Amazing hilltop town with unforgettable views over the Val di Chiana."
+
+- name: "Castiglione del Lago"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 43.1260
+  lng: 12.0396
+  date: "2022"
+  radius: 5
+  zoom_min: 6
+  note: "Beautiful lakeside town on Lake Trasimeno with a lovely fortress."
+
+- name: "Orvieto"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 42.7185
+  lng: 12.1116
+  date: "2019"
+  radius: 5
+  zoom_min: 6
+  note: "The cathedral facade is extraordinary and the whole cliff-top setting is spectacular."
+
+- name: "Bolsena"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 42.6447
+  lng: 11.9860
+  date: "2019"
+  radius: 5
+  zoom_min: 6
+  note: "Lake Bolsena is amazing and the town is wonderfully peaceful."
+
+- name: "Caprarola"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 42.3276
+  lng: 12.2386
+  date: "2019"
+  radius: 5
+  zoom_min: 6
+  note: "Villa Farnese is absolutely amazing and one of the most impressive villas in Italy."
+
+- name: "Norcia"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 42.7924
+  lng: 13.0932
+  date: "2017, 2025"
+  radius: 5
+  zoom_min: 6
+  note: "Wonderful Umbrian mountain town, famous for its atmosphere, landscapes, and incredible food."
+
+- name: "Vernazza"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.1349
+  lng: 9.6830
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "One of the most beautiful villages in Cinque Terre, with an amazing harbor view."
+
+- name: "Monterosso al Mare"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.1488
+  lng: 9.6544
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "Beautiful beaches and a wonderful relaxed atmosphere by the sea."
+
+- name: "Manarola"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.1060
+  lng: 9.7271
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "The colorful houses over the cliffs are simply iconic."
+
+- name: "Riomaggiore"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.0992
+  lng: 9.7386
+  date: "2025"
+  radius: 5
+  zoom_min: 6
+  note: "A spectacular village with stunning sea views and the classic Cinque Terre charm."

@@ -20,7 +20,8 @@ toc_label: "Contents"
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-.blog-figure--compact { max-width: 620px; margin-left: auto; margin-right: auto; }
+.blog-figure--stacked figure { display: block !important; max-width: 900px; margin: 0 auto; }
+.blog-figure--compact { max-width: 520px; margin-left: auto; margin-right: auto; }
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
 .tldr-box strong { color: #0f2a36; }
 .key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
@@ -67,7 +68,7 @@ Each of Q, K, V is produced by multiplying the token's embedding by a learned we
 
 ## The Four-Step Computation
 
-<div class="blog-figure">
+<div class="blog-figure blog-figure--stacked">
 <figure>
 <svg viewBox="0 0 580 290" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
   <defs>

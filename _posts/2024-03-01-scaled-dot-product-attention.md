@@ -20,6 +20,7 @@ toc_label: "Contents"
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
+.blog-figure--compact { max-width: 420px; margin-left: auto; margin-right: auto; }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -34,9 +35,10 @@ toc_label: "Contents"
   border-radius: 8px;
   padding: 1rem 1.4rem;
   margin: 1.25rem 0;
-  font-family: monospace;
-  font-size: 1rem;
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 1.02rem;
   text-align: center;
+  line-height: 1.7;
 }
 .insight-box {
   background: #fffbeb;
@@ -50,7 +52,9 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Without the √d_k scaling factor, dot products grow large in high dimensions → softmax outputs near 0 or 1 everywhere → gradients vanish and training stalls. Dividing by √d_k keeps dot products well-conditioned regardless of model size.
 </div>
+<div class="blog-figure--compact">
 {% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled Dot-Product Attention" caption="Scaled Dot-Product Attention (Vaswani et al., 2017)" %}
+</div>
 
 
 ## The Formula
@@ -58,7 +62,11 @@ toc_label: "Contents"
 Scaled dot-product attention is the engine inside every Transformer. Given queries **Q**, keys **K**, and values **V**:
 
 <div class="math-box">
-Attention(Q, K, V) = softmax( Q Kᵀ / √d_k ) · V
+\[
+\mathrm{Attention}(Q, K, V)
+=
+\mathrm{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+\]
 </div>
 
 The term **d_k** is the dimension of the key vectors. The division by **√d_k** is the "scaling" in the name. It looks minor. It is not.
@@ -80,7 +88,11 @@ When d_k = 64 (a typical value), individual dot products have std ≈ 8. When d_
 Softmax is defined as:
 
 <div class="math-box">
-softmax(xᵢ) = exp(xᵢ) / Σⱼ exp(xⱼ)
+\[
+\mathrm{softmax}(x_i)
+=
+\frac{e^{x_i}}{\sum_j e^{x_j}}
+\]
 </div>
 
 When inputs are large — say the vector **[35, 2, -10, 1]** — the exponential function amplifies differences exponentially. The largest value dominates completely. The output becomes something like **[≈1.0, ≈0.0, ≈0.0, ≈0.0]**.
@@ -92,11 +104,15 @@ This is called **softmax saturation**. The "soft" maximum collapses into a hard 
 Softmax saturation is catastrophic for learning because it causes **gradient death**. The gradient of softmax with respect to its input is:
 
 <div class="math-box">
-∂softmax(xᵢ)/∂xᵢ = softmax(xᵢ) · (1 − softmax(xᵢ))
+\[
+\frac{\partial \,\mathrm{softmax}(x_i)}{\partial x_i}
+=
+\mathrm{softmax}(x_i)\bigl(1-\mathrm{softmax}(x_i)\bigr)
+\]
 </div>
 
-When softmax(xᵢ) ≈ 1, this gradient ≈ 1·(1−1) = **0**.  
-When softmax(xᵢ) ≈ 0, this gradient ≈ 0·(1−0) = **0**.
+When \(\mathrm{softmax}(x_i) \approx 1\), the factor \((1-\mathrm{softmax}(x_i))\) is near zero.  
+When \(\mathrm{softmax}(x_i) \approx 0\), the leading \(\mathrm{softmax}(x_i)\) term is near zero.
 
 In both cases: no gradient flows. No learning happens. The attention weights are stuck.
 
@@ -105,7 +121,15 @@ In both cases: no gradient flows. No learning happens. The attention weights are
 Dividing each dot product by √d_k scales the variance back to 1:
 
 <div class="math-box">
-Var( q·k / √d_k ) = Var(q·k) / d_k = d_k / d_k = 1
+\[
+\mathrm{Var}\!\left(\frac{q \cdot k}{\sqrt{d_k}}\right)
+=
+\frac{\mathrm{Var}(q \cdot k)}{d_k}
+=
+\frac{d_k}{d_k}
+=
+1
+\]
 </div>
 
 Now the inputs to softmax live in a reasonable range regardless of d_k. Softmax operates in its smooth, differentiable regime. Gradients flow. Learning works.
