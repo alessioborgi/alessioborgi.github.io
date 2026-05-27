@@ -582,7 +582,7 @@ redirect_from:
         <span class="ab-hero__tag">Vision</span>
       </div>
       <div class="ab-hero__ctas">
-        <a class="ab-btn ab-btn--teal" href="mailto:alessio.borgi@uniroma1.it">
+        <a class="ab-btn ab-btn--teal" href="mailto:alessio.borgi@uniroma1.it,ab3352@cam.ac.uk">
           <i class="fas fa-envelope" aria-hidden="true"></i> Email Me
         </a>
         <a class="ab-btn ab-btn--glass" href="/cv/">
@@ -625,7 +625,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
     Don't hesitate to reach out if you'd like to collaborate on a project, research, paper idea, or a moonshot you're cooking up.
   </p>
   <div class="ab-collab__cta">
-    <a href="mailto:alessio.borgi@uniroma1.it" class="ab-btn ab-btn--teal">
+    <a href="mailto:alessio.borgi@uniroma1.it,ab3352@cam.ac.uk" class="ab-btn ab-btn--teal">
       <i class="fas fa-envelope" aria-hidden="true"></i> Let's talk
     </a>
   </div>

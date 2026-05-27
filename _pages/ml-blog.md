@@ -219,6 +219,7 @@ author_profile: true
 {% assign ph_posts          = site.posts | where: "book", "tdl"                   | sort: "date" %}
 {% assign rl_posts          = site.posts | where: "book", "rl"                    | sort: "date" %}
 {% assign robotics_posts    = site.posts | where: "book", "robotics"              | sort: "date" %}
+{% assign genai_posts       = site.posts | where: "book", "generative-ai"         | sort: "date" %}
 
 {% assign t_overview  = transformer_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
@@ -265,6 +266,9 @@ author_profile: true
 {% assign rob_learning    = robotics_posts | where: "subsection", "learning" %}
 {% assign rob_perception  = robotics_posts | where: "subsection", "perception" %}
 {% assign rob_frontier    = robotics_posts | where: "subsection", "frontier" %}
+
+{% assign genai_overview       = genai_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign genai_style_transfer = genai_posts | where: "subsection", "style-transfer" %}
 
 
 <!-- ════════════════════════════════════════════════════════ -->
@@ -1018,6 +1022,45 @@ author_profile: true
     </div>
     {% endif %}
 
+  </div>
+</div>
+
+<div class="blog-book" data-book="generative-ai">
+  <div class="book-banner">
+    <span class="book-icon">🎨</span>
+    <div>
+      <h2>Generative AI &amp; Style Transfer</h2>
+      <p>Diffusion models, latent manipulation, style alignment, and controllable generation.</p>
+    </div>
+  </div>
+
+  <div class="book-body">
+    {% if genai_overview %}
+    <a class="blog-overview-card" href="{{ genai_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ genai_overview.title }}</h3>
+      <p>{{ genai_overview.excerpt | strip_html | truncate: 210 }}</p>
+    </a>
+    {% endif %}
+
+    {% if genai_style_transfer.size > 0 %}
+    <div class="subsection-label" data-section="style-transfer">🎭 Style Transfer &amp; Latent Manipulation</div>
+    <div class="chapters-grid">
+      {% for post in genai_style_transfer %}
+        {% unless post.is_overview %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+        {% endunless %}
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
 </div>
 

@@ -19,6 +19,7 @@ toc_label: "Contents"
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 780px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .6rem; font-style: italic; }
+.blog-figure--compact { max-width: 620px; margin-left: auto; margin-right: auto; }
 .paper-preview img { width: min(100%, 620px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
@@ -101,16 +102,21 @@ RoPE failures at long context are not only positional. They are *selective-atten
 
 ## GAPE: Two Gates on the Logits
 
-GAPE introduces a **content-aware additive bias** directly into the pre-softmax attention logits, *after* the rotary dot-product is computed:
+GAPE introduces a **content-aware additive mask** directly into the pre-softmax attention logits. In the paper notation, the attention logit is written as
 
-$$a_{mn} = \frac{q_m^\top k_n}{\sqrt{d}} + \underbrace{g_q(q_m) \cdot g_k(k_n)}_{\text{GAPE bias}}$$
+$$a_{i,j} = \frac{1}{\sqrt{d}} \mathbf{q}_i^\top R_\Theta(i-j)\mathbf{k}_j + M_{i,j}$$
 
-The two gates are:
+with GAPE mask
 
-- **Query gate** *g_q(q_m)*: a scalar function of the query vector. Learns to output a *negative* value for queries that are "looking for something specific" — this contracts the attention mass assigned to distant, unprotected tokens.
-- **Key gate** *g_k(k_n)*: a scalar function of the key vector. Learns to output a *positive* value for keys that carry salient content — this *protects* important distant tokens from being suppressed.
+$$M_{i,j} = \Gamma_h g_i \left(\frac{j(1-l_j)}{T} + \frac{i\,l_j}{T}\right).$$
 
-The decoupling is critical: the query gate controls *forgetting* (global distance-based suppression), while the key gate controls *remembering* (token-specific survival). The rotary geometry is untouched.
+The routing variables are defined in the paper as:
+
+- **Landmark gate**: $l_j = \sigma(\mathbf{w}_l^\top \mathbf{k}_j + b_l)$
+- **Query gate**: $g_i = \operatorname{Softplus}(\mathbf{w}_g^\top \mathbf{q}_i + b_g)$
+- **Head amplitude**: $\Gamma_h = \operatorname{Softplus}(\gamma_h)$
+
+This is the key decoupling: $g_i$ controls how strongly query $i$ suppresses unprotected distant context, while $l_j$ marks key $j$ as a landmark that should be protected from that suppression. RoPE’s rotary geometry remains untouched because the structural intervention enters additively through $M_{i,j}$ rather than by changing the rotations themselves.
 
 ## Why the Factorisation Matters
 
@@ -160,6 +166,10 @@ The key gate's mechanistic effect is visible directly in the attention maps: GAP
 
 ### Gate Dynamics During Training
 
+This part matters because GAPE is only useful if the gates learn a nontrivial routing policy rather than collapsing to a constant bias. The training dynamics show exactly that they do not collapse. Different heads and different layers settle into different regimes: some become strong suppressors of irrelevant background context, some remain relatively permissive, and some specialise in preserving a narrower set of salient positions.
+
+In other words, the model is not learning one global "forget more" knob. It is learning a structured allocation of filtering behaviour across the attention stack. That is a much stronger result, because it suggests GAPE is expressive enough to adapt to the role of each head rather than merely acting as a blunt long-context penalty.
+
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/papers/gape-g-evolution.png" alt="Evolution of GAPE mask values by attention head across layers and training steps">
@@ -167,14 +177,18 @@ The key gate's mechanistic effect is visible directly in the attention maps: GAP
 </figure>
 </div>
 
-<div class="blog-figure">
+The next question is whether those learned gates actually change attention behaviour in the intended direction. The entropy plots answer that directly. If the gates are doing real work, attention should become sharper exactly in the layers where the model has learned stronger suppression of diffuse background context.
+
+<div class="blog-figure blog-figure--compact">
 <figure>
 <img src="/images/blog/papers/gape-attention-entropy-by-layer.png" alt="Average attention entropy by layer comparing p-RoPE, RoPE, and p-RoPE with GAPE">
 <figcaption>Figure 6 — Layer-wise entropy confirms the same story from a different angle: adding GAPE to positional schemes yields more concentrated attention in the middle and deeper layers, where long-context selection pressure is strongest. The gain is not uniform, which is precisely why a learned gating mechanism is useful: different layers need different amounts of forgetting.</figcaption>
 </figure>
 </div>
 
-<div class="blog-figure">
+What makes the section convincing is the consistency between the mechanism variables and the downstream statistics. The learned gate magnitude is not floating independently of the attention maps; it tracks the same contraction effect that shows up in entropy. That is the kind of alignment you want from a mechanistic intervention: one variable that is interpretable, trainable, and visibly tied to the claimed behaviour.
+
+<div class="blog-figure blog-figure--compact">
 <figure>
 <img src="/images/blog/papers/gape-g-and-entropy-by-layer.png" alt="Average gate magnitude and average attention entropy by layer in GAPE">
 <figcaption>Figure 7 — This summary plot links the mechanism to the outcome. Layers with stronger average gating tend to be the layers where entropy is driven down the most, tying the learned gate magnitude directly to sharper attention. It is a compact sanity check that the gate is not just present, but causally aligned with the behaviour the paper claims.</figcaption>

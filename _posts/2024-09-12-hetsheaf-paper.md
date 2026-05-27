@@ -85,7 +85,7 @@ A **cellular sheaf** assigns a vector space (a *stalk*) to each node and edge, p
 
 HetSheaf makes two changes:
 
-1. **Type-aware stalks**: Each node and edge gets a stalk whose dimension depends on its type. A *person* node might have a 64-dimensional stalk; an *institution* node gets 32 dimensions.
+1. **Type-aware stalks**: Each node and edge keeps the same stalk dimension, but the stalk content is made type-aware through the learned sheaf construction. In other words, HetSheaf does not yet assign different stalk sizes to different types; instead, it uses a shared-dimensional local space whose semantics depend on node and edge type. Allowing genuinely different stalk dimensions across types is a natural future direction, but it is not part of the current method.
 
 2. **Conditioned restriction maps**: The restriction map for each edge endpoint is conditioned on the node features, node type, and edge type. This lets the model learn type-specific relational structure automatically, without separate architectural components per relation.
 
@@ -109,7 +109,13 @@ The restriction maps can be instantiated in different ways, giving a family of *
 
 ## SheafPool: Graph-Level Readout
 
-For graph classification, standard pooling (mean/sum) over sheaf node representations is problematic: the stalk bases are local and not globally aligned, so averaging across different basis choices is geometrically ill-defined.
+For graph classification, the hard part is not only learning good node representations. It is also deciding how to turn a collection of **stalk-valued** node representations into a single graph representation without destroying the geometry that the sheaf model has learned.
+
+That is where standard pooling becomes problematic. In an ordinary GNN, node embeddings all live in the same ambient vector space, so taking a sum or mean is at least algebraically sensible. In a sheaf model, each node representation lives in its own **local coordinate frame**. Even if all stalks have the same dimension, their bases are not canonically aligned across the graph. So two vectors that look numerically different may actually represent the same geometric object under a different basis choice.
+
+This means naive pooling is not just suboptimal, but conceptually wrong. If you average stalk vectors directly, the result depends on arbitrary local gauge choices rather than only on the graph signal itself. In other words, two equivalent sheaf representations of the same graph could produce different pooled graph embeddings simply because the local bases were rotated differently. For graph classification, that is unacceptable: the readout should reflect the graph, not the bookkeeping convention used to write its stalk features down.
+
+The problem becomes especially acute in heterogeneous graphs, where local relational structure already varies by node type and edge type. If the readout is basis-sensitive, then the whole benefit of learning a rich typed sheaf geometry gets partially cancelled at the final aggregation step.
 
 **SheafPool** solves this by projecting each node's stalk representation into a shared *canonical space* before aggregating. The result is a readout that is **invariant to local basis changes** — a fundamental requirement for making sheaf-based graph classification well-defined.
 

@@ -121,7 +121,7 @@ layout: default
       <section class="page__content" itemprop="text">
         {{ content }}
 
-        {% if page.book %}
+        {% if page.id %}
           {% assign _page_file = page.path | split: '/' | last | remove: '.md' %}
           <div id="ml-blog-next-cta" class="ml-blog-next-cta" hidden></div>
           <script>
@@ -133,53 +133,91 @@ layout: default
                 slug: {{ p.path | split: '/' | last | remove: '.md' | jsonify }},
                 url: {{ p.url | relative_url | jsonify }},
                 title: {{ p.title | jsonify }},
-                book: {{ p.book | jsonify }}
+                book: {{ p.book | jsonify }},
+                date: {{ p.date | date_to_xmlschema | jsonify }},
+                categories: {{ p.categories | jsonify }}
               }{% unless forloop.last %},{% endunless %}
               {% endfor %}
             ];
 
             var bookKey = {{ page.book | jsonify }};
             var currentSlug = {{ _page_file | jsonify }};
+            var currentDate = {{ page.date | date_to_xmlschema | jsonify }};
+            var currentCategories = {{ page.categories | jsonify }};
             var target = document.getElementById('ml-blog-next-cta');
-            var book = mlBlogCatalog[bookKey];
-            if (!target || !book) return;
+            if (!target) return;
 
-            var ordered = [];
-            if (Array.isArray(book.overview)) {
-              book.overview.forEach(function (entry) {
-                if (entry && entry.published === 'online') ordered.push(entry.slug);
-              });
+            function renderNext(nextPost, subtitle) {
+              if (!nextPost) return;
+              target.hidden = false;
+              target.innerHTML =
+                '<a class="ml-blog-next-btn" href="' + nextPost.url + '">' +
+                '<span class="ml-blog-next-copy">' +
+                '<span class="ml-blog-next-label">Continue the journey</span>' +
+                '<strong>' + nextPost.title + '</strong>' +
+                '<span class="ml-blog-next-subtitle">' + subtitle + '</span>' +
+                '</span>' +
+                '<span class="ml-blog-next-arrow" aria-hidden="true">→</span>' +
+                '</a>';
             }
-            if (book.sections) {
-              Object.keys(book.sections).forEach(function (sectionKey) {
-                var posts = (book.sections[sectionKey] && book.sections[sectionKey].posts) || [];
-                posts.forEach(function (entry) {
+
+            if (bookKey && mlBlogCatalog[bookKey]) {
+              var book = mlBlogCatalog[bookKey];
+              var ordered = [];
+              if (Array.isArray(book.overview)) {
+                book.overview.forEach(function (entry) {
                   if (entry && entry.published === 'online') ordered.push(entry.slug);
                 });
-              });
+              }
+              if (book.sections) {
+                Object.keys(book.sections).forEach(function (sectionKey) {
+                  var posts = (book.sections[sectionKey] && book.sections[sectionKey].posts) || [];
+                  posts.forEach(function (entry) {
+                    if (entry && entry.published === 'online') ordered.push(entry.slug);
+                  });
+                });
+              }
+
+              var currentIndex = ordered.indexOf(currentSlug);
+              if (currentIndex !== -1) {
+                var nextSlug = ordered[currentIndex + 1];
+                if (nextSlug) {
+                  var nextBookPost = allPosts.find(function (post) {
+                    return post.slug === nextSlug;
+                  });
+                  if (nextBookPost) {
+                    renderNext(nextBookPost, 'Next up in this series');
+                    return;
+                  }
+                }
+              }
             }
 
-            var currentIndex = ordered.indexOf(currentSlug);
-            if (currentIndex === -1) return;
-
-            var nextSlug = ordered[currentIndex + 1];
-            if (!nextSlug) return;
-
-            var nextPost = allPosts.find(function (post) {
-              return post.slug === nextSlug;
+            var currentCategory = Array.isArray(currentCategories) && currentCategories.length ? currentCategories[0] : null;
+            var sortedPosts = allPosts.slice().sort(function (a, b) {
+              return new Date(a.date) - new Date(b.date);
             });
+            var sameCategory = sortedPosts.filter(function (post) {
+              return post.slug !== currentSlug &&
+                currentCategory &&
+                Array.isArray(post.categories) &&
+                post.categories.indexOf(currentCategory) !== -1;
+            });
+            var nextPost = sameCategory.find(function (post) {
+              return new Date(post.date) > new Date(currentDate);
+            });
+            if (!nextPost && sameCategory.length) {
+              nextPost = sameCategory[0];
+            }
+            if (!nextPost) {
+              nextPost = sortedPosts.find(function (post) {
+                return post.slug !== currentSlug && new Date(post.date) > new Date(currentDate);
+              }) || sortedPosts.find(function (post) {
+                return post.slug !== currentSlug;
+              });
+            }
             if (!nextPost) return;
-
-            target.hidden = false;
-            target.innerHTML =
-              '<a class="ml-blog-next-btn" href="' + nextPost.url + '">' +
-              '<span class="ml-blog-next-copy">' +
-              '<span class="ml-blog-next-label">Continue the journey</span>' +
-              '<strong>' + nextPost.title + '</strong>' +
-              '<span class="ml-blog-next-subtitle">Next up in this series</span>' +
-              '</span>' +
-              '<span class="ml-blog-next-arrow" aria-hidden="true">→</span>' +
-              '</a>';
+            renderNext(nextPost, currentCategory ? ('Next up in ' + currentCategory) : 'Next up on the blog');
           });
           </script>
           <style>
