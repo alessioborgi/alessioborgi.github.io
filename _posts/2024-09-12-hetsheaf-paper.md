@@ -20,6 +20,7 @@ toc_label: "Contents"
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 780px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .6rem; font-style: italic; }
+.blog-figure--stacked figure { display: block !important; max-width: 900px; margin: 0 auto; }
 .paper-preview img { width: min(100%, 620px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
@@ -51,7 +52,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Standard heterogeneous GNNs handle node/edge types via specialised architectural modules. HetSheaf moves heterogeneity into the <em>data structure</em> itself — the cellular sheaf — so a single unified architecture handles all types through type-aware restriction maps, achieving state-of-the-art on HGB benchmarks with up to 10× fewer parameters.
+  <strong>TL;DR:</strong> Standard heterogeneous GNNs add type-specific layers. HetSheaf instead encodes node and edge types directly in the sheaf, so one unified model can handle heterogeneous graphs with far fewer parameters.
 </div>
 
 <div class="paper-meta">
@@ -59,8 +60,6 @@ toc_label: "Contents"
   <strong>Authors:</strong> L. Braithwaite, <em>A. Borgi</em>, G. Onorato, K. Tarantelli, F. Restuccia, F. Silvestri, P. Liò<br>
   <strong>Venue:</strong> arXiv preprint, 2024 &nbsp;·&nbsp;
   <a href="https://arxiv.org/abs/2409.08036" target="_blank" rel="noopener">📄 Read the paper</a>
-  &nbsp;·&nbsp;
-  <a href="/publications/2024-09-12-heterogeneous-sheaf-neural-networks/">🔗 Publication page</a>
 </div>
 
 <div class="paper-preview">
@@ -77,7 +76,7 @@ Existing heterogeneous GNNs — R-GCN, HAN, HGT — handle this by adding type-s
 
 ## The Intuition in One Sentence
 
-HetSheaf treats node type and edge type not as a reason to build a different neural layer for every relation, but as a reason to build a richer local geometry: different stalk sizes, different restriction maps, same global propagation rule.
+HetSheaf treats node type and edge type not as a reason to build a different neural layer for every relation, but as a reason to build a richer local geometry: typed stalk semantics, type-conditioned restriction maps, same global propagation rule.
 
 ## The Core Idea: Type-Aware Sheaves
 
@@ -89,7 +88,7 @@ HetSheaf makes two changes:
 
 2. **Conditioned restriction maps**: The restriction map for each edge endpoint is conditioned on the node features, node type, and edge type. This lets the model learn type-specific relational structure automatically, without separate architectural components per relation.
 
-<div class="blog-figure">
+<div class="blog-figure blog-figure--stacked">
 <figure>
 <img src="/images/blog/papers/hetsheaf-overview.png" alt="HetSheaf framework overview comparing architecture-level heterogeneity with sheaf-level heterogeneity">
 <figcaption>Figure 1 — HetSheaf’s main overview contrasts the standard approach of baking heterogeneity into the architecture with the sheaf-based alternative: node and edge types are absorbed directly into local stalk spaces and restriction maps, so the propagation rule itself stays unified and geometry-aware.</figcaption>
@@ -100,7 +99,7 @@ HetSheaf makes two changes:
 
 The restriction maps can be instantiated in different ways, giving a family of **Heterogeneous Sheaf Predictors (HSPs)**. The paper explores several variants ranging from linear maps to nonlinear maps conditioned on concatenated node/edge features.
 
-<div class="blog-figure">
+<div class="blog-figure blog-figure--stacked">
 <figure>
 <img src="/images/blog/papers/hetsheaf-predictors.png" alt="Heterogeneous Sheaf Predictor variants including Sheaf-NSD, ensemble, NE, EE, TE, NT, ET, and types">
 <figcaption>Figure 2 — The Heterogeneous Sheaf Predictor family shows how expressive power increases as restriction maps are conditioned on richer typed context. The variants progressively inject node-type functions, edge-type functions, or both, making it clear that HetSheaf is a framework for typed local geometry rather than one fixed predictor.</figcaption>
@@ -109,17 +108,25 @@ The restriction maps can be instantiated in different ways, giving a family of *
 
 ## SheafPool: Graph-Level Readout
 
-For graph classification, the hard part is not only learning good node representations. It is also deciding how to turn a collection of **stalk-valued** node representations into a single graph representation without destroying the geometry that the sheaf model has learned.
+The graph-classification problem is simple to state:
 
-That is where standard pooling becomes problematic. In an ordinary GNN, node embeddings all live in the same ambient vector space, so taking a sum or mean is at least algebraically sensible. In a sheaf model, each node representation lives in its own **local coordinate frame**. Even if all stalks have the same dimension, their bases are not canonically aligned across the graph. So two vectors that look numerically different may actually represent the same geometric object under a different basis choice.
+- ordinary GNNs can sum or average node embeddings directly;
+- sheaf GNNs cannot, because each node lives in its own **local coordinate frame**.
 
-This means naive pooling is not just suboptimal, but conceptually wrong. If you average stalk vectors directly, the result depends on arbitrary local gauge choices rather than only on the graph signal itself. In other words, two equivalent sheaf representations of the same graph could produce different pooled graph embeddings simply because the local bases were rotated differently. For graph classification, that is unacceptable: the readout should reflect the graph, not the bookkeeping convention used to write its stalk features down.
+So naive pooling is not just weak, but wrong. Two stalk vectors can represent the same geometric content in different bases, and direct averaging would treat them as different. The final graph embedding would then depend on arbitrary local frame choices instead of only on the graph.
 
-The problem becomes especially acute in heterogeneous graphs, where local relational structure already varies by node type and edge type. If the readout is basis-sensitive, then the whole benefit of learning a rich typed sheaf geometry gets partially cancelled at the final aggregation step.
+SheafPool fixes this by making the readout **basis-invariant**.
 
-**SheafPool** solves this by projecting each node's stalk representation into a shared *canonical space* before aggregating. The result is a readout that is **invariant to local basis changes** — a fundamental requirement for making sheaf-based graph classification well-defined.
+In practice, it does four things:
 
-<div class="blog-figure">
+1. **Normalise** each stalk locally.
+2. **Align** stalks to a shared anchor frame.
+3. **Score** nodes with invariant attention weights.
+4. **Pool** the aligned stalks into one graph representation.
+
+The key idea is: **align first, pool later**. That is what makes graph-level prediction well-defined in sheaf space, especially on heterogeneous graphs where local geometry is already more complex.
+
+<div class="blog-figure blog-figure--stacked">
 <figure>
 <img src="/images/blog/papers/hetsheaf-sheafpool.png" alt="SheafPool architecture with whitening, anchor-guided alignment, invariant attention weights, stalk pooling, and invariant graph feature extraction">
 <figcaption>Figure 3 — SheafPool solves the core graph-level readout problem step by step: whiten each stalk, align residual orientations with a shared anchor frame, compute invariant attention weights, pool aligned stalks into a receive-only token, and finally extract graph features through channel-wise invariant energies. This is what makes graph classification well-defined under local basis changes.</figcaption>

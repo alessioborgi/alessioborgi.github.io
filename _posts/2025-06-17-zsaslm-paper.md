@@ -60,7 +60,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Linear blending of style representations in latent diffusion models assumes a flat latent space — which it isn't. Z-SASLM replaces linear interpolation with <strong>Spherical Linear Interpolation (SLERP)</strong> along the geodesic of the hypersphere, preserving the latent manifold structure when fusing multiple styles. Zero-shot, no fine-tuning, and a new evaluation metric to match.
+  <strong>TL;DR:</strong> Linear style blending in diffusion latents distorts the geometry of the latent space. Z-SASLM replaces it with <strong>SLERP</strong>, producing cleaner multi-style blends that better preserve the structure of the original style representations.
 </div>
 
 <div class="paper-meta">
@@ -68,8 +68,6 @@ toc_label: "Contents"
   <strong>Authors:</strong> <em>A. Borgi</em>, L. Maiano, I. Amerini<br>
   <strong>Venue:</strong> CVPR 2025 Workshop on Computer Vision for Extended Universe (CVEU) &nbsp;·&nbsp;
   <a href="https://arxiv.org/abs/2503.23234" target="_blank" rel="noopener">📄 Read the paper</a>
-  &nbsp;·&nbsp;
-  <a href="/publications/2025-06-10-z-saslm/">🔗 Publication page</a>
 </div>
 
 <div class="paper-preview">

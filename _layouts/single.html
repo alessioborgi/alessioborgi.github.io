@@ -25,6 +25,14 @@ layout: default
 
     {% if page.book or page.categories contains "research" or page.categories contains "transformers" %}
     <style>
+      .page__content p,
+      .page__content li,
+      .page__content blockquote {
+        text-align: justify;
+        text-justify: inter-word;
+        hyphens: auto;
+      }
+
       .page__content .blog-media,
       .page__content .blog-figure figure,
       .page__content > figure {

@@ -58,7 +58,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Sheaf GNNs can learn powerful node-level geometry, but graph classification still needs a principled readout. SheafPool fixes that by aligning stalk features into a shared canonical frame before pooling, so the final graph embedding is invariant to arbitrary local basis choices.
+  <strong>TL;DR:</strong> Sheaf GNNs can learn strong node representations, but graph classification still needs a basis-invariant readout. SheafPool aligns local stalk features before pooling, so the final graph embedding does not depend on arbitrary local frames.
 </div>
 
 <div class="paper-meta">
@@ -68,8 +68,6 @@ toc_label: "Contents"
   <a href="https://arxiv.org/abs/2409.08036" target="_blank" rel="noopener">📄 Paper</a>
   &nbsp;·&nbsp;
   <a href="/blog/sheaf/hetsheaf-paper/">🌿 HetSheaf blog post</a>
-  &nbsp;·&nbsp;
-  <a href="/publications/2024-09-12-heterogeneous-sheaf-neural-networks/">🔗 Publication page</a>
 </div>
 
 ## The Problem: Pooling in Sheaf Models Is Not Ordinary Pooling
