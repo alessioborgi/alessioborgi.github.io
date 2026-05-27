@@ -40,8 +40,10 @@ toc_label: "Contents"
   border-radius: 8px;
   padding: 1rem 1.4rem;
   margin: 1.25rem 0;
-  font-family: monospace;
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 1.02rem;
   text-align: center;
+  line-height: 1.7;
 }
 </style>
 
@@ -70,7 +72,11 @@ The **FeedForward** (FFN) sub-layer is the second half of every block. In popula
 The FFN is a simple two-layer MLP applied **position-wise**: each token is processed identically and independently.
 
 <div class="math-box">
-FFN(x) = W₂ · activation( W₁ · x + b₁ ) + b₂
+\[
+\mathrm{FFN}(x)
+=
+W_2\,\mathrm{activation}(W_1x + b_1) + b_2
+\]
 </div>
 
 - **W₁ ∈ ℝ^{d_model × d_ff}**: projects up from d_model to d_ff
@@ -120,7 +126,9 @@ When a token activates a key neuron (because it matches a learned pattern), the 
 ### ReLU (original Transformer, 2017)
 
 <div class="math-box">
-ReLU(x) = max(0, x)
+\[
+\mathrm{ReLU}(x) = \max(0, x)
+\]
 </div>
 
 Simple and sparse — negative activations are exactly zero, which gives the FFN a sparse, efficient structure.
@@ -128,7 +136,9 @@ Simple and sparse — negative activations are exactly zero, which gives the FFN
 ### GELU (GPT-2, BERT, and successors)
 
 <div class="math-box">
-GELU(x) ≈ x · σ(1.702 · x)
+\[
+\mathrm{GELU}(x) \approx x \cdot \sigma(1.702x)
+\]
 </div>
 
 Smooth approximation of ReLU with non-zero gradient for negative inputs. Empirically outperforms ReLU on most language tasks.
@@ -136,7 +146,11 @@ Smooth approximation of ReLU with non-zero gradient for negative inputs. Empiric
 ### SwiGLU (LLaMA, PaLM, Mistral)
 
 <div class="math-box">
-SwiGLU(x, W, V) = Swish(xW) ⊙ (xV)
+\[
+\mathrm{SwiGLU}(x, W, V)
+=
+\mathrm{Swish}(xW) \odot (xV)
+\]
 </div>
 
 A gated variant: two parallel linear projections, one gating the other element-wise. SwiGLU-based FFNs use d_ff = (8/3) × d_model (not 4×) to keep parameter count comparable. Consistently outperforms ReLU and GELU at large scale.

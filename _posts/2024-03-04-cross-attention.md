@@ -19,6 +19,7 @@ toc_label: "Contents"
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure--compact { max-width: 440px; margin-left: auto; margin-right: auto; }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -48,7 +49,9 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> In self-attention, Q, K, and V all come from the same sequence. In cross-attention, Q comes from one sequence (the decoder) while K and V come from another (the encoder). This asymmetry is how the decoder "reads" the encoder's output.
 </div>
+<div class="blog-figure--compact">
 {% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Cross-attention in encoder-decoder" caption="Cross-attention between encoder output and decoder queries (Vaswani et al., 2017)" %}
+</div>
 
 <div class="insight-box">
 <strong>Fast intuition:</strong> self-attention lets a sequence look inward. Cross-attention lets one sequence look outward at another representation.

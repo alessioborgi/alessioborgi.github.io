@@ -25,12 +25,123 @@ layout: default
 
     {% if page.book or page.categories contains "research" or page.categories contains "transformers" %}
     <style>
+      .page__header,
+      .page > header {
+        position: relative;
+      }
+
+      .page__title {
+        letter-spacing: -0.03em;
+        line-height: 1.02;
+        color: #0f172a;
+      }
+
+      .page__meta,
+      .page__date {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.35rem 0.7rem;
+        border-radius: 999px;
+        background: linear-gradient(160deg, #f8fbff 0%, #eef7ff 100%);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      }
+
       .page__content p,
       .page__content li,
       .page__content blockquote {
         text-align: justify;
         text-justify: inter-word;
         hyphens: auto;
+      }
+
+      .page__content > h2,
+      .page__content > h3 {
+        position: relative;
+        margin-top: 2.2rem;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+      }
+
+      .page__content > h2 {
+        padding-top: 0.35rem;
+      }
+
+      .page__content > h2::before {
+        content: "";
+        position: absolute;
+        top: -0.45rem;
+        left: 0;
+        width: 72px;
+        height: 4px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #14b8a6 0%, #38bdf8 100%);
+      }
+
+      .page__content strong {
+        color: #0f172a;
+      }
+
+      .page__content a {
+        text-underline-offset: 0.16em;
+      }
+
+      .page__content table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 1.5rem 0;
+        overflow: hidden;
+        border-radius: 14px;
+        border: 1px solid #dbe7f5;
+        box-shadow: 0 8px 24px rgba(15, 42, 54, 0.06);
+        background: #ffffff;
+      }
+
+      .page__content th,
+      .page__content td {
+        padding: 0.85rem 0.95rem;
+        border-bottom: 1px solid #e5eef8;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .page__content th {
+        background: linear-gradient(160deg, #f8fbff 0%, #eef7ff 100%);
+        color: #0f2a36;
+      }
+
+      .page__content tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .page__content tbody tr:nth-child(even) td {
+        background: rgba(248, 250, 252, 0.88);
+      }
+
+      .page__content pre,
+      .page__content code.highlighter-rouge,
+      .page__content .highlight {
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(15, 42, 54, 0.08);
+      }
+
+      .page__content code {
+        border-radius: 6px;
+      }
+
+      .page__content .tldr-box,
+      .page__content .insight-box,
+      .page__content .math-box,
+      .page__content .key-takeaways,
+      .page__content .paper-meta,
+      .page__content .reference-box,
+      .page__content .roadmap-box,
+      .page__content .next-posts,
+      .page__content .chapter-card,
+      .page__content .paper-insight {
+        box-shadow: 0 10px 28px rgba(15, 42, 54, 0.07);
       }
 
       .page__content .blog-media,

@@ -19,6 +19,7 @@ toc_label: "Contents"
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure--compact { max-width: 480px; margin-left: auto; margin-right: auto; }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -40,8 +41,10 @@ toc_label: "Contents"
   border-radius: 8px;
   padding: 1rem 1.4rem;
   margin: 1.25rem 0;
-  font-family: monospace;
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 1.02rem;
   text-align: center;
+  line-height: 1.7;
 }
 .insight-box {
   background: #fffbeb;
@@ -55,7 +58,9 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Q (query) is what you're looking for. K (key) is what each token advertises about itself. V (value) is the information that gets retrieved when a match is found. Together they implement a soft, differentiable information lookup.
 </div>
+<div class="blog-figure--compact">
 {% include figure image_path="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Query Key Value attention" caption="Query, Key, Value projections in Multi-Head Attention (Vaswani et al., 2017)" %}
+</div>
 
 
 ## The Analogy: A Smart Library
@@ -75,7 +80,13 @@ This is exactly what attention does — but over tokens in a sequence, and with 
 Each token in the input sequence gets three vector representations learned by the model:
 
 <div class="math-box">
-Q = X · Wᵩ &nbsp;&nbsp;&nbsp; K = X · W_K &nbsp;&nbsp;&nbsp; V = X · W_V
+\[
+Q = XW_Q,
+\qquad
+K = XW_K,
+\qquad
+V = XW_V
+\]
 </div>
 
 Where X is the token representation and W_Q, W_K, W_V are learned weight matrices. The model learns what to advertise (K), what to ask for (Q), and what to share (V) — and these can be different projections of the same token.
@@ -109,7 +120,9 @@ Two reasons:
 <strong>Key insight:</strong> Q and K are both in the same "matching space" (so their dot product is meaningful). V lives in a different "content space" (what actually gets mixed into the output). These are distinct roles, and the model learns each separately.
 </div>
 
+<div class="blog-figure--compact">
 {% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention as lookup over Q, K, V" caption="Q and K decide the lookup weights; V provides the content that gets mixed into the output (Vaswani et al., 2017)." %}
+</div>
 
 ## The Most Common Beginner Confusion
 
@@ -125,7 +138,13 @@ Given a single query token and a sequence of key-value pairs:
 4. **Retrieve:** weighted sum of values → the output for this query token
 
 <div class="math-box">
-output = Σᵢ softmax( q · kᵢ / √d_k ) · vᵢ
+\[
+\mathrm{output}
+=
+\sum_i
+\mathrm{softmax}\!\left(\frac{q \cdot k_i}{\sqrt{d_k}}\right)
+v_i
+\]
 </div>
 
 The result is a blend of all value vectors, weighted by how much each token's key matched the query. Tokens with high relevance contribute more; irrelevant tokens contribute near zero.

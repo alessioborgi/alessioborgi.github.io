@@ -40,8 +40,10 @@ toc_label: "Contents"
   border-radius: 8px;
   padding: 1rem 1.4rem;
   margin: 1.25rem 0;
-  font-family: monospace;
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 1.02rem;
   text-align: center;
+  line-height: 1.7;
 }
 </style>
 
@@ -68,7 +70,9 @@ This is why naive deep networks (without tricks) perform worse than shallower on
 Introduced by He et al. (2015) for CNNs (ResNet), residual connections add the input directly to the output of each sub-layer:
 
 <div class="math-box">
+\[
 y = x + f(x)
+\]
 </div>
 
 Where x is the input, f(x) is whatever the sub-layer computes (attention, FFN, etc.), and y is the output.
@@ -80,7 +84,13 @@ This changes what the sub-layer must learn. Instead of learning a full transform
 In a standard deep network, the gradient of the loss L with respect to an early activation x_l is:
 
 <div class="math-box">
-∂L/∂x_l = ∂L/∂x_L · ∏ᵢ₌ₗᴸ ∂f_i/∂x_{i-1}
+\[
+\frac{\partial L}{\partial x_l}
+=
+\frac{\partial L}{\partial x_L}
+\prod_{i=l}^{L}
+\frac{\partial f_i}{\partial x_{i-1}}
+\]
 </div>
 
 This is a product of L Jacobians — exponentially small or large.
@@ -88,7 +98,11 @@ This is a product of L Jacobians — exponentially small or large.
 With residual connections, y_l = x_l + f(x_l), so:
 
 <div class="math-box">
-∂y_l/∂x_l = 1 + ∂f/∂x_l
+\[
+\frac{\partial y_l}{\partial x_l}
+=
+1 + \frac{\partial f}{\partial x_l}
+\]
 </div>
 
 The gradient always includes the **1** term — a direct, unattenuated path from output to input. Even if ∂f/∂x_l ≈ 0 (a saturated or poorly-conditioned sub-layer), the gradient still flows back as 1.
