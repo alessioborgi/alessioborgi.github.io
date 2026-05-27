@@ -246,6 +246,7 @@ sheaf:
         - { slug: "2025-06-21-temporal-sheaves",       title: "Temporal Sheaves: Extending Sheaf GNNs to Dynamic Graphs",                 published: offline }
         - { slug: "2025-06-22-sheaf-transformers",     title: "Sheaves Meet Attention: Transformer-Inspired Sheaf Models",                published: offline }
         - { slug: "2024-09-12-hetsheaf-paper",         title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves (Borgi et al.)",      published: online }
+        - { slug: "2025-06-26-sheafpool",              title: "SheafPool: Basis-Invariant Graph Readout for Sheaf Neural Networks",        published: online }
 
     applications:
       label: "Applications"
