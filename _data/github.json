@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 56,
+  "total_stars": 57,
   "total_forks": 14,
   "public_repos": 30,
   "followers": 16,
@@ -59,7 +59,7 @@
       "name": "sheaf-mpnn",
       "html_url": "https://github.com/alessioborgi/sheaf-mpnn",
       "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks as Message Passing comprising all variants and a benchmark suite with 14+ Datasets.",
-      "stars": 7,
+      "stars": 8,
       "forks": 1,
       "language": "Jupyter Notebook"
     },
