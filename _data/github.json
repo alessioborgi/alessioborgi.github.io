@@ -1,7 +1,7 @@
 {
   "username": "alessioborgi",
-  "total_stars": 54,
-  "total_forks": 13,
+  "total_stars": 56,
+  "total_forks": 14,
   "public_repos": 30,
   "followers": 16,
   "top_languages": [
@@ -56,20 +56,20 @@
       "language": "C++"
     },
     {
+      "name": "sheaf-mpnn",
+      "html_url": "https://github.com/alessioborgi/sheaf-mpnn",
+      "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks as Message Passing comprising all variants and a benchmark suite with 14+ Datasets.",
+      "stars": 7,
+      "forks": 1,
+      "language": "Jupyter Notebook"
+    },
+    {
       "name": "BioHeat-PINNs",
       "html_url": "https://github.com/alessioborgi/BioHeat-PINNs",
       "description": " Improving hyperthermia treatment by controlling temperature distribution in both 1D and 2D domains and thermal energy applied to cutaneous and subcutaneous tissues, through Bio-Heat equation with Physics-Informed Neural Networks (PINNs).",
       "stars": 7,
       "forks": 1,
       "language": "Mathematica"
-    },
-    {
-      "name": "sheaf-mpnn",
-      "html_url": "https://github.com/alessioborgi/sheaf-mpnn",
-      "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks as Message Passing comprising all variants and a benchmark suite with 14+ Datasets.",
-      "stars": 5,
-      "forks": 0,
-      "language": "Jupyter Notebook"
     },
     {
       "name": "RealTime-VLM",
