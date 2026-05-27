@@ -90,7 +90,7 @@
     {
       "name": "sheaf-mpnn",
       "html_url": "https://github.com/alessioborgi/sheaf-mpnn",
-      "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks comprising all variants and a benchmark suite with 20+ Datasets.",
+      "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks as Message Passing comprising all variants and a benchmark suite with 14+ Datasets.",
       "stars": 2,
       "forks": 0,
       "language": "Jupyter Notebook"
