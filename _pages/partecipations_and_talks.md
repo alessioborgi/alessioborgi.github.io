@@ -218,23 +218,6 @@ author_profile: true
         </div>
       </div>
 
-      <!-- MMLW 2025 -->
-      <div class="pt-item">
-        <div class="pt-dot pt-dot--purple"><span></span></div>
-        <div class="pt-content">
-          <div class="pt-period pt-period--purple">November 2025</div>
-          <div class="pt-title"><a href="https://workshops.eeml.eu/" target="_blank" rel="noopener">MMLW 2025 — Montenegrin Machine Learning Workshop</a></div>
-          <div class="pt-org">🇲🇪 Podgorica, Montenegro &nbsp;·&nbsp; EEML Workshops / MAIA</div>
-          <div class="pt-body">
-            <p>Participated in the one-day Montenegrin Machine Learning Workshop, a satellite event of the EEML summer school series focused on bringing top-tier AI talks and community building to Eastern Europe.</p>
-          </div>
-          <div class="pt-badges">
-            <span class="pt-badge--purple pt-badge">EEML Workshop</span>
-            <span class="pt-badge--blue pt-badge">ML Community</span>
-          </div>
-        </div>
-      </div>
-
       <!-- SEIO School -->
       <div class="pt-item">
         <div class="pt-dot"><span></span></div>
@@ -250,6 +233,23 @@ author_profile: true
             <span class="pt-badge">Transportation Networks</span>
             <span class="pt-badge--blue pt-badge">Workshop Talk</span>
             <span class="pt-badge">Optimisation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MMLW 2025 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--purple"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--purple">November 2025</div>
+          <div class="pt-title"><a href="https://workshops.eeml.eu/" target="_blank" rel="noopener">MMLW 2025 — Montenegrin Machine Learning Workshop</a></div>
+          <div class="pt-org">🇲🇪 Podgorica, Montenegro &nbsp;·&nbsp; EEML Workshops / MAIA</div>
+          <div class="pt-body">
+            <p>Participated in the one-day Montenegrin Machine Learning Workshop, a satellite event of the EEML summer school series focused on bringing top-tier AI talks and community building to Eastern Europe.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--purple pt-badge">EEML Workshop</span>
+            <span class="pt-badge--blue pt-badge">ML Community</span>
           </div>
         </div>
       </div>
