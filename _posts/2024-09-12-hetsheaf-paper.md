@@ -91,8 +91,8 @@ HetSheaf makes two changes:
 
 <div class="blog-figure">
 <figure>
-<img src="https://arxiv.org/html/2409.08036/2409.08036v3/x1.png" alt="HetSheaf framework overview: conventional HGNNs vs HetSheaf">
-<figcaption>Figure 1 — Conventional HGNNs encode heterogeneity in the architecture (separate modules per type). HetSheaf encodes it in the sheaf data structure through type-aware stalks and restriction maps, enabling a single unified propagation rule.</figcaption>
+<img src="/images/blog/papers/hetsheaf-overview.png" alt="HetSheaf framework overview comparing architecture-level heterogeneity with sheaf-level heterogeneity">
+<figcaption>Figure 1 — HetSheaf’s main overview contrasts the standard approach of baking heterogeneity into the architecture with the sheaf-based alternative: node and edge types are absorbed directly into local stalk spaces and restriction maps, so the propagation rule itself stays unified and geometry-aware.</figcaption>
 </figure>
 </div>
 
@@ -102,8 +102,8 @@ The restriction maps can be instantiated in different ways, giving a family of *
 
 <div class="blog-figure">
 <figure>
-<img src="https://arxiv.org/html/2409.08036/2409.08036v3/x2.png" alt="Heterogeneous Sheaf Predictor variants">
-<figcaption>Figure 2 — The family of Heterogeneous Sheaf Predictors. More expressive variants condition restriction maps on richer combinations of node features, node types, and edge types.</figcaption>
+<img src="/images/blog/papers/hetsheaf-predictors.png" alt="Heterogeneous Sheaf Predictor variants including Sheaf-NSD, ensemble, NE, EE, TE, NT, ET, and types">
+<figcaption>Figure 2 — The Heterogeneous Sheaf Predictor family shows how expressive power increases as restriction maps are conditioned on richer typed context. The variants progressively inject node-type functions, edge-type functions, or both, making it clear that HetSheaf is a framework for typed local geometry rather than one fixed predictor.</figcaption>
 </figure>
 </div>
 
@@ -115,8 +115,8 @@ For graph classification, standard pooling (mean/sum) over sheaf node representa
 
 <div class="blog-figure">
 <figure>
-<img src="https://arxiv.org/html/2409.08036/2409.08036v3/x3.png" alt="SheafPool architecture">
-<figcaption>Figure 3 — SheafPool maps node stalk representations to a canonical space before aggregation, making graph-level readout invariant to local basis transformations. This enables up to 42pp higher F1 on graph classification compared to naive mean pooling.</figcaption>
+<img src="/images/blog/papers/hetsheaf-sheafpool.png" alt="SheafPool architecture with whitening, anchor-guided alignment, invariant attention weights, stalk pooling, and invariant graph feature extraction">
+<figcaption>Figure 3 — SheafPool solves the core graph-level readout problem step by step: whiten each stalk, align residual orientations with a shared anchor frame, compute invariant attention weights, pool aligned stalks into a receive-only token, and finally extract graph features through channel-wise invariant energies. This is what makes graph classification well-defined under local basis changes.</figcaption>
 </figure>
 </div>
 

@@ -114,17 +114,16 @@ This gives:
 - **No SVD** needed: the recurrence only requires sparse matrix-vector products.
 - **Stability** via convex mixtures (coefficients sum to 1) + spectral rescaling to [−1, 1] + residual/gated paths.
 
-<div class="paper-insight">
-  <h3>Figure 1 — The Core PolyNSD Layer</h3>
-  <p>The paper’s central diagram shows a single layer built around a Chebyshev recurrence on the normalised sheaf Laplacian. The key point is not just speed: the recurrence gives a controlled spectral filter, while the residual and gating pieces keep optimisation stable instead of letting deep sheaf propagation drift numerically.</p>
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/polynsd-architecture.png" alt="PolyNSD architecture showing lifting, sheaf Laplacian construction, spectral rescaling, Chebyshev polynomial evaluation, and gated residual update">
+<figcaption>Figure 1 — The PolyNSD pipeline starts by lifting node features into stalk spaces, learns restriction maps to build the sheaf Laplacian, rescales the spectrum to a stable range, and then applies a Chebyshev polynomial filter with a gated residual correction. The important point is that diffusion is no longer a fragile repeated operator: it becomes a controlled spectral module with explicit receptive field and better numerical behaviour.</figcaption>
+</figure>
 </div>
 
 ## Architecture Overview
 
-<div class="paper-insight">
-  <h3>Figure 2 — End-to-End Pipeline</h3>
-  <p>The full architecture is deliberately clean. Node features are lifted into stalk spaces, diffusion is performed through polynomial filtering on the sheaf Laplacian, and the output head reads the result back for prediction. That simplicity is part of the contribution: the model becomes easier to reason about than earlier sheaf pipelines with heavier normalisation machinery.</p>
-</div>
+The full architecture is deliberately clean. Node features are lifted into stalk spaces, diffusion is performed through polynomial filtering on the sheaf Laplacian, and the output head reads the result back for prediction. That simplicity is part of the contribution: the model becomes easier to reason about than earlier sheaf pipelines with heavier normalisation machinery.
 
 ### Diagonal Restriction Maps
 
@@ -140,9 +139,25 @@ This is one of the paper's most useful empirical findings. Earlier sheaf models 
 
 ## Results
 
-<div class="paper-insight">
-  <h3>Figure 3 — Accuracy vs. Stalk Dimension</h3>
-  <p>The benchmark plot makes the message concrete: PolyNSD stays strong across stalk dimensions, while standard NSD degrades as the dimension grows and the numerics become less forgiving. The surprising result is that the best regime is often the small, cheap one: diagonal maps with modest stalk sizes.</p>
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/polynsd-minesweeper-influence.jpg" alt="Influence decay versus hop distance on Minesweeper comparing NSD and PolyNSD variants">
+<figcaption>Figure 2 — On Minesweeper, the influence-decay plot shows the mechanism behind PolyNSD’s stability: polynomial variants retain meaningful medium-range signal for longer, while the standard NSD curves collapse much faster as hop distance grows. This is exactly what you want from a sheaf model that should mix information beyond the immediate neighbourhood without becoming numerically brittle.</figcaption>
+</figure>
+</div>
+
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/polynsd-roman-empire-influence.jpg" alt="Influence decay versus hop distance on Roman Empire comparing NSD and PolyNSD variants">
+<figcaption>Figure 3 — The Roman Empire benchmark tells a similar story in a heterophilic regime: PolyNSD keeps the long-range influence profile substantially flatter, which means information can still travel across structurally distant but label-relevant nodes. That matters because heterophily is exactly where overly local message passing tends to fail.</figcaption>
+</figure>
+</div>
+
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/polynsd-amazon-ratings-influence.jpg" alt="Influence decay versus hop distance on Amazon Ratings comparing NSD and PolyNSD variants">
+<figcaption>Figure 4 — On Amazon Ratings, the polynomial filters again preserve signal over larger hop distances than their NSD counterparts. Read these curves as a frequency-domain sanity check: the learned filter is not just more accurate, it is shaping propagation in a way that better matches the graph’s long-range structure.</figcaption>
+</figure>
 </div>
 
 Key results vs. NSD and spectral GNN baselines:

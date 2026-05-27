@@ -116,9 +116,11 @@ The decoupling is critical: the query gate controls *forgetting* (global distanc
 
 If the bias were only query-dependent, the model could suppress distance but would have no mechanism to rescue rare important tokens. If it were only key-dependent, salient keys could be marked, but irrelevant long-range attention would still remain too diffuse. The product structure gives both effects at once: broad contraction plus selective preservation.
 
-<div class="paper-insight">
-  <h3>Figure 1 — Mechanism Overview</h3>
-  <p>GAPE adds a factored logit bias after the rotary dot-product. The query gate contracts irrelevant long-range context, while the key gate protects salient distant tokens. The important design choice is that RoPE itself is left untouched: geometry stays positional, gating stays content-aware.</p>
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/gape-mechanism.png" alt="GAPE mechanism showing query-gate controlled mask strength and protected landmark tokens">
+<figcaption>Figure 1 — The core GAPE mechanism is easiest to read as a selective context controller. Larger query-gate values shrink the effective usable context by pushing down unprotected distant tokens, while protected landmarks remain recoverable through the key-side protection term. The key design choice is visible directly in the figure: RoPE’s geometry is untouched, and the intervention happens only through a learned content-aware logit mask.</figcaption>
+</figure>
 </div>
 
 ## Theoretical Guarantee
@@ -131,25 +133,52 @@ The paper proves that protected tokens (high *g_k* value) remain accessible rega
 
 The Needle-in-a-Haystack (NIAH) benchmark places a critical fact (the "needle") at various positions in a long context and asks the model to retrieve it. GAPE consistently places sharper attention on the needle token at all context lengths and needle positions, even at 4× training context length.
 
-<div class="paper-insight">
-  <h3>Figure 2 — NIAH Retrieval</h3>
-  <p>On Needle-in-a-Haystack retrieval, the paper shows that GAPE keeps recall high at 1×, 2×, and 4× training context. The RoPE baseline progressively loses the needle as the context grows, while GAPE keeps the attention mass anchored on the relevant token.</p>
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/gape-needle-close-entropy.png" alt="Attention entropy for close-needle retrieval across context lengths with and without GAPE">
+<figcaption>Figure 2 — When the needle is relatively close, GAPE already lowers average attention entropy for the strongest positional schemes. Lower entropy here means attention is less diffuse and more concentrated on the relevant evidence, which is exactly the behaviour you want even before the retrieval task becomes maximally hard.</figcaption>
+</figure>
+</div>
+
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/gape-needle-far-entropy.png" alt="Attention entropy for far-needle retrieval across context lengths with and without GAPE">
+<figcaption>Figure 3 — The gap becomes more meaningful when the needle is far away. As context length grows, the GAPE variants keep entropy systematically lower than their ungated counterparts, showing that the method is not merely preserving long-range access in theory: it is actively preventing attention from diffusing across distractors in the hard retrieval regime.</figcaption>
+</figure>
 </div>
 
 ### Attention Sharpness
 
 The key gate's mechanistic effect is visible directly in the attention maps: GAPE produces sharper, more focused attention patterns compared to the vanilla RoPE baseline.
 
-<div class="paper-insight">
-  <h3>Figure 3 — Attention Sharpness</h3>
-  <p>The mechanistic attention maps are the clearest intuition for the method: vanilla RoPE diffuses attention across the haystack at long range, whereas GAPE sharpens it and keeps the model focused on the useful distant token instead of spreading mass over distractors.</p>
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/gape-mask-layer5-pos.png" alt="Mask strength over positions at layer 5 for different attention heads in GAPE">
+<figcaption>Figure 4 — This layer-5 positional mask plot shows that the heads do not all behave the same way. Some learn aggressively contracting masks, others remain permissive, and a few protect selected regions. That diversity matters: GAPE is not imposing one fixed long-context bias, it is giving each head a way to specialise its own notion of what should be forgotten and what should survive.</figcaption>
+</figure>
 </div>
 
-### OOD Perplexity
+### Gate Dynamics During Training
 
-<div class="paper-insight">
-  <h3>Figure 4 — OOD Perplexity</h3>
-  <p>As context extends beyond the training window, GAPE shows slower perplexity growth than RoPE. That result matters because it says the gain is not just a benchmark trick: the model remains more stable under the exact distribution shift that long-context inference creates.</p>
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/gape-g-evolution.png" alt="Evolution of GAPE mask values by attention head across layers and training steps">
+<figcaption>Figure 5 — The gate evolution curves make the learning dynamics concrete. Useful heads rapidly develop strong mask values and then stabilise, while others remain weak or specialised. In practice this means the model discovers which heads should act as strong context filters rather than requiring that behaviour to be hard-coded.</figcaption>
+</figure>
+</div>
+
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/gape-attention-entropy-by-layer.png" alt="Average attention entropy by layer comparing p-RoPE, RoPE, and p-RoPE with GAPE">
+<figcaption>Figure 6 — Layer-wise entropy confirms the same story from a different angle: adding GAPE to positional schemes yields more concentrated attention in the middle and deeper layers, where long-context selection pressure is strongest. The gain is not uniform, which is precisely why a learned gating mechanism is useful: different layers need different amounts of forgetting.</figcaption>
+</figure>
+</div>
+
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/papers/gape-g-and-entropy-by-layer.png" alt="Average gate magnitude and average attention entropy by layer in GAPE">
+<figcaption>Figure 7 — This summary plot links the mechanism to the outcome. Layers with stronger average gating tend to be the layers where entropy is driven down the most, tying the learned gate magnitude directly to sharper attention. It is a compact sanity check that the gate is not just present, but causally aligned with the behaviour the paper claims.</figcaption>
+</figure>
 </div>
 
 ## Practical Interpretation
