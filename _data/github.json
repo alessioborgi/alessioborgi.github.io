@@ -1,18 +1,18 @@
 {
   "username": "alessioborgi",
-  "total_stars": 49,
+  "total_stars": 51,
   "total_forks": 13,
-  "public_repos": 29,
+  "public_repos": 30,
   "followers": 16,
   "top_languages": [
     {
       "name": "Jupyter Notebook",
-      "bytes": 599929401,
+      "bytes": 601579049,
       "percent": 95.1
     },
     {
       "name": "Python",
-      "bytes": 27714794,
+      "bytes": 27999635,
       "percent": 4.4
     },
     {
@@ -88,6 +88,14 @@
       "language": "C++"
     },
     {
+      "name": "sheaf-mpnn",
+      "html_url": "https://github.com/alessioborgi/sheaf-mpnn",
+      "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks comprising all variants and a benchmark suite with 20+ Datasets.",
+      "stars": 2,
+      "forks": 0,
+      "language": "Jupyter Notebook"
+    },
+    {
       "name": "Z-SASLM",
       "html_url": "https://github.com/alessioborgi/Z-SASLM",
       "description": "[CVPR 2025]  Z-SASLM is a zero-shot framework for multi-style image synthesis leveraging Spherical Linear Interpolation (SLI) to achieve smooth, coherent blending\u2014without any fine-tuning.",
@@ -134,14 +142,6 @@
       "stars": 1,
       "forks": 2,
       "language": "Python"
-    },
-    {
-      "name": "Clustering-Deepening",
-      "html_url": "https://github.com/alessioborgi/Clustering-Deepening",
-      "description": "An in-depth exploration of clustering algorithms and techniques in machine learning, with applications focus on Object Tracking and Image Segmentation.",
-      "stars": 1,
-      "forks": 1,
-      "language": "Jupyter Notebook"
     }
   ]
 }
