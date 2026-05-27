@@ -640,7 +640,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
   <div class="ab-section__bar"></div>
 </div>
 
-{% assign places = site.data.map_places | default: [] %}
+{% assign places = site.data.map_places %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <div id="world-map"></div>
 <div class="map-legend">

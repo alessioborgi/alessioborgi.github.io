@@ -71,7 +71,7 @@ redirect_from:
   }
 </style>
 
-{% assign linkedin_posts = site.data.linkedin_posts | default: [] %}
+{% assign linkedin_posts = site.data.linkedin_posts %}
 {% if linkedin_posts.size > 0 %}
   <h2 id="linkedin-posts" class="archive__subtitle">LinkedIn posts</h2>
   <div class="linkedin-grid">
