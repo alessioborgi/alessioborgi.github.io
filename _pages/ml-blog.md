@@ -1122,6 +1122,16 @@ document.addEventListener('DOMContentLoaded', function () {
     return ordered;
   }
 
+  function getOrderedSectionSlugs(bookKey, sectionKey) {
+    var book = mlBlogCatalog[bookKey];
+    if (!book || !book.sections || !book.sections[sectionKey]) return [];
+    return (book.sections[sectionKey].posts || []).filter(function (entry) {
+      return entry && entry.published === 'online';
+    }).map(function (entry) {
+      return entry.slug;
+    });
+  }
+
   function injectChapterBadge(card, number) {
     if (!card || !number || card.querySelector('.chapter-number-badge')) return;
     var badge = document.createElement('span');
@@ -1196,6 +1206,30 @@ document.addEventListener('DOMContentLoaded', function () {
     ordered.forEach(function (entry, index) {
       if (!entry || !entry.slug || !cardMap[entry.slug]) return;
       injectChapterBadge(cardMap[entry.slug], index + 1);
+    });
+  });
+
+  Array.from(document.querySelectorAll('.blog-book')).forEach(function (book) {
+    var bookKey = book.dataset.book;
+    if (!bookKey) return;
+
+    book.querySelectorAll('.subsection-label').forEach(function (label) {
+      var sectionKey = label.dataset.section;
+      var grid = label.nextElementSibling;
+      if (!sectionKey || !grid || !grid.classList.contains('chapters-grid')) return;
+
+      var orderedSlugs = getOrderedSectionSlugs(bookKey, sectionKey);
+      if (!orderedSlugs.length) return;
+
+      var cardMap = {};
+      Array.from(grid.querySelectorAll('.chapter-card')).forEach(function (card) {
+        var slug = slugFromHref(card.getAttribute('href'));
+        if (slug) cardMap[slug] = card;
+      });
+
+      orderedSlugs.forEach(function (slug) {
+        if (cardMap[slug]) grid.appendChild(cardMap[slug]);
+      });
     });
   });
 
