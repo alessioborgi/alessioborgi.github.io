@@ -22,7 +22,7 @@ toc_label: "Contents"
 .blog-figure--compact img { width: min(100%, 500px); }
 .blog-figure--tiny img { width: min(100%, 250px); }
 .blog-figure--figure1 img {
-  width: min(100%, 100px);
+  width: 350px;
 }
 .paper-preview img { width: min(100%, 430px); }
 .tldr-box {
@@ -242,7 +242,7 @@ Transformers won not because attention is mathematically elegant, but because th
 
 That combination made Transformers less like a one-off NLP model and more like a general-purpose interface between data and computation.
 
-<div class="blog-figure blog-figure--tiny">
+<div class="blog-figure blog-figure--tiny blog-figure--figure1">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_attention_complexity_table.png" alt="Comparison table of self-attention, recurrent, and convolutional layers from Attention Is All You Need">
 <figcaption>Figure 4 — This comparison table captures why the design scaled so well in practice: self-attention keeps the path length between any two tokens at O(1), and unlike recurrent layers it avoids sequential dependence during the main computation. That combination is exactly what made long-range reasoning easier and GPU training far more efficient. Source: [1].</figcaption>
