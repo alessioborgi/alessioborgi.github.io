@@ -187,25 +187,26 @@ author_profile: true
 .ch-time { font-size: .72rem; color: #9ca3af; }
 .chapter-number-badge {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0.65rem;
+  right: 0.65rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2rem;
-  height: 2rem;
-  padding: 0 0.45rem;
+  min-width: 1.65rem;
+  height: 1.65rem;
+  padding: 0 0.3rem;
   border-radius: 999px;
-  background: rgba(15, 42, 54, 0.9);
-  color: #f8fafc;
+  background: rgba(15, 42, 54, 0.78);
+  color: #99f6e4;
   border: 1px solid rgba(255,255,255,0.28);
   box-shadow: 0 10px 22px rgba(15, 42, 54, 0.16);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
 .blog-overview-card .chapter-number-badge {
-  background: rgba(0, 62, 116, 0.9);
+  background: rgba(0, 62, 116, 0.82);
+  color: #dffbff;
 }
 .coming-soon-note {
   border: 1px dashed #bfd4ea;
