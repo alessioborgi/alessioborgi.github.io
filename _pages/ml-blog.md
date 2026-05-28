@@ -1091,12 +1091,27 @@ author_profile: true
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   var mlBlogCatalog = {{ site.data.mlblogposts | jsonify }};
+  var mlBlogPosts = [
+    {% for p in site.posts %}
+    {
+      slug: {{ p.path | split: '/' | last | remove: '.md' | jsonify }},
+      url: {{ p.url | relative_url | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+
+  function normalizePath(href) {
+    if (!href) return null;
+    return href.split('#')[0].split('?')[0].replace(/\/+$/, '');
+  }
 
   function slugFromHref(href) {
-    if (!href) return null;
-    var cleanHref = href.split('#')[0].split('?')[0].replace(/\/+$/, '');
-    var parts = cleanHref.split('/');
-    return parts.length ? parts[parts.length - 1] : null;
+    var normalizedHref = normalizePath(href);
+    if (!normalizedHref) return null;
+    var match = mlBlogPosts.find(function (post) {
+      return normalizePath(post.url) === normalizedHref;
+    });
+    return match ? match.slug : null;
   }
 
   function getOrderedEntries(bookKey) {
