@@ -24,6 +24,12 @@ toc_label: "Contents"
 .blog-figure--figure1 img {
   width: 350px;
 }
+.blog-figure--figure2 img {
+  width: min(100%, 220px);
+}
+.blog-figure--figure3 img {
+  width: min(100%, 240px);
+}
 .paper-preview img { width: min(100%, 430px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
@@ -159,7 +165,7 @@ The 2017 paper *Attention Is All You Need* (Vaswani et al.) asked: what if you l
 
 That's **self-attention**. Each token computes a score with every other token, learns which ones are relevant, and mixes their information together — in one parallel step. No sequential dependency. No forgetting.
 
-<div class="blog-figure blog-figure--tiny blog-figure--figure1">
+<div class="blog-figure blog-figure--tiny blog-figure--figure2">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention pipeline from Attention Is All You Need">
 <figcaption>Figure 2 — Scaled dot-product attention is the core computation inside the Transformer: queries score keys, scaling keeps those scores numerically well behaved, softmax turns them into weights, and values are mixed accordingly. Source: [1].</figcaption>
@@ -191,7 +197,7 @@ Because attention sees all tokens simultaneously, the model would otherwise have
 ### 3. Multi-Head Self-Attention
 This is the heart of the Transformer. Each token computes three vectors — a **Query** (what I'm looking for), a **Key** (what I offer), and a **Value** (what I'll contribute). The model computes pairwise relevance scores, normalises them with a softmax, then mixes the value vectors accordingly. Running this process in parallel across *h* heads lets the model capture different types of relationships simultaneously.
 
-<div class="blog-figure blog-figure--tiny blog-figure--figure1">
+<div class="blog-figure blog-figure--tiny blog-figure--figure3">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Multi-head attention architecture from Attention Is All You Need">
 <figcaption>Figure 3 — Multi-head attention repeats the same attention computation in parallel with different learned projections. Afterward, the heads are concatenated and remixed through one final linear layer, which lets the model combine several relational views of the same sequence at once. Source: [1].</figcaption>
