@@ -21,13 +21,13 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .blog-figure--compact img { width: min(100%, 500px); }
 .blog-figure--tiny img { width: min(100%, 250px); }
-.blog-figure--figure1 img {
+.page__content .blog-figure--figure1 figure img {
   width: 350px;
 }
-.blog-figure--figure2 img {
+.page__content .blog-figure--figure2 figure img {
   width: min(100%, 220px);
 }
-.blog-figure--figure3 img {
+.page__content .blog-figure--figure3 figure img {
   width: min(100%, 240px);
 }
 .paper-preview img { width: min(100%, 430px); }
