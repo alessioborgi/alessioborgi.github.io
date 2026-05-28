@@ -266,49 +266,107 @@ layout: default
             var target = document.getElementById('ml-blog-next-cta');
             if (!target) return;
 
-            function renderNext(nextPost, subtitle) {
+            function escapeHtml(value) {
+              return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            }
+
+            function renderSingleNext(nextPost, subtitle) {
               if (!nextPost) return;
               target.hidden = false;
               target.innerHTML =
                 '<a class="ml-blog-next-btn" href="' + nextPost.url + '">' +
                 '<span class="ml-blog-next-copy">' +
                 '<span class="ml-blog-next-label">Continue the journey</span>' +
-                '<strong>' + nextPost.title + '</strong>' +
-                '<span class="ml-blog-next-subtitle">' + subtitle + '</span>' +
+                '<strong>' + escapeHtml(nextPost.title) + '</strong>' +
+                '<span class="ml-blog-next-subtitle">' + escapeHtml(subtitle) + '</span>' +
                 '</span>' +
                 '<span class="ml-blog-next-arrow" aria-hidden="true">→</span>' +
                 '</a>';
             }
 
-            if (bookKey && mlBlogCatalog[bookKey]) {
+            function getOrderedBookEntries(bookKey) {
+              if (!bookKey || !mlBlogCatalog[bookKey]) return [];
               var book = mlBlogCatalog[bookKey];
               var ordered = [];
+
               if (Array.isArray(book.overview)) {
                 book.overview.forEach(function (entry) {
-                  if (entry && entry.published === 'online') ordered.push(entry.slug);
+                  if (entry && entry.published === 'online') ordered.push(entry);
                 });
               }
+
               if (book.sections) {
                 Object.keys(book.sections).forEach(function (sectionKey) {
                   var posts = (book.sections[sectionKey] && book.sections[sectionKey].posts) || [];
                   posts.forEach(function (entry) {
-                    if (entry && entry.published === 'online') ordered.push(entry.slug);
+                    if (entry && entry.published === 'online') ordered.push(entry);
                   });
                 });
               }
 
-              var currentIndex = ordered.indexOf(currentSlug);
+              return ordered;
+            }
+
+            function renderBookNav(previousPost, nextPost, currentNumber, totalChapters) {
+              if (!previousPost && !nextPost) return;
+              var cards = [];
+
+              if (previousPost) {
+                cards.push(
+                  '<a class="ml-blog-next-btn is-prev" href="' + previousPost.url + '">' +
+                  '<span class="ml-blog-next-arrow" aria-hidden="true">←</span>' +
+                  '<span class="ml-blog-next-copy">' +
+                  '<span class="ml-blog-next-label">Previous chapter</span>' +
+                  '<strong>' + escapeHtml(previousPost.title) + '</strong>' +
+                  '<span class="ml-blog-next-subtitle">Chapter ' + (currentNumber - 1) + ' of ' + totalChapters + '</span>' +
+                  '</span>' +
+                  '</a>'
+                );
+              }
+
+              if (nextPost) {
+                cards.push(
+                  '<a class="ml-blog-next-btn is-next" href="' + nextPost.url + '">' +
+                  '<span class="ml-blog-next-copy">' +
+                  '<span class="ml-blog-next-label">Continue the journey</span>' +
+                  '<strong>' + escapeHtml(nextPost.title) + '</strong>' +
+                  '<span class="ml-blog-next-subtitle">Chapter ' + (currentNumber + 1) + ' of ' + totalChapters + '</span>' +
+                  '</span>' +
+                  '<span class="ml-blog-next-arrow" aria-hidden="true">→</span>' +
+                  '</a>'
+                );
+              }
+
+              target.hidden = false;
+              target.innerHTML =
+                '<div class="ml-blog-nav-heading">' +
+                '<span class="ml-blog-nav-kicker">Book Navigation</span>' +
+                '<strong>Chapter ' + currentNumber + ' of ' + totalChapters + '</strong>' +
+                '</div>' +
+                '<div class="ml-blog-next-grid' + (cards.length === 1 ? ' is-single' : '') + '">' + cards.join('') + '</div>';
+            }
+
+            if (bookKey && mlBlogCatalog[bookKey]) {
+              var orderedEntries = getOrderedBookEntries(bookKey);
+              var orderedSlugs = orderedEntries.map(function (entry) { return entry.slug; });
+              var currentIndex = orderedSlugs.indexOf(currentSlug);
               if (currentIndex !== -1) {
-                var nextSlug = ordered[currentIndex + 1];
-                if (nextSlug) {
-                  var nextBookPost = allPosts.find(function (post) {
-                    return post.slug === nextSlug;
-                  });
-                  if (nextBookPost) {
-                    renderNext(nextBookPost, 'Next up in this series');
-                    return;
-                  }
-                }
+                var previousSlug = orderedSlugs[currentIndex - 1];
+                var nextSlug = orderedSlugs[currentIndex + 1];
+                var previousBookPost = previousSlug ? allPosts.find(function (post) {
+                  return post.slug === previousSlug;
+                }) : null;
+                var nextBookPost = nextSlug ? allPosts.find(function (post) {
+                  return post.slug === nextSlug;
+                }) : null;
+
+                renderBookNav(previousBookPost, nextBookPost, currentIndex + 1, orderedSlugs.length);
+                return;
               }
             }
 
@@ -336,22 +394,55 @@ layout: default
               });
             }
             if (!nextPost) return;
-            renderNext(nextPost, currentCategory ? ('Next up in ' + currentCategory) : 'Next up on the blog');
+            renderSingleNext(nextPost, currentCategory ? ('Next up in ' + currentCategory) : 'Next up on the blog');
           });
           </script>
           <style>
             .ml-blog-next-cta {
-              display: flex;
-              justify-content: flex-end;
+              display: grid;
+              gap: 1rem;
               margin: 2.5rem 0 0.75rem;
             }
 
+            .ml-blog-nav-heading {
+              display: flex;
+              align-items: baseline;
+              justify-content: space-between;
+              gap: 1rem;
+              flex-wrap: wrap;
+            }
+
+            .ml-blog-nav-kicker {
+              font-size: 0.74rem;
+              letter-spacing: 0.16em;
+              text-transform: uppercase;
+              color: #0f766e;
+              font-weight: 800;
+            }
+
+            .ml-blog-nav-heading strong {
+              color: #0f2a36;
+              font-size: 0.96rem;
+              font-weight: 800;
+            }
+
+            .ml-blog-next-grid {
+              display: grid;
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              gap: 1rem;
+            }
+
+            .ml-blog-next-grid.is-single {
+              grid-template-columns: minmax(0, 680px);
+              justify-content: end;
+            }
+
             .ml-blog-next-btn {
-              display: inline-grid;
+              display: grid;
               grid-template-columns: minmax(0, 1fr) auto;
               align-items: center;
               gap: 1rem;
-              width: min(100%, 680px);
+              width: 100%;
               padding: 1.2rem 1.25rem 1.2rem 1.35rem;
               border-radius: 18px;
               text-decoration: none;
@@ -366,6 +457,14 @@ layout: default
               transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, filter 0.18s ease;
               overflow: hidden;
               position: relative;
+            }
+
+            .ml-blog-next-btn.is-prev {
+              grid-template-columns: auto minmax(0, 1fr);
+              background:
+                radial-gradient(circle at top right, rgba(191, 219, 254, 0.16), transparent 32%),
+                linear-gradient(135deg, #0f2a36 0%, #21496b 52%, #355a87 100%);
+              border-color: rgba(191, 219, 254, 0.22);
             }
 
             .ml-blog-next-btn:hover {
@@ -424,6 +523,11 @@ layout: default
             }
 
             @media (max-width: 720px) {
+              .ml-blog-next-grid,
+              .ml-blog-next-grid.is-single {
+                grid-template-columns: 1fr;
+              }
+
               .ml-blog-next-btn {
                 width: 100%;
                 max-width: none;

@@ -63,6 +63,7 @@ author_profile: true
 
 /* Overview (featured) card */
 .blog-overview-card {
+  position: relative;
   background: linear-gradient(145deg, #e8fbfb 0%, #b0b9f1 100%);
   border: 1px solid #c7d4f2;
   border-radius: 12px;
@@ -151,6 +152,7 @@ author_profile: true
   gap: .85rem;
 }
 .chapter-card {
+  position: relative;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
@@ -183,6 +185,28 @@ author_profile: true
   font-weight: 600;
 }
 .ch-time { font-size: .72rem; color: #9ca3af; }
+.chapter-number-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.45rem;
+  border-radius: 999px;
+  background: rgba(15, 42, 54, 0.9);
+  color: #f8fafc;
+  border: 1px solid rgba(255,255,255,0.28);
+  box-shadow: 0 10px 22px rgba(15, 42, 54, 0.16);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.blog-overview-card .chapter-number-badge {
+  background: rgba(0, 62, 116, 0.9);
+}
 .coming-soon-note {
   border: 1px dashed #bfd4ea;
   background: linear-gradient(145deg, #ffffff 0%, #f3f8ff 100%);
@@ -1068,6 +1092,45 @@ author_profile: true
 document.addEventListener('DOMContentLoaded', function () {
   var mlBlogCatalog = {{ site.data.mlblogposts | jsonify }};
 
+  function slugFromHref(href) {
+    if (!href) return null;
+    var cleanHref = href.split('#')[0].split('?')[0].replace(/\/+$/, '');
+    var parts = cleanHref.split('/');
+    return parts.length ? parts[parts.length - 1] : null;
+  }
+
+  function getOrderedEntries(bookKey) {
+    var book = mlBlogCatalog[bookKey];
+    if (!book) return [];
+    var ordered = [];
+
+    if (Array.isArray(book.overview)) {
+      book.overview.forEach(function (entry) {
+        if (entry && entry.published === 'online') ordered.push(entry);
+      });
+    }
+
+    if (book.sections) {
+      Object.keys(book.sections).forEach(function (sectionKey) {
+        var posts = (book.sections[sectionKey] && book.sections[sectionKey].posts) || [];
+        posts.forEach(function (entry) {
+          if (entry && entry.published === 'online') ordered.push(entry);
+        });
+      });
+    }
+
+    return ordered;
+  }
+
+  function injectChapterBadge(card, number) {
+    if (!card || !number || card.querySelector('.chapter-number-badge')) return;
+    var badge = document.createElement('span');
+    badge.className = 'chapter-number-badge';
+    badge.textContent = number;
+    badge.setAttribute('aria-label', 'Chapter ' + number);
+    card.appendChild(badge);
+  }
+
   function createSoonNote(copy) {
     var note = document.createElement('div');
     note.className = 'coming-soon-note';
@@ -1116,6 +1179,23 @@ document.addEventListener('DOMContentLoaded', function () {
     body.querySelectorAll('.subsection-label').forEach(function (label) {
       if (hasOnlineSection(bookKey, label.dataset.section)) return;
       replaceGridAfterLabel(label, 'This subsection is currently offline and will be republished soon in the same concise, image-rich style.');
+    });
+  });
+
+  Array.from(document.querySelectorAll('.blog-book')).forEach(function (book) {
+    var bookKey = book.dataset.book;
+    var ordered = getOrderedEntries(bookKey);
+    if (!ordered.length) return;
+
+    var cardMap = {};
+    book.querySelectorAll('.blog-overview-card, .chapter-card').forEach(function (card) {
+      var slug = slugFromHref(card.getAttribute('href'));
+      if (slug) cardMap[slug] = card;
+    });
+
+    ordered.forEach(function (entry, index) {
+      if (!entry || !entry.slug || !cardMap[entry.slug]) return;
+      injectChapterBadge(cardMap[entry.slug], index + 1);
     });
   });
 

@@ -20,6 +20,7 @@ toc_label: "Contents"
 .blog-figure img { width: min(100%, 700px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .blog-figure--compact img { width: min(100%, 500px); }
+.blog-figure--tiny img { width: min(100%, 360px); }
 .paper-preview img { width: min(100%, 430px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
@@ -117,7 +118,7 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/papers/vaswani2017-paper.png" alt="First page of the Attention Is All You Need paper" caption="Paper preview — Attention Is All You Need (Vaswani et al., 2017)." %}
 </div>
 
-<div class="blog-figure blog-figure--compact">
+<div class="blog-figure blog-figure--tiny">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Original Transformer encoder-decoder architecture from Attention Is All You Need">
 <figcaption>Figure 1 — The original Transformer diagram is still the best high-level map of the architecture: token embeddings and positional information enter stacked encoder and decoder blocks, while masked self-attention and cross-attention let generation stay autoregressive without losing access to the encoded source sequence. Source: [1].</figcaption>
@@ -155,7 +156,7 @@ The 2017 paper *Attention Is All You Need* (Vaswani et al.) asked: what if you l
 
 That's **self-attention**. Each token computes a score with every other token, learns which ones are relevant, and mixes their information together — in one parallel step. No sequential dependency. No forgetting.
 
-<div class="blog-figure blog-figure--compact">
+<div class="blog-figure blog-figure--tiny">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention pipeline from Attention Is All You Need">
 <figcaption>Figure 2 — Scaled dot-product attention is the core computation inside the Transformer: queries score keys, scaling keeps those scores numerically well behaved, softmax turns them into weights, and values are mixed accordingly. Source: [1].</figcaption>
@@ -187,7 +188,7 @@ Because attention sees all tokens simultaneously, the model would otherwise have
 ### 3. Multi-Head Self-Attention
 This is the heart of the Transformer. Each token computes three vectors — a **Query** (what I'm looking for), a **Key** (what I offer), and a **Value** (what I'll contribute). The model computes pairwise relevance scores, normalises them with a softmax, then mixes the value vectors accordingly. Running this process in parallel across *h* heads lets the model capture different types of relationships simultaneously.
 
-<div class="blog-figure blog-figure--compact">
+<div class="blog-figure blog-figure--tiny">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Multi-head attention architecture from Attention Is All You Need">
 <figcaption>Figure 3 — Multi-head attention repeats the same attention computation in parallel with different learned projections. Afterward, the heads are concatenated and remixed through one final linear layer, which lets the model combine several relational views of the same sequence at once. Source: [1].</figcaption>
@@ -238,7 +239,7 @@ Transformers won not because attention is mathematically elegant, but because th
 
 That combination made Transformers less like a one-off NLP model and more like a general-purpose interface between data and computation.
 
-<div class="blog-figure blog-figure--compact">
+<div class="blog-figure blog-figure--tiny">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_attention_complexity_table.png" alt="Comparison table of self-attention, recurrent, and convolutional layers from Attention Is All You Need">
 <figcaption>Figure 4 — This comparison table captures why the design scaled so well in practice: self-attention keeps the path length between any two tokens at O(1), and unlike recurrent layers it avoids sequential dependence during the main computation. That combination is exactly what made long-range reasoning easier and GPU training far more efficient. Source: [1].</figcaption>
