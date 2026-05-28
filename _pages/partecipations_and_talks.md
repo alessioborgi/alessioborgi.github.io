@@ -187,6 +187,29 @@ author_profile: true
     border-color: rgba(220,38,38,0.25);
     color: #991b1b;
   }
+
+  .pt-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.7rem;
+    padding: 0.45rem 0.82rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0f2a36 0%, #164e63 100%);
+    border: 1px solid rgba(56,193,183,0.28);
+    color: #ecfeff !important;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    box-shadow: 0 8px 18px rgba(15,42,54,0.14);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  }
+  .pt-link-btn:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(15,42,54,0.18);
+    filter: saturate(1.05);
+  }
 </style>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -359,6 +382,41 @@ author_profile: true
             <span class="pt-badge--blue pt-badge">Google Cloud</span>
             <span class="pt-badge">MLOps</span>
             <span class="pt-badge--blue pt-badge">Responsible AI</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CONFERENCES
+     ═══════════════════════════════════════════════════════ -->
+<div class="pt-section">
+  <div class="pt-section__hd">
+    <span class="pt-bar"></span>
+    Conferences Attended
+  </div>
+  <div class="pt-section__body">
+    <div class="pt-timeline">
+
+      <!-- CVPR 2025 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--purple"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--purple">June 2025</div>
+          <div class="pt-title"><a href="https://cvpr.thecvf.com/Conferences/2025" target="_blank" rel="noopener">CVPR 2025 — IEEE/CVF Conference on Computer Vision and Pattern Recognition</a></div>
+          <div class="pt-org">🇺🇸 Nashville, Tennessee, United States &nbsp;·&nbsp; Music City Center</div>
+          <div class="pt-body">
+            <p>Attended <strong>CVPR 2025</strong>, one of the leading international conferences in computer vision and machine learning.</p>
+            <p>Presented the paper <strong>Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation</strong> at the <strong>CVEU Workshop</strong> held in conjunction with CVPR 2025.</p>
+          </div>
+          <a class="pt-link-btn" href="/blog/research/zsaslm-paper/">📘 Read the ML Blog Companion</a>
+          <div class="pt-badges">
+            <span class="pt-badge--purple pt-badge">CVPR 2025</span>
+            <span class="pt-badge--blue pt-badge">CVEU Workshop</span>
+            <span class="pt-badge">Paper Presentation</span>
           </div>
         </div>
       </div>
