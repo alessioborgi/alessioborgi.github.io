@@ -20,7 +20,7 @@ toc_label: "Contents"
 .blog-figure img { width: min(100%, 700px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 .blog-figure--compact img { width: min(100%, 500px); }
-.blog-figure--tiny img { width: min(100%, 360px); }
+.blog-figure--tiny img { width: min(100%, 250px); }
 .paper-preview img { width: min(100%, 430px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
