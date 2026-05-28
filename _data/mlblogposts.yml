@@ -26,14 +26,14 @@ transformers:
       label: "Core Components"
       posts:
         - { slug: "2024-01-02-attention-mechanism",           title: "Self-Attention: Teaching Machines to Focus",                    published: online }
-        - { slug: "2024-03-01-scaled-dot-product-attention",  title: "Scaled Dot-Product Attention: Why the √d Matters",             published: online }
         - { slug: "2024-03-02-qkv-intuition",                 title: "Query, Key, Value: The Intuition Behind QKV",                   published: online }
+        - { slug: "2024-03-01-scaled-dot-product-attention",  title: "Scaled Dot-Product Attention: Why the √d Matters",             published: online }
         - { slug: "2024-01-03-multi-head-attention",          title: "Multi-Head Attention: Many Eyes on the Data",                   published: online }
         - { slug: "2024-03-03-attention-masks",               title: "Attention Masks: Causal, Padding, and Bidirectional",           published: online }
         - { slug: "2024-03-04-cross-attention",               title: "Cross-Attention: How Models Attend to Another Sequence",        published: online }
         - { slug: "2024-03-05-encoder-decoder-transformers",  title: "Encoder vs Decoder vs Encoder-Decoder Transformers",           published: online }
-        - { slug: "2024-03-07-residual-connections",          title: "Residual Connections: Why Transformers Can Be Deep",            published: online }
         - { slug: "2024-03-06-layer-normalization",           title: "Layer Normalization in Transformers",                           published: online }
+        - { slug: "2024-03-07-residual-connections",          title: "Residual Connections: Why Transformers Can Be Deep",            published: online }
         - { slug: "2024-03-08-feed-forward-networks",         title: "Feed-Forward Networks: The Forgotten Half of Transformers",     published: online }
         - { slug: "2024-03-09-transformer-block",             title: "The Transformer Block: Putting It All Together",                published: online }
 

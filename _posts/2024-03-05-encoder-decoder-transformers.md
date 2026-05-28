@@ -48,7 +48,7 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Encoder-only models (BERT) read everything bidirectionally — great for understanding. Decoder-only models (GPT) generate left-to-right — great for generation. Encoder-decoder models (T5) encode the input fully, then generate the output — great for transformation tasks like translation and summarisation.
 </div>
-{% include figure image_path="/images/blog/transformers/slides/slide-43-encoder-decoder.png" alt="Slide showing the full encoder-decoder architecture" caption="The encoder-decoder pattern separates full-input encoding from autoregressive decoding, with cross-attention connecting the two streams. Source: [2]." %}
+{% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Original Transformer encoder-decoder architecture from Attention Is All You Need" caption="The original Transformer diagram is still the clearest high-level view of the encoder-decoder design: the encoder builds a full representation of the input, while the decoder combines masked self-attention with cross-attention to generate the output autoregressively. Source: [1]." %}
 
 <div class="insight-box">
 <strong>Rule of thumb:</strong> encoder-only models are best at understanding, decoder-only at generating, encoder-decoder at transforming one sequence into another.
