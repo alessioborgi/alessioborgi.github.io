@@ -187,26 +187,35 @@ author_profile: true
 .ch-time { font-size: .72rem; color: #9ca3af; }
 .chapter-number-badge {
   position: absolute;
-  top: 0.65rem;
-  right: 0.65rem;
+  top: 0.78rem;
+  right: 0.8rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.65rem;
-  height: 1.65rem;
-  padding: 0 0.3rem;
-  border-radius: 999px;
-  background: rgba(15, 42, 54, 0.78);
-  color: #99f6e4;
-  border: 1px solid rgba(255,255,255,0.28);
-  box-shadow: 0 10px 22px rgba(15, 42, 54, 0.16);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  padding: 0 0.45rem;
+  border-radius: 0.8rem;
+  background:
+    radial-gradient(circle at top left, rgba(153,246,228,0.28), transparent 45%),
+    linear-gradient(135deg, rgba(15,42,54,0.96) 0%, rgba(25,77,99,0.92) 100%);
+  color: #d9fffb;
+  border: 1px solid rgba(153,246,228,0.26);
+  box-shadow:
+    0 10px 20px rgba(15, 42, 54, 0.14),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .blog-overview-card .chapter-number-badge {
-  background: rgba(0, 62, 116, 0.82);
-  color: #dffbff;
+  background:
+    radial-gradient(circle at top left, rgba(186,230,253,0.26), transparent 45%),
+    linear-gradient(135deg, rgba(0,62,116,0.97) 0%, rgba(30,64,175,0.9) 100%);
+  color: #effbff;
+  border-color: rgba(191,219,254,0.28);
 }
 .coming-soon-note {
   border: 1px dashed #bfd4ea;
@@ -1152,7 +1161,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!card || !number || card.querySelector('.chapter-number-badge')) return;
     var badge = document.createElement('span');
     badge.className = 'chapter-number-badge';
-    badge.textContent = number;
+    badge.textContent = String(number).padStart(2, '0');
     badge.setAttribute('aria-label', 'Chapter ' + number);
     card.appendChild(badge);
   }

@@ -72,7 +72,7 @@ author:
   steam            : # Username
   telegram         : # URL
   tumblr           : # Username
-  twitter          : # Username for X / Twitter
+  twitter          : alessioborgi17 # Username for X / Twitter
   vine             : # Username
   weibo            : # Username
   wikipedia        : # Username
@@ -151,6 +151,10 @@ social:
   type                   : # Person or Organization (defaults to Person)
   name                   : # If the user or organization name differs from the site's name
   links: # An array of links to social media profiles
+    - https://github.com/alessioborgi
+    - https://www.linkedin.com/in/alessio-borgi/
+    - https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it
+    - https://x.com/alessioborgi17
 
 
 # Analytics

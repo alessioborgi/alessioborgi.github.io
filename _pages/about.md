@@ -591,6 +591,9 @@ redirect_from:
         <a class="ab-btn ab-btn--glass" href="https://github.com/alessioborgi" target="_blank" rel="noopener">
           <i class="fab fa-github" aria-hidden="true"></i> GitHub
         </a>
+        <a class="ab-btn ab-btn--glass" href="https://x.com/alessioborgi17" target="_blank" rel="noopener">
+          <i class="fab fa-x-twitter" aria-hidden="true"></i> X
+        </a>
         <a class="ab-btn ab-btn--glass" href="https://scholar.google.com/citations?user=Ds4ktdkAAAAJ&hl=it" target="_blank" rel="noopener">
           <i class="ai ai-google-scholar" aria-hidden="true"></i> Scholar
         </a>
@@ -956,6 +959,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
   "url": "https://alessioborgi.github.io/",
   "sameAs": [
     "https://github.com/alessioborgi",
+    "https://x.com/alessioborgi17",
     "https://scholar.google.com/citations?user=Ds4ktdkAAAAJ"
   ],
   "email": "mailto:borgialessio01@gmail.com",
