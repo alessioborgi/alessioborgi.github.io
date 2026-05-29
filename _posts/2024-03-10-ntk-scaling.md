@@ -19,6 +19,17 @@ toc_label: "Contents"
 <style>
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.paper-preview img { width: min(100%, 560px); }
+.paper-meta {
+  background: linear-gradient(135deg,#f8fafc,#eef6ff);
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 1rem 1.15rem;
+  margin: 1rem 0 1.35rem;
+  font-size: .96rem;
+  line-height: 1.55;
+}
+.paper-meta strong { color: #003E74; }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
   border-left: 4px solid #0d9488;
@@ -47,6 +58,17 @@ toc_label: "Contents"
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> RoPE encodes position through rotation frequencies θᵢ. When you extend context beyond training length, high-frequency dimensions fail (they have seen all their cycles). NTK-Aware Scaling replaces the base (10000) with a larger value, spreading frequencies out so all dimensions remain useful at longer contexts — often with no additional training.
+</div>
+
+<div class="paper-meta">
+  <strong>Paper:</strong> "Scaling Laws of RoPE-based Extrapolation" &nbsp;·&nbsp; arXiv:2310.05209<br>
+  <strong>Authors:</strong> Xiaoran Liu, Hang Yan, Shuo Zhang, Chenxin An, Xipeng Qiu, Dahua Lin<br>
+  <strong>Venue:</strong> ICLR 2024 &nbsp;·&nbsp;
+  <a href="https://arxiv.org/abs/2310.05209" target="_blank" rel="noopener">📄 Read the paper</a>
+</div>
+
+<div class="paper-preview">
+{% include figure image_path="/images/blog/papers/ntk-scaling-paper.png" alt="First page of the NTK scaling paper" caption="Paper preview — Scaling Laws of RoPE-based Extrapolation (Liu et al., 2024)." %}
 </div>
 
 ## The Context Extension Problem

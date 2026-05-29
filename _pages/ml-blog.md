@@ -326,7 +326,7 @@ author_profile: true
 
 <div class="blog-library-note">
   <span class="blog-library-chip blog-library-chip--gold">★ My papers</span>
-  <span><strong>Gold cards</strong> mark posts directly tied to my own research papers and companion explainers, such as <strong>GAPE</strong>, <strong>Z-SASLM</strong>, <strong>PolyNSD</strong>, <strong>HetSheaf</strong>, and <strong>SheafPool</strong>.</span>
+  <span><strong>Gold cards</strong> mark posts directly tied to my own research papers and companion explainers.</span>
 </div>
 
 {% assign transformer_posts = site.posts | where: "book", "transformers"         | sort: "date" %}

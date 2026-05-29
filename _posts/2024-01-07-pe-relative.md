@@ -20,8 +20,18 @@ toc_label: "Contents"
 .blog-figure { margin: 1.5rem 0; text-align: center; }
 .blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
+.paper-preview img { width: min(100%, 620px); }
 .tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
 .tldr-box strong { color: #0f2a36; }
+.paper-meta {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.93rem;
+}
+.paper-meta strong { color: #003E74; }
 .insight-box { background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 8px; padding: .95rem 1.1rem; margin: 1.25rem 0; }
 .key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
 .key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
@@ -32,6 +42,17 @@ toc_label: "Contents"
 
 <div class="tldr-box">
   <strong>TL;DR:</strong> Relative PE encodes how far apart two tokens are rather than where each one sits. Shaw et al. (2018) add learnable distance vectors to the attention computation; T5 adds a simpler learned scalar bias per distance bucket. Both approaches generalise better than absolute PE.
+</div>
+
+<div class="paper-meta">
+  <strong>Paper:</strong> "Self-Attention with Relative Position Representations" &nbsp;·&nbsp; arXiv:1803.02155<br>
+  <strong>Authors:</strong> Peter Shaw, Jakob Uszkoreit, Ashish Vaswani<br>
+  <strong>Venue:</strong> NAACL 2018 &nbsp;·&nbsp;
+  <a href="https://arxiv.org/abs/1803.02155" target="_blank" rel="noopener">📄 Read the paper</a>
+</div>
+
+<div class="paper-preview">
+{% include figure image_path="/images/blog/papers/relative-pe-paper.png" alt="First page of the Self-Attention with Relative Position Representations paper" caption="Paper preview — Self-Attention with Relative Position Representations (Shaw et al., 2018)." %}
 </div>
 {% include figure image_path="/images/blog/transformers/raffel2020_t5.png" alt="T5 and relative positional bias" caption="T5 popularised a lightweight learned relative attention bias instead of absolute positional vectors (Raffel et al., 2020)." %}
 
