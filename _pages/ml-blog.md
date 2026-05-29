@@ -12,6 +12,35 @@ author_profile: true
   font-size: 1.05rem;
   line-height: 1.65;
 }
+.blog-library-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin: -0.75rem 0 1.8rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #fffdf4 0%, #f8fbff 100%);
+  border: 1px solid rgba(217, 119, 6, 0.18);
+  color: #4b5563;
+  font-size: 0.94rem;
+}
+.blog-library-note strong { color: #0f2a36; }
+.blog-library-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.24rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.blog-library-chip--gold {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(251, 191, 36, 0.22) 100%);
+  border: 1px solid rgba(217, 119, 6, 0.28);
+  color: #92400e;
+}
 .blog-book { margin-bottom: 3.5rem; }
 
 /* Book banner */
@@ -171,6 +200,54 @@ author_profile: true
   transform: translateY(-2px);
   text-decoration: none;
 }
+.blog-overview-card.is-authored-paper,
+.chapter-card.is-authored-paper {
+  background: linear-gradient(145deg, #fff9ea 0%, #fff1c7 100%);
+  border-color: rgba(217,119,6,0.24);
+  box-shadow: 0 8px 20px rgba(180, 83, 9, 0.1);
+}
+.blog-overview-card.is-authored-paper:hover,
+.chapter-card.is-authored-paper:hover {
+  border-color: rgba(217,119,6,0.4);
+  box-shadow: 0 12px 24px rgba(180, 83, 9, 0.14);
+}
+.blog-overview-card.is-authored-paper .overview-label {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+}
+.chapter-card.is-authored-paper .ch-tag,
+.blog-overview-card.is-authored-paper .blog-read-badge {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(217, 119, 6, 0.22);
+  color: #92400e;
+}
+.authored-paper-pill {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  padding: 0.22rem 0.62rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.14) 0%, rgba(251, 191, 36, 0.22) 100%);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.chapter-card.is-authored-paper .ch-icon,
+.blog-overview-card.is-authored-paper h3,
+.chapter-card.is-authored-paper h4 {
+  color: #7c2d12;
+}
+.chapter-card.is-authored-paper {
+  padding-top: 2.4rem;
+}
+.blog-overview-card.is-authored-paper {
+  padding-top: 3.1rem;
+}
 .chapter-card .ch-icon { font-size: 1.4rem; line-height: 1; }
 .chapter-card h4  { margin: 0; font-size: .96rem; color: #0f2a36; line-height: 1.35; }
 .chapter-card p   { margin: 0; font-size: .82rem; color: #4b5563; line-height: 1.45; flex: 1; }
@@ -246,6 +323,11 @@ author_profile: true
 <p class="blog-library-intro">
   Welcome to my research blog — structured like a <strong>library of books</strong>. Each book covers a major AI topic; every chapter is a short, self-contained post you can read in 3–5 minutes. Start with the <em>Start Here</em> overview of any book, then dive into whichever chapters interest you most.
 </p>
+
+<div class="blog-library-note">
+  <span class="blog-library-chip blog-library-chip--gold">★ My papers</span>
+  <span><strong>Gold cards</strong> mark posts directly tied to my own research papers and companion explainers, such as <strong>GAPE</strong>, <strong>Z-SASLM</strong>, <strong>PolyNSD</strong>, <strong>HetSheaf</strong>, and <strong>SheafPool</strong>.</span>
+</div>
 
 {% assign transformer_posts = site.posts | where: "book", "transformers"         | sort: "date" %}
 {% assign gnn_posts         = site.posts | where: "book", "gnn"                  | sort: "date" %}
@@ -1101,6 +1183,13 @@ author_profile: true
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   var mlBlogCatalog = {{ site.data.mlblogposts | jsonify }};
+  var authoredPaperSlugs = [
+    '2026-05-11-gape-paper',
+    '2025-06-17-zsaslm-paper',
+    '2025-12-02-polynsd-paper',
+    '2024-09-12-hetsheaf-paper',
+    '2025-06-26-sheafpool'
+  ];
   var mlBlogPosts = [
     {% for p in site.posts %}
     {
@@ -1164,6 +1253,16 @@ document.addEventListener('DOMContentLoaded', function () {
     badge.textContent = String(number).padStart(2, '0');
     badge.setAttribute('aria-label', 'Chapter ' + number);
     card.appendChild(badge);
+  }
+
+  function markAuthoredPaper(card) {
+    if (!card || card.classList.contains('is-authored-paper')) return;
+    card.classList.add('is-authored-paper');
+    if (card.querySelector('.authored-paper-pill')) return;
+    var pill = document.createElement('span');
+    pill.className = 'authored-paper-pill';
+    pill.textContent = 'My paper';
+    card.appendChild(pill);
   }
 
   function createSoonNote(copy) {
@@ -1231,6 +1330,9 @@ document.addEventListener('DOMContentLoaded', function () {
     ordered.forEach(function (entry, index) {
       if (!entry || !entry.slug || !cardMap[entry.slug]) return;
       injectChapterBadge(cardMap[entry.slug], index + 1);
+      if (authoredPaperSlugs.indexOf(entry.slug) !== -1) {
+        markAuthoredPaper(cardMap[entry.slug]);
+      }
     });
   });
 
