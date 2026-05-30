@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 64,
+  "total_stars": 65,
   "total_forks": 17,
   "public_repos": 30,
   "followers": 17,
@@ -48,20 +48,20 @@
   ],
   "popular_repos": [
     {
+      "name": "sheaf-mpnn",
+      "html_url": "https://github.com/alessioborgi/sheaf-mpnn",
+      "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks as Message Passing comprising all variants and a benchmark suite with 14+ Datasets.",
+      "stars": 16,
+      "forks": 2,
+      "language": "Jupyter Notebook"
+    },
+    {
       "name": "AMR_CleaningRobot",
       "html_url": "https://github.com/alessioborgi/AMR_CleaningRobot",
       "description": "Simulation of a Cleaning Robot with the capability of performing SLAM of the environment the robot is navigating, Planning Trajectories to calculate optimal paths considering static and dynamic obstacles, and Dynamic Obstacle Avoidance to detect and navigate around obstacles.",
       "stars": 16,
       "forks": 1,
       "language": "C++"
-    },
-    {
-      "name": "sheaf-mpnn",
-      "html_url": "https://github.com/alessioborgi/sheaf-mpnn",
-      "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks as Message Passing comprising all variants and a benchmark suite with 14+ Datasets.",
-      "stars": 15,
-      "forks": 2,
-      "language": "Jupyter Notebook"
     },
     {
       "name": "BioHeat-PINNs",
