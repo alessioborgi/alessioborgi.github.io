@@ -3,28 +3,28 @@
   <desc id="desc">A diagram showing how the same linear score can be transformed by different activation functions.</desc>
   <defs>
     <style>
-      .bg{fill:#f8fbff}.card{fill:#fff;stroke:#dbe7f5;stroke-width:2}.title{font:700 28px Arial,sans-serif;fill:#0f2a36}.text{font:16px Arial,sans-serif;fill:#475569}.tiny{font:14px Arial,sans-serif;fill:#64748b}.axis{stroke:#b8c6d9;stroke-width:2}.a{fill:none;stroke:#2563eb;stroke-width:5;stroke-linecap:round}.b{fill:none;stroke:#10b981;stroke-width:5;stroke-linecap:round}.c{fill:none;stroke:#f97316;stroke-width:5;stroke-linecap:round}.arrow{stroke:#0f2a36;stroke-width:3;fill:none;marker-end:url(#m)}
+      .bg{fill:#f8fbff}.card{fill:#fff;stroke:#dbe7f5;stroke-width:2}.title{font:700 31px Arial,sans-serif;fill:#0f2a36}.text{font:18px Arial,sans-serif;fill:#334155}.tiny{font:16px Arial,sans-serif;fill:#475569}.axis{stroke:#b8c6d9;stroke-width:2}.a{fill:none;stroke:#2563eb;stroke-width:5;stroke-linecap:round}.b{fill:none;stroke:#10b981;stroke-width:5;stroke-linecap:round}.c{fill:none;stroke:#f97316;stroke-width:5;stroke-linecap:round}.arrow{stroke:#0f2a36;stroke-width:3;fill:none;marker-end:url(#m)}
     </style>
     <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0f2a36"/></marker>
   </defs>
   <rect class="bg" width="1200" height="420" rx="24"/>
   <rect class="card" x="36" y="70" width="250" height="270" rx="18"/>
   <text class="title" x="62" y="112">1. Linear score</text>
-  <text class="text" x="62" y="145">A neuron first computes:</text>
-  <text class="title" x="62" y="190">z = Wx + b</text>
-  <text class="tiny" x="62" y="230">This is only an affine transformation.</text>
-  <text class="tiny" x="62" y="252">By itself, it does not create non-linearity.</text>
+  <text class="text" x="62" y="148">A neuron first computes</text>
+  <text class="title" x="62" y="196">z = Wx + b</text>
+  <text class="tiny" x="62" y="236">Only a linear score so far.</text>
+  <text class="tiny" x="62" y="260">No non-linearity yet.</text>
   <path class="arrow" d="M286 205 L350 205"/>
 
   <rect class="card" x="350" y="40" width="250" height="145" rx="18"/>
   <text class="title" x="374" y="80">2A. Hard switch</text>
-  <text class="text" x="374" y="110">Step / threshold</text>
+  <text class="text" x="374" y="112">Step / threshold</text>
   <line class="axis" x1="390" y1="155" x2="560" y2="155"/><line class="axis" x1="472" y1="170" x2="472" y2="98"/>
   <path class="c" d="M410 155 L470 155 L470 116 L550 116"/>
 
   <rect class="card" x="350" y="205" width="250" height="145" rx="18"/>
   <text class="title" x="374" y="245">2B. Soft gate</text>
-  <text class="text" x="374" y="275">Sigmoid / tanh</text>
+  <text class="text" x="374" y="277">Sigmoid / tanh</text>
   <line class="axis" x1="390" y1="320" x2="560" y2="320"/><line class="axis" x1="472" y1="336" x2="472" y2="260"/>
   <path class="b" d="M408 318 C434 318, 450 312, 466 298 C478 286, 488 274, 550 264"/>
 
@@ -33,16 +33,16 @@
 
   <rect class="card" x="676" y="70" width="488" height="270" rx="18"/>
   <text class="title" x="704" y="112">3. What changes downstream</text>
-  <text class="text" x="704" y="152">The activation decides how much signal passes forward.</text>
-  <text class="text" x="704" y="182">That changes both representation power and gradient flow.</text>
+  <text class="text" x="704" y="152">The activation decides how much signal passes.</text>
+  <text class="text" x="704" y="182">That changes expressivity and gradient flow.</text>
   <rect x="720" y="220" width="120" height="52" rx="12" fill="#eff6ff" stroke="#bfdbfe"/>
-  <text class="text" x="747" y="252">layer 1</text>
+  <text class="text" x="740" y="252">layer 1</text>
   <rect x="878" y="220" width="120" height="52" rx="12" fill="#ecfdf5" stroke="#a7f3d0"/>
-  <text class="text" x="905" y="252">layer 2</text>
+  <text class="text" x="898" y="252">layer 2</text>
   <rect x="1036" y="220" width="100" height="52" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
-  <text class="text" x="1061" y="252">output</text>
+  <text class="text" x="1052" y="252">output</text>
   <path class="arrow" d="M840 246 L878 246"/>
   <path class="arrow" d="M998 246 L1036 246"/>
-  <text class="tiny" x="720" y="300">Without the activation, this whole stack collapses</text>
-  <text class="tiny" x="720" y="322">into one big linear map.</text>
+  <text class="tiny" x="720" y="300">Without the activation, the stack collapses</text>
+  <text class="tiny" x="720" y="324">into one big linear map.</text>
 </svg>
