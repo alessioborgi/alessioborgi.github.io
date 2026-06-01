@@ -37,7 +37,7 @@ toc_label: "Contents"
 }
 .formula-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: .85rem;
   margin: 1rem 0 1.2rem;
 }
@@ -46,11 +46,23 @@ toc_label: "Contents"
   border: 1px solid #dbe7f5;
   border-radius: 12px;
   padding: .9rem 1rem;
+  overflow: hidden;
 }
 .formula-card strong {
   display: block;
   margin-bottom: .45rem;
   color: #0f2a36;
+}
+.formula-card mjx-container[display="true"],
+.formula-box mjx-container[display="true"] {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: .15rem;
+}
+.formula-card mjx-container {
+  font-size: 90% !important;
 }
 .mini-table {
   width: 100%;

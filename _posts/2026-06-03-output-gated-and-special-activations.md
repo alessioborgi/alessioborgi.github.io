@@ -37,7 +37,7 @@ toc_label: "Contents"
 }
 .formula-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: .85rem;
   margin: 1rem 0 1.2rem;
 }
@@ -46,11 +46,48 @@ toc_label: "Contents"
   border: 1px solid #dbe7f5;
   border-radius: 12px;
   padding: .9rem 1rem;
+  overflow: hidden;
 }
 .formula-card strong {
   display: block;
   margin-bottom: .45rem;
   color: #0f2a36;
+}
+.formula-card mjx-container[display="true"],
+.formula-box mjx-container[display="true"] {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: .15rem;
+}
+.formula-card mjx-container {
+  font-size: 90% !important;
+}
+.formula-grid--shrink {
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+}
+.formula-grid--shrink .formula-card mjx-container {
+  font-size: 78% !important;
+}
+.formula-grid--gated {
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+}
+.formula-grid--gated .formula-card mjx-container {
+  font-size: 82% !important;
+}
+.formula-grid--special {
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+}
+.formula-grid--special .formula-card mjx-container {
+  font-size: 80% !important;
+}
+@media (max-width: 900px) {
+  .formula-grid--gated,
+  .formula-grid--shrink,
+  .formula-grid--special {
+    grid-template-columns: 1fr;
+  }
 }
 .mini-table {
   width: 100%;
@@ -102,7 +139,7 @@ That gives you:
 - **GeGLU:** GELU gate
 - **ReGLU:** ReLU gate
 
-<div class="formula-grid">
+<div class="formula-grid formula-grid--gated">
   <div class="formula-card">
     <strong>GLU</strong>
     \[
@@ -147,7 +184,7 @@ Another family is built around sparsity or denoising:
 - **Sparsemax:** like softmax, but can produce exact zeros
 - **Entmax:** interpolates between dense softmax and sparse alternatives
 
-<div class="formula-grid">
+<div class="formula-grid formula-grid--shrink">
   <div class="formula-card">
     <strong>TanhShrink</strong>
     \[
@@ -189,7 +226,7 @@ Some activations are not mainstream in basic classifiers, but they are extremely
 - **Soft Exponential:** learns whether to behave more like a log, linear, or exponential function
 - **KAN / spline activations:** learns the activation shape itself rather than choosing a fixed closed-form function
 
-<div class="formula-grid">
+<div class="formula-grid formula-grid--special">
   <div class="formula-card">
     <strong>SIREN</strong>
     \[

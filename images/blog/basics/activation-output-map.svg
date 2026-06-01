@@ -1,27 +1,81 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
-  <title id="title">Different roles of activation functions</title>
-  <desc id="desc">Diagram showing hidden-layer, output, and gated activation roles.</desc>
-  <defs><style>.bg{fill:#f8fbff}.card{fill:#fff;stroke:#dbe7f5;stroke-width:2}.title{font:700 24px Arial,sans-serif;fill:#0f2a36}.text{font:15px Arial,sans-serif;fill:#475569}.tiny{font:13px Arial,sans-serif;fill:#64748b}.arrow{stroke:#0f2a36;stroke-width:3;fill:none;marker-end:url(#m)}.box1{fill:#eff6ff;stroke:#bfdbfe}.box2{fill:#ecfdf5;stroke:#a7f3d0}.box3{fill:#fff7ed;stroke:#fed7aa}</style><marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0f2a36"/></marker></defs>
-  <rect class="bg" width="1200" height="430" rx="24"/>
-  <rect class="card" x="34" y="56" width="340" height="300" rx="18"/>
-  <text class="title" x="62" y="98">Hidden-layer activations</text>
-  <text class="text" x="62" y="130">Shape internal features and gradient flow.</text>
-  <rect class="box1" x="70" y="188" width="90" height="42" rx="12"/><rect class="box1" x="194" y="188" width="90" height="42" rx="12"/><rect class="box1" x="124" y="262" width="90" height="42" rx="12"/>
-  <text class="tiny" x="92" y="215">ReLU</text><text class="tiny" x="216" y="215">GELU</text><text class="tiny" x="151" y="289">SiLU</text>
-  <text class="tiny" x="62" y="328">Examples: ReLU, GELU, SiLU, Mish</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
+  <title id="title">Three roles of activation functions</title>
+  <desc id="desc">A clearer diagram showing the difference between hidden-layer activations, output activations, and gated activations.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fbff; }
+      .card { fill: #ffffff; stroke: #dbe7f5; stroke-width: 2; }
+      .title { font: 700 30px Arial, sans-serif; fill: #0f2a36; }
+      .subtitle { font: 18px Arial, sans-serif; fill: #334155; }
+      .label { font: 700 16px Arial, sans-serif; fill: #0f2a36; }
+      .tiny { font: 16px Arial, sans-serif; fill: #475569; }
+      .tiny-bold { font: 700 16px Arial, sans-serif; fill: #0f2a36; }
+      .box1 { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 2; }
+      .box2 { fill: #ecfdf5; stroke: #a7f3d0; stroke-width: 2; }
+      .box3 { fill: #fff7ed; stroke: #fed7aa; stroke-width: 2; }
+      .arrow { stroke: #0f2a36; stroke-width: 3; fill: none; marker-end: url(#m); }
+      .pipe { stroke: #cbd5e1; stroke-width: 4; stroke-linecap: round; }
+    </style>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#0f2a36"/>
+    </marker>
+  </defs>
 
-  <rect class="card" x="430" y="56" width="340" height="300" rx="18"/>
-  <text class="title" x="458" y="98">Output activations</text>
-  <text class="text" x="458" y="130">Turn logits into the right prediction object.</text>
-  <rect class="box2" x="468" y="188" width="90" height="42" rx="12"/><rect class="box2" x="592" y="188" width="90" height="42" rx="12"/><rect class="box2" x="530" y="262" width="90" height="42" rx="12"/>
-  <text class="tiny" x="488" y="215">Sigmoid</text><text class="tiny" x="615" y="215">Softmax</text><text class="tiny" x="558" y="289">Linear</text>
-  <text class="tiny" x="458" y="328">Binary, multi-class, and regression outputs</text>
+  <rect class="bg" width="1200" height="500" rx="28"/>
 
-  <rect class="card" x="826" y="56" width="340" height="300" rx="18"/>
-  <text class="title" x="854" y="98">Gated activations</text>
-  <text class="text" x="854" y="130">Use one feature stream to modulate another.</text>
-  <rect class="box3" x="858" y="184" width="96" height="46" rx="12"/><rect class="box3" x="1040" y="184" width="96" height="46" rx="12"/>
-  <text class="tiny" x="886" y="212">value</text><text class="tiny" x="1068" y="212">gate</text>
-  <path class="arrow" d="M954 207 L1040 207"/>
-  <text class="tiny" x="888" y="278">Examples: GLU, SwiGLU, GeGLU, ReGLU</text>
+  <!-- Hidden-layer activations -->
+  <rect class="card" x="34" y="58" width="344" height="360" rx="20"/>
+  <text class="title" x="62" y="104">Hidden-Layer</text>
+  <text class="title" x="62" y="140">Activations</text>
+  <text class="subtitle" x="62" y="180">Role: shape internal features</text>
+  <text class="subtitle" x="62" y="208">and help gradients flow.</text>
+
+  <rect class="box1" x="62" y="252" width="92" height="44" rx="12"/>
+  <rect class="box1" x="174" y="252" width="92" height="44" rx="12"/>
+  <rect class="box1" x="286" y="252" width="92" height="44" rx="12"/>
+  <text class="label" x="92" y="280">ReLU</text>
+  <text class="label" x="202" y="280">GELU</text>
+  <text class="label" x="316" y="280">SiLU</text>
+
+  <text class="tiny-bold" x="62" y="336">What they decide</text>
+  <text class="tiny" x="62" y="364">How much feature signal should pass</text>
+  <text class="tiny" x="62" y="388">through the hidden stack.</text>
+
+  <!-- Output activations -->
+  <rect class="card" x="428" y="58" width="344" height="360" rx="20"/>
+  <text class="title" x="456" y="104">Output</text>
+  <text class="title" x="456" y="140">Activations</text>
+  <text class="subtitle" x="456" y="180">Role: turn logits into the right</text>
+  <text class="subtitle" x="456" y="208">kind of prediction.</text>
+
+  <rect class="box2" x="456" y="252" width="96" height="44" rx="12"/>
+  <rect class="box2" x="572" y="252" width="96" height="44" rx="12"/>
+  <rect class="box2" x="688" y="252" width="84" height="44" rx="12"/>
+  <text class="label" x="478" y="280">Sigmoid</text>
+  <text class="label" x="597" y="280">Softmax</text>
+  <text class="label" x="713" y="280">Linear</text>
+
+  <text class="tiny-bold" x="456" y="336">Typical tasks</text>
+  <text class="tiny" x="456" y="364">Binary classification, multi-class</text>
+  <text class="tiny" x="456" y="388">classification, and regression.</text>
+
+  <!-- Gated activations -->
+  <rect class="card" x="822" y="58" width="344" height="360" rx="20"/>
+  <text class="title" x="850" y="104">Gated</text>
+  <text class="title" x="850" y="140">Activations</text>
+  <text class="subtitle" x="850" y="180">Role: use one feature stream</text>
+  <text class="subtitle" x="850" y="208">to modulate another.</text>
+
+  <rect class="box3" x="856" y="250" width="92" height="46" rx="12"/>
+  <rect class="box3" x="1040" y="250" width="92" height="46" rx="12"/>
+  <text class="label" x="884" y="279">value</text>
+  <text class="label" x="1069" y="279">gate</text>
+  <path class="arrow" d="M948 273 L1040 273"/>
+
+  <text class="tiny-bold" x="850" y="336">Typical examples</text>
+  <text class="tiny" x="850" y="364">GLU, SwiGLU, GeGLU, ReGLU</text>
+  <text class="tiny" x="850" y="388">especially in Transformer MLP blocks.</text>
+
+  <!-- subtle top accent -->
+  <line class="pipe" x1="60" y1="34" x2="1140" y2="34"/>
 </svg>
