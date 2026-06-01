@@ -30,6 +30,9 @@ toc_label: "Contents"
 .page__content .blog-figure--figure3 figure img {
   width: min(100%, 240px);
 }
+.page__content .blog-figure--figure4 figure img {
+  width: min(100%, 350px);
+}
 .paper-preview img { width: min(100%, 430px); }
 .tldr-box {
   background: linear-gradient(145deg,#e8fbfb,#dbeafe);
@@ -192,7 +195,7 @@ A Transformer encoder consists of these building blocks, stacked N times:
 Each word (or subword token) is mapped to a dense vector — a point in high-dimensional space where similar words land close together.
 
 ### 2. Positional Encoding
-Because attention sees all tokens simultaneously, the model would otherwise have no idea which word comes first. Positional encodings inject position information into each token's vector before it enters the attention layers. (See the dedicated PE posts for all the variants.)
+Because attention sees all tokens simultaneously, the model would otherwise have no idea which word comes first. Positional encodings inject position information into each token's vector before it enters the attention layers. (<a href="/blog/transformers/positional-encodings/">See the dedicated PE posts for all the variants.</a>)
 
 ### 3. Multi-Head Self-Attention
 This is the heart of the Transformer. Each token computes three vectors — a **Query** (what I'm looking for), a **Key** (what I offer), and a **Value** (what I'll contribute). The model computes pairwise relevance scores, normalises them with a softmax, then mixes the value vectors accordingly. Running this process in parallel across *h* heads lets the model capture different types of relationships simultaneously.
@@ -248,7 +251,7 @@ Transformers won not because attention is mathematically elegant, but because th
 
 That combination made Transformers less like a one-off NLP model and more like a general-purpose interface between data and computation.
 
-<div class="blog-figure blog-figure--tiny blog-figure--figure1">
+<div class="blog-figure blog-figure--tiny blog-figure--figure4">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_attention_complexity_table.png" alt="Comparison table of self-attention, recurrent, and convolutional layers from Attention Is All You Need">
 <figcaption>Figure 4 — This comparison table captures why the design scaled so well in practice: self-attention keeps the path length between any two tokens at O(1), and unlike recurrent layers it avoids sequential dependence during the main computation. That combination is exactly what made long-range reasoning easier and GPU training far more efficient. Source: [1].</figcaption>

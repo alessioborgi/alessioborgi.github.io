@@ -330,12 +330,16 @@ author_profile: true
 </div>
 
 {% assign transformer_posts = site.posts | where: "book", "transformers"         | sort: "date" %}
+{% assign basics_posts      = site.posts | where: "book", "basics"               | sort: "date" %}
 {% assign gnn_posts         = site.posts | where: "book", "gnn"                  | sort: "date" %}
 {% assign sheaf_posts       = site.posts | where: "book", "sheaf"                | sort: "date" %}
 {% assign ph_posts          = site.posts | where: "book", "tdl"                   | sort: "date" %}
 {% assign rl_posts          = site.posts | where: "book", "rl"                    | sort: "date" %}
 {% assign robotics_posts    = site.posts | where: "book", "robotics"              | sort: "date" %}
 {% assign genai_posts       = site.posts | where: "book", "generative-ai"         | sort: "date" %}
+
+{% assign b_overview    = basics_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign b_activations = basics_posts | where: "subsection", "activation-functions" %}
 
 {% assign t_overview  = transformer_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
@@ -385,6 +389,52 @@ author_profile: true
 
 {% assign genai_overview       = genai_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign genai_style_transfer = genai_posts | where: "subsection", "style-transfer" %}
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  BOOK 0 · BASICS                                         -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book" data-book="basics">
+  <div class="book-banner">
+    <span class="book-icon">🧠</span>
+    <div>
+      <h2>Book 0 — Basics</h2>
+      <p>The neural-network foundations that make the later books easier to understand</p>
+    </div>
+  </div>
+  <div class="book-body">
+
+    {% if b_overview %}
+    <a class="blog-overview-card" href="{{ b_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ b_overview.title }}</h3>
+      <p>{{ b_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ b_overview.read_mins | default: "5" }} min read</span>
+        <span>A guided introduction before Transformers, GNNs, and Sheaf models</span>
+      </div>
+    </a>
+    {% endif %}
+
+    {% if b_activations.size > 0 %}
+    <div class="subsection-label" data-section="activation-functions">⚡ Activation Functions</div>
+    <div class="chapters-grid">
+      {% for post in b_activations %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "5" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
 
 
 <!-- ════════════════════════════════════════════════════════ -->

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 960" role="img" aria-labelledby="title desc">
+  <title id="title">Output, gated, sparse, and special activations</title>
+  <desc id="desc">A grid of output-layer, gated, sparse, and specialized activations shown schematically.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fbff; }
+      .panel { fill: #ffffff; stroke: #d7e3f4; stroke-width: 2; }
+      .label { font: 700 20px "Arial", sans-serif; fill: #0f2a36; }
+      .sub { font: 13px "Arial", sans-serif; fill: #5b6473; }
+      .axis { stroke: #b8c6d9; stroke-width: 2; }
+      .a { fill: none; stroke: #2563eb; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+      .b { fill: none; stroke: #10b981; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+      .c { fill: none; stroke: #f97316; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+      .d { fill: none; stroke: #7c3aed; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+      .bar1 { fill: #93c5fd; }
+      .bar2 { fill: #60a5fa; }
+      .bar3 { fill: #2563eb; }
+      .box { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 2; }
+      .box2 { fill: #ecfdf5; stroke: #a7f3d0; stroke-width: 2; }
+      .tiny { font: 12px "Arial", sans-serif; fill: #64748b; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="960" rx="28"/>
+  <g transform="translate(20,20)">
+    <!-- Row 1 -->
+    <g transform="translate(0,0)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">Softmax</text><text class="sub" x="18" y="52">logits → probabilities</text><rect class="bar1" x="60" y="126" width="28" height="36" rx="6"/><rect class="bar2" x="112" y="104" width="28" height="58" rx="6"/><rect class="bar3" x="164" y="78" width="28" height="84" rx="6"/><text class="tiny" x="54" y="182">sum = 1</text></g>
+    <g transform="translate(290,0)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">LogSoftmax</text><text class="sub" x="18" y="52">log probabilities</text><rect class="bar1" x="60" y="124" width="28" height="38" rx="6"/><rect class="bar2" x="112" y="108" width="28" height="54" rx="6"/><rect class="bar3" x="164" y="88" width="28" height="74" rx="6"/><text class="tiny" x="42" y="182">stable log domain</text></g>
+    <g transform="translate(580,0)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">Maxout</text><text class="sub" x="18" y="52">max over affine branches</text><line class="axis" x1="34" y1="160" x2="230" y2="160"/><line class="axis" x1="132" y1="178" x2="132" y2="74"/><path class="a" d="M58 150 L204 88"/><path class="c" d="M64 92 L210 136"/><path class="d" d="M64 150 L126 124 L206 88"/></g>
+    <g transform="translate(870,0)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">GLU</text><text class="sub" x="18" y="52">one branch gates another</text><rect class="box" x="40" y="88" width="76" height="38" rx="10"/><rect class="box2" x="152" y="88" width="76" height="38" rx="10"/><text class="tiny" x="62" y="112">linear</text><text class="tiny" x="173" y="112">gate</text><path class="a" d="M116 107 L152 107"/><text class="tiny" x="96" y="158">⊗ learned gate</text></g>
+
+    <!-- Row 2 -->
+    <g transform="translate(0,225)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">SwiGLU</text><text class="sub" x="18" y="52">GLU with SiLU gate</text><rect class="box" x="42" y="92" width="72" height="36" rx="10"/><rect class="box2" x="154" y="92" width="72" height="36" rx="10"/><text class="tiny" x="60" y="114">value</text><text class="tiny" x="172" y="114">SiLU</text><path class="b" d="M114 110 L154 110"/><text class="tiny" x="93" y="160">smooth gate</text></g>
+    <g transform="translate(290,225)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">GeGLU</text><text class="sub" x="18" y="52">GLU with GELU gate</text><rect class="box" x="42" y="92" width="72" height="36" rx="10"/><rect class="box2" x="154" y="92" width="72" height="36" rx="10"/><text class="tiny" x="60" y="114">value</text><text class="tiny" x="170" y="114">GELU</text><path class="d" d="M114 110 L154 110"/></g>
+    <g transform="translate(580,225)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">ReGLU</text><text class="sub" x="18" y="52">GLU with ReLU gate</text><rect class="box" x="42" y="92" width="72" height="36" rx="10"/><rect class="box2" x="154" y="92" width="72" height="36" rx="10"/><text class="tiny" x="60" y="114">value</text><text class="tiny" x="170" y="114">ReLU</text><path class="c" d="M114 110 L154 110"/></g>
+    <g transform="translate(870,225)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">TanhShrink</text><text class="sub" x="18" y="52">x − tanh(x)</text><line class="axis" x1="34" y1="160" x2="230" y2="160"/><line class="axis" x1="132" y1="178" x2="132" y2="74"/><path class="a" d="M66 146 C104 146, 118 136, 132 120 C148 104, 164 94, 206 88"/></g>
+
+    <!-- Row 3 -->
+    <g transform="translate(0,450)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">SoftShrink</text><text class="sub" x="18" y="52">shrinks toward zero</text><line class="axis" x1="34" y1="160" x2="230" y2="160"/><line class="axis" x1="132" y1="178" x2="132" y2="74"/><path class="b" d="M66 140 L118 128 L146 128 L206 92"/></g>
+    <g transform="translate(290,450)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">HardShrink</text><text class="sub" x="18" y="52">small values become zero</text><line class="axis" x1="34" y1="160" x2="230" y2="160"/><line class="axis" x1="132" y1="178" x2="132" y2="74"/><path class="c" d="M66 140 L108 140 L108 160 L156 160 L156 118 L206 92"/></g>
+    <g transform="translate(580,450)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">Sparsemax</text><text class="sub" x="18" y="52">probabilities with zeros</text><rect class="bar1" x="58" y="142" width="28" height="20" rx="6"/><rect class="bar2" x="110" y="162" width="28" height="0" rx="6"/><rect class="bar3" x="162" y="86" width="28" height="76" rx="6"/><text class="tiny" x="52" y="182">exact zeros</text></g>
+    <g transform="translate(870,450)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">Entmax</text><text class="sub" x="18" y="52">controlled sparsity</text><rect class="bar1" x="58" y="136" width="28" height="26" rx="6"/><rect class="bar2" x="110" y="150" width="28" height="12" rx="6"/><rect class="bar3" x="162" y="88" width="28" height="74" rx="6"/><text class="tiny" x="46" y="182">between dense and sparse</text></g>
+
+    <!-- Row 4 -->
+    <g transform="translate(0,675)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">Sin / SIREN</text><text class="sub" x="18" y="52">periodic activations</text><line class="axis" x1="34" y1="160" x2="230" y2="160"/><path class="d" d="M48 124 C66 82, 88 82, 108 124 C128 166, 148 166, 168 124 C188 82, 208 82, 226 124"/></g>
+    <g transform="translate(290,675)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">Gaussian / RBF</text><text class="sub" x="18" y="52">distance-based response</text><line class="axis" x1="34" y1="160" x2="230" y2="160"/><path class="b" d="M56 160 C88 160, 100 86, 132 78 C164 86, 176 160, 208 160"/></g>
+    <g transform="translate(580,675)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">Soft Exponential</text><text class="sub" x="18" y="52">learns the curve family</text><line class="axis" x1="34" y1="160" x2="230" y2="160"/><path class="c" d="M62 148 C92 140, 116 132, 136 122 C156 108, 176 90, 206 66"/></g>
+    <g transform="translate(870,675)"><rect class="panel" width="270" height="205" rx="18"/><text class="label" x="18" y="30">KAN / Splines</text><text class="sub" x="18" y="52">learn the shape itself</text><line class="axis" x1="34" y1="160" x2="230" y2="160"/><path class="a" d="M58 146 C80 110, 96 112, 118 134 C140 156, 160 98, 182 104 C196 108, 208 92, 220 72"/></g>
+  </g>
+</svg>
