@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">Different roles of activation functions</title>
+  <desc id="desc">Diagram showing hidden-layer, output, and gated activation roles.</desc>
+  <defs><style>.bg{fill:#f8fbff}.card{fill:#fff;stroke:#dbe7f5;stroke-width:2}.title{font:700 24px Arial,sans-serif;fill:#0f2a36}.text{font:15px Arial,sans-serif;fill:#475569}.tiny{font:13px Arial,sans-serif;fill:#64748b}.arrow{stroke:#0f2a36;stroke-width:3;fill:none;marker-end:url(#m)}.box1{fill:#eff6ff;stroke:#bfdbfe}.box2{fill:#ecfdf5;stroke:#a7f3d0}.box3{fill:#fff7ed;stroke:#fed7aa}</style><marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0f2a36"/></marker></defs>
+  <rect class="bg" width="1200" height="430" rx="24"/>
+  <rect class="card" x="34" y="56" width="340" height="300" rx="18"/>
+  <text class="title" x="62" y="98">Hidden-layer activations</text>
+  <text class="text" x="62" y="130">Shape internal features and gradient flow.</text>
+  <rect class="box1" x="70" y="188" width="90" height="42" rx="12"/><rect class="box1" x="194" y="188" width="90" height="42" rx="12"/><rect class="box1" x="124" y="262" width="90" height="42" rx="12"/>
+  <text class="tiny" x="92" y="215">ReLU</text><text class="tiny" x="216" y="215">GELU</text><text class="tiny" x="151" y="289">SiLU</text>
+  <text class="tiny" x="62" y="328">Examples: ReLU, GELU, SiLU, Mish</text>
+
+  <rect class="card" x="430" y="56" width="340" height="300" rx="18"/>
+  <text class="title" x="458" y="98">Output activations</text>
+  <text class="text" x="458" y="130">Turn logits into the right prediction object.</text>
+  <rect class="box2" x="468" y="188" width="90" height="42" rx="12"/><rect class="box2" x="592" y="188" width="90" height="42" rx="12"/><rect class="box2" x="530" y="262" width="90" height="42" rx="12"/>
+  <text class="tiny" x="488" y="215">Sigmoid</text><text class="tiny" x="615" y="215">Softmax</text><text class="tiny" x="558" y="289">Linear</text>
+  <text class="tiny" x="458" y="328">Binary, multi-class, and regression outputs</text>
+
+  <rect class="card" x="826" y="56" width="340" height="300" rx="18"/>
+  <text class="title" x="854" y="98">Gated activations</text>
+  <text class="text" x="854" y="130">Use one feature stream to modulate another.</text>
+  <rect class="box3" x="858" y="184" width="96" height="46" rx="12"/><rect class="box3" x="1040" y="184" width="96" height="46" rx="12"/>
+  <text class="tiny" x="886" y="212">value</text><text class="tiny" x="1068" y="212">gate</text>
+  <path class="arrow" d="M954 207 L1040 207"/>
+  <text class="tiny" x="888" y="278">Examples: GLU, SwiGLU, GeGLU, ReGLU</text>
+</svg>

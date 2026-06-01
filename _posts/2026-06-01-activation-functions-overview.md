@@ -32,11 +32,27 @@ toc_label: "Contents"
   background: #f8fafc;
   border: 1px solid #dbeafe;
   border-radius: 10px;
-  padding: .9rem 1.05rem;
+  padding: 1rem 1.15rem;
   margin: 1rem 0 1.2rem;
   text-align: center;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   color: #1e3a5f;
+}
+.formula-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .85rem;
+  margin: 1rem 0 1.2rem;
+}
+.formula-card {
+  background: linear-gradient(155deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dbe7f5;
+  border-radius: 12px;
+  padding: .9rem 1rem;
+}
+.formula-card strong {
+  display: block;
+  margin-bottom: .45rem;
+  color: #0f2a36;
 }
 .insight-box {
   background: #fff7ed;
@@ -88,7 +104,9 @@ toc_label: "Contents"
 The core equation of a hidden layer is simple:
 
 <div class="formula-box">
-h = σ(Wx + b)
+\[
+h = \sigma(Wx + b)
+\]
 </div>
 
 The matrix multiplication `Wx + b` is only an affine transformation. If every layer did only that, then stacking ten layers would still collapse into one big affine transformation. Depth would give you more parameters, but not more expressive shape.
@@ -109,6 +127,13 @@ Think of a neuron as a tiny processor that first computes a score and then asks:
 - A **ReLU** behaves like a one-way valve: block negatives, pass positives.
 
 That tiny local choice changes the global behavior of the whole network.
+
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/basics/activation-signal-flow.svg" alt="Diagram showing a neuron computing a linear score and then passing it through different kinds of activation gates">
+<figcaption>Figure 1 — The same linear score can be turned into very different behaviors depending on the activation: a hard threshold, a soft probability gate, or a one-way valve like ReLU. The activation is what decides how the raw score becomes a useful signal.</figcaption>
+</figure>
+</div>
 
 ## Historical Progression
 
@@ -137,9 +162,30 @@ The linear activation is not wrong, but if you use it in every hidden layer, you
 
 The first major family maps inputs into a bounded range:
 
-- **Sigmoid:** `σ(x) = 1 / (1 + e^-x)` maps to `[0, 1]`.
+- **Sigmoid:** maps to `[0, 1]`.
 - **Tanh:** maps to `[-1, 1]` and is zero-centered.
 - **Softsign:** also saturates, but more gently than tanh.
+
+<div class="formula-grid">
+  <div class="formula-card">
+    <strong>Sigmoid</strong>
+    \[
+    \sigma(x) = \frac{1}{1 + e^{-x}}
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>Tanh</strong>
+    \[
+    \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>Softsign</strong>
+    \[
+    \operatorname{softsign}(x) = \frac{x}{1 + |x|}
+    \]
+  </div>
+</div>
 
 These functions were historically attractive because they are smooth and easy to differentiate. Their main weakness is saturation: for large positive or negative inputs, the derivative becomes tiny.
 
@@ -147,19 +193,44 @@ These functions were historically attractive because they are smooth and easy to
 
 Then came the ReLU era:
 
-- **ReLU:** `max(0, x)`
+- **ReLU:** keeps the positive branch and zeros out the negative one.
 - **Leaky ReLU:** small negative slope instead of a hard zero
 - **PReLU:** learns that negative slope
 - **RReLU:** uses a random negative slope during training
 - **ReLU6:** same idea as ReLU, but clipped at `6`
 - **Thresholded ReLU:** stays at zero until a chosen threshold
 
+<div class="formula-grid">
+  <div class="formula-card">
+    <strong>ReLU</strong>
+    \[
+    \operatorname{ReLU}(x) = \max(0, x)
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>Leaky ReLU</strong>
+    \[
+    \operatorname{LeakyReLU}(x) =
+    \begin{cases}
+      x, & x > 0 \\
+      \alpha x, & x \le 0
+    \end{cases}
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>ReLU6</strong>
+    \[
+    \operatorname{ReLU6}(x) = \min(\max(0, x), 6)
+    \]
+  </div>
+</div>
+
 These functions made optimization much easier because their positive branch keeps a strong gradient.
 
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/basics/activation-foundations-grid.svg" alt="Grid of classical activation functions including linear, step, sigmoid, tanh, ReLU, Leaky ReLU, PReLU, RReLU, Softplus, Softsign, ReLU6, and Thresholded ReLU">
-<figcaption>Figure 1 — A visual cheat sheet for the classical activation family. The main story is already visible in the shapes: squashing activations saturate, ReLU-like activations keep a strong positive branch, and clipped variants trade expressivity for stability or efficiency.</figcaption>
+<figcaption>Figure 2 — A visual cheat sheet for the classical activation family. The main story is already visible in the shapes: squashing activations saturate, ReLU-like activations keep a strong positive branch, and clipped variants trade expressivity for stability or efficiency.</figcaption>
 </figure>
 </div>
 
@@ -213,6 +284,13 @@ Backpropagation trains a network by multiplying many derivatives together. That 
 
 This is why ReLU became such a turning point: it did not solve everything, but it avoided the worst saturation behavior that slowed down older deep networks.
 
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/basics/activation-gradient-problems.svg" alt="Diagram contrasting vanishing gradients, dead neurons, and healthy gradient flow across common activations">
+<figcaption>Figure 3 — Activation choice is really a gradient-management decision. Sigmoid and tanh can flatten into tiny derivatives, ReLU can kill units on the negative side, and smoother modern activations try to preserve useful gradient flow near zero.</figcaption>
+</figure>
+</div>
+
 ## Practical First Recommendations
 
 If you are just starting, a strong first mental map is:
@@ -226,6 +304,42 @@ If you are just starting, a strong first mental map is:
 | Regression output | Linear |
 
 The later chapters in this mini-series cover the smoother modern functions and the output-layer functions in more detail.
+
+## What Can Go Wrong with Classical Activations?
+
+<div class="summary-box">
+  <h3>Typical failure modes</h3>
+  <table class="mini-table">
+    <thead>
+      <tr>
+        <th>Activation</th>
+        <th>Potential problem</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Step</strong></td>
+        <td>Not useful for standard backpropagation because the derivative is zero almost everywhere.</td>
+      </tr>
+      <tr>
+        <td><strong>Sigmoid</strong></td>
+        <td>Saturates in the tails and causes vanishing gradients in deep hidden stacks.</td>
+      </tr>
+      <tr>
+        <td><strong>Tanh</strong></td>
+        <td>Zero-centered, but still saturates for large magnitudes.</td>
+      </tr>
+      <tr>
+        <td><strong>ReLU</strong></td>
+        <td>Can create dead neurons that never reactivate.</td>
+      </tr>
+      <tr>
+        <td><strong>ReLU6 / clipped variants</strong></td>
+        <td>Gain control, but can reduce expressivity if clipping is too aggressive.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 ## Common Mistakes
 

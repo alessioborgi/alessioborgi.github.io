@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Hard versus soft activation gating</title>
+  <desc id="desc">A comparison of ReLU as a hard gate and smoother modern activations as soft gates.</desc>
+  <defs><style>.bg{fill:#f8fbff}.card{fill:#fff;stroke:#dbe7f5;stroke-width:2}.title{font:700 24px Arial,sans-serif;fill:#0f2a36}.text{font:15px Arial,sans-serif;fill:#475569}.axis{stroke:#b8c6d9;stroke-width:2}.a{fill:none;stroke:#f97316;stroke-width:6;stroke-linecap:round}.b{fill:none;stroke:#10b981;stroke-width:6;stroke-linecap:round}.c{fill:none;stroke:#2563eb;stroke-width:6;stroke-linecap:round}.tiny{font:13px Arial,sans-serif;fill:#64748b}</style></defs>
+  <rect class="bg" width="1200" height="420" rx="24"/>
+  <rect class="card" x="36" y="55" width="332" height="300" rx="18"/>
+  <text class="title" x="62" y="98">ReLU</text>
+  <text class="text" x="62" y="128">Abrupt turn-on</text>
+  <line class="axis" x1="74" y1="250" x2="320" y2="250"/><line class="axis" x1="194" y1="278" x2="194" y2="120"/>
+  <path class="a" d="M96 250 L194 250 L292 174"/>
+  <text class="tiny" x="62" y="320">Fast and simple, but the gate is hard.</text>
+
+  <rect class="card" x="434" y="55" width="332" height="300" rx="18"/>
+  <text class="title" x="460" y="98">GELU / SiLU</text>
+  <text class="text" x="460" y="128">Gradual turn-on</text>
+  <line class="axis" x1="472" y1="250" x2="718" y2="250"/><line class="axis" x1="592" y1="278" x2="592" y2="120"/>
+  <path class="b" d="M494 246 C538 252, 568 243, 592 224 C620 198, 648 184, 692 174"/>
+  <text class="tiny" x="460" y="320">More of the signal survives near zero.</text>
+
+  <rect class="card" x="832" y="55" width="332" height="300" rx="18"/>
+  <text class="title" x="858" y="98">Mish</text>
+  <text class="text" x="858" y="128">Smooth and slightly richer negative side</text>
+  <line class="axis" x1="870" y1="250" x2="1116" y2="250"/><line class="axis" x1="990" y1="278" x2="990" y2="120"/>
+  <path class="c" d="M892 244 C924 258, 960 258, 988 230 C1016 200, 1048 186, 1092 176"/>
+  <text class="tiny" x="858" y="320">Soft gate with a more expressive bend.</text>
+</svg>

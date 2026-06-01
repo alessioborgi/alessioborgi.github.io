@@ -33,8 +33,24 @@ toc_label: "Contents"
   background: #f8fafc;
   border: 1px solid #dbeafe;
   text-align: center;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   color: #1e3a5f;
+}
+.formula-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .85rem;
+  margin: 1rem 0 1.2rem;
+}
+.formula-card {
+  background: linear-gradient(155deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dbe7f5;
+  border-radius: 12px;
+  padding: .9rem 1rem;
+}
+.formula-card strong {
+  display: block;
+  margin-bottom: .45rem;
+  color: #0f2a36;
 }
 .mini-table {
   width: 100%;
@@ -70,16 +86,31 @@ That simplicity is often a strength, but it is not always the best match for lar
 Instead of saying:
 
 <div class="formula-box">
-"negative values are off, positive values are fully on"
+\[
+f(x) =
+\begin{cases}
+0, & x < 0 \\
+x, & x \ge 0
+\end{cases}
+\]
 </div>
 
 modern activations often say:
 
 <div class="formula-box">
-"let the signal turn on gradually, and maybe let small negative values still matter"
+\[
+f(x) \text{ should turn on smoothly and keep a useful derivative near } x = 0
+\]
 </div>
 
 That makes them feel more like **soft gates** than hard thresholds.
+
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/basics/activation-soft-gating.svg" alt="Diagram comparing a hard ReLU switch with smoother GELU, SiLU, and Mish style gating">
+<figcaption>Figure 1 — Modern activations are easier to understand if you think in terms of gating. ReLU flips on abruptly, while GELU, SiLU, and Mish let the signal turn on gradually and keep more structure around zero.</figcaption>
+</figure>
+</div>
 
 ## Smooth ReLU-Like Families
 
@@ -98,7 +129,9 @@ They are especially interesting because they acknowledge that "all negatives bec
 GELU is the activation you now see everywhere in Transformers.
 
 <div class="formula-box">
-GELU(x) ≈ x · Φ(x)
+\[
+\operatorname{GELU}(x) \approx x \, \Phi(x)
+\]
 </div>
 
 where `Φ(x)` is the Gaussian cumulative distribution function.
@@ -108,7 +141,9 @@ The intuition is elegant: instead of passing all positive signals and rejecting 
 ### Swish and SiLU
 
 <div class="formula-box">
-SiLU(x) = x · sigmoid(x)
+\[
+\operatorname{SiLU}(x) = x \, \sigma(x)
+\]
 </div>
 
 Swish is the same family idea; SiLU is the most common fixed version. These activations are smooth, slightly non-monotonic, and behave like a gated linear response.
@@ -118,15 +153,42 @@ Swish is the same family idea; SiLU is the most common fixed version. These acti
 Mish pushes the same logic further:
 
 <div class="formula-box">
-Mish(x) = x · tanh(softplus(x))
+\[
+\operatorname{Mish}(x) = x \, \tanh(\operatorname{softplus}(x))
+\]
 </div>
 
 It is smooth, non-monotonic, and often visually looks like "a softer Swish with a richer negative-side bend."
 
+<div class="formula-grid">
+  <div class="formula-card">
+    <strong>ELU</strong>
+    \[
+    \operatorname{ELU}(x) =
+    \begin{cases}
+      x, & x > 0 \\
+      \alpha(e^x - 1), & x \le 0
+    \end{cases}
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>GELU</strong>
+    \[
+    \operatorname{GELU}(x) \approx \frac{x}{2}\left(1 + \tanh\!\Big(\sqrt{\frac{2}{\pi}}\big(x + 0.044715x^3\big)\Big)\right)
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>Swish / SiLU</strong>
+    \[
+    \operatorname{Swish}(x) = x \, \sigma(\beta x), \qquad \operatorname{SiLU}(x) = x \, \sigma(x)
+    \]
+  </div>
+</div>
+
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/basics/activation-modern-grid.svg" alt="Grid of modern activation functions including ELU, SELU, CELU, GELU, Swish, SiLU, Mish, Hard Sigmoid, Hard Tanh, Hard Swish, Bent Identity, and Arctan">
-<figcaption>Figure 1 — Modern activation functions mostly differ in one place: how sharply or smoothly they transition around zero, and how much negative information they preserve. GELU, SiLU, and Mish are all trying to replace a hard switch with a softer gate.</figcaption>
+<figcaption>Figure 2 — Modern activation functions mostly differ in one place: how sharply or smoothly they transition around zero, and how much negative information they preserve. GELU, SiLU, and Mish are all trying to replace a hard switch with a softer gate.</figcaption>
 </figure>
 </div>
 
@@ -195,6 +257,41 @@ These are not the default choices in modern LLMs, but they help build the reader
     <li><strong>Efficient CNNs / mobile models:</strong> Hard Swish or SiLU are common.</li>
     <li><strong>General-purpose modern MLPs:</strong> ReLU is still a valid baseline, but SiLU is worth testing.</li>
   </ul>
+</div>
+
+## What Can Go Wrong with Modern Activations?
+
+<div class="summary-box">
+  <table class="mini-table">
+    <thead>
+      <tr>
+        <th>Activation</th>
+        <th>Potential problem</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>ELU / SELU / CELU</strong></td>
+        <td>More expensive than ReLU and more sensitive to architectural assumptions than many beginners expect.</td>
+      </tr>
+      <tr>
+        <td><strong>GELU</strong></td>
+        <td>Excellent in Transformers, but often unnecessary overhead in smaller or simpler models.</td>
+      </tr>
+      <tr>
+        <td><strong>SiLU / Swish</strong></td>
+        <td>Smoother optimization, but still costlier than piecewise-linear activations.</td>
+      </tr>
+      <tr>
+        <td><strong>Mish</strong></td>
+        <td>Can work well, but is less standardized and not always worth the extra complexity.</td>
+      </tr>
+      <tr>
+        <td><strong>Hard approximations</strong></td>
+        <td>Faster on-device, but they give up part of the smooth behavior that motivated the original function.</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 ## Common Misunderstanding

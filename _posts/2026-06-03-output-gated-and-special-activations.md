@@ -33,8 +33,24 @@ toc_label: "Contents"
   background: #f8fafc;
   border: 1px solid #dbeafe;
   text-align: center;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   color: #1e3a5f;
+}
+.formula-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .85rem;
+  margin: 1rem 0 1.2rem;
+}
+.formula-card {
+  background: linear-gradient(155deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dbe7f5;
+  border-radius: 12px;
+  padding: .9rem 1rem;
+}
+.formula-card strong {
+  display: block;
+  margin-bottom: .45rem;
+  color: #0f2a36;
 }
 .mini-table {
   width: 100%;
@@ -70,7 +86,9 @@ In hidden layers, activation functions mainly shape representation learning and 
 The softmax formula is:
 
 <div class="formula-box">
-softmax(z_i) = exp(z_i) / Σ_j exp(z_j)
+\[
+\operatorname{softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}
+\]
 </div>
 
 ## Why Gated Activations Became So Important
@@ -84,10 +102,39 @@ That gives you:
 - **GeGLU:** GELU gate
 - **ReGLU:** ReLU gate
 
+<div class="formula-grid">
+  <div class="formula-card">
+    <strong>GLU</strong>
+    \[
+    \operatorname{GLU}(x) = a \otimes \sigma(b)
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>SwiGLU</strong>
+    \[
+    \operatorname{SwiGLU}(x) = a \otimes \operatorname{SiLU}(b)
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>GeGLU / ReGLU</strong>
+    \[
+    \operatorname{GeGLU}(x) = a \otimes \operatorname{GELU}(b), \qquad
+    \operatorname{ReGLU}(x) = a \otimes \operatorname{ReLU}(b)
+    \]
+  </div>
+</div>
+
 This family matters because large Transformers often rely more on **gated feed-forward blocks** than on plain ReLU-style MLPs.
 
 <div class="insight-box">
 <strong>Useful mental model:</strong> ReLU asks “should this neuron pass?” GLU-like activations ask “how strongly should this feature gate another feature?”
+</div>
+
+<div class="blog-figure">
+<figure>
+<img src="/images/blog/basics/activation-output-map.svg" alt="Diagram contrasting hidden-layer activations, output activations, and gated activations">
+<figcaption>Figure 1 — Not all activations play the same role. Hidden-layer activations shape features, output activations shape the prediction object, and gated activations decide how one feature stream modulates another.</figcaption>
+</figure>
 </div>
 
 ## Shrinkage and Sparse Activations
@@ -99,6 +146,36 @@ Another family is built around sparsity or denoising:
 - **HardShrink:** zeroes small values completely
 - **Sparsemax:** like softmax, but can produce exact zeros
 - **Entmax:** interpolates between dense softmax and sparse alternatives
+
+<div class="formula-grid">
+  <div class="formula-card">
+    <strong>TanhShrink</strong>
+    \[
+    \operatorname{TanhShrink}(x) = x - \tanh(x)
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>SoftShrink</strong>
+    \[
+    \operatorname{SoftShrink}(x) =
+    \begin{cases}
+      x - \lambda, & x > \lambda \\
+      0, & |x| \le \lambda \\
+      x + \lambda, & x < -\lambda
+    \end{cases}
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>HardShrink</strong>
+    \[
+    \operatorname{HardShrink}(x) =
+    \begin{cases}
+      x, & |x| > \lambda \\
+      0, & |x| \le \lambda
+    \end{cases}
+    \]
+  </div>
+</div>
 
 These are useful when you want more structured or selective outputs rather than dense probability mass everywhere.
 
@@ -112,12 +189,38 @@ Some activations are not mainstream in basic classifiers, but they are extremely
 - **Soft Exponential:** learns whether to behave more like a log, linear, or exponential function
 - **KAN / spline activations:** learns the activation shape itself rather than choosing a fixed closed-form function
 
+<div class="formula-grid">
+  <div class="formula-card">
+    <strong>SIREN</strong>
+    \[
+    f(x) = \sin(\omega x)
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>Gaussian / RBF</strong>
+    \[
+    \phi(x) = \exp\!\left(-\frac{\|x-c\|^2}{2\sigma^2}\right)
+    \]
+  </div>
+  <div class="formula-card">
+    <strong>Soft Exponential</strong>
+    \[
+    f_\alpha(x) =
+    \begin{cases}
+      -\frac{\log(1-\alpha(x+\alpha))}{\alpha}, & \alpha < 0 \\
+      x, & \alpha = 0 \\
+      \frac{e^{\alpha x}-1}{\alpha} + \alpha, & \alpha > 0
+    \end{cases}
+    \]
+  </div>
+</div>
+
 These remind us that “activation function” is a much broader design space than just ReLU vs GELU.
 
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/basics/activation-special-grid.svg" alt="Grid of output, gated, sparse, and special activations including Softmax, LogSoftmax, Maxout, GLU, SwiGLU, GeGLU, ReGLU, TanhShrink, SoftShrink, HardShrink, Sparsemax, Entmax, SIREN, Gaussian RBF, Soft Exponential, and spline-style activations">
-<figcaption>Figure 1 — This last family is much more diverse. Some activations map logits to probabilities, some implement feature gating, some encourage sparsity, and some are designed for special function classes such as implicit fields or spline-based networks.</figcaption>
+<figcaption>Figure 2 — This last family is much more diverse. Some activations map logits to probabilities, some implement feature gating, some encourage sparsity, and some are designed for special function classes such as implicit fields or spline-based networks.</figcaption>
 </figure>
 </div>
 
@@ -171,6 +274,41 @@ These remind us that “activation function” is a much broader design space th
       <tr>
         <td>Radial similarity models</td>
         <td><strong>Gaussian / RBF</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+## What Can Go Wrong with Output and Special Activations?
+
+<div class="summary-box">
+  <table class="mini-table">
+    <thead>
+      <tr>
+        <th>Activation family</th>
+        <th>Potential problem</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Softmax</strong></td>
+        <td>Easy to misuse with the wrong loss pipeline, especially if you apply it before losses that expect raw logits.</td>
+      </tr>
+      <tr>
+        <td><strong>Sigmoid outputs</strong></td>
+        <td>Wrong choice for mutually exclusive multi-class prediction, where softmax is usually the right tool.</td>
+      </tr>
+      <tr>
+        <td><strong>GLU-style gating</strong></td>
+        <td>More expressive, but also more parameter-heavy and architecture-dependent.</td>
+      </tr>
+      <tr>
+        <td><strong>Sparsemax / Entmax</strong></td>
+        <td>Useful for sparsity, but can change optimization behavior enough that they are not just drop-in replacements for softmax.</td>
+      </tr>
+      <tr>
+        <td><strong>SIREN / RBF / spline-style activations</strong></td>
+        <td>Very powerful in the right niche, but usually a poor default if the model and task were not designed for them.</td>
       </tr>
     </tbody>
   </table>

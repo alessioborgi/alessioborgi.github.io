@@ -17,14 +17,12 @@ basics:
   icon:  "🧠"
   color: "#2563eb"
 
-  overview:
-    - { slug: "2026-06-01-activation-functions-overview", title: "Activation Functions in Neural Networks: Why Non-Linearity Matters", published: online }
-
   sections:
 
     activation-functions:
       label: "Activation Functions"
       posts:
+        - { slug: "2026-06-01-activation-functions-overview", title: "Activation Functions in Neural Networks: Why Non-Linearity Matters", published: online }
         - { slug: "2026-06-02-modern-activation-functions", title: "Modern Activation Functions: GELU, SiLU, Mish, and Smooth Gating", published: online }
         - { slug: "2026-06-03-output-gated-and-special-activations", title: "Output, Gated, and Special Activations: Softmax, GLU, SIREN, and More", published: online }
 

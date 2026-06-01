@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Gradient problems across activations</title>
+  <desc id="desc">A comparison of gradient flow for sigmoid or tanh, ReLU, and smoother modern activations.</desc>
+  <defs><style>.bg{fill:#f8fbff}.card{fill:#fff;stroke:#dbe7f5;stroke-width:2}.title{font:700 24px Arial,sans-serif;fill:#0f2a36}.text{font:15px Arial,sans-serif;fill:#475569}.tiny{font:13px Arial,sans-serif;fill:#64748b}.line1{stroke:#ef4444;stroke-width:6;stroke-linecap:round}.line2{stroke:#f59e0b;stroke-width:6;stroke-linecap:round}.line3{stroke:#10b981;stroke-width:6;stroke-linecap:round}.dot{fill:#0f2a36}</style></defs>
+  <rect class="bg" width="1200" height="420" rx="24"/>
+  <rect class="card" x="30" y="50" width="350" height="310" rx="18"/>
+  <text class="title" x="58" y="92">Sigmoid / tanh</text>
+  <text class="text" x="58" y="124">Large magnitudes push the curve into flat tails.</text>
+  <path class="line1" d="M90 220 C150 220, 165 210, 185 190 C205 170, 220 160, 310 160"/>
+  <circle class="dot" cx="120" cy="220" r="6"/><circle class="dot" cx="188" cy="188" r="6"/><circle class="dot" cx="290" cy="161" r="6"/>
+  <text class="tiny" x="58" y="278">Derivative becomes tiny in the tails.</text>
+  <text class="tiny" x="58" y="300">Deep stacks can stop learning early layers.</text>
+
+  <rect class="card" x="425" y="50" width="350" height="310" rx="18"/>
+  <text class="title" x="453" y="92">ReLU</text>
+  <text class="text" x="453" y="124">Healthy positive branch, but a dead negative side.</text>
+  <path class="line2" d="M485 225 L600 225 L710 165"/>
+  <circle class="dot" cx="525" cy="225" r="6"/><circle class="dot" cx="600" cy="225" r="6"/><circle class="dot" cx="680" cy="181" r="6"/>
+  <text class="tiny" x="453" y="278">Strong gradient when active.</text>
+  <text class="tiny" x="453" y="300">But units can die if they stay negative.</text>
+
+  <rect class="card" x="820" y="50" width="350" height="310" rx="18"/>
+  <text class="title" x="848" y="92">GELU / SiLU / Mish</text>
+  <text class="text" x="848" y="124">Try to preserve gradient flow around zero.</text>
+  <path class="line3" d="M878 224 C928 232, 965 222, 995 194 C1018 173, 1044 165, 1110 158"/>
+  <circle class="dot" cx="918" cy="228" r="6"/><circle class="dot" cx="992" cy="196" r="6"/><circle class="dot" cx="1088" cy="160" r="6"/>
+  <text class="tiny" x="848" y="278">Smoother transition, fewer abrupt dead zones.</text>
+  <text class="tiny" x="848" y="300">Often easier to optimize in large modern models.</text>
+</svg>
