@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: applications
 tags: [molecules, drug-discovery, QSAR, molecular-property, ADMET]
-published: false
+published: true
 excerpt: "Graph neural networks are transforming computational drug discovery. Molecules are natural graphs, and GNNs learn molecular representations that predict toxicity, solubility, binding affinity, and synthesis feasibility — tasks that previously required expensive laboratory experiments."
 author_profile: true
 read_time: true

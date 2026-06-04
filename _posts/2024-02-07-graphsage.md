@@ -4,7 +4,7 @@ title: "GraphSAGE: Inductive Learning on Large Graphs"
 categories: [gnn]
 book: gnn
 tags: [graphsage, inductive, sampling]
-published: false
+published: true
 excerpt: "GCN and GAT learn embeddings for fixed graphs — add a new node and you're stuck. GraphSAGE (Hamilton et al., 2017) learns an aggregation function instead, so it can generate embeddings for entirely new nodes at inference time."
 author_profile: true
 read_time: true

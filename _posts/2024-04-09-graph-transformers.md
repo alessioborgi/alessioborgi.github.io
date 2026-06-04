@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: architectures
 tags: [graph-transformer, attention, positional-encoding, global-attention]
-published: false
+published: true
 excerpt: "Graph Transformers replace or augment local message passing with full pairwise attention — every node attends to every other node. This solves long-range dependencies and over-squashing at the cost of O(N²) computation."
 author_profile: true
 read_time: true

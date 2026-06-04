@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: sheaf
 tags: [sheaf-maps, diagonal, orthogonal, general, expressivity, scalability]
-published: false
+published: true
 excerpt: "The restriction maps in a cellular sheaf can be constrained to different matrix classes: scalars, diagonal matrices, orthogonal matrices, or general matrices. Each class offers a different trade-off between expressivity and computational cost."
 author_profile: true
 read_time: true

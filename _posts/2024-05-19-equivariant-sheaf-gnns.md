@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: sheaf
 tags: [sheaf, equivariant, connection-Laplacian, gauge-symmetry, geometric]
-published: false
+published: true
 excerpt: "Sheaves with orthogonal restriction maps define a connection on the graph — a parallel transport structure over edges. This connects sheaf GNNs to differential geometry and enables equivariant processing of data with local coordinate frames at each node."
 author_profile: true
 read_time: true

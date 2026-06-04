@@ -4,7 +4,7 @@ title: "The Graph Adjacency Matrix: A Graph in Matrix Form"
 categories: [gnn]
 book: gnn
 tags: [graph, adjacency-matrix, fundamentals]
-published: false
+published: true
 excerpt: "Before understanding GNNs, you need to understand how graphs are represented mathematically. The adjacency matrix is the foundation — a simple grid that tells you which nodes are connected."
 author_profile: true
 read_time: true
@@ -159,3 +159,8 @@ Normalising by degree: `D⁻¹ · A · H` gives the **mean** of neighbour featur
   <li>Adding the identity (Ã = A+I) creates self-loops so each node includes its own features during aggregation.</li>
 </ul>
 </div>
+
+## References
+
+- Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.
+- Bondy, J. A., & Murty, U. S. R. (2008). *Graph Theory*. Springer.

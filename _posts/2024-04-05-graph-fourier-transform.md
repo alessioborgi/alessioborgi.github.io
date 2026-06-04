@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: fundamentals
 tags: [spectral, Fourier, Laplacian, eigenvectors, graph-signal]
-published: false
+published: true
 excerpt: "The Graph Fourier Transform decomposes a signal on a graph into frequency components using the Laplacian's eigenvectors. This spectral view is the mathematical foundation behind spectral GNNs like ChebNet and GCN."
 author_profile: true
 read_time: true

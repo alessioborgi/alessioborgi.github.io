@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: pooling
 tags: [set2set, attention-readout, readout, LSTM, graph-classification]
-published: false
+published: true
 excerpt: "Mean and sum readout treat all nodes equally. Attention readout learns which nodes matter most for a given task. Set2Set goes further — it uses an LSTM to iteratively query the node set, producing richer graph representations than single-pass pooling."
 author_profile: true
 read_time: true

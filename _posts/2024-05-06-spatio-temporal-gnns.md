@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: dynamic
 tags: [spatio-temporal, STGCN, DCRNN, traffic, forecasting]
-published: false
+published: true
 excerpt: "Spatio-temporal GNNs combine spatial message passing with temporal sequence modelling. They are the dominant approach for traffic forecasting, weather prediction, and any task where measurements at sensor nodes evolve over time on a fixed graph."
 author_profile: true
 read_time: true

@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: heterogeneous
 tags: [heterogeneous-graph, relational, knowledge-graph, meta-path, HAN]
-published: false
+published: true
 excerpt: "Most real-world graphs are heterogeneous — they contain multiple node types (users, items, tags) and edge types (clicks, rates, authors). Standard GNNs treat all nodes and edges identically, making them blind to this type structure."
 author_profile: true
 read_time: true

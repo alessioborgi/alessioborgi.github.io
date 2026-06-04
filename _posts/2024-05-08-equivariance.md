@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: geometric
 tags: [equivariance, invariance, symmetry, group-theory, E(n)]
-published: false
+published: true
 excerpt: "Equivariance formalises the idea that a function should 'commute with symmetry transformations.' A rotation-equivariant model applied to rotated input gives the rotated output — no extra training needed. This is the foundation for geometric deep learning."
 author_profile: true
 read_time: true

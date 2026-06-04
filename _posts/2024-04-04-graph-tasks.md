@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: fundamentals
 tags: [node-classification, link-prediction, graph-classification, graph-regression]
-published: false
+published: true
 excerpt: "GNNs can predict at three levels: properties of individual nodes, existence or type of edges, or properties of entire graphs. Each level requires a different output head and training setup."
 author_profile: true
 read_time: true
@@ -142,5 +142,6 @@ All tasks share the same GNN backbone. Mastering graph-level tasks requires unde
 
 ## References
 
+- Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.
 - Hamilton, W. L., Ying, R., & Leskovec, J. (2017). [Inductive Representation Learning on Large Graphs](https://arxiv.org/abs/1706.02216). *NeurIPS 2017* (GraphSAGE — introduces the node/link/graph task taxonomy).
 - Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv preprint*.

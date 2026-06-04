@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: fundamentals
 tags: [homophily, heterophily, GNN, aggregation, over-smoothing]
-published: false
+published: true
 excerpt: "Most GNNs assume nearby nodes are similar — the homophily assumption. When this breaks (heterophilic graphs), standard message passing hurts performance. Understanding this distinction is essential for modern GNN design."
 author_profile: true
 read_time: true

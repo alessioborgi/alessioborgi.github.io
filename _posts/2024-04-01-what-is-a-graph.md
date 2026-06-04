@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: fundamentals
 tags: [graph-theory, nodes, edges, features, labels]
-published: false
+published: true
 excerpt: "A graph is a set of nodes connected by edges — but the power of GNNs comes from the features attached to nodes and edges, and the labels we want to predict."
 author_profile: true
 read_time: true
@@ -137,4 +137,5 @@ Graphs are the natural language of relational data. GNNs are the deep learning a
 ## References
 
 - Bondy, J. A., & Murty, U. S. R. (2008). *Graph Theory*. Springer. — Standard reference for graph theory fundamentals.
+- Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.
 - Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv preprint*.

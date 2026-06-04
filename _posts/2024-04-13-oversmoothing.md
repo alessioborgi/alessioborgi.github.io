@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: expressivity
 tags: [oversmoothing, depth, GNN, Laplacian, convergence]
-published: false
+published: true
 excerpt: "Stack enough GNN layers and all node embeddings converge to the same vector — making the model useless. Oversmoothing is not a training problem; it is a mathematical inevitability of iterated averaging."
 author_profile: true
 read_time: true

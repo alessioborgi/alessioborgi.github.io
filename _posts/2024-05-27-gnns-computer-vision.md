@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: applications
 tags: [scene-graph, visual-question-answering, object-detection, skeleton, point-cloud]
-published: false
+published: true
 excerpt: "Computer vision tasks increasingly require relational reasoning — understanding how objects relate to each other, not just what they are. Scene graph generation, visual question answering, action recognition from skeletons, and 3D point cloud processing all benefit from GNN-based relational modelling."
 author_profile: true
 read_time: true

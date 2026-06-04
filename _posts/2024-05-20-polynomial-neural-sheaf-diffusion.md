@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: sheaf
 tags: [polynomial-sheaf-diffusion, PNSD, spectral, polynomial-filter, sheaf]
-published: false
+published: true
 excerpt: "Polynomial Neural Sheaf Diffusion (PNSD) replaces the fixed diffusion operator (I - Δ_F) with a learnable polynomial of the Sheaf Laplacian. This gives the model spectral flexibility — it can learn to amplify or suppress different frequency components of the sheaf signal."
 author_profile: true
 read_time: true

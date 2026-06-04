@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: expressivity
 tags: [expressivity, WL-test, regular-graphs, indistinguishability, GNN-limits]
-published: false
+published: true
 excerpt: "Certain graph structures are invisible to message-passing GNNs — not because of bad training, but because of fundamental mathematical limits. Two structurally distinct graphs can produce identical embeddings in any MPNN."
 author_profile: true
 read_time: true

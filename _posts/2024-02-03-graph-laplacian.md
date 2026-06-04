@@ -4,7 +4,7 @@ title: "The Graph Laplacian: Spectral Graph Theory Explained Simply"
 categories: [gnn]
 book: gnn
 tags: [graph, laplacian, spectral]
-published: false
+published: true
 excerpt: "The Graph Laplacian is L = D - A. Its eigenvectors reveal the graph's community structure; its eigenvalues tell you how well-connected the graph is. It's also the mathematical bridge from spectral theory to GNNs like GCN."
 author_profile: true
 read_time: true
@@ -151,3 +151,8 @@ Its eigenvalues lie in [0, 2], making it more numerically stable for filter desi
   <li>GCN is a simplified spectral convolution: approximate the Laplacian filter as first-order polynomial, normalise → get ÃH.</li>
 </ul>
 </div>
+
+## References
+
+- Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.
+- Kipf, T. N., & Welling, M. (2017). [Semi-Supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907). *ICLR 2017*.

@@ -103,114 +103,114 @@ gnn:
   color: "#0d9488"
 
   overview:
-    - { slug: "2024-02-01-gnn-overview", title: "Graph Neural Networks: Learning on Graphs", published: offline }
+    - { slug: "2024-02-01-gnn-overview", title: "Graph Neural Networks: Learning on Graphs", published: online }
 
   sections:
 
     fundamentals:
       label: "Graph Fundamentals"
       posts:
-        - { slug: "2024-02-02-adjacency-matrix",           title: "The Graph Adjacency Matrix: A Graph in Matrix Form",                       published: offline }
-        - { slug: "2024-02-03-graph-laplacian",            title: "The Graph Laplacian: Spectral Graph Theory Explained Simply",              published: offline }
-        - { slug: "2024-04-01-what-is-a-graph",            title: "What Is a Graph? Nodes, Edges, Features, and Labels",                     published: offline }
-        - { slug: "2024-04-02-graph-types",                title: "Directed, Undirected, Weighted, and Heterogeneous Graphs",                 published: offline }
-        - { slug: "2024-04-03-homophily-heterophily",      title: "Homophily vs Heterophily: When Neighbours Are Similar or Different",      published: offline }
-        - { slug: "2024-04-04-graph-tasks",                title: "Graph Tasks: Node, Edge, and Graph-Level Prediction",                      published: offline }
-        - { slug: "2024-04-05-graph-fourier-transform",    title: "Graph Fourier Transform: The Spectral View of Graphs",                    published: offline }
+        - { slug: "2024-02-02-adjacency-matrix",           title: "The Graph Adjacency Matrix: A Graph in Matrix Form",                       published: online }
+        - { slug: "2024-02-03-graph-laplacian",            title: "The Graph Laplacian: Spectral Graph Theory Explained Simply",              published: online }
+        - { slug: "2024-04-01-what-is-a-graph",            title: "What Is a Graph? Nodes, Edges, Features, and Labels",                     published: online }
+        - { slug: "2024-04-02-graph-types",                title: "Directed, Undirected, Weighted, and Heterogeneous Graphs",                 published: online }
+        - { slug: "2024-04-03-homophily-heterophily",      title: "Homophily vs Heterophily: When Neighbours Are Similar or Different",      published: online }
+        - { slug: "2024-04-04-graph-tasks",                title: "Graph Tasks: Node, Edge, and Graph-Level Prediction",                      published: online }
+        - { slug: "2024-04-05-graph-fourier-transform",    title: "Graph Fourier Transform: The Spectral View of Graphs",                    published: online }
 
     architectures:
       label: "Core Architectures"
       posts:
-        - { slug: "2024-02-04-message-passing",     title: "Message Passing: The Universal GNN Framework",                         published: offline }
-        - { slug: "2024-02-05-gcn",                 title: "GCN: Graph Convolutional Networks",                                    published: offline }
-        - { slug: "2024-02-06-gat",                 title: "GAT: Graph Attention Networks",                                        published: offline }
-        - { slug: "2024-02-07-graphsage",           title: "GraphSAGE: Inductive Learning on Large Graphs",                       published: offline }
-        - { slug: "2024-02-08-gin",                 title: "GIN: Graph Isomorphism Network — The Most Expressive GNN",            published: offline }
-        - { slug: "2024-04-06-chebnet",             title: "ChebNet: Spectral Graph Convolutions via Chebyshev Polynomials",      published: offline }
-        - { slug: "2024-04-07-sgc",                 title: "SGC: Simple Graph Convolution",                                        published: offline }
-        - { slug: "2024-04-08-appnp",               title: "APPNP: Personalized PageRank Meets Graph Neural Networks",            published: offline }
-        - { slug: "2024-04-09-graph-transformers",  title: "Graph Transformers: Bringing Attention to Graphs",                    published: offline }
-        - { slug: "2024-04-10-graphormer",          title: "Graphormer: Transformers with Structural Biases for Graphs",          published: offline }
-        - { slug: "2024-04-11-mpnn",                title: "MPNN: The General Message Passing Neural Network Framework",          published: offline }
+        - { slug: "2024-02-04-message-passing",     title: "Message Passing: The Universal GNN Framework",                         published: online }
+        - { slug: "2024-02-05-gcn",                 title: "GCN: Graph Convolutional Networks",                                    published: online }
+        - { slug: "2024-02-06-gat",                 title: "GAT: Graph Attention Networks",                                        published: online }
+        - { slug: "2024-02-07-graphsage",           title: "GraphSAGE: Inductive Learning on Large Graphs",                       published: online }
+        - { slug: "2024-02-08-gin",                 title: "GIN: Graph Isomorphism Network — The Most Expressive GNN",            published: online }
+        - { slug: "2024-04-06-chebnet",             title: "ChebNet: Spectral Graph Convolutions via Chebyshev Polynomials",      published: online }
+        - { slug: "2024-04-07-sgc",                 title: "SGC: Simple Graph Convolution",                                        published: online }
+        - { slug: "2024-04-08-appnp",               title: "APPNP: Personalized PageRank Meets Graph Neural Networks",            published: online }
+        - { slug: "2024-04-09-graph-transformers",  title: "Graph Transformers: Bringing Attention to Graphs",                    published: online }
+        - { slug: "2024-04-10-graphormer",          title: "Graphormer: Transformers with Structural Biases for Graphs",          published: online }
+        - { slug: "2024-04-11-mpnn",                title: "MPNN: The General Message Passing Neural Network Framework",          published: online }
 
     expressivity:
       label: "Expressivity & Limitations"
       posts:
-        - { slug: "2024-04-12-wl-test",                          title: "The Weisfeiler-Lehman Test: How Powerful Are GNNs?",                         published: offline }
-        - { slug: "2024-04-13-oversmoothing",                    title: "Oversmoothing: When All Node Embeddings Become the Same",                    published: offline }
-        - { slug: "2024-04-14-oversquashing",                    title: "Oversquashing: When Too Much Information Passes Through Bottlenecks",        published: offline }
-        - { slug: "2024-04-15-oversmoothing-vs-oversquashing",   title: "Over-smoothing vs Over-squashing: The Difference",                           published: offline }
-        - { slug: "2024-04-16-gnn-depth",                        title: "Depth in GNNs: Why Deeper Is Not Always Better",                             published: offline }
-        - { slug: "2024-04-16b-why-graphs-fool-gnns",            title: "Why Some Graphs Fool GNNs: The Structural Indistinguishability Problem",     published: offline }
+        - { slug: "2024-04-12-wl-test",                          title: "The Weisfeiler-Lehman Test: How Powerful Are GNNs?",                         published: online }
+        - { slug: "2024-04-13-oversmoothing",                    title: "Oversmoothing: When All Node Embeddings Become the Same",                    published: online }
+        - { slug: "2024-04-14-oversquashing",                    title: "Oversquashing: When Too Much Information Passes Through Bottlenecks",        published: online }
+        - { slug: "2024-04-15-oversmoothing-vs-oversquashing",   title: "Over-smoothing vs Over-squashing: The Difference",                           published: online }
+        - { slug: "2024-04-16-gnn-depth",                        title: "Depth in GNNs: Why Deeper Is Not Always Better",                             published: online }
+        - { slug: "2024-04-16b-why-graphs-fool-gnns",            title: "Why Some Graphs Fool GNNs: The Structural Indistinguishability Problem",     published: online }
 
     graph-pe:
       label: "Graph Positional Encodings"
       posts:
-        - { slug: "2024-04-17-why-gnns-need-pe",             title: "Why GNNs Need Positional Encodings",                          published: offline }
-        - { slug: "2024-04-18-laplacian-pe",                 title: "Laplacian Eigenvectors as Graph Positional Encodings",        published: offline }
-        - { slug: "2024-04-19-rwpe",                         title: "Random Walk Positional Encodings",                            published: offline }
-        - { slug: "2024-04-20-shortest-path-encodings",      title: "Shortest-Path Encodings for Graph Transformers",              published: offline }
-        - { slug: "2024-04-21-structural-vs-positional-pe",  title: "Structural vs Positional Encodings in Graphs",               published: offline }
-        - { slug: "2024-04-22-sign-ambiguity-lape",          title: "Sign Ambiguity in Laplacian Eigenvectors",                   published: offline }
+        - { slug: "2024-04-17-why-gnns-need-pe",             title: "Why GNNs Need Positional Encodings",                          published: online }
+        - { slug: "2024-04-18-laplacian-pe",                 title: "Laplacian Eigenvectors as Graph Positional Encodings",        published: online }
+        - { slug: "2024-04-19-rwpe",                         title: "Random Walk Positional Encodings",                            published: online }
+        - { slug: "2024-04-20-shortest-path-encodings",      title: "Shortest-Path Encodings for Graph Transformers",              published: online }
+        - { slug: "2024-04-21-structural-vs-positional-pe",  title: "Structural vs Positional Encodings in Graphs",               published: online }
+        - { slug: "2024-04-22-sign-ambiguity-lape",          title: "Sign Ambiguity in Laplacian Eigenvectors",                   published: online }
 
     pooling:
       label: "Graph Pooling & Readout"
       posts:
-        - { slug: "2024-04-23-global-pooling",          title: "Global Pooling in GNNs: Mean, Sum, and Max",                         published: offline }
-        - { slug: "2024-04-24-diffpool",                title: "DiffPool: Learning Hierarchical Graph Pooling",                      published: offline }
-        - { slug: "2024-04-25-topkpool-sagpool",        title: "TopKPool and SAGPool: Sparse Graph Pooling",                         published: offline }
-        - { slug: "2024-04-26-set2set-attention-readout", title: "Set2Set and Attention Readout: Order-Invariant Graph Summaries",   published: offline }
-        - { slug: "2024-04-27-graph-classification",    title: "Graph Classification: From Node Embeddings to Graph Embeddings",     published: offline }
+        - { slug: "2024-04-23-global-pooling",          title: "Global Pooling in GNNs: Mean, Sum, and Max",                         published: online }
+        - { slug: "2024-04-24-diffpool",                title: "DiffPool: Learning Hierarchical Graph Pooling",                      published: online }
+        - { slug: "2024-04-25-topkpool-sagpool",        title: "TopKPool and SAGPool: Sparse Graph Pooling",                         published: online }
+        - { slug: "2024-04-26-set2set-attention-readout", title: "Set2Set and Attention Readout: Order-Invariant Graph Summaries",   published: online }
+        - { slug: "2024-04-27-graph-classification",    title: "Graph Classification: From Node Embeddings to Graph Embeddings",     published: online }
 
     heterogeneous:
       label: "Heterogeneous Graphs"
       posts:
-        - { slug: "2024-04-28-heterogeneous-graphs",      title: "Heterogeneous Graphs: When Nodes and Edges Have Types",          published: offline }
-        - { slug: "2024-04-29-rgcn",                      title: "R-GCN: Relational Graph Convolutional Networks",                 published: offline }
-        - { slug: "2024-04-30-han",                       title: "HAN: Heterogeneous Graph Attention Networks",                    published: offline }
-        - { slug: "2024-05-01-kg-embeddings-vs-gnns",     title: "Knowledge Graph Embeddings vs GNNs",                            published: offline }
-        - { slug: "2024-05-02-temporal-knowledge-graphs", title: "Temporal Knowledge Graphs: Facts That Change Over Time",        published: offline }
+        - { slug: "2024-04-28-heterogeneous-graphs",      title: "Heterogeneous Graphs: When Nodes and Edges Have Types",          published: online }
+        - { slug: "2024-04-29-rgcn",                      title: "R-GCN: Relational Graph Convolutional Networks",                 published: online }
+        - { slug: "2024-04-30-han",                       title: "HAN: Heterogeneous Graph Attention Networks",                    published: online }
+        - { slug: "2024-05-01-kg-embeddings-vs-gnns",     title: "Knowledge Graph Embeddings vs GNNs",                            published: online }
+        - { slug: "2024-05-02-temporal-knowledge-graphs", title: "Temporal Knowledge Graphs: Facts That Change Over Time",        published: online }
 
     dynamic:
       label: "Dynamic Graphs"
       posts:
-        - { slug: "2024-05-03-static-vs-dynamic-graphs", title: "Static vs Dynamic Graphs: When Structure Changes Over Time",   published: offline }
-        - { slug: "2024-05-04-temporal-graph-networks",  title: "Temporal Graph Networks: Learning from Events",                published: offline }
-        - { slug: "2024-05-05-graph-neural-odes",        title: "Graph Neural ODEs: Continuous-Time Graph Dynamics",           published: offline }
-        - { slug: "2024-05-06-spatio-temporal-gnns",     title: "Spatio-Temporal GNNs: Learning on Graphs Through Time",       published: offline }
+        - { slug: "2024-05-03-static-vs-dynamic-graphs", title: "Static vs Dynamic Graphs: When Structure Changes Over Time",   published: online }
+        - { slug: "2024-05-04-temporal-graph-networks",  title: "Temporal Graph Networks: Learning from Events",                published: online }
+        - { slug: "2024-05-05-graph-neural-odes",        title: "Graph Neural ODEs: Continuous-Time Graph Dynamics",           published: online }
+        - { slug: "2024-05-06-spatio-temporal-gnns",     title: "Spatio-Temporal GNNs: Learning on Graphs Through Time",       published: online }
 
     geometric:
       label: "Geometric Deep Learning"
       posts:
-        - { slug: "2024-05-07-why-geometry-matters-gnns", title: "Why Geometry Matters in Graph Neural Networks",              published: offline }
-        - { slug: "2024-05-08-equivariance",               title: "Equivariance: What It Means and Why It Matters",            published: offline }
-        - { slug: "2024-05-09-egnn",                       title: "EGNN: E(n)-Equivariant Graph Neural Networks",              published: offline }
-        - { slug: "2024-05-10-se3-transformers",           title: "SE(3)-Transformers: Attention with 3D Symmetry",            published: offline }
-        - { slug: "2024-05-11-tensor-field-networks",      title: "Tensor Field Networks and Geometric Deep Learning",         published: offline }
-        - { slug: "2024-05-12-molecular-gnns",             title: "Molecular GNNs: Learning on Atoms and Bonds",               published: offline }
+        - { slug: "2024-05-07-why-geometry-matters-gnns", title: "Why Geometry Matters in Graph Neural Networks",              published: online }
+        - { slug: "2024-05-08-equivariance",               title: "Equivariance: What It Means and Why It Matters",            published: online }
+        - { slug: "2024-05-09-egnn",                       title: "EGNN: E(n)-Equivariant Graph Neural Networks",              published: online }
+        - { slug: "2024-05-10-se3-transformers",           title: "SE(3)-Transformers: Attention with 3D Symmetry",            published: online }
+        - { slug: "2024-05-11-tensor-field-networks",      title: "Tensor Field Networks and Geometric Deep Learning",         published: online }
+        - { slug: "2024-05-12-molecular-gnns",             title: "Molecular GNNs: Learning on Atoms and Bonds",               published: online }
 
     sheaf:
       label: "Sheaf Neural Networks"
       posts:
-        - { slug: "2024-05-13-why-message-passing-not-enough", title: "Why Message Passing Is Not Enough: The Case for Sheaves", published: offline }
-        - { slug: "2024-05-14-what-is-a-sheaf",                title: "What Is a Sheaf? From Topology to Graph Learning",        published: offline }
-        - { slug: "2024-05-15-sheaf-laplacian",                title: "The Sheaf Laplacian: Spectral Theory for Sheaves",        published: offline }
-        - { slug: "2024-05-16-neural-sheaf-diffusion",         title: "Neural Sheaf Diffusion: Learning Sheaves End-to-End",     published: offline }
-        - { slug: "2024-05-17-sheaf-map-types",                title: "Diagonal, Orthogonal, and General Sheaf Maps",            published: offline }
-        - { slug: "2024-05-18-sheaf-gnns-heterophily",         title: "Sheaf Neural Networks and Heterophily",                   published: offline }
-        - { slug: "2024-05-19-equivariant-sheaf-gnns",         title: "Equivariant Sheaf Neural Networks",                       published: offline }
-        - { slug: "2024-05-20-polynomial-neural-sheaf-diffusion", title: "Polynomial Neural Sheaf Diffusion",                    published: offline }
+        - { slug: "2024-05-13-why-message-passing-not-enough", title: "Why Message Passing Is Not Enough: The Case for Sheaves", published: online }
+        - { slug: "2024-05-14-what-is-a-sheaf",                title: "What Is a Sheaf? From Topology to Graph Learning",        published: online }
+        - { slug: "2024-05-15-sheaf-laplacian",                title: "The Sheaf Laplacian: Spectral Theory for Sheaves",        published: online }
+        - { slug: "2024-05-16-neural-sheaf-diffusion",         title: "Neural Sheaf Diffusion: Learning Sheaves End-to-End",     published: online }
+        - { slug: "2024-05-17-sheaf-map-types",                title: "Diagonal, Orthogonal, and General Sheaf Maps",            published: online }
+        - { slug: "2024-05-18-sheaf-gnns-heterophily",         title: "Sheaf Neural Networks and Heterophily",                   published: online }
+        - { slug: "2024-05-19-equivariant-sheaf-gnns",         title: "Equivariant Sheaf Neural Networks",                       published: online }
+        - { slug: "2024-05-20-polynomial-neural-sheaf-diffusion", title: "Polynomial Neural Sheaf Diffusion",                    published: online }
 
     applications:
       label: "Applications"
       posts:
-        - { slug: "2024-05-21-gnns-molecules",           title: "GNNs for Molecules: Drug Discovery and Material Design",              published: offline }
-        - { slug: "2024-05-22-gnns-recommender-systems", title: "GNNs for Recommender Systems",                                       published: offline }
-        - { slug: "2024-05-23-gnns-social-networks",     title: "GNNs for Social Networks: Influence, Communities, and Misinformation", published: offline }
-        - { slug: "2024-05-24-gnns-traffic",             title: "GNNs for Traffic Forecasting",                                        published: offline }
-        - { slug: "2024-05-25-gnns-knowledge-graphs",    title: "GNNs for Knowledge Graphs: Reasoning and Completion",                 published: offline }
-        - { slug: "2024-05-26-gnns-robotics",            title: "GNNs for Robotics: Planning, Manipulation, and Multi-Agent Systems",  published: offline }
-        - { slug: "2024-05-27-gnns-computer-vision",     title: "GNNs for Computer Vision: Scene Graphs and Beyond",                  published: offline }
+        - { slug: "2024-05-21-gnns-molecules",           title: "GNNs for Molecules: Drug Discovery and Material Design",              published: online }
+        - { slug: "2024-05-22-gnns-recommender-systems", title: "GNNs for Recommender Systems",                                       published: online }
+        - { slug: "2024-05-23-gnns-social-networks",     title: "GNNs for Social Networks: Influence, Communities, and Misinformation", published: online }
+        - { slug: "2024-05-24-gnns-traffic",             title: "GNNs for Traffic Forecasting",                                        published: online }
+        - { slug: "2024-05-25-gnns-knowledge-graphs",    title: "GNNs for Knowledge Graphs: Reasoning and Completion",                 published: online }
+        - { slug: "2024-05-26-gnns-robotics",            title: "GNNs for Robotics: Planning, Manipulation, and Multi-Agent Systems",  published: online }
+        - { slug: "2024-05-27-gnns-computer-vision",     title: "GNNs for Computer Vision: Scene Graphs and Beyond",                  published: online }
 
 
 # ────────────────────────────────────────────────────────────────────────────

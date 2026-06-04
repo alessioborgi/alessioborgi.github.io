@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: sheaf
 tags: [sheaf-laplacian, spectral, coboundary, Dirichlet-energy, diffusion]
-published: false
+published: true
 excerpt: "The Sheaf Laplacian generalises the graph Laplacian by incorporating per-edge restriction maps. Its spectrum reveals how consistent data is under the sheaf. Sheaf diffusion with this Laplacian generalises GCN to handle heterophilic graphs."
 author_profile: true
 read_time: true

@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: heterogeneous
 tags: [knowledge-graph, TransE, DistMult, ComplEx, R-GCN, link-prediction]
-published: false
+published: true
 excerpt: "Knowledge graph completion can be solved with shallow KG embeddings (TransE, DistMult, ComplEx) or with structural GNNs (R-GCN, CompGCN). Each approach has different inductive biases and failure modes. Understanding when to use each is the central design decision for KG tasks."
 author_profile: true
 read_time: true

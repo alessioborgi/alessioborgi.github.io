@@ -4,7 +4,7 @@ title: "Graph Neural Networks: Learning on Graphs"
 categories: [gnn]
 book: gnn
 tags: [graph, neural-network, overview]
-published: false
+published: true
 excerpt: "Graphs are everywhere — molecules, social networks, road maps, knowledge bases. Graph Neural Networks learn from this relational structure by propagating information between connected nodes. Here's the complete picture."
 author_profile: true
 read_time: true
@@ -33,6 +33,8 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> GNNs learn vector representations for nodes (and graphs) by iteratively aggregating information from neighbourhoods. They outperform flat neural networks on any data that is naturally relational — molecules, social graphs, knowledge graphs, road networks, and more.
 </div>
+
+> **Series note:** This Graph Neural Networks track is organised as short, self-contained 3-5 minute posts. The fundamentals are aligned with the presentation in William L. Hamilton's *Graph Representation Learning*, which is the main background reference for the basic graph concepts used throughout the series.
 
 ## Graphs Are Everywhere
 
@@ -165,3 +167,8 @@ For node tasks: use the node embeddings directly. For graph tasks: **readout** (
   <li><a href="/blog/gnn/message-passing/">Message Passing: The Universal GNN Framework</a></li>
 </ul>
 </div>
+
+## References
+
+- Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.
+- Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv preprint*.

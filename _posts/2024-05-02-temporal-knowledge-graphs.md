@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: heterogeneous
 tags: [temporal-KG, TKG, time-aware, link-prediction, historical-reasoning]
-published: false
+published: true
 excerpt: "Most knowledge graphs treat facts as timeless — but facts change. Barack Obama was president from 2009 to 2017. Temporal Knowledge Graphs add timestamps to triples, requiring models to reason about what was true when."
 author_profile: true
 read_time: true

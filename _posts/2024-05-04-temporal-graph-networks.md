@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: dynamic
 tags: [TGN, temporal, continuous-time, memory, link-prediction]
-published: false
+published: true
 excerpt: "TGN (Temporal Graph Network) is the leading framework for continuous-time dynamic graphs. It maintains a per-node memory that is updated upon each interaction, enabling efficient inductive link prediction on event streams."
 author_profile: true
 read_time: true

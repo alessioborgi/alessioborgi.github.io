@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: applications
 tags: [social-network, community-detection, influence, fake-news, link-prediction]
-published: false
+published: true
 excerpt: "Social networks are large sparse graphs with rich node features (user profiles) and heterogeneous edges (friendship, follow, retweet). GNNs predict user behaviour, detect communities, identify influential spreaders, and flag misinformation — tasks with significant real-world impact."
 author_profile: true
 read_time: true

@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: graph-pe
 tags: [positional-encoding, structural-encoding, symmetry, GNN]
-published: false
+published: true
 excerpt: "Message-passing GNNs are permutation-equivariant by design — they cannot assign unique positions to nodes. Without positional encodings, symmetric nodes are indistinguishable. Here is why that matters and how to fix it."
 author_profile: true
 read_time: true

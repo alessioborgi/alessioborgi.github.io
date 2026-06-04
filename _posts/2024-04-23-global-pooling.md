@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: pooling
 tags: [pooling, readout, graph-classification, aggregation, global-pooling]
-published: false
+published: true
 excerpt: "To predict a property of an entire graph, node embeddings must be aggregated into a single vector. The choice of global pooling — mean, sum, or max — is not arbitrary: each has distinct expressive power and fits different tasks."
 author_profile: true
 read_time: true

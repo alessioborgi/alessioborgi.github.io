@@ -4,7 +4,7 @@ title: "Message Passing: The Universal GNN Framework"
 categories: [gnn]
 book: gnn
 tags: [message-passing, mpnn, framework]
-published: false
+published: true
 excerpt: "Every GNN — GCN, GAT, GraphSAGE, GIN — is a special case of message passing. Learn the three-step loop that defines them all: compute messages, aggregate, update."
 author_profile: true
 read_time: true
@@ -168,3 +168,8 @@ After 3 layers, an atom "knows" about the atoms 3 bonds away — capturing local
   <li>Graph-level predictions require a <strong>readout function</strong> that pools node embeddings into a single vector.</li>
 </ul>
 </div>
+
+## References
+
+- Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.
+- Gilmer, J., Schoenholz, S. S., Riley, P. F., Vinyals, O., & Dahl, G. E. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017*.

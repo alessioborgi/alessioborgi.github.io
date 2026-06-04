@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: applications
 tags: [knowledge-graph, entity-alignment, reasoning, Freebase, Wikidata]
-published: false
+published: true
 excerpt: "Knowledge graphs encode human knowledge as typed entity-relation triples. GNNs enable structure-aware entity representation, multi-hop reasoning, knowledge base completion, and entity alignment — tasks that shallow embedding methods cannot fully solve."
 author_profile: true
 read_time: true

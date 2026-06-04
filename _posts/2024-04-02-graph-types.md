@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 subsection: fundamentals
 tags: [graph-types, directed, heterogeneous, weighted, multigraph]
-published: false
+published: true
 excerpt: "Not all graphs are equal. Directed edges, edge weights, multiple node/edge types — each variant requires different GNN design choices."
 author_profile: true
 read_time: true
