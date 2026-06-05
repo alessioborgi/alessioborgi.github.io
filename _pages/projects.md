@@ -262,7 +262,7 @@ author_profile: true
 {%- comment -%}
   Categories (keyword-matched on title | downcase):
   1. graph-topo   — sheaf, graph, polysheaf, xgnn
-  2. genai-vision — style, adavit, vision transformer, vlm, realtime-vlm, clip, skin, alpr, license plate, z-saslm, z-samb
+  2. genai-vision — style, adavit, vision transformer, vlm, realtime-vlm, clip, skin, alpr, license plate, llm, translation, modernization, nlp
   3. robotics     — moonbot, moon, amr, cleaning robot, robomat, autodrive, unidrive, autonomous, rover
   4. sci-health   — bioheat, pinn, careconnect, hospital, cluster, segmentation, rtad, anomaly, 5g
   5. software     — everything else
@@ -301,16 +301,17 @@ author_profile: true
 <div class="projects-category">
   <div class="projects-category__hd">
     <span class="cat-bar"></span>
-    🎨 Generative AI &amp; Vision
-    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{% if _pk contains "style" or _pk contains "adavit" or _pk contains "vision transformer" or _pk contains "vlm" or _pk contains "realtime" or _pk contains "clip" or _pk contains "skin" or _pk contains "alpr" or _pk contains "license plate" %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
+    🎨 Generative AI, Vision &amp; NLP
+    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{% if _pk contains "style" or _pk contains "adavit" or _pk contains "vision transformer" or _pk contains "vlm" or _pk contains "realtime" or _pk contains "clip" or _pk contains "skin" or _pk contains "alpr" or _pk contains "license plate" or _pk contains "llm" or _pk contains "translation" or _pk contains "modernization" or _pk contains "nlp" or _pk contains "italian" %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
   </div>
   <div class="projects-grid">
     {% for post in items %}
       {%- assign pk = post.title | downcase -%}
-      {%- if pk contains "style" or pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime" or pk contains "clip" or pk contains "skin" or pk contains "alpr" or pk contains "license plate" -%}
+      {%- if pk contains "style" or pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime" or pk contains "clip" or pk contains "skin" or pk contains "alpr" or pk contains "license plate" or pk contains "llm" or pk contains "translation" or pk contains "modernization" or pk contains "nlp" or pk contains "italian" -%}
       <article class="project-card">
         {%- assign prj_emoji = "🎨" -%}
         {%- if pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime" or pk contains "clip" -%}{%- assign prj_emoji = "👁️" -%}
+        {%- elsif pk contains "translation" or pk contains "modernization" or pk contains "nlp" or pk contains "italian" or pk contains "llm" -%}{%- assign prj_emoji = "📝" -%}
         {%- elsif pk contains "skin" -%}{%- assign prj_emoji = "🩺" -%}
         {%- elsif pk contains "alpr" or pk contains "license plate" -%}{%- assign prj_emoji = "🚗" -%}
         {%- endif -%}
@@ -398,13 +399,13 @@ author_profile: true
   <div class="projects-category__hd">
     <span class="cat-bar"></span>
     ⚙️ Software Engineering &amp; Tools
-    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{%- assign _is_other = true -%}{%- if _pk contains "sheaf" or _pk contains "graph" or _pk contains "polysheaf" or _pk contains "xgnn" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "style" or _pk contains "adavit" or _pk contains "vision transformer" or _pk contains "vlm" or _pk contains "realtime" or _pk contains "clip" or _pk contains "skin" or _pk contains "alpr" or _pk contains "license plate" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "moonbot" or _pk contains "moon" or _pk contains "amr" or _pk contains "robomat" or _pk contains "autodrive" or _pk contains "unidrive" or _pk contains "autonomous" or _pk contains "rover" or _pk contains "cleaning robot" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "bioheat" or _pk contains "pinn" or _pk contains "careconnect" or _pk contains "hospital" or _pk contains "cluster" or _pk contains "segmentation" or _pk contains "rtad" or _pk contains "anomaly" or _pk contains "5g" -%}{%- assign _is_other = false -%}{%- endif -%}{% if _is_other %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
+    <span class="cat-count">{% assign _c = 0 %}{% for p in items %}{%- assign _pk = p.title | downcase -%}{%- assign _is_other = true -%}{%- if _pk contains "sheaf" or _pk contains "graph" or _pk contains "polysheaf" or _pk contains "xgnn" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "style" or _pk contains "adavit" or _pk contains "vision transformer" or _pk contains "vlm" or _pk contains "realtime" or _pk contains "clip" or _pk contains "skin" or _pk contains "alpr" or _pk contains "license plate" or _pk contains "llm" or _pk contains "translation" or _pk contains "modernization" or _pk contains "nlp" or _pk contains "italian" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "moonbot" or _pk contains "moon" or _pk contains "amr" or _pk contains "robomat" or _pk contains "autodrive" or _pk contains "unidrive" or _pk contains "autonomous" or _pk contains "rover" or _pk contains "cleaning robot" -%}{%- assign _is_other = false -%}{%- endif -%}{%- if _pk contains "bioheat" or _pk contains "pinn" or _pk contains "careconnect" or _pk contains "hospital" or _pk contains "cluster" or _pk contains "segmentation" or _pk contains "rtad" or _pk contains "anomaly" or _pk contains "5g" -%}{%- assign _is_other = false -%}{%- endif -%}{% if _is_other %}{%- assign _c = _c | plus: 1 -%}{% endif %}{% endfor %}{{ _c }}</span>
   </div>
   <div class="projects-grid">
     {% for post in items %}
       {%- assign pk = post.title | downcase -%}
       {%- assign is_graph  = false -%}{%- if pk contains "sheaf" or pk contains "graph" or pk contains "polysheaf" or pk contains "xgnn" -%}{%- assign is_graph = true -%}{%- endif -%}
-      {%- assign is_vision = false -%}{%- if pk contains "style" or pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime" or pk contains "clip" or pk contains "skin" or pk contains "alpr" or pk contains "license plate" -%}{%- assign is_vision = true -%}{%- endif -%}
+      {%- assign is_vision = false -%}{%- if pk contains "style" or pk contains "adavit" or pk contains "vision transformer" or pk contains "vlm" or pk contains "realtime" or pk contains "clip" or pk contains "skin" or pk contains "alpr" or pk contains "license plate" or pk contains "llm" or pk contains "translation" or pk contains "modernization" or pk contains "nlp" or pk contains "italian" -%}{%- assign is_vision = true -%}{%- endif -%}
       {%- assign is_robot  = false -%}{%- if pk contains "moonbot" or pk contains "moon" or pk contains "amr" or pk contains "robomat" or pk contains "autodrive" or pk contains "unidrive" or pk contains "autonomous" or pk contains "rover" or pk contains "cleaning robot" -%}{%- assign is_robot = true -%}{%- endif -%}
       {%- assign is_sci    = false -%}{%- if pk contains "bioheat" or pk contains "pinn" or pk contains "careconnect" or pk contains "hospital" or pk contains "cluster" or pk contains "segmentation" or pk contains "rtad" or pk contains "anomaly" or pk contains "5g" -%}{%- assign is_sci = true -%}{%- endif -%}
       {%- unless is_graph or is_vision or is_robot or is_sci -%}
