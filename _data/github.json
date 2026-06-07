@@ -1,9 +1,9 @@
 {
   "username": "alessioborgi",
-  "total_stars": 66,
+  "total_stars": 69,
   "total_forks": 17,
   "public_repos": 31,
-  "followers": 17,
+  "followers": 18,
   "top_languages": [
     {
       "name": "Jupyter Notebook",
@@ -51,7 +51,7 @@
       "name": "sheaf-mpnn",
       "html_url": "https://github.com/alessioborgi/sheaf-mpnn",
       "description": "A clean PyTorch / PyG implementation library of Sheaf Neural Networks as Message Passing comprising all variants and a benchmark suite with 14+ Datasets.",
-      "stars": 17,
+      "stars": 18,
       "forks": 2,
       "language": "Jupyter Notebook"
     },
@@ -99,8 +99,16 @@
       "name": "Z-SASLM",
       "html_url": "https://github.com/alessioborgi/Z-SASLM",
       "description": "[CVPR 2025]  Z-SASLM is a zero-shot framework for multi-style image synthesis leveraging Spherical Linear Interpolation (SLI) to achieve smooth, coherent blending\u2014without any fine-tuning.",
-      "stars": 2,
+      "stars": 3,
       "forks": 0,
+      "language": "Jupyter Notebook"
+    },
+    {
+      "name": "XGNN-GraphGenRL",
+      "html_url": "https://github.com/alessioborgi/XGNN-GraphGenRL",
+      "description": " Explainable Graph Neural Networks (XGNNs) and Reinforcement Learning (RL) techniques for graph generation and optimization tasks. The project aims to explore and validate the use of explainable AI for creating interpretable graph structures.",
+      "stars": 2,
+      "forks": 2,
       "language": "Jupyter Notebook"
     },
     {
@@ -117,14 +125,6 @@
       "description": "Novel framework for Zero-Shot Style Alignment in Text-to-Image generation, incorporating Multi-Modal Context-Awareness and Multi-Reference Style Alignment, using minimal attention sharing, ensuring consistent style transfer without fine-tuning.",
       "stars": 2,
       "forks": 0,
-      "language": "Jupyter Notebook"
-    },
-    {
-      "name": "XGNN-GraphGenRL",
-      "html_url": "https://github.com/alessioborgi/XGNN-GraphGenRL",
-      "description": " Explainable Graph Neural Networks (XGNNs) and Reinforcement Learning (RL) techniques for graph generation and optimization tasks. The project aims to explore and validate the use of explainable AI for creating interpretable graph structures.",
-      "stars": 1,
-      "forks": 2,
       "language": "Jupyter Notebook"
     },
     {
