@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## PID Control: The Universal Baseline
 
+**Intuition first.** Imagine trying to park a car by feel alone. The proportional term is how hard you steer based on how far off-centre you are. The derivative term is the instinct to ease off as you approach the target (avoiding overshoot). The integral term is the slow correction for a persistent lean caused by, say, a crosswind. PID captures exactly these three instincts in a single formula.
+
 The **PID (Proportional-Integral-Derivative) controller** is the workhorse of industrial robot control. Given a position error $$e(t) = q_{\text{des}}(t) - q(t)$$ between desired and actual joint angle, the control torque is:
 
 <div class="math-box">
@@ -44,6 +46,51 @@ $$u(t) = K_p\, e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d\, \dot{e}(t)$$
 PID operates in **joint space** — one controller per joint. Cross-coupling between joints (due to inertia and Coriolis forces) is handled as a disturbance, which works for slow, light robots but breaks down for fast or heavy manipulation.
 
 Computed torque control (a model-based approach) adds the inverse dynamics $$M(\mathbf{q})\ddot{\mathbf{q}} + C(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q})$$ as a feedforward term, linearising and decoupling the system so that simple PID suffices in the error space.
+
+### PID Tuning: What Goes Wrong
+
+| Setting | Effect | Failure Mode |
+|---------|--------|--------------|
+| High K_p | Fast response | Oscillation / instability |
+| High K_i | Eliminates steady-state error | Integral windup on saturation |
+| High K_d | Damps oscillation | Amplifies sensor noise |
+
+A practical rule of thumb: tune K_p until you see oscillation, then halve it; add K_d to kill the oscillation; add K_i last and only as much as needed to eliminate steady-state error.
+
+<style>
+@keyframes pid-track {
+  0%   { cx: 30px;  cy: 100px; }
+  25%  { cx: 120px; cy: 40px; }
+  50%  { cx: 210px; cy: 70px; }
+  75%  { cx: 300px; cy: 65px; }
+  100% { cx: 390px; cy: 65px; }
+}
+@keyframes pid-setpoint { 0%,100%{opacity:.5} 50%{opacity:1} }
+.pid-dot { animation: pid-track 4s ease-in-out infinite; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:auto;">
+  <!-- Axes -->
+  <line x1="20" y1="130" x2="410" y2="130" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="20" y1="10"  x2="20"  y2="130" stroke="#9ca3af" stroke-width="1.5"/>
+  <text x="415" y="133" fill="#6b7280" font-size="9">t</text>
+  <text x="5"   y="14"  fill="#6b7280" font-size="9">q</text>
+  <!-- Setpoint line -->
+  <line x1="20" y1="65" x2="410" y2="65" stroke="#f97316" stroke-width="1" stroke-dasharray="5,4" class="pid-setpoint"/>
+  <text x="380" y="60" fill="#f97316" font-size="8">setpoint</text>
+  <!-- P-only response (oscillates) -->
+  <polyline points="20,130 60,30 110,95 160,45 210,80 260,60 310,72 360,66 410,65"
+            fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.7"/>
+  <text x="65" y="22" fill="#ef4444" font-size="8">P-only (oscillates)</text>
+  <!-- PID response (converges smoothly) -->
+  <polyline points="20,130 80,42 150,60 220,63 290,65 360,65 410,65"
+            fill="none" stroke="#0d9488" stroke-width="2"/>
+  <text x="220" y="55" fill="#0d9488" font-size="8">PID (converges)</text>
+  <!-- Tracking dot -->
+  <circle r="5" fill="#0d9488" class="pid-dot"/>
+</svg>
+<figcaption>P-only control (red) oscillates around the setpoint. Adding D damping and I correction (teal) drives the joint smoothly to the target angle.</figcaption>
+</figure></div>
 
 ## Impedance Control: Compliant Interaction
 

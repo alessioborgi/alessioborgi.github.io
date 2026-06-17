@@ -31,6 +31,49 @@ toc_label: "Contents"
 
 ## Forward Kinematics: From Joint Angles to Pose
 
+**Intuition first.** Imagine your own arm: shoulder at the origin, elbow 30 cm away, wrist 25 cm beyond that. If you rotate your shoulder by 45° and your elbow by −30°, your fingertip ends up at a specific point in space — no guesswork needed. Forward kinematics is just this calculation made precise for any number of links and joints.
+
+<style>
+@keyframes joint1-rotate { 0%{transform-origin:80px 80px; transform:rotate(0deg)} 50%{transform-origin:80px 80px; transform:rotate(40deg)} 100%{transform-origin:80px 80px; transform:rotate(0deg)} }
+@keyframes joint2-swing  { 0%{transform-origin:0 0; transform:rotate(0deg)} 50%{transform-origin:0 0; transform:rotate(-50deg)} 100%{transform-origin:0 0; transform:rotate(0deg)} }
+.arm-link1 { animation: joint1-rotate 4s ease-in-out infinite; }
+.arm-group2 { animation: joint2-swing  4s ease-in-out infinite; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;display:block;margin:auto;">
+  <!-- Base -->
+  <rect x="60" y="145" width="40" height="12" rx="3" fill="#374151"/>
+  <text x="80" y="172" text-anchor="middle" fill="#374151" font-size="10">base</text>
+  <!-- Joint 1 marker -->
+  <circle cx="80" cy="140" r="7" fill="#0d9488"/>
+  <text x="80" y="135" text-anchor="middle" fill="#0d9488" font-size="9">q₁</text>
+  <!-- Link 1 + Joint 2 (rotates as a unit around joint 1) -->
+  <g class="arm-link1">
+    <line x1="80" y1="140" x2="185" y2="90" stroke="#0d9488" stroke-width="7" stroke-linecap="round"/>
+    <text x="130" y="107" fill="#0d9488" font-size="9">L₁=1.0 m</text>
+    <circle cx="185" cy="90" r="6" fill="#7c3aed"/>
+    <text x="185" y="82" text-anchor="middle" fill="#7c3aed" font-size="9">q₂</text>
+    <!-- Link 2 + end-effector (rotates around joint 2) -->
+    <g class="arm-group2" style="transform-origin:185px 90px">
+      <line x1="185" y1="90" x2="265" y2="55" stroke="#7c3aed" stroke-width="6" stroke-linecap="round"/>
+      <text x="228" y="63" fill="#7c3aed" font-size="9">L₂=0.8 m</text>
+      <circle cx="265" cy="55" r="5" fill="#f97316"/>
+      <text x="273" y="53" fill="#f97316" font-size="9">EE</text>
+    </g>
+  </g>
+  <!-- World frame -->
+  <line x1="20" y1="160" x2="45" y2="160" stroke="#374151" stroke-width="1.5" marker-end="url(#wx)"/>
+  <line x1="20" y1="160" x2="20" y2="135" stroke="#374151" stroke-width="1.5" marker-end="url(#wy)"/>
+  <text x="48" y="163" fill="#374151" font-size="9">x</text>
+  <text x="14" y="132" fill="#374151" font-size="9">y</text>
+  <defs>
+    <marker id="wx" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#374151"/></marker>
+    <marker id="wy" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#374151"/></marker>
+  </defs>
+</svg>
+<figcaption>Animated 2-link planar arm. Joint 1 (teal) rotates the whole arm; joint 2 (purple) bends the forearm independently. The orange end-effector traces an arc in Cartesian space.</figcaption>
+</figure></div>
+
 A serial robot manipulator consists of rigid links connected by joints. Given a vector of joint angles $$\mathbf{q} = [q_1, \dots, q_n]^T$$, **forward kinematics (FK)** computes the end-effector pose $$\mathbf{x} \in SE(3)$$:
 
 <div class="math-box">
@@ -44,6 +87,24 @@ $${}^{i-1}T_i = \begin{pmatrix} c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\a
 </div>
 
 FK is straightforward to compute — it is a simple chain of matrix multiplications — and always has a unique solution. This makes it useful for simulation, collision checking, and rendering.
+
+### Worked Example: 2-Link Planar Arm
+
+Consider a 2-link planar arm with link lengths $$L_1 = 1.0\,\text{m}$$ and $$L_2 = 0.8\,\text{m}$$, and joint angles $$q_1 = 45°$$, $$q_2 = -30°$$ (elbow bending back).
+
+The end-effector position is:
+
+<div class="math-box">
+$$x = L_1 \cos q_1 + L_2 \cos(q_1 + q_2)$$
+$$y = L_1 \sin q_1 + L_2 \sin(q_1 + q_2)$$
+</div>
+
+Plugging in numbers:
+- $$q_1 + q_2 = 45° - 30° = 15°$$
+- $$x = 1.0 \cdot \cos 45° + 0.8 \cdot \cos 15° = 0.707 + 0.773 = 1.480\,\text{m}$$
+- $$y = 1.0 \cdot \sin 45° + 0.8 \cdot \sin 15° = 0.707 + 0.207 = 0.914\,\text{m}$$
+
+So the gripper tip reaches **(1.48 m, 0.91 m)** — purely by chaining two rotation matrices. No iteration, no solver needed.
 
 ## The Jacobian: Velocity Kinematics
 
@@ -74,6 +135,8 @@ $$\dot{\mathbf{q}} = J^+(\mathbf{q})\, \dot{\mathbf{x}}, \quad J^+ = J^T(JJ^T)^{
 </div>
 
 This minimises $$\|\dot{\mathbf{q}}\|$$ subject to achieving $$\dot{\mathbf{x}}$$. Damped least squares ($$J^+ = J^T(JJ^T + \lambda^2 I)^{-1}$$) avoids numerical blow-up near singularities. **Learning-based IK** trains a neural network $$q = f_\theta(x)$$ on large datasets of FK evaluations, providing fast inference at the cost of exactness.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The pseudoinverse IK solution <em>minimises joint velocity norm</em>, not joint displacement. This means it naturally spreads motion across all joints, avoiding situations where one joint takes all the work — important for motor health and avoiding joint limits in practice.</div>
 
 ## Singularities and Redundancy
 

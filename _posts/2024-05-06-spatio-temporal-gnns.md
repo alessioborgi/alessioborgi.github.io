@@ -31,12 +31,63 @@ toc_label: "Contents"
 
 ## The Spatio-Temporal Setting
 
+**Intuition First:** Imagine a city-wide network of traffic sensors. At any moment, sensor A reports 30 mph while sensor B (one mile downstream) still reports 60 mph — but in 5 minutes, B will slow down too. A purely temporal model sees each sensor in isolation and misses this propagation. A purely spatial model has no sense of time. ST-GNNs handle both at once: they let each sensor "talk" to its road-network neighbours at every timestep.
+
 Given:
 - Fixed graph G = (V, E) — the spatial structure (road network, weather stations)
 - Time series at each node: X_t ∈ ℝ^{N × d} for t = 1, ..., T
 - Goal: predict X_{T+1}, ..., X_{T+H} from X_{T-τ+1}, ..., X_T
 
 **The key insight:** sensors at nearby nodes are correlated. A traffic jam upstream affects downstream sensors. A temperature reading in Paris is informative for predicting Frankfurt. The graph structure encodes *which nodes influence each other*.
+
+<style>
+@keyframes wave-pulse {
+  0%   { fill: #93c5fd; }
+  50%  { fill: #1d4ed8; }
+  100% { fill: #93c5fd; }
+}
+@keyframes edge-flow {
+  0%   { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto;">
+  <style>
+    .sensor { animation: wave-pulse 2s ease-in-out infinite; }
+    .sensor:nth-child(2) { animation-delay: 0.4s; }
+    .sensor:nth-child(3) { animation-delay: 0.8s; }
+    .sensor:nth-child(4) { animation-delay: 1.2s; }
+    .sensor:nth-child(5) { animation-delay: 1.6s; }
+    .edge-animated { stroke-dasharray: 6 4; animation: edge-flow 1.2s linear infinite; }
+  </style>
+  <!-- Road edges -->
+  <line x1="60" y1="80" x2="140" y2="80" stroke="#94a3b8" stroke-width="2" class="edge-animated"/>
+  <line x1="160" y1="80" x2="230" y2="80" stroke="#94a3b8" stroke-width="2" class="edge-animated"/>
+  <line x1="250" y1="80" x2="320" y2="80" stroke="#94a3b8" stroke-width="2" class="edge-animated"/>
+  <line x1="340" y1="80" x2="390" y2="80" stroke="#94a3b8" stroke-width="2" class="edge-animated"/>
+  <!-- Direction arrow -->
+  <polygon points="388,75 398,80 388,85" fill="#64748b"/>
+  <!-- Sensor nodes -->
+  <circle cx="50"  cy="80" r="18" class="sensor" fill="#93c5fd"/>
+  <circle cx="150" cy="80" r="18" class="sensor" fill="#93c5fd"/>
+  <circle cx="240" cy="80" r="18" class="sensor" fill="#1d4ed8"/>
+  <circle cx="330" cy="80" r="18" class="sensor" fill="#93c5fd"/>
+  <text x="50"  y="85" text-anchor="middle" font-size="11" fill="white" font-weight="bold">A</text>
+  <text x="150" y="85" text-anchor="middle" font-size="11" fill="white" font-weight="bold">B</text>
+  <text x="240" y="85" text-anchor="middle" font-size="11" fill="white" font-weight="bold">C</text>
+  <text x="330" y="85" text-anchor="middle" font-size="11" fill="white" font-weight="bold">D</text>
+  <!-- Labels -->
+  <text x="50"  y="115" text-anchor="middle" font-size="10" fill="#64748b">60 mph</text>
+  <text x="150" y="115" text-anchor="middle" font-size="10" fill="#64748b">55 mph</text>
+  <text x="240" y="115" text-anchor="middle" font-size="10" fill="#1d4ed8" font-weight="bold">JAM</text>
+  <text x="330" y="115" text-anchor="middle" font-size="10" fill="#64748b">60 mph</text>
+  <text x="210" y="20" text-anchor="middle" font-size="12" fill="#374151" font-weight="bold">Congestion propagates downstream →</text>
+  <text x="210" y="145" text-anchor="middle" font-size="10" fill="#9ca3af">Sensor C is congested; spatial GNN warns B and A before their speed drops</text>
+</svg>
+</figure>
+</div>
 
 ## Two Architectures
 
@@ -89,6 +140,22 @@ Each temporal block uses a gated 1D convolution (GLU: gated linear unit) across 
 <div class="insight-box">
 <strong>DCRNN vs STGCN:</strong> DCRNN captures long-range temporal dependencies via GRU hidden states but is sequential (slow training). STGCN is faster (parallel convolutions) but has limited temporal receptive field (fixed kernel size × number of layers). On standard traffic benchmarks (METR-LA, PEMS-BAY), both achieve similar accuracy; STGCN is preferred when training speed matters.
 </div>
+
+## Worked Example: One STGCN Step
+
+**Setup:** 3 sensors (A, B, C) on a road, each with 1 feature (speed in mph). Current readings: A=60, B=30 (jam), C=55. Adjacency A=[0,1,0; 1,0,1; 0,1,0], symmetric.
+
+**Temporal gated conv (GLU) — kernel size 3, 1 input channel, 1 output channel:**
+Suppose at times t-2,t-1,t sensor B reads [40, 35, 30]. With kernel weights θ₁=[0.2,0.5,0.3] and θ₂=[0.1,0.3,0.6]:
+- Gate input g = 0.2×40 + 0.5×35 + 0.3×30 = 8+17.5+9 = 34.5
+- Gating mask σ(0.1×40+0.3×35+0.6×30) = σ(4+10.5+18) = σ(32.5) ≈ 1.0
+- Temporal output for B ≈ 34.5 × 1.0 = 34.5
+
+**Spatial GCN step (normalised):** degree D = diag(1,2,1), Â = D^{-1/2} A D^{-1/2}
+- Updated B = mean of A's and C's temporal outputs: (60+55)/2 = 57.5 (pulled toward neighbours)
+- **Interpretation:** B's representation is now influenced by its free-flowing neighbours — the model learns that this discrepancy predicts an upcoming jam spreading to A and C.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The temporal conv captures "B has been slowing for 3 timesteps." The spatial conv then propagates that signal to neighbours A and C. This two-stage process is exactly why ST-GNNs outperform both standalone LSTMs (no spatial) and standalone GCNs (no temporal).</div>
 
 ## Graph Construction for ST-GNNs
 

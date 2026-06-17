@@ -31,6 +31,94 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Sheaf cohomology H0 H1" caption="Sheaf cohomology: global sections H⁰ and obstructions H¹ (Bodnar et al., 2022)" %}
 
 
+## Intuition First: Sections, Obstructions, Memory
+
+Imagine you are trying to assign temperatures to each room in a building (nodes) such that every connecting corridor (edge) agrees — the temperature on the "source" side of the corridor matches the temperature on the "sink" side after applying the corridor's heat-transfer map. A **global section** H⁰ is any assignment that satisfies every corridor simultaneously. It is the "steady state" the building converges to.
+
+Now imagine some corridors form a loop that is physically impossible to satisfy consistently (perhaps the heat-transfer maps around the loop compose to something other than the identity). That impossibility is H¹ — the obstruction space. No matter how cleverly you assign temperatures, this obstruction cannot be resolved. It is a topological feature of the building's floor plan.
+
+In machine learning terms: **dim H⁰ = how much information survives infinitely many diffusion steps**, and **dim H¹ = how many frustrated cycles the graph contains**.
+
+<style>
+@keyframes cochain-arrow-flow {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes cochain-c0-pulse {
+  0%, 100% { fill: #dbeafe; }
+  50% { fill: #bfdbfe; }
+}
+@keyframes cochain-h0-pulse {
+  0%, 100% { fill-opacity: 0.7; }
+  50% { fill-opacity: 1; }
+}
+@keyframes cochain-c1-pulse {
+  0%, 100% { fill: #fce7f3; }
+  50% { fill: #fbcfe8; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 540 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin:0 auto;">
+  <defs>
+    <marker id="cc-arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 9 3.5, 0 7" fill="#6366f1"/>
+    </marker>
+    <clipPath id="c0-clip">
+      <rect x="30" y="60" width="160" height="100" rx="10"/>
+    </clipPath>
+  </defs>
+  <rect width="540" height="220" fill="#f8fafc" rx="12"/>
+  <!-- C⁰ box -->
+  <rect x="30" y="60" width="160" height="100" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5">
+    <animate attributeName="fill" values="#dbeafe;#bfdbfe;#dbeafe" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  <text x="110" y="88" text-anchor="middle" fill="#1d4ed8" font-size="13" font-weight="700">C⁰(G, F)</text>
+  <text x="110" y="104" text-anchor="middle" fill="#1e40af" font-size="10">Node vectors</text>
+  <text x="110" y="118" text-anchor="middle" fill="#1e40af" font-size="9" font-family="monospace">x = (x_v)_{v∈V}</text>
+  <text x="110" y="132" text-anchor="middle" fill="#1e40af" font-size="9" font-family="monospace">≅ ℝ^{Nd}</text>
+  <text x="110" y="148" text-anchor="middle" fill="#64748b" font-size="8">dim = N·d</text>
+  <!-- H⁰ highlighted subspace inside C⁰ -->
+  <rect x="38" y="148" width="144" height="4" rx="2" fill="#bbf7d0" stroke="#22c55e" stroke-width="1">
+    <animate attributeName="fill-opacity" values="0.7;1;0.7" dur="1.8s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="38" y="68" width="144" height="72" rx="7" fill="#bbf7d0" fill-opacity="0.35" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 3">
+    <animate attributeName="fill-opacity" values="0.35;0.6;0.35" dur="2.5s" repeatCount="indefinite"/>
+  </rect>
+  <text x="110" y="84" text-anchor="middle" fill="#166534" font-size="11" font-weight="700" dy="0">H⁰ = ker(δ₀)</text>
+  <text x="110" y="97" text-anchor="middle" fill="#166534" font-size="9">global sections</text>
+  <!-- δ₀ arrow -->
+  <line x1="200" y1="110" x2="310" y2="110" stroke="#6366f1" stroke-width="3" stroke-dasharray="8 4" marker-end="url(#cc-arrow)">
+    <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1s" repeatCount="indefinite"/>
+  </line>
+  <rect x="213" y="90" width="82" height="18" rx="4" fill="#e0e7ff" stroke="#a5b4fc" stroke-width="1"/>
+  <text x="254" y="102" text-anchor="middle" fill="#3730a3" font-size="10" font-weight="700">δ₀</text>
+  <text x="254" y="128" text-anchor="middle" fill="#6366f1" font-size="8">(coboundary)</text>
+  <!-- C¹ box -->
+  <rect x="320" y="60" width="180" height="100" rx="10" fill="#fce7f3" stroke="#ec4899" stroke-width="2.5">
+    <animate attributeName="fill" values="#fce7f3;#fbcfe8;#fce7f3" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+  </rect>
+  <text x="410" y="88" text-anchor="middle" fill="#be185d" font-size="13" font-weight="700">C¹(G, F)</text>
+  <text x="410" y="104" text-anchor="middle" fill="#be185d" font-size="10">Edge vectors</text>
+  <text x="410" y="118" text-anchor="middle" fill="#be185d" font-size="9" font-family="monospace">y = (y_e)_{e∈E}</text>
+  <text x="410" y="132" text-anchor="middle" fill="#be185d" font-size="9" font-family="monospace">≅ ℝ^{Ed}</text>
+  <text x="410" y="148" text-anchor="middle" fill="#64748b" font-size="8">dim = E·d</text>
+  <!-- im(δ₀) shaded region inside C¹ -->
+  <rect x="328" y="68" width="164" height="46" rx="7" fill="#fde68a" fill-opacity="0.5" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="410" y="84" text-anchor="middle" fill="#92400e" font-size="9" font-weight="700">im(δ₀) ⊆ C¹</text>
+  <text x="410" y="97" text-anchor="middle" fill="#92400e" font-size="8">"explained" disagreements</text>
+  <!-- H¹ region -->
+  <text x="410" y="145" text-anchor="middle" fill="#9d174d" font-size="8">H¹ = C¹ / im(δ₀)</text>
+  <!-- Title -->
+  <text x="270" y="22" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="700">Sheaf Cochain Complex: 0 → C⁰ →^{δ₀} C¹ → 0</text>
+  <text x="270" y="38" text-anchor="middle" fill="#64748b" font-size="10">H⁰ (green) = ker(δ₀) ⊆ C⁰ — global sections. H¹ = C¹/im(δ₀) — obstruction.</text>
+  <!-- Bottom note -->
+  <text x="270" y="192" text-anchor="middle" fill="#475569" font-size="9">dim(H⁰) controls long-range memory; dim(H¹) counts frustrated cycles</text>
+</svg>
+<figcaption>The sheaf cochain complex. C⁰ (blue) holds node vectors; C¹ (pink) holds edge vectors. The coboundary δ₀ flows left-to-right. The green subspace H⁰ = ker(δ₀) is the space of global sections — the attractor of sheaf diffusion. The yellow band im(δ₀) ⊆ C¹ is the "explainable" part; H¹ is what remains.</figcaption>
+</figure>
+</div>
+
 ## The Cochain Complex
 
 Given a cellular sheaf F on a graph G, the **cochain complex** is:
@@ -58,6 +146,35 @@ H⁰(G, F) = ker(δ₀) is the vector space of **global sections** — node assi
 <div class="math-box">
 F_{u▷e} x_u = F_{v▷e} x_v
 </div>
+
+### Worked Example: Computing H⁰ for a 2-Node Graph
+
+**Setup.** Graph: two nodes u and v, one edge e = (u, v). Stalk dimension d = 1. Restriction maps: F_{u→e} = 2, F_{v→e} = 3.
+
+**Step 1 — Write δ₀.** With node order (u, v) and the single edge e:
+
+<div class="math-box" style="text-align:left;">
+(δ₀ x)_e = F_{v→e} x_v − F_{u→e} x_u = 3 x_v − 2 x_u
+</div>
+
+As a matrix: δ₀ = [−2, 3] (1 × 2 matrix).
+
+**Step 2 — Find ker(δ₀).** We need 3 x_v − 2 x_u = 0, i.e., 2 x_u = 3 x_v.
+
+One solution: x_u = 3, x_v = 2. The full kernel is the line span{(3, 2)} ⊆ ℝ².
+
+**Step 3 — Verify it is a global section.** Plug x_u = 3, x_v = 2 into the consistency condition:
+
+<div class="math-box">
+F_{u→e} x_u = 2 · 3 = 6<br>
+F_{v→e} x_v = 3 · 2 = 6  ✓
+</div>
+
+Both endpoints project to the same value 6 in the edge stalk F(e) ≅ ℝ. This is a global section.
+
+**Result:** H⁰(G, F) = ker(δ₀) = span{(3, 2)} — a 1-dimensional subspace of ℝ². **dim(H⁰) = 1.**
+
+Note the contrast with the identity sheaf (F_{u→e} = F_{v→e} = 1): its global sections are all (c, c), i.e., constant signals. Here the global section (3, 2) is not constant — the two nodes must be in ratio 3:2. Non-trivial restriction maps shift which signals the network considers "consistent".
 
 **Dimension of H⁰:** For a connected graph with trivial (identity) sheaf, dim(H⁰) = d — one d-dimensional constant function per component. For a sheaf with orthogonal maps and trivial holonomy, dim(H⁰) = d. For a sheaf with maps that have non-trivial kernel interactions, dim(H⁰) can be larger.
 
@@ -153,6 +270,8 @@ Global sections: x₂=x₁, x₃=x₂, −x₃=x₁ → x₁=x₂=x₃=−x₁ �
 dim H¹ = |E|·d − |V|·d + dim H⁰ = 3−3+0 = 0. But wait — using χ: χ(G) = 3−3 = 0, so dim H⁰ − dim H¹ = 0 → dim H¹ = dim H⁰ = 0. The sheaf is cohomologically trivial, even though it has no global sections.
 
 This example shows the subtlety: a sheaf can be frustrated (no global sections) while still having trivial H¹. The frustration doesn't create H¹; rather, it is captured by H⁰ vanishing.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> dim(H⁰) is the model's implicit "memory capacity" for long-range features. When a sheaf GNN runs K layers of diffusion X ← (I − αΔ_F)X, the only signal that survives as K → ∞ is the projection of the input onto ker(Δ_F) = H⁰. A large H⁰ means many independent long-range patterns are preserved; a small or zero H⁰ means diffusion is purely contractive and forgets everything past a few hops. Learning the restriction maps (as NSD does) is therefore equivalent to learning which long-range features the model is allowed to remember — the architecture implicitly programs its own memory capacity by shaping H⁰.</div>
 
 ## Why Cohomology Matters for GNNs
 

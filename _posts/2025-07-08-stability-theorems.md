@@ -27,6 +27,38 @@ permalink: /blog/persistent-homology/stability-theorems/
 {% include figure image_path="/images/blog/tdl/hofer2020_topological_layers.png" alt="Stability of persistence" caption="Topological stability and layers (Hofer et al., 2020)" %}
 
 
+**Intuition First.** Imagine two persistence diagrams as two sets of dots in the plane. The bottleneck distance asks: what is the cheapest way to match every dot in diagram 1 to a dot in diagram 2, where unmatched dots get sent to the nearest point on the diagonal? The "cost" of a match is the maximum displacement of any single dot. The stability theorem says this cost is bounded by how much the underlying data changed — measured in the $$L^\infty$$ norm.
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;font-family:sans-serif;">
+  <text x="230" y="18" font-size="12" fill="#0d9488" font-weight="bold" text-anchor="middle">Bottleneck matching between two diagrams</text>
+  <!-- Diagram 1 points -->
+  <circle cx="100" cy="70"  r="7" fill="#1e40af" opacity="0.85"/>
+  <circle cx="140" cy="100" r="7" fill="#1e40af" opacity="0.85"/>
+  <circle cx="80"  cy="150" r="5" fill="#1e40af" opacity="0.5"/>
+  <text x="55" y="190" font-size="10" fill="#1e40af">Diagram D₁</text>
+  <!-- Diagram 2 points -->
+  <circle cx="210" cy="75"  r="7" fill="#ef4444" opacity="0.85"/>
+  <circle cx="250" cy="108" r="7" fill="#ef4444" opacity="0.85"/>
+  <circle cx="190" cy="155" r="5" fill="#ef4444" opacity="0.5"/>
+  <text x="170" y="190" font-size="10" fill="#ef4444">Diagram D₂</text>
+  <!-- Matching arrows -->
+  <line x1="107" y1="70"  x2="203" y2="75"  stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="147" y1="100" x2="243" y2="108" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="80"  y1="150" x2="190" y2="155" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- Max displacement annotation -->
+  <line x1="107" y1="70" x2="203" y2="75" stroke="#7c3aed" stroke-width="0"/>
+  <text x="155" y="62" font-size="10" fill="#7c3aed" text-anchor="middle">d_B = max displacement</text>
+  <!-- Stability bound -->
+  <rect x="300" y="50" width="145" height="90" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="372" y="72"  font-size="11" fill="#f97316" font-weight="bold" text-anchor="middle">Stability Theorem</text>
+  <text x="372" y="92"  font-size="11" fill="#475569" text-anchor="middle">d_B(D₁, D₂)</text>
+  <text x="372" y="108" font-size="11" fill="#475569" text-anchor="middle">≤ ‖f − g‖_∞</text>
+  <text x="372" y="128" font-size="10" fill="#94a3b8" text-anchor="middle">1-Lipschitz bound</text>
+</svg>
+<figcaption>Bottleneck matching between diagrams D₁ and D₂. Each point is matched to its nearest counterpart; unmatched points go to the diagonal. The stability theorem bounds this worst-case displacement by the input function difference.</figcaption>
+</figure></div>
+
 ## The Bottleneck Distance
 
 To state the stability theorem, we first need a metric on persistence diagrams. The **bottleneck distance** between two diagrams $$D_1$$ and $$D_2$$ is:
@@ -66,6 +98,10 @@ A corresponding Wasserstein stability theorem holds under stronger assumptions (
 $$W_p(\mathrm{dgm}(f), \mathrm{dgm}(g)) \leq C \cdot \|f - g\|_p$$
 
 for appropriate constants $$C$$. Wasserstein stability gives a finer guarantee: not just the worst-case matching cost (bottleneck), but the average-case cost is also bounded.
+
+## Concrete Example: Perturbation Bound
+
+Suppose you have a function $$f$$ on a triangulated surface and you add Gaussian noise with standard deviation $$\sigma$$, giving $$g = f + \eta$$ with $$\|\eta\|_\infty \leq 3\sigma$$ (with high probability). Then every point in $$\mathrm{dgm}(f)$$ moves by at most $$3\sigma$$ in the bottleneck metric. Any feature with persistence $$d - b > 6\sigma$$ is guaranteed to remain a distinct off-diagonal point in $$\mathrm{dgm}(g)$$. This gives a concrete noise threshold: filter out everything with persistence $$\leq 6\sigma$$ and the remaining features are provably real.
 
 ## Implications for Data Analysis
 

@@ -88,6 +88,19 @@ f̂[k] = uₖᵀ f is the "amplitude" of the k-th frequency component in the sig
 
 This is a change of basis: from node space (what value is at each node) to frequency space (how much of each eigenvector pattern is present in the signal).
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First — What Is a "Frequency" on a Graph?</strong> On a line (1D), a low-frequency sinusoid wiggles slowly — neighbouring points have similar values. A high-frequency sinusoid wiggles rapidly — neighbours differ a lot. On a graph, "frequency" measures the same thing: how much adjacent nodes disagree. A graph signal where every node has nearly the same value as its neighbours is low-frequency (smooth). A signal where every node has the opposite sign to its neighbours is high-frequency (rough). The Laplacian eigenvectors are the graph's natural frequency basis — they are the "sinusoids" of graph space.</div>
+
+**Concrete 4-node example.** On a path graph 1–2–3–4, the Laplacian eigenvectors are (approximately):
+
+| Mode | Eigenvector | Behaviour |
+|------|-------------|-----------|
+| u₁ (λ=0) | [+, +, +, +] | Constant — DC component |
+| u₂ (λ≈0.6) | [+, +, −, −] | Slow variation — low frequency |
+| u₃ (λ≈1.4) | [+, −, −, +] | Medium variation |
+| u₄ (λ≈2) | [+, −, +, −] | Alternates sign at every hop — highest frequency |
+
+A GCN layer applies a low-pass filter: it amplifies u₁ and u₂ while suppressing u₃ and u₄.
+
 ## Graph Convolution via the GFT
 
 In classical signal processing, convolution in time equals pointwise multiplication in frequency:

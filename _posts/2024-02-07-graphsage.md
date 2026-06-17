@@ -123,6 +123,20 @@ The key novelty: concatenate the node's **own** previous representation with the
 </figure>
 </div>
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Why Inductive Learning Matters:</strong> GCN and GAT compute embeddings tied to a specific adjacency matrix. Their weight matrices learn "which position in this fixed graph matters." GraphSAGE instead learns "what kind of neighbourhood looks like this?" — a transferable pattern. This is the difference between memorising a map vs. learning to navigate any city.</div>
+
+## Concrete Example: Embedding a New Node at Inference Time
+
+Suppose we trained GraphSAGE on a product graph. A new product P is uploaded tonight with features h_P = [0.8, 0.3, 0.1] and two existing similar products as neighbours: n₁ = [0.7, 0.4, 0.2], n₂ = [0.6, 0.5, 0.1].
+
+**Without retraining:**
+1. Sample: S_P = {n₁, n₂} (both neighbours, K=2)
+2. Aggregate (mean): agg_P = ([0.7,0.4,0.2] + [0.6,0.5,0.1]) / 2 = [0.65, 0.45, 0.15]
+3. Concatenate + transform: h_P_new = σ(W · [0.8, 0.3, 0.1, 0.65, 0.45, 0.15])
+4. Normalise to unit sphere.
+
+The resulting embedding places P in the correct region of the embedding space relative to existing products — ready for recommendation — all without touching the training set.
+
 ## Aggregator Choices
 
 GraphSAGE offers three built-in aggregators:

@@ -124,6 +124,31 @@ This is why changing a single word in a prompt changes the relevant regions of t
 
 Cross-attention allows visual tokens to query language tokens and vice versa — the fundamental mechanism for grounding language in images.
 
+## Worked Example: 3-Token Translation
+
+Translating *"The cat sat"* (3 English tokens) → *"Le chat s'est assis"* (4 French tokens).
+
+**Encoder** processes [The, cat, sat] → produces key-value pairs K_enc, V_enc (shape 3×d_model).
+
+**Decoder** generates each French token one at a time. When generating "chat" (token 2):
+
+```
+Q_dec  = W_Q · h_decoder["chat position"]   → shape 1×d_k
+K_enc  = W_K · [The, cat, sat]              → shape 3×d_k
+V_enc  = W_V · [The, cat, sat]              → shape 3×d_v
+
+scores = Q_dec · K_enc^T = [s_The, s_cat, s_sat]
+       ≈ [0.10,  0.85,  0.05]   (after softmax)
+
+output = 0.10·v_The + 0.85·v_cat + 0.05·v_sat
+```
+
+"chat" attends mostly to "cat" — the cross-attention map recovers the word alignment without any explicit supervision.
+
+<div class="insight-box">
+<strong>The encoder is a soft memory:</strong> it computes K and V once and caches them. The decoder queries this cache once per output token — the same encoded English representation is read repeatedly, from different query angles, as each French word is generated.
+</div>
+
 ## The Attention Map Has a New Shape
 
 In self-attention on a sequence of length N, the attention matrix is N×N.

@@ -28,6 +28,78 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Oversmoothing vs oversquashing" caption="Over-smoothing vs over-squashing — two distinct failure modes in deep GNNs (Topping et al., 2022)" %}
 
 
+## Intuition First
+
+Imagine you are in a room full of people whispering a message from person to person. **Oversmoothing** is what happens when everyone repeats the average of all messages they heard — after enough rounds, everyone says the same thing. The content has been diluted to nothing.
+
+**Oversquashing** is different: imagine two distant groups connected by a single corridor (one "bridge" person). All information between the groups must squeeze through that one person. No matter how many rounds of whispering, the bridge person cannot faithfully relay an exponentially growing flood of messages.
+
+Same symptom (performance collapse), completely different causes.
+
+<style>
+@keyframes smooth-pulse {
+  0%,100% { opacity:1; }
+  50%      { opacity:0.4; }
+}
+@keyframes squash-flow {
+  0%   { stroke-dashoffset: 60; }
+  100% { stroke-dashoffset: 0; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:auto">
+  <style>
+    .os-node { fill:#6366f1; }
+    .os-node-faded { fill:#a5b4fc; animation: smooth-pulse 1.8s ease-in-out infinite; }
+    .sq-node { fill:#f97316; }
+    .sq-bridge { fill:#ef4444; }
+    .edge { stroke:#94a3b8; stroke-width:1.5; fill:none; }
+    .label-text { font-size:11px; fill:#334155; font-family:sans-serif; text-anchor:middle; }
+    .title-text { font-size:12px; fill:#1e293b; font-family:sans-serif; font-weight:bold; text-anchor:middle; }
+    .sq-edge { stroke:#f97316; stroke-width:2; fill:none; stroke-dasharray:8; animation: squash-flow 1.2s linear infinite; }
+  </style>
+  <!-- OVERSMOOTHING section -->
+  <text x="140" y="18" class="title-text">Oversmoothing: features converge</text>
+  <circle cx="50"  cy="80" r="14" class="os-node"/>
+  <circle cx="100" cy="55" r="14" class="os-node-faded"/>
+  <circle cx="140" cy="90" r="14" class="os-node-faded"/>
+  <circle cx="185" cy="60" r="14" class="os-node-faded"/>
+  <circle cx="225" cy="85" r="14" class="os-node-faded"/>
+  <line x1="50" y1="80" x2="100" y2="55" class="edge"/>
+  <line x1="100" y1="55" x2="140" y2="90" class="edge"/>
+  <line x1="140" y1="90" x2="185" y2="60" class="edge"/>
+  <line x1="185" y1="60" x2="225" y2="85" class="edge"/>
+  <line x1="50"  y1="80" x2="140" y2="90" class="edge"/>
+  <text x="140" y="125" class="label-text">Layer 1 → rich</text>
+  <text x="140" y="140" class="label-text">Layer 8 → all identical (faded)</text>
+  <!-- divider -->
+  <line x1="280" y1="20" x2="280" y2="150" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4"/>
+  <!-- OVERSQUASHING section -->
+  <text x="420" y="18" class="title-text">Oversquashing: bottleneck edge</text>
+  <circle cx="310" cy="75" r="12" class="sq-node"/>
+  <circle cx="340" cy="50" r="12" class="sq-node"/>
+  <circle cx="340" cy="100" r="12" class="sq-node"/>
+  <!-- bridge node -->
+  <circle cx="390" cy="75" r="12" class="sq-bridge"/>
+  <!-- right cluster -->
+  <circle cx="440" cy="50" r="12" class="sq-node"/>
+  <circle cx="440" cy="100" r="12" class="sq-node"/>
+  <circle cx="470" cy="75" r="12" class="sq-node"/>
+  <line x1="310" y1="75" x2="340" y2="50" class="edge"/>
+  <line x1="310" y1="75" x2="340" y2="100" class="edge"/>
+  <line x1="340" y1="50" x2="340" y2="100" class="edge"/>
+  <!-- bridge edge animated -->
+  <path d="M 352 75 L 378 75" class="sq-edge"/>
+  <line x1="390" y1="75" x2="440" y2="50" class="edge"/>
+  <line x1="390" y1="75" x2="440" y2="100" class="edge"/>
+  <line x1="440" y1="50" x2="470" y2="75" class="edge"/>
+  <line x1="440" y1="100" x2="470" y2="75" class="edge"/>
+  <text x="390" y="125" class="label-text">🔴 Bridge = bottleneck</text>
+  <text x="390" y="140" class="label-text">Exponential info squashed through 1 edge</text>
+</svg>
+<figcaption>Left: oversmoothing — node features fade toward a uniform value. Right: oversquashing — all cross-cluster information must traverse the single red bridge node.</figcaption>
+</figure></div>
+
 ## The Confusion
 
 Both oversmoothing and oversquashing:
@@ -65,6 +137,25 @@ You have a task requiring long-range reasoning (e.g., predicting whether two dis
 **Symptom:** performance on long-range tasks (e.g., LRGB benchmarks) is poor regardless of depth. Jacobian norms near zero for distant node pairs.
 
 **Fix:** graph rewiring (SDRF, add virtual nodes), global attention (Graph Transformers, GPS). Adding residual connections does NOT fix oversquashing — information still can't reach distant nodes.
+
+## Worked Diagnostic Example
+
+Consider a 4-layer GCN on a path graph: A — B — C — D — E — F — G — H — I — J (10 nodes).
+
+**Oversmoothing check:** Compute Mean Average Distance (MAD) between node embeddings at each layer.
+- Layer 1: MAD = 0.82 (distinct features)
+- Layer 2: MAD = 0.51
+- Layer 4: MAD = 0.09 (nearly uniform)
+
+The embeddings have collapsed — all nodes look alike. If you need to classify node A differently from node J, the model cannot.
+
+**Oversquashing check:** Compute the Jacobian ∂h_A / ∂x_J (how much does node J's input affect node A's output?).
+- With 4 layers, A has a 4-hop receptive field, which includes J (distance 9). So ∂h_A / ∂x_J = 0 — A literally cannot see J.
+- Even with 9 layers (reaching J), the path A→...→J has exponentially many competing paths that dilute the signal to near-zero.
+
+Both problems can coexist: you need 9 layers to reach J (depth demand), but 9 layers cause oversmoothing. The fix is not "just add more layers."
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing is measured in the <em>forward pass</em> (do node embeddings converge?). Oversquashing is measured via <em>Jacobians</em> (does a distant node's input influence this node's output?). You can have one without the other: a 2-layer GCN on a bottleneck graph has oversquashing but not oversmoothing.</div>
 
 ## A Unified View
 

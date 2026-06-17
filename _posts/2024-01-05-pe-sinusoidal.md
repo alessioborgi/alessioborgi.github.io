@@ -40,6 +40,12 @@ toc_label: "Contents"
 </div>
 
 
+## Intuition First: Why Waves?
+
+Imagine you want to give each position in a sequence a unique "fingerprint" using only values between −1 and +1. A single sine wave won't work — it repeats. But if you stack many sine waves at different frequencies, their combined values at any position form a unique signature (like a barcode).
+
+That's exactly what sinusoidal PE does: each dimension of the encoding vector is one wave of a specific frequency. Low-index dimensions oscillate fast; high-index dimensions oscillate slowly. Together, they uniquely identify any position.
+
 ## The Formula
 
 For a token at position `pos`, dimension `i` of its PE vector is:
@@ -189,6 +195,31 @@ Each position gets a unique fingerprint — a mix of fast and slow oscillations 
 </svg>
 <figcaption>Figure 1: Sinusoidal PE heatmap. Each row is a position; each column is a dimension. Left columns (high frequency) alternate rapidly; right columns (low frequency) stay nearly constant.</figcaption>
 </figure>
+</div>
+
+## Concrete Worked Example (d = 4)
+
+Let's compute the PE vector for position pos = 1 with d = 4 dimensions (i = 0 and i = 1):
+
+```
+PE(1, dim=0) = sin(1 / 10000^(0/4)) = sin(1 / 1)       = sin(1.0)  ≈  0.841
+PE(1, dim=1) = cos(1 / 10000^(0/4)) = cos(1 / 1)       = cos(1.0)  ≈  0.540
+PE(1, dim=2) = sin(1 / 10000^(2/4)) = sin(1 / 100)     = sin(0.01) ≈  0.010
+PE(1, dim=3) = cos(1 / 10000^(2/4)) = cos(1 / 100)     = cos(0.01) ≈  1.000
+```
+
+So PE(pos=1) ≈ [0.841, 0.540, 0.010, 1.000].
+
+Now compare pos = 2:
+```
+PE(2, dim=0) = sin(2.0) ≈  0.909    (changed a lot — high frequency)
+PE(2, dim=2) = sin(0.02) ≈ 0.020    (barely changed — low frequency)
+```
+
+The high-frequency dims (left) distinguish nearby positions; the low-frequency dims (right) distinguish distant ones. Together they uniquely encode every position.
+
+<div class="insight-box">
+<strong>Why this is clever:</strong> at d_model = 512, the 256 pairs of (sin, cos) cover frequencies from a period of ~6 tokens up to ~62,832 tokens. Every position gets a unique fingerprint, and the model can learn to read it.
 </div>
 
 ## Three Key Properties

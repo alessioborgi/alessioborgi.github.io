@@ -58,6 +58,8 @@ Where **b_{ij}** is an optional attention bias encoding the graph structure betw
 Without b_{ij}: the model ignores the graph and is a standard Transformer on node features.  
 With b_{ij}: graph structure guides attention (edge presence, distance, structural similarity).
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition: Why Positional Encodings Are Essential.</strong> In a sentence Transformer, position 3 is unambiguously "the third word." In a graph, there is no position 3. Two structurally equivalent nodes in different graphs should get similar positional encodings — but two nodes with identical features in different structural roles (hub vs. leaf) should get different ones. Without positional encodings, a Graph Transformer with no b_ij term is completely blind to graph structure — it would produce the same output for a path graph and a complete graph with the same node features.</div>
+
 ## The Key Challenge: Positional Encodings for Graphs
 
 Sequences have a natural positional order (position 1, 2, 3, ...). Graphs do not — there is no canonical node ordering. Without positional information, nodes with identical features but different structural roles are indistinguishable.

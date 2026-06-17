@@ -95,6 +95,125 @@ HetSheaf makes two changes:
 </figure>
 </div>
 
+<style>
+@keyframes hetsheaf-pulse-person {
+  0%, 100% { r: 28; opacity: 1; }
+  50% { r: 33; opacity: 0.75; }
+}
+@keyframes hetsheaf-pulse-org {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+@keyframes hetsheaf-pulse-concept {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+@keyframes hetsheaf-edge-flow {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes hetsheaf-label-fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin:0 auto;">
+  <defs>
+    <marker id="arrow-het" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+    </marker>
+  </defs>
+  <!-- Background -->
+  <rect width="480" height="260" fill="#f8fafc" rx="12"/>
+  <!-- Edges with animated dashes -->
+  <!-- A--B -->
+  <line x1="120" y1="130" x2="240" y2="130" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrow-het)">
+    <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1.4s" repeatCount="indefinite"/>
+  </line>
+  <!-- B--C -->
+  <line x1="260" y1="130" x2="360" y2="130" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrow-het)">
+    <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1.4s" begin="0.4s" repeatCount="indefinite"/>
+  </line>
+  <!-- Node A: Person — circle (blue) -->
+  <circle cx="100" cy="130" r="28" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="2.5">
+    <animate attributeName="r" values="28;33;28" dur="2.4s" repeatCount="indefinite"/>
+    <animate attributeName="fill-opacity" values="0.18;0.08;0.18" dur="2.4s" repeatCount="indefinite"/>
+  </circle>
+  <text x="100" y="125" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="700">Person</text>
+  <text x="100" y="139" text-anchor="middle" fill="#1d4ed8" font-size="10">A</text>
+  <!-- Stalk box A -->
+  <rect x="60" y="165" width="80" height="22" rx="4" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+  <text x="100" y="180" text-anchor="middle" fill="#1e40af" font-size="9" font-family="monospace">x_A∈ℝ²</text>
+  <!-- Node B: Org — rectangle (green) -->
+  <rect x="218" y="107" width="52" height="46" rx="7" fill="#22c55e" fill-opacity="0.15" stroke="#22c55e" stroke-width="2.5">
+    <animate attributeName="fill-opacity" values="0.15;0.05;0.15" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-width" values="2.5;4;2.5" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+  </rect>
+  <text x="244" y="125" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700">Org</text>
+  <text x="244" y="139" text-anchor="middle" fill="#15803d" font-size="10">B</text>
+  <!-- Stalk box B -->
+  <rect x="204" y="165" width="80" height="22" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+  <text x="244" y="180" text-anchor="middle" fill="#166534" font-size="9" font-family="monospace">x_B∈ℝ²</text>
+  <!-- Node C: Concept — diamond (orange) -->
+  <polygon points="388,102 416,130 388,158 360,130" fill="#f97316" fill-opacity="0.15" stroke="#f97316" stroke-width="2.5">
+    <animate attributeName="fill-opacity" values="0.15;0.05;0.15" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-width" values="2.5;4;2.5" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+  </polygon>
+  <text x="388" y="125" text-anchor="middle" fill="#c2410c" font-size="11" font-weight="700">Concept</text>
+  <text x="388" y="139" text-anchor="middle" fill="#c2410c" font-size="10">C</text>
+  <!-- Stalk box C -->
+  <rect x="348" y="165" width="80" height="22" rx="4" fill="#ffedd5" stroke="#fdba74" stroke-width="1"/>
+  <text x="388" y="180" text-anchor="middle" fill="#9a3412" font-size="9" font-family="monospace">x_C∈ℝ²</text>
+  <!-- Edge labels (restriction map types) -->
+  <rect x="140" y="110" width="80" height="16" rx="4" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1"/>
+  <text x="180" y="121" text-anchor="middle" fill="#0369a1" font-size="9">F^{P→O}_{v→e}</text>
+  <rect x="279" y="110" width="76" height="16" rx="4" fill="#fef3c7" stroke="#fcd34d" stroke-width="1"/>
+  <text x="317" y="121" text-anchor="middle" fill="#92400e" font-size="9">F^{O→C}_{v→e}</text>
+  <!-- Title -->
+  <text x="240" y="22" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="700">HetSheaf: Type-Conditioned Restriction Maps</text>
+  <text x="240" y="38" text-anchor="middle" fill="#64748b" font-size="10">Each edge type gets a different learned linear map — no separate modules needed</text>
+  <!-- Legend -->
+  <circle cx="72" cy="240" r="6" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="82" y="244" fill="#374151" font-size="9">Person node</text>
+  <rect x="130" y="234" width="12" height="12" rx="2" fill="#22c55e" fill-opacity="0.4" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="147" y="244" fill="#374151" font-size="9">Org node</text>
+  <polygon points="204,240 210,234 216,240 210,246" fill="#f97316" fill-opacity="0.4" stroke="#f97316" stroke-width="1.5"/>
+  <text x="222" y="244" fill="#374151" font-size="9">Concept node</text>
+</svg>
+<figcaption>HetSheaf assigns a different restriction map per edge type. Three node types (person, org, concept) with different local geometries share one propagation rule — heterogeneity lives in the maps, not the architecture.</figcaption>
+</figure>
+</div>
+
+### Mini-Example: 3-Node Heterogeneous Graph
+
+Consider a small graph with nodes A (person), B (org), C (concept), two edges e_AB and e_BC.
+
+**Standard SNN** (type-blind): both edges use the same learned matrix W ∈ ℝ^{2×2}.
+
+<div class="math-box" style="background:linear-gradient(145deg,#f8fafc,#f0f4f8);border:1px solid #e2e8f0;border-radius:8px;padding:1rem 1.4rem;margin:1.25rem 0;font-family:monospace;text-align:left;">
+F_{A→e_AB} = W,   F_{B→e_AB} = W<br>
+F_{B→e_BC} = W,   F_{C→e_BC} = W
+</div>
+
+**HetSheaf** (type-conditioned): each edge type gets its own restriction map, conditioned on the node's type embedding τ and features h_v.
+
+<div class="math-box" style="background:linear-gradient(145deg,#f8fafc,#f0f4f8);border:1px solid #e2e8f0;border-radius:8px;padding:1rem 1.4rem;margin:1.25rem 0;font-family:monospace;text-align:left;">
+F_{A→e_AB} = MLP(h_A, τ_person, τ_{P→O})  ∈ ℝ^{2×2}<br>
+F_{B→e_AB} = MLP(h_B, τ_org,    τ_{P→O})  ∈ ℝ^{2×2}<br>
+F_{B→e_BC} = MLP(h_B, τ_org,    τ_{O→C})  ∈ ℝ^{2×2}<br>
+F_{C→e_BC} = MLP(h_C, τ_concept, τ_{O→C}) ∈ ℝ^{2×2}
+</div>
+
+The disagreement at e_AB that the Sheaf Laplacian penalises is then:
+
+<div class="math-box" style="background:linear-gradient(145deg,#f8fafc,#f0f4f8);border:1px solid #e2e8f0;border-radius:8px;padding:1rem 1.4rem;margin:1.25rem 0;font-family:monospace;text-align:center;">
+(δ₀ x)_{e_AB} = F_{A→e_AB} x_A − F_{B→e_AB} x_B
+</div>
+
+With type-conditioned maps, this disagreement is measured **in the coordinate frame appropriate to the A–B relation**, not in a generic frame shared by all edge types. A person-to-org relationship and an org-to-concept relationship are penalised on their own terms.
+
 ## Sheaf Predictors
 
 The restriction maps can be instantiated in different ways, giving a family of **Heterogeneous Sheaf Predictors (HSPs)**. The paper explores several variants ranging from linear maps to nonlinear maps conditioned on concatenated node/edge features.
@@ -141,6 +260,8 @@ On the **Heterogeneous Graph Benchmark (HGB)** — covering node classification,
 - Up to **99.62% F1** on link prediction benchmarks.
 - **10× parameter reduction** vs. type-specialised baselines while maintaining competitive performance.
 - SheafPool delivers **+42pp** over mean pooling on graph classification tasks.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Type-specific neural modules scale as O(T²) in the number of relation types T — every pair of node types may need its own transformation. Type-aware restriction maps in HetSheaf scale as O(T): each type gets a conditioning signal, but the propagation rule stays the same. Encoding heterogeneity in geometry rather than architecture is the key to parameter-efficient relational learning.</div>
 
 ## Why This Matters
 

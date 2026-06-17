@@ -113,6 +113,51 @@ The block learns to be a general "refinement step" that improves representations
 </figure>
 </div>
 
+## Intuition: The Same Brain, More Time
+
+Consider how you solve a mental arithmetic problem:
+
+- *"2 + 2?"* — you answer instantly, one "pass" through your brain.
+- *"147 × 23?"* — you work through it step by step, running your reasoning machinery several times.
+
+Your brain does not become physically larger for hard problems. It just runs longer. Looped Transformers apply exactly this principle: one block, many iterations.
+
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 520 130" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <style>
+    @keyframes loop-pulse {
+      0%, 100% { stroke-width: 2; opacity: 0.6; }
+      50%       { stroke-width: 3.5; opacity: 1; }
+    }
+    .loop-arrow { animation: loop-pulse 1.6s ease-in-out infinite; }
+  </style>
+  <defs>
+    <marker id="lp1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#0d9488"/></marker>
+    <marker id="lp2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#6b7280"/></marker>
+  </defs>
+  <!-- Input -->
+  <rect x="10" y="50" width="80" height="36" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="50" y="72" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700">Input h₀</text>
+  <line x1="90" y1="68" x2="110" y2="68" stroke="#6b7280" stroke-width="1.5" marker-end="url(#lp2)"/>
+  <!-- Shared block -->
+  <rect x="112" y="38" width="110" height="60" rx="8" fill="#ccfbf1" stroke="#0d9488" stroke-width="2.5"/>
+  <text x="167" y="63" text-anchor="middle" font-size="11" fill="#134e4a" font-weight="700">Shared</text>
+  <text x="167" y="79" text-anchor="middle" font-size="10" fill="#134e4a">Block F(·)</text>
+  <!-- Loop arrow -->
+  <path d="M 222 58 C 270 30 270 106 222 78" fill="none" stroke="#0d9488" stroke-width="2.5" marker-end="url(#lp1)" class="loop-arrow"/>
+  <text x="278" y="72" font-size="10" fill="#0d9488" font-weight="700">× T loops</text>
+  <!-- Output -->
+  <line x1="222" y1="68" x2="340" y2="68" stroke="#6b7280" stroke-width="1.5" marker-end="url(#lp2)"/>
+  <rect x="342" y="50" width="80" height="36" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="382" y="72" text-anchor="middle" font-size="10" fill="#78350f" font-weight="700">Output hₜ</text>
+  <!-- Easy vs hard labels -->
+  <text x="167" y="118" text-anchor="middle" font-size="9" fill="#6b7280">Easy: T=2  |  Hard: T=20  |  T chosen adaptively</text>
+</svg>
+<figcaption>The shared block F(·) is applied T times. The loop arrow pulses to emphasise iteration. T can be chosen per input at inference time.</figcaption>
+</figure>
+</div>
+
 ## Adaptive Computation: Think Harder When Needed
 
 A key advantage: **the number of loops T can be varied at inference time**.

@@ -30,6 +30,69 @@ toc_label: "Contents"
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Sheaf Laplacian construction" caption="Cellular sheaf structure and Sheaf Laplacian construction (Bodnar et al., 2022)" %}
 
+## Intuition First: What Is a Cellular Sheaf?
+
+Imagine you have a social network where each person (node) holds a 2D opinion vector — one dimension for economics, one for social policy. When two people talk (an edge), they don't necessarily agree: their opinions are "compared" through a linear map that translates one person's coordinate frame into the other's. A **cellular sheaf** formalises this: each node gets a local vector space (its *stalk*), each edge gets a stalk too, and *restriction maps* say how a node's data projects onto an adjacent edge's perspective.
+
+A **global section** is an assignment of vectors to every node such that *all* adjacent pairs are already in agreement after applying their restriction maps — nobody is "wrong" relative to their neighbours. The space of global sections is the oversmoothing attractor of sheaf diffusion.
+
+<style>
+@keyframes restrictPulse {
+  0%,100% { stroke-dashoffset: 0; }
+  50% { stroke-dashoffset: 8; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 210" style="width:100%;max-width:520px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- three nodes -->
+  <circle cx="80"  cy="105" r="30" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="240" cy="105" r="30" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <circle cx="400" cy="105" r="30" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+  <!-- node labels -->
+  <text x="80"  y="100" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e40af">v₁</text>
+  <text x="80"  y="115" text-anchor="middle" font-size="9"  fill="#3b82f6">stalk ℝ²</text>
+  <text x="240" y="100" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">v₂</text>
+  <text x="240" y="115" text-anchor="middle" font-size="9"  fill="#16a34a">stalk ℝ²</text>
+  <text x="400" y="100" text-anchor="middle" font-size="12" font-weight="bold" fill="#be185d">v₃</text>
+  <text x="400" y="115" text-anchor="middle" font-size="9"  fill="#db2777">stalk ℝ²</text>
+  <!-- edge stalks as diamonds -->
+  <polygon points="160,95 175,105 160,115 145,105" fill="#fef3c7" stroke="#d97706" stroke-width="1.8"/>
+  <text x="160" y="109" text-anchor="middle" font-size="8" fill="#92400e">e₁₂</text>
+  <polygon points="320,95 335,105 320,115 305,105" fill="#fef3c7" stroke="#d97706" stroke-width="1.8"/>
+  <text x="320" y="109" text-anchor="middle" font-size="8" fill="#92400e">e₂₃</text>
+  <!-- restriction map arrows with animated dash -->
+  <line x1="110" y1="100" x2="143" y2="103" stroke="#7c3aed" stroke-width="2"
+        stroke-dasharray="4,2" style="animation:restrictPulse 2s ease-in-out infinite;"/>
+  <text x="120" y="92" font-size="8" fill="#7c3aed">F_{1▷e₁₂}</text>
+  <line x1="213" y1="103" x2="177" y2="103" stroke="#7c3aed" stroke-width="2"
+        stroke-dasharray="4,2" style="animation:restrictPulse 2s ease-in-out infinite 0.3s;"/>
+  <text x="192" y="92" font-size="8" fill="#7c3aed">F_{2▷e₁₂}</text>
+  <line x1="270" y1="103" x2="303" y2="103" stroke="#7c3aed" stroke-width="2"
+        stroke-dasharray="4,2" style="animation:restrictPulse 2s ease-in-out infinite 0.6s;"/>
+  <text x="283" y="92" font-size="8" fill="#7c3aed">F_{2▷e₂₃}</text>
+  <line x1="370" y1="103" x2="337" y2="103" stroke="#7c3aed" stroke-width="2"
+        stroke-dasharray="4,2" style="animation:restrictPulse 2s ease-in-out infinite 0.9s;"/>
+  <text x="350" y="92" font-size="8" fill="#7c3aed">F_{3▷e₂₃}</text>
+  <!-- stalk arrows indicating local data -->
+  <line x1="80"  y1="75" x2="95"  y2="57" stroke="#3b82f6" stroke-width="2" marker-end="url(#blueArr)"/>
+  <line x1="240" y1="75" x2="255" y2="57" stroke="#16a34a" stroke-width="2" marker-end="url(#greenArr)"/>
+  <line x1="400" y1="75" x2="415" y2="57" stroke="#db2777" stroke-width="2" marker-end="url(#pinkArr)"/>
+  <!-- x vector annotations -->
+  <text x="100" y="50" font-size="9" fill="#3b82f6">x₁</text>
+  <text x="260" y="50" font-size="9" fill="#16a34a">x₂</text>
+  <text x="420" y="50" font-size="9" fill="#db2777">x₃</text>
+  <!-- consistency label -->
+  <text x="240" y="185" text-anchor="middle" font-size="10" fill="#374151">Global section: F_{1▷e₁₂}x₁ = F_{2▷e₁₂}x₂  <tspan font-weight="bold" fill="#15803d">and</tspan>  F_{2▷e₂₃}x₂ = F_{3▷e₂₃}x₃</text>
+  <defs>
+    <marker id="blueArr"  markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#3b82f6"/></marker>
+    <marker id="greenArr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#16a34a"/></marker>
+    <marker id="pinkArr"  markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#db2777"/></marker>
+  </defs>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Path graph with three node stalks (coloured circles), two edge stalks (amber diamonds), and four restriction maps (animated dashed purple arrows). A global section requires both pairs of restrictions to agree.</figcaption>
+</figure></div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The restriction map is not a constraint imposed on the data — it is a <em>lens</em> through which node v sees its own data as it would look from the edge's perspective. Two nodes that look the same under their respective lenses are in agreement. The sheaf Laplacian measures the total disagreement across all edges simultaneously.</div>
 
 ## Setup: A Worked Example
 
@@ -162,6 +225,25 @@ dX/dt = −Δ_F X   →   X(t) = exp(−Δ_F t) X(0)
 </div>
 
 as t → ∞, X(t) projects onto ker(Δ_F). The equilibrium is not a constant but a global section — a signal that satisfies all pairwise restrictions.
+
+## Concrete Numerical Example: 3-Node Path with Explicit Matrices
+
+Let's make the abstract completely concrete. Take the path graph 1–2–3 with stalk dimension d=2 and these specific restriction maps:
+
+<div class="math-box">
+A₁ = F_{1▷e₁₂} = [[1, 0],[0, 1]]  (identity)
+A₂ = F_{2▷e₁₂} = [[1, 0],[0,-1]]  (flip second component)
+B₂ = F_{2▷e₂₃} = [[0, 1],[1, 0]]  (swap components)
+B₃ = F_{3▷e₂₃} = [[1, 0],[0, 1]]  (identity)
+</div>
+
+**Global sections** must satisfy:
+- A₁ x₁ = A₂ x₂  →  [x₁₁, x₁₂] = [x₂₁, -x₂₂]  →  x₁₁=x₂₁, x₁₂=-x₂₂
+- B₂ x₂ = B₃ x₃  →  [x₂₂, x₂₁] = [x₃₁, x₃₂]   →  x₃₁=x₂₂, x₃₂=x₂₁
+
+Setting x₂ = (a, b): x₁ = (a, -b), x₃ = (b, a). The null space is span{[(a,-b), (a,b), (b,a)] : a,b∈ℝ} — a 2-dimensional family. Even though the maps are non-identity, we still have dim ker(Δ_F) = 2 = d for this connected path graph, confirming the theory. The global section with a=1,b=0 gives x₁=(1,0), x₂=(1,0), x₃=(0,1) — nodes 1 and 2 carry the same first component while node 3 carries a rotated version.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The restriction maps encode a <em>translation dictionary</em> between adjacent stalks. When A₁x₁ = A₂x₂ is satisfied, we say x₁ and x₂ are "in agreement as seen from edge e₁₂." This is different from x₁ = x₂ (which is what a standard GCN requires). Sheaf diffusion converges to this structured agreement, not to a boring constant.</div>
 
 ## Normalisation
 

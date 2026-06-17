@@ -79,6 +79,69 @@ The proof uses the theory of stochastic approximation (Robbins-Monro). The key s
 
 Note that convergence is **not guaranteed** with function approximation (neural networks). The combination of off-policy learning, bootstrapping, and function approximation is called the **deadly triad** — addressed by DQN's experience replay and target networks.
 
+## Intuition First: Why Max Instead of Average?
+
+SARSA updates Q(s,a) toward what the agent *actually* did next. Q-learning updates toward what the agent *could* do best next — ignoring the exploration noise. Think of it this way: SARSA is like rating a restaurant based on what you ordered (including bad choices), while Q-learning always rates it as if you ordered the best dish. Q-learning therefore learns the optimal Q-function regardless of how erratically it explores.
+
+## Manual Q-Table Update Walkthrough
+
+A 3×3 gridworld: start at (0,0), goal at (2,2) with reward +1, wall at (1,1). $$\gamma=0.9$$, $$\alpha=0.1$$. Initial Q-table = all zeros.
+
+**Transition**: from state (0,0) take action RIGHT → land in (0,1), receive r=0.
+
+$$Q((0,0), \text{RIGHT}) \leftarrow 0 + 0.1 \times [0 + 0.9 \times \max_{a'} Q((0,1), a') - 0]$$
+$$= 0 + 0.1 \times [0 + 0.9 \times 0 - 0] = \mathbf{0.000}$$
+
+*(No signal yet — reward is only at goal.)*
+
+**Later**: from (1,2) take action RIGHT → land at (2,2)=Goal, receive r=+1.
+
+$$Q((1,2), \text{RIGHT}) \leftarrow 0 + 0.1 \times [1 + 0.9 \times 0 - 0] = \mathbf{0.100}$$
+
+**Next episode** from (0,2) → RIGHT → (1,2):
+
+$$Q((0,2), \text{RIGHT}) \leftarrow 0 + 0.1 \times [0 + 0.9 \times 0.1 - 0] = \mathbf{0.009}$$
+
+The +1 reward ripples back one cell per episode, tracing the optimal path.
+
+<style>
+@keyframes heat-cell { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" style="max-width:260px;width:100%;display:block;margin:auto;">
+  <text x="130" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#334155">Q-Value Heatmap (converged)</text>
+  <!-- Grid 3x3 -->
+  <!-- Row 0 -->
+  <rect x="20"  y="25" width="65" height="65" rx="4" fill="#bfdbfe" opacity="0.7"/>
+  <text x="52"  y="56" text-anchor="middle" font-size="11" fill="#1e40af">0.73</text>
+  <rect x="90"  y="25" width="65" height="65" rx="4" fill="#93c5fd" opacity="0.7"/>
+  <text x="122" y="56" text-anchor="middle" font-size="11" fill="#1e40af">0.81</text>
+  <rect x="160" y="25" width="65" height="65" rx="4" fill="#60a5fa" opacity="0.85"/>
+  <text x="192" y="56" text-anchor="middle" font-size="11" fill="#1e3a8a">0.90</text>
+  <!-- Row 1 -->
+  <rect x="20"  y="95" width="65" height="65" rx="4" fill="#bfdbfe" opacity="0.7"/>
+  <text x="52"  y="126" text-anchor="middle" font-size="11" fill="#1e40af">0.66</text>
+  <rect x="90"  y="95" width="65" height="65" rx="4" fill="#e2e8f0"/>
+  <text x="122" y="126" text-anchor="middle" font-size="13" fill="#94a3b8">■</text>
+  <text x="122" y="140" text-anchor="middle" font-size="9"  fill="#94a3b8">wall</text>
+  <rect x="160" y="95" width="65" height="65" rx="4" fill="#60a5fa" opacity="0.85" style="animation:heat-cell 2s ease-in-out infinite;"/>
+  <text x="192" y="126" text-anchor="middle" font-size="11" fill="#1e3a8a">0.90</text>
+  <!-- Row 2 -->
+  <rect x="20"  y="165" width="65" height="65" rx="4" fill="#dbeafe" opacity="0.7"/>
+  <text x="52"  y="196" text-anchor="middle" font-size="11" fill="#1e40af">0.59</text>
+  <rect x="90"  y="165" width="65" height="65" rx="4" fill="#93c5fd" opacity="0.7"/>
+  <text x="122" y="196" text-anchor="middle" font-size="11" fill="#1e40af">0.66</text>
+  <rect x="160" y="165" width="65" height="65" rx="4" fill="#f97316"/>
+  <text x="192" y="196" text-anchor="middle" font-size="12" fill="white" font-weight="bold">GOAL</text>
+  <text x="192" y="210" text-anchor="middle" font-size="10" fill="white">+1.00</text>
+  <!-- Axis labels -->
+  <text x="52"  y="245" text-anchor="middle" font-size="9" fill="#64748b">(0,0)</text>
+  <text x="122" y="245" text-anchor="middle" font-size="9" fill="#64748b">(0,1)</text>
+  <text x="192" y="245" text-anchor="middle" font-size="9" fill="#64748b">(0,2)</text>
+</svg>
+<figcaption>Converged Q-values (best action) in a 3×3 gridworld with γ=0.9. Values decrease with distance from the goal by factors of 0.9. The wall cell at (1,1) has no Q-value.</figcaption>
+</figure></div>
+
 ## Grid World Example
 
 Consider a 4×4 grid world with a goal state (reward +1) and a hole (reward −1), with $$\gamma = 0.9$$. After 500 episodes of Q-learning with ε=0.1:

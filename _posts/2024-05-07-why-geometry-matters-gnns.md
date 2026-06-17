@@ -31,6 +31,63 @@ toc_label: "Contents"
 
 ## The Geometric Setting
 
+**Intuition First:** Imagine you have a molecular model kit. You can describe the connectivity — carbon bonded to two oxygens — without saying *how* those bonds are arranged in 3D space. But a flat (180°) CO₂ and a bent (120°) arrangement have wildly different properties. Standard GNNs only read the assembly instructions; geometric GNNs also read the 3D blueprint.
+
+<style>
+@keyframes mol-rotate {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes fade-label {
+  0%,100% { opacity:0.4; }
+  50%      { opacity:1.0; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;display:block;margin:0 auto;">
+  <!-- L-alanine (left) -->
+  <text x="100" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">L-Alanine</text>
+  <line x1="100" y1="60" x2="70"  y2="100" stroke="#6b7280" stroke-width="2"/>
+  <line x1="100" y1="60" x2="130" y2="100" stroke="#6b7280" stroke-width="2"/>
+  <line x1="100" y1="60" x2="100" y2="30"  stroke="#6b7280" stroke-width="2"/>
+  <line x1="100" y1="60" x2="135" y2="55"  stroke="#6b7280" stroke-width="2"/>
+  <circle cx="100" cy="60"  r="14" fill="#3b82f6"/>
+  <circle cx="70"  cy="105" r="11" fill="#ef4444"/>
+  <circle cx="130" cy="105" r="11" fill="#10b981"/>
+  <circle cx="100" cy="26"  r="10" fill="#8b5cf6"/>
+  <circle cx="140" cy="53"  r="9"  fill="#f59e0b"/>
+  <text x="100" y="64"  text-anchor="middle" font-size="10" fill="white" font-weight="bold">C</text>
+  <text x="70"  y="109" text-anchor="middle" font-size="9"  fill="white">NH₂</text>
+  <text x="130" y="109" text-anchor="middle" font-size="9"  fill="white">COOH</text>
+  <text x="100" y="30"  text-anchor="middle" font-size="9"  fill="white">CH₃</text>
+  <text x="140" y="57"  text-anchor="middle" font-size="9"  fill="white">H</text>
+  <text x="100" y="150" text-anchor="middle" font-size="10" fill="#10b981">✓ Biologically active</text>
+  <!-- D-alanine (right) — mirror image -->
+  <text x="300" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">D-Alanine</text>
+  <line x1="300" y1="60" x2="330" y2="100" stroke="#6b7280" stroke-width="2"/>
+  <line x1="300" y1="60" x2="270" y2="100" stroke="#6b7280" stroke-width="2"/>
+  <line x1="300" y1="60" x2="300" y2="30"  stroke="#6b7280" stroke-width="2"/>
+  <line x1="300" y1="60" x2="265" y2="55"  stroke="#6b7280" stroke-width="2"/>
+  <circle cx="300" cy="60"  r="14" fill="#3b82f6"/>
+  <circle cx="330" cy="105" r="11" fill="#ef4444"/>
+  <circle cx="270" cy="105" r="11" fill="#10b981"/>
+  <circle cx="300" cy="26"  r="10" fill="#8b5cf6"/>
+  <circle cx="260" cy="53"  r="9"  fill="#f59e0b"/>
+  <text x="300" y="64"  text-anchor="middle" font-size="10" fill="white" font-weight="bold">C</text>
+  <text x="330" y="109" text-anchor="middle" font-size="9"  fill="white">NH₂</text>
+  <text x="270" y="109" text-anchor="middle" font-size="9"  fill="white">COOH</text>
+  <text x="300" y="30"  text-anchor="middle" font-size="9"  fill="white">CH₃</text>
+  <text x="260" y="57"  text-anchor="middle" font-size="9"  fill="white">H</text>
+  <text x="300" y="150" text-anchor="middle" font-size="10" fill="#ef4444">✗ Inactive (mirror)</text>
+  <!-- Mirror line -->
+  <line x1="200" y1="20" x2="200" y2="155" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="200" y="172" text-anchor="middle" font-size="10" fill="#9ca3af">Same connectivity — opposite chirality → different biology</text>
+</svg>
+<figcaption>Stereoisomers: identical bond graph, completely different 3D structure and biological activity. A connectivity-only GNN gives them the same embedding.</figcaption>
+</figure>
+</div>
+
 Consider a molecule modelled as a graph G = (V, E, X, R):
 - V: atoms (nodes), E: bonds (edges), X: atomic features (atom type, charge)
 - R ∈ ℝ^{N×3}: 3D coordinates of each atom
@@ -102,6 +159,8 @@ Process 3D vectors as vectors — not just their magnitudes. EGNN, SE(3)-Transfo
 **Robotics:** process point cloud sensor data while maintaining rotational equivariance.
 
 **Particle physics:** predict particle interaction properties with detector geometry.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Every symmetry you bake into the architecture is one fewer thing the model needs to learn from data. A rotation-invariant model trained on one molecular orientation generalises to all orientations for free. This is not just elegant mathematics — it translates directly into needing 10–100× less labelled data to reach the same accuracy.</div>
 
 ## Summary
 

@@ -77,6 +77,10 @@ Standard GNNs aggregate neighbour features by averaging — implicitly assuming 
 
 Sheaf Neural Networks address both problems from a single mathematical framework: **cellular sheaf theory**, a branch of algebraic topology. The key idea is to attach a vector space (a *stalk*) to every node and edge, and learn a linear map (a *restriction map*) per edge that describes the structural relationship between the endpoint stalks. The Sheaf Laplacian — built from these maps — replaces the graph Laplacian used by GCN, and the resulting diffusion process respects the relational geometry of the graph rather than forcing raw feature equality.
 
+**Intuition First — the weather station analogy.** Before any equations, picture a network of weather stations spread across a country. Each station (a graph node) measures temperature, but in its own local units: some use Celsius, some Fahrenheit, some a proprietary scale. Knowing that two adjacent stations read "22" and "71" tells you nothing until you know the conversion factor between them. That conversion factor is the **restriction map**. A **global section** is a set of readings — one per station — where every pair of adjacent stations is consistent *after* applying their shared conversion factor. The Sheaf Laplacian is the penalty for inconsistency: it is large when nearby stations disagree in their own coordinate systems. Sheaf Neural Networks learn the conversion factors from data — and that is the entire conceptual leap.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Standard GNNs aggregate by scalar averaging — they assume all nodes live in the same coordinate space and "22 at node u" is directly comparable to "22 at node v". Sheaf GNNs replace scalar averaging with vector-space transport: each node has its own local frame (a vector space stalk), and restriction maps are the frame-to-frame linear maps. This single change unlocks the ability to represent heterophily, directional relations, and richer invariants — all from one unified operator, the Sheaf Laplacian.</div>
+
 ## The Core Mathematical Object
 
 A cellular sheaf F on a graph G assigns:
@@ -109,6 +113,99 @@ The **Sheaf Laplacian** Δ_F = δ₀ᵀ δ₀ is a block matrix that generalises
 ## The Whole Story in One Paragraph
 
 If you want the shortest correct summary, it is this: **a sheaf equips every node and edge with a vector space, and every incidence with a linear map; the Sheaf Laplacian then measures inconsistency after transporting signals through those maps**. Once you accept that formulation, many things that look like separate research problems in GNNs begin to unify: heterophily, sign structure, gauge symmetry, directional flow, and even some forms of oversmoothing analysis.
+
+<style>
+@keyframes roadmap-glow-1 {
+  0%, 100% { filter: drop-shadow(0 0 0px #0d9488); }
+  20% { filter: drop-shadow(0 0 10px #0d9488); }
+}
+@keyframes roadmap-glow-2 {
+  0%, 20%, 100% { filter: drop-shadow(0 0 0px #3b82f6); }
+  40% { filter: drop-shadow(0 0 10px #3b82f6); }
+}
+@keyframes roadmap-glow-3 {
+  0%, 40%, 100% { filter: drop-shadow(0 0 0px #8b5cf6); }
+  60% { filter: drop-shadow(0 0 10px #8b5cf6); }
+}
+@keyframes roadmap-glow-4 {
+  0%, 60%, 100% { filter: drop-shadow(0 0 0px #f59e0b); }
+  80% { filter: drop-shadow(0 0 10px #f59e0b); }
+}
+@keyframes roadmap-glow-5 {
+  0%, 80%, 100% { filter: drop-shadow(0 0 0px #ef4444); }
+  100% { filter: drop-shadow(0 0 10px #ef4444); }
+}
+@keyframes roadmap-arrow-flow {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 540 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin:0 auto;">
+  <defs>
+    <marker id="rm-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="540" height="200" fill="#f8fafc" rx="12"/>
+  <!-- Arrows between parts -->
+  <line x1="90" y1="100" x2="136" y2="100" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#rm-arrow)">
+    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.2s" repeatCount="indefinite"/>
+  </line>
+  <line x1="196" y1="100" x2="236" y2="100" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#rm-arrow)">
+    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.2s" begin="0.25s" repeatCount="indefinite"/>
+  </line>
+  <line x1="296" y1="100" x2="336" y2="100" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#rm-arrow)">
+    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.2s" begin="0.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="396" y1="100" x2="436" y2="100" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#rm-arrow)">
+    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.2s" begin="0.75s" repeatCount="indefinite"/>
+  </line>
+  <!-- Part 1: Foundations -->
+  <g style="animation: roadmap-glow-1 5s ease-in-out infinite;">
+    <rect x="10" y="68" width="80" height="64" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2.5"/>
+  </g>
+  <text x="50" y="92" text-anchor="middle" fill="#0f766e" font-size="10" font-weight="700">Part 1</text>
+  <text x="50" y="105" text-anchor="middle" fill="#0f766e" font-size="9">Foundations</text>
+  <text x="50" y="118" text-anchor="middle" fill="#0f766e" font-size="8">Posts 1–6</text>
+  <!-- Part 2: Core Papers -->
+  <g style="animation: roadmap-glow-2 5s ease-in-out 1s infinite;">
+    <rect x="140" y="68" width="80" height="64" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5"/>
+  </g>
+  <text x="180" y="92" text-anchor="middle" fill="#1d4ed8" font-size="10" font-weight="700">Part 2</text>
+  <text x="180" y="105" text-anchor="middle" fill="#1d4ed8" font-size="9">Core Papers</text>
+  <text x="180" y="118" text-anchor="middle" fill="#1d4ed8" font-size="8">Posts 7–12</text>
+  <!-- Part 3: Theory -->
+  <g style="animation: roadmap-glow-3 5s ease-in-out 2s infinite;">
+    <rect x="240" y="68" width="80" height="64" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2.5"/>
+  </g>
+  <text x="280" y="92" text-anchor="middle" fill="#6d28d9" font-size="10" font-weight="700">Part 3</text>
+  <text x="280" y="105" text-anchor="middle" fill="#6d28d9" font-size="9">Theory</text>
+  <text x="280" y="118" text-anchor="middle" fill="#6d28d9" font-size="8">Posts 13–17</text>
+  <!-- Part 4: Extensions -->
+  <g style="animation: roadmap-glow-4 5s ease-in-out 3s infinite;">
+    <rect x="340" y="68" width="80" height="64" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5"/>
+  </g>
+  <text x="380" y="92" text-anchor="middle" fill="#b45309" font-size="10" font-weight="700">Part 4</text>
+  <text x="380" y="105" text-anchor="middle" fill="#b45309" font-size="9">Extensions</text>
+  <text x="380" y="118" text-anchor="middle" fill="#b45309" font-size="8">Posts 18–22</text>
+  <!-- Part 5: Applications -->
+  <g style="animation: roadmap-glow-5 5s ease-in-out 4s infinite;">
+    <rect x="440" y="68" width="90" height="64" rx="10" fill="#fee2e2" stroke="#ef4444" stroke-width="2.5"/>
+  </g>
+  <text x="485" y="92" text-anchor="middle" fill="#b91c1c" font-size="10" font-weight="700">Part 5</text>
+  <text x="485" y="105" text-anchor="middle" fill="#b91c1c" font-size="9">Applications</text>
+  <text x="485" y="118" text-anchor="middle" fill="#b91c1c" font-size="8">Posts 23–25</text>
+  <!-- Title -->
+  <text x="270" y="22" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="700">Book Roadmap — Reading Order</text>
+  <text x="270" y="38" text-anchor="middle" fill="#64748b" font-size="10">Each part pulses in sequence to suggest the recommended reading order</text>
+  <!-- Bottom legend: recommended shortcut -->
+  <text x="270" y="172" text-anchor="middle" fill="#475569" font-size="9">Fast track: Part 1 (foundations) → Post 8 (NSD) → Part 5 (applications)</text>
+</svg>
+<figcaption>The five parts of the Sheaf Neural Networks series. The parts pulse in reading order — start at Foundations and work right. The dashed arrows indicate natural dependency flow.</figcaption>
+</figure>
+</div>
 
 ## Series Structure
 

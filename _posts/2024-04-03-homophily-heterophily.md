@@ -85,6 +85,55 @@ Where dₖ is the proportion of nodes in class k. This adjusts for the expected 
 
 Another useful measure: **node homophily** — for each node, the fraction of same-class neighbours — then averaged across nodes.
 
+<style>
+@keyframes homo-pulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+.homo-edge { animation: homo-pulse 1.8s ease-in-out infinite; }
+.hetero-edge { animation: homo-pulse 1.8s ease-in-out infinite 0.9s; }
+</style>
+
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 480 190" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <!-- Homophilic graph -->
+  <text x="115" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Homophilic (h ≈ 0.8)</text>
+  <!-- Blue cluster -->
+  <circle cx="60"  cy="70"  r="20" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="60"  y="75"  text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700">A</text>
+  <circle cx="120" cy="50"  r="20" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="120" y="55"  text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700">B</text>
+  <circle cx="120" cy="120" r="20" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="120" y="125" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700">C</text>
+  <!-- Intra-class edges (same colour = homophily) -->
+  <line x1="79"  y1="63"  x2="101" y2="58"  stroke="#3b82f6" stroke-width="3" class="homo-edge"/>
+  <line x1="79"  y1="79"  x2="101" y2="110" stroke="#3b82f6" stroke-width="3" class="homo-edge"/>
+  <line x1="120" y1="70"  x2="120" y2="100" stroke="#3b82f6" stroke-width="3" class="homo-edge"/>
+  <text x="90" y="160" text-anchor="middle" font-size="9" fill="#059669">Same-class edges (blue↔blue)</text>
+  <text x="90" y="172" text-anchor="middle" font-size="9" fill="#059669">Aggregation = denoising ✓</text>
+
+  <!-- Divider -->
+  <line x1="230" y1="10" x2="230" y2="185" stroke="#e2e8f0" stroke-dasharray="4,3" stroke-width="1.5"/>
+
+  <!-- Heterophilic graph -->
+  <text x="365" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Heterophilic (h ≈ 0.2)</text>
+  <circle cx="300" cy="70"  r="20" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="300" y="75"  text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700">A</text>
+  <circle cx="370" cy="50"  r="20" fill="#fef3c7" stroke="#d97706" stroke-width="2.5"/>
+  <text x="370" y="55"  text-anchor="middle" font-size="10" fill="#78350f" font-weight="700">B</text>
+  <circle cx="420" cy="110" r="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="420" y="115" text-anchor="middle" font-size="10" fill="#4c1d95" font-weight="700">C</text>
+  <circle cx="310" cy="140" r="20" fill="#fef3c7" stroke="#d97706" stroke-width="2.5"/>
+  <text x="310" y="145" text-anchor="middle" font-size="10" fill="#78350f" font-weight="700">D</text>
+  <!-- Cross-class edges (different colours = heterophily) -->
+  <line x1="319" y1="63"  x2="351" y2="57"  stroke="#dc2626" stroke-width="3" class="hetero-edge"/>
+  <line x1="316" y1="82"  x2="402" y2="102" stroke="#dc2626" stroke-width="3" class="hetero-edge"/>
+  <line x1="318" y1="75"  x2="298" y2="122" stroke="#dc2626" stroke-width="3" class="hetero-edge"/>
+  <text x="360" y="160" text-anchor="middle" font-size="9" fill="#dc2626">Cross-class edges (blue↔orange↔purple)</text>
+  <text x="360" y="172" text-anchor="middle" font-size="9" fill="#dc2626">GCN aggregation ≡ class mixing ✗</text>
+</svg>
+<figcaption>Figure 1: Homophilic graph — pulsing edges connect same-class nodes; aggregation reinforces class signal. Heterophilic graph — edges cross class boundaries; standard GCN averaging mixes and blurs class signals.</figcaption>
+</figure>
+</div>
+
 ## Approaches for Heterophilic Graphs
 
 ### 1. Use higher-order neighbourhoods

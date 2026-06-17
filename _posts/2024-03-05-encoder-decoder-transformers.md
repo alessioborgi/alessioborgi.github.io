@@ -171,6 +171,102 @@ Decoder cross-attention (full encoder access):
 
 The mask tells the whole story. Encoder: open. Decoder: lower triangular. Cross-attention: open to the encoder.
 
+<div class="blog-figure">
+<figure>
+<style>
+@keyframes enc-fill { 0%,15%{opacity:0} 30%,100%{opacity:1} }
+@keyframes dec-fill { 0%,40%{opacity:0} 60%,100%{opacity:1} }
+@keyframes cross-fill { 0%,65%{opacity:0} 85%,100%{opacity:1} }
+</style>
+<svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <!-- Encoder mask -->
+  <text x="95" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#0d9488">Encoder (bidirectional)</text>
+  <g>
+    <rect x="28" y="30" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.0s"/>
+    <rect x="58" y="30" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.1s"/>
+    <rect x="88" y="30" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.2s"/>
+    <rect x="118" y="30" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="28" y="60" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.1s"/>
+    <rect x="58" y="60" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.2s"/>
+    <rect x="88" y="60" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="118" y="60" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.4s"/>
+    <rect x="28" y="90" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.2s"/>
+    <rect x="58" y="90" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="88" y="90" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.4s"/>
+    <rect x="118" y="90" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.5s"/>
+    <rect x="28" y="120" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="58" y="120" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.4s"/>
+    <rect x="88" y="120" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.5s"/>
+    <rect x="118" y="120" width="26" height="26" rx="4" fill="#0d9488" style="animation:enc-fill 2.4s ease forwards;animation-delay:0.6s"/>
+  </g>
+  <text x="95" y="175" text-anchor="middle" font-size="11" fill="#475569">every token sees every token</text>
+
+  <!-- Decoder causal mask -->
+  <text x="355" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">Decoder (causal)</text>
+  <g>
+    <rect x="288" y="30" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.0s"/>
+    <rect x="318" y="30" width="26" height="26" rx="4" fill="#e5e7eb"/>
+    <rect x="348" y="30" width="26" height="26" rx="4" fill="#e5e7eb"/>
+    <rect x="378" y="30" width="26" height="26" rx="4" fill="#e5e7eb"/>
+    <rect x="288" y="60" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.1s"/>
+    <rect x="318" y="60" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.2s"/>
+    <rect x="348" y="60" width="26" height="26" rx="4" fill="#e5e7eb"/>
+    <rect x="378" y="60" width="26" height="26" rx="4" fill="#e5e7eb"/>
+    <rect x="288" y="90" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.2s"/>
+    <rect x="318" y="90" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="348" y="90" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.4s"/>
+    <rect x="378" y="90" width="26" height="26" rx="4" fill="#e5e7eb"/>
+    <rect x="288" y="120" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="318" y="120" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.4s"/>
+    <rect x="348" y="120" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.5s"/>
+    <rect x="378" y="120" width="26" height="26" rx="4" fill="#7c3aed" style="animation:dec-fill 2.4s ease forwards;animation-delay:0.6s"/>
+  </g>
+  <text x="355" y="175" text-anchor="middle" font-size="11" fill="#475569">lower triangular — no peeking forward</text>
+
+  <!-- Cross-attention -->
+  <text x="620" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#ea580c">Cross-attention</text>
+  <g>
+    <rect x="548" y="42" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.0s"/>
+    <rect x="578" y="42" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.1s"/>
+    <rect x="608" y="42" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.2s"/>
+    <rect x="638" y="42" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="548" y="72" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.1s"/>
+    <rect x="578" y="72" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.2s"/>
+    <rect x="608" y="72" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="638" y="72" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.4s"/>
+    <rect x="548" y="102" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.2s"/>
+    <rect x="578" y="102" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.3s"/>
+    <rect x="608" y="102" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.4s"/>
+    <rect x="638" y="102" width="26" height="26" rx="4" fill="#ea580c" style="animation:cross-fill 2.4s ease forwards;animation-delay:0.5s"/>
+  </g>
+  <text x="524" y="142" text-anchor="start" font-size="10" fill="#475569">← dec pos 1</text>
+  <text x="524" y="158" text-anchor="start" font-size="10" fill="#475569">← dec pos 2</text>
+  <text x="524" y="174" text-anchor="start" font-size="10" fill="#475569">← dec pos 3</text>
+  <text x="524" y="192" text-anchor="middle" font-size="0" fill="#fff"> </text>
+  <text x="620" y="215" text-anchor="middle" font-size="11" fill="#475569">decoder rows, encoder columns — fully open</text>
+</svg>
+<figcaption>Animated attention masks for the three architecture families. Teal = encoder (all attend to all). Purple = decoder causal mask (lower triangular, filled left-to-right). Orange = cross-attention (every decoder position sees every encoder position).</figcaption>
+</figure>
+</div>
+
+## Concrete Worked Example: Translating "The cat sat"
+
+To make the three architectures concrete, consider translating "The cat sat" into French ("Le chat s'est assis").
+
+**Encoder (reads input):**  
+Tokens `[The, cat, sat]` enter simultaneously. At layer 1, `cat` attends to both `The` and `sat` — bidirectional context tells it this is a subject noun, not a verb. All positions are processed in parallel.
+
+**Decoder step 1 (generates "Le"):**  
+Input to decoder: `[<BOS>]`. Causal self-attention: only position 0 is visible. Cross-attention: `<BOS>` queries the encoder's full representation of `[The, cat, sat]` and retrieves a weighted mixture centred on "The". Output distribution peaks at "Le".
+
+**Decoder step 2 (generates "chat"):**  
+Input: `[<BOS>, Le]`. Causal self-attention: position 1 can see position 0 ("Le") but not future tokens. Cross-attention: "Le" queries the encoder and attends heavily to "cat". Output: "chat".
+
+**Decoder step 3 (generates "s'est"):**  
+Input: `[<BOS>, Le, chat]`. Cross-attention now attends to the verb "sat". Autoregressive chain continues until `<EOS>`.
+
+This step-by-step shows why encoder-decoder wins for translation: the encoder reads all context before any generation begins, and cross-attention lets each decoder step query that full context freely.
+
 ## Summary
 
 The three architectures are not better or worse in absolute terms — they are optimised for different settings:

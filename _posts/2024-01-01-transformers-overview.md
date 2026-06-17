@@ -158,6 +158,56 @@ Before 2017, the go-to model for text was the **Recurrent Neural Network (RNN)**
 
 This is the **vanishing gradient problem**: information from far-back positions barely influences the model. Researchers patched it with LSTMs and GRUs, but the fundamental bottleneck remained: you can't parallelise a sequential process. Training was slow, and long-range dependencies were hard to capture.
 
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 580 160" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <style>
+    @keyframes fade-signal {
+      0%   { opacity: 1; }
+      60%  { opacity: 0.25; }
+      100% { opacity: 0.08; }
+    }
+    .sig1 { animation: fade-signal 2.8s ease-in-out infinite; }
+    .sig2 { animation: fade-signal 2.8s ease-in-out 0.4s infinite; }
+    .sig3 { animation: fade-signal 2.8s ease-in-out 0.8s infinite; }
+    .sig4 { animation: fade-signal 2.8s ease-in-out 1.2s infinite; }
+    .sig5 { animation: fade-signal 2.8s ease-in-out 1.6s infinite; }
+  </style>
+  <defs>
+    <marker id="ov1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#6b7280"/></marker>
+  </defs>
+  <!-- RNN label -->
+  <text x="290" y="15" text-anchor="middle" font-size="12" font-weight="700" fill="#374151">RNN: information fades as it travels through steps</text>
+  <!-- Boxes -->
+  <rect x="30"  y="34" width="70" height="34" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="65"  y="55" text-anchor="middle" font-size="10" fill="#7f1d1d">"The"</text>
+  <rect x="140" y="34" width="70" height="34" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="175" y="55" text-anchor="middle" font-size="10" fill="#7f1d1d">"animal"</text>
+  <rect x="250" y="34" width="70" height="34" rx="6" fill="#fef2f2" stroke="#f87171" stroke-width="1.5"/>
+  <text x="285" y="55" text-anchor="middle" font-size="10" fill="#991b1b">"didn't"</text>
+  <rect x="360" y="34" width="70" height="34" rx="6" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="395" y="55" text-anchor="middle" font-size="10" fill="#b91c1c">"cross"</text>
+  <rect x="470" y="34" width="70" height="34" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1.5"/>
+  <text x="505" y="55" text-anchor="middle" font-size="10" fill="#dc2626">"it"</text>
+  <!-- Hidden state arrows -->
+  <line x1="100" y1="51" x2="138" y2="51" stroke="#dc2626" stroke-width="2" marker-end="url(#ov1)" class="sig1"/>
+  <line x1="210" y1="51" x2="248" y2="51" stroke="#ef4444" stroke-width="2" marker-end="url(#ov1)" class="sig2"/>
+  <line x1="320" y1="51" x2="358" y2="51" stroke="#f87171" stroke-width="2" marker-end="url(#ov1)" class="sig3"/>
+  <line x1="430" y1="51" x2="468" y2="51" stroke="#fca5a5" stroke-width="2" marker-end="url(#ov1)" class="sig4"/>
+  <!-- Signal decay label -->
+  <text x="65"  y="90" text-anchor="middle" font-size="8" fill="#dc2626">strong</text>
+  <text x="175" y="90" text-anchor="middle" font-size="8" fill="#ef4444">strong</text>
+  <text x="285" y="90" text-anchor="middle" font-size="8" fill="#f87171">fading...</text>
+  <text x="395" y="90" text-anchor="middle" font-size="8" fill="#fca5a5">weak</text>
+  <text x="505" y="90" text-anchor="middle" font-size="8" fill="#fecaca">lost?</text>
+  <!-- Bottom label: "it" resolves to "animal" but signal is gone -->
+  <text x="290" y="120" text-anchor="middle" font-size="10" fill="#6b7280">"it" should resolve to "animal" — but by the time the RNN reaches "it", that signal has faded.</text>
+  <text x="290" y="136" text-anchor="middle" font-size="10" fill="#6b7280">Transformers attend directly: "it" → "animal" in one step.</text>
+</svg>
+<figcaption>Animated: information from "animal" fades as the RNN processes each subsequent step. Transformers solve this by attending to every token directly.</figcaption>
+</figure>
+</div>
+
 <div class="insight-box">
   <strong>The real bottleneck:</strong> older sequence models were not only harder to train. They also forced information to move through many intermediate steps, which is exactly the wrong bias when meaning depends on distant words, long documents, or multi-modal context.
 </div>
@@ -186,6 +236,48 @@ If you strip away the implementation details, a Transformer does five things:
 5. Refine each token independently with a feed-forward network.
 
 That recipe is simple enough to reuse across domains, which is why the same core architecture reappears in language, vision, audio, biology, robotics, and multi-modal systems.
+
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 580 110" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <style>
+    @keyframes pulse-block {
+      0%, 100% { opacity: 1; transform: scaleY(1); }
+      50%       { opacity: 0.7; transform: scaleY(1.04); }
+    }
+    .blk1 { animation: pulse-block 2s ease-in-out 0s infinite; transform-origin: 55px 55px; }
+    .blk2 { animation: pulse-block 2s ease-in-out 0.3s infinite; transform-origin: 150px 55px; }
+    .blk3 { animation: pulse-block 2s ease-in-out 0.6s infinite; transform-origin: 250px 55px; }
+    .blk4 { animation: pulse-block 2s ease-in-out 0.9s infinite; transform-origin: 350px 55px; }
+    .blk5 { animation: pulse-block 2s ease-in-out 1.2s infinite; transform-origin: 455px 55px; }
+  </style>
+  <defs>
+    <marker id="ov2" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3z" fill="#6b7280"/></marker>
+  </defs>
+  <rect x="10"  y="28" width="90" height="54" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" class="blk1"/>
+  <text x="55"  y="52" text-anchor="middle" font-size="9" fill="#1e3a5f" font-weight="700">① Token</text>
+  <text x="55"  y="65" text-anchor="middle" font-size="9" fill="#1e3a5f">Embedding</text>
+  <line x1="100" y1="55" x2="118" y2="55" stroke="#6b7280" stroke-width="1.5" marker-end="url(#ov2)"/>
+  <rect x="120" y="28" width="90" height="54" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" class="blk2"/>
+  <text x="165" y="52" text-anchor="middle" font-size="9" fill="#78350f" font-weight="700">② Positional</text>
+  <text x="165" y="65" text-anchor="middle" font-size="9" fill="#78350f">Encoding</text>
+  <line x1="210" y1="55" x2="228" y2="55" stroke="#6b7280" stroke-width="1.5" marker-end="url(#ov2)"/>
+  <rect x="230" y="28" width="90" height="54" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1.5" class="blk3"/>
+  <text x="275" y="52" text-anchor="middle" font-size="9" fill="#065f46" font-weight="700">③ Self-</text>
+  <text x="275" y="65" text-anchor="middle" font-size="9" fill="#065f46">Attention</text>
+  <line x1="320" y1="55" x2="338" y2="55" stroke="#6b7280" stroke-width="1.5" marker-end="url(#ov2)"/>
+  <rect x="340" y="28" width="90" height="54" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5" class="blk4"/>
+  <text x="385" y="52" text-anchor="middle" font-size="9" fill="#4c1d95" font-weight="700">④ Add &amp;</text>
+  <text x="385" y="65" text-anchor="middle" font-size="9" fill="#4c1d95">LayerNorm</text>
+  <line x1="430" y1="55" x2="448" y2="55" stroke="#6b7280" stroke-width="1.5" marker-end="url(#ov2)"/>
+  <rect x="450" y="28" width="100" height="54" rx="8" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.5" class="blk5"/>
+  <text x="500" y="52" text-anchor="middle" font-size="9" fill="#134e4a" font-weight="700">⑤ Feed-</text>
+  <text x="500" y="65" text-anchor="middle" font-size="9" fill="#134e4a">Forward</text>
+  <text x="290" y="102" text-anchor="middle" font-size="9" fill="#6b7280">Blocks ③–⑤ repeat N times (N=6 in the original paper)</text>
+</svg>
+<figcaption>The five-step Transformer pipeline, animated to highlight the sequential data flow. Steps 3–5 form the repeatable encoder block.</figcaption>
+</figure>
+</div>
 
 ## Architecture Walk-Through
 

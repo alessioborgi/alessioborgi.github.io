@@ -57,6 +57,106 @@ toc_label: "Contents"
 </div>
 
 
+## Intuition First: The FFN as a Pattern-Response Memory
+
+Think of the FFN as a giant associative memory. The first matrix W₁ acts as a bank of **pattern detectors** — each row is a template asking "does this token look like X?" The nonlinearity fires neurons that match. The second matrix W₂ then says "when pattern X fires, add feature vector Y to the output."
+
+So for a token representing "Paris" in context "capital of France", a neuron in the expanded layer might activate for the pattern "capital-of-Europe-city" and the corresponding W₂ column adds a "France-related" feature vector to the output. This is factual retrieval — not via attention, but via the FFN's stored patterns.
+
+<div class="blog-figure">
+<figure>
+<style>
+@keyframes ffn-expand {
+  0%   { opacity: 0.2; transform: scaleX(0.1); }
+  40%  { opacity: 1;   transform: scaleX(1); }
+  60%  { opacity: 1;   transform: scaleX(1); }
+  100% { opacity: 0.2; transform: scaleX(0.1); }
+}
+@keyframes ffn-contract {
+  0%,39% { opacity: 0; }
+  40%,60% { opacity: 1; }
+  100%    { opacity: 0; }
+}
+@keyframes neuron-fire {
+  0%,35%  { fill: #e2e8f0; }
+  50%     { fill: #f59e0b; }
+  65%,100%{ fill: #e2e8f0; }
+}
+@keyframes neuron-dark {
+  0%,35%  { fill: #e2e8f0; }
+  50%     { fill: #334155; }
+  65%,100%{ fill: #e2e8f0; }
+}
+</style>
+<svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <!-- Input token -->
+  <rect x="18" y="70" width="80" height="60" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="58" y="97" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">token</text>
+  <text x="58" y="113" text-anchor="middle" font-size="10" fill="#3b82f6">d_model</text>
+
+  <!-- W1 arrow + label -->
+  <path d="M98 100 L148 100" stroke="#2563eb" stroke-width="2.5" fill="none" marker-end="url(#arr1)"/>
+  <text x="123" y="92" text-anchor="middle" font-size="10" fill="#64748b">W₁</text>
+  <defs>
+    <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#16a34a"/>
+    </marker>
+    <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+
+  <!-- Hidden layer neurons (4× expansion, some fire) -->
+  <text x="285" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">hidden (4×d_model) — some neurons fire</text>
+  <circle cx="210" cy="50"  r="11" style="animation:neuron-dark 2.5s ease-in-out infinite"/>
+  <circle cx="210" cy="75"  r="11" style="animation:neuron-fire 2.5s 0.1s ease-in-out infinite"/>
+  <circle cx="210" cy="100" r="11" style="animation:neuron-dark 2.5s 0.2s ease-in-out infinite"/>
+  <circle cx="210" cy="125" r="11" style="animation:neuron-fire 2.5s 0.3s ease-in-out infinite"/>
+  <circle cx="210" cy="150" r="11" style="animation:neuron-dark 2.5s 0.4s ease-in-out infinite"/>
+  <circle cx="255" cy="50"  r="11" style="animation:neuron-fire 2.5s 0.1s ease-in-out infinite"/>
+  <circle cx="255" cy="75"  r="11" style="animation:neuron-dark 2.5s 0.2s ease-in-out infinite"/>
+  <circle cx="255" cy="100" r="11" style="animation:neuron-fire 2.5s 0.3s ease-in-out infinite"/>
+  <circle cx="255" cy="125" r="11" style="animation:neuron-dark 2.5s 0.4s ease-in-out infinite"/>
+  <circle cx="255" cy="150" r="11" style="animation:neuron-fire 2.5s 0.5s ease-in-out infinite"/>
+  <circle cx="300" cy="50"  r="11" style="animation:neuron-dark 2.5s 0.0s ease-in-out infinite"/>
+  <circle cx="300" cy="75"  r="11" style="animation:neuron-dark 2.5s 0.1s ease-in-out infinite"/>
+  <circle cx="300" cy="100" r="11" style="animation:neuron-fire 2.5s 0.2s ease-in-out infinite"/>
+  <circle cx="300" cy="125" r="11" style="animation:neuron-dark 2.5s 0.3s ease-in-out infinite"/>
+  <circle cx="300" cy="150" r="11" style="animation:neuron-fire 2.5s 0.6s ease-in-out infinite"/>
+  <circle cx="345" cy="50"  r="11" style="animation:neuron-fire 2.5s 0.2s ease-in-out infinite"/>
+  <circle cx="345" cy="75"  r="11" style="animation:neuron-dark 2.5s 0.3s ease-in-out infinite"/>
+  <circle cx="345" cy="100" r="11" style="animation:neuron-fire 2.5s 0.4s ease-in-out infinite"/>
+  <circle cx="345" cy="125" r="11" style="animation:neuron-dark 2.5s 0.5s ease-in-out infinite"/>
+  <circle cx="345" cy="150" r="11" style="animation:neuron-dark 2.5s 0.6s ease-in-out infinite"/>
+
+  <!-- W2 arrow -->
+  <path d="M370 100 L430 100" stroke="#16a34a" stroke-width="2.5" fill="none" marker-end="url(#arr2)"/>
+  <text x="400" y="92" text-anchor="middle" font-size="10" fill="#64748b">W₂</text>
+
+  <!-- Output token -->
+  <rect x="440" y="70" width="80" height="60" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="480" y="97" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">enriched</text>
+  <text x="480" y="113" text-anchor="middle" font-size="10" fill="#16a34a">d_model</text>
+
+  <!-- Residual add -->
+  <circle cx="580" cy="100" r="20" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+  <text x="580" y="106" text-anchor="middle" font-size="18" fill="#ea580c">⊕</text>
+  <path d="M520 100 L558 100" stroke="#16a34a" stroke-width="2" fill="none" marker-end="url(#arr3)"/>
+  <path d="M58 70 Q58 30 580 30 L580 78" stroke="#ea580c" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+  <text x="325" y="186" text-anchor="middle" font-size="11" fill="#64748b">position-wise: token i processed independently of token j</text>
+
+  <!-- Output arrow -->
+  <path d="M600 100 L650 100" stroke="#7c3aed" stroke-width="2.5" fill="none" marker-end="url(#arr3)"/>
+  <rect x="660" y="78" width="52" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="686" y="103" text-anchor="middle" font-size="10" font-weight="700" fill="#5b21b6">output</text>
+</svg>
+<figcaption>Animated FFN forward pass. Amber neurons = fired (active after nonlinearity); dark neurons = suppressed (ReLU/GELU set them near zero). The sparse firing pattern is the FFN "reading" which patterns match the current token and assembling the response via W₂.</figcaption>
+</figure>
+</div>
+
 ## The FFN Is Half the Block
 
 Every Transformer block follows this pattern:
@@ -163,6 +263,29 @@ This means:
 - **Parallelisable across positions** (all tokens in a sequence processed simultaneously)
 - **No position-to-position information mixing** — that is strictly the role of attention
 - The FFN refines each token's representation in place; it does not redistribute information
+
+## Worked Example: Parameter Count in GPT-3
+
+GPT-3: d_model = 12,288 · d_ff = 49,152 (4×) · 96 layers
+
+Per layer FFN parameters:
+- W₁: 12,288 × 49,152 = **603.9M**
+- W₂: 49,152 × 12,288 = **603.9M**
+- Total FFN per layer: **≈1.21B**
+
+Per layer MHA parameters (96 heads, d_k = d_v = 128):
+- Q, K, V, O projections: 4 × 12,288² = **603.9M**
+
+Across 96 layers:
+- All FFNs: 96 × 1.21B ≈ **116B parameters**
+- All MHA: 96 × 603.9M ≈ **58B parameters**
+- FFN share: **≈ 67% of the 175B total**
+
+This confirms the rule: in any standard Transformer, the FFN holds roughly two-thirds of all parameters. Scaling the model mostly means scaling the FFN.
+
+<div class="insight-box">
+<strong>Inference bottleneck:</strong> During autoregressive generation, attention uses a KV-cache so only the newest token's query hits the full key-value store — cheap at long context. But the FFN still executes a full 12,288 → 49,152 → 12,288 projection for every single generated token, on every layer, every step. The FFN, not attention, is typically the memory and compute bottleneck in LLM inference.
+</div>
 
 ## Sparse FFNs: MoE
 

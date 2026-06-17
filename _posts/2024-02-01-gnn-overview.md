@@ -116,6 +116,8 @@ GNNs are designed to respect all three of these properties.
 
 ## The Core Idea: Aggregate from Neighbours
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Imagine rumours spreading in a social network. After one round, each person knows what their direct friends heard. After two rounds, they know what their friends' friends heard. A GNN works exactly like this — each "layer" is one round of information spreading, and after k layers every node has gathered news from up to k hops away.</div>
+
 Every GNN follows the same fundamental principle, called **message passing**:
 
 > Each node's new representation = function(its current representation, representations of its neighbours)
@@ -126,6 +128,78 @@ This is beautiful because:
 - Nearby nodes influence each other (just like in the real world).
 - The same aggregation function works on graphs of any size.
 - The function is learned from data, so it adapts to the task.
+
+**Concrete numerical example.** Suppose node A has feature vector [1, 0] and its two neighbours B=[0,1] and C=[1,1]. After one GCN-style layer (mean aggregation + identity weights), A's new representation is the mean of A, B, C: ([1,0]+[0,1]+[1,1])/3 = [0.67, 0.67]. After a second layer, A's representation will also absorb B's and C's updated neighbours — capturing the 2-hop neighbourhood.
+
+## Animated Information Flow
+
+<style>
+.gnn-anim-pulse { animation: gnn-pulse 1.6s ease-in-out infinite; }
+.gnn-anim-pulse2 { animation: gnn-pulse 1.6s ease-in-out infinite 0.4s; }
+.gnn-anim-pulse3 { animation: gnn-pulse 1.6s ease-in-out infinite 0.8s; }
+@keyframes gnn-pulse {
+  0%,100% { opacity: 0.35; r: 6px; }
+  50%      { opacity: 1;    r: 10px; }
+}
+</style>
+
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <defs>
+    <marker id="aov" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3z" fill="#0d9488"/></marker>
+  </defs>
+  <!-- Layer 0 -->
+  <text x="60"  y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#374151">Layer 0 (input)</text>
+  <circle cx="60"  cy="55"  r="18" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="60"  y="59" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700">A</text>
+  <circle cx="30"  cy="110" r="18" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="30"  y="114" text-anchor="middle" font-size="10" fill="#134e4a" font-weight="700">B</text>
+  <circle cx="90"  cy="110" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="90"  y="114" text-anchor="middle" font-size="10" fill="#4c1d95" font-weight="700">C</text>
+  <line x1="44" y1="68" x2="38" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="75" y1="68" x2="82" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
+  <!-- Animated dots (messages) -->
+  <circle cx="41" cy="81" r="6" fill="#f97316" class="gnn-anim-pulse"/>
+  <circle cx="78" cy="81" r="6" fill="#f97316" class="gnn-anim-pulse2"/>
+
+  <!-- Arrow L0→L1 -->
+  <line x1="120" y1="90" x2="150" y2="90" stroke="#0d9488" stroke-width="1.5" marker-end="url(#aov)"/>
+  <text x="135" y="84" text-anchor="middle" font-size="8" fill="#0d9488">layer 1</text>
+
+  <!-- Layer 1 -->
+  <text x="220" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#374151">Layer 1 (1-hop)</text>
+  <circle cx="220" cy="55"  r="18" fill="#fef3c7" stroke="#d97706" stroke-width="2.5"/>
+  <text x="220" y="59" text-anchor="middle" font-size="10" fill="#78350f" font-weight="700">A'</text>
+  <circle cx="190" cy="110" r="18" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="190" y="114" text-anchor="middle" font-size="10" fill="#134e4a" font-weight="700">B'</text>
+  <circle cx="250" cy="110" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="250" y="114" text-anchor="middle" font-size="10" fill="#4c1d95" font-weight="700">C'</text>
+  <line x1="204" y1="68" x2="198" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="235" y1="68" x2="242" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
+  <circle cx="201" cy="81" r="6" fill="#f97316" class="gnn-anim-pulse2"/>
+  <circle cx="238" cy="81" r="6" fill="#f97316" class="gnn-anim-pulse3"/>
+  <text x="220" y="150" text-anchor="middle" font-size="8" fill="#059669">A knows B &amp; C</text>
+
+  <!-- Arrow L1→L2 -->
+  <line x1="280" y1="90" x2="310" y2="90" stroke="#0d9488" stroke-width="1.5" marker-end="url(#aov)"/>
+  <text x="295" y="84" text-anchor="middle" font-size="8" fill="#0d9488">layer 2</text>
+
+  <!-- Layer 2 -->
+  <text x="390" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#374151">Layer 2 (2-hop)</text>
+  <circle cx="390" cy="55"  r="22" fill="#d1fae5" stroke="#059669" stroke-width="3"/>
+  <text x="390" y="59" text-anchor="middle" font-size="10" fill="#065f46" font-weight="700">A''</text>
+  <circle cx="355" cy="110" r="18" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="355" y="114" text-anchor="middle" font-size="10" fill="#134e4a" font-weight="700">B''</text>
+  <circle cx="425" cy="110" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="425" y="114" text-anchor="middle" font-size="10" fill="#4c1d95" font-weight="700">C''</text>
+  <line x1="372" y1="70" x2="362" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="408" y1="70" x2="418" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="390" y="150" text-anchor="middle" font-size="8" fill="#059669">A knows 2-hop nbhd</text>
+</svg>
+<figcaption>Figure 2: Animated message flow. Pulsing orange dots represent messages travelling along edges each layer. After layer 1, A knows about B and C directly. After layer 2, A's embedding captures B's and C's own neighbourhoods — a 2-hop view.</figcaption>
+</figure>
+</div>
 
 ## Three Task Levels
 

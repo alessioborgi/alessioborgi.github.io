@@ -24,6 +24,97 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> A 2D image is a natural cubical complex: pixels are 2-cubes, edges between adjacent pixels are 1-cubes, and corners are 0-cubes. Filtering by pixel intensity gives a filtration whose persistence diagram captures topological features (connected components, loops, cavities) at all scales. Libraries like Cubical Ripser and GUDHI compute cubical persistence in O(n log n) for n pixels — far faster than building a Rips complex.</div>
 
+## Intuition First
+
+An image is already a filtration — you just don't know it yet. Sort pixels from darkest to brightest and add them one by one. Watch what happens: isolated bright blobs appear (H₀ births), blobs merge (H₀ deaths), a ring of bright pixels closes around a dark center (H₁ birth), the ring merges into a larger region (H₁ death). The persistence diagram of this pixel-ordering process is the complete multi-scale topological fingerprint of the image — no triangulation needed.
+
+<style>
+@keyframes pixelFill {
+  0%   { opacity: 0; }
+  25%  { opacity: 0.4; }
+  50%  { opacity: 0.7; }
+  100% { opacity: 1.0; }
+}
+@keyframes h0Birth { 0%,30%{opacity:0} 40%{opacity:1;fill:#22c55e} 100%{opacity:1;fill:#22c55e} }
+@keyframes h1Birth { 0%,65%{opacity:0} 75%{opacity:1;fill:#a855f7} 100%{opacity:1;fill:#a855f7} }
+</style>
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;display:block;margin:0 auto;">
+  <text x="75" y="14" font-size="11" fill="#64748b" text-anchor="middle">Pixel intensity (sublevel filtration)</text>
+  <text x="330" y="14" font-size="11" fill="#64748b" text-anchor="middle">Persistence diagram output</text>
+  <line x1="195" y1="18" x2="195" y2="190" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- 5×5 pixel grid (left) -->
+  <!-- Row 1 -->
+  <rect x="10"  y="20" width="28" height="28" rx="1" fill="#1e3a5f"/>
+  <rect x="40"  y="20" width="28" height="28" rx="1" fill="#2563eb"/>
+  <rect x="70"  y="20" width="28" height="28" rx="1" fill="#93c5fd"/>
+  <rect x="100" y="20" width="28" height="28" rx="1" fill="#2563eb"/>
+  <rect x="130" y="20" width="28" height="28" rx="1" fill="#1e3a5f"/>
+  <!-- Row 2 -->
+  <rect x="10"  y="50" width="28" height="28" rx="1" fill="#2563eb"/>
+  <rect x="40"  y="50" width="28" height="28" rx="1" fill="#f8fafc"/>
+  <rect x="70"  y="50" width="28" height="28" rx="1" fill="#f8fafc"/>
+  <rect x="100" y="50" width="28" height="28" rx="1" fill="#f8fafc"/>
+  <rect x="130" y="50" width="28" height="28" rx="1" fill="#2563eb"/>
+  <!-- Row 3 (ring with dark center) -->
+  <rect x="10"  y="80" width="28" height="28" rx="1" fill="#93c5fd"/>
+  <rect x="40"  y="80" width="28" height="28" rx="1" fill="#f8fafc"/>
+  <rect x="70"  y="80" width="28" height="28" rx="1" fill="#1e293b"/>
+  <rect x="100" y="80" width="28" height="28" rx="1" fill="#f8fafc"/>
+  <rect x="130" y="80" width="28" height="28" rx="1" fill="#93c5fd"/>
+  <!-- Row 4 -->
+  <rect x="10"  y="110" width="28" height="28" rx="1" fill="#2563eb"/>
+  <rect x="40"  y="110" width="28" height="28" rx="1" fill="#f8fafc"/>
+  <rect x="70"  y="110" width="28" height="28" rx="1" fill="#f8fafc"/>
+  <rect x="100" y="110" width="28" height="28" rx="1" fill="#f8fafc"/>
+  <rect x="130" y="110" width="28" height="28" rx="1" fill="#2563eb"/>
+  <!-- Row 5 -->
+  <rect x="10"  y="140" width="28" height="28" rx="1" fill="#1e3a5f"/>
+  <rect x="40"  y="140" width="28" height="28" rx="1" fill="#2563eb"/>
+  <rect x="70"  y="140" width="28" height="28" rx="1" fill="#93c5fd"/>
+  <rect x="100" y="140" width="28" height="28" rx="1" fill="#2563eb"/>
+  <rect x="130" y="140" width="28" height="28" rx="1" fill="#1e3a5f"/>
+  <!-- arrows showing ring structure -->
+  <text x="75" y="185" font-size="9" fill="#64748b" text-anchor="middle">Dark center surrounded by bright ring</text>
+
+  <!-- RIGHT: persistence diagram -->
+  <!-- Axes -->
+  <line x1="215" y1="175" x2="490" y2="175" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="215" y1="175" x2="215" y2="25"  stroke="#64748b" stroke-width="1.5"/>
+  <text x="490" y="185" font-size="9" fill="#64748b">birth</text>
+  <text x="205" y="22"  font-size="9" fill="#64748b">death</text>
+  <!-- diagonal -->
+  <line x1="215" y1="175" x2="490" y2="25" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- H0 points (bright blobs born early, die when merging) -->
+  <circle cx="240" cy="80"  r="5" fill="#22c55e" opacity="0.9"/>
+  <circle cx="255" cy="95"  r="5" fill="#22c55e" opacity="0.9"/>
+  <circle cx="248" cy="110" r="5" fill="#22c55e" opacity="0.9"/>
+  <circle cx="265" cy="70"  r="4" fill="#22c55e" opacity="0.7"/>
+  <!-- H0 long bar (global component, infinite persistence) -->
+  <circle cx="220" cy="30"  r="6" fill="#16a34a" stroke="#fff" stroke-width="1.5"/>
+  <text x="220" y="20" font-size="8" fill="#16a34a" text-anchor="middle">∞</text>
+
+  <!-- H1 point (the ring!) -->
+  <circle cx="360" cy="50"  r="7" fill="#a855f7" stroke="#fff" stroke-width="1.5"/>
+  <text x="390" y="50" font-size="10" fill="#a855f7">H₁: ring feature</text>
+  <text x="390" y="62" font-size="9"  fill="#94a3b8">(long-lived = robust)</text>
+
+  <!-- short H1 noise -->
+  <circle cx="280" cy="158" r="3" fill="#c4b5fd" opacity="0.6"/>
+  <circle cx="295" cy="162" r="3" fill="#c4b5fd" opacity="0.6"/>
+
+  <!-- Legend -->
+  <circle cx="220" cy="192" r="4" fill="#22c55e"/>
+  <text x="227" y="196" font-size="8" fill="#64748b">H₀ (components)</text>
+  <circle cx="305" cy="192" r="4" fill="#a855f7"/>
+  <text x="312" y="196" font-size="8" fill="#64748b">H₁ (loops)</text>
+</svg>
+<figcaption style="text-align:center;font-size:.85em;color:#64748b;">Left: 5×5 image with a bright ring around a dark center. Right: persistence diagram — several short H₀ bars (bright blobs merging), one long H₁ bar (the robust ring), and noise near the diagonal.</figcaption>
+</figure></div>
+
 ## Cubical Complexes for Images
 
 An **elementary cube** in $$\mathbb{R}^d$$ is a product of intervals:

@@ -29,6 +29,51 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/rl/mnih2015_dqn.png" alt="RL for Atari games" caption="DQN superhuman performance on Atari (Mnih et al., 2015)" %}
 
 
+## Intuition First: Games as Clean RL Laboratories
+
+Games have three properties that make them ideal RL benchmarks: (1) the reward is unambiguous — the score or win/loss is exactly what we want to maximise; (2) the simulator is fast — you can run millions of frames per second; and (3) human performance provides a clear evaluation target. These properties let researchers iterate quickly and measure progress precisely. Every major RL breakthrough has used a game as its proving ground before transferring the technique to harder real-world domains.
+
+<style>
+@keyframes bar-grow { from{height:0;} to{} }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 170" xmlns="http://www.w3.org/2000/svg" style="max-width:460px;width:100%;display:block;margin:auto;">
+  <text x="230" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#334155">RL Game Milestones — Difficulty vs. Year</text>
+  <!-- Axis -->
+  <line x1="40" y1="140" x2="440" y2="140" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="40" y1="20"  x2="40"  y2="140" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="15" y="90" font-size="9" fill="#64748b" transform="rotate(-90,15,90)">Difficulty</text>
+  <!-- Milestones as circles + labels -->
+  <circle cx="80"  cy="120" r="12" fill="#0d9488" opacity="0.85"/>
+  <text x="80"  y="125" text-anchor="middle" fill="white" font-size="8" font-weight="bold">DQN</text>
+  <text x="80"  y="155" text-anchor="middle" font-size="8" fill="#64748b">2013</text>
+  <circle cx="160" cy="95"  r="14" fill="#0d9488" opacity="0.85"/>
+  <text x="160" y="100" text-anchor="middle" fill="white" font-size="8" font-weight="bold">AlphaGo</text>
+  <text x="160" y="155" text-anchor="middle" font-size="8" fill="#64748b">2016</text>
+  <circle cx="230" cy="75"  r="14" fill="#7c3aed" opacity="0.85"/>
+  <text x="230" y="80" text-anchor="middle" fill="white" font-size="8" font-weight="bold">AlphaZero</text>
+  <text x="230" y="155" text-anchor="middle" font-size="8" fill="#64748b">2017</text>
+  <circle cx="310" cy="50"  r="16" fill="#f97316" opacity="0.9"/>
+  <text x="310" y="50" text-anchor="middle" fill="white" font-size="7" font-weight="bold">AlphaStar</text>
+  <text x="310" y="62" text-anchor="middle" fill="white" font-size="7">SC2</text>
+  <text x="310" y="155" text-anchor="middle" font-size="8" fill="#64748b">2019</text>
+  <circle cx="390" cy="35"  r="16" fill="#f97316" opacity="0.9"/>
+  <text x="390" y="35" text-anchor="middle" fill="white" font-size="7" font-weight="bold">OAI Five</text>
+  <text x="390" y="47" text-anchor="middle" fill="white" font-size="7">Dota2</text>
+  <text x="390" y="155" text-anchor="middle" font-size="8" fill="#64748b">2019</text>
+  <!-- Trendline -->
+  <path d="M80,120 L160,95 L230,75 L310,50 L390,35" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <!-- Legend -->
+  <circle cx="50"  cy="165" r="5" fill="#0d9488"/>
+  <text x="58"  y="168" font-size="8" fill="#334155">Value-based</text>
+  <circle cx="140" cy="165" r="5" fill="#7c3aed"/>
+  <text x="148" y="168" font-size="8" fill="#334155">Self-play</text>
+  <circle cx="210" cy="165" r="5" fill="#f97316"/>
+  <text x="218" y="168" font-size="8" fill="#334155">Multi-agent / RTS</text>
+</svg>
+<figcaption>RL milestones across games: difficulty (imperfect information, action space, horizon) increases steadily while RL techniques became more powerful to match.</figcaption>
+</figure></div>
+
 ## Why Games?
 
 Games provide uniquely clean environments for RL research: the reward signal is unambiguous, the environment is fast to simulate, and human-level performance provides a well-defined benchmark. Each new game environment has pushed the community to develop new techniques, from replay buffers and target networks (Atari), to Monte Carlo Tree Search with neural networks (board games), to population-based self-play and hierarchical architectures (real-time strategy).

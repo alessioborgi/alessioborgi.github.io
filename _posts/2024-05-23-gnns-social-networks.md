@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## Why Graphs for Social Networks?
 
+**Intuition First:** Content-only models ask "what did this user post?" Graph models ask "who did this user talk to, and what did those people say?" These are fundamentally different questions. A verified journalist with 50,000 followers has very different influence from a bot account with the same follower count — the difference is entirely in the graph structure (diverse, organic follow graph vs. dense, synthetic bot network). GNNs capture this structural information directly, while text classifiers are blind to it.
+
 Social influence is inherently relational:
 - A user's political views are correlated with their friends' views (homophily)
 - Misinformation spreads along retweet chains — the propagation tree matters
@@ -81,6 +83,8 @@ Train to reconstruct A from Z. The latent Z captures community structure — nod
 This replaces expensive Monte Carlo simulation (10,000 cascade simulations per seed set) with a single GNN forward pass.
 
 **Viral content prediction:** given a post's initial shares (first 1 hour), predict total reach at 24 hours. The post's propagation subgraph at 1 hour → GNN → reach prediction. Structure of early spread is highly predictive of final virality.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Fake news detection illustrates perfectly why structure matters more than content. Two tweets with identical text — "Breaking: political figure says X" — can have completely different truth values depending on propagation pattern. If the first tweet spreads through verified news accounts and journalists (deep, diverse tree), it is likely real. If the second spreads only through bot accounts in the first hour then dies out (shallow, homogeneous tree), it is likely fake. The GNN sees the propagation tree; the text classifier sees only the words.</div>
 
 ## Task 4: Friend and Follow Recommendation
 

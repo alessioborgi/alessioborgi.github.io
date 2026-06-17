@@ -28,6 +28,62 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Structural vs positional PE" caption="Structural vs positional graph encodings (Dwivedi et al., 2022)" %}
 
 
+## Intuition First
+
+Imagine two different cities, each with a "central train station." The structural encoding (hub node, high degree, high betweenness centrality) is the same — both are hubs. But the positional encoding differs — they sit at completely different coordinates in their respective cities.
+
+Now imagine two different train stations in the *same* city — say, "North Station" and "South Station." They may have the same structural role (both are hubs) but occupy different global positions. A task about "which station is closer to the airport?" needs positional information. A task about "which station handles more connections?" needs structural information.
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 500 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;display:block;margin:auto">
+  <style>
+    .sp-node  { stroke:#fff; stroke-width:2; }
+    .sp-edge  { stroke:#94a3b8; stroke-width:1.5; }
+    .sp-label { font-size:9px; font-family:sans-serif; text-anchor:middle; fill:#334155; }
+    .sp-title { font-size:11px; font-family:sans-serif; font-weight:bold; text-anchor:middle; fill:#1e293b; }
+    .sp-badge { font-size:8px; font-family:sans-serif; font-weight:bold; }
+  </style>
+  <!-- Left graph -->
+  <text x="115" y="13" class="sp-title">Same position, different structure</text>
+  <circle cx="115" cy="65" r="13" class="sp-node" fill="#6366f1"/>
+  <circle cx="65"  cy="90" r="10" class="sp-node" fill="#818cf8"/>
+  <circle cx="85"  cy="40" r="10" class="sp-node" fill="#818cf8"/>
+  <circle cx="145" cy="40" r="10" class="sp-node" fill="#818cf8"/>
+  <circle cx="165" cy="90" r="10" class="sp-node" fill="#818cf8"/>
+  <line x1="115" y1="65" x2="65"  y2="90" class="sp-edge"/>
+  <line x1="115" y1="65" x2="85"  y2="40" class="sp-edge"/>
+  <line x1="115" y1="65" x2="145" y2="40" class="sp-edge"/>
+  <line x1="115" y1="65" x2="165" y2="90" class="sp-edge"/>
+  <text x="115" y="120" class="sp-label">Central node, degree 4 (sp3 carbon)</text>
+  <!-- Right of left -->
+  <circle cx="115" cy="65" r="13" fill="none" stroke="#f97316" stroke-width="2" stroke-dasharray="3" cx2="200"/>
+  <!-- second graph same position different structure -->
+  <circle cx="115" cy="65" r="13" class="sp-node" fill="#f97316" opacity="0"/>
+  <!-- divider -->
+  <line x1="245" y1="10" x2="245" y2="130" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3"/>
+  <!-- Right graph -->
+  <text x="375" y="13" class="sp-title">Same structure, different position</text>
+  <circle cx="290" cy="70" r="13" class="sp-node" fill="#6366f1"/>
+  <circle cx="270" cy="45" r="10" class="sp-node" fill="#818cf8"/>
+  <circle cx="310" cy="45" r="10" class="sp-node" fill="#818cf8"/>
+  <circle cx="270" cy="95" r="10" class="sp-node" fill="#818cf8"/>
+  <line x1="290" y1="70" x2="270" y2="45" class="sp-edge"/>
+  <line x1="290" y1="70" x2="310" y2="45" class="sp-edge"/>
+  <line x1="290" y1="70" x2="270" y2="95" class="sp-edge"/>
+  <line x1="310" y1="45" x2="370" y2="70" class="sp-edge" stroke-dasharray="4"/>
+  <circle cx="460" cy="70" r="13" class="sp-node" fill="#6366f1"/>
+  <circle cx="440" cy="45" r="10" class="sp-node" fill="#818cf8"/>
+  <circle cx="480" cy="45" r="10" class="sp-node" fill="#818cf8"/>
+  <circle cx="440" cy="95" r="10" class="sp-node" fill="#818cf8"/>
+  <line x1="460" y1="70" x2="440" y2="45" class="sp-edge"/>
+  <line x1="460" y1="70" x2="480" y2="45" class="sp-edge"/>
+  <line x1="460" y1="70" x2="440" y2="95" class="sp-edge"/>
+  <text x="375" y="120" class="sp-label">Two hub nodes: same structure (deg-3)</text>
+  <text x="375" y="132" class="sp-label">but different global positions → different LapPE</text>
+</svg>
+<figcaption>Left: two molecules where the central atom occupies the same "central" position but has different bond counts (structural difference). Right: two hub nodes in the same graph with identical local structure but different Fiedler vector values (positional difference).</figcaption>
+</figure></div>
+
 ## The Conceptual Distinction
 
 **Positional encoding (PE):** assigns each node a unique identifier that reflects its global location in the graph. If the graph has a natural linear or spatial ordering (like a sequence or a molecular geometry), PEs capture that.

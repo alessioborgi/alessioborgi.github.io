@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## Sheaves in Ordinary Mathematics
 
+**Intuition First:** Imagine you're assembling a jigsaw puzzle. Each piece (node) has part of the picture. Two adjacent pieces (connected by an edge) must agree along their shared border — but the border on piece A's side is the same physical border as on piece B's side, viewed from slightly different angles. The "restriction maps" are exactly the rotation/flip transforms that make A's border match B's border. A global section is a completed puzzle where every adjacent pair agrees perfectly after applying those transforms.
+
 In mathematics, a sheaf is a tool for tracking local data (defined on open sets of a topological space) and understanding when local data can be assembled into global data.
 
 The key property: **local-to-global consistency**. Data is consistent locally at every overlap → data assembles into a unique global section.
@@ -101,6 +103,23 @@ GCN propagation H ← (I - L/2) H is graph diffusion — it minimises the Dirich
 With non-trivial restriction maps, the "agreement" condition becomes F_{u→e} x_u = F_{v→e} x_v — x_u and x_v are not required to be equal, only to agree after transformation.
 
 This allows adjacent nodes to have **different but compatible** features. In a heterophilic graph, two nodes with different labels might have very different features, but a learned sheaf map could rotate one into the other's space — making them "consistent" under the sheaf even though they are numerically different.
+
+## Worked Example: Global Section on a Triangle Graph
+
+**Setup:** triangle graph with nodes u, v, w. All stalks R^1 (scalars). Restriction maps: F_{u→e_uv}=1, F_{v→e_uv}=1, F_{v→e_vw}=2, F_{w→e_vw}=1, F_{u→e_uw}=1, F_{w→e_uw}=3.
+
+**Coboundary at edge e_uv:** (δ₀ x)_{e_uv} = F_{v→e_uv} x_v − F_{u→e_uv} x_u = x_v − x_u
+
+**Coboundary at edge e_vw:** (δ₀ x)_{e_vw} = F_{w→e_vw} x_w − F_{v→e_vw} x_v = x_w − 2 x_v
+
+**Global section condition** (all coboundaries = 0):
+1. x_v − x_u = 0  →  x_v = x_u
+2. x_w − 2 x_v = 0  →  x_w = 2 x_u
+3. 3 x_w − x_u = 0  →  3(2 x_u) − x_u = 5 x_u = 0  →  x_u = 0
+
+**Conclusion:** the only global section is the zero vector — this sheaf has no non-trivial consistent signal. The non-trivial restriction maps made the three consistency constraints overdetermined.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The dimension of the global section space (null space of δ₀) tells you how much "consistent information" the sheaf can carry. The trivial sheaf (all maps = identity) on a connected graph always has a 1D null space — the constant function. Non-trivial maps can expand or shrink this space, which directly controls how diffusion with the Sheaf Laplacian behaves at long times.</div>
 
 ## Why Sheaves for Graphs?
 

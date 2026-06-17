@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## Constructing the Sheaf Laplacian
 
+**Intuition First:** The standard graph Laplacian penalises adjacent nodes for being *different* (it minimises Σ (x_u − x_v)²). The Sheaf Laplacian instead penalises adjacent nodes for being *inconsistent after transformation* (it minimises Σ ‖F_{v→e} x_v − F_{u→e} x_u‖²). With identity maps, these are the same. With learned maps, "consistent" can mean "opposite in a structured way" — which is exactly what heterophilic graphs need.
+
 Given a cellular sheaf F on graph G with coboundary map δ₀, the **Sheaf Laplacian** is:
 
 <div class="math-box">
@@ -105,6 +107,30 @@ For the normalised version, define the normalised Sheaf Laplacian:
 </div>
 
 Where D is the block-diagonal of Δ_F. The normalised diffusion H ← (I - Δ_F^{norm}) H is analogous to normalised GCN (Â = D^{-1/2} A D^{-1/2}).
+
+## Worked Example: 2-Node Sheaf Laplacian
+
+**Setup:** two nodes u, v connected by one edge e. Stalks R^2. Restriction maps:
+- F_{u→e} = [[1,0],[0,1]] (identity)
+- F_{v→e} = [[0,1],[-1,0]] (90° rotation)
+
+**Diagonal block for u:** (Δ_F)_{uu} = F_{u→e}^T F_{u→e} = I
+
+**Diagonal block for v:** (Δ_F)_{vv} = F_{v→e}^T F_{v→e} = [[0,-1],[1,0]]^T [[0,1],[-1,0]] = I
+
+**Off-diagonal block:** (Δ_F)_{uv} = −F_{u→e}^T F_{v→e} = −[[0,1],[-1,0]]
+
+**Full 4×4 Sheaf Laplacian:**
+```
+Δ_F = [[ 1,  0,  0, -1],
+       [ 0,  1,  1,  0],
+       [ 0, -1,  1,  0],
+       [-1,  0,  0,  1]]
+```
+
+**Global section (null space):** Δ_F x = 0. From the equations: x_u = [[0,1],[-1,0]] x_v, which means x_v must satisfy R·x_v = x_v where R is a 90° rotation. No non-zero vector is fixed by 90° rotation, so the null space is trivial — no consistent global signal exists for this "twisted" sheaf.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The non-trivial off-diagonal block −F_{u→e}^T F_{v→e} is the core difference from the standard Laplacian (which would have −I). Diffusion with this Sheaf Laplacian does not try to make x_u = x_v; it tries to make x_u = R · x_v. This geometric twist in the operator is what allows sheaf GNNs to handle structured disagreement between neighbouring nodes.</div>
 
 ## Spectral Properties
 

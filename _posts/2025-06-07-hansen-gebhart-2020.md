@@ -35,6 +35,60 @@ toc_label: "Contents"
 <strong>Why this paper matters historically:</strong> it did not win the field with raw benchmark gains. It changed the vocabulary. After this paper, GCN could be seen as one very special point inside a much larger sheaf-based design space.
 </div>
 
+## Intuition First: GCN Is One Point in a Vast Design Space
+
+Standard GCN uses identity restriction maps — every node talks to its neighbours in the same language (ℝ^d), with no translation needed. Hansen & Gebhart's insight is that this is an arbitrary special case.
+
+Think of restriction maps as *interpreters* sitting on each edge. GCN uses the same interpreter everywhere (the trivial identity). A sheaf GNN can use a different interpreter per edge — one that says "when node u talks to edge e, translate u's signal using matrix F_{u▷e} first." The space of possible interpreters is enormous; GCN lives at a single corner of it.
+
+<style>
+@keyframes gcnHl {
+  0%,100% { fill: #bfdbfe; }
+  50% { fill: #93c5fd; }
+}
+@keyframes sheafSpace {
+  0%,100% { opacity:0.5; }
+  50% { opacity:1; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200" style="width:100%;max-width:520px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- design space ellipse -->
+  <ellipse cx="240" cy="105" rx="195" ry="75" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="240" y="30" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">Sheaf GNN Design Space</text>
+  <!-- labels for regions -->
+  <text x="240" y="50" text-anchor="middle" font-size="9" fill="#6b7280">(all possible restriction maps F_{v▷e} ∈ ℝ^{d×d})</text>
+  <!-- GCN dot (corner) -->
+  <circle cx="90" cy="125" r="16" stroke="#1e40af" stroke-width="2">
+    <animate attributeName="fill" values="#bfdbfe;#93c5fd;#bfdbfe" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="90" y="129" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e40af">GCN</text>
+  <text x="90" y="155" text-anchor="middle" font-size="8" fill="#6b7280">F=I (identity)</text>
+  <!-- Diagonal NSD dot -->
+  <circle cx="200" cy="95" r="16" fill="#dcfce7" stroke="#16a34a" stroke-width="2">
+    <animate attributeName="fill" values="#dcfce7;#bbf7d0;#dcfce7" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="200" y="99" text-anchor="middle" font-size="8" font-weight="bold" fill="#166534">NSD-diag</text>
+  <text x="200" y="125" text-anchor="middle" font-size="7" fill="#6b7280">F=diag</text>
+  <!-- Orthogonal NSD dot -->
+  <circle cx="310" cy="90" r="16" fill="#fce7f3" stroke="#db2777" stroke-width="2">
+    <animate attributeName="fill" values="#fce7f3;#fbcfe8;#fce7f3" dur="2s" begin="1s" repeatCount="indefinite"/>
+  </circle>
+  <text x="310" y="94" text-anchor="middle" font-size="8" font-weight="bold" fill="#be185d">NSD-orth</text>
+  <text x="310" y="118" text-anchor="middle" font-size="7" fill="#6b7280">F∈O(d)</text>
+  <!-- PNSD dot -->
+  <circle cx="380" cy="110" r="16" fill="#fef3c7" stroke="#d97706" stroke-width="2">
+    <animate attributeName="fill" values="#fef3c7;#fde68a;#fef3c7" dur="2.5s" begin="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="380" y="114" text-anchor="middle" font-size="8" font-weight="bold" fill="#92400e">PNSD</text>
+  <text x="380" y="138" text-anchor="middle" font-size="7" fill="#6b7280">poly filter</text>
+  <!-- annotation: Hansen & Gebhart showed GCN is a special case -->
+  <line x1="90" y1="109" x2="130" y2="70" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="140" y="65" font-size="9" fill="#7c3aed">Hansen &amp; Gebhart (2020):</text>
+  <text x="140" y="77" font-size="9" fill="#7c3aed">"GCN is just one point here"</text>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">The sheaf GNN design space. GCN (blue, pulsing) lives at the corner with identity restriction maps. Hansen & Gebhart showed that moving away from that corner — to diagonal, orthogonal, or general maps — opens a richer space. NSD (2022) made the maps learnable; PNSD (2024) added a polynomial spectral filter on top.</figcaption>
+</figure></div>
 
 ## Context and Motivation
 

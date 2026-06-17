@@ -129,6 +129,57 @@ Fixed methods (sinusoidal, ALiBi) use a deterministic formula — no extra param
 **3. Extrapolation**
 Can the model handle sequences *longer* than those seen during training? This is the key practical question for LLMs serving long documents. ALiBi and RoPE generally win here; standard learned absolute PEs fail badly.
 
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 540 190" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <style>
+    @keyframes bar-grow {
+      0%   { transform: scaleX(0); }
+      100% { transform: scaleX(1); }
+    }
+    .bar1 { animation: bar-grow 1.0s ease-out 0.1s both; transform-origin: left center; }
+    .bar2 { animation: bar-grow 1.0s ease-out 0.3s both; transform-origin: left center; }
+    .bar3 { animation: bar-grow 1.0s ease-out 0.5s both; transform-origin: left center; }
+    .bar4 { animation: bar-grow 1.0s ease-out 0.7s both; transform-origin: left center; }
+    .bar5 { animation: bar-grow 1.0s ease-out 0.9s both; transform-origin: left center; }
+    .bar6 { animation: bar-grow 1.0s ease-out 1.1s both; transform-origin: left center; }
+  </style>
+  <text x="270" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Positional Encoding Methods — Extrapolation Capability</text>
+  <!-- Axis -->
+  <line x1="170" y1="28" x2="520" y2="28" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="170" y="24" text-anchor="middle" font-size="8" fill="#9ca3af">0%</text>
+  <text x="345" y="24" text-anchor="middle" font-size="8" fill="#9ca3af">50%</text>
+  <text x="520" y="24" text-anchor="middle" font-size="8" fill="#9ca3af">100%</text>
+  <!-- Rows -->
+  <!-- Learned Absolute -->
+  <text x="160" y="53" text-anchor="end" font-size="9" fill="#374151">Learned Abs.</text>
+  <rect x="170" y="40" width="60" height="20" rx="3" fill="#fca5a5" class="bar1"/>
+  <text x="236" y="53" font-size="9" fill="#dc2626">Poor (hard cutoff)</text>
+  <!-- Sinusoidal -->
+  <text x="160" y="83" text-anchor="end" font-size="9" fill="#374151">Sinusoidal</text>
+  <rect x="170" y="70" width="140" height="20" rx="3" fill="#fde68a" class="bar2"/>
+  <text x="316" y="83" font-size="9" fill="#b45309">Moderate</text>
+  <!-- Relative (Shaw) -->
+  <text x="160" y="113" text-anchor="end" font-size="9" fill="#374151">Relative (Shaw)</text>
+  <rect x="170" y="100" width="190" height="20" rx="3" fill="#86efac" class="bar3"/>
+  <text x="366" y="113" font-size="9" fill="#166534">Good</text>
+  <!-- T5 Bias -->
+  <text x="160" y="143" text-anchor="end" font-size="9" fill="#374151">T5 Rel. Bias</text>
+  <rect x="170" y="130" width="210" height="20" rx="3" fill="#6ee7b7" class="bar4"/>
+  <text x="386" y="143" font-size="9" fill="#065f46">Good+</text>
+  <!-- RoPE -->
+  <text x="160" y="173" text-anchor="end" font-size="9" fill="#374151">RoPE (+YaRN)</text>
+  <rect x="170" y="160" width="310" height="20" rx="3" fill="#34d399" class="bar5"/>
+  <text x="486" y="173" font-size="9" fill="#065f46">Excellent</text>
+  <!-- ALiBi -->
+  <text x="160" y="188" text-anchor="end" font-size="9" fill="#374151">ALiBi</text>
+  <rect x="170" y="175" width="340" height="12" rx="3" fill="#0d9488" class="bar6"/>
+  <text x="516" y="185" font-size="9" fill="#065f46">Excellent</text>
+</svg>
+<figcaption>Relative extrapolation quality of each PE method. Learned absolute PEs have a hard cutoff at training length; RoPE and ALiBi extend gracefully beyond it. Bars animate on load.</figcaption>
+</figure>
+</div>
+
 {% include figure image_path="/images/blog/transformers/press2022_alibi.png" alt="ALiBi as linear biases added to attention scores" caption="ALiBi changes the attention logits directly with a distance-dependent bias instead of adding explicit positional vectors at the input layer (Press et al., 2022)." %}
 
 ## Which PE Should You Reach For?

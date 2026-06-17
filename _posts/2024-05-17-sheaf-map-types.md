@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Design Space of Restriction Maps
 
+**Intuition First:** Think of the four map types as four different ways to describe the relationship between two people's views of the same object. A scalar map says "person B sees things 3× more intensely than person A." A diagonal map says "person B emphasises different colour channels differently." An orthogonal map says "person B is looking from a rotated angle — same information, different frame." A general map says "person B's perception is a completely arbitrary linear combination of person A's." The richer the map class, the more relationships you can model — but the more parameters you need per edge.
+
 In Neural Sheaf Diffusion, the MLP outputs a restriction map F_{u→e} for each directed edge. The choice of matrix class constrains both what relationships the sheaf can represent and how much computation is required.
 
 ## Scalar Maps (d_e = 1)
@@ -117,6 +119,8 @@ F_{u→e} ∈ ℝ^{d_e × d}   (d_e · d parameters)
 **Use orthogonal maps when:** geometry of the feature space matters (the maps should be interpretable as rotations), or when the theoretical connection to differential geometry is valuable.
 
 **Use general maps when:** maximum expressiveness is needed and the graph is small enough (molecules, proteins with E < 10,000).
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Orthogonal maps are the sweet spot for most practical sheaf GNN applications. Because Q^T Q = I, the diagonal blocks of the Sheaf Laplacian simplify to deg(v) · I — reducing the matrix-vector product cost by ~50% compared to general maps. Meanwhile, orthogonal maps can still represent arbitrary rotations and reflections between feature frames, which is enough to encode the structural relationships present in most heterophilic benchmarks. General maps only start outperforming orthogonal ones when the task requires feature mixing (not just frame rotation) across edges.</div>
 
 ## Impact on Sheaf Laplacian Sparsity
 

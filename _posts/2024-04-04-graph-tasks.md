@@ -108,6 +108,8 @@ The **READOUT** (also called pooling or global pooling) aggregates all node embe
 
 **Training setup:** each graph is an independent data point. Standard train/val/test split across graphs. Multiple graphs per batch (mini-batch training with graph-level batching).
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight: The GNN Backbone Is Shared.</strong> The same stack of message-passing layers produces node embeddings for all three task levels. What differs is only the output head: for node tasks, apply a linear layer to each h_v independently; for edge tasks, combine h_u and h_v for each pair; for graph tasks, pool all h_v into a single vector first. This modularity means you can swap task heads without retraining the backbone.</div>
+
 ## Task 4: Node Regression
 
 Like node classification but predicting a continuous value per node.

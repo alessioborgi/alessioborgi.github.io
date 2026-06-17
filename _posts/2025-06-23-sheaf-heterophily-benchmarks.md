@@ -77,6 +77,131 @@ Results from NSD (Bodnar et al., 2022) and PNSD (Zaghen et al., 2024):
 | NSD-orth | 57.1 ± 1.3 |
 | **PNSD-orth** | **60.8 ± 1.1** |
 
+<style>
+@keyframes growBar {
+  from { height: 0; y: 185; }
+  to   { /* final values set on each rect */ }
+}
+</style>
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%;font-family:sans-serif;">
+  <text x="260" y="16" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">Accuracy (%) — GCN vs NSD vs PNSD</text>
+  <!-- Y-axis labels -->
+  <text x="38" y="190" text-anchor="end" font-size="9" fill="#6b7280">0</text>
+  <text x="38" y="150" text-anchor="end" font-size="9" fill="#6b7280">40</text>
+  <text x="38" y="110" text-anchor="end" font-size="9" fill="#6b7280">60</text>
+  <text x="38" y="77"  text-anchor="end" font-size="9" fill="#6b7280">75</text>
+  <text x="38" y="50"  text-anchor="end" font-size="9" fill="#6b7280">90</text>
+  <!-- Gridlines -->
+  <line x1="42" y1="188" x2="510" y2="188" stroke="#e5e7eb" stroke-width="1"/>
+  <line x1="42" y1="148" x2="510" y2="148" stroke="#e5e7eb" stroke-width="0.7" stroke-dasharray="3,3"/>
+  <line x1="42" y1="108" x2="510" y2="108" stroke="#e5e7eb" stroke-width="0.7" stroke-dasharray="3,3"/>
+
+  <!-- Cornell group -->
+  <text x="100" y="205" text-anchor="middle" font-size="11" fill="#374151" font-weight="bold">Cornell</text>
+  <!-- GCN: 57 → height ~(57/100)*140=79.8, y=188-79.8=108 -->
+  <rect x="58" y="76" width="22" height="112" rx="3" fill="#9ca3af">
+    <animate attributeName="height" from="0" to="112" dur="1s" begin="0s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="76" dur="1s" begin="0s" fill="freeze"/>
+  </rect>
+  <!-- NSD: 85 → height=119, y=69 -->
+  <rect x="88" y="52" width="22" height="136" rx="3" fill="#0d9488">
+    <animate attributeName="height" from="0" to="136" dur="1s" begin="0.3s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="52" dur="1s" begin="0.3s" fill="freeze"/>
+  </rect>
+  <!-- PNSD: 88 → height=123, y=65 -->
+  <rect x="118" y="41" width="22" height="147" rx="3" fill="#f97316">
+    <animate attributeName="height" from="0" to="147" dur="1s" begin="0.6s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="41" dur="1s" begin="0.6s" fill="freeze"/>
+  </rect>
+  <!-- Labels on top -->
+  <text x="69"  y="72"  text-anchor="middle" font-size="9" fill="#6b7280">57</text>
+  <text x="99"  y="48"  text-anchor="middle" font-size="9" fill="#0d9488">85</text>
+  <text x="129" y="37"  text-anchor="middle" font-size="9" fill="#f97316">88</text>
+
+  <!-- Texas group -->
+  <text x="205" text-anchor="middle" y="205" font-size="11" fill="#374151" font-weight="bold">Texas</text>
+  <!-- GCN: 60 → height=84, y=104 -->
+  <rect x="163" y="104" width="22" height="84" rx="3" fill="#9ca3af">
+    <animate attributeName="height" from="0" to="84" dur="1s" begin="0.1s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="104" dur="1s" begin="0.1s" fill="freeze"/>
+  </rect>
+  <!-- NSD: 88 → height=123, y=65 -->
+  <rect x="193" y="65" width="22" height="123" rx="3" fill="#0d9488">
+    <animate attributeName="height" from="0" to="123" dur="1s" begin="0.4s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="65" dur="1s" begin="0.4s" fill="freeze"/>
+  </rect>
+  <!-- PNSD: 90 → height=126, y=62 -->
+  <rect x="223" y="62" width="22" height="126" rx="3" fill="#f97316">
+    <animate attributeName="height" from="0" to="126" dur="1s" begin="0.7s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="62" dur="1s" begin="0.7s" fill="freeze"/>
+  </rect>
+  <text x="174" y="100" text-anchor="middle" font-size="9" fill="#6b7280">60</text>
+  <text x="204" y="61"  text-anchor="middle" font-size="9" fill="#0d9488">88</text>
+  <text x="234" y="58"  text-anchor="middle" font-size="9" fill="#f97316">90</text>
+
+  <!-- Chameleon group -->
+  <text x="310" text-anchor="middle" y="205" font-size="11" fill="#374151" font-weight="bold">Chameleon</text>
+  <!-- GCN: 60 → y=104 -->
+  <rect x="268" y="104" width="22" height="84" rx="3" fill="#9ca3af">
+    <animate attributeName="height" from="0" to="84" dur="1s" begin="0.2s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="104" dur="1s" begin="0.2s" fill="freeze"/>
+  </rect>
+  <!-- NSD: 70 → height=98, y=90 -->
+  <rect x="298" y="90" width="22" height="98" rx="3" fill="#0d9488">
+    <animate attributeName="height" from="0" to="98" dur="1s" begin="0.5s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="90" dur="1s" begin="0.5s" fill="freeze"/>
+  </rect>
+  <!-- PNSD: 73 → height=102, y=86 -->
+  <rect x="328" y="86" width="22" height="102" rx="3" fill="#f97316">
+    <animate attributeName="height" from="0" to="102" dur="1s" begin="0.8s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="86" dur="1s" begin="0.8s" fill="freeze"/>
+  </rect>
+  <text x="279" y="100" text-anchor="middle" font-size="9" fill="#6b7280">60</text>
+  <text x="309" y="86"  text-anchor="middle" font-size="9" fill="#0d9488">70</text>
+  <text x="339" y="82"  text-anchor="middle" font-size="9" fill="#f97316">73</text>
+
+  <!-- Squirrel group -->
+  <text x="415" text-anchor="middle" y="205" font-size="11" fill="#374151" font-weight="bold">Squirrel</text>
+  <!-- GCN: 37 → height=52, y=136 -->
+  <rect x="373" y="136" width="22" height="52" rx="3" fill="#9ca3af">
+    <animate attributeName="height" from="0" to="52" dur="1s" begin="0.15s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="136" dur="1s" begin="0.15s" fill="freeze"/>
+  </rect>
+  <!-- NSD: 57 → height=80, y=108 -->
+  <rect x="403" y="108" width="22" height="80" rx="3" fill="#0d9488">
+    <animate attributeName="height" from="0" to="80" dur="1s" begin="0.45s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="108" dur="1s" begin="0.45s" fill="freeze"/>
+  </rect>
+  <!-- PNSD: 61 → height=85, y=103 -->
+  <rect x="433" y="103" width="22" height="85" rx="3" fill="#f97316">
+    <animate attributeName="height" from="0" to="85" dur="1s" begin="0.75s" fill="freeze"/>
+    <animate attributeName="y" from="188" to="103" dur="1s" begin="0.75s" fill="freeze"/>
+  </rect>
+  <text x="384" y="132" text-anchor="middle" font-size="9" fill="#6b7280">37</text>
+  <text x="414" y="104" text-anchor="middle" font-size="9" fill="#0d9488">57</text>
+  <text x="444" y="99"  text-anchor="middle" font-size="9" fill="#f97316">61</text>
+
+  <!-- Legend -->
+  <rect x="43"  y="212" width="10" height="10" rx="2" fill="#9ca3af"/>
+  <text x="57"  y="220" font-size="9" fill="#374151">GCN</text>
+  <rect x="90"  y="212" width="10" height="10" rx="2" fill="#0d9488"/>
+  <text x="104" y="220" font-size="9" fill="#374151">NSD</text>
+  <rect x="137" y="212" width="10" height="10" rx="2" fill="#f97316"/>
+  <text x="151" y="220" font-size="9" fill="#374151">PNSD</text>
+</svg>
+<figcaption>Animated bar chart: GCN (gray) vs NSD (teal) vs PNSD (orange) accuracy (%) on four heterophilic benchmarks. Bars animate from zero to final values. The largest absolute gains are on Cornell and Texas (h=0.11), where sheaf's null-space adaptation matters most.</figcaption>
+</figure></div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why sheaves win on heterophily (3 mechanisms):</strong>
+<ol style="margin:.5rem 0 0 1rem;padding:0;">
+  <li><strong>Learned null-space adaptation:</strong> NSD learns restriction maps that push task-relevant features into ker(Δ_F). On Cornell/Texas (h=0.11), this means the model learns anti-alignment maps (F ≈ −I) for heterophilic edges, so cross-class signals cancel rather than pollute each node's representation.</li>
+  <li><strong>Spectral flexibility via PNSD:</strong> PNSD learns arbitrary polynomial filters on the sheaf Laplacian — including high-pass filters that amplify the high-frequency components separating different classes. Standard GCN's fixed low-pass filter cannot achieve this on heterophilic graphs.</li>
+  <li><strong>Stalk dimension enriches representation:</strong> Each node has a d-dimensional stalk rather than a scalar. This gives the model d orthogonal channels to encode class-relevant geometry independently, avoiding the averaging collapse that harms standard GCN on heterophilic graphs.</li>
+</ol>
+</div>
+
 ## What Drives the Performance Gains?
 
 **1. Null space adaptation:** NSD learns maps that make the task-optimal features lie in ker(Δ_F). For Cornell and Texas (h=0.11), this requires strong anti-alignment maps (F_{v▷e} ≈ −I) for heterophilic edges — the model learns these automatically.
@@ -154,6 +279,20 @@ For a new heterophilic dataset:
 4. Add a skip connection: H ← (1−α)(I−Δ_F^{norm})HW + αX₀W' (residual to initial features).
 5. Regularise: L2 on map norms (λ=1e-4), dropout on stalk features (p=0.5).
 6. If performance saturates: try orthogonal maps, d=3, or PNSD with K=5 polynomial filter.
+
+## Quick Diagnostic: Is a Sheaf GNN Worth Trying?
+
+Before running a sheaf model on a new dataset, answer these three questions:
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;">
+<strong>3-Question Pre-Flight Check:</strong>
+<ol style="margin:.5rem 0 0 1rem;padding:0;">
+  <li><strong>Is h(G) &lt; 0.4?</strong> — Compute the edge homophily ratio. If yes, heterophily is real and sheaf maps can adapt to it. If h &gt; 0.6, GCN probably works fine.</li>
+  <li><strong>Is N &gt; 200?</strong> — The sheaf predictor MLP needs enough node pairs to learn meaningful per-edge maps. Very small graphs (N &lt; 100) tend to overfit; medium graphs (N = 200–10K) are the sweet spot.</li>
+  <li><strong>Do nodes have initial features?</strong> — The sheaf predictor uses node features as input. If nodes have no features (only structural information), the predictor degrades to a function of degrees — much less expressive.</li>
+</ol>
+If all three answers are <strong>yes</strong>, a sheaf GNN is very likely worth trying. Start with d=2, diagonal maps, 2 layers, and the checklist above before tuning further.
+</div>
 
 ## References
 

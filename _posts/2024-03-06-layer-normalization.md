@@ -65,6 +65,53 @@ toc_label: "Contents"
 </div>
 
 
+## Intuition First: What Does "Normalise" Actually Do?
+
+Imagine you are a neuron receiving thousands of inputs from the previous layer. If those inputs have wildly different scales — some near 0, some near 1000 — your weights need to be tiny for large inputs and large for small inputs simultaneously. That is a frustrating optimisation landscape.
+
+Normalisation is simply: "before passing information to the next layer, rescale it so every token's feature vector looks roughly the same." You lose no information (learned γ and β can undo the normalisation) but you gain a predictable, well-conditioned signal at every layer.
+
+<div class="blog-figure">
+<figure>
+<style>
+@keyframes norm-bars { 0%{transform:scaleY(1)} 50%{transform:scaleY(0.25)} 100%{transform:scaleY(1)} }
+@keyframes norm-bars2 { 0%{transform:scaleY(1)} 50%{transform:scaleY(0.25)} 100%{transform:scaleY(1)} }
+@keyframes appear { 0%,49%{opacity:0} 50%,100%{opacity:1} }
+</style>
+<svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <text x="180" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#dc2626">Before LayerNorm — high variance</text>
+  <text x="540" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#0d9488">After LayerNorm — unit variance</text>
+
+  <!-- before bars (raw activations, varying heights) -->
+  <rect x="40"  y="170" width="22" height="-90" rx="3" fill="#fca5a5" style="transform-origin:40px 170px;animation:norm-bars 3s ease-in-out infinite"/>
+  <rect x="72"  y="170" width="22" height="-18" rx="3" fill="#fca5a5" style="transform-origin:72px 170px;animation:norm-bars 3s 0.1s ease-in-out infinite"/>
+  <rect x="104" y="170" width="22" height="-140"rx="3" fill="#ef4444" style="transform-origin:104px 170px;animation:norm-bars 3s 0.2s ease-in-out infinite"/>
+  <rect x="136" y="170" width="22" height="-55" rx="3" fill="#fca5a5" style="transform-origin:136px 170px;animation:norm-bars 3s 0.3s ease-in-out infinite"/>
+  <rect x="168" y="170" width="22" height="-120"rx="3" fill="#ef4444" style="transform-origin:168px 170px;animation:norm-bars 3s 0.4s ease-in-out infinite"/>
+  <rect x="200" y="170" width="22" height="-30" rx="3" fill="#fca5a5" style="transform-origin:200px 170px;animation:norm-bars 3s 0.5s ease-in-out infinite"/>
+  <rect x="232" y="170" width="22" height="-75" rx="3" fill="#fca5a5" style="transform-origin:232px 170px;animation:norm-bars 3s 0.6s ease-in-out infinite"/>
+  <rect x="264" y="170" width="22" height="-48" rx="3" fill="#fca5a5" style="transform-origin:264px 170px;animation:norm-bars 3s 0.7s ease-in-out infinite"/>
+  <line x1="30" y1="170" x2="300" y2="170" stroke="#94a3b8" stroke-width="2"/>
+  <text x="165" y="195" text-anchor="middle" font-size="11" fill="#64748b">features (d_model dimensions)</text>
+
+  <text x="360" y="95" text-anchor="middle" font-size="24" fill="#0f172a">→</text>
+
+  <!-- after bars (normalised, uniform heights) -->
+  <rect x="400" y="170" width="22" height="-65" rx="3" fill="#5eead4" style="transform-origin:400px 170px;animation:norm-bars2 3s ease-in-out infinite"/>
+  <rect x="432" y="170" width="22" height="-68" rx="3" fill="#5eead4" style="transform-origin:432px 170px;animation:norm-bars2 3s 0.1s ease-in-out infinite"/>
+  <rect x="464" y="170" width="22" height="-70" rx="3" fill="#14b8a6" style="transform-origin:464px 170px;animation:norm-bars2 3s 0.2s ease-in-out infinite"/>
+  <rect x="496" y="170" width="22" height="-64" rx="3" fill="#5eead4" style="transform-origin:496px 170px;animation:norm-bars2 3s 0.3s ease-in-out infinite"/>
+  <rect x="528" y="170" width="22" height="-72" rx="3" fill="#14b8a6" style="transform-origin:528px 170px;animation:norm-bars2 3s 0.4s ease-in-out infinite"/>
+  <rect x="560" y="170" width="22" height="-63" rx="3" fill="#5eead4" style="transform-origin:560px 170px;animation:norm-bars2 3s 0.5s ease-in-out infinite"/>
+  <rect x="592" y="170" width="22" height="-67" rx="3" fill="#5eead4" style="transform-origin:592px 170px;animation:norm-bars2 3s 0.6s ease-in-out infinite"/>
+  <rect x="624" y="170" width="22" height="-66" rx="3" fill="#5eead4" style="transform-origin:624px 170px;animation:norm-bars2 3s 0.7s ease-in-out infinite"/>
+  <line x1="390" y1="170" x2="660" y2="170" stroke="#94a3b8" stroke-width="2"/>
+  <text x="525" y="195" text-anchor="middle" font-size="11" fill="#64748b">features re-centered to mean 0, std 1</text>
+</svg>
+<figcaption>Animated: before LayerNorm (left) the d_model feature values of one token vary wildly in scale. After LayerNorm (right) all features are rescaled to near-unit variance — the network downstream sees a predictable signal regardless of which token or layer it is in.</figcaption>
+</figure>
+</div>
+
 ## Why Normalisation at All?
 
 Deep networks suffer from **internal covariate shift**: as weights update during training, the distribution of activations at each layer changes unpredictably. Later layers must constantly adapt to a moving target.
@@ -100,6 +147,29 @@ LayerNorm(x) = γ · (x − μ) / √(σ² + ε) + β
 - **ε** (typically 1e-5) prevents division by zero
 
 After normalisation, the output has approximately zero mean and unit variance. γ and β then allow the network to re-scale and re-shift to whatever distribution is optimal — without collapsing the normalisation.
+
+## Worked Example: LayerNorm on a 4-Dimensional Token
+
+Suppose a token's representation is **x = [2, 4, −2, 0]** (d = 4, simplified).
+
+**Step 1 — Compute mean:**  
+μ = (2 + 4 + (−2) + 0) / 4 = **1.0**
+
+**Step 2 — Compute variance:**  
+σ² = [(2−1)² + (4−1)² + (−2−1)² + (0−1)²] / 4  
+= [1 + 9 + 9 + 1] / 4 = **5.0**
+
+**Step 3 — Normalise:**  
+x̂ = (x − μ) / √(σ² + ε) ≈ [1/√5, 3/√5, −3/√5, −1/√5] ≈ **[0.45, 1.34, −1.34, −0.45]**
+
+**Step 4 — Apply γ and β** (assume γ = [1,1,1,1], β = [0,0,0,0] at initialisation):  
+Output = γ · x̂ + β = **[0.45, 1.34, −1.34, −0.45]**
+
+After training, γ and β may have become [2, 1, 1, 0.5] and [0.1, −0.2, 0.1, 0] — allowing the network to recover any useful scale it needs while keeping the normalisation benefit.
+
+<div class="insight-box">
+<strong>Why ε matters:</strong> if σ² = 0 (all features identical), the denominator would be zero. ε = 1e-5 prevents this. In practice it almost never matters numerically but is essential for correctness.
+</div>
 
 ## Post-LN: The Original Placement
 

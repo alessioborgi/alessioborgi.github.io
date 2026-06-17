@@ -231,7 +231,6 @@ author_profile: true
           <div class="pt-org">🇮🇹 Pisa, Italy &nbsp;·&nbsp; University of Pisa</div>
           <div class="pt-body">
             <p>Participated in the LoG Italian Meetup 2026, held on <strong>June 9-11, 2026</strong> at the University of Pisa, presenting work on Polynomial Neural Sheaf Diffusion.</p>
-            <p>Side note: the Leaning Tower of Pisa is <em>actually</em> very crooked — way more than I was expecting up close! 🗼</p>
           </div>
           <div class="pt-badges">
             <a class="pt-link-btn" href="/files/LoG_2026/PolyNSD_Poster_LoG.pdf" target="_blank" rel="noopener">🪧 View Poster</a>

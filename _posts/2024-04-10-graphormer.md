@@ -84,6 +84,20 @@ Where cᵢ = z⁻_{deg⁻(i)} + z⁺_{deg⁺(i)} is the centrality encoding for 
 
 The complete layer is: Centrality-augmented queries/keys + Distance-biased scores + Path-edge-biased scores + Attention-weighted value aggregation.
 
+**Concrete example: benzene (C₆H₆) molecular attention.**
+
+Benzene has 6 carbon atoms in a ring. Consider two atoms i and j that are 3 bonds apart (opposite sides of the ring).
+
+Without structural encoding: attention score = Q_i · K_j^T / √d. Two atoms with identical features get identical attention to all equidistant atoms — the model cannot distinguish "3 bonds apart clockwise" from "3 bonds apart anticlockwise."
+
+With Graphormer's spatial encoding:
+- dist(i,j) = 3 → learned bias φ(3) = −0.8 (moderate distance penalty)
+- dist(i,k) = 1 (adjacent) → φ(1) = +0.5 (closeness bonus)
+
+The spatial bias shifts attention strongly toward direct neighbours while still allowing long-range attention where features justify it. The edge encoding further adds bond-type information along each path.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Why Graphormer Beat GNNs on Molecules:</strong> Molecular property prediction (HOMO-LUMO gap, binding affinity) requires whole-molecule reasoning — the electronic structure of one end of a molecule influences the other. Local message-passing GNNs require many layers to propagate this information, risking oversmoothing. Graphormer's global attention connects every atom pair in one shot, and the structural biases ensure chemically meaningful attention patterns without sacrificing locality entirely.</div>
+
 ## Expressive Power
 
 **Theorem (Ying et al., 2021):** Graphormer is strictly more expressive than 1-WL (the Weisfeiler-Lehman test). Any function computed by a message-passing GNN can be computed by Graphormer.

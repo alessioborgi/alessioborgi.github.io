@@ -67,6 +67,90 @@ When restriction maps are orthogonal, the holonomy around the path i–j–k is 
 
 **Formal claim:** For a sheaf with orthogonal maps trained on molecular data, the learned maps F_{v▷e} encode the 3D geometric relationship between atom v and bond e — in the same information-theoretic sense as DimeNet's angle features.
 
+<style>
+@keyframes rotateBondMap {
+  0%   { transform: rotate(0deg); }
+  50%  { transform: rotate(40deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes rotateBondMap2 {
+  0%   { transform: rotate(0deg); }
+  50%  { transform: rotate(-55deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes fadeAtom {
+  0%   { opacity:0; transform:scale(0.4); }
+  100% { opacity:1; transform:scale(1); }
+}
+.bond-map-arrow  { animation: rotateBondMap  3s ease-in-out infinite; }
+.bond-map-arrow2 { animation: rotateBondMap2 3s ease-in-out infinite; animation-delay:0.8s; }
+.atom-appear     { animation: fadeAtom 0.7s ease-out both; }
+</style>
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 500 230" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;width:100%;font-family:sans-serif;">
+  <text x="250" y="16" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">Molecular Sheaf: Atoms, Bonds, and Restriction Maps</text>
+  <!-- Methane-like: central C with H neighbours -->
+  <!-- C atom -->
+  <circle cx="250" cy="115" r="26" fill="#6b7280" class="atom-appear" style="animation-delay:0s"/>
+  <text x="250" y="120" text-anchor="middle" font-size="14" fill="white" font-weight="bold">C</text>
+  <!-- H atoms -->
+  <circle cx="160" cy="75" r="18" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" class="atom-appear" style="animation-delay:0.2s"/>
+  <text x="160" y="80" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">H</text>
+  <circle cx="340" cy="75" r="18" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" class="atom-appear" style="animation-delay:0.4s"/>
+  <text x="340" y="80" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">H</text>
+  <circle cx="160" cy="160" r="18" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" class="atom-appear" style="animation-delay:0.6s"/>
+  <text x="160" y="165" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">H</text>
+  <circle cx="340" cy="160" r="18" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" class="atom-appear" style="animation-delay:0.8s"/>
+  <text x="340" y="165" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">H</text>
+  <!-- Bonds -->
+  <line x1="224" y1="102" x2="175" y2="84" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="276" y1="102" x2="325" y2="84" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="224" y1="128" x2="175" y2="147" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="276" y1="128" x2="325" y2="147" stroke="#94a3b8" stroke-width="2.5"/>
+  <!-- Stalk boxes at C -->
+  <rect x="248" y="143" width="32" height="18" rx="3" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+  <text x="264" y="155" text-anchor="middle" font-size="8" fill="#1e40af">stalk_C</text>
+  <!-- Rotating restriction map arrows on bonds -->
+  <g class="bond-map-arrow" style="transform-origin:198px 93px;">
+    <line x1="198" y1="93" x2="215" y2="78" stroke="#f97316" stroke-width="2" marker-end="url(#mArrow1)"/>
+  </g>
+  <g class="bond-map-arrow2" style="transform-origin:302px 93px;">
+    <line x1="302" y1="93" x2="318" y2="78" stroke="#7c3aed" stroke-width="2" marker-end="url(#mArrow2)"/>
+  </g>
+  <g class="bond-map-arrow" style="transform-origin:198px 138px;">
+    <line x1="198" y1="138" x2="215" y2="153" stroke="#f97316" stroke-width="2" marker-end="url(#mArrow1)"/>
+  </g>
+  <g class="bond-map-arrow2" style="transform-origin:302px 138px;">
+    <line x1="302" y1="138" x2="318" y2="153" stroke="#7c3aed" stroke-width="2" marker-end="url(#mArrow2)"/>
+  </g>
+  <!-- Labels -->
+  <text x="185" y="65" text-anchor="middle" font-size="9" fill="#f97316">F_{C▷e₁}</text>
+  <text x="315" y="65" text-anchor="middle" font-size="9" fill="#7c3aed">F_{C▷e₂}</text>
+  <text x="250" y="195" text-anchor="middle" font-size="10" fill="#6b7280">Each bond gets a restriction map encoding bond geometry</text>
+  <text x="250" y="210" text-anchor="middle" font-size="10" fill="#6b7280">Animated arrows = maps rotating to different bond angles</text>
+  <!-- Legend -->
+  <circle cx="45" cy="220" r="7" fill="#6b7280"/>
+  <text x="56" y="224" font-size="9" fill="#374151">C (carbon, gray)</text>
+  <circle cx="155" cy="220" r="7" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1"/>
+  <text x="166" y="224" font-size="9" fill="#374151">H (hydrogen, white)</text>
+  <circle cx="265" cy="220" r="7" fill="#ef4444"/>
+  <text x="276" y="224" font-size="9" fill="#374151">O (oxygen, red)</text>
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="mArrow1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f97316"/>
+    </marker>
+    <marker id="mArrow2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+</svg>
+<figcaption>Molecular sheaf on a methane-like fragment. Atoms are nodes (C=gray, H=white, O=red in legend). Each bond is an edge. At each node-edge incidence there is a restriction map (animated colored arrows) encoding the local geometric relationship between atom and bond. The arrows rotate to different angles, representing how different bond orientations are encoded as different restriction maps — the sheaf's geometric vocabulary for molecular structure.</figcaption>
+</figure></div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — bond types are restriction map types:</strong> Bond types in chemistry are <em>exactly</em> restriction map types in sheaf theory. A C-C single bond has a different electronic structure from a C=O double bond: different bond length, different orbital overlap, different electronegativity gradient. In sheaf language, these are different restriction maps: the single bond map encodes a sigma-bond geometry, the double bond map encodes sigma+pi geometry. By learning a different map per bond type, a sheaf GNN automatically encodes the chemical distinctions between bond types — without any hand-crafted bond-type features. The maps learn the chemistry.</div>
+
 ## Multi-Relational Molecular Sheaves
 
 Different bond types (single, double, triple, aromatic) have different geometric and electronic properties. A multi-relational molecular sheaf assigns different restriction maps per bond type:
@@ -84,6 +168,22 @@ The multi-relational Sheaf Laplacian:
 </div>
 
 This separates the contribution of different bond types to the diffusion — single bonds propagate information differently from double bonds.
+
+**Concrete bond-angle encoding example.** Consider three atoms arranged as H–C–H in methane, with bond angle θ ≈ 109.5°. Label them i (H), j (C), k (H). The restriction maps on the two bonds are orthogonal matrices O_{i▷e_{ij}} and O_{j▷e_{ij}} (for the i-j bond) and O_{j▷e_{jk}}, O_{k▷e_{jk}} (for the j-k bond).
+
+The **holonomy** around the path i → j → k is the composition of restriction maps:
+
+<div class="math-box">
+Holonomy(i→j→k) = O_{j▷e_{jk}}ᵀ · O_{j▷e_{ij}} = R(θ_{ijk}) = R(109.5°)
+</div>
+
+This is a rotation by 109.5° in ℝ² (for d=2 stalks). The bond angle is encoded directly as the angle of this rotation matrix — no explicit angle feature is needed. When the sheaf predictor learns orthogonal maps from atomic positions, it implicitly encodes all bond angles as holonomies. This is the same information DimeNet computes explicitly as θ_{ijk} = arccos((r_i−r_j)·(r_k−r_j) / (|r_i−r_j||r_k−r_j|)), but encoded implicitly in the geometry of the sheaf.
+
+**Numerical step-through:** For θ=109.5°, the 2×2 rotation matrix is:
+- cos(109.5°) ≈ −0.333,  sin(109.5°) ≈ 0.943
+- R(109.5°) = [[−0.333, −0.943], [0.943, −0.333]]
+
+If the j-node's stalk vector is h_j = [1, 0], then after holonomy transport h_j becomes [−0.333, 0.943] — a vector rotated by 109.5°. The sheaf diffusion propagates this angle-encoded signal without ever explicitly computing an angle.
 
 ## Equivariant Molecular Sheaves
 

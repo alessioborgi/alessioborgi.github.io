@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The NSD Architecture
 
+**Intuition First:** NSD is a GCN where the "wiring" is learned freshly at each layer. In a standard GCN the aggregation weights are fixed (based on degree or attention scores). In NSD, the entire d×d linear map telling "how much and in what direction node u should influence node v" is predicted by a small MLP at each layer. This is expensive, but it means the model can learn to say: "for this particular heterophilic edge, I should rotate u's features 180° before adding them to v's representation — effectively subtracting rather than adding." That flip is what prevents oversmoothing across class boundaries.
+
 NSD has two interleaved components:
 
 ### 1. Sheaf Predictor (Map Learner)
@@ -76,6 +78,19 @@ On heterophilic graphs: the MLP learns F_{u→e} that rotates u's features into 
 <div class="insight-box">
 <strong>Heterophily resolution:</strong> Standard GCN uses Δ_trivial = L ⊗ I_d, which pushes all neighbours to be equal. NSD uses Δ_F with learned maps, which defines "equal" to mean "equal under the sheaf transformation." By learning maps that flip the feature direction for nodes of different classes, NSD can make diffusion convergent within classes and divergent across classes — the right inductive bias for heterophilic tasks.
 </div>
+
+## Worked Example: NSD vs GCN on a Heterophilic Edge
+
+**Setup:** two nodes A (class 0, h_A = [1, 0]) and B (class 1, h_B = [0, 1]), connected by one edge.
+
+**GCN update for A:** h_A ← (h_A + h_B) / 2 = [0.5, 0.5] — the embedding moves toward the class boundary. After many layers it converges to [0.5, 0.5] for all nodes — useless for classification.
+
+**NSD update for A:** the MLP predicts a restriction map from the pair (h_A, h_B). For a perfectly heterophilic edge, the optimal map is F_{B→e} = −I (negation). Then:
+- Sheaf disagreement: F_{A→e} h_A − F_{B→e} h_B = [1,0] − (−[0,1]) = [1,1]
+- NSD diffuses to reduce this disagreement — but since the maps encode "A and B should be opposite," equilibrium is h_A = −h_B, not h_A = h_B.
+- Class A nodes converge to [1,0] (or a scaled version); class B to [0,1]. Classification remains easy.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> NSD learns the sign (and direction) of each edge's "agreement rule." On homophilic edges it learns identity maps (standard GCN behaviour). On heterophilic edges it learns rotation or negation maps that make diffusion class-preserving rather than class-averaging. The model has one architecture that handles both cases — no heuristic switches needed.</div>
 
 ## Connection to Other Architectures
 

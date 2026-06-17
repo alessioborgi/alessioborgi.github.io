@@ -152,6 +152,151 @@ for edge e = (u, v) with a chosen orientation. The disagreement (δ₀ x)_e ∈ 
 
 This is the central operator for sheaf-based graph learning. Its null space is exactly the space of global sections.
 
+<style>
+@keyframes sheaf-arrow-flow-ab {
+  0% { stroke-dashoffset: 18; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes sheaf-arrow-flow-bc {
+  0% { stroke-dashoffset: 18; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes sheaf-node-pulse-a {
+  0%, 100% { fill-opacity: 0.2; }
+  50% { fill-opacity: 0.07; }
+}
+@keyframes sheaf-node-pulse-b {
+  0%, 100% { fill-opacity: 0.2; }
+  50% { fill-opacity: 0.07; }
+}
+@keyframes sheaf-node-pulse-c {
+  0%, 100% { fill-opacity: 0.2; }
+  50% { fill-opacity: 0.07; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin:0 auto;">
+  <defs>
+    <marker id="sheaf-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#6366f1"/>
+    </marker>
+  </defs>
+  <rect width="520" height="240" fill="#f8fafc" rx="12"/>
+  <!-- Edges A-B and B-C with flowing dashes -->
+  <line x1="118" y1="110" x2="218" y2="110" stroke="#6366f1" stroke-width="2.5" stroke-dasharray="7 4" marker-end="url(#sheaf-arr)">
+    <animate attributeName="stroke-dashoffset" from="18" to="0" dur="1.1s" repeatCount="indefinite"/>
+  </line>
+  <line x1="302" y1="110" x2="400" y2="110" stroke="#6366f1" stroke-width="2.5" stroke-dasharray="7 4" marker-end="url(#sheaf-arr)">
+    <animate attributeName="stroke-dashoffset" from="18" to="0" dur="1.1s" begin="0.35s" repeatCount="indefinite"/>
+  </line>
+  <!-- Node A -->
+  <circle cx="90" cy="110" r="28" fill="#3b82f6" stroke="#3b82f6" stroke-width="2.5">
+    <animate attributeName="fill-opacity" values="0.2;0.07;0.2" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="90" cy="110" r="28" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="90" y="106" text-anchor="middle" fill="#1d4ed8" font-size="13" font-weight="700">A</text>
+  <text x="90" y="120" text-anchor="middle" fill="#1d4ed8" font-size="9">node</text>
+  <!-- Stalk A -->
+  <rect x="50" y="148" width="82" height="28" rx="5" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="91" y="162" text-anchor="middle" fill="#1e40af" font-size="9" font-family="monospace">F(A) ≅ ℝ¹</text>
+  <text x="91" y="172" text-anchor="middle" fill="#1e40af" font-size="8" font-family="monospace">x_A ∈ ℝ</text>
+  <!-- Node B -->
+  <circle cx="260" cy="110" r="28" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="2.5">
+    <animate attributeName="fill-opacity" values="0.2;0.07;0.2" dur="2.2s" begin="0.7s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="260" cy="110" r="28" fill="none" stroke="#8b5cf6" stroke-width="2.5"/>
+  <text x="260" y="106" text-anchor="middle" fill="#6d28d9" font-size="13" font-weight="700">B</text>
+  <text x="260" y="120" text-anchor="middle" fill="#6d28d9" font-size="9">node</text>
+  <!-- Stalk B -->
+  <rect x="220" y="148" width="82" height="28" rx="5" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="261" y="162" text-anchor="middle" fill="#6d28d9" font-size="9" font-family="monospace">F(B) ≅ ℝ¹</text>
+  <text x="261" y="172" text-anchor="middle" fill="#6d28d9" font-size="8" font-family="monospace">x_B ∈ ℝ</text>
+  <!-- Node C -->
+  <circle cx="428" cy="110" r="28" fill="#10b981" stroke="#10b981" stroke-width="2.5">
+    <animate attributeName="fill-opacity" values="0.2;0.07;0.2" dur="2.2s" begin="1.4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="428" cy="110" r="28" fill="none" stroke="#10b981" stroke-width="2.5"/>
+  <text x="428" y="106" text-anchor="middle" fill="#065f46" font-size="13" font-weight="700">C</text>
+  <text x="428" y="120" text-anchor="middle" fill="#065f46" font-size="9">node</text>
+  <!-- Stalk C -->
+  <rect x="388" y="148" width="82" height="28" rx="5" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.5"/>
+  <text x="429" y="162" text-anchor="middle" fill="#065f46" font-size="9" font-family="monospace">F(C) ≅ ℝ¹</text>
+  <text x="429" y="172" text-anchor="middle" fill="#065f46" font-size="8" font-family="monospace">x_C ∈ ℝ</text>
+  <!-- Restriction map labels on edges -->
+  <rect x="127" y="82" width="82" height="18" rx="4" fill="#e0e7ff" stroke="#a5b4fc" stroke-width="1"/>
+  <text x="168" y="94" text-anchor="middle" fill="#3730a3" font-size="9">F_{A→e}=+1, F_{B→e}=−1</text>
+  <rect x="308" y="82" width="82" height="18" rx="4" fill="#e0e7ff" stroke="#a5b4fc" stroke-width="1"/>
+  <text x="349" y="94" text-anchor="middle" fill="#3730a3" font-size="9">F_{B→e}=+1, F_{C→e}=+1</text>
+  <!-- Edge midpoint stalk labels -->
+  <rect x="148" y="105" width="58" height="16" rx="3" fill="#f5f3ff" stroke="#a5b4fc" stroke-width="1"/>
+  <text x="177" y="116" text-anchor="middle" fill="#4c1d95" font-size="8" font-family="monospace">F(e_AB)≅ℝ¹</text>
+  <rect x="319" y="105" width="58" height="16" rx="3" fill="#f5f3ff" stroke="#a5b4fc" stroke-width="1"/>
+  <text x="348" y="116" text-anchor="middle" fill="#4c1d95" font-size="8" font-family="monospace">F(e_BC)≅ℝ¹</text>
+  <!-- Title -->
+  <text x="260" y="22" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="700">Cellular Sheaf: 3-Node Path Graph A – B – C</text>
+  <text x="260" y="37" text-anchor="middle" fill="#64748b" font-size="10">Stalks (coloured boxes) + restriction maps (edge labels) + flowing coboundary arrows</text>
+  <text x="260" y="215" text-anchor="middle" fill="#6366f1" font-size="10" font-style="italic">δ₀ maps node vectors → edge disagreements via the restriction maps on each arrow</text>
+</svg>
+<figcaption>A cellular sheaf on the 3-node path A–B–C. Stalks are the coloured boxes below each node. Restriction maps label the flowing arrows. The coboundary δ₀ measures disagreement at each edge after applying the maps.</figcaption>
+</figure>
+</div>
+
+### Concrete Worked Example: 3-Node Path Graph
+
+**Setup.** Graph: A–B–C (path). Stalk dimension d = 1. Restriction maps:
+
+<div class="math-box" style="text-align:left;">
+F_{A→e_AB} = +1,  F_{B→e_AB} = −1<br>
+F_{B→e_BC} = +1,  F_{C→e_BC} = +1
+</div>
+
+**Step 1 — Write δ₀ as a matrix.** Node order: (A, B, C). Edge order: (e_AB, e_BC).
+
+<div class="math-box">
+δ₀ = [ +1  −1   0 ]   ← row for e_AB: F_{A→e}·x_A − F_{B→e}·x_B<br>
+     [  0  +1  +1 ]   ← row for e_BC: F_{B→e}·x_B − F_{C→e}·x_C  (note sign convention)
+</div>
+
+Wait — the standard convention is (δ₀ x)_e = F_{v→e} x_v − F_{u→e} x_u for edge e=(u,v) with u the tail. For e_BC = (B,C): (δ₀ x)_{e_BC} = F_{C→e} x_C − F_{B→e} x_B. Adopting orientation A→B and B→C:
+
+<div class="math-box">
+(δ₀ x)_{e_AB} = F_{B→e} x_B − F_{A→e} x_A = (−1)x_B − (+1)x_A<br>
+(δ₀ x)_{e_BC} = F_{C→e} x_C − F_{B→e} x_B = (+1)x_C − (+1)x_B
+</div>
+
+**Step 2 — Compute Δ_F = δ₀ᵀ δ₀.** With the matrix above:
+
+<div class="math-box">
+Δ_F = δ₀ᵀ δ₀ = [  1   1   0 ]<br>
+               [  1   2  −1 ]<br>
+               [  0  −1   1 ]
+</div>
+
+(Diagonal entries: Δ[A,A] = 1, Δ[B,B] = 1+1 = 2, Δ[C,C] = 1. Off-diagonal: Δ[A,B] = (+1)(−1) netting to +1 via the product of columns — verify by direct multiplication.)
+
+**Step 3 — Check x = (1, −1, 1).**
+
+<div class="math-box" style="text-align:left;">
+(δ₀ x)_{e_AB} = (−1)(−1) − (+1)(1) = 1 − 1 = 0  ✓<br>
+(δ₀ x)_{e_BC} = (+1)(1) − (+1)(−1) = 1 + 1 = 2  ✗
+</div>
+
+x = (1, −1, 1) is **not** a global section — e_BC has disagreement 2.
+
+**Step 4 — Find a global section.** Need δ₀ x = 0:
+
+<div class="math-box" style="text-align:left;">
+(−1)x_B − x_A = 0  →  x_A = −x_B<br>
+x_C − x_B = 0       →  x_C = x_B
+</div>
+
+Global sections: multiples of (−1, 1, 1). So x = (−1, 1, 1) is a genuine global section. x = (0, 0, 0) is always trivially one. **dim(H⁰) = 1.**
+
+The non-trivial section (−1, 1, 1) is not constant — node A has the opposite sign to B and C. The sheaf encodes the signed relation F_{A→e_AB}=+1, F_{B→e_AB}=−1, and the global section reflects this: A must be opposite to B for the edge to be satisfied.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The standard graph Laplacian L = D − A is a special case of the Sheaf Laplacian with all restriction maps equal to the scalar 1 and stalk dimension d=1. The Sheaf Laplacian Δ_F = δ₀ᵀδ₀ generalises this in two directions simultaneously: (1) stalk dimension d &gt; 1 turns each node feature into a vector, and (2) non-identity restriction maps replace the implicit "nodes should be equal" with "nodes should be related by a learned linear map". Setting all maps to the identity and d=1 recovers L exactly. Every theorem about sheaf diffusion therefore reduces to a known theorem about graph diffusion in this special case — a useful sanity check throughout this series.</div>
+
 ## The Three Key Objects
 
 | Object | Symbol | Role in graph learning |

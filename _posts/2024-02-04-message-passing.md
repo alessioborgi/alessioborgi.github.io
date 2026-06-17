@@ -113,6 +113,35 @@ Where:
 </figure>
 </div>
 
+## Concrete Worked Example: One Full MPNN Step
+
+Let node B have features h_B = [1, 0], with three neighbours:
+- A: h_A = [0, 1]
+- C: h_C = [1, 1]
+- D: h_D = [0, 0]
+
+**Step 1 — Compute messages** (using identity MSG, i.e. just pass neighbour features):
+```
+msg(A→B) = [0, 1]
+msg(C→B) = [1, 1]
+msg(D→B) = [0, 0]
+```
+
+**Step 2 — Aggregate** (sum):
+```
+agg_B = [0,1] + [1,1] + [0,0] = [1, 2]
+```
+
+**Step 3 — Update** (concatenate own features + aggregated, apply linear W):
+```
+input = concat(h_B, agg_B) = [1, 0, 1, 2]
+h_B_new = ReLU( W · [1, 0, 1, 2] )   # W is 2×4 learned weight matrix
+```
+
+After this one layer, B's new 2-d embedding encodes information from all three of its neighbours.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The three steps — MSG, AGGREGATE, UPDATE — are independent design choices. Changing any one of them gives a different GNN family. GCN uses W·h_u as message and sum as aggregation. GAT weights the sum by learned attention. GIN uses sum + MLP. The framework shows that these are all variations on the same theme.</div>
+
 ## Step 1: Message Function
 
 The message function computes what each neighbour sends. The simplest choice: just send the neighbour's features.

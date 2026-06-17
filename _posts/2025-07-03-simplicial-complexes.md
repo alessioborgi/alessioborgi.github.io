@@ -27,6 +27,50 @@ permalink: /blog/persistent-homology/simplicial-complexes/
 {% include figure image_path="/images/blog/tdl/gabrielsson2020_gfl.png" alt="Simplicial complex geometry" caption="Simplicial complex representations (Gabrielsson et al., 2020)" %}
 
 
+**Intuition First.** Think of building a Lego model. Individual bricks are 0-simplices (vertices). Connecting two bricks with a rod gives a 1-simplex (edge). Filling a triangle of three connected bricks with a flat plate gives a 2-simplex. The *downward closure* rule says: you can only add the plate once all three rods are in place. This mirrors how TDA builds complexes — higher-dimensional pieces can only enter after all their lower-dimensional faces are present.
+
+<style>
+@keyframes simplex-appear {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.simplex-demo > * { transform-origin: center; }
+</style>
+
+<div class="blog-figure"><figure>
+<svg class="simplex-demo" viewBox="0 0 520 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;font-family:sans-serif;">
+  <!-- 0-simplex -->
+  <circle cx="50" cy="80" r="8" fill="#0d9488" style="animation:simplex-appear 0.4s ease 0s both"/>
+  <text x="50" y="125" font-size="11" fill="#475569" text-anchor="middle">0-simplex</text>
+  <text x="50" y="138" font-size="10" fill="#94a3b8" text-anchor="middle">vertex</text>
+  <!-- 1-simplex -->
+  <circle cx="130" cy="80" r="7" fill="#0d9488" style="animation:simplex-appear 0.4s ease 0.1s both"/>
+  <circle cx="180" cy="80" r="7" fill="#0d9488" style="animation:simplex-appear 0.4s ease 0.15s both"/>
+  <line x1="130" y1="80" x2="180" y2="80" stroke="#0d9488" stroke-width="3" style="animation:simplex-appear 0.4s ease 0.2s both"/>
+  <text x="155" y="125" font-size="11" fill="#475569" text-anchor="middle">1-simplex</text>
+  <text x="155" y="138" font-size="10" fill="#94a3b8" text-anchor="middle">edge</text>
+  <!-- 2-simplex -->
+  <polygon points="255,45 215,110 295,110" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="2.5" style="animation:simplex-appear 0.4s ease 0.3s both"/>
+  <circle cx="255" cy="45" r="7" fill="#0d9488" style="animation:simplex-appear 0.4s ease 0.25s both"/>
+  <circle cx="215" cy="110" r="7" fill="#0d9488" style="animation:simplex-appear 0.4s ease 0.25s both"/>
+  <circle cx="295" cy="110" r="7" fill="#0d9488" style="animation:simplex-appear 0.4s ease 0.25s both"/>
+  <text x="255" y="125" font-size="11" fill="#475569" text-anchor="middle">2-simplex</text>
+  <text x="255" y="138" font-size="10" fill="#94a3b8" text-anchor="middle">triangle (filled)</text>
+  <!-- 3-simplex wireframe -->
+  <polygon points="385,40 345,110 425,110" fill="#7c3aed" fill-opacity="0.10" stroke="#7c3aed" stroke-width="2" style="animation:simplex-appear 0.4s ease 0.35s both"/>
+  <line x1="385" y1="40" x2="415" y2="75" stroke="#7c3aed" stroke-width="2" stroke-dasharray="4,3" style="animation:simplex-appear 0.4s ease 0.4s both"/>
+  <line x1="345" y1="110" x2="415" y2="75" stroke="#7c3aed" stroke-width="2" stroke-dasharray="4,3" style="animation:simplex-appear 0.4s ease 0.4s both"/>
+  <line x1="425" y1="110" x2="415" y2="75" stroke="#7c3aed" stroke-width="2" stroke-dasharray="4,3" style="animation:simplex-appear 0.4s ease 0.4s both"/>
+  <circle cx="415" cy="75" r="7" fill="#7c3aed" style="animation:simplex-appear 0.4s ease 0.38s both"/>
+  <circle cx="385" cy="40" r="6" fill="#7c3aed" style="animation:simplex-appear 0.4s ease 0.38s both"/>
+  <circle cx="345" cy="110" r="6" fill="#7c3aed" style="animation:simplex-appear 0.4s ease 0.38s both"/>
+  <circle cx="425" cy="110" r="6" fill="#7c3aed" style="animation:simplex-appear 0.4s ease 0.38s both"/>
+  <text x="385" y="125" font-size="11" fill="#475569" text-anchor="middle">3-simplex</text>
+  <text x="385" y="138" font-size="10" fill="#94a3b8" text-anchor="middle">tetrahedron</text>
+</svg>
+<figcaption>Simplices in dimensions 0–3. Each k-simplex has k+1 vertices. The 2-simplex is a filled triangle; the 3-simplex is a solid tetrahedron.</figcaption>
+</figure></div>
+
 ## Simplices: The Building Blocks
 
 A **k-simplex** is the convex hull of $$k+1$$ affinely independent points $$v_0, v_1, \ldots, v_k \in \mathbb{R}^n$$:
@@ -61,6 +105,8 @@ Key examples:
 - **Boundary of a tetrahedron**: four triangles, six edges, four vertices — homeomorphic to $$S^2$$.
 - **Solid tetrahedron**: includes the interior 3-simplex — contractible, hence topologically trivial.
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The downward closure axiom is not bureaucratic bookkeeping — it is what makes the boundary operator <em>well-defined</em>. If a triangle's edges were not in the complex, the formula ∂₂[v₀v₁v₂] = [v₁v₂] − [v₀v₂] + [v₀v₁] would reference nonexistent objects. Every TDA filtration must respect this: a triangle can only enter the filtration after all three of its edges (and all three vertices) are already present.</div>
+
 ## The Euler Characteristic
 
 The **Euler characteristic** is the alternating sum of simplex counts:
@@ -76,6 +122,10 @@ where $$|K_k|$$ is the number of $$k$$-simplices. For a triangulated surface, $$
 - Genus-$$g$$ surface: $$\chi = 2 - 2g$$
 
 The deep connection is $$\chi(K) = \sum_k (-1)^k \beta_k$$ where $$\beta_k = \mathrm{rank}(H_k(K))$$ are the Betti numbers. This is the **Euler-Poincaré formula**, relating combinatorial data to algebraic topology.
+
+## Worked Example: Building a Complex Step by Step
+
+Take four vertices $$v_0, v_1, v_2, v_3$$. Start empty. Add vertices one by one (all four are 0-simplices). Now add edges: $$[v_0 v_1], [v_1 v_2], [v_0 v_2]$$ — this forms a triangle *boundary* (no filled interior yet). At this point $$\beta_0 = 2$$ (two components: $$\{v_0,v_1,v_2\}$$ and $$\{v_3\}$$) and $$\beta_1 = 1$$ (one loop). Add edge $$[v_0 v_3]$$ — the two components merge, $$\beta_0 = 1$$. Now fill in the triangle by adding the 2-simplex $$[v_0 v_1 v_2]$$ — the loop dies, $$\beta_1 = 0$$. The Euler characteristic at the end: $$\chi = 4 - 4 + 1 = 1$$, matching a contractible space.
 
 ## The Nerve Theorem
 

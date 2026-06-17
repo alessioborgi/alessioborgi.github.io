@@ -80,6 +80,19 @@ What you want to predict determines the **task level**:
 | Edge | y_{uv} per edge | Will users u and v become friends? (link prediction) |
 | Graph | y_G per graph | Is this molecule toxic? (graph classification) |
 
+## Concrete Example: A Molecule as a Graph
+
+Consider water (H₂O):
+- **Nodes:** O (oxygen, node 0), H (hydrogen, node 1), H (hydrogen, node 2)
+- **Node features:** x₀ = [8, 2, 6] (atomic number, valence electrons, electronegativity×10), x₁ = x₂ = [1, 1, 2]
+- **Edges:** (0,1) and (0,2) — two O–H bonds
+- **Edge features:** e₀₁ = e₀₂ = [1, 0.96] (bond order=1, bond length=0.96Å)
+- **Graph label:** y_G = 1 (polar molecule, for a classification task)
+
+This small example shows every component: node features capturing chemistry, edge features capturing bond properties, and a graph-level label for the prediction task.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The same GNN architecture can process both H₂O (3 nodes) and a drug molecule (50 nodes) because the message-passing computation is defined per-node, not per-position. There is no "slot 1" or "slot 2" — only nodes and their connections. This is what makes GNNs fundamentally different from fixed-input-size networks like MLPs.</div>
+
 ## The Adjacency Matrix
 
 A graph's structure is encoded in an **adjacency matrix A ∈ {0,1}^{N×N}**:

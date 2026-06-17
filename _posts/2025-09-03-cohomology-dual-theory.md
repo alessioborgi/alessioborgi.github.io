@@ -24,6 +24,45 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> Cohomology replaces chains (formal sums of simplices) with cochains (functions assigning values to simplices), and boundary maps with coboundary maps going in the opposite direction. Over a field, H^n ≅ H_n, so the hole-counting is the same — but the cup product gives extra structure, and persistent cohomology runs faster in practice due to its column-reduction direction.</div>
 
+**Intuition First.** If homology asks "which closed loops are not boundaries?", cohomology asks the dual question: "which functions on edges are consistent (form a cocycle)?" A 1-cochain assigns a value to each edge; it's a cocycle if around every triangle the three edge-values sum to zero. Cohomology counts independent consistent edge-labellings that can't be explained by vertex-labelling differences. This dual view is computationally faster (Ripser uses it) and topologically richer (cup products distinguish spaces with the same Betti numbers).
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;font-family:sans-serif;">
+  <text x="230" y="18" font-size="12" fill="#0d9488" font-weight="bold" text-anchor="middle">Homology vs Cohomology: dual arrows</text>
+  <!-- Homology chain complex -->
+  <text x="115" y="45" font-size="11" fill="#1e40af" font-weight="bold" text-anchor="middle">Homology (chains go down)</text>
+  <rect x="20"  y="55" width="50" height="30" rx="4" fill="#e0f2fe" stroke="#1e40af" stroke-width="1.5"/>
+  <text x="45"  y="74" font-size="11" fill="#1e40af" text-anchor="middle">C₂</text>
+  <line x1="70" y1="70" x2="95" y2="70" stroke="#1e40af" stroke-width="2"/>
+  <polygon points="93,65 103,70 93,75" fill="#1e40af"/>
+  <text x="82" y="62" font-size="9" fill="#1e40af" text-anchor="middle">∂₂</text>
+  <rect x="105" y="55" width="50" height="30" rx="4" fill="#e0f2fe" stroke="#1e40af" stroke-width="1.5"/>
+  <text x="130" y="74" font-size="11" fill="#1e40af" text-anchor="middle">C₁</text>
+  <line x1="155" y1="70" x2="180" y2="70" stroke="#1e40af" stroke-width="2"/>
+  <polygon points="178,65 188,70 178,75" fill="#1e40af"/>
+  <text x="167" y="62" font-size="9" fill="#1e40af" text-anchor="middle">∂₁</text>
+  <rect x="190" y="55" width="50" height="30" rx="4" fill="#e0f2fe" stroke="#1e40af" stroke-width="1.5"/>
+  <text x="215" y="74" font-size="11" fill="#1e40af" text-anchor="middle">C₀</text>
+  <!-- Cohomology cochain complex (arrows reversed) -->
+  <text x="365" y="45" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">Cohomology (cochains go up)</text>
+  <rect x="270" y="55" width="50" height="30" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="295" y="74" font-size="11" fill="#7c3aed" text-anchor="middle">C⁰</text>
+  <line x1="355" y1="70" x2="330" y2="70" stroke="#7c3aed" stroke-width="2"/>
+  <polygon points="332,65 322,70 332,75" fill="#7c3aed"/>
+  <text x="343" y="62" font-size="9" fill="#7c3aed" text-anchor="middle">δ₀</text>
+  <rect x="355" y="55" width="50" height="30" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="380" y="74" font-size="11" fill="#7c3aed" text-anchor="middle">C¹</text>
+  <line x1="440" y1="70" x2="415" y2="70" stroke="#7c3aed" stroke-width="2"/>
+  <polygon points="417,65 407,70 417,75" fill="#7c3aed"/>
+  <text x="428" y="62" font-size="9" fill="#7c3aed" text-anchor="middle">δ₁</text>
+  <rect x="440" y="55" width="50" height="30" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="465" y="74" font-size="11" fill="#7c3aed" text-anchor="middle">C²</text>
+  <!-- Universal Coeff note -->
+  <text x="230" y="125" font-size="10" fill="#64748b" text-anchor="middle">Over a field: Hⁿ ≅ Hₙ — same Betti numbers, but cohomology ring has extra structure (cup product)</text>
+</svg>
+<figcaption>Homology boundary maps go downward (∂: Cₙ→Cₙ₋₁); cohomology coboundary maps go upward (δ: Cⁿ→Cⁿ⁺¹). Over a field the groups are isomorphic, but cohomology gains the cup product ring structure.</figcaption>
+</figure></div>
+
 ## From Chains to Cochains
 
 Given a simplicial complex $$K$$ and a field $$\mathbb{F}$$, the **$$n$$-cochain group** is the dual space:
@@ -57,6 +96,8 @@ $$(\varphi \smile \psi)([v_0,\ldots,v_{p+q}]) = \varphi([v_0,\ldots,v_p]) \cdot 
 The cup product turns the cohomology ring $$H^*(X;\mathbb{F}) = \bigoplus_n H^n(X;\mathbb{F})$$ into a graded ring. This structure distinguishes spaces that have the same Betti numbers but different ring structures — cohomology is strictly more powerful than homology as a topological invariant.
 
 <div class="insight-box"><strong>Key Insight:</strong> The torus $$T^2 = S^1 \times S^1$$ and the Klein bottle $$K$$ have the same Betti numbers over $$\mathbb{F}_2$$ ($$\beta_0 = 1, \beta_1 = 2, \beta_2 = 1$$), but their cohomology rings differ. The cup product structure distinguishes them — demonstrating that cohomology is a finer invariant than just the Betti numbers.</div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The computational advantage of cohomology is real and large. Ripser, the fastest TDA library, computes Vietoris-Rips persistent <em>co</em>homology — not homology — because the coboundary matrix reduction benefits from a "clearing" optimisation: once a column is reduced it can be immediately cleared. This makes Ripser up to 10× faster than homology-based algorithms on typical inputs.</div>
 
 ## Persistent Cohomology and Circular Coordinates
 

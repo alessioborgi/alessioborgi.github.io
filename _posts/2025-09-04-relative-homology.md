@@ -24,6 +24,40 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> Relative homology H_n(X, A) treats the subspace A as "collapsed to a point" — cycles in A become trivial and only topology that "escapes" A is counted. The long exact sequence of a pair connects H_n(A), H_n(X), and H_n(X,A), enabling powerful decomposition arguments. Extended persistence uses relative homology to capture topology that would otherwise be missed.</div>
 
+**Intuition First.** Relative homology $$H_n(X, A)$$ is the homology of $$X$$ with $$A$$ "collapsed to a point." Any loop that stays entirely inside $$A$$ becomes trivial — we don't count it. Only topology that "escapes" $$A$$ and ventures into $$X \setminus A$$ is measured. Think of $$A$$ as a known, understood subspace that you want to factor out, and $$H_n(X,A)$$ as the extra topology that $$X$$ adds on top of $$A$$.
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 440 145" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:440px;font-family:sans-serif;">
+  <text x="220" y="18" font-size="12" fill="#0d9488" font-weight="bold" text-anchor="middle">Long exact sequence of a pair (K, L)</text>
+  <!-- LES boxes -->
+  <rect x="10"  y="40" width="60" height="30" rx="4" fill="#e0f2fe" stroke="#1e40af" stroke-width="1.5"/>
+  <text x="40"  y="59" font-size="10" fill="#1e40af" text-anchor="middle">Hₙ(L)</text>
+  <line x1="70" y1="55" x2="90" y2="55" stroke="#64748b" stroke-width="1.5"/>
+  <polygon points="88,50 98,55 88,60" fill="#64748b"/>
+  <text x="80"  y="47" font-size="9" fill="#64748b" text-anchor="middle">i*</text>
+  <rect x="98"  y="40" width="60" height="30" rx="4" fill="#e0f2fe" stroke="#1e40af" stroke-width="1.5"/>
+  <text x="128" y="59" font-size="10" fill="#1e40af" text-anchor="middle">Hₙ(K)</text>
+  <line x1="158" y1="55" x2="178" y2="55" stroke="#64748b" stroke-width="1.5"/>
+  <polygon points="176,50 186,55 176,60" fill="#64748b"/>
+  <text x="168"  y="47" font-size="9" fill="#64748b" text-anchor="middle">j*</text>
+  <rect x="186"  y="40" width="72" height="30" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="222" y="59" font-size="10" fill="#f97316" text-anchor="middle">Hₙ(K,L)</text>
+  <line x1="258" y1="55" x2="278" y2="55" stroke="#7c3aed" stroke-width="1.5"/>
+  <polygon points="276,50 286,55 276,60" fill="#7c3aed"/>
+  <text x="268"  y="47" font-size="9" fill="#7c3aed" text-anchor="middle">∂*</text>
+  <rect x="286"  y="40" width="72" height="30" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="322" y="59" font-size="10" fill="#7c3aed" text-anchor="middle">Hₙ₋₁(L)</text>
+  <line x1="358" y1="55" x2="378" y2="55" stroke="#64748b" stroke-width="1.5"/>
+  <polygon points="376,50 386,55 376,60" fill="#64748b"/>
+  <text x="368"  y="47" font-size="9" fill="#64748b" text-anchor="middle">i*</text>
+  <text x="400" y="59" font-size="13" fill="#94a3b8" text-anchor="middle">⋯</text>
+  <!-- Exactness note -->
+  <text x="220" y="100" font-size="11" fill="#475569" text-anchor="middle">Exactness: im(each map) = ker(next map)</text>
+  <text x="220" y="118" font-size="10" fill="#94a3b8" text-anchor="middle">The connecting homomorphism ∂* lowers degree by 1 — it links relative and absolute topology</text>
+</svg>
+<figcaption>The long exact sequence of a pair (K, L). The connecting homomorphism ∂* is the key: it extracts a (n−1)-cycle in L from a relative n-cycle in (K,L), linking the three levels of topology.</figcaption>
+</figure></div>
+
 ## Relative Chain Groups
 
 Given a simplicial pair $$(K, L)$$ with $$L \subseteq K$$, the **relative chain group** is the quotient:
@@ -69,6 +103,14 @@ This is the main tool for computing homology of spaces built from simpler pieces
 Extended persistence captures features that would have infinite persistence in the standard setting — particularly useful for manifold-valued data where the "top" class never dies.
 
 <div class="insight-box"><strong>Key Insight:</strong> The Mayer-Vietoris sequence is the algebraic engine behind the Čech nerve theorem: if a cover $$\mathcal{U}$$ of $$X$$ has contractible intersections, the nerve of $$\mathcal{U}$$ is homotopy equivalent to $$X$$. This justifies approximating the topology of point clouds with Vietoris-Rips and Čech complexes.</div>
+
+## Worked Example: Disk Relative to its Boundary
+
+Let $$K$$ be a filled 2-simplex (disk) and $$L = \partial K$$ its boundary circle (three edges + three vertices, no interior). The long exact sequence gives:
+
+$$0 \to H_2(K,L) \to H_1(L) \to H_1(K) \to H_1(K,L) \to H_0(L) \to H_0(K) \to H_0(K,L) \to 0$$
+
+We know $$H_1(K) = 0$$ (disk is contractible), $$H_1(L) = \mathbb{Z}$$ (the boundary circle), $$H_0(L) = H_0(K) = \mathbb{Z}$$ (both connected). Exactness forces $$H_2(K,L) \cong \mathbb{Z}$$ — the relative homology "sees" the disk as a 2-cell filling in the boundary, i.e., a 2-sphere's top half. This is why relative homology is central to computing the homology of CW complexes: each cell contributes exactly one relative class.
 
 ## References
 

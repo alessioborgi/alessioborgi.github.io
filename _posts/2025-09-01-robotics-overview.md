@@ -41,7 +41,51 @@ This **sense-plan-act** cycle repeats continuously at frequencies ranging from 1
 
 Classical robotics treated these as separate, modular blocks with clean interfaces. The learning revolution blurs these boundaries: a neural network that takes raw pixels and outputs joint torques combines all three phases in a single forward pass.
 
+<style>
+@keyframes sense-pulse { 0%,100%{opacity:.4;r:18} 50%{opacity:1;r:22} }
+@keyframes plan-pulse { 0%,100%{opacity:.4;r:18} 50%{opacity:1;r:22} }
+@keyframes act-pulse { 0%,100%{opacity:.4;r:18} 50%{opacity:1;r:22} }
+@keyframes arrow-flash { 0%,100%{opacity:.3} 50%{opacity:1} }
+.sense-circ { animation: sense-pulse 2s ease-in-out infinite; }
+.plan-circ  { animation: plan-pulse  2s ease-in-out infinite 0.67s; }
+.act-circ   { animation: act-pulse   2s ease-in-out infinite 1.33s; }
+.spa-arrow  { animation: arrow-flash 2s ease-in-out infinite; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:auto;">
+  <!-- Sense node -->
+  <circle cx="80" cy="80" r="18" fill="#0d9488" class="sense-circ"/>
+  <text x="80" y="85" text-anchor="middle" fill="white" font-size="11" font-weight="bold">SENSE</text>
+  <!-- Plan node -->
+  <circle cx="240" cy="80" r="18" fill="#7c3aed" class="plan-circ"/>
+  <text x="240" y="85" text-anchor="middle" fill="white" font-size="11" font-weight="bold">PLAN</text>
+  <!-- Act node -->
+  <circle cx="400" cy="80" r="18" fill="#f97316" class="act-circ"/>
+  <text x="400" y="85" text-anchor="middle" fill="white" font-size="11" font-weight="bold">ACT</text>
+  <!-- Forward arrows -->
+  <line x1="100" y1="80" x2="220" y2="80" stroke="#6b7280" stroke-width="2" marker-end="url(#arr)" class="spa-arrow"/>
+  <line x1="260" y1="80" x2="380" y2="80" stroke="#6b7280" stroke-width="2" marker-end="url(#arr)" class="spa-arrow"/>
+  <!-- Feedback arc -->
+  <path d="M 400 62 Q 240 10 80 62" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#arr2)" class="spa-arrow"/>
+  <!-- Labels -->
+  <text x="160" y="72" text-anchor="middle" fill="#374151" font-size="9">observations</text>
+  <text x="320" y="72" text-anchor="middle" fill="#374151" font-size="9">commands</text>
+  <text x="240" y="28" text-anchor="middle" fill="#64748b" font-size="9">world feedback (1 Hz – 1 kHz)</text>
+  <!-- Frequency labels -->
+  <text x="80" y="110" text-anchor="middle" fill="#0d9488" font-size="8">100 Hz–1 kHz</text>
+  <text x="240" y="110" text-anchor="middle" fill="#7c3aed" font-size="8">1–100 Hz</text>
+  <text x="400" y="110" text-anchor="middle" fill="#f97316" font-size="8">100 Hz–1 kHz</text>
+  <defs>
+    <marker id="arr"  markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6b7280"/></marker>
+    <marker id="arr2" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="#64748b"/></marker>
+  </defs>
+</svg>
+<figcaption>The sense-plan-act loop runs at multiple timescales simultaneously. Nodes pulse in phase order — sensing leads, acting trails.</figcaption>
+</figure></div>
+
 ## The Learning Revolution in Robotics
+
+**Intuition first.** Think of classical robotics as writing an instruction manual for every possible situation. If the manual has a gap — an object the engineer never anticipated — the robot stops. Learning-based robotics is more like an apprentice who has watched thousands of tasks and builds an internal model of "what tends to work". Gaps in training become interpolation challenges rather than hard failures.
 
 Before deep learning, robot behaviours were programmed explicitly. A manipulation policy might consist of thousands of hand-crafted rules covering every anticipated scenario. This approach is brittle: the world is too complex and variable for exhaustive enumeration.
 
@@ -65,6 +109,8 @@ Despite rapid progress, several fundamental obstacles remain:
 **Generalisation.** A robot trained to grasp objects on a white table may fail on a cluttered desk. Bridging distribution shift between training and deployment environments requires diverse training data, domain randomisation, and robust representations.
 
 **Sim-to-real gap.** Simulators are imperfect models of the real world. Contact dynamics, friction, and deformable objects are notoriously hard to simulate accurately, causing policies trained in simulation to fail when deployed on real hardware.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The four challenges (safety, sample efficiency, generalisation, sim-to-real gap) are deeply connected. Domain randomisation addresses the sim-to-real gap but worsens sample efficiency. More data improves generalisation but makes safety harder to guarantee. Progress in robot learning is often progress at the intersection of two or more of these challenges simultaneously.</div>
 
 ## Book Structure
 

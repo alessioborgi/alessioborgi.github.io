@@ -55,6 +55,88 @@ Sheaf GNNs do not directly increase expressiveness on the WL hierarchy — they 
 
 **Theorem (informal):** A sheaf GNN with stalk dimension d' and learned restriction maps is at least as expressive as the corresponding standard MPNN with feature dimension d·d'. This follows directly from the fact that sheaf diffusion on a d'-stalk is a special case of message passing with Nd'-dimensional features.
 
+<style>
+@keyframes rotateArrowU {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes rotateArrowV {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+@keyframes fadeInNode {
+  0%   { opacity: 0; transform: scale(0.5); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.svg-arrow-u { animation: rotateArrowU 4s linear infinite; transform-origin: 50% 50%; }
+.svg-arrow-v { animation: rotateArrowV 3s linear infinite; transform-origin: 50% 50%; }
+.svg-node-appear { animation: fadeInNode 0.8s ease-out both; }
+</style>
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%;font-family:sans-serif;">
+  <!-- Left cluster: node u (3-regular) -->
+  <text x="140" y="20" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">Node u — 3-regular neighbourhood</text>
+  <!-- Center node u -->
+  <circle cx="140" cy="130" r="22" fill="#0d9488" class="svg-node-appear" style="animation-delay:0s"/>
+  <text x="140" y="135" text-anchor="middle" font-size="13" fill="white" font-weight="bold">u</text>
+  <!-- Neighbours of u -->
+  <circle cx="70" cy="80" r="16" fill="#6b7280" class="svg-node-appear" style="animation-delay:0.2s"/>
+  <text x="70" y="85" text-anchor="middle" font-size="11" fill="white">n1</text>
+  <circle cx="70" cy="180" r="16" fill="#6b7280" class="svg-node-appear" style="animation-delay:0.4s"/>
+  <text x="70" y="185" text-anchor="middle" font-size="11" fill="white">n2</text>
+  <circle cx="200" cy="80" r="16" fill="#6b7280" class="svg-node-appear" style="animation-delay:0.6s"/>
+  <text x="200" y="85" text-anchor="middle" font-size="11" fill="white">n3</text>
+  <!-- Edges -->
+  <line x1="140" y1="130" x2="82" y2="90" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="140" y1="130" x2="82" y2="170" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="140" y1="130" x2="188" y2="90" stroke="#9ca3af" stroke-width="1.5"/>
+  <!-- Rotating restriction map arrows at u — tight angle spread -->
+  <g class="svg-arrow-u" style="transform-origin:140px 130px;">
+    <line x1="140" y1="130" x2="160" y2="110" stroke="#f97316" stroke-width="2.2" marker-end="url(#arrowU)"/>
+    <line x1="140" y1="130" x2="120" y2="110" stroke="#f97316" stroke-width="2.2" marker-end="url(#arrowU)"/>
+    <line x1="140" y1="130" x2="150" y2="155" stroke="#f97316" stroke-width="2.2" marker-end="url(#arrowU)"/>
+  </g>
+  <text x="140" y="240" text-anchor="middle" font-size="10" fill="#f97316">maps rotate ~30°</text>
+  <!-- Right cluster: node v (3-regular, same WL colour) -->
+  <text x="420" y="20" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">Node v — same WL colour as u</text>
+  <!-- Center node v -->
+  <circle cx="420" cy="130" r="22" fill="#0d9488" class="svg-node-appear" style="animation-delay:0.1s"/>
+  <text x="420" y="135" text-anchor="middle" font-size="13" fill="white" font-weight="bold">v</text>
+  <!-- Neighbours of v -->
+  <circle cx="350" cy="80" r="16" fill="#6b7280" class="svg-node-appear" style="animation-delay:0.3s"/>
+  <text x="350" y="85" text-anchor="middle" font-size="11" fill="white">m1</text>
+  <circle cx="350" cy="180" r="16" fill="#6b7280" class="svg-node-appear" style="animation-delay:0.5s"/>
+  <text x="350" y="185" text-anchor="middle" font-size="11" fill="white">m2</text>
+  <circle cx="480" cy="80" r="16" fill="#6b7280" class="svg-node-appear" style="animation-delay:0.7s"/>
+  <text x="480" y="85" text-anchor="middle" font-size="11" fill="white">m3</text>
+  <!-- Edges -->
+  <line x1="420" y1="130" x2="362" y2="90" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="420" y1="130" x2="362" y2="170" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="420" y1="130" x2="468" y2="90" stroke="#9ca3af" stroke-width="1.5"/>
+  <!-- Rotating restriction map arrows at v — wider angle spread -->
+  <g class="svg-arrow-v" style="transform-origin:420px 130px;">
+    <line x1="420" y1="130" x2="445" y2="105" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#arrowV)"/>
+    <line x1="420" y1="130" x2="395" y2="105" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#arrowV)"/>
+    <line x1="420" y1="130" x2="420" y2="158" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#arrowV)"/>
+  </g>
+  <text x="420" y="240" text-anchor="middle" font-size="10" fill="#7c3aed">maps rotate ~90°</text>
+  <!-- Divider -->
+  <line x1="280" y1="25" x2="280" y2="250" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="280" y="255" text-anchor="middle" font-size="10" fill="#9ca3af">1-WL: same colour ← | → same colour</text>
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arrowU" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f97316"/>
+    </marker>
+    <marker id="arrowV" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+</svg>
+<figcaption>Two 1-WL-equivalent nodes in a 3-regular graph. Both have identical neighbourhoods in the eyes of any MPNN. But their sheaf restriction maps (animated arrows) encode different local geometries: u's maps span a narrow angle (orange, rotating fast), v's maps span a wide angle (purple, rotating in the opposite direction). A sheaf GNN tracks these different local frames and assigns different representations; any standard GNN assigns the same.</figcaption>
+</figure></div>
+
 ## When Sheaves Go Beyond 1-WL
 
 Consider two nodes u and v that are 1-WL-equivalent: they have identical colour sequences c_u^{(k)} = c_v^{(k)} for all k. Standard MPNNs cannot distinguish them.
@@ -69,6 +151,8 @@ A sheaf GNN with stalk dimension d' can potentially distinguish them if their **
 <div class="insight-box">
 <strong>Caveat:</strong> This only applies when the restriction maps genuinely distinguish u and v. If the sheaf predictor MLP produces identical maps for u and v (because they have identical features and neighbourhood features up to K hops), then the sheaf GNN also cannot distinguish them. The expressiveness gain requires that the learned maps reflect structural differences not captured by 1-WL colours.
 </div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Sheaf expressiveness is <em>orthogonal</em> to the WL hierarchy — it does not give you more WL iterations; it gives you a richer local geometry that WL colours completely ignore. Think of it as adding colour theory to a black-and-white photograph. The photo (WL colour) tells you the shape; the colour (sheaf geometry) tells you something structurally new. Two nodes can share identical WL colours across all K iterations yet live in completely different sheaf environments — different angles between adjacent stalks, different holonomies — and a sheaf GNN will separate them while any MPNN won't.</div>
 
 ## Sheaf Expressiveness Hierarchy
 
@@ -91,6 +175,15 @@ c_v^{(t+1)} = HASH( h_v^{(t)} )  where h_v^{(t)} comes from k-hop sheaf diffusio
 *Proof:* With identity maps, Δ_F = L ⊗ I_{d'}. Sheaf diffusion decomposes into d' independent copies of standard graph diffusion — one per channel. The d' channels don't interact. This is equivalent to running a standard MPNN with d' feature channels independently. □
 
 **Implication:** The expressiveness gain of sheaf GNNs comes entirely from the non-trivial restriction maps — the off-diagonal coupling between feature channels induced by the maps. Without learning non-trivial maps, sheaf GNNs offer no expressiveness advantage over standard MPNNs.
+
+**Concrete identity-map collapse example (d=2):** Consider two nodes u–v connected by a single edge, with d=2 stalks and identity restriction maps F_{u▷e} = F_{v▷e} = I₂. The sheaf Laplacian block for this edge is:
+
+<div class="math-box">
+Δ_F = [ I  −I ] [ I  ] = [ I  −I ]
+       [    ] [−I ]   [−I   I ]
+</div>
+
+This is exactly L_{uv} ⊗ I₂, where L_{uv} is the 2×2 standard graph Laplacian for the edge. Sheaf diffusion gives: h_u ← h_u − (h_u − h_v) = h_v and h_v ← h_v − (h_v − h_u) = h_u — applied independently to channel 1 and channel 2. The two channels never interact. This is exactly two independent GCN-style diffusions running in parallel — no cross-channel information flow, no expressiveness gain over a standard 2-feature MPNN. The sheaf is just a 2-copy of the standard graph.
 
 ## What Sheaf GNNs Cannot Distinguish
 

@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Heterophily Problem Revisited
 
+**Intuition First:** On a heterophilic graph, running GCN is like trying to find your own position on a GPS by averaging all your neighbours' GPS coordinates — if you live at the boundary between two neighbourhoods, you'll always end up placed in the wrong one. The sheaf solution is to give each boundary edge a "flip" map, so that crossing the boundary transforms features rather than blending them. The result is like placing a mirror at each class boundary: you see the reflection of the other side, not a blend.
+
 Recall: in a heterophilic graph, nodes tend to connect to nodes of different classes. GCN's aggregation:
 
 <div class="math-box">
@@ -90,6 +92,22 @@ On standard heterophilic benchmarks (Chameleon, Squirrel, Cornell, Texas):
 | NSD (general) | 76.2% | 61.9% |
 
 NSD with general restriction maps provides the largest improvements on heterophilic benchmarks.
+
+## Worked Example: Two-Class Bipartite Graph
+
+**Setup:** complete bipartite graph K_{2,2} with nodes A₁, A₂ (class 0, features [1,0]) and B₁, B₂ (class 1, features [0,1]). Every edge connects a class-A node to a class-B node.
+
+**Standard GCN (2 layers):**
+- Layer 1: each A node averages its B neighbours → [0,1]; each B node averages its A neighbours → [1,0]
+- Layer 2: each A node (now [0,1]) averages B neighbours (now [1,0]) → [0.5, 0.5]
+- All nodes collapse to [0.5, 0.5] — classification impossible.
+
+**NSD with optimal maps:** set F_{A→e} = I, F_{B→e} = [[0,1],[−1,0]] (90° rotation) for every edge.
+- "Agreement" at edge (A,B): F_{A→e} x_A = x_A = [1,0]; F_{B→e} x_B = [0,1]·rotation → [1,0]. They agree!
+- The global section satisfying all edge conditions is exactly the class-discriminative signal [1,0] for A, [0,1] for B (up to the frame rotation).
+- Diffusion converges to this section — class structure is preserved at equilibrium.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The same mechanism that makes GCN fail on heterophilic graphs (convergence to a fixed point) becomes a feature in NSD — the fixed point is now the class-discriminative signal itself, because the learned sheaf maps rotate "opposite class" features into alignment. GCN converges to the wrong answer; NSD converges to the right one.</div>
 
 ## Why Sheaves Beat Heuristic Fixes
 

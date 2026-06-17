@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## From Sheaves to Connections
 
+**Intuition First:** Imagine each node in the graph is a city with its own local coordinate system — north means something slightly different in New York than in Tokyo because Earth is curved. To compare directions between cities, you need to transport a vector along the path between them, accounting for the curvature. That transport rule is the "connection." In a sheaf with orthogonal maps, the edge maps are exactly this parallel transport — they tell you how to rotate a vector from node u's local frame to node v's local frame. The "curvature" is detected when you go around a cycle and the transported vector has rotated from where you started.
+
 A cellular sheaf with orthogonal restriction maps O_{u→e} ∈ O(d) defines a **principal O(d)-bundle** on the graph — each node has a "local coordinate frame," and the edge maps specify how to transform vectors from u's frame to the edge's frame (and from there to v's frame).
 
 The **holonomy** around a cycle in the graph is the composition of edge maps along the cycle. If the sheaf is flat (holonomy = identity around all cycles), global sections exist and the sheaf is consistent. Non-trivial holonomy indicates global geometric structure — like parallel transport on a curved manifold.
@@ -97,6 +99,8 @@ The mathematical structures are parallel:
 - Sheaf GNNs: equivariant under gauge group O(d) acting locally (different transformation at each node)
 
 Sheaf gauge equivariance is **strictly stronger** than global equivariance — it requires equivariance under independent transformations at each node, not just a single global rotation.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Global equivariance (EGNN, SE(3)-Transformers) means the whole graph is rotated by a single global rotation R. Gauge equivariance (orthogonal sheaf GNNs) is strictly stronger: each node has an independent local rotation, and the model must still produce consistent outputs. A globally equivariant model fails if different parts of the input use inconsistent coordinate frames (e.g., protein residues each reported in their own local backbone frame). A gauge-equivariant sheaf GNN handles this natively.</div>
 
 ## Applications
 

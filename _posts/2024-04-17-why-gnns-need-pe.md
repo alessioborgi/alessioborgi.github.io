@@ -28,6 +28,49 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Why GNNs need positional encodings" caption="Positional encodings as graph structure signals (Dwivedi et al., 2022)" %}
 
 
+## Intuition First
+
+Imagine reading a sentence where all words are presented as an unordered bag — you lose the crucial information about what comes first, second, last. Transformers solve this with sinusoidal positional encodings that inject a unique "address" for each position.
+
+Graphs face the same problem, but harder: there is no canonical position 1, 2, 3 — the graph has no start or end. Two nodes can have the same local neighborhood structure yet be in fundamentally different global positions. Without positional encodings, a GNN is forced to treat them identically.
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:auto">
+  <style>
+    .pe-node { fill:#6366f1; stroke:#fff; stroke-width:2; }
+    .pe-node-hi { fill:#f97316; stroke:#fff; stroke-width:2; }
+    .pe-edge { stroke:#94a3b8; stroke-width:1.8; }
+    .pe-label { font-size:10px; fill:#1e293b; font-family:sans-serif; text-anchor:middle; }
+    .pe-title { font-size:11px; fill:#1e293b; font-family:sans-serif; font-weight:bold; text-anchor:middle; }
+  </style>
+  <text x="115" y="14" class="pe-title">Without PE: B = D (same embedding)</text>
+  <circle cx="40"  cy="70" r="12" class="pe-node"/><text x="40"  cy="70" dy="4" class="pe-label" fill="white">A</text>
+  <circle cx="90"  cy="70" r="12" class="pe-node-hi"/><text x="90"  cy="70" dy="4" class="pe-label" fill="white">B</text>
+  <circle cx="140" cy="70" r="12" class="pe-node"/><text x="140" cy="70" dy="4" class="pe-label" fill="white">C</text>
+  <circle cx="190" cy="70" r="12" class="pe-node-hi"/><text x="190" cy="70" dy="4" class="pe-label" fill="white">D</text>
+  <circle cx="240" cy="70" r="12" class="pe-node"/><text x="240" cy="70" dy="4" class="pe-label" fill="white">E</text>
+  <line x1="52" y1="70" x2="78" y2="70" class="pe-edge"/>
+  <line x1="102" y1="70" x2="128" y2="70" class="pe-edge"/>
+  <line x1="152" y1="70" x2="178" y2="70" class="pe-edge"/>
+  <line x1="202" y1="70" x2="228" y2="70" class="pe-edge"/>
+  <text x="115" y="105" class="pe-label">B and D: both degree-2, same 2-hop tree → same GNN output</text>
+  <text x="115" y="118" class="pe-label">but B is 2nd node from A; D is 4th — different global positions</text>
+  <!-- divider -->
+  <line x1="270" y1="10" x2="270" y2="125" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4"/>
+  <text x="370" y="14" class="pe-title">With PE: B ≠ D (unique identity)</text>
+  <circle cx="290" cy="70" r="12" class="pe-node"/><text x="290" cy="70" dy="4" class="pe-label" fill="white">A</text>
+  <circle cx="335" cy="70" r="12" class="pe-node-hi"/><text x="335" cy="70" dy="4" class="pe-label" fill="white">B</text>
+  <circle cx="380" cy="70" r="12" class="pe-node"/><text x="380" cy="70" dy="4" class="pe-label" fill="white">C</text>
+  <circle cx="425" cy="70" r="12" class="pe-node-hi" style="opacity:0.5"/><text x="425" cy="70" dy="4" class="pe-label" fill="white">D</text>
+  <line x1="302" y1="70" x2="323" y2="70" class="pe-edge"/>
+  <line x1="347" y1="70" x2="368" y2="70" class="pe-edge"/>
+  <line x1="392" y1="70" x2="413" y2="70" class="pe-edge"/>
+  <text x="370" y="105" class="pe-label">Fiedler vector: B gets +0.4, D gets −0.1</text>
+  <text x="370" y="118" class="pe-label">Now the model can distinguish them</text>
+</svg>
+<figcaption>Path graph A–B–C–D–E. B and D have identical local structure (degree 2, same 2-hop tree). Without positional encodings a GNN assigns them the same embedding. Laplacian PE gives each node a unique coordinate in graph space.</figcaption>
+</figure></div>
+
 ## Permutation Equivariance: A Double-Edged Sword
 
 GNNs are designed to be permutation equivariant: the result of processing a graph should not depend on the arbitrary labelling of nodes. If you permute the node indices, the output node embeddings permute accordingly.
@@ -69,6 +112,8 @@ A good graph PE x_pe_v should:
 | **Distance-based** | Distances to other nodes | Random walk landing probabilities |
 
 Positional and structural encodings are complementary — some tasks need absolute position, others need local role information.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Positional and structural encodings answer different questions. "Where is this node in the graph?" (positional — Laplacian eigenvectors) vs "What structural role does this node play?" (structural — RWPE, degree). For molecule property prediction, you usually want structural (is this atom in a ring?). For tracking specific atoms across a simulation, you want positional (which atom is this?). Use both when in doubt — GPS does exactly this.</div>
 
 ## Impact on Graph Transformers
 

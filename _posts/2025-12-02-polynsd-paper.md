@@ -100,6 +100,76 @@ A **Sheaf Neural Network** enriches a graph with a cellular sheaf: each node and
 2. **Dense restriction maps**: one *d × d* matrix per node-edge pair, scaling quadratically with stalk dimension *d*.
 3. **Brittle gradients**: the normalised sheaf Laplacian construction is numerically unstable for large *d*, leading to gradient issues.
 
+<style>
+@keyframes drawCurve {
+  0%   { stroke-dashoffset: 400; opacity:0; }
+  100% { stroke-dashoffset: 0;   opacity:1; }
+}
+@keyframes fadeLabel {
+  0%   { opacity:0; }
+  100% { opacity:1; }
+}
+.cheby-curve { stroke-dasharray:400; animation: drawCurve 1.2s ease-out both; }
+.cheby-label { animation: fadeLabel 0.6s ease-out both; }
+</style>
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 560 240" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%;font-family:sans-serif;">
+  <text x="280" y="16" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">Chebyshev Basis T₀…T₃ and the PolyNSD Weighted Combination</text>
+
+  <!-- Axes for polynomial plot -->
+  <line x1="40" y1="20" x2="40" y2="160" stroke="#94a3b8" stroke-width="1.2"/>
+  <line x1="40" y1="90" x2="310" y2="90" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="315" y="93" font-size="9" fill="#6b7280">x</text>
+  <text x="38" y="18" text-anchor="middle" font-size="9" fill="#6b7280">T</text>
+  <!-- x labels -->
+  <text x="40"  y="170" text-anchor="middle" font-size="8" fill="#6b7280">-1</text>
+  <text x="175" y="170" text-anchor="middle" font-size="8" fill="#6b7280">0</text>
+  <text x="308" y="170" text-anchor="middle" font-size="8" fill="#6b7280">+1</text>
+  <!-- y labels -->
+  <text x="33" y="35"  text-anchor="end" font-size="8" fill="#6b7280">+1</text>
+  <text x="33" y="148" text-anchor="end" font-size="8" fill="#6b7280">-1</text>
+
+  <!-- T0(x) = 1: flat horizontal line -->
+  <line x1="42" y1="90" x2="308" y2="90" stroke="#3b82f6" stroke-width="2" class="cheby-curve" style="animation-delay:0s;stroke-dasharray:280;"/>
+  <text x="312" y="92" font-size="9" fill="#3b82f6" class="cheby-label" style="animation-delay:1.2s">T₀=1</text>
+
+  <!-- T1(x) = x: diagonal -->
+  <line x1="42" y1="148" x2="308" y2="32" stroke="#0d9488" stroke-width="2" class="cheby-curve" style="animation-delay:0.4s;stroke-dasharray:300;"/>
+  <text x="312" y="34" font-size="9" fill="#0d9488" class="cheby-label" style="animation-delay:1.6s">T₁=x</text>
+
+  <!-- T2(x) = 2x²-1: parabola approximated via path -->
+  <path d="M42,32 C100,148 215,148 308,32" stroke="#f59e0b" stroke-width="2" fill="none" class="cheby-curve" style="animation-delay:0.8s;"/>
+  <text x="312" y="55" font-size="9" fill="#f59e0b" class="cheby-label" style="animation-delay:2s">T₂=2x²-1</text>
+
+  <!-- T3(x) = 4x³-3x: cubic approximated via path -->
+  <path d="M42,148 C80,32 120,32 175,90 C230,148 265,148 308,32" stroke="#7c3aed" stroke-width="2" fill="none" class="cheby-curve" style="animation-delay:1.2s;"/>
+  <text x="312" y="76" font-size="9" fill="#7c3aed" class="cheby-label" style="animation-delay:2.4s">T₃=4x³-3x</text>
+
+  <!-- Divider -->
+  <line x1="330" y1="20" x2="330" y2="170" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="445" y="16" text-anchor="middle" font-size="11" fill="#374151" font-weight="bold">PolyNSD Filter h(x) = Σ αₖ Tₖ(x)</text>
+
+  <!-- Axes for combined plot -->
+  <line x1="345" y1="20" x2="345" y2="160" stroke="#94a3b8" stroke-width="1.2"/>
+  <line x1="345" y1="90" x2="555" y2="90" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="558" y="93" font-size="9" fill="#6b7280">x</text>
+  <!-- x labels right plot -->
+  <text x="345" y="170" text-anchor="middle" font-size="8" fill="#6b7280">-1</text>
+  <text x="450" y="170" text-anchor="middle" font-size="8" fill="#6b7280">0</text>
+  <text x="555" y="170" text-anchor="middle" font-size="8" fill="#6b7280">+1</text>
+
+  <!-- Combined filter: example high-pass shape (learned weights, e.g. α=(0.1,-0.4,0.5,0.3)) -->
+  <path d="M347,140 C370,120 400,70 450,45 C490,28 530,50 555,75" stroke="#f97316" stroke-width="2.5" fill="none" class="cheby-curve" style="animation-delay:2s;stroke-dasharray:280;"/>
+  <text x="445" y="178" text-anchor="middle" font-size="9" fill="#f97316" class="cheby-label" style="animation-delay:3.2s">Learned combination (example: high-pass shape)</text>
+
+  <!-- Weight annotation -->
+  <text x="350" y="190" font-size="9" fill="#374151" class="cheby-label" style="animation-delay:3.4s">α₀=0.1  α₁=-0.4  α₂=0.5  α₃=0.3  (example learned weights)</text>
+  <text x="350" y="202" font-size="9" fill="#6b7280" class="cheby-label" style="animation-delay:3.6s">Constrained: Σαₖ=1 (convex mixture → stable training)</text>
+</svg>
+<figcaption>Left: the first four Chebyshev polynomials T₀ (flat, blue), T₁ (linear, teal), T₂ (parabola, amber), T₃ (cubic, purple), each drawn with a CSS animation. Right: the PolyNSD filter is a learned convex combination of these basis polynomials — the orange curve shows an example high-pass shape (emphasising high-frequency, heterophily-relevant components). The coefficients sum to 1 for stability.</figcaption>
+</figure></div>
+
 ## The Main Design Choice
 
 PolyNSD takes the perspective of spectral GNNs seriously: instead of repeatedly applying a fragile diffusion operator layer after layer, it learns a polynomial filter directly on the normalised sheaf Laplacian. That means the network can shape the frequency response explicitly, while keeping the computation sparse and stable.
@@ -133,9 +203,39 @@ The key parameter-reduction insight: **diagonal restriction maps** (a vector of 
 
 This is where the paper becomes especially useful. Many sheaf models implicitly suggest that more expressive geometry requires larger dense restriction maps. PolyNSD shows that this is often the wrong tradeoff. If the spectral filter is doing the right global work, the local maps can stay lightweight and still capture the anisotropic behavior that matters.
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why diagonal maps are sufficient once the polynomial filter is strong:</strong> There is a natural division of labour in PolyNSD. The polynomial filter on the sheaf Laplacian handles <em>global spectral shaping</em> — deciding which frequency components of the graph signal to amplify or suppress across the entire graph. The restriction maps handle <em>local relational structure</em> — encoding how each node's features relate to each adjacent edge. Once the polynomial filter does the global work, the local maps only need to encode directionality and sign, not full rotational geometry. Diagonal maps (a vector of d scalars per node-edge pair) capture directional anisotropy without needing a full d×d matrix. The polynomial handles the global; the diagonal map handles the local. Splitting the task this way reduces parameters from O(d²) to O(d) per edge with negligible accuracy loss.</div>
+
 ## Why Diagonal Maps Are Enough
 
 This is one of the paper's most useful empirical findings. Earlier sheaf models tended to assume that expressive sheaf learning required large dense restriction matrices. PolyNSD shows that this is often unnecessary: once the spectral filter itself is strong enough, diagonal maps can already encode the right anisotropic behaviour while being much cheaper to train and much less numerically delicate.
+
+## Concrete 3-Node Chebyshev Recurrence Example
+
+Consider a path graph A–B–C with d=1 stalks (scalar features) and diagonal restriction maps. Let F_{A→e_AB} = diag(1) = 1, F_{B→e_AB} = diag(−1) = −1 on edge AB, and F_{B→e_BC} = diag(1) = 1, F_{C→e_BC} = diag(1) = 1 on edge BC. Initial node features: x = [x_A, x_B, x_C]ᵀ.
+
+**Step 1 — Build the sheaf Laplacian block.** For a path A–B–C with these maps, the (unnormalised) sheaf Laplacian is:
+
+<div class="math-box">
+Δ_F = [ 1  1  0 ]    (contribution from edge AB: F_{A}ᵀF_{A} − F_{A}ᵀF_{B} = 1·I − 1·(−1) = 2 on diagonal A)
+      [ 1  2  −1]    (B is incident to both edges)
+      [ 0 −1  1 ]    (C is incident to edge BC only)
+</div>
+
+After spectral rescaling to [−1, 1] (dividing by the largest eigenvalue ~3 and shifting), we get the normalised Δ̃_F.
+
+**Step 2 — Chebyshev recurrence with K=2.** The three Chebyshev basis evaluations are:
+
+<div class="math-box">
+T₀(Δ̃_F) x = x = [x_A, x_B, x_C]ᵀ                     (identity — 0-hop, each node only sees itself)
+
+T₁(Δ̃_F) x = Δ̃_F x ≈ [x_A + x_B,  x_A + 2x_B − x_C,  −x_B + x_C]ᵀ   (1-hop — each node sees direct neighbours)
+
+T₂(Δ̃_F) x = 2·Δ̃_F·T₁(Δ̃_F)x − T₀(Δ̃_F)x              (2-hop — each node sees 2-hop neighbourhood)
+</div>
+
+**Step 3 — 3-hop receptive field "for free".** The T₂ term gives node A access to information from node C (2 hops away) in a single PolyNSD layer with K=2. In NSD, reaching C from A requires 2 separate message-passing layers (A→B in layer 1, B→C in layer 2). PolyNSD achieves the same 2-hop receptive field in one layer — because the Chebyshev recurrence computes multi-hop aggregations algebraically without stacking layers. For K=3, node A would see 3 hops with a single filter evaluation. This is the key efficiency gain: K polynomial terms in one layer = K separate NSD layers, but with only one set of learned parameters and one set of map computations.
+
+**Learned weights example.** With K=2, PolyNSD learns weights [α₀, α₁, α₂] (convex mixture summing to 1). For a homophilic graph, the model might learn [0.6, 0.3, 0.1] (low-pass, dominated by T₀). For a heterophilic graph like Cornell, it might learn [0.1, −0.3, 0.6] (high-pass, dominated by T₂ which oscillates — amplifying differences between nodes). This spectral flexibility is what makes PolyNSD work well on both homophilic and heterophilic benchmarks with a single architecture.
 
 ## Results
 

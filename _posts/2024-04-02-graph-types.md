@@ -83,6 +83,8 @@ Edge types: {Author→Paper: wrote, Paper→Venue: published_at, Paper→Paper: 
 <strong>Homogeneous vs Heterogeneous:</strong> Most classical GNN papers (GCN, GAT, GIN, GraphSAGE) assume homogeneous graphs — one node type, one edge type. Real-world graphs are almost never homogeneous. Understanding the type structure of your data is the first step in choosing an appropriate GNN.
 </div>
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight: Choosing the Wrong Graph Type Is Costly.</strong> Treating a directed citation graph as undirected loses the "A cites B but B doesn't cite A" signal — which matters when predicting paper influence. Treating a heterogeneous academic graph (papers, authors, venues) as homogeneous forces the same weight matrix on fundamentally incompatible node types. Always identify your graph type before designing the GNN.</div>
+
 ## Hypergraphs
 
 A **hypergraph** generalises graphs: hyperedges can connect any number of nodes (not just pairs).
@@ -90,6 +92,55 @@ A **hypergraph** generalises graphs: hyperedges can connect any number of nodes 
 **Real examples:** group memberships (a paper can have 5 authors — one hyperedge connecting all 5), co-purchase events, multi-agent interactions.
 
 **GNN implication:** hypergraph neural networks convert hyperedges to bipartite graphs (node–hyperedge–node) and propagate through both.
+
+<style>
+@keyframes directed-flow {
+  0%   { stroke-dashoffset: 24; opacity: 0.4; }
+  100% { stroke-dashoffset: 0;  opacity: 1; }
+}
+.directed-edge { stroke-dasharray: 8 4; animation: directed-flow 1.2s linear infinite; }
+</style>
+
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <defs>
+    <marker id="gt-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#0d9488"/></marker>
+    <marker id="gt-arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#7c3aed"/></marker>
+  </defs>
+  <!-- Undirected panel -->
+  <text x="80"  y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#374151">Undirected (A = Aᵀ)</text>
+  <circle cx="40"  cy="80" r="18" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="40" y="84" text-anchor="middle" font-size="11" fill="#134e4a" font-weight="700">P</text>
+  <circle cx="120" cy="80" r="18" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="120" y="84" text-anchor="middle" font-size="11" fill="#134e4a" font-weight="700">Q</text>
+  <line x1="58" y1="80" x2="102" y2="80" stroke="#0d9488" stroke-width="2.5"/>
+  <text x="80" y="108" text-anchor="middle" font-size="9" fill="#0d9488">mutual bond</text>
+
+  <!-- Directed panel -->
+  <text x="260" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#374151">Directed (A ≠ Aᵀ)</text>
+  <circle cx="210" cy="80" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="210" y="84" text-anchor="middle" font-size="11" fill="#4c1d95" font-weight="700">A</text>
+  <circle cx="310" cy="80" r="18" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="310" y="84" text-anchor="middle" font-size="11" fill="#78350f" font-weight="700">B</text>
+  <!-- A cites B (one direction) -->
+  <line x1="228" y1="74" x2="292" y2="74" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#gt-arr2)" class="directed-edge"/>
+  <text x="260" y="62" text-anchor="middle" font-size="8" fill="#7c3aed">A cites B</text>
+  <text x="260" y="108" text-anchor="middle" font-size="9" fill="#d97706">B does NOT cite A</text>
+
+  <!-- Weighted panel -->
+  <text x="420" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#374151">Weighted</text>
+  <circle cx="380" cy="80" r="18" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="380" y="84" text-anchor="middle" font-size="11" fill="#1e3a5f" font-weight="700">X</text>
+  <circle cx="460" cy="80" r="18" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="460" y="84" text-anchor="middle" font-size="11" fill="#7f1d1d" font-weight="700">Y</text>
+  <line x1="398" y1="80" x2="442" y2="80" stroke="#3b82f6" stroke-width="5" opacity="0.7"/>
+  <text x="420" y="68" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="700">w=0.9</text>
+  <text x="420" y="108" text-anchor="middle" font-size="9" fill="#3b82f6">thick = high weight</text>
+</svg>
+<figcaption>Figure 1: Undirected (symmetric, mutual), directed (asymmetric, citation flows one way), and weighted (edge thickness encodes strength). Each type requires different GNN design choices.</figcaption>
+</figure>
+</div>
 
 ## Dynamic Graphs
 

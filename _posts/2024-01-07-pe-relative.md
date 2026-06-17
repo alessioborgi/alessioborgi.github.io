@@ -141,6 +141,26 @@ score(i, j) = q_i · k_j / √d_k + b(i − j)
 
 This is extremely memory-efficient and generalises gracefully to longer sequences.
 
+## Concrete Worked Example
+
+Suppose we have the sentence: *"I love dogs and cats"* (5 tokens).
+
+With T5-style relative bias and `m` (head slope) = 0.5, the attention score from token 2 ("love") to each other token gets a bias added:
+
+| Attending from "love" (pos 1) | target pos | distance | bias b(dist) |
+|-------------------------------|-----------|----------|-------------|
+| "I"                           | 0         | −1       | b(−1)        |
+| "love"                        | 1         | 0        | b(0) = 0     |
+| "dogs"                        | 2         | +1       | b(+1)        |
+| "and"                         | 3         | +2       | b(+2)        |
+| "cats"                        | 4         | +3       | b(+3)        |
+
+The biases b(−1), b(0), b(+1), … are small learned scalars. Crucially, if this same sentence fragment appeared at positions 50–54 in a longer document, the *exact same bias values* apply — because only the relative distances matter, not the absolute indices.
+
+<div class="insight-box">
+<strong>Why this matters at scale:</strong> a model trained on sequences of 512 tokens using relative PE can still correctly apply the bias b(+1) at positions 1000 and 1001 — it has seen "distance 1" millions of times. An absolute-PE model at position 1000 has seen that index far less often.
+</div>
+
 ## Why Relative PE Generalises Better
 
 Absolute PE puts a token at "position 42" — if training sequences were at most 64 long, the model learned what position 42 means. At position 200? It never saw that index.

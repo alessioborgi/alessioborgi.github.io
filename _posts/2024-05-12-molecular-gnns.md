@@ -46,6 +46,8 @@ The task: predict molecular properties from G. Properties include:
 
 ## From Fingerprints to GNNs
 
+**Intuition First:** Morgan fingerprints work like a census of neighbourhoods. Each atom looks at the atoms within K bonds of it, hashes the whole pattern to a number, and reports that number. The GNN approach instead lets atoms *talk* to their neighbours iteratively — at round 1 atoms share their own identity, at round 2 they share what they heard from round 1, and so on. Unlike the fixed hash, GNN representations are learned end-to-end for the specific task, so they focus on the features that actually predict toxicity (or solubility, or binding), rather than encoding everything uniformly.
+
 **Traditional approach — Morgan fingerprints (ECFP):**
 - Encode each atom's K-hop neighbourhood as a hash
 - Sum over all atoms → fixed-size bit vector
@@ -113,6 +115,49 @@ Equivariant models process 3D positions as vectors, maintaining E(n) or SE(3) eq
 **NequIP:** TFN-style tensor features + message passing. State-of-the-art for force fields with few training points.
 
 **MACE:** many-body interactions. Current SOTA on MD17 molecular dynamics benchmark.
+
+<style>
+@keyframes bar-grow {
+  from { width: 0; }
+  to   { width: var(--bar-w); }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto;">
+  <text x="210" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">HOMO-LUMO Gap Error on QM9 (eV, lower = better)</text>
+  <!-- Axis -->
+  <line x1="165" y1="30" x2="165" y2="185" stroke="#d1d5db" stroke-width="1"/>
+  <line x1="165" y1="185" x2="405" y2="185" stroke="#d1d5db" stroke-width="1"/>
+  <!-- Labels + bars -->
+  <!-- Morgan RF: 0.50 eV → 200px wide (scale: 400px = 0.50 eV) -->
+  <text x="160" y="52"  text-anchor="end" font-size="10" fill="#6b7280">Morgan+RF</text>
+  <rect x="165" y="40"  height="18" width="200" fill="#ef4444" rx="2"><animate attributeName="width" from="0" to="200" dur="0.8s" fill="freeze"/></rect>
+  <text x="370" y="52"  font-size="9" fill="#374151">0.50</text>
+
+  <text x="160" y="82"  text-anchor="end" font-size="10" fill="#6b7280">MPNN (2D)</text>
+  <rect x="165" y="70"  height="18" width="144" fill="#f97316" rx="2"><animate attributeName="width" from="0" to="144" dur="0.9s" fill="freeze"/></rect>
+  <text x="314" y="82"  font-size="9" fill="#374151">0.18</text>
+
+  <text x="160" y="112" text-anchor="end" font-size="10" fill="#6b7280">SchNet</text>
+  <rect x="165" y="100" height="18" width="56"  fill="#f59e0b" rx="2"><animate attributeName="width" from="0" to="56"  dur="1.0s" fill="freeze"/></rect>
+  <text x="226" y="112" font-size="9" fill="#374151">0.07</text>
+
+  <text x="160" y="142" text-anchor="end" font-size="10" fill="#6b7280">DimeNet</text>
+  <rect x="165" y="130" height="18" width="40"  fill="#10b981" rx="2"><animate attributeName="width" from="0" to="40"  dur="1.1s" fill="freeze"/></rect>
+  <text x="210" y="142" font-size="9" fill="#374151">0.05</text>
+
+  <text x="160" y="172" text-anchor="end" font-size="10" fill="#6b7280">NequIP/MACE</text>
+  <rect x="165" y="160" height="18" width="16"  fill="#3b82f6" rx="2"><animate attributeName="width" from="0" to="16"  dur="1.2s" fill="freeze"/></rect>
+  <text x="186" y="172" font-size="9" fill="#374151">0.02</text>
+
+  <!-- Chemical accuracy line -->
+  <line x1="197" y1="30" x2="197" y2="185" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="199" y="28" font-size="9" fill="#8b5cf6">chem. accuracy (0.04 eV)</text>
+</svg>
+<figcaption>HOMO-LUMO gap prediction error by model level. Each step down the geometric hierarchy roughly halves the error.</figcaption>
+</figure>
+</div>
 
 ## Benchmarks
 

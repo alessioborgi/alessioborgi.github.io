@@ -99,6 +99,22 @@ On a graph, `(Lf)[i] = Σⱼ (f[i] - f[j])` for all neighbours j — it measures
 </figure>
 </div>
 
+## Concrete Numerical Example
+
+For the 4-node graph above, let's verify the Laplacian formula entry by entry:
+
+```
+L[1][1] = deg(1) = 3,   L[1][2] = -A[1][2] = -1  (edge exists)
+L[1][3] = -A[1][3] = -1 (edge exists),  L[1][4] = -A[1][4] = -1 (edge exists)
+
+Check the "row sum = 0" property:
+Row 1: 3 + (-1) + (-1) + (-1) = 0  ✓
+```
+
+This zero row-sum is crucial: it means the constant vector **1** = [1,1,1,1] satisfies L·1 = 0 — confirming λ₁ = 0 for connected graphs.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The Laplacian always has at least one zero eigenvalue because the all-ones vector is always in its null space. The <em>number</em> of zero eigenvalues equals the number of connected components — this is how you detect disconnected clusters with pure linear algebra, no search algorithm needed.</div>
+
 ## The Eigendecomposition: Graph Fourier Transform
 
 The Laplacian L is symmetric and positive semi-definite. It can be decomposed as:
@@ -119,6 +135,55 @@ This is exactly analogous to the Fourier transform:
 - **Number of zero eigenvalues = number of connected components.** A graph with 3 disconnected clusters has 3 zero eigenvalues.
 - **λ₂ (the algebraic connectivity or Fiedler value):** close to 0 means the graph is barely connected; large means it's well-connected and hard to cut.
 - **The eigenvector for λ₂ (Fiedler vector)** reveals the best way to partition the graph into two communities — directly usable for spectral clustering.
+
+## Animated Heat Diffusion
+
+<style>
+@keyframes heat-flow {
+  0%   { fill: #ff4040; }
+  50%  { fill: #ffa040; }
+  100% { fill: #ffff60; }
+}
+@keyframes heat-cool {
+  0%   { fill: #60a0ff; }
+  50%  { fill: #80c0ff; }
+  100% { fill: #c0e0ff; }
+}
+.node-hot  { animation: heat-flow 2.2s ease-in-out infinite; }
+.node-cool { animation: heat-cool 2.2s ease-in-out infinite 0.7s; }
+</style>
+
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <text x="240" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Heat diffusion on a graph (df/dt = −Lf): hot node cools, cold node warms</text>
+  <!-- Nodes -->
+  <circle cx="90"  cy="90" r="28" class="node-hot" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="90"  y="86"  text-anchor="middle" font-size="11" fill="#fff" font-weight="700">v₁</text>
+  <text x="90"  y="102" text-anchor="middle" font-size="9"  fill="#fff">hot</text>
+
+  <circle cx="230" cy="90" r="28" fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+  <text x="230" y="86"  text-anchor="middle" font-size="11" fill="#78350f" font-weight="700">v₂</text>
+  <text x="230" y="102" text-anchor="middle" font-size="9"  fill="#78350f">medium</text>
+
+  <circle cx="370" cy="90" r="28" class="node-cool" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="370" y="86"  text-anchor="middle" font-size="11" fill="#fff" font-weight="700">v₃</text>
+  <text x="370" y="102" text-anchor="middle" font-size="9"  fill="#fff">cold</text>
+
+  <!-- Edges with flow arrows -->
+  <defs>
+    <marker id="lhf1" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3z" fill="#dc2626"/></marker>
+    <marker id="lhf2" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3z" fill="#3b82f6"/></marker>
+  </defs>
+  <line x1="118" y1="90" x2="195" y2="90" stroke="#dc2626" stroke-width="3" marker-end="url(#lhf1)" stroke-dasharray="6,3"/>
+  <line x1="258" y1="90" x2="335" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#lhf2)" stroke-dasharray="6,3"/>
+  <text x="157" y="78" text-anchor="middle" font-size="8" fill="#dc2626" font-weight="600">heat flows out</text>
+  <text x="297" y="78" text-anchor="middle" font-size="8" fill="#3b82f6" font-weight="600">heat flows in</text>
+  <text x="240" y="148" text-anchor="middle" font-size="9" fill="#6b7280">Lf at v₁ = large positive (hot, loses heat) · Lf at v₃ = large negative (cold, gains heat)</text>
+</svg>
+<figcaption>Figure 2: Animated heat diffusion governed by df/dt = −Lf. The Laplacian L measures local imbalance — hot nodes (large Lf) lose heat to cooler neighbours; cold nodes gain it. At equilibrium, Lf = 0 everywhere.</figcaption>
+</figure>
+</div>
 
 ## From Laplacian to GCN
 

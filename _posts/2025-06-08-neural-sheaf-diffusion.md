@@ -61,6 +61,76 @@ toc_label: "Contents"
 </div>
 
 
+## NSD Architecture at a Glance
+
+<style>
+@keyframes flow-pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+@keyframes flow-pulse2 {
+  0%, 20%, 100% { opacity: 0.2; }
+  60%, 80% { opacity: 1; }
+}
+@keyframes flow-pulse3 {
+  0%, 40%, 100% { opacity: 0.2; }
+  70%, 90% { opacity: 1; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 110" style="width:100%;max-width:660px;display:block;margin:0 auto;">
+  <!-- boxes -->
+  <rect x="10"  y="30" width="80" height="44" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="115" y="30" width="90" height="44" rx="7" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <rect x="230" y="30" width="80" height="44" rx="7" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="335" y="30" width="70" height="44" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <rect x="430" y="30" width="80" height="44" rx="7" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+  <rect x="535" y="30" width="70" height="44" rx="7" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+  <!-- labels -->
+  <text x="50"  y="48" text-anchor="middle" font-size="9.5" fill="#1e40af" font-weight="bold">Input</text>
+  <text x="50"  y="61" text-anchor="middle" font-size="9.5" fill="#1e40af">Graph G, X₀</text>
+  <text x="160" y="46" text-anchor="middle" font-size="9.5" fill="#5b21b6" font-weight="bold">MLP predicts</text>
+  <text x="160" y="58" text-anchor="middle" font-size="9.5" fill="#5b21b6">F_{u▷e}, F_{v▷e}</text>
+  <text x="270" y="48" text-anchor="middle" font-size="9.5" fill="#92400e" font-weight="bold">Build Δ_F</text>
+  <text x="270" y="61" text-anchor="middle" font-size="9.5" fill="#92400e">(block matrix)</text>
+  <text x="370" y="48" text-anchor="middle" font-size="9.5" fill="#166534" font-weight="bold">Diffuse</text>
+  <text x="370" y="61" text-anchor="middle" font-size="9.5" fill="#166534">(I−Δ_F)HW</text>
+  <text x="470" y="48" text-anchor="middle" font-size="9.5" fill="#9d174d" font-weight="bold">Nonlinearity</text>
+  <text x="470" y="61" text-anchor="middle" font-size="9.5" fill="#9d174d">σ(·)</text>
+  <text x="570" y="48" text-anchor="middle" font-size="9.5" fill="#14532d" font-weight="bold">Output</text>
+  <text x="570" y="61" text-anchor="middle" font-size="9.5" fill="#14532d">H^(K)</text>
+  <!-- animated arrows (dots travelling along path) -->
+  <circle r="4" fill="#3b82f6">
+    <animateMotion dur="2.4s" repeatCount="indefinite" path="M90,52 L115,52"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="4" fill="#7c3aed">
+    <animateMotion dur="2.4s" begin="0.4s" repeatCount="indefinite" path="M205,52 L230,52"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" begin="0.4s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="4" fill="#d97706">
+    <animateMotion dur="2.4s" begin="0.8s" repeatCount="indefinite" path="M310,52 L335,52"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="4" fill="#16a34a">
+    <animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M405,52 L430,52"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="4" fill="#db2777">
+    <animateMotion dur="2.4s" begin="1.6s" repeatCount="indefinite" path="M510,52 L535,52"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+  </circle>
+  <!-- static arrow lines -->
+  <line x1="90"  y1="52" x2="114" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="205" y1="52" x2="229" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="310" y1="52" x2="334" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="405" y1="52" x2="429" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="510" y1="52" x2="534" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="310" y="100" text-anchor="middle" font-size="9" fill="#64748b" font-style="italic">repeated K times per layer</text>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">NSD forward pass: the MLP predicts edge-specific restriction maps, from which Δ_F is assembled, then diffusion and a nonlinearity are applied.</figcaption>
+</figure></div>
+
 ## The Central Idea
 
 Hansen & Gebhart (2020) showed that fixed sheaf maps generalise GCN. The key limitation was: who specifies the maps?
@@ -148,6 +218,58 @@ Proof sketch: Consider edge (u, v) where u and v have different labels. Choose F
 ## Why This Paper Felt New
 
 A lot of heterophily work before NSD still lived in the mindset of "fix message passing with a better architecture." NSD changes the object being learned. The graph is no longer just a support over which messages move. It becomes a space equipped with trainable local linear relations. That is a deeper change than swapping one aggregator for another.
+
+## Worked Example: 2-Node Diffusion Step
+
+To make the mechanics concrete, consider two nodes u and v with stalk dimension d = 2.
+
+**Setup:**
+- Features: h_u = (1, 0)ᵀ, h_v = (0, 1)ᵀ (orthogonal — maximally "different")
+- Restriction maps (diagonal): F_{u▷e} = diag(1, −1), F_{v▷e} = diag(1, 1)
+
+**Step 1 — Coboundary block for edge e = (u, v).** The coboundary maps each node's signal into the edge space:
+
+<div class="math-box">
+δ₀ = [F_{v▷e} | −F_{u▷e}] = [diag(1,1) | −diag(1,−1)]
+   = [[1, 0, −1,  0],
+      [0, 1,  0,  1]]    ∈ ℝ^{2×4}
+</div>
+
+**Step 2 — Sheaf Laplacian Δ_F = δ₀ᵀδ₀ ∈ ℝ^{4×4}.** Stacking the stalk signals as x = (h_u, h_v) = (1, 0, 0, 1)ᵀ:
+
+<div class="math-box">
+Δ_F = δ₀ᵀδ₀ = [[ 1,  0,  −1,   0],
+                [ 0,  1,   0,   1],
+                [−1,  0,   1,   0],
+                [ 0,  1,   0,   1]]
+</div>
+
+(The (1,2) block comes from F_{u▷e}ᵀF_{v▷e} = diag(1,−1)·diag(1,1) = diag(1,−1).)
+
+**Step 3 — Normalised Laplacian.** The degree block for each node is D_u = F_{u▷e}ᵀF_{u▷e} = diag(1,1) = I₂. So D_F = I₄ and Δ_F^{norm} = Δ_F.
+
+**Step 4 — One diffusion step** (I − Δ_F^{norm}) x₀:
+
+<div class="math-box">
+Δ_F x₀ = Δ_F (1, 0, 0, 1)ᵀ
+
+row 1: 1·1 + 0·0 + (−1)·0 + 0·1 =  1
+row 2: 0·1 + 1·0 + 0·0   + 1·1 =  1
+row 3: −1·1 + 0·0 + 1·0  + 0·1 = −1
+row 4: 0·1 + 1·0 + 0·0   + 1·1 =  1
+
+Δ_F x₀ = (1, 1, −1, 1)ᵀ
+
+x₁ = x₀ − Δ_F x₀ = (1,0,0,1)ᵀ − (1,1,−1,1)ᵀ = (0, −1, 1, 0)ᵀ
+</div>
+
+So after one step: h_u^(1) = (0, −1)ᵀ, h_v^(1) = (1, 0)ᵀ.
+
+**What happened?** Check consistency: F_{u▷e} h_u^(1) = diag(1,−1)(0,−1)ᵀ = (0, 1)ᵀ. F_{v▷e} h_v^(1) = diag(1,1)(1, 0)ᵀ = (1, 0)ᵀ. Still not equal — one more step is needed. But notice h_u has moved from (1,0) toward the direction that would satisfy F_{u▷e}h_u = F_{v▷e}h_v: the diffusion is driving the system toward the global section of this sheaf.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The specific choice F_{u▷e} = diag(1,−1) means "consistency" requires h_u's second component to be opposite in sign to h_v's. This is how NSD encodes heterophily: the map itself defines what "compatible" means, and the diffusion enforces that compatibility — not by pushing features to match, but by pushing them to satisfy the map-defined relation.</div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Conceptual Hierarchy:</strong> FAGCN uses scalar restriction maps (a single signed weight a_{uv} ∈ [−1,+1] per edge — 1D maps). NSD uses d×d matrix maps, letting each feature dimension interact with all others across an edge. This makes NSD a strict generalization: scalar maps are the d=1 special case, diagonal maps add per-dimension signs, and full d×d maps encode arbitrary linear relations. The richer the map, the richer the notion of "consistency" the model can represent — and the richer the null space H⁰ it constructs as its diffusion target.</div>
 
 ## Connection to FAGCN and Signed Attention
 

@@ -89,6 +89,60 @@ With base = 10000 (the original RoPE default), frequencies range from 1 (low-fre
 
 High-frequency dimensions complete many rotation cycles within a short context window. Low-frequency dimensions rotate slowly across the full context.
 
+## Visual Intuition: Frequency Saturation
+
+<div class="blog-figure">
+<figure>
+<style>
+@keyframes freq-sweep {
+  0%   { stroke-dashoffset: 400; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes freq-alarm {
+  0%,60%  { fill: #dcfce7; }
+  70%,100%{ fill: #fee2e2; }
+}
+</style>
+<svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <text x="360" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">RoPE frequency dimensions at training length vs 4× extended context</text>
+
+  <!-- Axis lines -->
+  <line x1="50" y1="180" x2="690" y2="180" stroke="#94a3b8" stroke-width="2"/>
+  <line x1="50" y1="40"  x2="50"  y2="180" stroke="#94a3b8" stroke-width="2"/>
+  <text x="370" y="205" text-anchor="middle" font-size="11" fill="#64748b">RoPE dimension index (low freq → high freq)</text>
+  <text x="20"  y="115" text-anchor="middle" font-size="11" fill="#64748b" transform="rotate(-90,20,115)">rotation cycles at context length</text>
+
+  <!-- Training length curve (low values — within budget) -->
+  <path d="M60,175 C150,173 250,165 370,140 S560,90 680,45" fill="none" stroke="#0d9488" stroke-width="3"
+        stroke-dasharray="400" style="animation:freq-sweep 2s ease-out forwards"/>
+  <text x="560" y="80" font-size="11" fill="#0d9488" font-weight="700">original L=2k context</text>
+
+  <!-- 4× extended curve (high-freq dims overflow — shown in red) -->
+  <path d="M60,175 C150,170 250,155 370,120 S490,68 600,35" fill="none" stroke="#ef4444" stroke-width="3"
+        stroke-dasharray="400" style="animation:freq-sweep 2s 0.5s ease-out forwards"/>
+  <!-- overflow zone highlight -->
+  <rect x="490" y="32" width="200" height="148" rx="6" fill="#fee2e2" opacity="0.5" style="animation:freq-alarm 3s 1s ease-in-out infinite"/>
+  <text x="590" y="52" text-anchor="middle" font-size="11" fill="#dc2626" font-weight="700">saturated!</text>
+  <text x="590" y="68" text-anchor="middle" font-size="10" fill="#dc2626">high-freq dims see</text>
+  <text x="590" y="82" text-anchor="middle" font-size="10" fill="#dc2626">too many cycles</text>
+  <text x="460" y="105" font-size="11" fill="#ef4444" font-weight="700">4× extension (no fix)</text>
+
+  <!-- NTK fixed curve -->
+  <path d="M60,175 C150,172 250,163 370,138 S560,88 680,43" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="8 5"/>
+  <text x="560" y="135" font-size="11" fill="#7c3aed" font-weight="700">NTK-scaled (base↑)</text>
+
+  <!-- Legend -->
+  <rect x="60" y="210" width="14" height="4" fill="#0d9488" rx="2"/>
+  <text x="80" y="218" font-size="10" fill="#334155">Training budget (2k)</text>
+  <rect x="230" y="210" width="14" height="4" fill="#ef4444" rx="2"/>
+  <text x="250" y="218" font-size="10" fill="#334155">Naive 4× extension (breaks high-freq)</text>
+  <rect x="490" y="210" width="14" height="4" fill="#7c3aed" rx="2"/>
+  <text x="510" y="218" font-size="10" fill="#334155">NTK scaling (stretches all dims proportionally)</text>
+</svg>
+<figcaption>At 4× context extension without NTK scaling (red), high-frequency RoPE dimensions complete far more cycles than during training — their rotation angles enter unseen regimes (red zone). NTK scaling (purple dashed) raises the base value so all dimensions are stretched proportionally, keeping every dimension within a familiar regime.</figcaption>
+</figure>
+</div>
+
 ## What Breaks at Long Context
 
 When context length exceeds training length, two problems arise:
@@ -132,6 +186,30 @@ This larger base stretches all frequencies proportionally. High-frequency dimens
 | NTK scaling | Preserved | Good | Usually not needed |
 
 Linear interpolation scales positions but keeps frequencies fixed — the high-frequency dimensions see too many cycles per unit position. NTK scaling changes the frequencies to match the new scale.
+
+## Worked Example: Computing the NTK Base
+
+Model: LLaMA-2 7B, trained at L = 4096, head dimension d = 128, original base = 10,000.
+
+**Target: extend to L' = 32,768 (8× extension)**
+
+base_new = 10,000 × (32768 / 4096)^(128 / (128−2))  
+= 10,000 × 8^(128/126)  
+= 10,000 × 8^1.016  
+= 10,000 × 8.36  
+≈ **83,600**
+
+The new base of ~83,600 means every RoPE frequency θᵢ = 1/base^(2i/d) is reduced by a factor of ~8×, spreading cycles proportionally over 8× more tokens.
+
+**For dimension i = 0** (lowest frequency):
+- Original: θ₀ = 1/10,000⁰ = 1.0 (full rotation per token — highest freq)
+- After NTK: θ₀ = 1/83,600⁰ = 1.0 (unchanged — already handles short range fine)
+
+**For dimension i = 63** (highest frequency of the pair, near d/2):
+- Original: θ₆₃ = 1/10,000^(126/128) ≈ 1/7,244 ≈ 0.000138
+- After NTK: θ₆₃ = 1/83,600^(126/128) ≈ 1/60,600 ≈ 0.0000165
+
+The highest-frequency dimension now completes its cycle every ~60,600 tokens instead of ~7,244 — scaled with the 8× target extension.
 
 ## Dynamic NTK Scaling
 

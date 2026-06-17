@@ -29,6 +29,10 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/rl/mnih2016_a3c.png" alt="Temporal difference learning" caption="Temporal difference in asynchronous learning (Mnih et al., 2016)" %}
 
 
+## Intuition First: Bootstrapping as Grade Estimation
+
+Imagine you are midway through a semester and want to estimate your final grade. Monte Carlo says: *wait until you get your final mark at the end of the semester, then use that exact number.* Dynamic programming says: *use the official grade book, which lists every assignment weight exactly.* Temporal Difference says: *estimate your final grade right now from your partial exam scores — update that estimate after each test, without waiting for the semester to end.* The partial estimate introduces a small bias (it is not the real final grade yet) but massively reduces the variance you would suffer from waiting for one noisy end-of-semester signal.
+
 ## The DP–MC–TD Triangle
 
 Three approaches to policy evaluation form a triangle of trade-offs:
@@ -70,6 +74,26 @@ for each episode:
 **Convergence**: for tabular representations and a policy $$\pi$$, TD(0) converges to $$V^\pi$$ almost surely as long as the step-size $$\alpha$$ satisfies the Robbins-Monro conditions: $$\sum_t \alpha_t = \infty$$ and $$\sum_t \alpha_t^2 < \infty$$.
 
 <div class="insight-box"><strong>Key Insight:</strong> The TD error δ_t is the RL analogue of the *prediction error* in neuroscience — dopamine neurons in the brain appear to encode something very similar to δ_t. This connection, noted by Montague, Dayan, and Sejnowski (1996), suggests that temporal difference learning may be biologically implemented in the basal ganglia.</div>
+
+## Worked Example: TD(0) Update by Hand
+
+A 4-state gridworld (S1 → S2 → S3 → Goal). Rewards: 0 everywhere except +1 at Goal. $$\gamma = 0.9$$, $$\alpha = 0.1$$. Initial estimates: $$V = [0, 0, 0, 0]$$.
+
+**Step 1**: Agent in S1, moves to S2, receives r=0.
+$$\delta = 0 + 0.9 \times V(S2) - V(S1) = 0 + 0 - 0 = 0$$
+$$V(S1) \leftarrow 0 + 0.1 \times 0 = 0$$ *(no change yet)*
+
+**Step 2**: Agent in S3, moves to Goal, receives r=+1.
+$$\delta = 1 + 0.9 \times 0 - 0 = +1.0$$
+$$V(S3) \leftarrow 0 + 0.1 \times 1.0 = \mathbf{0.1}$$
+
+**Step 3**: Agent in S2, moves to S3, receives r=0.
+$$\delta = 0 + 0.9 \times 0.1 - 0 = +0.09$$
+$$V(S2) \leftarrow 0 + 0.1 \times 0.09 = \mathbf{0.009}$$
+
+The reward at Goal is slowly propagating backward — one hop per episode visit. After many episodes the values converge to $$[0.729, 0.81, 0.9, 0]$$ (the true $$\gamma$$-discounted values).
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> TD learning propagates reward information one step at a time. Crucially it does this <em>online</em> — updating after every transition rather than waiting for the episode to end. This is why TD is much faster to learn in long episodes than Monte Carlo.</div>
 
 ## n-Step Returns
 

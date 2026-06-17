@@ -241,8 +241,6 @@ layout: default
       <section class="page__content" itemprop="text">
         {{ content }}
 
-        {% include agent-chat.html %}
-
         {% if page.id %}
           {% assign _page_file = page.path | split: '/' | last | remove: '.md' %}
           <div id="ml-blog-next-cta" class="ml-blog-next-cta" hidden></div>

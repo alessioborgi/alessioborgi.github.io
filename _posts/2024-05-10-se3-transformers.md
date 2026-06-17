@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Gap SE(3)-Transformers Fill
 
+**Intuition First:** Spherical harmonics are the "Fourier modes of a sphere." Just as a Fourier series decomposes a 1D signal into frequencies (sin, cos at different rates), spherical harmonics decompose a function on a 3D sphere into angular frequency components. l=0 is the constant component (no angular dependence — a scalar). l=1 is the linear dipole pattern (x, y, z). l=2 is the quadrupole pattern (five components). Higher l captures finer angular detail. SE(3)-Transformers encode the direction from atom i to atom j as spherical harmonics, giving the model access to all angular frequencies up to degree L.
+
 EGNN achieves E(n) equivariance with simple relative-position updates, but only captures first-order geometric information (vectors, l=1). For tasks requiring higher-order geometric features — polarisability tensors (l=2), octupoles (l=3) — or where orientation-specific attention is needed, more sophisticated geometric representations are required.
 
 SE(3)-Transformers use **spherical harmonics** as a basis for geometric features, allowing the model to capture arbitrary-order rotational information while maintaining exact SE(3) equivariance.
@@ -85,6 +87,8 @@ The weighted sum of equivariant values is equivariant. Attention weights α_{ij}
 <strong>The key insight:</strong> Attention weights (scalars) can be computed with any mechanism — they don't need to be equivariant, because scalars are trivially invariant. Values (equivariant vectors/tensors) carry the geometric content. Multiplying a scalar weight by an equivariant value and summing preserves equivariance. This cleanly separates "how much to attend" (invariant) from "what geometric information" (equivariant).
 </div>
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> SE(3)-Transformers separate <em>who to attend to</em> (invariant scalars → attention weights) from <em>what geometric content to aggregate</em> (equivariant spherical harmonic features → values). This clean split is what makes the attention mechanism compatible with SE(3) equivariance. Rotating the whole system rotates the value features but leaves the scalar attention weights unchanged — so attention focuses on the same neighbours, and the aggregated result rotates correctly.</div>
+
 ## Tensor Products and Clebsch-Gordan Coefficients
 
 Combining two irreps of degrees l_1 and l_2 via tensor product produces irreps of degrees |l_1 - l_2|, ..., l_1 + l_2 (triangle rule). The Clebsch-Gordan coefficients C^{l_1 l_2 l}_{m_1 m_2 m} mediate this combination:
@@ -94,6 +98,15 @@ Combining two irreps of degrees l_1 and l_2 via tensor product produces irreps o
 </div>
 
 This is the mathematically correct way to combine geometric features of different degrees — analogous to how matrix multiplication combines vectors in ordinary linear algebra.
+
+## Worked Example: CG Triangle Rule
+
+When combining a vector feature (l=1, dim=3) with a spherical harmonic of degree l_f=1 (dim=3):
+- Possible output degrees: |1−1|=0, 1, 1+1=2
+- So the tensor product produces components at degrees 0 (scalar, dim=1), 1 (vector, dim=3), and 2 (quadrupole, dim=5)
+- The CG coefficients C^{l₁ l₂ l}_{m₁ m₂ m} mix the 3×3=9 input components into these 1+3+5=9 output components
+
+This is exactly the 3D analogue of multiplying two signals: if signal A has frequency f₁ and signal B has frequency f₂, the product contains frequencies |f₁−f₂| through f₁+f₂.
 
 ## Cost of Higher-Order Features
 

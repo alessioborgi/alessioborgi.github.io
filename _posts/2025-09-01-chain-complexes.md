@@ -24,6 +24,42 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> A chain complex is a sequence of vector spaces (or abelian groups) connected by boundary maps ∂ such that ∂∘∂ = 0. Homology groups H_n = ker(∂_n)/im(∂_{n+1}) capture cycles that do not bound — the topological holes. This algebraic structure is the computational core of persistent homology.</div>
 
+**Intuition First.** A chain complex is the algebraic skeleton underneath every topological space. Think of it like a spreadsheet where each row records the simplices of one dimension, and each cell entry records which lower-dimensional faces they share. The boundary map is the "adjacency rule" between rows. Homology then asks: which rows have cycles (closed loops with zero boundary) that aren't already explained by the row above? Those unexplained cycles are the holes.
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;font-family:sans-serif;">
+  <text x="250" y="18" font-size="12" fill="#0d9488" font-weight="bold" text-anchor="middle">Chain complex for a filled triangle [v₀v₁v₂]</text>
+  <!-- C2 box -->
+  <rect x="20" y="35" width="80" height="40" rx="5" fill="#e0f2fe" stroke="#0d9488" stroke-width="1.5"/>
+  <text x="60" y="52" font-size="11" fill="#0d9488" font-weight="bold" text-anchor="middle">C₂</text>
+  <text x="60" y="67" font-size="10" fill="#475569" text-anchor="middle">[v₀v₁v₂]</text>
+  <!-- arrow + ∂₂ label -->
+  <line x1="100" y1="55" x2="130" y2="55" stroke="#7c3aed" stroke-width="2"/>
+  <polygon points="128,50 138,55 128,60" fill="#7c3aed"/>
+  <text x="115" y="47" font-size="10" fill="#7c3aed" text-anchor="middle">∂₂</text>
+  <!-- C1 box -->
+  <rect x="140" y="35" width="120" height="40" rx="5" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="200" y="52" font-size="11" fill="#7c3aed" font-weight="bold" text-anchor="middle">C₁</text>
+  <text x="200" y="67" font-size="10" fill="#475569" text-anchor="middle">e₀₁, e₁₂, e₀₂</text>
+  <!-- arrow + ∂₁ label -->
+  <line x1="260" y1="55" x2="290" y2="55" stroke="#f97316" stroke-width="2"/>
+  <polygon points="288,50 298,55 288,60" fill="#f97316"/>
+  <text x="275" y="47" font-size="10" fill="#f97316" text-anchor="middle">∂₁</text>
+  <!-- C0 box -->
+  <rect x="300" y="35" width="120" height="40" rx="5" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="360" y="52" font-size="11" fill="#f97316" font-weight="bold" text-anchor="middle">C₀</text>
+  <text x="360" y="67" font-size="10" fill="#475569" text-anchor="middle">v₀, v₁, v₂</text>
+  <!-- arrow to 0 -->
+  <line x1="420" y1="55" x2="450" y2="55" stroke="#94a3b8" stroke-width="2"/>
+  <polygon points="448,50 458,55 448,60" fill="#94a3b8"/>
+  <rect x="455" y="44" width="22" height="22" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/>
+  <text x="466" y="59" font-size="12" fill="#94a3b8" text-anchor="middle">0</text>
+  <!-- ∂∘∂=0 annotation -->
+  <text x="250" y="108" font-size="11" fill="#64748b" text-anchor="middle">Fundamental property: ∂₁ ∘ ∂₂ = 0  (boundary of boundary is empty)</text>
+</svg>
+<figcaption>The chain complex for a filled triangle. The boundary map ∂₂ sends the triangle to the sum of its three edges; ∂₁ sends each edge to the sum of its two vertices. Composing gives zero.</figcaption>
+</figure></div>
+
 ## From Simplicial Complexes to Algebra
 
 A simplicial complex gives us a combinatorial description of a space. To compute topology, we translate it into algebra via **chain groups** and **boundary maps**.
@@ -73,6 +109,14 @@ The $$n$$-th **homology group** is:
 Intuitively, $$H_n$$ counts $$n$$-dimensional holes: cycles that are not boundaries. The **Betti number** $$\beta_n = \dim(H_n)$$ is the number of independent holes.
 
 <div class="insight-box"><strong>Key Insight:</strong> Over $$\mathbb{F}_2$$, computing homology reduces to linear algebra over a binary field: boundary maps become binary matrices, and $$H_n$$ is computed by Gaussian elimination. This is exactly what the persistence algorithm does — it applies boundary matrix reduction to a sequence of chain complexes (the filtration).</div>
+
+## Worked Example: Boundary Matrix for a Tetrahedron Boundary
+
+Consider the boundary of a tetrahedron: 4 vertices, 6 edges, 4 triangles, no interior. Over $$\mathbb{F}_2$$ the boundary matrix $$\partial_2$$ is $$6 \times 4$$ (rows = edges, columns = triangles). Each column has exactly three 1s (the three edges of that triangle). Gaussian elimination over $$\mathbb{F}_2$$ reveals:
+- $$\mathrm{rank}(\partial_2) = 3$$, $$\ker(\partial_2)$$ has dimension $$4 - 3 = 1$$.
+- $$\mathrm{rank}(\partial_1) = 3$$, $$\ker(\partial_1)$$ has dimension $$6 - 3 = 3$$.
+
+So $$H_1 = \ker(\partial_1) / \mathrm{im}(\partial_2) = \mathbb{F}_2^3 / \mathbb{F}_2^3 = 0$$ and $$H_2 = \ker(\partial_2) / 0 = \mathbb{F}_2$$. One 2-dimensional void — the hollow interior of the tetrahedron, topologically a 2-sphere ($$S^2$$).
 
 ## Connection to Persistence
 

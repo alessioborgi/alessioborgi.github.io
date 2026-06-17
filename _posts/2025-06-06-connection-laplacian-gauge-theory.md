@@ -30,6 +30,57 @@ toc_label: "Contents"
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_transport.png" alt="Connection Laplacian gauge theory" caption="Connection Laplacian and gauge equivariance in sheaf GNNs (Bodnar et al., 2022)" %}
 
+## Intuition First: Rotations on a Graph
+
+Picture a network of gyroscopes (nodes), each spinning in its own local 2D plane. When two gyroscopes are connected (edge), the connection tells you how to *rotate* one gyroscope's local frame to match the other's. If you carry a vector around a loop of gyroscopes and it comes back rotated (not equal to where you started), the loop has **non-trivial holonomy** — the connection has curvature.
+
+An O(d)-sheaf on a graph is exactly this: restriction maps that are rotations. The Connection Laplacian governs how signals "parallel transport" through the network. Gauge invariance means the physics doesn't change if you re-orient every gyroscope independently.
+
+<style>
+@keyframes rotateStalk {
+  0%,100% { transform: rotate(0deg); transform-origin: 130px 90px; }
+  50%      { transform: rotate(30deg); transform-origin: 130px 90px; }
+}
+@keyframes rotateStalkB {
+  0%,100% { transform: rotate(0deg); transform-origin: 330px 90px; }
+  50%      { transform: rotate(-30deg); transform-origin: 330px 90px; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 185" style="width:100%;max-width:500px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- node u -->
+  <circle cx="130" cy="90" r="32" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="130" y="85" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e40af">u</text>
+  <text x="130" y="100" text-anchor="middle" font-size="9" fill="#3b82f6">O(d) frame</text>
+  <!-- node v -->
+  <circle cx="330" cy="90" r="32" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="330" y="85" text-anchor="middle" font-size="13" font-weight="bold" fill="#166534">v</text>
+  <text x="330" y="100" text-anchor="middle" font-size="9" fill="#16a34a">O(d) frame</text>
+  <!-- edge -->
+  <line x1="162" y1="90" x2="298" y2="90" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="230" y="78" text-anchor="middle" font-size="10" fill="#7c3aed" font-weight="bold">O_uv ∈ O(d)</text>
+  <!-- stalk vector at u (animated) -->
+  <line x1="130" y1="90" x2="155" y2="62" stroke="#3b82f6" stroke-width="2.5" marker-end="url(#bArr)"
+        style="animation:rotateStalk 3s ease-in-out infinite;"/>
+  <text x="162" y="56" font-size="9" fill="#3b82f6">h_u</text>
+  <!-- transported vector at v -->
+  <line x1="330" y1="90" x2="355" y2="62" stroke="#f97316" stroke-width="2.5" marker-end="url(#oArr)"
+        style="animation:rotateStalkB 3s ease-in-out infinite;"/>
+  <text x="360" y="56" font-size="9" fill="#f97316">O_uv h_u</text>
+  <!-- label: parallel transport -->
+  <text x="230" y="118" text-anchor="middle" font-size="9" fill="#374151">parallel transport: h_u →  O_uv h_u  in v's frame</text>
+  <!-- holonomy triangle below -->
+  <text x="230" y="155" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">Holonomy = O_{uv} · O_{vw} · O_{wu}</text>
+  <text x="230" y="170" text-anchor="middle" font-size="9" fill="#6b7280">= I (flat)   or   ≠ I (curved connection)</text>
+  <defs>
+    <marker id="bArr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#3b82f6"/></marker>
+    <marker id="oArr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#f97316"/></marker>
+  </defs>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Two stalks with O(d) restriction maps. The blue vector h_u at node u is animated rotating; O_uv h_u (orange) is its parallel transport into v's frame. The holonomy around any cycle is the composition of these rotation maps — flat means the composition is the identity.</figcaption>
+</figure></div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Gauge invariance is what separates <em>physics</em> from <em>coordinate choices</em>. The eigenvalues of the Connection Laplacian are gauge-invariant — they do not depend on which local frame you use at each node. This is why they are the "right" quantities to compute: two graphs with the same eigenvalues of L_C have the same relational geometry up to local basis changes. Neural networks that process eigenvalues (or eigenvectors modulo gauge) of L_C are respecting this invariance.</div>
 
 ## From General Sheaves to Connections
 

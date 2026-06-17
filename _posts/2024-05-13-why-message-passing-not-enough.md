@@ -31,6 +31,47 @@ toc_label: "Contents"
 
 ## The Fundamental Assumption of Message Passing
 
+**Intuition First:** Standard message passing is like asking every person in a room to shout their opinion, then averaging what you hear. In a room where everyone agrees (homophilic graph), the average is a good summary. But in a room where your neighbours all have opposite political views, the average is a useless mush that says nothing about *your* views. Sheaves give each pair of people a translation device: instead of averaging raw opinions, you first transform what each person says into a common frame of reference — then compare.
+
+<style>
+@keyframes avg-collapse {
+  0%   { opacity:1; }
+  60%  { opacity:0.4; }
+  100% { opacity:1; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto;">
+  <!-- Homophilic -->
+  <text x="95" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">Homophilic</text>
+  <circle cx="95" cy="80" r="20" fill="#3b82f6"/><text x="95" y="85" text-anchor="middle" font-size="10" fill="white">A</text>
+  <circle cx="45" cy="50" r="16" fill="#60a5fa"/><text x="45" y="55" text-anchor="middle" font-size="9" fill="white">B</text>
+  <circle cx="45" cy="110" r="16" fill="#60a5fa"/><text x="45" y="115" text-anchor="middle" font-size="9" fill="white">C</text>
+  <circle cx="145" cy="50" r="16" fill="#60a5fa"/><text x="145" y="55" text-anchor="middle" font-size="9" fill="white">D</text>
+  <circle cx="145" cy="110" r="16" fill="#60a5fa"/><text x="145" y="115" text-anchor="middle" font-size="9" fill="white">E</text>
+  <line x1="75" y1="68" x2="58" y2="58" stroke="#93c5fd" stroke-width="1.5"/>
+  <line x1="75" y1="92" x2="58" y2="103" stroke="#93c5fd" stroke-width="1.5"/>
+  <line x1="115" y1="68" x2="132" y2="58" stroke="#93c5fd" stroke-width="1.5"/>
+  <line x1="115" y1="92" x2="132" y2="103" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="95" y="150" text-anchor="middle" font-size="10" fill="#10b981">avg ≈ meaningful ✓</text>
+  <!-- Heterophilic -->
+  <text x="315" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">Heterophilic</text>
+  <circle cx="315" cy="80" r="20" fill="#3b82f6"/><text x="315" y="85" text-anchor="middle" font-size="10" fill="white">A</text>
+  <circle cx="265" cy="50" r="16" fill="#ef4444"/><text x="265" y="55" text-anchor="middle" font-size="9" fill="white">X</text>
+  <circle cx="265" cy="110" r="16" fill="#f97316"/><text x="265" y="115" text-anchor="middle" font-size="9" fill="white">Y</text>
+  <circle cx="365" cy="50" r="16" fill="#8b5cf6"/><text x="365" y="55" text-anchor="middle" font-size="9" fill="white">Z</text>
+  <circle cx="365" cy="110" r="16" fill="#10b981"/><text x="365" y="115" text-anchor="middle" font-size="9" fill="white">W</text>
+  <line x1="295" y1="68" x2="278" y2="58" stroke="#fca5a5" stroke-width="1.5"/>
+  <line x1="295" y1="92" x2="278" y2="103" stroke="#fca5a5" stroke-width="1.5"/>
+  <line x1="335" y1="68" x2="352" y2="58" stroke="#fca5a5" stroke-width="1.5"/>
+  <line x1="335" y1="92" x2="352" y2="103" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="315" y="150" text-anchor="middle" font-size="10" fill="#ef4444">avg = useless mix ✗</text>
+</svg>
+<figcaption>Left: homophilic graph — all neighbours share the same class (blue), averaging works. Right: heterophilic — node A is surrounded by four different classes; averaging pushes its embedding to an uninformative middle point.</figcaption>
+</figure>
+</div>
+
 Standard message passing (e.g., GCN, GAT) computes something like:
 
 <div class="math-box">
@@ -89,6 +130,8 @@ The edge maps F_{u→v} can be:
 - **Diagonal:** elementwise rescaling — captures which features to emphasise
 - **Orthogonal:** rotation in feature space — preserves norm, changes direction
 - **General (d×d matrix):** full linear transformation — most expressive
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The sheaf edge map F_{u→v} is a learnable linear transformation applied to u's features before they are compared with v's. When two nodes have different class-driven feature directions (heterophily), the model can learn F_{u→v} that rotates u's features into alignment with v's — making the comparison meaningful. Standard message passing is the special case where all edge maps are the identity: neighbours are always compared raw, which is only appropriate when they should be equal.</div>
 
 ## The Mathematical Object: A Cellular Sheaf
 

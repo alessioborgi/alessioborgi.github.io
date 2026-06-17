@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## Recommendation as a Graph Problem
 
+**Intuition First:** Matrix factorisation is like learning that "Alice likes comedies" and "this film is a comedy" and multiplying those two vectors. It captures direct user–item similarity but cannot represent the chain: "Alice liked this film, Bob also liked it, Bob also liked that other film, so Alice might like that other film too." GNNs capture this multi-hop chain by propagating information along the bipartite graph — 2-hop neighbours of Alice (items liked by users who liked Alice's items) are exactly the collaborative filtering signal that matrix factorisation misses.
+
 **Traditional collaborative filtering:** learn user embedding e_u and item embedding e_i; predict score as e_u · e_i. This captures pairwise similarity but not higher-order structure.
 
 **GNN approach:** build a bipartite graph where user u is connected to item i if u interacted with i. Run GNN to produce user/item embeddings that capture multi-hop neighbourhood structure:
@@ -101,6 +103,42 @@ m_{ui} = (W_1 h_i + W_2 (h_i ⊙ h_u)) / √|N(u)||N(i)|
 </div>
 
 The Hadamard product h_i ⊙ h_u captures user-item feature interactions. LightGCN showed this adds overfitting without expressive benefit on standard benchmarks — but for rich feature settings it can help.
+
+<style>
+@keyframes hop-flash {
+  0%,100% { opacity: 0.3; }
+  50%      { opacity: 1.0; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto;">
+  <text x="210" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">2-hop Collaborative Filtering via GNN</text>
+  <!-- Users left column -->
+  <circle cx="60"  cy="70"  r="18" fill="#3b82f6"/><text x="60"  y="74"  text-anchor="middle" font-size="10" fill="white">Alice</text>
+  <circle cx="60"  cy="140" r="18" fill="#3b82f6"/><text x="60"  y="144" text-anchor="middle" font-size="10" fill="white">Bob</text>
+  <!-- Items middle column -->
+  <circle cx="200" cy="55"  r="16" fill="#10b981"/><text x="200" y="59"  text-anchor="middle" font-size="9"  fill="white">Item1</text>
+  <circle cx="200" cy="110" r="16" fill="#10b981"/><text x="200" y="114" text-anchor="middle" font-size="9"  fill="white">Item2</text>
+  <circle cx="200" cy="165" r="16" fill="#10b981"/><text x="200" y="169" text-anchor="middle" font-size="9"  fill="white">Item3</text>
+  <!-- Edges Alice–items -->
+  <line x1="78"  y1="64"  x2="184" y2="58"  stroke="#93c5fd" stroke-width="1.5"/>
+  <line x1="78"  y1="74"  x2="184" y2="108" stroke="#93c5fd" stroke-width="1.5"/>
+  <!-- Edges Bob–items -->
+  <line x1="78"  y1="136" x2="184" y2="112" stroke="#6ee7b7" stroke-width="1.5"/>
+  <line x1="78"  y1="146" x2="184" y2="162" stroke="#6ee7b7" stroke-width="1.5" stroke-dasharray="5 3"><animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/></line>
+  <!-- 2-hop: Alice → Item2 → Bob → Item3 (target) -->
+  <rect x="335" y="148" width="60" height="32" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="365" y="162" text-anchor="middle" font-size="9" fill="#92400e">Item3</text>
+  <text x="365" y="174" text-anchor="middle" font-size="9" fill="#92400e">? for Alice</text>
+  <line x1="216" y1="165" x2="333" y2="164" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 3"><animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/></line>
+  <!-- Labels -->
+  <text x="60"  y="188" text-anchor="middle" font-size="9" fill="#6b7280">1-hop: items Alice liked</text>
+  <text x="365" y="196" text-anchor="middle" font-size="9" fill="#f59e0b">2-hop recommendation</text>
+</svg>
+<figcaption>GNN propagation on the bipartite graph: Alice and Bob both liked Item2 (1-hop). Bob also liked Item3 (2-hop). LightGCN propagates this signal to suggest Item3 for Alice.</figcaption>
+</figure>
+</div>
 
 ## Session-Based Recommendation
 

@@ -31,6 +31,52 @@ toc_label: "Contents"
 
 ## Sensor Modalities
 
+**Intuition first.** No single sensor tells the whole story. A camera sees colour and texture but is blind to depth. LiDAR measures precise distances but captures no colour. An IMU feels every vibration but drifts badly over time. Fusion is not a luxury — it is the only way to build a reliable picture of the world.
+
+<style>
+@keyframes lidar-sweep {
+  0%   { transform: rotate(-80deg); opacity: 0.9; }
+  100% { transform: rotate(80deg);  opacity: 0.9; }
+}
+@keyframes beam-fade { 0%,100%{opacity:.1} 50%{opacity:.7} }
+.lidar-beam { animation: beam-fade 0.4s ease-in-out infinite; }
+.lidar-ray  { transform-origin: 170px 120px; animation: lidar-sweep 2s ease-in-out infinite alternate; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;display:block;margin:auto;">
+  <!-- Ground / obstacles -->
+  <rect x="0" y="155" width="340" height="45" fill="#f3f4f6"/>
+  <rect x="60"  y="110" width="30" height="45" fill="#d1d5db" rx="3"/>
+  <rect x="220" y="95"  width="40" height="60" fill="#d1d5db" rx="3"/>
+  <rect x="130" y="125" width="25" height="30" fill="#d1d5db" rx="3"/>
+  <!-- LiDAR unit -->
+  <circle cx="170" cy="120" r="12" fill="#0d9488"/>
+  <text x="170" y="145" text-anchor="middle" fill="#0d9488" font-size="9">LiDAR</text>
+  <!-- Rotating sweep beam -->
+  <g class="lidar-ray">
+    <line x1="170" y1="120" x2="170" y2="35" stroke="#0d9488" stroke-width="1.5" opacity="0.7"/>
+    <!-- Reflection dots along beam -->
+    <circle cx="170" cy="65"  r="3" fill="#f97316" class="lidar-beam"/>
+    <circle cx="170" cy="80"  r="3" fill="#f97316" class="lidar-beam" style="animation-delay:0.1s"/>
+    <circle cx="170" cy="95"  r="3" fill="#f97316" class="lidar-beam" style="animation-delay:0.2s"/>
+  </g>
+  <!-- FOV arc -->
+  <path d="M 100 120 A 70 70 0 0 1 240 120" fill="none" stroke="#0d9488" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+  <!-- Camera FOV cone -->
+  <polygon points="270,60 310,30 340,60 310,90" fill="#7c3aed" opacity="0.15"/>
+  <rect x="300" y="52" width="20" height="16" rx="2" fill="#7c3aed"/>
+  <text x="310" y="100" text-anchor="middle" fill="#7c3aed" font-size="9">Camera</text>
+  <text x="310" y="110" text-anchor="middle" fill="#7c3aed" font-size="8">FOV ~60°</text>
+  <!-- IMU -->
+  <rect x="10" y="60" width="28" height="22" rx="3" fill="#f59e0b"/>
+  <text x="24" y="73" text-anchor="middle" fill="white" font-size="8" font-weight="bold">IMU</text>
+  <text x="24" y="98" text-anchor="middle" fill="#f59e0b" font-size="8">100–1000 Hz</text>
+  <!-- Labels -->
+  <text x="170" y="18" text-anchor="middle" fill="#374151" font-size="10" font-weight="bold">Multi-Sensor Robot Perception</text>
+</svg>
+<figcaption>LiDAR sweeps across the scene (teal beam, orange return points). The camera covers a narrow forward FOV (purple cone). The IMU (amber box) measures motion at high frequency. Each sensor has complementary strengths.</figcaption>
+</figure></div>
+
 **RGB cameras** are the most widely deployed sensor in robotics. They capture rich texture and color information at low cost. However, they are projective sensors — depth information is lost in the 2D image plane. Stereo cameras recover depth via triangulation but require careful calibration and struggle with textureless regions.
 
 **RGB-D cameras** (e.g., Intel RealSense, Microsoft Kinect) add per-pixel depth using structured light or time-of-flight. They provide a registered color-depth image pair, enabling direct 3D reconstruction at short range (0.2–4 m). At longer ranges or in outdoor bright light, structured light degrades.
@@ -40,6 +86,8 @@ toc_label: "Contents"
 **Inertial Measurement Units (IMUs)** combine accelerometers and gyroscopes to measure linear acceleration and angular velocity at 100–1000 Hz. IMUs are lightweight, cheap, and fast — but suffer from integration drift. A small bias in the accelerometer grows to significant position error after a few seconds of dead-reckoning.
 
 **Force/torque sensors** at the wrist measure contact forces in 6-DOF (3 forces, 3 torques). They are essential for compliant manipulation, assembly tasks, and safe human-robot interaction.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Sensor comparison at a glance — <strong>Camera</strong>: rich colour/texture, cheap, no direct depth; <strong>LiDAR</strong>: precise 3D geometry, 360° FOV, expensive, lighting-robust; <strong>RGB-D</strong>: colour + depth, short range only; <strong>IMU</strong>: 100–1000 Hz motion, lightweight, drifts fast; <strong>Force/torque</strong>: contact quality, essential for assembly but adds weight and cost. Real robots almost always fuse at least two of these modalities.</div>
 
 ## Calibration: Intrinsic and Extrinsic
 
@@ -66,6 +114,10 @@ $$\mathbf{x}_k = \hat{\mathbf{x}}_{k|k-1} + K_k(z_k - h(\hat{\mathbf{x}}_{k|k-1}
 </div>
 
 The IMU provides high-rate predictions (predict step); GPS or visual odometry provides corrections (update step). The complementary filter structure makes the combination robust: IMU covers high-frequency motion, external sensors correct low-frequency drift.
+
+### EKF Fusion Worked Example
+
+Suppose a robot is navigating at 1 m/s. Its IMU provides acceleration measurements at 200 Hz. After 1 second of pure dead-reckoning, a 0.01 m/s² accelerometer bias accumulates to **0.5 cm** position error — acceptable. After 10 seconds: **50 cm**. After 60 seconds: **18 m**. This is why GPS/visual corrections in the EKF update step are not optional; they reset drift before it compounds catastrophically.
 
 ## Point Cloud Processing
 

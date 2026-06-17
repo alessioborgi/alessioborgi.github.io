@@ -25,6 +25,8 @@ toc_label: "Contents"
 .key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
 .key-takeaways ul { margin: 0; padding-left: 1.2rem; }
 .key-takeaways li { margin-bottom: .3rem; font-size: .95rem; }
+.insight-box { background: #fff7ed; border-left: 4px solid #f97316; border-radius: 8px; padding: .95rem 1.1rem; margin: 1.25rem 0; }
+.insight-box strong { color: #9a3412; }
 </style>
 
 <div class="tldr-box">
@@ -127,6 +129,22 @@ After each stage, **patch merging** concatenates 2×2 neighbouring patches and p
 | After Stage 4 | H/32 × W/32 | 768 |
 
 These multi-scale features plug directly into standard detection heads (FPN, DETR) and segmentation decoders — something ViT cannot easily do.
+
+## Complexity Worked Example
+
+Consider a 224×224 image divided into 4×4 patches → 56×56 = 3136 patches.
+
+**ViT global attention:** O(3136²) = ~9.8 million operations per layer.
+
+**Swin with M=7 windows:** Each window has 7×7 = 49 patches. Number of windows = (56/7)² = 64.
+- Per window cost: O(49²) = 2401
+- Total: 64 × 2401 = ~154K operations per layer
+
+That is a **63× reduction** in attention complexity. For 1024×1024 images (dense prediction), the gap grows to ~1000×.
+
+<div class="insight-box">
+<strong>Why this matters for detection:</strong> object detection models need features at multiple scales — small for fine details, large for whole-object context. Swin's hierarchical stages produce exactly those scales as a natural output, while ViT produces only one scale and needs an external FPN to recover them.
+</div>
 
 ## Where Swin Wins
 

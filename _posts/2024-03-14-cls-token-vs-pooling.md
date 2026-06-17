@@ -49,6 +49,80 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/transformers/dosovitskiy2020_vit.png" alt="CLS token in ViT" caption="CLS token for global image representation in ViT (Dosovitskiy et al., 2020)" %}
 
 
+## Intuition First: Two Ways to Summarise a Book
+
+Imagine you have read 196 pages of a book (one page per patch) and must write a one-paragraph summary.
+
+**[CLS] token approach:** You are an editor who, on every page, can ask "wait, what's the key point here for the summary?" — you selectively gather what matters. By the last page your mental summary is refined by selective attention across all chapters.
+
+**Global average pooling:** You photocopy every page and stack them all on top of each other. Every page contributes equal ink. The result is a blurry average — good for capturing the general theme, worse at isolating the crucial scene on page 147.
+
+The [CLS] token is the editor. GAP is the photocopier.
+
+<div class="blog-figure">
+<figure>
+<style>
+@keyframes cls-attend { 0%,100%{r:8} 50%{r:13} }
+@keyframes gap-grey   { 0%,100%{opacity:0.5} 50%{opacity:0.9} }
+</style>
+<svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <!-- CLS panel -->
+  <text x="185" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#0d9488">[CLS] Token — selective attention readout</text>
+  <rect x="20" y="28" width="330" height="150" rx="10" fill="#f0fdfa" stroke="#5eead4" stroke-width="2"/>
+
+  <!-- Patch tokens (circles) with varying attention weight -->
+  <circle cx="70"  cy="80"  r="12" fill="#e2e8f0"/>
+  <circle cx="110" cy="80"  r="12" fill="#e2e8f0"/>
+  <circle cx="150" cy="80"  r="22" fill="#0d9488" opacity="0.85" style="animation:cls-attend 2s 0.1s ease-in-out infinite"/>
+  <circle cx="190" cy="80"  r="12" fill="#e2e8f0"/>
+  <circle cx="230" cy="80"  r="18" fill="#0d9488" opacity="0.7" style="animation:cls-attend 2s 0.5s ease-in-out infinite"/>
+  <circle cx="270" cy="80"  r="12" fill="#e2e8f0"/>
+  <circle cx="310" cy="80"  r="14" fill="#14b8a6" opacity="0.6" style="animation:cls-attend 2s 0.9s ease-in-out infinite"/>
+
+  <!-- CLS token -->
+  <circle cx="185" cy="145" r="18" fill="#f59e0b" stroke="#d97706" stroke-width="2.5"/>
+  <text x="185" y="150" text-anchor="middle" font-size="10" font-weight="700" fill="#78350f">CLS</text>
+
+  <!-- Attention arrows to CLS -->
+  <path d="M150 102 L178 128" stroke="#0d9488" stroke-width="2.5" fill="none" opacity="0.8"/>
+  <path d="M230 98  L190 128" stroke="#0d9488" stroke-width="2"   fill="none" opacity="0.6"/>
+  <path d="M310 94  L200 130" stroke="#14b8a6" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M70  92  L175 128" stroke="#94a3b8" stroke-width="1"   fill="none" opacity="0.3" stroke-dasharray="3 3"/>
+  <path d="M110 92  L178 128" stroke="#94a3b8" stroke-width="1"   fill="none" opacity="0.3" stroke-dasharray="3 3"/>
+
+  <text x="185" y="190" text-anchor="middle" font-size="10" fill="#475569">high-weight patches pull CLS toward object</text>
+
+  <!-- GAP panel -->
+  <text x="540" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">Global Average Pooling — uniform readout</text>
+  <rect x="375" y="28" width="330" height="150" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="2"/>
+
+  <circle cx="425" cy="80" r="12" fill="#7c3aed" opacity="0.5" style="animation:gap-grey 2.2s 0.0s ease-in-out infinite"/>
+  <circle cx="465" cy="80" r="12" fill="#7c3aed" opacity="0.5" style="animation:gap-grey 2.2s 0.1s ease-in-out infinite"/>
+  <circle cx="505" cy="80" r="12" fill="#7c3aed" opacity="0.5" style="animation:gap-grey 2.2s 0.2s ease-in-out infinite"/>
+  <circle cx="545" cy="80" r="12" fill="#7c3aed" opacity="0.5" style="animation:gap-grey 2.2s 0.3s ease-in-out infinite"/>
+  <circle cx="585" cy="80" r="12" fill="#7c3aed" opacity="0.5" style="animation:gap-grey 2.2s 0.4s ease-in-out infinite"/>
+  <circle cx="625" cy="80" r="12" fill="#7c3aed" opacity="0.5" style="animation:gap-grey 2.2s 0.5s ease-in-out infinite"/>
+  <circle cx="665" cy="80" r="12" fill="#7c3aed" opacity="0.5" style="animation:gap-grey 2.2s 0.6s ease-in-out infinite"/>
+
+  <!-- Equal-weight arrows -->
+  <path d="M425 92 L530 128" stroke="#7c3aed" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M465 92 L535 128" stroke="#7c3aed" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M505 92 L538 128" stroke="#7c3aed" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M545 92 L541 128" stroke="#7c3aed" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M585 92 L545 128" stroke="#7c3aed" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M625 92 L548 128" stroke="#7c3aed" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M665 92 L552 128" stroke="#7c3aed" stroke-width="1.5" fill="none" opacity="0.5"/>
+
+  <!-- Mean pool result -->
+  <rect x="510" y="128" width="60" height="30" rx="6" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
+  <text x="540" y="147" text-anchor="middle" font-size="10" font-weight="700" fill="white">mean</text>
+
+  <text x="540" y="190" text-anchor="middle" font-size="10" fill="#475569">equal weight → background dilutes object signal</text>
+</svg>
+<figcaption>Left: the [CLS] token selectively attends to the most discriminative patches (larger circles = higher attention weight), concentrating the image summary on the object. Right: GAP assigns equal weight to every patch — background patches dilute the object signal but gradients flow to every position during training.</figcaption>
+</figure>
+</div>
+
 ## The Problem: From Patches to Image
 
 After L Transformer blocks, you have a sequence of token representations:

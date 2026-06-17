@@ -223,6 +223,91 @@ GPT-3 at 175B parameters is 96 of these blocks, each with d_model=12288, 96 atte
 
 {% include figure image_path="/images/blog/transformers/slides/slide-37-full-model.png" alt="Slide showing the full Transformer built from stacked blocks" caption="The block only matters because it repeats: the full Transformer is embeddings, position information, and a stack of this same unit." %}
 
+## Animated: Information Flow Through One Block
+
+<div class="blog-figure">
+<figure>
+<style>
+@keyframes pulse-ln  { 0%,100%{fill:#dbeafe} 50%{fill:#93c5fd} }
+@keyframes pulse-mha { 0%,100%{fill:#dcfce7} 50%{fill:#4ade80} }
+@keyframes pulse-ffn { 0%,100%{fill:#fef9c3} 50%{fill:#fde047} }
+@keyframes pulse-res { 0%,100%{fill:#fff7ed} 50%{fill:#fed7aa} }
+@keyframes flow-h {
+  0%   { stroke-dashoffset: 60; opacity: 0.3; }
+  50%  { stroke-dashoffset: 0;  opacity: 1; }
+  100% { stroke-dashoffset:-60; opacity: 0.3; }
+}
+</style>
+<svg viewBox="0 0 720 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <defs>
+    <marker id="blk-arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- Step labels -->
+  <text x="60"  y="16" text-anchor="middle" font-size="10" fill="#475569">① LN</text>
+  <text x="185" y="16" text-anchor="middle" font-size="10" fill="#475569">② MHA</text>
+  <text x="320" y="16" text-anchor="middle" font-size="10" fill="#ea580c" font-weight="700">③ + residual</text>
+  <text x="440" y="16" text-anchor="middle" font-size="10" fill="#475569">④ LN</text>
+  <text x="560" y="16" text-anchor="middle" font-size="10" fill="#475569">⑤ FFN</text>
+  <text x="680" y="16" text-anchor="middle" font-size="10" fill="#ea580c" font-weight="700">⑥ + residual</text>
+
+  <!-- Input -->
+  <rect x="10"  y="70" width="46" height="40" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="33"  y="94" text-anchor="middle" font-size="10" fill="#334155">x in</text>
+
+  <!-- LN1 -->
+  <rect x="72"  y="60" width="76" height="60" rx="8" style="animation:pulse-ln 2.5s ease-in-out infinite"/>
+  <text x="110" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">Layer</text>
+  <text x="110" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">Norm</text>
+
+  <!-- MHA -->
+  <rect x="162" y="50" width="96" height="80" rx="8" style="animation:pulse-mha 2.5s 0.4s ease-in-out infinite"/>
+  <text x="210" y="84" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">Multi-Head</text>
+  <text x="210" y="100" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">Attention</text>
+
+  <!-- Residual add 1 -->
+  <circle cx="318" cy="90" r="22" style="animation:pulse-res 2.5s 0.8s ease-in-out infinite" stroke="#ea580c" stroke-width="2"/>
+  <text x="318" y="96" text-anchor="middle" font-size="20" fill="#ea580c">⊕</text>
+
+  <!-- LN2 -->
+  <rect x="352" y="60" width="76" height="60" rx="8" style="animation:pulse-ln 2.5s 1.2s ease-in-out infinite"/>
+  <text x="390" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">Layer</text>
+  <text x="390" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">Norm</text>
+
+  <!-- FFN -->
+  <rect x="442" y="50" width="96" height="80" rx="8" style="animation:pulse-ffn 2.5s 1.6s ease-in-out infinite"/>
+  <text x="490" y="84" text-anchor="middle" font-size="11" font-weight="700" fill="#854d0e">Feed</text>
+  <text x="490" y="100" text-anchor="middle" font-size="11" font-weight="700" fill="#854d0e">Forward</text>
+
+  <!-- Residual add 2 -->
+  <circle cx="598" cy="90" r="22" style="animation:pulse-res 2.5s 2.0s ease-in-out infinite" stroke="#ea580c" stroke-width="2"/>
+  <text x="598" y="96" text-anchor="middle" font-size="20" fill="#ea580c">⊕</text>
+
+  <!-- Output -->
+  <rect x="634" y="70" width="58" height="40" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="663" y="94" text-anchor="middle" font-size="10" fill="#334155">x out</text>
+
+  <!-- Connecting arrows -->
+  <path d="M56 90 L70 90"   stroke="#475569" stroke-width="2" fill="none" marker-end="url(#blk-arr)" stroke-dasharray="5 3" style="animation:flow-h 1.2s linear infinite"/>
+  <path d="M148 90 L160 90" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#blk-arr)" stroke-dasharray="5 3" style="animation:flow-h 1.2s 0.3s linear infinite"/>
+  <path d="M258 90 L294 90" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#blk-arr)" stroke-dasharray="5 3" style="animation:flow-h 1.2s 0.6s linear infinite"/>
+  <path d="M340 90 L350 90" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#blk-arr)" stroke-dasharray="5 3" style="animation:flow-h 1.2s 0.9s linear infinite"/>
+  <path d="M428 90 L440 90" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#blk-arr)" stroke-dasharray="5 3" style="animation:flow-h 1.2s 1.2s linear infinite"/>
+  <path d="M538 90 L574 90" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#blk-arr)" stroke-dasharray="5 3" style="animation:flow-h 1.2s 1.5s linear infinite"/>
+  <path d="M620 90 L632 90" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#blk-arr)" stroke-dasharray="5 3" style="animation:flow-h 1.2s 1.8s linear infinite"/>
+
+  <!-- Skip connections -->
+  <path d="M33 70 Q33 32 318 32 L318 68"  stroke="#ea580c" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+  <path d="M318 112 Q318 148 598 148 L598 112" stroke="#ea580c" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+  <text x="180" y="28" text-anchor="middle" font-size="9" fill="#ea580c">skip 1 (identity)</text>
+  <text x="460" y="165" text-anchor="middle" font-size="9" fill="#ea580c">skip 2 (identity)</text>
+</svg>
+<figcaption>Animated forward pass through one Pre-LN Transformer block. Each component pulses when active. The orange dashed arcs are the residual skip connections — they carry the original signal directly to the addition nodes, ensuring the block only needs to learn a correction, not a full transformation.</figcaption>
+</figure>
+</div>
+
 ## Why This Block Scales So Well
 
 - The **attention** sub-layer mixes information globally across the sequence.

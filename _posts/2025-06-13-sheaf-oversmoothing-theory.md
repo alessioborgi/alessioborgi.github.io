@@ -31,6 +31,101 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_accuracy.png" alt="Sheaf avoids oversmoothing" caption="Sheaf GNNs avoid oversmoothing: non-trivial ker(Δ_F) preserves signal (Bodnar et al., 2022)" %}
 
 
+<style>
+@keyframes gcn-fade {
+  0%   { fill: #1e40af; }
+  40%  { fill: #6b7280; }
+  100% { fill: #9ca3af; }
+}
+@keyframes gcn-fade-orange {
+  0%   { fill: #ea580c; }
+  40%  { fill: #6b7280; }
+  100% { fill: #9ca3af; }
+}
+@keyframes sheaf-pulse {
+  0%,100% { fill: #1e40af; }
+  50%     { fill: #3b82f6; }
+}
+@keyframes sheaf-pulse-orange {
+  0%,100% { fill: #ea580c; }
+  50%     { fill: #f97316; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- Panel labels -->
+  <text x="115" y="18" text-anchor="middle" font-size="13" font-weight="bold" fill="#374151">GCN (oversmoothing)</text>
+  <text x="345" y="18" text-anchor="middle" font-size="13" font-weight="bold" fill="#374151">Sheaf Diffusion</text>
+  <!-- divider -->
+  <line x1="230" y1="22" x2="230" y2="215" stroke="#e5e7eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- GCN panel: 4-node graph, nodes fade to gray -->
+  <!-- edges -->
+  <line x1="80"  y1="80"  x2="150" y2="80"  stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="80"  y1="80"  x2="80"  y2="150" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="150" y1="80"  x2="150" y2="150" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="80"  y1="150" x2="150" y2="150" stroke="#9ca3af" stroke-width="1.5"/>
+  <!-- node A (blue class) -->
+  <circle cx="80"  cy="80"  r="18" stroke="#1e3a8a" stroke-width="2">
+    <animate attributeName="fill" values="#1e40af;#6b7280;#9ca3af" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- node B (orange class) -->
+  <circle cx="150" cy="80"  r="18" stroke="#7c2d12" stroke-width="2">
+    <animate attributeName="fill" values="#ea580c;#6b7280;#9ca3af" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- node C (blue class) -->
+  <circle cx="80"  cy="150" r="18" stroke="#1e3a8a" stroke-width="2">
+    <animate attributeName="fill" values="#1e40af;#6b7280;#9ca3af" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- node D (orange class) -->
+  <circle cx="150" cy="150" r="18" stroke="#7c2d12" stroke-width="2">
+    <animate attributeName="fill" values="#ea580c;#6b7280;#9ca3af" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- label -->
+  <text x="115" y="195" text-anchor="middle" font-size="10" fill="#6b7280">features collapse → gray</text>
+
+  <!-- Sheaf panel: same graph, colors stay vivid -->
+  <!-- edges with "−1" labels on heterophilic edges -->
+  <line x1="310" y1="80"  x2="380" y2="80"  stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="310" y1="80"  x2="310" y2="150" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="380" y1="80"  x2="380" y2="150" stroke="#9ca3af" stroke-width="1.5"/>
+  <line x1="310" y1="150" x2="380" y2="150" stroke="#9ca3af" stroke-width="1.5"/>
+  <!-- −1 labels on cross-class edges -->
+  <text x="345" y="73" text-anchor="middle" font-size="9" fill="#7c3aed">−1</text>
+  <text x="303" y="118" text-anchor="end"   font-size="9" fill="#7c3aed">−1</text>
+  <text x="387" y="118" text-anchor="start" font-size="9" fill="#7c3aed">−1</text>
+  <text x="345" y="165" text-anchor="middle" font-size="9" fill="#7c3aed">−1</text>
+  <!-- node A keeps blue -->
+  <circle cx="310" cy="80"  r="18" stroke="#1e3a8a" stroke-width="2">
+    <animate attributeName="fill" values="#1e40af;#3b82f6;#1e40af" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- node B keeps orange -->
+  <circle cx="380" cy="80"  r="18" stroke="#7c2d12" stroke-width="2">
+    <animate attributeName="fill" values="#ea580c;#f97316;#ea580c" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- node C keeps blue -->
+  <circle cx="310" cy="150" r="18" stroke="#1e3a8a" stroke-width="2">
+    <animate attributeName="fill" values="#1e40af;#3b82f6;#1e40af" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- node D keeps orange -->
+  <circle cx="380" cy="150" r="18" stroke="#7c2d12" stroke-width="2">
+    <animate attributeName="fill" values="#ea580c;#f97316;#ea580c" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="345" y="195" text-anchor="middle" font-size="10" fill="#374151">features stay class-distinct</text>
+</svg>
+<figcaption>GCN (left): node colors — blue (class 0) and orange (class 1) — gradually fade to gray as layers increase, losing all class information. Sheaf diffusion (right): restriction maps (−1 on cross-class edges) keep colors vivid by encoding the antipodal class structure as a global section.</figcaption>
+</figure></div>
+
+## Intuition First: Why Oversmoothing Happens
+
+Think of graph diffusion as heat spreading on a metal plate. Standard GCN is like a plate with uniform thermal conductivity — heat always flows from hot to cold, and eventually the entire plate reaches the same temperature. That uniform temperature is the constant function: the oversmoothing attractor.
+
+Now imagine that some junctions have a *sign flip* — they transmit heat with a phase inversion. A node at 1°C next to a node at -1°C can be "in equilibrium" without both becoming 0°C. The restriction map encodes exactly this: it defines what counts as "equal temperature" at each junction.
+
+**Sheaf diffusion replaces the single boring attractor (constants) with a richer one (global sections) — which can vary across nodes in structured, task-relevant ways.**
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The oversmoothing problem is entirely a null-space problem. GCN's null space is {constants} — dim d for N nodes. NSD's null space is H⁰(G,F) — can be much larger and can encode class-structure. The fix is not adding skip connections (though they help further); the fix is changing the null space itself by learning the restriction maps. Once the null space contains the task-optimal features, convergence to it is desirable, not harmful.</div>
+
 ## The Classical Oversmoothing Result
 
 **Theorem (Li et al., 2018):** Let H^{(0)} = X (initial features). For a k-layer GCN with normalised adjacency Ã = D^{-1/2}ÃD^{-1/2}:
@@ -140,6 +235,41 @@ where λ_gap = λ_{dim H⁰ + 1}(Δ_F^{norm}) is the smallest non-zero eigenvalu
 - Small spectral gap → slow convergence → many layers preserve gradient components
 
 For optimal depth, choose K such that (1 − λ_gap)^K ≈ 0.1 — i.e., K ≈ 2/λ_gap. Graphs with small spectral gap (nearly disconnected) require many more layers.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Deeper Is Better in NSD:</strong> In standard GCN, deeper = worse: each added layer pushes features closer to the constant attractor, erasing class discrimination. In NSD, deeper = better (up to the spectral gap): each added layer pushes features closer to H⁰(G, F) — a task-relevant space that the model has learned to encode class structure in. The "fix" for oversmoothing is not skip connections (though they help further) — it is the null space change. Correct restriction maps make the task-optimal features a global section, so convergence to H⁰ is convergence to the right answer, not away from it.</div>
+
+## Worked Example: 3-Node Sheaf Oversmoothing
+
+**Setup:** path graph u — v — w (two edges: e₁ = (u,v), e₂ = (v,w)). Initial features: x_u = 1, x_v = 0, x_w = 0 (a localised signal at u).
+
+**Standard GCN, 10 layers:** The normalised graph Laplacian of a path P₃ has null space span{(1,1,1)}. After many GCN steps:
+
+```
+(1, 0, 0) → (1/3, 1/3, 1/3)  [uniform constant — all information lost]
+```
+
+This is oversmoothing: x_u = x_v = x_w at convergence. The null space of L is exactly the constants.
+
+**Sheaf with antipodal maps:** Now assign restriction maps:
+- Edge e₁: F_{u▷e₁} = +1, F_{v▷e₁} = −1 (u and v should be opposite)
+- Edge e₂: F_{v▷e₂} = +1, F_{w▷e₂} = +1 (v and w should be equal)
+
+The consistency conditions for ker(Δ_F) are:
+```
+F_{u▷e₁} x_u = F_{v▷e₁} x_v  ⟹  x_u = −x_v
+F_{v▷e₂} x_v = F_{w▷e₂} x_w  ⟹  x_v = x_w
+```
+
+Solving: x_u = −x_v and x_v = x_w. Setting x_v = t: ker(Δ_F) = span{(−1, 1, 1)}.
+
+**After 10 NSD steps from x=(1,0,0):** The signal converges to the projection onto ker(Δ_F):
+
+```
+proj_{ker} (1,0,0) = [(1,0,0)·(−1,1,1) / ||(−1,1,1)||²] (−1,1,1)
+                   = [−1/3] (−1,1,1) = (1/3, −1/3, −1/3)
+```
+
+The attractor is NOT the constant (1/3, 1/3, 1/3) but the antipodal pattern (1/3, −1/3, −1/3). Nodes u and v/w remain distinguishable — sheaf diffusion converges to a non-trivial structured signal, not to uniformity.
 
 ## Skip Connections and Residual Sheaf Diffusion
 

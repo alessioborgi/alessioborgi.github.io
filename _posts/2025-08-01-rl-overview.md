@@ -46,6 +46,8 @@ What distinguishes RL from other machine learning paradigms:
 - **Delayed credit**: a reward at step $$t$$ may result from actions taken many steps earlier.
 - **Non-stationarity**: the agent's own learning changes the data distribution it encounters.
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Think of RL like learning to ride a bike: no one tells you the exact muscle adjustments to make — you just try, fall, and use the pain/balance signal to improve. The reward is delayed (you feel stable only after a sequence of correct micro-adjustments) and the "supervisor" is purely the outcome, not a labelled correction.</div>
+
 ## The RL Pipeline
 
 Every RL system follows the same fundamental loop:
@@ -54,6 +56,31 @@ Every RL system follows the same fundamental loop:
 2. Agent selects action $$a_t \sim \pi(\cdot \mid s_t)$$.
 3. Environment transitions to $$s_{t+1} \sim P(\cdot \mid s_t, a_t)$$ and emits reward $$r_t = R(s_t, a_t, s_{t+1})$$.
 4. Agent updates its policy using the observed transition $$(s_t, a_t, r_t, s_{t+1})$$.
+
+<style>
+@keyframes pulse-agent { 0%,100%{fill:#0d9488;} 50%{fill:#14b8a6;} }
+@keyframes pulse-env { 0%,100%{fill:#7c3aed;} 50%{fill:#8b5cf6;} }
+@keyframes flow-arrow { 0%{stroke-dashoffset:30;} 100%{stroke-dashoffset:0;} }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 520 160" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%;display:block;margin:auto;">
+  <!-- Agent box -->
+  <rect x="20" y="55" width="130" height="50" rx="10" fill="#0d9488" style="animation:pulse-agent 2s ease-in-out infinite;"/>
+  <text x="85" y="84" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Agent π</text>
+  <!-- Environment box -->
+  <rect x="370" y="55" width="130" height="50" rx="10" fill="#7c3aed" style="animation:pulse-env 2s ease-in-out infinite;"/>
+  <text x="435" y="84" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Environment</text>
+  <!-- Action arrow (top) -->
+  <path d="M150 68 Q260 20 370 68" fill="none" stroke="#f97316" stroke-width="2.5" stroke-dasharray="8 4" style="animation:flow-arrow 1.2s linear infinite;"/>
+  <polygon points="370,68 358,62 362,74" fill="#f97316"/>
+  <text x="260" y="28" text-anchor="middle" fill="#f97316" font-size="12" font-weight="bold">action aₜ</text>
+  <!-- State+Reward arrow (bottom) -->
+  <path d="M370 92 Q260 140 150 92" fill="none" stroke="#0ea5e9" stroke-width="2.5" stroke-dasharray="8 4" style="animation:flow-arrow 1.2s linear infinite reverse;"/>
+  <polygon points="150,92 162,86 158,98" fill="#0ea5e9"/>
+  <text x="260" y="148" text-anchor="middle" fill="#0ea5e9" font-size="12" font-weight="bold">state sₜ₊₁ , reward rₜ</text>
+</svg>
+<figcaption>The agent-environment loop: the agent sends actions, the environment returns the next state and a reward signal.</figcaption>
+</figure></div>
 
 This loop is mathematically formalised as a **Markov Decision Process** (MDP), covered in the next post. The Markov property — that $$s_{t+1}$$ depends only on $$(s_t, a_t)$$, not on full history — is the key simplifying assumption.
 
@@ -73,6 +100,52 @@ Modern RL algorithms can be organised along two axes:
 - *Actor-critic*: maintain both a policy (actor) and a value function (critic). Examples: A3C, SAC, PPO with value baseline.
 
 The rough historical progression: tabular Q-learning (1989) → DQN with deep neural networks (2013) → policy gradient methods with trust regions (2015–2017, TRPO/PPO) → off-policy maximum-entropy methods (2018, SAC) → model-based planning (MuZero 2019).
+
+<style>
+@keyframes grow-bar { from { width: 0; } to { width: var(--w); } }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" style="max-width:480px;width:100%;display:block;margin:auto;">
+  <text x="10" y="20" font-size="12" font-weight="bold" fill="#334155">RL Algorithm Timeline</text>
+  <!-- Year axis -->
+  <line x1="10" y1="170" x2="470" y2="170" stroke="#94a3b8" stroke-width="1.5"/>
+  <!-- Bars -->
+  <rect x="20"  y="140" width="30" height="28" rx="4" fill="#0d9488" opacity="0.85"/>
+  <text x="35"  y="138" text-anchor="middle" font-size="9" fill="#0d9488" font-weight="bold">Q-learn</text>
+  <text x="35"  y="185" text-anchor="middle" font-size="9" fill="#64748b">1989</text>
+
+  <rect x="110" y="120" width="30" height="48" rx="4" fill="#0d9488" opacity="0.85"/>
+  <text x="125" y="118" text-anchor="middle" font-size="9" fill="#0d9488" font-weight="bold">DQN</text>
+  <text x="125" y="185" text-anchor="middle" font-size="9" fill="#64748b">2013</text>
+
+  <rect x="195" y="100" width="30" height="68" rx="4" fill="#7c3aed" opacity="0.85"/>
+  <text x="210" y="98" text-anchor="middle" font-size="9" fill="#7c3aed" font-weight="bold">TRPO</text>
+  <text x="210" y="185" text-anchor="middle" font-size="9" fill="#64748b">2015</text>
+
+  <rect x="250" y="90" width="30" height="78" rx="4" fill="#7c3aed" opacity="0.85"/>
+  <text x="265" y="88" text-anchor="middle" font-size="9" fill="#7c3aed" font-weight="bold">PPO</text>
+  <text x="265" y="185" text-anchor="middle" font-size="9" fill="#64748b">2017</text>
+
+  <rect x="315" y="75" width="30" height="93" rx="4" fill="#f97316" opacity="0.85"/>
+  <text x="330" y="73" text-anchor="middle" font-size="9" fill="#f97316" font-weight="bold">SAC</text>
+  <text x="330" y="185" text-anchor="middle" font-size="9" fill="#64748b">2018</text>
+
+  <rect x="390" y="55" width="30" height="113" rx="4" fill="#0ea5e9" opacity="0.85"/>
+  <text x="405" y="53" text-anchor="middle" font-size="9" fill="#0ea5e9" font-weight="bold">MuZero</text>
+  <text x="405" y="185" text-anchor="middle" font-size="9" fill="#64748b">2019</text>
+
+  <!-- Legend -->
+  <rect x="10" y="192" width="10" height="8" fill="#0d9488" rx="2"/>
+  <text x="24" y="200" font-size="9" fill="#334155">Value-Based</text>
+  <rect x="100" y="192" width="10" height="8" fill="#7c3aed" rx="2"/>
+  <text x="114" y="200" font-size="9" fill="#334155">Policy-Gradient</text>
+  <rect x="210" y="192" width="10" height="8" fill="#f97316" rx="2"/>
+  <text x="224" y="200" font-size="9" fill="#334155">Max-Entropy</text>
+  <rect x="300" y="192" width="10" height="8" fill="#0ea5e9" rx="2"/>
+  <text x="314" y="200" font-size="9" fill="#334155">Model-Based</text>
+</svg>
+<figcaption>RL milestone algorithms by year and family. Bar height loosely reflects impact on the field.</figcaption>
+</figure></div>
 
 ## RL vs. Supervised Learning
 

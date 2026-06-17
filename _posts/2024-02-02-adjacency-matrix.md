@@ -120,6 +120,8 @@ A[i][j] = 0    otherwise
 
 ## Key Properties
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Think of the adjacency matrix as a truth table for "are these two nodes friends?" Row i, column j answers: did node i and node j shake hands? For undirected graphs the handshake is mutual, so the table is mirrored across the diagonal.</div>
+
 **Symmetry:** For undirected graphs, A[i][j] = A[j][i] always — the matrix is symmetric. Directed graphs have asymmetric adjacency matrices.
 
 **Degree:** The **degree** of node i is the number of edges it has. It equals the sum of row i in A: `deg(i) = Σⱼ A[i][j]`. The degree matrix D is a diagonal matrix where `D[i][i] = deg(i)`.
@@ -149,6 +151,25 @@ H_new = A · H
 Row i of `A·H` is a sum of feature vectors of all neighbours of node i. This is precisely message passing: aggregate all neighbour features.
 
 Normalising by degree: `D⁻¹ · A · H` gives the **mean** of neighbour features — the basis for many GNN designs.
+
+**Step-by-step worked example.** Consider a 3-node path graph: 1—2—3.
+
+```
+Adjacency matrix A:        Feature matrix H (each node has 1 feature):
+  1  2  3                    node 1: [2]
+1[0  1  0]                   node 2: [4]
+2[1  0  1]                   node 3: [6]
+3[0  1  0]
+
+A · H:
+  row 1 = 0·[2] + 1·[4] + 0·[6] = [4]   ← node 1 collects from node 2
+  row 2 = 1·[2] + 0·[4] + 1·[6] = [8]   ← node 2 collects from nodes 1 and 3
+  row 3 = 0·[2] + 1·[4] + 0·[6] = [4]   ← node 3 collects from node 2
+```
+
+With Ã = A + I (self-loops added), node 2 would collect [2+4+6] = [12] — including its own feature.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Matrix multiplication with A is <em>simultaneously</em> performing neighbourhood aggregation for every node in one shot. This is why GNNs can be implemented so efficiently — the entire graph is processed with a single sparse matrix multiply.</div>
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

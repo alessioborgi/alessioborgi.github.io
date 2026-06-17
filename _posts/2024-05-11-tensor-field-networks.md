@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The TFN Framework
 
+**Intuition First:** Imagine describing wind at a weather station. A scalar (speed) tells you how hard the wind blows — that's an l=0 feature. A vector (velocity arrow) tells you direction too — that's l=1. A tensor (describing how wind shear twists in different planes) is l=2. TFN stores all of these simultaneously at every atom, each transforming correctly under rotation. The Clebsch-Gordan product is the rule for combining two such descriptors — just as combining a dipole and a quadrupole gives terms at degrees 1, 2, and 3.
+
 In TFN, each node i carries a **feature field** — a collection of irreducible representations:
 
 <div class="math-box">
@@ -96,6 +98,8 @@ This unification shows that architectural choices are really choices about which
 - Many-body basis functions via tensor product pooling
 - State-of-the-art on MD17 (molecular dynamics benchmark)
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> You cannot apply ReLU to a vector feature and keep equivariance. ReLU(Rx) ≠ R·ReLU(x) for a rotation R. The two equivariant nonlinearity designs (gate activation and norm nonlinearity) preserve equivariance by applying nonlinearities only to scalars or norms — quantities that are already invariant. Higher-order features are then scaled by these invariant quantities, which keeps their transformation behaviour intact.</div>
+
 ## Equivariant Nonlinearities
 
 Standard MLPs (ReLU, sigmoid) break equivariance when applied to l>0 features — the result is not equivariant. Two equivariant nonlinearity designs:
@@ -115,6 +119,18 @@ f^{(l)} ← f^{(l)} / ||f^{(l)}|| · σ(||f^{(l)}||)
 </div>
 
 Norm is invariant; normalised direction is equivariant. Applying σ to the norm and scaling preserves equivariance.
+
+## Worked Example: Gate Nonlinearity
+
+**Setup:** node i has a scalar channel f^(0) = 2.5 and a vector channel f^(1) = (1, 0, −1).
+
+**Gate activation:**
+- Compute gate: g = σ(W^(0) · f^(0)) = σ(0.8 × 2.5) = σ(2.0) ≈ 0.88
+- Apply to vector: f^(1)_new = f^(1) · g = (0.88, 0, −0.88)
+
+**Equivariance check:** rotate f^(1) by 90° around z-axis first → f^(1)_rot = (0, 1, −1).
+- Gate g depends only on f^(0) (scalar, invariant) → g = 0.88 unchanged
+- f^(1)_new after rotation = (0, 0.88, −0.88) = R · (0.88, 0, −0.88) ✓ equivariance preserved
 
 ## Summary
 

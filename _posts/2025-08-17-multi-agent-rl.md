@@ -29,6 +29,10 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/rl/lowe2017_maddpg.png" alt="Multi-agent RL with MADDPG" caption="MADDPG centralised training with decentralised execution (Lowe et al., 2017)" %}
 
 
+## Intuition First: Why Single-Agent RL Breaks in Multi-Agent Settings
+
+In single-agent RL, the environment is stationary: the same action in the same state always produces the same distribution of outcomes. In a multi-agent game, Agent A's "environment" includes Agent B — but Agent B is also learning and changing. From A's perspective, the world is non-stationary: what worked yesterday against B's old policy may fail today against B's improved policy. This violates the fundamental Markov assumption. The field's solutions — centralised critics, factored value functions, self-play leagues — are all attempts to manage this non-stationarity.
+
 ## The Multi-Agent Setting
 
 In a multi-agent environment, $$N$$ agents simultaneously take actions $$a^1, \ldots, a^N$$ in a shared state $$s$$, receiving rewards $$r^1, \ldots, r^N$$. Depending on the reward structure:
@@ -80,6 +84,48 @@ The mixing network has positive weights (enforced by absolute value activations)
 <div class="math-box">argmax_{a} Q_tot = (argmax_{a^1} Q_1, ..., argmax_{a^N} Q_N)</div>
 
 This factorisation means each agent can greedily maximise its individual utility and the result is globally optimal — dramatically simplifying decentralised execution.
+
+## CTDE Visualised
+
+<style>
+@keyframes ctde-pulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 440 190" xmlns="http://www.w3.org/2000/svg" style="max-width:440px;width:100%;display:block;margin:auto;">
+  <!-- Training phase -->
+  <rect x="5" y="5" width="210" height="180" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="110" y="22" text-anchor="middle" font-size="11" font-weight="bold" fill="#16a34a">TRAINING (centralised)</text>
+  <!-- Centralised critic -->
+  <rect x="30" y="35" width="160" height="45" rx="6" fill="#0d9488"/>
+  <text x="110" y="55" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Centralised Critic</text>
+  <text x="110" y="70" text-anchor="middle" fill="white" font-size="8">Q(o¹,o²,...,oᴺ, a¹,...,aᴺ)</text>
+  <!-- Agents in training -->
+  <rect x="30"  y="100" width="60" height="35" rx="5" fill="#7c3aed" opacity="0.85"/>
+  <text x="60"  y="115" text-anchor="middle" fill="white" font-size="9" font-weight="bold">Agent 1</text>
+  <text x="60"  y="127" text-anchor="middle" fill="white" font-size="7">π(o¹)</text>
+  <rect x="105" y="100" width="60" height="35" rx="5" fill="#7c3aed" opacity="0.85"/>
+  <text x="135" y="115" text-anchor="middle" fill="white" font-size="9" font-weight="bold">Agent N</text>
+  <text x="135" y="127" text-anchor="middle" fill="white" font-size="7">π(oᴺ)</text>
+  <text x="92" y="120" fill="#94a3b8" font-size="14">…</text>
+  <!-- Arrows in training -->
+  <line x1="110" y1="80" x2="70"  y2="98" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4 2" style="animation:ctde-pulse 1.5s ease-in-out infinite;"/>
+  <line x1="110" y1="80" x2="140" y2="98" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4 2" style="animation:ctde-pulse 1.5s ease-in-out infinite 0.5s;"/>
+  <!-- Execution phase -->
+  <rect x="225" y="5" width="210" height="180" rx="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="330" y="22" text-anchor="middle" font-size="11" font-weight="bold" fill="#ca8a04">EXECUTION (decentralised)</text>
+  <!-- No critic -->
+  <rect x="255" y="100" width="60" height="35" rx="5" fill="#7c3aed" opacity="0.85"/>
+  <text x="285" y="115" text-anchor="middle" fill="white" font-size="9" font-weight="bold">Agent 1</text>
+  <text x="285" y="127" text-anchor="middle" fill="white" font-size="7">π(o¹ only)</text>
+  <rect x="340" y="100" width="60" height="35" rx="5" fill="#7c3aed" opacity="0.85"/>
+  <text x="370" y="115" text-anchor="middle" fill="white" font-size="9" font-weight="bold">Agent N</text>
+  <text x="370" y="127" text-anchor="middle" fill="white" font-size="7">π(oᴺ only)</text>
+  <text x="325" y="120" fill="#94a3b8" font-size="14">…</text>
+  <text x="330" y="65" text-anchor="middle" font-size="9" fill="#ca8a04">No centralised critic</text>
+  <text x="330" y="80" text-anchor="middle" font-size="9" fill="#ca8a04">local obs only ✓</text>
+</svg>
+<figcaption>CTDE: during training, a centralised critic has access to all agents' observations and actions. During execution, each agent acts using only its own local observation — enabling deployment in real distributed systems.</figcaption>
+</figure></div>
 
 ## Nash Equilibria in Competitive Settings
 

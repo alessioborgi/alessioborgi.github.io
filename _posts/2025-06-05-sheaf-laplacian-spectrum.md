@@ -47,6 +47,61 @@ toc_label: "Contents"
 
 ## Spectral Properties of Δ_F
 
+<style>
+@keyframes pulse-dot {
+  0%, 100% { r: 5; opacity: 1; }
+  50% { r: 8; opacity: 0.6; }
+}
+@keyframes drift-mid {
+  0% { cx: 220; }
+  50% { cx: 260; }
+  100% { cx: 220; }
+}
+@keyframes drift-hi {
+  0% { cx: 370; }
+  50% { cx: 355; }
+  100% { cx: 370; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 140" style="width:100%;max-width:560px;display:block;margin:0 auto;">
+  <!-- axis line -->
+  <line x1="40" y1="70" x2="460" y2="70" stroke="#64748b" stroke-width="2"/>
+  <!-- axis ticks -->
+  <line x1="40" y1="65" x2="40" y2="75" stroke="#64748b" stroke-width="2"/>
+  <line x1="250" y1="65" x2="250" y2="75" stroke="#64748b" stroke-width="2"/>
+  <line x1="460" y1="65" x2="460" y2="75" stroke="#64748b" stroke-width="2"/>
+  <!-- tick labels -->
+  <text x="40" y="90" text-anchor="middle" font-size="12" fill="#374151">0</text>
+  <text x="250" y="90" text-anchor="middle" font-size="12" fill="#374151">1</text>
+  <text x="460" y="90" text-anchor="middle" font-size="12" fill="#374151">2</text>
+  <!-- low-pass highlight band -->
+  <rect x="40" y="55" width="140" height="30" fill="#0d948820" rx="4"/>
+  <text x="110" y="48" text-anchor="middle" font-size="10" fill="#0d9488" font-weight="bold">low-pass keeps these</text>
+  <!-- region labels -->
+  <text x="40" y="120" text-anchor="middle" font-size="9" fill="#0d9488" font-weight="bold">global sections</text>
+  <text x="40" y="130" text-anchor="middle" font-size="9" fill="#0d9488">(λ = 0)</text>
+  <text x="250" y="120" text-anchor="middle" font-size="9" fill="#64748b">gradient</text>
+  <text x="250" y="130" text-anchor="middle" font-size="9" fill="#64748b">components</text>
+  <text x="460" y="120" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="bold">max frequency</text>
+  <text x="460" y="130" text-anchor="middle" font-size="9" fill="#dc2626">(λ = 2)</text>
+  <!-- eigenvalue dot at 0 (global section) -->
+  <circle cx="40" cy="70" r="6" fill="#0d9488" style="animation: pulse-dot 1.8s ease-in-out infinite;"/>
+  <!-- eigenvalue dot in gradient region (drifting) -->
+  <circle cy="70" r="5" fill="#6366f1" style="animation: pulse-dot 2.1s ease-in-out infinite, drift-mid 3s ease-in-out infinite;">
+    <animate attributeName="cx" values="220;260;220" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <!-- eigenvalue dot near max -->
+  <circle cy="70" r="5" fill="#dc2626" style="animation: pulse-dot 1.6s ease-in-out infinite;">
+    <animate attributeName="cx" values="370;355;370" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <!-- arrow head -->
+  <polygon points="460,67 467,70 460,73" fill="#64748b"/>
+  <text x="470" y="73" font-size="11" fill="#64748b">λ</text>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Eigenvalue spectrum of Δ_F<sup>norm</sup> on [0, 2]. Dots are eigenvalues; the teal band marks the low-pass region kept by (I − Δ_F).</figcaption>
+</figure></div>
+
 The Sheaf Laplacian Δ_F = δ₀ᵀδ₀ is:
 - **Symmetric:** Δ_F = Δ_Fᵀ (since δ₀ᵀδ₀ is always symmetric)
 - **Positive semidefinite:** xᵀΔ_Fx = ||δ₀x||² ≥ 0
@@ -114,6 +169,8 @@ where x_harm ∈ ker(Δ_F) (the harmonic / global-section component) and x_grad 
 
 So diffusion retains the harmonic component and attenuates the gradient component. This is the sheaf analogue of low-pass filtering — but "low" means "in ker(Δ_F)", not "in span{1}".
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The harmonic component — the global sections — is precisely what survives indefinite sheaf diffusion. It is not an arbitrary constant; it is the subspace of signals that are everywhere consistent with the restriction maps. This means the long-time limit of sheaf diffusion is not a trivial collapse to uniform values, but a projection onto a geometrically meaningful subspace that the model itself defines by learning the maps. Designing better restriction maps is equivalent to designing a better target for the diffusion.</div>
+
 <div class="insight-box">
 <strong>This is the practical payoff:</strong> in a vanilla GCN, deep diffusion pushes everything toward constants. In a sheaf model, deep diffusion pushes signals toward whatever the learned restrictions define as globally compatible. That is a much better target when the graph is heterophilic or direction-sensitive.
 </div>
@@ -151,6 +208,59 @@ Different filter profiles:
 - h(λ) = a₀ + a₁λ + a₂λ²: learnable, can be any polynomial profile
 
 Polynomial Neural Sheaf Diffusion (PNSD) learns the coefficients a_k to fit the task, rather than using the fixed low-pass filter (1 − λ).
+
+## Worked Example: 3-Node Triangle
+
+Consider the simplest non-trivial graph: a triangle with nodes {1, 2, 3}, edges {e₁₂, e₂₃, e₁₃}, stalk dimension d = 1, and all restriction maps equal to 1 (the trivial sheaf, which recovers the ordinary graph Laplacian).
+
+**Step 1 — coboundary matrix δ₀ (edges × nodes, with orientation e₁₂: 1→2, e₂₃: 2→3, e₁₃: 1→3):**
+
+<div class="math-box">
+δ₀ = [F_{2▷e₁₂} | −F_{1▷e₁₂} | 0       ]   =   [1  −1   0]
+     [0         | F_{3▷e₂₃} | −F_{2▷e₂₃}]       [0   1  −1]
+     [F_{3▷e₁₃} | 0         | −F_{1▷e₁₃}]       [1   0  −1]
+</div>
+
+**Step 2 — Sheaf Laplacian Δ_F = δ₀ᵀδ₀:**
+
+<div class="math-box">
+Δ_F = δ₀ᵀδ₀ = [ 2  −1  −1]
+               [−1   2  −1]
+               [−1  −1   2]
+</div>
+
+This is exactly the combinatorial graph Laplacian L of the triangle (as expected for the trivial sheaf).
+
+**Step 3 — Eigenvalues.** The characteristic polynomial is det(Δ_F − λI) = 0. One eigenvalue is always λ₁ = 0 (null space = global sections). The remaining two eigenvalues of L for the complete graph K₃ are both λ = 3:
+
+<div class="math-box">
+λ₁ = 0,   λ₂ = 3,   λ₃ = 3
+</div>
+
+**Step 4 — Null space.** The null eigenvector satisfies Δ_F x = 0:
+
+<div class="math-box">
+x* = (1/√3) · (1, 1, 1)ᵀ
+</div>
+
+This is the only global section: the unique (up to scale) assignment of values to nodes that is consistent across all edges (since F_{u▷e} = F_{v▷e} = 1 means consistency = equality).
+
+**Step 5 — One step of normalised diffusion.** The normalised Laplacian is Δ_F^{norm} = D^{−1/2}LD^{1/2} = (1/2)L (since each node has degree 2). Eigenvalues of Δ_F^{norm}: 0, 3/2, 3/2 — within [0, 2] as expected.
+
+Starting from x₀ = (1, 0, 0)ᵀ (all signal at node 1):
+
+<div class="math-box">
+x₁ = (I − Δ_F^{norm}) x₀ = x₀ − (1/2)L x₀
+
+L x₀ = [2·1 + (−1)·0 + (−1)·0,  (−1)·1 + 2·0 + (−1)·0,  (−1)·1 + (−1)·0 + 2·0]ᵀ
+      = (2, −1, −1)ᵀ
+
+x₁ = (1,0,0)ᵀ − (1/2)(2,−1,−1)ᵀ = (0, 0.5, 0.5)ᵀ
+</div>
+
+After one step the signal has moved halfway toward the global section (1/√3)(1,1,1)ᵀ. The harmonic component of x₀ in the direction of x* is (1/√3)(1/√3)(1,1,1)ᵀ = (1/3)(1,1,1)ᵀ. That component is preserved exactly; the gradient component has been partially attenuated.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> For the trivial sheaf (all maps = 1), the Sheaf Laplacian reduces exactly to the graph Laplacian and the global section is the constant vector. As soon as maps are non-trivial, the "global section" changes — it is no longer constants but the space of signals that satisfy all the map-consistency conditions. The eigenvalue structure (and therefore the mixing rate) changes accordingly.</div>
 
 ## Sheaf Cheeger Inequality
 

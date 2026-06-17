@@ -45,6 +45,12 @@ toc_label: "Contents"
 <strong>Trade-off:</strong> learned absolute embeddings are flexible and easy to train, but they tie the model to the position range it has actually seen.
 </div>
 
+## Intuition First: Position as a Word
+
+Think of each position index as a separate "token" in its own mini-vocabulary. Just as a word embedding table has one row per word, a position embedding table has one row per position slot. During training, gradient descent shapes those rows into whatever vectors are most useful for the task.
+
+The result may look nothing like sinusoidal waves — the model is free to encode position however it finds helpful, including non-monotonic patterns.
+
 ## The Simplest Possible Idea
 
 Word embeddings map each token in the vocabulary to a learned vector. Learned PE does exactly the same thing for positions.

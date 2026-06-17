@@ -142,6 +142,29 @@ Now the inputs to softmax live in a reasonable range regardless of d_k. Softmax 
 
 If you only read the attention formula once, the scaling term looks cosmetic. In reality it is a stability device: attention is not just about matching tokens, it is also about keeping those matches in a numerical regime where softmax can still learn.
 
+## Concrete Numerical Example
+
+Suppose d_k = 64 and two vectors q = k = [1/8, 1/8, …, 1/8] (all 64 entries equal 1/8).
+
+**Unscaled dot product:**
+```
+q · k = 64 × (1/8 × 1/8) = 64 × 1/64 = 1.0
+```
+
+Now try q with entries drawn from N(0,1): typical magnitude ≈ √64 = 8.
+
+A score of 8 vs. −8 in a 4-token sequence:
+```
+softmax([8, -8, 2, -1]) ≈ [0.9997, 0.000, 0.003, 0.0001]
+```
+Nearly all weight on one token — a hard argmax. Gradient ≈ 0.
+
+**After scaling by √64 = 8:**
+```
+softmax([1.0, -1.0, 0.25, -0.125]) ≈ [0.47, 0.06, 0.30, 0.17]
+```
+Smooth distribution. Gradient flows to all four tokens.
+
 ## Visualising the Effect
 
 | d_k | Raw std(q·k) | Scaled std | Softmax regime |

@@ -124,9 +124,29 @@ Two reasons:
 {% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention as lookup over Q, K, V" caption="Q and K decide the lookup weights; V provides the content that gets mixed into the output (Vaswani et al., 2017)." %}
 </div>
 
+## Worked Example: The Word "Bank"
+
+Consider the sentence: *"The bank approved the loan."*
+
+During a forward pass, "bank" generates three vectors:
+
+| Vector | Learned to... | Example content |
+|--------|--------------|-----------------|
+| **k** (Key) | Advertise: *I am a financial institution* | high overlap with "finance", "money" keys |
+| **q** (Query) | Ask: *what financial terms are nearby?* | high score against "loan", "approved" keys |
+| **v** (Value) | Contribute: *rich contextual embedding* | full d_model representation with context |
+
+Now "loan" (another token) has a Query asking *"who approved me?"*. Its q scores highly against "bank"'s k. So "loan"'s output mixes in a lot of "bank"'s **v** — gaining knowledge that its approver is a financial institution.
+
+Notice: "bank"'s k just needs to be good at *being found*. Its v can carry far more information. Separating them lets the model optimise these two functions independently.
+
+<div class="insight-box">
+<strong>Why V can differ from K:</strong> the key is like a business card — short, specific, designed to be matched. The value is like a full report — rich, contextual, designed to be informative once you've already found the right source. Forcing them to be the same vector is unnecessarily restrictive.
+</div>
+
 ## The Most Common Beginner Confusion
 
-A lot of people think V is just "K later in the pipeline." It is not. K is optimized to be matched against queries; V is optimized to carry useful information once a match has been found.
+A lot of people think V is just "K later in the pipeline." It is not. K is optimised to be matched against queries; V is optimised to carry useful information once a match has been found.
 
 ## The Full Attention Computation Step by Step
 

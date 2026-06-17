@@ -24,6 +24,71 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> The elder rule says that when a new simplex creates a merge of two connected components, the younger component (the one born later) is killed, not the older one. More generally, the persistence pairing assigns each "negative" simplex (that destroys a class) to the youngest "positive" simplex (that created a class) it can kill. This pairing is unique and well-defined regardless of the reduction algorithm.</div>
 
+## Intuition First
+
+Picture a landscape filling with rising water. Several hilltops emerge as islands (births). When the water level reaches a saddle between two islands, they merge into one. Which island "survives"? The elder rule says: the **older** island (born earlier, i.e., the higher hilltop that appeared first) absorbs the younger one. The younger island's "component" dies at the saddle. This rule uniquely determines all H₀ persistence pairs.
+
+<style>
+@keyframes waterRise {
+  0%   { height: 0px;   y: 140px; opacity: 0.5; }
+  40%  { height: 50px;  y: 90px;  opacity: 0.7; }
+  70%  { height: 80px;  y: 60px;  opacity: 0.8; }
+  100% { height: 100px; y: 40px;  opacity: 0.9; }
+}
+@keyframes islandAppear {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+@keyframes mergeFlash {
+  0%, 60%  { opacity: 0; }
+  70%      { opacity: 1; fill: #f97316; }
+  85%      { opacity: 1; fill: #ef4444; }
+  100%     { opacity: 0; }
+}
+</style>
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0 auto;">
+  <!-- Ground -->
+  <rect x="0" y="140" width="480" height="40" fill="#e2e8f0"/>
+  <!-- Water level animated -->
+  <rect x="0" y="140" width="480" height="0" fill="#bfdbfe" opacity="0.7"
+    style="animation: waterRise 4s ease-in-out infinite alternate;">
+    <animate attributeName="y" values="140;60;60;140" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="height" values="0;80;80;0" dur="4s" repeatCount="indefinite"/>
+  </rect>
+  <!-- Left hill (older, born at t=1) -->
+  <polygon points="80,140 140,60 200,140" fill="#6ee7b7" opacity="0.9"/>
+  <circle cx="140" cy="60" r="6" fill="#0d9488"/>
+  <text x="140" y="52" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d9488">Born t=1</text>
+  <text x="140" y="158" text-anchor="middle" font-size="10" fill="#475569">(older)</text>
+  <!-- Right hill (younger, born at t=2) -->
+  <polygon points="270,140 330,80 390,140" fill="#a5b4fc" opacity="0.9"/>
+  <circle cx="330" cy="80" r="6" fill="#7c3aed"/>
+  <text x="330" y="72" text-anchor="middle" font-size="11" font-weight="bold" fill="#7c3aed">Born t=2</text>
+  <text x="330" y="158" text-anchor="middle" font-size="10" fill="#475569">(younger)</text>
+  <!-- Saddle point -->
+  <circle cx="235" cy="120" r="7" fill="#f97316">
+    <animate attributeName="opacity" values="0;0;1;1;0" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <text x="235" y="112" text-anchor="middle" font-size="10" fill="#f97316">
+    <animate attributeName="opacity" values="0;0;1;1;0" dur="4s" repeatCount="indefinite"/>
+    merge t=3
+  </text>
+  <!-- Arrow from younger to death -->
+  <line x1="330" y1="88" x2="280" y2="118" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,2">
+    <animate attributeName="opacity" values="0;0;1;1;0" dur="4s" repeatCount="indefinite"/>
+  </line>
+  <text x="290" y="107" font-size="10" fill="#ef4444">
+    <animate attributeName="opacity" values="0;0;1;1;0" dur="4s" repeatCount="indefinite"/>
+    dies (elder rule)
+  </text>
+  <text x="240" y="20" font-size="11" fill="#64748b" text-anchor="middle">Elder rule: when two components merge, the younger one dies</text>
+</svg>
+<figcaption style="text-align:center;font-size:.85em;color:#64748b;">The older component (t=1) persists; the younger one (t=2) is absorbed at the merge edge (t=3), giving persistence pair (2, 3).</figcaption>
+</figure></div>
+
 ## Positive and Negative Simplices
 
 In the standard persistence algorithm, each simplex $$\sigma_i$$ added to the filtration is either:
@@ -53,6 +118,21 @@ For any homological dimension $$n$$: when a negative simplex $$\sigma^-$$ kills 
 Formally, after reducing the boundary matrix $$R$$, we get the pairing:
 
 $$\mathrm{pivot}(R_j) = i \implies \sigma_j \text{ is paired with } \sigma_i$$
+
+## Worked Example: Four Vertices
+
+Consider four vertices $$v_1, v_2, v_3, v_4$$ added at times 1, 2, 3, 4, then edges $$e_{12}$$ (merge at 5), $$e_{23}$$ (merge at 6), $$e_{34}$$ (merge at 7).
+
+- $$t=1$$: $$v_1$$ born → component $$C_1$$.
+- $$t=2$$: $$v_2$$ born → component $$C_2$$.
+- $$t=3$$: $$v_3$$ born → component $$C_3$$.
+- $$t=4$$: $$v_4$$ born → component $$C_4$$.
+- $$t=5$$: edge $$e_{12}$$ added → $$C_1$$ (born 1) and $$C_2$$ (born 2) merge. Elder rule: $$C_2$$ dies. Pair: $$(v_2, e_{12}) = (2, 5)$$.
+- $$t=6$$: edge $$e_{23}$$ added → merged $$C_{12}$$ (oldest birth=1) and $$C_3$$ (born 3) merge. Elder rule: $$C_3$$ dies. Pair: $$(v_3, e_{23}) = (3, 6)$$.
+- $$t=7$$: edge $$e_{34}$$ added → merged $$C_{123}$$ (oldest birth=1) and $$C_4$$ (born 4) merge. Elder rule: $$C_4$$ dies. Pair: $$(v_4, e_{34}) = (4, 7)$$.
+- $$v_1$$ remains unpaired → infinite bar $$(1, \infty)$$.
+
+The H₀ persistence diagram has pairs: **(2,5), (3,6), (4,7)** plus one infinite bar. Every software (Ripser, GUDHI) would give exactly this output regardless of column reduction order.
 
 ## Pairing Uniqueness Theorem
 

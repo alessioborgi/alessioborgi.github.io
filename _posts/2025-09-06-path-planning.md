@@ -31,6 +31,72 @@ toc_label: "Contents"
 
 ## The Path Planning Problem
 
+**Intuition first.** Path planning is the robot equivalent of finding your way through a maze. The maze walls are obstacles; the free corridors are C-space free. A* is like exploring the maze with a compass — always trying the passage that points most directly toward the exit. RRT is like randomly throwing a rope into the maze and growing it outward until a strand happens to touch the exit.
+
+<style>
+@keyframes frontier-pulse { 0%,100%{opacity:.3;r:5} 50%{opacity:1;r:7} }
+@keyframes path-draw { from{stroke-dashoffset:300} to{stroke-dashoffset:0} }
+.frontier-cell { animation: frontier-pulse 1.2s ease-in-out infinite; }
+.astar-path    { stroke-dasharray:300; animation: path-draw 2.5s ease forwards; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;display:block;margin:auto;">
+  <!-- Grid 8×7, each cell 32px -->
+  <!-- Obstacles (dark) -->
+  <rect x="64"  y="32"  width="32" height="32" fill="#374151" rx="2"/>
+  <rect x="64"  y="64"  width="32" height="32" fill="#374151" rx="2"/>
+  <rect x="64"  y="96"  width="32" height="32" fill="#374151" rx="2"/>
+  <rect x="128" y="64"  width="32" height="32" fill="#374151" rx="2"/>
+  <rect x="128" y="96"  width="32" height="32" fill="#374151" rx="2"/>
+  <rect x="128" y="128" width="32" height="32" fill="#374151" rx="2"/>
+  <rect x="192" y="32"  width="32" height="32" fill="#374151" rx="2"/>
+  <!-- Explored cells (light blue) -->
+  <rect x="32"  y="32"  width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <rect x="32"  y="64"  width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <rect x="32"  y="96"  width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <rect x="32"  y="128" width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <rect x="96"  y="128" width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <rect x="160" y="128" width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <rect x="160" y="96"  width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <rect x="160" y="64"  width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <rect x="160" y="32"  width="32" height="32" fill="#bfdbfe" rx="2" opacity="0.8"/>
+  <!-- Frontier cells (pulsing circles) -->
+  <circle cx="240" cy="48"  r="5" fill="#f97316" class="frontier-cell"/>
+  <circle cx="240" cy="80"  r="5" fill="#f97316" class="frontier-cell" style="animation-delay:.3s"/>
+  <circle cx="240" cy="112" r="5" fill="#f97316" class="frontier-cell" style="animation-delay:.6s"/>
+  <circle cx="208" cy="144" r="5" fill="#f97316" class="frontier-cell" style="animation-delay:.9s"/>
+  <!-- Optimal path (animated draw) -->
+  <polyline points="48,144 48,128 48,112 48,96 48,80 48,48 112,48 176,48 208,48 208,80 208,112 208,160 208,176"
+            fill="none" stroke="#0d9488" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="astar-path"/>
+  <!-- Start -->
+  <circle cx="48" cy="160" r="9" fill="#16a34a"/>
+  <text x="48" y="164" text-anchor="middle" fill="white" font-size="9" font-weight="bold">S</text>
+  <!-- Goal -->
+  <circle cx="208" cy="176" r="9" fill="#dc2626"/>
+  <text x="208" y="180" text-anchor="middle" fill="white" font-size="9" font-weight="bold">G</text>
+  <!-- Grid lines -->
+  <g stroke="#e5e7eb" stroke-width="0.5" opacity="0.6">
+    <line x1="32" y1="32"  x2="256" y2="32"/>  <line x1="32" y1="64"  x2="256" y2="64"/>
+    <line x1="32" y1="96"  x2="256" y2="96"/>  <line x1="32" y1="128" x2="256" y2="128"/>
+    <line x1="32" y1="160" x2="256" y2="160"/> <line x1="32" y1="192" x2="256" y2="192"/>
+    <line x1="32"  y1="32" x2="32"  y2="192"/> <line x1="64"  y1="32" x2="64"  y2="192"/>
+    <line x1="96"  y1="32" x2="96"  y2="192"/> <line x1="128" y1="32" x2="128" y2="192"/>
+    <line x1="160" y1="32" x2="160" y2="192"/> <line x1="192" y1="32" x2="192" y2="192"/>
+    <line x1="224" y1="32" x2="224" y2="192"/> <line x1="256" y1="32" x2="256" y2="192"/>
+  </g>
+  <!-- Legend -->
+  <rect x="32" y="200" width="10" height="10" fill="#374151" rx="1"/>
+  <text x="46" y="209" fill="#374151" font-size="8">obstacle</text>
+  <rect x="90" y="200" width="10" height="10" fill="#bfdbfe" rx="1"/>
+  <text x="104" y="209" fill="#374151" font-size="8">explored</text>
+  <circle cx="163" cy="205" r="4" fill="#f97316"/>
+  <text x="172" y="209" fill="#374151" font-size="8">frontier</text>
+  <line x1="208" y1="205" x2="220" y2="205" stroke="#0d9488" stroke-width="2"/>
+  <text x="224" y="209" fill="#0d9488" font-size="8">path</text>
+</svg>
+<figcaption>A* on an 8×7 grid. Blue cells are already explored. Orange pulsing dots are the current frontier. The teal path animates from Start (green) to Goal (red), navigating around wall obstacles.</figcaption>
+</figure></div>
+
 A robot must navigate from an initial configuration $$q_{\text{start}}$$ to a goal $$q_{\text{goal}}$$ without colliding with obstacles. The space of all valid robot configurations is the **configuration space** (C-space). Obstacles in workspace map to forbidden regions in C-space, and the planner must find a path through the free region $$\mathcal{C}_{\text{free}}$$.
 
 The challenge scales dramatically with dimensionality. A mobile robot in 2D has a 3D C-space (x, y, heading), but a robot arm with 7 joints lives in a 7D C-space, making exhaustive search intractable.

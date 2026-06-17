@@ -160,6 +160,16 @@ In practice, masks are combined additively. A decoder in an encoder-decoder mode
 | T5 encoder | Bidirectional | — |
 | T5 decoder | Causal | Full (to encoder) |
 
+## Why −∞ Rather Than 0?
+
+A natural question: why set masked positions to −∞ instead of 0?
+
+After softmax, a score of 0 becomes `e⁰/(e⁰ + others) > 0` — the token still gets *some* attention weight. Setting to −∞ gives `e^(−∞) = 0` exactly, so masked positions contribute precisely zero to the weighted value sum. This is essential for causal masking — even a tiny weight on a future token would leak information.
+
+<div class="insight-box">
+<strong>In practice:</strong> modern implementations use <code>float('-inf')</code> rather than a very large negative number like −1e9, because on some hardware −1e9 divided by a large d_k can produce NaN gradients. True −∞ is numerically safe.
+</div>
+
 ## Implementation Detail
 
 In PyTorch, attention masks are typically boolean or float tensors added to raw scores before softmax:

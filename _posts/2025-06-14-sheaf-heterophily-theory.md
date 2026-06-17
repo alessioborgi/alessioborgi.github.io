@@ -31,6 +31,72 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_accuracy.png" alt="Sheaf handles heterophily" caption="Sheaf GNN accuracy on heterophilic benchmarks vs baselines (Bodnar et al., 2022)" %}
 
 
+<style>
+@keyframes gcn-blend {
+  0%   { stop-color: #dc2626; }
+  60%  { stop-color: #9333ea; }
+  100% { stop-color: #6b7280; }
+}
+@keyframes gcn-blend-b {
+  0%   { stop-color: #2563eb; }
+  60%  { stop-color: #9333ea; }
+  100% { stop-color: #6b7280; }
+}
+@keyframes sheaf-keep-r {
+  0%,100% { fill: #dc2626; }
+  50%     { fill: #ef4444; }
+}
+@keyframes sheaf-keep-b {
+  0%,100% { fill: #2563eb; }
+  50%     { fill: #3b82f6; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- Panel titles -->
+  <text x="115" y="16" text-anchor="middle" font-size="13" font-weight="bold" fill="#374151">Standard GCN</text>
+  <text x="345" y="16" text-anchor="middle" font-size="13" font-weight="bold" fill="#374151">Sheaf GNN</text>
+  <line x1="230" y1="20" x2="230" y2="195" stroke="#e5e7eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- GCN panel -->
+  <!-- edge -->
+  <line x1="80" y1="100" x2="155" y2="100" stroke="#9ca3af" stroke-width="2"/>
+  <!-- blending arrow -->
+  <text x="118" y="88" text-anchor="middle" font-size="9" fill="#9333ea">blend →</text>
+  <!-- red node A -->
+  <circle cx="68" cy="100" r="22" stroke="#991b1b" stroke-width="2">
+    <animate attributeName="fill" values="#dc2626;#9333ea;#6b7280" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="68" y="104" text-anchor="middle" font-size="10" fill="white" font-weight="bold">A</text>
+  <!-- blue node B -->
+  <circle cx="167" cy="100" r="22" stroke="#1e3a8a" stroke-width="2">
+    <animate attributeName="fill" values="#2563eb;#9333ea;#6b7280" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="167" y="104" text-anchor="middle" font-size="10" fill="white" font-weight="bold">B</text>
+  <text x="118" y="152" text-anchor="middle" font-size="10" fill="#6b7280">A and B blend → indistinguishable</text>
+  <text x="118" y="166" text-anchor="middle" font-size="9" fill="#9ca3af">E(H) penalises any difference</text>
+
+  <!-- Sheaf panel -->
+  <!-- edge with -1 label -->
+  <line x1="310" y1="100" x2="385" y2="100" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="347" y="88" text-anchor="middle" font-size="12" fill="#7c3aed" font-weight="bold">−1</text>
+  <text x="347" y="76" text-anchor="middle" font-size="8" fill="#7c3aed">anti-align</text>
+  <!-- red node A stays red -->
+  <circle cx="298" cy="100" r="22" stroke="#991b1b" stroke-width="2">
+    <animate attributeName="fill" values="#dc2626;#ef4444;#dc2626" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="298" y="104" text-anchor="middle" font-size="10" fill="white" font-weight="bold">A</text>
+  <!-- blue node B stays blue -->
+  <circle cx="397" cy="100" r="22" stroke="#1e3a8a" stroke-width="2">
+    <animate attributeName="fill" values="#2563eb;#3b82f6;#2563eb" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="397" y="104" text-anchor="middle" font-size="10" fill="white" font-weight="bold">B</text>
+  <text x="347" y="152" text-anchor="middle" font-size="10" fill="#374151">A and B stay distinct</text>
+  <text x="347" y="166" text-anchor="middle" font-size="9" fill="#7c3aed">E_F(H)=0 when x_A=−x_B</text>
+</svg>
+<figcaption>GCN (left): class-A (red) and class-B (blue) nodes connected by a heterophilic edge. Standard aggregation blends their features toward purple then gray — erasing class information. Sheaf GNN (right): a −1 restriction map on the cross-class edge encodes anti-alignment; the sheaf energy is zero when x_A = −x_B, keeping classes distinct throughout diffusion.</figcaption>
+</figure></div>
+
 ## The Homophily Assumption in GCN
 
 Homophily: the tendency of nodes to connect to nodes of the same class. The homophily ratio h(G) = |{(u,v)∈E : y_u=y_v}| / |E| quantifies this.
@@ -81,6 +147,8 @@ Choose F_{u▷e} = I and F_{v▷e} = −I (negation). Global sections satisfy x_
 
 More generally: choose F_{v▷e} = R for any rotation R. Global sections then satisfy x_u = Rᵀ x_v — adjacent nodes' features are related by a rotation, not equal. This represents heterophilic graphs where the relational structure is a structured rotation between class representations.
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Sheaves Are Universal for Relational Structure:</strong> The General Heterophily Theorem says something profound: a sheaf is not just a tool for handling one type of graph structure — it is <em>universal</em>. No matter what the relational structure of the graph is (homophilic, heterophilic, mixed, or anything in between), there exist restriction maps that make the task-optimal node features a global section. The sheaf "absorbs" all relational complexity into its maps, leaving the diffusion operator free to simply find consistent signals. Standard GCN cannot do this — its null space is fixed at the constants, so it can only handle homophilic structure natively.</div>
+
 ## The General Heterophily Theorem
 
 **Theorem (Bodnar et al., 2022, Theorem 1, informal):** For any desired node assignment x* where x*_u ≠ x*_v for heterophilic edges (u,v), there exist restriction maps F such that x* is a global section of F (i.e., x* ∈ ker(Δ_F)).
@@ -92,6 +160,35 @@ More generally: choose F_{v▷e} = R for any rotation R. Global sections then sa
 <div class="insight-box">
 <strong>Key implication:</strong> When NSD learns restriction maps, it is simultaneously learning (1) the "correct" relational geometry between adjacent nodes and (2) the space of globally consistent features. If the maps are learned correctly, the task-optimal features are global sections, and sheaf diffusion converges to them naturally — no matter how many layers are used.
 </div>
+
+## Worked Example: 4-Node Heterophilic Graph
+
+**Setup:** four nodes {A1, A2, B1, B2}. Class 0: A1, A2 with feature +1. Class 1: B1, B2 with feature −1. Edges: A1–B1 (cross-class), A2–B1 (cross-class), B1–B2 (same-class). Target signal: x* = (+1, +1, −1, −1).
+
+**Standard GCN Dirichlet energy on x*:**
+
+```
+E(x*) = Σ_{(u,v)∈E} (x*_u − x*_v)²
+       = (x*_{A1} − x*_{B1})² + (x*_{A2} − x*_{B1})² + (x*_{B1} − x*_{B2})²
+       = (+1 − (−1))² + (+1 − (−1))² + (−1 − (−1))²
+       = 4 + 4 + 0  =  8
+```
+
+The optimal class assignment has E(x*) = 8 — a large energy penalty. GCN is strongly penalised for having the correct class-discriminative features on the cross-class edges A1–B1 and A2–B1.
+
+**Sheaf with scalar anti-alignment maps:** On each cross-class edge, set F_{A▷e} = +1, F_{B▷e} = −1. On the same-class edge B1–B2, set F_{B1▷e} = F_{B2▷e} = +1.
+
+**Sheaf Dirichlet energy on x*:**
+
+```
+E_F(x*) = Σ_{e=(u,v)} (F_{u▷e} x*_u − F_{v▷e} x*_v)²
+
+Edge A1–B1: (+1·(+1) − (−1)·(−1))² = (1 − 1)² = 0
+Edge A2–B1: (+1·(+1) − (−1)·(−1))² = (1 − 1)² = 0
+Edge B1–B2: (+1·(−1) − (+1)·(−1))² = (−1 + 1)² = 0
+```
+
+**E_F(x*) = 0** — the task-optimal feature assignment (+1, +1, −1, −1) is a global section of the sheaf. Sheaf diffusion converges to this assignment naturally, with zero energy cost. The restriction maps have absorbed the heterophilic structure, making the correct class separation effortless.
 
 ## Why Signed Attention Is Not Enough
 

@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Traffic Forecasting Task
 
+**Intuition First:** Traffic networks are like dominoes: a slowdown at one sensor topples the next. An ARIMA model at each sensor sees its own history but is blind to the upstream jam that caused its own slowdown — it only "learns" the pattern after the slowdown arrives. A GNN-augmented model receives advance warning: neighbouring sensors upstream are already slowing down, so the spatial signal arrives before the temporal consequence does. This is why adding graph structure consistently cuts prediction error by 20–30% over temporal-only baselines.
+
 **Input:** X ∈ ℝ^{N × T × d} — N sensor readings over T past timesteps, each with d features (speed, volume, occupancy)
 
 **Output:** X̂ ∈ ℝ^{N × H × d} — predictions for H future timesteps
@@ -100,6 +102,16 @@ Adds an **adaptive adjacency matrix** that is learned from data, not just from r
 Where E_1, E_2 ∈ ℝ^{N × d} are learnable node embeddings. The adaptive adjacency captures non-geographic correlations (sensors far apart but behaviourally correlated — e.g., parallel highways).
 
 Also uses **dilated causal convolutions** (like WaveNet) for temporal modelling — wider receptive field than standard 1D conv without more parameters.
+
+## Worked Example: Spatial vs Temporal Signal
+
+**Setup:** 3 sensors A→B→C (chain). At t=0: A=60 mph, B=60 mph, C=60 mph. A traffic incident causes sensor A to drop: at t=1 A=20 mph (jam), B=55 mph, C=60 mph.
+
+**LSTM (per-sensor, no graph):** sensor B's history is [60, 55] — it sees a mild slowdown. Predicted B at t=2: ~52 mph. Actual: 30 mph (jam propagation).
+
+**DCRNN (graph-aware):** at t=1, sensor A reports 20 mph to B via the graph edge. DCRNN's diffusion convolution computes B's message as a weighted combination of A and B's readings: 0.6×20 + 0.4×55 = 34 mph spatial signal. Combined with B's temporal history: predicted B at t=2 ≈ 33 mph — much closer to the actual 30 mph.
+
+**The gain:** DCRNN gets advance warning from A's spatial signal before B's own temporal history reflects the jam. This is the core reason GNNs cut 60-min forecast MAE from 3.99 (LSTM) to 2.77 (DCRNN) on METR-LA.
 
 ## Industrial Deployment
 

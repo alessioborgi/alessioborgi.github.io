@@ -31,6 +31,19 @@ toc_label: "Contents"
 
 <div class="paper-box"><strong>Key Paper:</strong> Hessel, M., et al. (2018). Rainbow: Combining improvements in deep reinforcement learning. <em>AAAI 2018</em>. arXiv:1710.02298. The paper is notable for showing that independently developed improvements are complementary and collectively achieve much better sample efficiency than any individual method.</div>
 
+## Intuition First: Six Perspectives on the Same Problem
+
+Think of DQN as a car with six known weaknesses. Each Rainbow component is an independent fix:
+
+1. **Double DQN** — the car's speedometer over-reads; install a second gauge to cross-check.
+2. **Dueling networks** — split the dashboard into "how fast am I going" (V) and "is this lane better" (A).
+3. **Prioritised replay** — don't replay boring stretches of highway; focus on near-misses.
+4. **Multi-step returns** — instead of updating after each metre, look 3 metres ahead.
+5. **Distributional RL** — don't just track average fuel consumption; track the full distribution.
+6. **Noisy networks** — replace random detours (ε-greedy) with calibrated uncertainty in your navigation system.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The six components are orthogonal — they each fix a distinct failure mode. This is why combining all six gives a multiplicative benefit rather than diminishing returns. The ablation in the Rainbow paper confirms each component contributes independently.</div>
+
 ## Component 1: Double DQN
 
 Standard DQN uses the same network to select and evaluate the greedy action, causing **maximisation bias** — Q-values are systematically overestimated because max is taken over noisy estimates.

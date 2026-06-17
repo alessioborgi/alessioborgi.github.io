@@ -27,6 +27,42 @@ permalink: /blog/persistent-homology/topological-spaces/
 {% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="Topological spaces in ML" caption="Topological concepts underpinning TDA (Hensel et al., 2021)" %}
 
 
+**Intuition First.** In metric geometry, "close" means "small distance." But topology asks a more primitive question: *can you tell two points apart without measuring?* Open sets encode the answer. If every open set containing $$x$$ also contains $$y$$, then $$x$$ and $$y$$ are topologically indistinguishable — no experiment using only the topology can separate them. This purely set-theoretic notion of nearness is what makes topology invariant under stretching, bending, and continuous deformation.
+
+<style>
+@keyframes morph-shape {
+  0%   { d: path("M 80,100 C 80,40 140,40 140,100 C 140,160 80,160 80,100 Z"); }
+  50%  { d: path("M 60,95 C 70,30 155,45 150,100 C 145,155 65,165 60,95 Z"); }
+  100% { d: path("M 80,100 C 80,40 140,40 140,100 C 140,160 80,160 80,100 Z"); }
+}
+@keyframes morph-mug {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.7; }
+}
+</style>
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;font-family:sans-serif;">
+  <!-- "Same topology" label -->
+  <text x="210" y="20" font-size="12" fill="#0d9488" font-weight="bold" text-anchor="middle">Homeomorphic spaces share all topological invariants</text>
+  <!-- Circle / Ellipse -->
+  <ellipse cx="90" cy="95" rx="55" ry="55" fill="none" stroke="#0d9488" stroke-width="2.5"/>
+  <text x="90" y="170" font-size="11" fill="#475569" text-anchor="middle">Circle S¹</text>
+  <!-- ≅ symbol -->
+  <text x="185" y="100" font-size="22" fill="#94a3b8" text-anchor="middle">≅</text>
+  <!-- Squished ellipse -->
+  <ellipse cx="280" cy="95" rx="75" ry="35" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="280" y="170" font-size="11" fill="#475569" text-anchor="middle">Ellipse (homeomorphic)</text>
+  <!-- ≇ with interval -->
+  <text x="375" y="100" font-size="20" fill="#ef4444" text-anchor="middle">≇</text>
+  <!-- Line segment -->
+  <line x1="395" y1="95" x2="415" y2="95" stroke="#ef4444" stroke-width="3"/>
+  <!-- Note at bottom -->
+  <text x="210" y="155" font-size="10" fill="#64748b" text-anchor="middle">Removing a point from S¹ leaves a connected space; from a line segment — two disconnected pieces</text>
+</svg>
+<figcaption>A circle and an ellipse are homeomorphic (same topology). A circle and a line segment are not — removing one point has different effects.</figcaption>
+</figure></div>
+
 ## Topological Spaces: Nearness Without Distance
 
 A **topological space** is a pair $$(X, \tau)$$ where $$X$$ is a set and $$\tau \subseteq \mathcal{P}(X)$$ is a collection of subsets called the **open sets**, satisfying three axioms:
@@ -61,6 +97,8 @@ Classical examples of homeomorphic (and non-homeomorphic) spaces:
 - The torus $$T^2 = S^1 \times S^1$$ is not homeomorphic to $$S^2$$: they differ in fundamental group and first homology.
 - A coffee mug is homeomorphic to a donut (torus) — the classic topology joke reflects a real mathematical fact.
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The open-set axioms are the minimal structure needed to define continuity without a metric. A function is continuous if and only if pulling back open sets gives open sets — this single condition replaces the entire ε-δ machinery and works for spaces where no distance function exists.</div>
+
 ## Homotopy Equivalence: A Weaker Relation
 
 Homeomorphism is very strict. A more flexible notion is **homotopy equivalence**: two spaces $$X$$ and $$Y$$ are homotopy equivalent (written $$X \simeq Y$$) if there exist continuous maps $$f: X \to Y$$ and $$g: Y \to X$$ such that $$g \circ f \simeq \mathrm{id}_X$$ and $$f \circ g \simeq \mathrm{id}_Y$$, where $$\simeq$$ denotes homotopy (continuous deformation of maps).
@@ -71,6 +109,10 @@ Homotopy equivalence preserves homology groups. This is weaker than homeomorphis
 - The punctured plane $$\mathbb{R}^2 \setminus \{0\}$$ is homotopy equivalent to $$S^1$$.
 
 <div class="insight-box"><strong>Key Insight:</strong> TDA uses topology rather than geometry because homology is a homotopy invariant. Two data clouds that are geometrically very different (scaled, rotated, slightly perturbed) but topologically the same will yield identical persistence diagrams — up to the stability bound. This is precisely the noise-robustness that makes TDA practical.</div>
+
+## Worked Example: The Punctured Plane
+
+Take $$X = \mathbb{R}^2 \setminus \{(0,0)\}$$, the plane with the origin removed. Define $$f: X \to S^1$$ by $$f(x,y) = (x,y)/\|(x,y)\|$$ and $$g: S^1 \to X$$ by inclusion. Then $$f \circ g = \mathrm{id}_{S^1}$$ and $$g \circ f$$ is homotopic to $$\mathrm{id}_X$$ via the straight-line homotopy $$H(x,t) = (1-t)x + t \cdot x/\|x\|$$. So $$X \simeq S^1$$. This means the punctured plane has $$H_1 \cong \mathbb{Z}$$ — it has exactly one independent loop (going around the origin), which is precisely what TDA detects.
 
 ## Compactness and Connectivity
 

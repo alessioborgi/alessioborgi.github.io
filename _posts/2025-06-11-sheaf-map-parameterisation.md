@@ -42,6 +42,131 @@ This single choice determines:
 - The structure of the Sheaf Laplacian's null space
 - Computational cost of map learning and Laplacian construction
 
+<style>
+@keyframes scalar-flow {
+  0%   { stroke-dashoffset: 60; opacity: 0.3; }
+  100% { stroke-dashoffset: 0;  opacity: 1; }
+}
+@keyframes diag-flow {
+  0%   { stroke-dashoffset: 40; opacity: 0.2; }
+  100% { stroke-dashoffset: 0;  opacity: 1; }
+}
+@keyframes orth-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes gen-mix {
+  0%,100% { opacity: 0.3; }
+  50%     { opacity: 1;   }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- Scalar box -->
+  <rect x="5" y="30" width="110" height="110" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  <text x="60" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">Scalar</text>
+  <text x="60" y="52" text-anchor="middle" font-size="10" fill="#555">s·I</text>
+  <!-- single arrow, animated -->
+  <line x1="20" y1="85" x2="90" y2="85" stroke="#22c55e" stroke-width="3"
+        stroke-dasharray="60" stroke-dashoffset="60" marker-end="url(#arr-g)">
+    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="1.2s" repeatCount="indefinite"/>
+  </line>
+  <text x="60" y="130" text-anchor="middle" font-size="9" fill="#777">1 channel</text>
+
+  <!-- Diagonal box -->
+  <rect x="130" y="30" width="110" height="110" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="185" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">Diagonal</text>
+  <text x="185" y="52" text-anchor="middle" font-size="10" fill="#555">diag(f₁…fₐ)</text>
+  <!-- d parallel arrows -->
+  <line x1="145" y1="72" x2="225" y2="72" stroke="#3b82f6" stroke-width="2"
+        stroke-dasharray="40" stroke-dashoffset="40" marker-end="url(#arr-b)">
+    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="1.0s" begin="0.1s" repeatCount="indefinite"/>
+  </line>
+  <line x1="145" y1="90" x2="225" y2="90" stroke="#60a5fa" stroke-width="2"
+        stroke-dasharray="40" stroke-dashoffset="40" marker-end="url(#arr-b)">
+    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="1.0s" begin="0.3s" repeatCount="indefinite"/>
+  </line>
+  <line x1="145" y1="108" x2="225" y2="108" stroke="#93c5fd" stroke-width="2"
+        stroke-dasharray="40" stroke-dashoffset="40" marker-end="url(#arr-b)">
+    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="1.0s" begin="0.5s" repeatCount="indefinite"/>
+  </line>
+  <text x="185" y="130" text-anchor="middle" font-size="9" fill="#777">d independent channels</text>
+
+  <!-- Orthogonal box -->
+  <rect x="255" y="30" width="110" height="110" rx="8" fill="#fdf4ff" stroke="#a855f7" stroke-width="2"/>
+  <text x="310" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#7e22ce">Orthogonal</text>
+  <text x="310" y="52" text-anchor="middle" font-size="10" fill="#555">O ∈ O(d)</text>
+  <!-- rotating arrow group -->
+  <g transform="translate(310,90)">
+    <line x1="0" y1="0" x2="28" y2="0" stroke="#a855f7" stroke-width="3" marker-end="url(#arr-p)">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  <text x="310" y="130" text-anchor="middle" font-size="9" fill="#777">rotation, no scaling</text>
+
+  <!-- General box -->
+  <rect x="380" y="30" width="130" height="110" rx="8" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+  <text x="445" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#c2410c">General</text>
+  <text x="445" y="52" text-anchor="middle" font-size="10" fill="#555">F ∈ ℝ^{d×d}</text>
+  <!-- mixing arrows -->
+  <line x1="395" y1="72" x2="500" y2="108" stroke="#f97316" stroke-width="1.5" marker-end="url(#arr-o)" opacity="0.7">
+    <animate attributeName="opacity" values="0.2;1;0.2" dur="1.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="395" y1="108" x2="500" y2="72" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arr-o)" opacity="0.7">
+    <animate attributeName="opacity" values="1;0.2;1" dur="1.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="395" y1="90" x2="500" y2="90" stroke="#fed7aa" stroke-width="1.5" marker-end="url(#arr-o)">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+  </line>
+  <text x="445" y="130" text-anchor="middle" font-size="9" fill="#777">full mixing, d² params</text>
+
+  <!-- arrowhead markers -->
+  <defs>
+    <marker id="arr-g" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#22c55e"/>
+    </marker>
+    <marker id="arr-b" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arr-p" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#a855f7"/>
+    </marker>
+    <marker id="arr-o" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f97316"/>
+    </marker>
+  </defs>
+</svg>
+<figcaption>Signal flow through each map type. Scalar: one channel flows uniformly. Diagonal: d independent parallel channels. Orthogonal: one channel rotated (no scaling). General: channels mix arbitrarily.</figcaption>
+</figure></div>
+
+## Worked Example: d=2, Diagonal vs Orthogonal
+
+**Setup:** edge e = (u, v), stalk dimension d=2. We compare two maps applied to the same pair of node signals.
+
+**Diagonal map:** F_{u▷e} = I₂ (identity), F_{v▷e} = diag(1, −1).
+
+Consistency condition: F_{u▷e} x_u = F_{v▷e} x_v, i.e.:
+
+```
+[1  0] [x_u¹]   [1  0 ] [x_v¹]
+[0  1] [x_u²] = [0 -1] [x_v²]
+```
+
+This forces x_u¹ = x_v¹ (channel 1 is homophilic — same value) and x_u² = −x_v² (channel 2 is heterophilic — opposite values). The sheaf encodes two independent relationships simultaneously: one "friends" channel and one "rivals" channel. The global section space is { (a, b, a, −b) : a,b ∈ ℝ } — two-dimensional, not the constant functions.
+
+**Orthogonal map:** F_{u▷e} = I₂, F_{v▷e} = [[0, 1], [−1, 0]] (90° rotation).
+
+Consistency condition: x_u = R x_v where R = [[0,1],[−1,0]], i.e.:
+
+```
+x_u¹ = x_v²
+x_u² = −x_v¹
+```
+
+Adjacent nodes must hold signals that are 90° rotations of each other. For example, if x_v = (3, 1), then x_u = (1, −3). The relationship is purely geometric — no scaling, no per-channel independence. The global section space is all signals related by 90° rotation along each edge — this is a parallel transport constraint, not a sign pattern.
+
+**Key difference:** Diagonal maps impose independent per-channel signs (flexible, learnable); orthogonal maps impose a geometric rotation (equivariant, no magnitude information). Both can be zero-energy without the nodes having equal features.
+
 ## Type 1: Scalar Maps (d=1 effective)
 
 **Form:** F_{v▷e} = s_{v▷e} · I where s_{v▷e} ∈ ℝ is a scalar.
@@ -162,6 +287,8 @@ The null space dimension dim(H⁰) = dim ker(Δ_F) determines the long-time attr
 | General | ≥ 0 (depends on learned maps) |
 
 The key insight: NSD with general or diagonal maps can learn maps that increase dim(H⁰) beyond d — the model adapts its oversmoothing attractor to the task.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Decision Tree for Map Type:</strong> Start with <strong>diagonal</strong>: good default for most tasks, cheap, interpretable, handles per-channel heterophily. If gauge equivariance is required (geometric data, synchronisation tasks, equivariant architectures), upgrade to <strong>orthogonal</strong>. If the graph is large (&gt;10k nodes) with abundant labels and complex relational structure that diagonal cannot capture, try <strong>general</strong> with L2 regularisation. Use <strong>scalar</strong> only as a diagnostic baseline to check whether d×d relational geometry matters at all for your task.</div>
 
 ## Practical Recommendations
 

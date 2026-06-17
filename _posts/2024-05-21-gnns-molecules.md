@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Drug Discovery Pipeline
 
+**Intuition First:** Finding a drug is like searching for a key that fits a specific lock (the protein target). Chemical space contains roughly 10^60 possible drug-like molecules — far too many to test physically. A GNN is trained on known key–lock pairs to predict which untested keys are likely to fit. It learns that certain atom arrangements near certain bond types correlate with good binding — then uses those patterns to score billions of virtual molecules in seconds rather than years.
+
 Drug discovery takes 10-15 years and $2B+ per approved drug. GNNs accelerate three key stages:
 
 1. **Virtual screening:** filter billions of candidate molecules to thousands using property predictions
@@ -88,6 +90,8 @@ SMILES string → RDKit graph → Atom/bond features
 <div class="insight-box">
 <strong>Why pre-training matters:</strong> Labelled molecular data is expensive — assaying binding affinity for 1000 compounds costs $100K+. GNNs trained from scratch on small datasets overfit. Pre-training on 10M+ unlabelled molecules (ChEMBL, PubChem) provides a strong starting point. Fine-tuning on 1000 labelled examples then reaches performance previously requiring 100K+ labels.
 </insight>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The most impactful use of GNNs in drug discovery is not replacing wet-lab experiments — it is prioritising them. A GNN-based screening pass over 1 billion virtual compounds (taking hours on GPU) narrows candidates down to 10,000, which are then docked computationally (days), narrowed to 1,000, then synthesised and assayed experimentally (weeks). Without the GNN filter, you would need to synthesise and test millions of compounds — years of work and hundreds of millions of dollars. The GNN adds value as a cheap, fast first filter, not as a replacement for experiments.</div>
 
 ## Virtual Screening at Scale
 

@@ -29,6 +29,62 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Non-isomorphic graphs that fool GNNs" caption="Non-isomorphic graphs indistinguishable by 1-WL / standard MPNNs (Xu et al., 2019)" %}
 
 
+## Intuition First
+
+The 1-WL test works by giving every node a "colour" based on its neighbourhood multiset, then iteratively refining colours. Two nodes get the same final colour if and only if their entire computational trees — the tree of all neighbours' neighbours' neighbours... — look identical.
+
+The catch: a tree cannot see cycles. A node in a triangle and a node with the same three neighbours but no triangle between them have identical computational trees at depth 1. And since GNNs are equivalent to 1-WL, **GNNs are cycle-blind**.
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 480 155" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:auto">
+  <style>
+    .wl-node { fill:#6366f1; stroke:#fff; stroke-width:2; }
+    .wl-node-q { fill:#f97316; stroke:#fff; stroke-width:2; }
+    .wl-edge { stroke:#94a3b8; stroke-width:1.8; }
+    .wl-label { font-size:10px; fill:#1e293b; font-family:sans-serif; text-anchor:middle; }
+    .wl-title { font-size:11px; fill:#1e293b; font-family:sans-serif; font-weight:bold; text-anchor:middle; }
+    .wl-same  { font-size:10px; fill:#dc2626; font-family:sans-serif; text-anchor:middle; font-weight:bold; }
+  </style>
+  <!-- Graph 1: 6-cycle -->
+  <text x="110" y="14" class="wl-title">6-cycle (connected, no triangles)</text>
+  <circle cx="110" cy="55"  r="11" class="wl-node"/>
+  <circle cx="145" cy="35"  r="11" class="wl-node"/>
+  <circle cx="180" cy="55"  r="11" class="wl-node"/>
+  <circle cx="180" cy="90"  r="11" class="wl-node"/>
+  <circle cx="145" cy="110" r="11" class="wl-node"/>
+  <circle cx="110" cy="90"  r="11" class="wl-node"/>
+  <line x1="110" y1="55"  x2="145" y2="35"  class="wl-edge"/>
+  <line x1="145" y1="35"  x2="180" y2="55"  class="wl-edge"/>
+  <line x1="180" y1="55"  x2="180" y2="90"  class="wl-edge"/>
+  <line x1="180" y1="90"  x2="145" y2="110" class="wl-edge"/>
+  <line x1="145" y1="110" x2="110" y2="90"  class="wl-edge"/>
+  <line x1="110" y1="90"  x2="110" y2="55"  class="wl-edge"/>
+  <text x="145" y="75" class="wl-label">all deg-2</text>
+
+  <!-- divider -->
+  <line x1="240" y1="20" x2="240" y2="135" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4"/>
+
+  <!-- Graph 2: two triangles -->
+  <text x="365" y="14" class="wl-title">Two 3-cycles (disconnected triangles)</text>
+  <circle cx="295" cy="55"  r="11" class="wl-node"/>
+  <circle cx="325" cy="100" r="11" class="wl-node"/>
+  <circle cx="265" cy="100" r="11" class="wl-node"/>
+  <line x1="295" y1="55"  x2="325" y2="100" class="wl-edge"/>
+  <line x1="325" y1="100" x2="265" y2="100" class="wl-edge"/>
+  <line x1="265" y1="100" x2="295" y2="55"  class="wl-edge"/>
+  <circle cx="415" cy="55"  r="11" class="wl-node"/>
+  <circle cx="445" cy="100" r="11" class="wl-node"/>
+  <circle cx="385" cy="100" r="11" class="wl-node"/>
+  <line x1="415" y1="55"  x2="445" y2="100" class="wl-edge"/>
+  <line x1="445" y1="100" x2="385" y2="100" class="wl-edge"/>
+  <line x1="385" y1="100" x2="415" y2="55"  class="wl-edge"/>
+  <text x="365" y="125" class="wl-label">all deg-2</text>
+  <!-- same label -->
+  <text x="240" y="148" class="wl-same">1-WL gives both the same histogram → any MPNN predicts identically</text>
+</svg>
+<figcaption>A 6-cycle and two disconnected 3-cycles both have 6 nodes, 6 edges, and every node with degree 2. 1-WL (and any MPNN) cannot tell them apart — yet one is connected and the other has two triangles.</figcaption>
+</figure></div>
+
 ## The Expressivity Ceiling
 
 The Weisfeiler-Lehman (1-WL) test is the exact expressivity ceiling for message-passing GNNs. Two graphs that 1-WL cannot distinguish cannot be distinguished by any MPNN — including GCN, GAT, GIN.
@@ -86,6 +142,16 @@ The **Circular Skip Link (CSL) graphs** are a family of 4-regular graphs on 41 n
 Yet the graphs are non-isomorphic (they have different skip patterns). Tasks that require distinguishing them (e.g., graph classification) will be solved at chance level by any MPNN.
 
 CSL is a standard benchmark for testing beyond-1-WL expressiveness.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The 1-WL bound is tight — GIN achieves it. So if you need to go beyond 1-WL, no amount of tuning GIN will help. You need a fundamentally different architecture: subgraph GNNs, higher-order WL, or structural encodings (RWPE, LapPE) that break the symmetry 1-WL cannot break.</div>
+
+## Concrete Failure: Molecule Classification
+
+Suppose two molecules both have 6 carbon atoms, each with exactly 2 bonds (degree-2). One is benzene (a 6-cycle, aromatic), the other is two propene fragments (two 3-cycles). Both have the same 1-WL colour histogram.
+
+A GNN trained to predict aromaticity will assign these the same graph-level embedding — and therefore the same prediction — even though only benzene is aromatic. This is not a data issue; it is a fundamental architectural limit.
+
+The fix: add ring-membership features (e.g., RWPE captures P³[v,v] > 0 for nodes in triangles) or use subgraph GNNs that explicitly detect cycles.
 
 ## Why This Matters in Practice
 

@@ -29,6 +29,10 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/rl/mnih2016_a3c.png" alt="Policy gradient methods" caption="Policy gradient and actor-critic framework (Mnih et al., 2016)" %}
 
 
+## Intuition First: Teaching Without a Grade Book
+
+In supervised learning you have a teacher who tells you "that was wrong, adjust your weights this way." In policy gradient methods there is no teacher — only an episode return. The trick is: after every episode, actions that led to higher-than-average returns get nudged to be *more* probable; actions that led to lower returns get nudged to be *less* probable. The score function $$\nabla_\theta \log \pi_\theta(a|s)$$ is the direction that makes a specific action more likely, and we weight it by how good the outcome was. Simple, unbiased — and very noisy.
+
 ## Why Direct Policy Optimisation?
 
 Value-based methods such as Q-learning learn a value function and extract a policy greedily. This works well for discrete action spaces but breaks down in continuous or high-dimensional settings where the argmax over actions is intractable. Policy gradient methods sidestep this by parameterising the policy directly as $$\pi_\theta(a \mid s)$$ and updating $$\theta$$ to maximise expected return.
@@ -66,6 +70,21 @@ A baseline $$b(s)$$ subtracted from the return does not change the expected grad
 The optimal baseline in terms of variance minimisation is proportional to the squared gradient norm, but in practice the **state-value function** $$V^\pi(s)$$ works very well. The quantity $$A(s,a) = Q(s,a) - V(s)$$ is the **advantage function**: it measures how much better action $$a$$ is compared to the average action in state $$s$$.
 
 Using the advantage as the weight yields the **advantage actor-critic** family of methods.
+
+## Worked Example: One REINFORCE Update
+
+Consider a 2-action softmax policy at a single state. Current parameters give:
+$$\pi_\theta(\text{LEFT}) = 0.3, \quad \pi_\theta(\text{RIGHT}) = 0.7$$
+
+The agent rolled out one episode, took RIGHT, and received return $$G_t = +2.0$$. Baseline $$b = 1.0$$ (average return). With learning rate $$\alpha = 0.01$$:
+
+**Score function for RIGHT**: $$\nabla_\theta \log \pi(\text{RIGHT}) = 1 - \pi(\text{RIGHT}) = 1 - 0.7 = 0.3$$ (for a softmax over 2 actions, this simplifies to $$\pi(\text{LEFT})$$).
+
+**Gradient**: $$\hat{g} = (G_t - b) \times 0.3 = (2.0 - 1.0) \times 0.3 = +0.30$$
+
+**Update**: logit for RIGHT increases by $$\alpha \times 0.30 = +0.003$$, pushing the policy slightly more toward RIGHT.
+
+If instead $$G_t = 0.5$$ (below baseline), the gradient would be $$-0.15$$, pushing *away* from RIGHT — even though it got a positive reward, it was below average, so we penalise it.
 
 ## Practical Considerations
 

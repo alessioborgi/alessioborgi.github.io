@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## Groups and Symmetry
 
+**Intuition First:** Think of a compass. No matter which direction you hold it, it still points north — the reading is *invariant* to how you rotate your body. Now think of your shadow: if you rotate 90°, your shadow rotates 90° too — the shadow is *equivariant* to your rotation. These two everyday observations capture the entire mathematical framework of geometric deep learning.
+
 A **group** G is a set of transformations {g} with a composition rule, identity, and inverses. Symmetry groups relevant to 3D geometry:
 
 - **SE(3):** rotations + translations in 3D (rigid body motions). SE = Special Euclidean.
@@ -77,6 +79,63 @@ Example: atomic forces. If we rotate the molecule, the forces rotate the same wa
 
 <div class="insight-box">
 <strong>The CNN analogy:</strong> A CNN is equivariant to translations — shifting the image shifts the feature maps by the same amount. This is baked into the convolution operation (shared weights + sliding window). We don't augment with all possible image shifts; instead, the architecture encodes translation equivariance. Geometric GNNs do the same for rotations and reflections.
+</div>
+
+## Worked Example: Invariant vs Equivariant in 2D
+
+**Setup:** molecule with two atoms at positions r₁=(1,0) and r₂=(0,1). We apply a 90° counter-clockwise rotation R: (x,y)→(−y,x).
+
+After rotation: r₁'=(0,1), r₂'=(−1,0).
+
+**Invariant quantity — distance:**
+- Before: ‖r₁−r₂‖ = ‖(1,−1)‖ = √2
+- After: ‖r₁'−r₂'‖ = ‖(1,1)‖ = √2  ✓ same
+
+**Equivariant quantity — force vector** (suppose F=(0.5, −0.5) before rotation):
+- After rotation: R·F = (0.5, 0.5)  ← force rotated by 90° too
+- A model that outputs F=(0.5,−0.5) for the original and F=(0.5,0.5) for the rotated version is equivariant.
+- A model that always outputs F=(0.5,−0.5) regardless of orientation is *wrong* — it breaks equivariance.
+
+<style>
+@keyframes spin-mol {
+  0%   { transform: rotate(0deg);   transform-origin: 200px 90px; }
+  50%  { transform: rotate(90deg);  transform-origin: 200px 90px; }
+  100% { transform: rotate(0deg);   transform-origin: 200px 90px; }
+}
+</style>
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;display:block;margin:0 auto;">
+  <!-- Before -->
+  <text x="85" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">Before rotation</text>
+  <line x1="85" y1="60" x2="55" y2="120" stroke="#6b7280" stroke-width="2"/>
+  <circle cx="85" cy="60"  r="14" fill="#3b82f6"/>
+  <circle cx="55" cy="120" r="14" fill="#ef4444"/>
+  <text x="85"  y="64"  text-anchor="middle" font-size="10" fill="white">r₁</text>
+  <text x="55"  y="124" text-anchor="middle" font-size="10" fill="white">r₂</text>
+  <!-- Force arrow before -->
+  <line x1="85" y1="60" x2="115" y2="30" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="122" y="27" font-size="9" fill="#f59e0b">F</text>
+  <!-- Arrow -->
+  <defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f59e0b"/></marker><marker id="arrow2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#10b981"/></marker></defs>
+  <!-- After -->
+  <text x="315" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">After 90° rotation</text>
+  <line x1="315" y1="90" x2="255" y2="90" stroke="#6b7280" stroke-width="2"/>
+  <circle cx="315" cy="90" r="14" fill="#3b82f6"/>
+  <circle cx="255" cy="90" r="14" fill="#ef4444"/>
+  <text x="315" y="94" text-anchor="middle" font-size="10" fill="white">r₁'</text>
+  <text x="255" y="94" text-anchor="middle" font-size="10" fill="white">r₂'</text>
+  <!-- Force arrow after (rotated) -->
+  <line x1="315" y1="90" x2="345" y2="60" stroke="#10b981" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="352" y="57" font-size="9" fill="#10b981">F'=R·F</text>
+  <!-- Rotation arrow in middle -->
+  <path d="M 175,80 A 30,30 0 0,1 225,80" stroke="#8b5cf6" stroke-width="2" fill="none" marker-end="url(#arrowR)"/>
+  <defs><marker id="arrowR" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#8b5cf6"/></marker></defs>
+  <text x="200" y="58" text-anchor="middle" font-size="10" fill="#8b5cf6">R(90°)</text>
+  <text x="200" y="148" text-anchor="middle" font-size="10" fill="#9ca3af">Distance ‖r₁−r₂‖=√2 is invariant; force vector F rotates with the molecule</text>
+</svg>
+<figcaption>Invariance (distance unchanged) vs equivariance (force rotates with the input).</figcaption>
+</figure>
 </div>
 
 ## Representations: Scalars, Vectors, Tensors

@@ -27,6 +27,47 @@ permalink: /blog/persistent-homology/persistent-homology-core/
 {% include figure image_path="/images/blog/tdl/carriere2020_perslay.png" alt="Persistent homology barcodes" caption="Persistent homology via PersLay (Carrière et al., 2020)" %}
 
 
+**Intuition First.** Think of a persistence module as a film reel. Each frame is a vector space (the homology group at that scale), and consecutive frames are connected by linear maps (induced by inclusions). The decomposition theorem says: every such film can be cut into independent single-feature films, each showing one topological feature alive for exactly one contiguous interval. The barcode is just the list of those intervals — a complete, lossless description of the entire reel.
+
+<style>
+@keyframes bar-grow {
+  from { width: 0; opacity: 0; }
+  to   { opacity: 1; }
+}
+</style>
+
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 520 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;font-family:sans-serif;">
+  <!-- Title -->
+  <text x="260" y="18" font-size="12" fill="#0d9488" font-weight="bold" text-anchor="middle">Barcode: each bar = one topological feature [birth, death)</text>
+  <!-- Axis -->
+  <line x1="60" y1="150" x2="490" y2="150" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="60"  y="165" font-size="10" fill="#64748b" text-anchor="middle">0</text>
+  <text x="160" y="165" font-size="10" fill="#64748b" text-anchor="middle">r₁</text>
+  <text x="280" y="165" font-size="10" fill="#64748b" text-anchor="middle">r₂</text>
+  <text x="400" y="165" font-size="10" fill="#64748b" text-anchor="middle">r₃</text>
+  <text x="490" y="165" font-size="10" fill="#64748b" text-anchor="middle">∞</text>
+  <!-- H0 bars -->
+  <text x="30" y="45" font-size="10" fill="#1e40af" text-anchor="middle">H₀</text>
+  <rect x="60" y="34" width="430" height="10" rx="3" fill="#1e40af" opacity="0.8"/>
+  <rect x="60" y="48" width="100" height="10" rx="3" fill="#1e40af" opacity="0.5"/>
+  <rect x="60" y="62" width="80"  height="10" rx="3" fill="#1e40af" opacity="0.5"/>
+  <!-- H1 bar -->
+  <text x="30" y="100" font-size="10" fill="#ef4444" text-anchor="middle">H₁</text>
+  <rect x="160" y="89" width="120" height="10" rx="3" fill="#ef4444" opacity="0.85"/>
+  <text x="160" y="85" font-size="9" fill="#ef4444">born</text>
+  <text x="280" y="85" font-size="9" fill="#ef4444">died</text>
+  <!-- H2 bar (essential) -->
+  <text x="30" y="130" font-size="10" fill="#7c3aed" text-anchor="middle">H₂</text>
+  <rect x="280" y="119" width="210" height="10" rx="3" fill="#7c3aed" opacity="0.7"/>
+  <text x="490" y="133" font-size="9" fill="#7c3aed">essential (→∞)</text>
+  <!-- Persistence annotation -->
+  <line x1="160" y1="108" x2="280" y2="108" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="220" y="120" font-size="9" fill="#ef4444" text-anchor="middle">persistence = r₂ − r₁</text>
+</svg>
+<figcaption>A schematic barcode. Blue bars are H₀ (connected components); the red H₁ bar captures one loop alive from r₁ to r₂; the purple H₂ bar is an essential class that never dies.</figcaption>
+</figure></div>
+
 ## Persistence Modules
 
 Given a filtration $$\{K_\varepsilon\}_{\varepsilon \geq 0}$$, applying the $$k$$-th homology functor gives a **persistence module**: a family of vector spaces $$\{H_k(K_\varepsilon)\}_{\varepsilon \geq 0}$$ connected by linear maps induced by inclusions:
@@ -66,6 +107,8 @@ A homology class $$\gamma \in H_k(K_\varepsilon)$$ is said to be **born** at $$\
 The **persistence** $$\mathrm{pers}(\gamma) = d - b$$ measures feature lifetime. The stability theorem (Cohen-Steiner et al., 2007) shows that only features with persistence greater than the noise level $$\delta$$ are truly data-driven: the bottleneck distance between diagrams of perturbed inputs is bounded by the perturbation size.
 
 <div class="insight-box"><strong>Key Insight:</strong> The fundamental decomposition theorem is the reason TDA works: it says the persistence module — an infinite-dimensional algebraic object — has a completely discrete, finite, canonical description: its barcode. This means we can represent all topological information at all scales with a finite multiset of intervals. No information is lost; no choices are made. The barcode is the unique complete invariant of the persistence module.</div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The elder rule is what makes the persistence pairing <em>unique</em>. Without it, merging events would be ambiguous: when two components fuse, either could be declared dead. The elder rule resolves this canonically — the younger one dies — ensuring that every filtration has exactly one barcode, with no arbitrary choices. This uniqueness is what makes persistence diagrams a well-defined invariant.</div>
 
 ## Example: Two Loops
 

@@ -47,6 +47,81 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> Flamingo (DeepMind, 2022) froze a powerful LLM and added cross-attention to visual features — few-shot VQA at scale. BLIP (Salesforce, 2022) bootstrapped better captions with a filter-generator loop. LLaVA (2023) showed that a linear projection from CLIP ViT into LLaMA is sufficient — matching Flamingo with 1% of the parameters. Modern VLMs follow LLaVA's recipe.
 </div>
 
+## Intuition First: Three Philosophies for Connecting Vision and Language
+
+Think of the problem as bridging two experts: a **vision expert** (trained to understand images) and a **language expert** (trained to generate text). You want them to collaborate on visual question answering. Three different philosophies emerged:
+
+**Flamingo's philosophy:** Keep both experts frozen — their skills are precious and easily destroyed. Build a translation layer (gated cross-attention) that lets the language expert consult the vision expert on demand.
+
+**BLIP's philosophy:** The bottleneck is noisy training data. Fix the data first (bootstrapped captions), then train a unified model that can do both understanding and generation.
+
+**LLaVA's philosophy:** The experts are already so powerful that the bridge can be minimal — a single linear layer is enough to map vision features into the language expert's coordinate system, and it learns the rest.
+
+<div class="blog-figure">
+<figure>
+<style>
+@keyframes arch-pulse { 0%,100%{opacity:0.8} 50%{opacity:1} }
+</style>
+<svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <defs>
+    <marker id="vlm-arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- Flamingo -->
+  <text x="110" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">Flamingo</text>
+  <rect x="22"  y="28" width="68" height="36" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="56"  y="50" text-anchor="middle" font-size="10" font-weight="700" fill="#1e40af">Frozen ViT</text>
+  <path d="M90 46 L106 46" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#vlm-arr)"/>
+  <rect x="108" y="28" width="60" height="36" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" style="animation:arch-pulse 2s ease-in-out infinite"/>
+  <text x="138" y="44" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">Perceiver</text>
+  <text x="138" y="57" text-anchor="middle" font-size="9" fill="#92400e">Resampler</text>
+  <path d="M168 46 L184 46" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#vlm-arr)"/>
+  <rect x="186" y="28" width="60" height="36" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" style="animation:arch-pulse 2s 0.3s ease-in-out infinite"/>
+  <text x="216" y="44" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">Gated</text>
+  <text x="216" y="57" text-anchor="middle" font-size="9" fill="#92400e">Cross-Attn</text>
+  <path d="M246 46 L262 46" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#vlm-arr)"/>
+  <rect x="264" y="28" width="68" height="36" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="298" y="44" text-anchor="middle" font-size="9" font-weight="700" fill="#166534">Frozen LLM</text>
+  <text x="298" y="57" text-anchor="middle" font-size="9" fill="#166534">(Chinchilla 70B)</text>
+  <text x="22"  y="82" font-size="9" fill="#64748b">Frozen</text>
+  <text x="108" y="82" font-size="9" fill="#f59e0b">Trained</text>
+  <text x="186" y="82" font-size="9" fill="#f59e0b">Trained</text>
+  <text x="264" y="82" font-size="9" fill="#64748b">Frozen</text>
+
+  <!-- BLIP-2 -->
+  <text x="500" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">BLIP-2 / LLaVA</text>
+  <rect x="360" y="28" width="68" height="36" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="394" y="50" text-anchor="middle" font-size="10" font-weight="700" fill="#1e40af">Frozen ViT</text>
+  <path d="M428 46 L444 46" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#vlm-arr)"/>
+  <rect x="446" y="28" width="80" height="36" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" style="animation:arch-pulse 2s 0.6s ease-in-out infinite"/>
+  <text x="486" y="44" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">Q-Former (BLIP-2)</text>
+  <text x="486" y="57" text-anchor="middle" font-size="9" fill="#92400e">or Linear (LLaVA)</text>
+  <path d="M526 46 L542 46" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#vlm-arr)"/>
+  <rect x="544" y="28" width="68" height="36" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="578" y="44" text-anchor="middle" font-size="9" font-weight="700" fill="#166534">Frozen LLM</text>
+  <text x="578" y="57" text-anchor="middle" font-size="9" fill="#166534">(LLaMA / T5)</text>
+  <text x="360" y="82" font-size="9" fill="#64748b">Frozen</text>
+  <text x="446" y="82" font-size="9" fill="#f59e0b">Trained</text>
+  <text x="544" y="82" font-size="9" fill="#64748b">Frozen (or LoRA)</text>
+
+  <!-- Comparison bar -->
+  <rect x="22" y="105" width="598" height="70" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="30" y="122" font-size="10" font-weight="700" fill="#334155">Trainable params:</text>
+  <rect x="30"  y="130" width="160" height="16" rx="4" fill="#7c3aed" opacity="0.8"/>
+  <text x="110" y="143" text-anchor="middle" font-size="9" fill="white">Flamingo ~10B</text>
+  <rect x="30"  y="152" width="30" height="16" rx="4" fill="#f59e0b" opacity="0.8"/>
+  <text x="100" y="165" font-size="9" fill="#78350f">BLIP-2 ~188M</text>
+  <rect x="30"  y="152" width="4"  height="16" rx="2" fill="#16a34a" opacity="0.9"/>
+  <text x="200" y="165" font-size="9" fill="#166534">LLaVA ~35M (just the projection)</text>
+  <text x="370" y="143" font-size="9" fill="#64748b">Key insight: the richer the pre-trained components,</text>
+  <text x="370" y="157" font-size="9" fill="#64748b">the simpler the bridge needs to be.</text>
+</svg>
+<figcaption>Three VLM architectures compared. Flamingo inserts trainable Perceiver Resampler + Gated Cross-Attention layers between frozen components (~10B trainable params). BLIP-2 uses a lightweight Q-Former (~188M). LLaVA uses a single linear projection (~35M) — the simplest possible bridge. All three freeze the vision encoder; they differ in how much of the LLM they touch.</figcaption>
+</figure>
+</div>
+
 ## The Vision-Language Model Problem
 
 CLIP gives a shared embedding space for images and text. But it does not generate text — it classifies and retrieves. The next step: combine a vision encoder with a language model to produce a model that can *describe*, *reason about*, and *answer questions* about images.

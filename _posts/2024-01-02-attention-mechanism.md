@@ -168,6 +168,47 @@ The attention matrix has a score for every (query-token, key-token) pair. High s
 
 Critically, this computation is **fully differentiable** — the model learns which token pairs should have high attention purely from training signal, with no hand-crafted rules.
 
+## Concrete Worked Example (2-token sequence, d_k = 2)
+
+Let's trace the full computation with tiny numbers so you can verify it by hand.
+
+**Setup:** two tokens "cat" (x₁) and "sat" (x₂), d_k = 2.
+
+Suppose after projection we have:
+- Q = [[1, 0], [0, 1]]  — q₁ = [1,0], q₂ = [0,1]
+- K = [[1, 0], [0, 1]]  — k₁ = [1,0], k₂ = [0,1]
+- V = [[2, 3], [5, 1]]  — v₁ = [2,3], v₂ = [5,1]
+
+**Step 1 — Raw scores** (Q · Kᵀ):
+
+```
+          k₁=[1,0]  k₂=[0,1]
+q₁=[1,0]    1·1+0·0=1   1·0+0·1=0
+q₂=[0,1]    0·1+1·0=0   0·0+1·1=1
+```
+
+Score matrix = [[1, 0], [0, 1]]
+
+**Step 2 — Scale by √d_k = √2 ≈ 1.41:**
+
+Scaled = [[0.71, 0], [0, 0.71]]
+
+**Step 3 — Softmax row-wise:**
+
+Row 1: softmax([0.71, 0]) = [e^0.71 / (e^0.71+1), 1/(e^0.71+1)] ≈ [0.67, 0.33]
+
+Row 2: softmax([0, 0.71]) ≈ [0.33, 0.67]
+
+**Step 4 — Weighted sum of V:**
+
+Output₁ = 0.67·[2,3] + 0.33·[5,1] = [1.34+1.65, 2.01+0.33] = **[2.99, 2.34]**
+
+Output₂ = 0.33·[2,3] + 0.67·[5,1] = [0.66+3.35, 0.99+0.67] = **[4.01, 1.66]**
+
+<div class="insight-box">
+<strong>What just happened:</strong> "cat" (token 1) attends mostly to itself (0.67) and a little to "sat" (0.33). Its output is a blend of both value vectors — it has absorbed context from the full sequence. Neither token's representation is isolated.
+</div>
+
 ## What Self-Attention Gives You That RNNs Do Not
 
 - **Direct long-range access:** the last token can attend to the first token immediately.
