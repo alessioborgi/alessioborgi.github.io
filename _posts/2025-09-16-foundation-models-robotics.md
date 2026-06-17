@@ -23,6 +23,8 @@ toc_label: "Contents"
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Foundation models — large models pre-trained on broad data — are entering robotics. RT-1 demonstrated that a Transformer trained on 130k diverse robot demonstrations generalises to novel tasks. RT-2 takes this further by co-fine-tuning a billion-parameter vision-language model on robot data, enabling emergent generalisation to instructions never seen in robot training. Open-source models like Octo and OpenVLA are making these capabilities accessible.</div>

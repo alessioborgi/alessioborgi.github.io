@@ -104,6 +104,8 @@ Tumours are heterogeneous — a single tumour contains multiple subpopulations o
 .cover-anim { animation: coverSlide 0.6s ease forwards; }
 .node-anim  { animation: nodeAppear 0.5s ease forwards; }
 .edge-anim  { animation: edgeAppear 0.4s ease forwards; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="blog-figure">

@@ -20,6 +20,8 @@ toc_label: "Contents"
 .tldr-box strong { color: #0d9488; }
 .insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; text-align: center; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> The elder rule says that when a new simplex creates a merge of two connected components, the younger component (the one born later) is killed, not the older one. More generally, the persistence pairing assigns each "negative" simplex (that destroys a class) to the youngest "positive" simplex (that created a class) it can kill. This pairing is unique and well-defined regardless of the reduction algorithm.</div>

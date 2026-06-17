@@ -23,6 +23,8 @@ toc_label: "Contents"
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Robot control spans a hierarchy from low-level PID joint position loops (kHz) to high-level task-space controllers (100 Hz) to planning (1–10 Hz). Impedance control models the robot as a virtual spring-damper for compliant contact. Whole-body control uses quadratic programming to satisfy hierarchical task priorities. MPC optimises over a receding horizon for anticipatory behaviour.</div>
@@ -67,6 +69,7 @@ A practical rule of thumb: tune K_p until you see oscillation, then halve it; ad
 }
 @keyframes pid-setpoint { 0%,100%{opacity:.5} 50%{opacity:1} }
 .pid-dot { animation: pid-track 4s ease-in-out infinite; }
+.pid-setpoint { animation: pid-setpoint 2s ease-in-out infinite; }
 </style>
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:auto;">

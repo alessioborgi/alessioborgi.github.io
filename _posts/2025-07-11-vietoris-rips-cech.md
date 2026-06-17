@@ -87,6 +87,8 @@ A simplex is included if all the $\varepsilon$-balls around its vertices have a 
 .ball-grow { animation: growBall 1.2s ease-out forwards; }
 .edge-show { animation: showEdge 0.5s ease forwards; }
 .tri-show  { animation: showTri 0.6s ease forwards; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="blog-figure">

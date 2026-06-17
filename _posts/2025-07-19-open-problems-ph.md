@@ -14,6 +14,10 @@ icon: "🚀"
 read_mins: 4
 permalink: /blog/persistent-homology/open-problems-ph/
 ---
+<style>
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
+</style>
 {% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="Open problems in TDA" caption="Current frontiers in topological machine learning (Hensel et al., 2021)" %}
 
 ## Intuition First

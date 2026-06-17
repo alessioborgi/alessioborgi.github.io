@@ -21,6 +21,8 @@ permalink: /blog/persistent-homology/homology-groups/
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Homology groups $$H_k$$ are algebraic invariants that count k-dimensional holes in a topological space: $$H_0$$ counts connected components, $$H_1$$ counts loops/tunnels, $$H_2$$ counts enclosed voids. They are computable from simplicial complexes via linear algebra over $$\mathbb{Z}_2$$, and their ranks — the Betti numbers $$\beta_k$$ — form the numerical shape fingerprint that persistent homology tracks across scales.</div>

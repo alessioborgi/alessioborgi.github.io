@@ -20,6 +20,8 @@ toc_label: "Contents"
 .tldr-box strong { color: #0d9488; }
 .insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; text-align: center; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Porous materials (zeolites, MOFs, foams) have geometrically complex void structures. Persistent H₁ and H₂ of the atomic point cloud characterise channels (1D voids, H₁) and cages (3D voids, H₂). The persistence diagram encodes pore size distribution (birth scale) and connectivity (death scale) in a single multi-scale descriptor. This predicts CO₂ adsorption, methane storage capacity, and mechanical stiffness better than simple pore size metrics.</div>

@@ -62,6 +62,8 @@ The result is a vector $\mathbf{v}(T) \in \mathbb{R}^{n \times n}$ — the **per
 }
 .step-fade { animation: fadeStep 0.6s ease forwards; }
 .pixel-pulse { animation: pulsePixel 1s ease forwards; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="blog-figure">

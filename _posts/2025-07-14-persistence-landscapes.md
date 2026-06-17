@@ -63,6 +63,8 @@ The **persistence landscape** is the sequence $\lambda = (\lambda_1, \lambda_2, 
 }
 .tent-line    { stroke-dasharray: 200; animation: drawTent 0.7s ease forwards; }
 .env-line     { stroke-dasharray: 400; animation: drawEnvelope 0.9s ease forwards; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="blog-figure">

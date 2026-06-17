@@ -26,6 +26,9 @@ toc_label: "Contents"
 .summary-table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 1rem 0 1.35rem; }
 .summary-table th { background: #0f2a36; color: #fff; padding: .55rem .75rem; text-align: left; }
 .summary-table td { padding: .5rem .75rem; border-bottom: 1px solid #e2e8f0; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box">

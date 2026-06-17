@@ -20,6 +20,8 @@ toc_label: "Contents"
 .tldr-box strong { color: #0d9488; }
 .insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; text-align: center; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> A filtration f: K → ℝ is just a function assigning "importance" to simplices. If we parameterise f by a neural network (e.g., a GNN on graph nodes/edges), we can learn f end-to-end by backpropagating through the persistence diagram. Graph Filtration Learning (Hofer et al. 2020) does exactly this: a 1-layer GNN outputs node values, inducing a filtration, whose persistence diagram is vectorised and classified.</div>

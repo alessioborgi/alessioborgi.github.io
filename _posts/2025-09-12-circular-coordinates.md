@@ -20,6 +20,8 @@ toc_label: "Contents"
 .tldr-box strong { color: #0d9488; }
 .insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; text-align: center; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Persistent H¹ detects loops in data. Circular coordinates (de Silva, Vejdemo-Johansson & Carlsson, 2011) upgrade this from a binary "loop exists" to a quantitative map f: P → S¹. A persistent 1-cocycle is smoothed (made harmonic) then integrated to a circle-valued function. Applications include gait parameterisation, gene expression cycles, and neural place-cell topology.</div>

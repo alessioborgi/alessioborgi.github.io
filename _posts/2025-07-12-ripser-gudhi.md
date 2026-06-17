@@ -94,6 +94,8 @@ The combination of cohomology + apparent pairs + clearing gives Ripser its enorm
 }
 .pair-cell { animation: pairFlash 0.8s ease forwards; }
 .skip-cell { animation: skipFlash 0.8s ease forwards; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="blog-figure">

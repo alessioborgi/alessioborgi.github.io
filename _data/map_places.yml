@@ -81,6 +81,14 @@
   date: "2025"
   note: "CVPR 2025, Nashville, TN, USA 🇺🇸"
 
+- name: "Pisa"
+  subtitle: "LoG Italian Meetup 2026 — Learning on Graphs"
+  type: "study"
+  lat: 43.7228
+  lng: 10.4017
+  date: "2026"
+  note: "University of Pisa, Pisa, Italy 🇮🇹 — The Leaning Tower is actually VERY crooked, way more than I was expecting up close! 🗼"
+
 - name: "Milan"
   subtitle: "M2L - Mediterranean Machine Learning Summer School"
   type: "study"

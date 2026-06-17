@@ -115,6 +115,8 @@ Column 6 becomes zero! So $e_{02}$ **creates** a 1-cycle. But wait — we now ch
 }
 .col-anim { animation: highlightCol 0.6s ease forwards; }
 .xor-cell { animation: xorFlash 0.8s ease forwards; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="blog-figure">

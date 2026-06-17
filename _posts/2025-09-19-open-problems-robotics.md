@@ -23,6 +23,8 @@ toc_label: "Contents"
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Robot learning has progressed remarkably: quadrupeds run through forests, arms manipulate Rubik's Cubes, and language models plan robot tasks. Yet the fundamental challenges remain unsolved: data scarcity, brittleness under distribution shift, missing tactile sensing, long-horizon reasoning, and the question of whether internet-scale pre-training can substitute for embodied experience. This post surveys the most important open problems.</div>

@@ -20,6 +20,8 @@ toc_label: "Contents"
 .tldr-box strong { color: #0d9488; }
 .insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; text-align: center; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Cohomology replaces chains (formal sums of simplices) with cochains (functions assigning values to simplices), and boundary maps with coboundary maps going in the opposite direction. Over a field, H^n ≅ H_n, so the hole-counting is the same — but the cup product gives extra structure, and persistent cohomology runs faster in practice due to its column-reduction direction.</div>

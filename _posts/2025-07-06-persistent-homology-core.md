@@ -21,6 +21,8 @@ permalink: /blog/persistent-homology/persistent-homology-core/
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
 .paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .paper-box strong { color: #7c3aed; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Persistent homology applies homology to a filtration. Each topological feature has a birth time (when it first appears) and a death time (when it merges with an older feature or becomes trivial). The full lifetime of all features is encoded in a persistence diagram — a multi-scale, noise-robust shape signature. The fundamental decomposition theorem guarantees this encoding is complete and unique.</div>

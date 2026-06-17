@@ -72,6 +72,8 @@ Functional MRI measures BOLD signal across ~100 brain regions over time. The sta
 }
 .brain-node { animation: popNode 0.4s ease forwards; }
 .brain-edge { animation: fadeEdge 0.5s ease forwards; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="blog-figure">

@@ -20,6 +20,8 @@ toc_label: "Contents"
 .tldr-box strong { color: #0d9488; }
 .insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
 .math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; text-align: center; }
+.blog-figure { margin: 1.5rem 0; text-align: center; }
+.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> The witness complex (de Silva & Carlsson, 2004) uses a small set of landmarks L ⊂ P and lets all other data points "witness" the inclusion of simplices between landmarks. A simplex on landmarks is included if it has a witness — a data point closer to those landmarks than to any others. This keeps the complex size O(|L|^k) rather than O(|P|^k), enabling TDA on millions of points.</div>
