@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## Vision Is Relational
 
+**Intuition First:** A CNN classifying cats sees pixels and textures — it answers "is there a cat-shaped pattern here?" A scene graph GNN answers "is the cat sitting *on* the mat, or *next to* it, or *under* it?" These are different questions entirely. The relation matters for image captioning, for VQA ("Is there anything on the mat?"), and for robotics ("pick up the object on top of the red box"). CNNs process each object in isolation; GNNs pass messages between objects so each object's representation is informed by its relational context.
+
 A single-object CNN classifier answers "what is in this image?" A relational vision system answers "how do the objects relate?" The latter is required for:
 
 - **Image captioning:** "a person riding a bicycle on a road" — requires knowing the person-bicycle relation
@@ -98,6 +100,8 @@ Human skeletons are natural graphs: joints (wrists, elbows, shoulders) are nodes
 - Medical: 3D organ segmentation from CT/MRI
 
 **Equivariant GNNs (EGNN):** point cloud processing that is SE(3)-equivariant — predictions are consistent regardless of sensor orientation. Critical for robotics where the sensor is mounted in various orientations.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The CLEVR benchmark makes the advantage of relational GNNs concrete: questions like "Is the large metallic cube to the left of the small rubber sphere?" require tracking two objects and computing a spatial relation — impossible for a model that reads the image as a single global feature vector. GNNs that build an explicit object graph and pass messages between nodes achieve near-perfect accuracy on CLEVR, while CNN+LSTM baselines struggle below 70%. The difference is not model capacity — it is whether spatial relations are explicitly represented.</div>
 
 ## Application 5: Object Detection with Region-Relation Reasoning
 

@@ -28,6 +28,65 @@ toc_label: "Contents"
 <div class="tldr-box"><strong>TL;DR:</strong> Language-conditioned robots can receive instructions in natural language and translate them into physical actions. SayCan grounds LLM task plans in robot affordances; CLIPort uses CLIP features to ground language in spatial manipulation; and modern VLMs serve as end-to-end instruction-following policies, enabling robots to understand complex, context-dependent commands.</div>
 {% include figure image_path="/images/blog/robotics/ahn2022_saycan.png" alt="SayCan language-conditioned policy" caption="SayCan: language-conditioned robot skill selection (Ahn et al., 2022)" %}
 
+<style>
+@keyframes llm-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+@keyframes arrow-slide {
+  0% { stroke-dashoffset: 40; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes robot-bob {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:620px;font-family:sans-serif;">
+  <!-- Background -->
+  <rect width="620" height="200" fill="#f8fafc" rx="12"/>
+  <!-- LLM/VLM box -->
+  <rect x="30" y="60" width="130" height="80" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="95" y="92" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d4ed8">LLM / VLM</text>
+  <text x="95" y="108" text-anchor="middle" font-size="9" fill="#1d4ed8">"Bring me</text>
+  <text x="95" y="120" text-anchor="middle" font-size="9" fill="#1d4ed8">something cold"</text>
+  <rect x="30" y="60" width="130" height="80" fill="none" stroke="#3b82f6" stroke-width="2" rx="8"
+        style="animation: llm-pulse 2s ease-in-out infinite;"/>
+  <!-- Arrow 1 -->
+  <line x1="162" y1="100" x2="218" y2="100" stroke="#64748b" stroke-width="2"
+        stroke-dasharray="8" style="animation: arrow-slide 0.8s linear infinite;"/>
+  <polygon points="218,95 228,100 218,105" fill="#64748b"/>
+  <text x="193" y="92" text-anchor="middle" font-size="8" fill="#64748b">plan</text>
+  <!-- Policy box -->
+  <rect x="230" y="60" width="130" height="80" fill="#dcfce7" stroke="#16a34a" stroke-width="2" rx="8"/>
+  <text x="295" y="92" text-anchor="middle" font-size="11" font-weight="bold" fill="#166534">Policy</text>
+  <text x="295" y="108" text-anchor="middle" font-size="9" fill="#166534">pick_up(soda_can)</text>
+  <text x="295" y="120" text-anchor="middle" font-size="9" fill="#166534">× affordance score</text>
+  <!-- Arrow 2 -->
+  <line x1="362" y1="100" x2="418" y2="100" stroke="#64748b" stroke-width="2"
+        stroke-dasharray="8" style="animation: arrow-slide 0.8s linear infinite 0.4s;"/>
+  <polygon points="418,95 428,100 418,105" fill="#64748b"/>
+  <text x="393" y="92" text-anchor="middle" font-size="8" fill="#64748b">action</text>
+  <!-- Robot box -->
+  <g style="animation: robot-bob 2s ease-in-out infinite;">
+    <rect x="430" y="55" width="130" height="90" fill="#fef9c3" stroke="#ca8a04" stroke-width="2" rx="8"/>
+    <text x="495" y="87" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400e">Robot</text>
+    <!-- simple arm icon -->
+    <line x1="480" y1="105" x2="480" y2="128" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+    <line x1="480" y1="118" x2="510" y2="128" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="513" cy="130" r="5" fill="#92400e"/>
+  </g>
+  <!-- Feedback arrow back -->
+  <path d="M495 148 Q495 170 295 170 Q95 170 95 143" fill="none" stroke="#94a3b8" stroke-width="1.5"
+        stroke-dasharray="5,3"/>
+  <polygon points="91,143 95,153 99,143" fill="#94a3b8"/>
+  <text x="295" y="185" text-anchor="middle" font-size="8" fill="#64748b">environment feedback (Inner Monologue)</text>
+  <!-- Title -->
+  <text x="310" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#334155">Language-Conditioned Robot Architecture</text>
+</svg>
+<figcaption>How language gets translated to robot actions: the LLM reasons about the instruction, the policy scores physical feasibility, and the robot executes — with optional feedback loops for re-planning.</figcaption>
+</figure></div>
 
 ## Grounding Language to Actions
 
@@ -36,6 +95,8 @@ Large Language Models possess impressive commonsense reasoning, world knowledge,
 The grounding problem is hard because language operates at a semantic level ("the mug on the left") while robot control requires precise geometric specifications (joint angles, end-effector positions). Bridging these levels of abstraction is the central challenge of language-conditioned robotics.
 
 ## SayCan: Affordance-Weighted LLM Planning
+
+**Intuition First.** Imagine you ask a friend to "grab something cold from the fridge." Your friend's brain does two things simultaneously: it uses language understanding to figure out that "something cold" probably means a drink or a cold snack, and it uses physical intuition to check whether the fridge is actually reachable, open, and stocked. SayCan replicates this exact two-channel process in software. The LLM handles the first channel — semantic plausibility — while a learned value function handles the second — physical feasibility. Neither alone is enough: the LLM might propose picking up an object that the robot cannot reach, and the affordance model alone has no sense of the task's intent.
 
 **SayCan** (Ahn et al. 2022, arXiv:2204.01691) elegantly decomposes the grounding problem into two components:
 
@@ -50,9 +111,23 @@ skill* = argmax_i  p_LLM(skill_i | instruction, context) * V(s, skill_i)
 
 This ensures that selected skills are both semantically appropriate (per the LLM) and physically executable (per the affordance model). SayCan demonstrated impressive open-ended instruction following in a real cafeteria environment with 101 skills across picking, placing, and opening tasks.
 
-<div class="insight-box"><strong>Key Insight:</strong> SayCan's key contribution is recognising that LLMs alone cannot plan for robots — they lack knowledge of physical feasibility. By multiplying LLM scores with affordance scores, the system balances what makes semantic sense with what the robot can actually do. Neither alone is sufficient.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> SayCan's contribution is recognising that LLMs alone cannot plan for robots — they lack knowledge of physical feasibility. By multiplying LLM scores with affordance scores, the system balances what makes semantic sense with what the robot can actually do. Neither channel alone is sufficient: an LLM without affordances proposes impossible actions; an affordance model without language has no notion of task intent.</div>
+
+**Worked Example — step by step.**
+
+Suppose the robot is in a cafeteria and receives the instruction *"I'm feeling a bit cold, can you bring me something hot?"*
+
+1. **Enumerate candidate skills**: the system has 101 skills including `pick_up(coffee_cup)`, `pick_up(soda_can)`, `open(microwave)`, `bring(coffee_cup, user)`, etc.
+2. **LLM scoring**: PaLM assigns high probability to `pick_up(coffee_cup)` and `bring(coffee_cup, user)` given the instruction — coffee fits "something hot". It assigns near-zero probability to `pick_up(soda_can)` — a cold drink contradicts the instruction.
+3. **Affordance scoring**: the robot's value function observes the current state (coffee cup is visible 0.8 m away, gripper is free) and estimates: `V(s, pick_up(coffee_cup)) = 0.87`, `V(s, open(microwave)) = 0.23` (microwave is far and partially occluded).
+4. **Combined score**: `pick_up(coffee_cup)` scores `0.91 × 0.87 = 0.79`, `open(microwave)` scores `0.70 × 0.23 = 0.16`.
+5. **Selection**: the robot picks `pick_up(coffee_cup)`, executes it, then re-runs the loop with updated state to select `bring(coffee_cup, user)`.
+
+The key is that step 2 filters for intent and step 3 filters for physical reachability — together they prune the skill space to actions that are both relevant and executable.
 
 ## CLIP for Robot Manipulation
+
+**Intuition First.** Think of CLIP as giving the robot a shared dictionary between words and pixels. Before CLIP, if you told a robot "pick up the red mug on the left," it would need separate task-specific training to connect those words to a region in the image. CLIP's contrastive training — matching millions of image-caption pairs — builds a universal lookup table: any text phrase can be compared against any image patch, and the closest match wins. CLIPort plugs this dictionary into a manipulation policy so that spatial precision (where exactly to grasp) and semantic grounding (what the instruction means) are handled by separate but complementary pathways.
 
 **CLIP** (Contrastive Language-Image Pre-training, Radford et al. 2021) jointly trains image and text encoders so that semantically related image-text pairs have similar embeddings. This gives CLIP zero-shot visual grounding ability: given the text "red mug on the left", CLIP can identify the corresponding region in an image without task-specific training.
 
@@ -82,9 +157,13 @@ This approach (used in systems like Inner Monologue, Huang et al. 2022) works wh
 
 ## VLMs as End-to-End Instruction Followers
 
+**Intuition First.** SayCan and CLIPort are modular: they separate language understanding, skill selection, and motor control into distinct components. The VLM end-to-end approach collapses all of this into a single model. Think of it like the difference between a committee that deliberates step by step and a human expert who has internalised so much experience that they act fluidly without consciously switching modes. The bet is that internet-scale vision-language pre-training provides such rich priors that a single model can handle semantic grounding and motor control together — and empirically, for many tasks, it does.
+
 The most direct approach conditions the full robot policy end-to-end on vision and language. Models like **RT-2**, **OpenVLA**, and **Octo** accept an image observation and a language instruction and directly output motor commands, bypassing explicit task planning and skill selection.
 
 These models benefit from VLM pre-training's rich semantic representations and can generalise to novel instruction phrasings, novel objects, and even novel task types that were not present in robot training data — abilities that emerge from the breadth of internet-scale pre-training.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> There is a spectrum from modular (SayCan) to end-to-end (RT-2). Modular systems are interpretable and easy to swap components in, but errors compound across modules. End-to-end systems are harder to debug but can learn cross-modal shortcuts that no hand-designed pipeline would discover. The field is still determining which regime wins for which task horizons and generalisation requirements.</div>
 
 ## References
 

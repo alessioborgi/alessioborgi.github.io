@@ -29,6 +29,8 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="Graph neural ODE dynamics" caption="Continuous-depth GNN dynamics — EGNN equivariant evolution (Satorras et al., 2021)" %}
 
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A discrete GNN with K layers is like a staircase — you take exactly K steps regardless of the terrain. A Graph Neural ODE is like a smooth ramp — the solver takes small steps where the dynamics are steep and large steps where they are flat. The number of effective "layers" adapts automatically to the data, and you can evaluate the state at any continuous time, not just at integer steps.</div>
+
 ## Neural ODEs: A Quick Refresher
 
 Standard residual network: H^{(k+1)} = H^{(k)} + f_θ(H^{(k)}). This is the Euler discretisation of the ODE:
@@ -69,6 +71,104 @@ This models physically-coupled systems (particle dynamics, multi-agent trajector
 <div class="insight-box">
 <strong>The physics connection:</strong> Many physical systems are naturally described by differential equations over interaction graphs — Newton's laws for particle systems, diffusion equations on networks, epidemic spreading on contact graphs. Graph Neural ODEs provide a learnable version of these dynamics, useful when the exact equations are unknown but the graph structure (who interacts with whom) is known.
 </div>
+
+## Worked Example: Graph Neural ODE vs Discrete GCN
+
+Consider a path graph with 3 nodes: A — B — C, each with scalar feature h(0) = [1, 0, 0] (only A is active). Adjacency after normalisation: A_hat has 1/sqrt(deg) weights.
+
+**Discrete GCN (2 layers):**
+- Layer 1: h_B gets contribution from A and C. h_B^(1) ≈ 0.5 (half of A's signal)
+- Layer 2: h_C gets contribution from B. h_C^(2) ≈ 0.25
+
+The signal reaches C exactly at layer 2. To reach further you must add more layers — the depth is a hard hyperparameter.
+
+**Graph Neural ODE (integrate from t=0 to T):**
+
+The ODE dH/dt = A_hat · H diffuses the signal continuously. At time t, the solution is:
+```
+H(t) = exp(A_hat · t) · H(0)
+```
+- At t=0.5: h_C(0.5) ≈ 0.06  (signal just starting to reach C)
+- At t=1.0: h_C(1.0) ≈ 0.18  (more signal)
+- At t=2.0: h_C(2.0) ≈ 0.30  (stronger, oversmoothed if too large)
+
+You can choose T to match the task's natural scale — no need to count layers. The ODE solver also automatically refines its steps near t=0 where the gradient is largest.
+
+<style>
+@keyframes flow-wave {
+  0% { stroke-dashoffset: 80; opacity: 0.5; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes node-pulse-ode {
+  0% { r: 10; }
+  50% { r: 13; }
+  100% { r: 10; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;">
+  <!-- Discrete GCN side -->
+  <text x="100" y="18" font-size="11" fill="#374151" text-anchor="middle" font-weight="bold">Discrete GCN (2 layers)</text>
+  <!-- Layer 0 -->
+  <circle cx="30"  cy="60" r="10" fill="#f97316" style="animation:node-pulse-ode 2s ease-in-out 0s infinite;"/>
+  <circle cx="30"  cy="95" r="10" fill="#e2e8f0"/>
+  <circle cx="30"  cy="130" r="10" fill="#e2e8f0"/>
+  <!-- Layer 1 -->
+  <circle cx="90"  cy="60" r="10" fill="#fb923c"/>
+  <circle cx="90"  cy="95" r="10" fill="#fdba74"/>
+  <circle cx="90"  cy="130" r="10" fill="#e2e8f0"/>
+  <!-- Layer 2 -->
+  <circle cx="150" cy="60" r="10" fill="#fed7aa"/>
+  <circle cx="150" cy="95" r="10" fill="#fdba74"/>
+  <circle cx="150" cy="130" r="10" fill="#fde68a"/>
+  <!-- edges -->
+  <line x1="40"  y1="60"  x2="80"  y2="60"  stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="40"  y1="95"  x2="80"  y2="95"  stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="40"  y1="130" x2="80"  y2="130" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="100" y1="60"  x2="140" y2="60"  stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="100" y1="95"  x2="140" y2="95"  stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="100" y1="130" x2="140" y2="130" stroke="#cbd5e1" stroke-width="1.5"/>
+  <!-- labels -->
+  <text x="30"  y="148" font-size="8" fill="#64748b" text-anchor="middle">L=0</text>
+  <text x="90"  y="148" font-size="8" fill="#64748b" text-anchor="middle">L=1</text>
+  <text x="150" y="148" font-size="8" fill="#64748b" text-anchor="middle">L=2</text>
+  <text x="15"  y="63"  font-size="8" fill="#64748b">A</text>
+  <text x="15"  y="98"  font-size="8" fill="#64748b">B</text>
+  <text x="15"  y="133" font-size="8" fill="#64748b">C</text>
+
+  <!-- divider -->
+  <line x1="220" y1="10" x2="220" y2="155" stroke="#f1f5f9" stroke-width="2"/>
+
+  <!-- ODE side -->
+  <text x="340" y="18" font-size="11" fill="#374151" text-anchor="middle" font-weight="bold">Graph Neural ODE (continuous)</text>
+  <!-- Continuous t axis -->
+  <line x1="245" y1="130" x2="440" y2="130" stroke="#cbd5e1" stroke-width="1.5"/>
+  <polygon points="440,125 450,130 440,135" fill="#cbd5e1"/>
+  <text x="450" y="134" font-size="9" fill="#64748b">t</text>
+  <!-- Signal curves: node A (orange, starts high), B (mid), C (starts low) -->
+  <!-- A: decays from high -->
+  <path d="M245,40 C275,42 305,50 340,60 C370,68 400,75 435,80" stroke="#f97316" stroke-width="2" fill="none" style="animation:flow-wave 2s linear infinite; stroke-dasharray:80;"/>
+  <!-- B: rises then plateaus -->
+  <path d="M245,90 C275,80 305,72 340,68 C370,66 400,67 435,68" stroke="#6366f1" stroke-width="2" fill="none" style="animation:flow-wave 2s linear 0.5s infinite; stroke-dasharray:80;"/>
+  <!-- C: rises slowly -->
+  <path d="M245,118 C275,110 305,100 340,90 C370,82 400,76 435,72" stroke="#10b981" stroke-width="2" fill="none" style="animation:flow-wave 2s linear 1s infinite; stroke-dasharray:80;"/>
+  <!-- t marks -->
+  <line x1="290" y1="126" x2="290" y2="134" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="340" y1="126" x2="340" y2="134" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="390" y1="126" x2="390" y2="134" stroke="#94a3b8" stroke-width="1"/>
+  <text x="290" y="144" font-size="8" fill="#64748b" text-anchor="middle">0.5</text>
+  <text x="340" y="144" font-size="8" fill="#64748b" text-anchor="middle">1.0</text>
+  <text x="390" y="144" font-size="8" fill="#64748b" text-anchor="middle">2.0</text>
+  <!-- legend -->
+  <line x1="245" y1="155" x2="262" y2="155" stroke="#f97316" stroke-width="2"/>
+  <text x="265" y="159" font-size="8" fill="#64748b">A</text>
+  <line x1="280" y1="155" x2="297" y2="155" stroke="#6366f1" stroke-width="2"/>
+  <text x="300" y="159" font-size="8" fill="#64748b">B</text>
+  <line x1="315" y1="155" x2="332" y2="155" stroke="#10b981" stroke-width="2"/>
+  <text x="335" y="159" font-size="8" fill="#64748b">C</text>
+</svg>
+<figcaption>Left: discrete GCN propagates signal in integer layer steps — C only receives signal at layer 2. Right: Graph Neural ODE diffuses signal continuously — you read off the state at any time T, and the solver adapts its step size to the local dynamics.</figcaption>
+</figure></div>
 
 ## Continuous-Time Graph Learning (CTDG Perspective)
 

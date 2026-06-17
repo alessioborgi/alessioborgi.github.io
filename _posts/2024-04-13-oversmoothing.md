@@ -29,6 +29,75 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/li2018_oversmoothing.png" alt="Over-smoothing in deep GNNs" caption="Over-smoothing: node representations converge with depth (Li et al., 2018)" %}
 
 
+## Intuition First: The Averaging Trap
+
+Think of oversmoothing as a rumour spreading through a network. Each round, every person replaces their belief with the average of their friends' beliefs. After a few rounds everyone in a tightly connected community converges to the same average opinion — individual information is destroyed. The more rounds, the more uniform the beliefs. A GNN doing neighbourhood averaging suffers exactly the same fate.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing is not a training bug. It is a <em>mathematical inevitability</em>: the smoothing matrix S̃ has spectral radius 1, so repeated application kills all eigenvectors except the constant one. No amount of regularisation or learning rate tuning will fix it — the architecture must change.</div>
+
+<style>
+@keyframes smooth-fade {
+  0% { stop-color: #dc2626; }
+  40% { stop-color: #f97316; }
+  80% { stop-color: #86efac; }
+  100% { stop-color: #86efac; }
+}
+@keyframes smooth-fade2 {
+  0% { stop-color: #1d4ed8; }
+  40% { stop-color: #60a5fa; }
+  80% { stop-color: #86efac; }
+  100% { stop-color: #86efac; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 380 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;display:block;margin:auto;">
+  <defs>
+    <linearGradient id="g0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" style="stop-color:#dc2626;animation:smooth-fade 4s ease-in-out infinite;"/>
+      <stop offset="100%" style="stop-color:#1d4ed8;animation:smooth-fade2 4s ease-in-out infinite;"/>
+    </linearGradient>
+    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#a5f3fc"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#86efac"/>
+      <stop offset="100%" stop-color="#86efac"/>
+    </linearGradient>
+  </defs>
+  <text x="190" y="14" font-size="11" font-family="sans-serif" fill="#475569" text-anchor="middle">Node embeddings converge to the same value with increasing GNN depth</text>
+  <!-- Layer 0 bars -->
+  <rect x="20" y="30" width="18" height="70" fill="url(#g0)" rx="3"/>
+  <rect x="42" y="50" width="18" height="50" fill="url(#g0)" rx="3"/>
+  <rect x="64" y="20" width="18" height="80" fill="url(#g0)" rx="3"/>
+  <rect x="86" y="60" width="18" height="40" fill="url(#g0)" rx="3"/>
+  <text x="70" y="118" font-size="9" font-family="sans-serif" fill="#64748b" text-anchor="middle">Layer 0</text>
+  <!-- Layer 1 bars -->
+  <rect x="120" y="35" width="18" height="65" fill="url(#g1)" rx="3"/>
+  <rect x="142" y="42" width="18" height="58" fill="url(#g1)" rx="3"/>
+  <rect x="164" y="28" width="18" height="72" fill="url(#g1)" rx="3"/>
+  <rect x="186" y="50" width="18" height="50" fill="url(#g1)" rx="3"/>
+  <text x="163" y="118" font-size="9" font-family="sans-serif" fill="#64748b" text-anchor="middle">Layer 1</text>
+  <!-- Layer 2 bars -->
+  <rect x="220" y="44" width="18" height="56" fill="url(#g2)" rx="3"/>
+  <rect x="242" y="47" width="18" height="53" fill="url(#g2)" rx="3"/>
+  <rect x="264" y="40" width="18" height="60" fill="url(#g2)" rx="3"/>
+  <rect x="286" y="49" width="18" height="51" fill="url(#g2)" rx="3"/>
+  <text x="263" y="118" font-size="9" font-family="sans-serif" fill="#64748b" text-anchor="middle">Layer 2</text>
+  <!-- Layer K bars -->
+  <rect x="320" y="50" width="18" height="50" fill="url(#g3)" rx="3"/>
+  <rect x="342" y="50" width="18" height="50" fill="url(#g3)" rx="3"/>
+  <rect x="320" y="50" width="18" height="50" fill="url(#g3)" rx="3"/>
+  <rect x="342" y="50" width="18" height="50" fill="url(#g3)" rx="3"/>
+  <text x="340" y="118" font-size="9" font-family="sans-serif" fill="#dc2626" text-anchor="middle">Layer K→∞</text>
+</svg>
+<figcaption>As depth increases, node embeddings (bars) lose diversity and converge to a uniform vector — oversmoothing.</figcaption>
+</figure></div>
+
 ## The Problem: Deep GNNs Fail
 
 Empirically: GCN with 2 layers works. With 8 layers, accuracy drops dramatically. With 64 layers, performance collapses to near-random. This is not overfitting — validation loss also degrades. It is oversmoothing.
@@ -82,6 +151,18 @@ For Cora (a sparse citation network), oversmoothing is slow — models can use 4
 <div class="insight-box">
 <strong>The diameter paradox:</strong> You might think: "I need K layers to reach nodes K hops away, so add more layers for better coverage." But adding more layers also accelerates oversmoothing for nearby nodes. The optimal depth is a trade-off between coverage (more layers = larger receptive field) and smoothing (more layers = less discrimination). For most graphs, this optimum is 2-3 layers.
 </div>
+
+## Concrete Worked Example: Dirichlet Energy Collapse
+
+Consider a path graph with 4 nodes: 1–2–3–4, with initial features h = [1, 0, 1, 0] (alternating). The symmetric normalised adjacency is S̃ ≈ [[0, 0.5, 0, 0], [0.5, 0, 0.5, 0], [0, 0.5, 0, 0.5], [0, 0, 0.5, 0]].
+
+**Dirichlet energy E = Σ_{edges} ||h_u - h_v||²:**
+- Layer 0: E = |1-0|² + |0-1|² + |1-0|² = 3.0 (nodes clearly distinct)
+- Layer 1 (apply S̃): h ≈ [0, 1, 0, 0.5] — energy decreases
+- Layer 2: h converges further toward uniform — energy → ~0.3
+- Layer 8: h ≈ [0.42, 0.42, 0.42, 0.42] — energy ≈ 0.0
+
+The Dirichlet energy tracks collapse precisely. Monitoring it during training tells you exactly how many layers you can stack before representations become useless.
 
 ## Oversmoothing vs Vanishing Gradients
 

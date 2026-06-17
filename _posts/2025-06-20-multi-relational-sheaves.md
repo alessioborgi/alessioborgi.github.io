@@ -31,6 +31,56 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/schlichtkrull2018_rgcn.png" alt="Multi-relational sheaf maps" caption="Multi-relational sheaves: per-relation restriction maps generalise R-GCN (Schlichtkrull et al., 2018)" %}
 
 
+## Intuition First: One Interpreter Per Relationship Type
+
+In a knowledge graph, the same entity (node) participates in very different kinds of relationships: a person *lives_in* a city, *works_at* a company, *knows* another person. Standard GNNs treat all edge types the same — every message is aggregated with the same weights regardless of the relationship type.
+
+A **multi-relational sheaf** assigns a different restriction map to each relation type — a different *interpreter* for each kind of edge. The "works_at" interpreter transforms an entity's features differently from the "knows" interpreter before comparing to the adjacent node. This is the principled generalisation of R-GCN (separate weight matrix per relation) to the full sheaf framework, where the maps also encode a *geometric* relationship (not just a linear transform).
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Every major knowledge graph embedding method is a special case of multi-relational sheaves with specific constraints on the restriction maps: TransE uses affine maps (translation by ±w_r), RotatE uses orthogonal maps (rotation by O_r), DistMult uses diagonal maps (element-wise scaling by w_r). The sheaf framework unifies all of these under one mathematical umbrella — and shows that any of them can be combined with sheaf diffusion to propagate entity embeddings through the graph topology.</div>
+
+<style>
+@keyframes relPulse {
+  0%,100% { stroke-opacity: 0.5; }
+  50%      { stroke-opacity: 1; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 180" style="width:100%;max-width:500px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- central entity node -->
+  <circle cx="230" cy="90" r="28" fill="#fef3c7" stroke="#d97706" stroke-width="2.5"/>
+  <text x="230" y="87" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400e">Alice</text>
+  <text x="230" y="101" text-anchor="middle" font-size="8"  fill="#b45309">entity</text>
+  <!-- works_at edge (blue) -->
+  <line x1="203" y1="80" x2="90" y2="45" stroke="#3b82f6" stroke-width="2.5"
+        stroke-dasharray="6,3" style="animation:relPulse 2.5s ease-in-out infinite;"/>
+  <circle cx="70" cy="40" r="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="70" y="37" text-anchor="middle" font-size="10" fill="#1e40af">Acme</text>
+  <text x="70" y="49" text-anchor="middle" font-size="8"  fill="#3b82f6">company</text>
+  <text x="145" y="52" text-anchor="middle" font-size="9" fill="#3b82f6" transform="rotate(-20,145,52)">works_at</text>
+  <text x="135" y="64" text-anchor="middle" font-size="8" fill="#3b82f6" transform="rotate(-20,135,64)">F^{work}_{v▷e}</text>
+  <!-- lives_in edge (green) -->
+  <line x1="203" y1="100" x2="90" y2="140" stroke="#16a34a" stroke-width="2.5"
+        stroke-dasharray="6,3" style="animation:relPulse 2.5s ease-in-out infinite 0.7s;"/>
+  <circle cx="68" cy="148" r="22" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="68" y="145" text-anchor="middle" font-size="10" fill="#166534">Paris</text>
+  <text x="68" y="157" text-anchor="middle" font-size="8"  fill="#16a34a">city</text>
+  <text x="145" y="128" text-anchor="middle" font-size="9" fill="#16a34a" transform="rotate(20,145,128)">lives_in</text>
+  <text x="140" y="116" text-anchor="middle" font-size="8" fill="#16a34a" transform="rotate(20,140,116)">F^{live}_{v▷e}</text>
+  <!-- knows edge (purple) -->
+  <line x1="258" y1="90" x2="385" y2="60" stroke="#7c3aed" stroke-width="2.5"
+        stroke-dasharray="6,3" style="animation:relPulse 2.5s ease-in-out infinite 1.4s;"/>
+  <circle cx="405" cy="55" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="405" y="52" text-anchor="middle" font-size="10" fill="#5b21b6">Bob</text>
+  <text x="405" y="64" text-anchor="middle" font-size="8"  fill="#7c3aed">person</text>
+  <text x="330" y="58" text-anchor="middle" font-size="9" fill="#7c3aed" transform="rotate(-15,330,58)">knows</text>
+  <text x="330" y="70" text-anchor="middle" font-size="8" fill="#7c3aed" transform="rotate(-15,330,70)">F^{know}_{v▷e}</text>
+  <!-- caption -->
+  <text x="230" y="170" text-anchor="middle" font-size="9" fill="#374151">Each relation type has its own restriction map — different geometry per relationship.</text>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Entity "Alice" (centre) participates in three different relation types, each with its own restriction map (animated dashed lines). The "works_at" map (blue) encodes employment geometry; "lives_in" (green) encodes spatial geometry; "knows" (purple) encodes social geometry. The multi-relational Sheaf Laplacian sums the contributions from all relation types.</figcaption>
+</figure></div>
+
 ## The Multi-Relational Setting
 
 A **knowledge graph** is a multi-relational graph: nodes are entities, edges are (entity, relation, entity) triples. Each edge e has a relation type r(e) ∈ R.

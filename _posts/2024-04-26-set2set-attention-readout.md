@@ -31,12 +31,69 @@ toc_label: "Contents"
 
 ## Beyond Uniform Pooling
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mean pooling computes the "average node" — it cannot distinguish a graph with one highly important node from one where all nodes are equally mediocre. Attention readout is the fix: it learns a per-node importance score during training, so the final graph embedding is dominated by the nodes that actually matter for the task.</div>
+
 Mean and sum pooling treat all nodes identically. But for most tasks, nodes differ greatly in importance:
 - In a molecule, the reactive functional group matters more than inert backbone atoms
 - In a social network, hubs matter more than peripheral nodes
 - In a citation graph, landmark papers matter more than derivative works
 
 **Attention readout** learns these importance differences during training.
+
+<style>
+@keyframes pulse-node {
+  0%, 100% { r: 14; opacity: 1; }
+  50% { r: 18; opacity: 0.7; }
+}
+@keyframes pulse-node-small {
+  0%, 100% { r: 8; opacity: 0.5; }
+  50% { r: 9; opacity: 0.7; }
+}
+@keyframes flow-arrow {
+  0% { opacity: 0; transform: translateY(-4px); }
+  50% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(4px); }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0 auto;">
+  <!-- Graph nodes with varying sizes = varying importance -->
+  <circle cx="60" cy="80" r="8" fill="#94a3b8" style="animation:pulse-node-small 2.4s ease-in-out infinite;"/>
+  <circle cx="110" cy="50" r="8" fill="#94a3b8" style="animation:pulse-node-small 2.4s ease-in-out 0.3s infinite;"/>
+  <circle cx="110" cy="110" r="8" fill="#94a3b8" style="animation:pulse-node-small 2.4s ease-in-out 0.6s infinite;"/>
+  <!-- High-importance node -->
+  <circle cx="170" cy="80" r="14" fill="#f97316" style="animation:pulse-node 2s ease-in-out infinite;" stroke="#fff" stroke-width="2"/>
+  <circle cx="230" cy="55" r="8" fill="#94a3b8" style="animation:pulse-node-small 2.4s ease-in-out 0.9s infinite;"/>
+  <circle cx="230" cy="105" r="8" fill="#94a3b8" style="animation:pulse-node-small 2.4s ease-in-out 1.2s infinite;"/>
+  <!-- edges -->
+  <line x1="60" y1="80" x2="110" y2="50" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="60" y1="80" x2="110" y2="110" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="110" y1="50" x2="170" y2="80" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="110" y1="110" x2="170" y2="80" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="170" y1="80" x2="230" y2="55" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="170" y1="80" x2="230" y2="105" stroke="#cbd5e1" stroke-width="1.5"/>
+  <!-- arrow to pooling -->
+  <text x="265" y="85" font-size="22" fill="#64748b" style="animation:flow-arrow 1.8s ease-in-out infinite;">→</text>
+  <!-- Attention weights bars -->
+  <rect x="300" y="60" width="6" height="40" fill="#94a3b8" rx="3"/>
+  <rect x="316" y="70" width="6" height="30" fill="#94a3b8" rx="3"/>
+  <rect x="332" y="50" width="6" height="50" fill="#f97316" rx="3" opacity="0.9"/>
+  <rect x="348" y="68" width="6" height="32" fill="#94a3b8" rx="3"/>
+  <rect x="364" y="72" width="6" height="28" fill="#94a3b8" rx="3"/>
+  <text x="300" y="120" font-size="10" fill="#64748b">α₁</text><text x="316" y="120" font-size="10" fill="#64748b">α₂</text>
+  <text x="330" y="120" font-size="10" fill="#f97316">α₃</text><text x="348" y="120" font-size="10" fill="#64748b">α₄</text>
+  <text x="364" y="120" font-size="10" fill="#64748b">α₅</text>
+  <!-- arrow to hG -->
+  <text x="390" y="85" font-size="22" fill="#64748b" style="animation:flow-arrow 1.8s ease-in-out 0.5s infinite;">→</text>
+  <rect x="418" y="62" width="44" height="32" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="440" y="82" font-size="11" fill="#1e40af" text-anchor="middle" font-weight="bold">h_G</text>
+  <!-- labels -->
+  <text x="130" y="148" font-size="10" fill="#64748b" text-anchor="middle">Graph G</text>
+  <text x="340" y="148" font-size="10" fill="#64748b" text-anchor="middle">Attention weights</text>
+  <text x="440" y="148" font-size="10" fill="#64748b" text-anchor="middle">Embedding</text>
+</svg>
+<figcaption>Attention readout: the high-importance node (orange, large) receives a high attention weight α₃, dominating the graph embedding h_G.</figcaption>
+</figure></div>
 
 ## Attention Readout (Global Attention Pooling)
 
@@ -69,6 +126,8 @@ This is a single-pass soft attention over all nodes. The model learns which node
 
 ## Set2Set (Vinyals et al., 2015)
 
+**Intuition first.** Imagine reading a complex document by scanning it T times, each time looking for something different. On scan 1 you find the main claim; on scan 2 you look for supporting evidence; on scan 3 you check for caveats. Set2Set does the same for a graph: each LSTM step issues a different "query" that attends to a different subset of nodes, building a richer summary than any single pass could.
+
 Set2Set produces a graph embedding using **T steps of LSTM-driven attention**. At each step t, the LSTM maintains a query vector q_t, which is used to compute attention over all nodes:
 
 **Step t:**
@@ -96,6 +155,25 @@ h_G = [q_T ; m_T]
 <div class="insight-box">
 <strong>Why multiple passes?</strong> At step t=1, the query q_1 is random — the model attends roughly uniformly. At step t=2, q_2 has seen what step 1 attended to, and can direct attention elsewhere. By step T, the LSTM has built up a rich query sequence — each step "reads" a different aspect of the node set. This is analogous to multi-head attention reading different subspaces.
 </div>
+
+## Worked Example: Set2Set on a 3-Node Graph
+
+Consider a graph with 3 nodes and embeddings h₁ = [1, 0], h₂ = [0, 1], h₃ = [1, 1] (d=2). Set2Set with T=2 steps:
+
+**Step t=1:** initial query q₁ = [0.5, 0.5] (learned init)
+- Scores: e¹₁ = q₁·h₁ = 0.5,  e¹₂ = q₁·h₂ = 0.5,  e¹₃ = q₁·h₃ = 1.0
+- After softmax: α¹ ≈ [0.27, 0.27, 0.46] — node 3 wins (largest score)
+- Attended message: m₁ = 0.27·[1,0] + 0.27·[0,1] + 0.46·[1,1] = [0.73, 0.73]
+- LSTM update: (q₂, c₂) = LSTM([q₁; m₁], c₁)  →  suppose q₂ ≈ [0.8, 0.2]
+
+**Step t=2:** new query q₂ = [0.8, 0.2] emphasises the first dimension
+- Scores: e²₁ = 0.8,  e²₂ = 0.2,  e²₃ = 1.0
+- After softmax: α² ≈ [0.31, 0.12, 0.57] — node 3 still dominant, but now node 1 > node 2
+- Attended message: m₂ = 0.31·[1,0] + 0.12·[0,1] + 0.57·[1,1] = [0.88, 0.69]
+
+**Final embedding:** h_G = [q₂; m₂] = [0.8, 0.2, 0.88, 0.69]  (dimension 2d = 4)
+
+Notice how the two steps captured different aspects: step 1 treated the graph symmetrically; step 2 distinguished node 1 from node 2. A single attention pass would have produced the same α for nodes 1 and 2.
 
 ## Set2Set vs Attention Readout vs Sum
 

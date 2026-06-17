@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Manipulation Problem
 
+**Intuition first.** Picking up a coffee mug seems trivial, yet it requires solving three deeply coupled problems simultaneously: figuring out where the mug is in 3D space (perception), deciding where to place your fingers so the grasp is stable (planning), and applying just enough force — not too little to drop it, not too much to crush it (control). Humans solve all three in under a second using a lifetime of embodied experience. Robots need explicit algorithms for each.
+
 Human hands can pick up a mug, thread a needle, and play piano — all with the same hardware. Robot manipulation remains far harder than locomotion because it requires precise force control, rich contact models, and the ability to handle the enormous diversity of object shapes, weights, and surface properties encountered in the real world.
 
 The manipulation pipeline typically involves: perceiving the scene (detecting and localising objects), planning a grasp, executing the grasp, and potentially performing in-hand manipulation to reorient the object for downstream tasks.
@@ -47,11 +49,67 @@ The **grasp wrench space** is spanned by primitive contact wrenches at each cont
 
 The **epsilon metric** (Yoshikawa 1985) measures how far the origin is from the boundary of the wrench space — a larger value indicates a more robust grasp. These analytical metrics require known object geometry and contact locations, making them useful for planning but not directly applicable to real-world noisy perception.
 
+## Worked Example: Force Closure Check
+
+Consider a cylindrical mug (radius 3 cm) grasped by a parallel-jaw gripper. Two contact points are placed at opposing sides of the rim. Each contact has friction coefficient $$\mu = 0.5$$, so the friction cone half-angle is $$\arctan(0.5) \approx 26.6°$$.
+
+**Check force closure:**
+1. Normal at contact A points in the +x direction; normal at contact B points in the −x direction.
+2. The line connecting A to B passes through the cylinder's axis — it lies inside both friction cones.
+3. The convex hull of the 4 contact wrenches (2 contacts × 2 extreme friction-cone edges each) contains the origin.
+4. **Conclusion:** this is a valid force-closure grasp. The epsilon quality metric (distance from origin to wrench-space boundary) is approximately 0.18 N·m for a 100 g mug — robust to 0.18 N·m of external disturbance.
+
 ## Antipodal Grasps
 
 **Antipodal grasps** are a special, analytically tractable class: two contact points with opposing friction cones that point toward each other. If the friction cone at each contact point contains the vector toward the other contact, the grasp achieves force closure under the friction model.
 
 For a two-finger parallel-jaw gripper, finding antipodal grasps on a point cloud reduces to sampling pairs of points with opposing normals and checking that the line connecting them lies within both friction cones. This geometric simplicity makes antipodal grasp planning efficient and practical for many industrial applications.
+
+<style>
+@keyframes gripperClose {
+  0%   { transform: translateX(0); }
+  60%  { transform: translateX(18px); }
+  100% { transform: translateX(18px); }
+}
+@keyframes gripperCloseR {
+  0%   { transform: translateX(0); }
+  60%  { transform: translateX(-18px); }
+  100% { transform: translateX(-18px); }
+}
+@keyframes objectGlow { 0%,100%{fill:#fcd34d;} 60%{fill:#f59e0b;} }
+.gripper-left  { animation: gripperClose  1.8s ease-in-out infinite; transform-origin: 120px 80px; }
+.gripper-right { animation: gripperCloseR 1.8s ease-in-out infinite; transform-origin: 220px 80px; }
+.obj-glow      { animation: objectGlow    1.8s ease-in-out infinite; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;display:block;margin:0 auto;background:#f8fafc;border-radius:8px;">
+  <!-- Object (cylinder cross-section) -->
+  <ellipse class="obj-glow" cx="170" cy="95" rx="22" ry="30" opacity="0.9"/>
+  <text x="170" y="100" text-anchor="middle" font-size="10" fill="#78350f" font-family="sans-serif">mug</text>
+  <!-- Gripper wrist -->
+  <rect x="140" y="20" width="60" height="18" rx="4" fill="#94a3b8"/>
+  <text x="170" y="32" text-anchor="middle" font-size="9" fill="#1e293b" font-family="sans-serif">wrist</text>
+  <!-- Left finger -->
+  <g class="gripper-left">
+    <rect x="110" y="38" width="14" height="62" rx="4" fill="#0d9488"/>
+    <!-- friction cone indicator -->
+    <path d="M110,100 L90,70 L110,70 Z" fill="#0d9488" opacity="0.25"/>
+    <text x="82" y="90" font-size="8" fill="#0d9488" font-family="sans-serif">cone</text>
+  </g>
+  <!-- Right finger -->
+  <g class="gripper-right">
+    <rect x="216" y="38" width="14" height="62" rx="4" fill="#0d9488"/>
+    <path d="M230,100 L250,70 L230,70 Z" fill="#0d9488" opacity="0.25"/>
+    <text x="232" y="90" font-size="8" fill="#0d9488" font-family="sans-serif">cone</text>
+  </g>
+  <!-- Contact normal arrows -->
+  <line x1="125" y1="80" x2="148" y2="80" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#cn)"/>
+  <line x1="215" y1="80" x2="193" y2="80" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#cn)"/>
+  <defs><marker id="cn" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7c3aed"/></marker></defs>
+  <text x="170" y="148" text-anchor="middle" font-size="9" fill="#475569" font-family="sans-serif">Antipodal grasp: opposing normals inside friction cones → force closure</text>
+</svg>
+<figcaption>Parallel-jaw gripper closing on a cylindrical object. The opposing contact normals (purple arrows) lie inside the friction cones (teal triangles), satisfying the antipodal force-closure condition.</figcaption>
+</figure></div>
 
 ## Deep 6-DOF Grasp Prediction
 

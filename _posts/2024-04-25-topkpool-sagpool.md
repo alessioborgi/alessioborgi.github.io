@@ -29,6 +29,74 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/lee2019_sagpool.png" alt="SAGPool self-attention pooling" caption="SAGPool: self-attention graph pooling for hierarchical classification (Lee et al., 2019)" %}
 
 
+## Intuition First: Selecting the Most Important Witnesses
+
+Imagine summarising a long meeting by selecting the 5 most informative speakers and ignoring the rest. TopKPool does exactly this for graphs: it learns a score for each node (how informative is this node for the prediction?) and keeps only the top-k scoring nodes. The key question is how to score nodes — by their own features alone (TopKPool) or by how important they are in the context of their neighbourhood (SAGPool).
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Hard selection (top-k) is non-differentiable — you cannot backpropagate through an argmax. The workaround is to <em>gate</em> the selected embeddings by their score: h'[i] = h[i] × tanh(score[i]). This lets gradients flow through the score while still selecting a sparse subset in the forward pass.</div>
+
+<style>
+@keyframes node-select {
+  0%, 100% { fill: #dbeafe; r: 12; }
+  50% { fill: #fbbf24; r: 15; }
+}
+@keyframes node-drop {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 360 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:auto;">
+  <style>
+    .tk-node { stroke-width:2; }
+    .tk-edge { stroke:#94a3b8; stroke-width:1.2; }
+    .tk-lbl { font-size:9px; font-family:sans-serif; text-anchor:middle; }
+    .tk-arr { stroke:#0d9488; stroke-width:2; marker-end:url(#tka); fill:none; }
+  </style>
+  <defs>
+    <marker id="tka" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#0d9488"/>
+    </marker>
+  </defs>
+  <!-- Original graph (6 nodes) -->
+  <text x="65" y="12" class="tk-lbl" font-weight="bold" fill="#1e293b">Before pooling (6 nodes)</text>
+  <line x1="20" y1="55" x2="55" y2="35" class="tk-edge"/>
+  <line x1="55" y1="35" x2="90" y2="55" class="tk-edge"/>
+  <line x1="90" y1="55" x2="55" y2="75" class="tk-edge"/>
+  <line x1="55" y1="75" x2="20" y2="55" class="tk-edge"/>
+  <line x1="90" y1="55" x2="120" y2="40" class="tk-edge"/>
+  <line x1="90" y1="55" x2="120" y2="70" class="tk-edge"/>
+  <!-- High score nodes (selected) -->
+  <circle cx="55" cy="35" r="14" class="tk-node" fill="#fbbf24" stroke="#d97706" style="animation:node-select 2s 0s ease-in-out infinite;"/>
+  <circle cx="90" cy="55" r="14" class="tk-node" fill="#fbbf24" stroke="#d97706" style="animation:node-select 2s 0.3s ease-in-out infinite;"/>
+  <circle cx="120" cy="40" r="14" class="tk-node" fill="#fbbf24" stroke="#d97706" style="animation:node-select 2s 0.6s ease-in-out infinite;"/>
+  <!-- Low score nodes (dropped) -->
+  <circle cx="20" cy="55" r="14" class="tk-node" fill="#f1f5f9" stroke="#94a3b8" style="animation:node-drop 2s 0s ease-in-out infinite;"/>
+  <circle cx="55" cy="75" r="14" class="tk-node" fill="#f1f5f9" stroke="#94a3b8" style="animation:node-drop 2s 0.3s ease-in-out infinite;"/>
+  <circle cx="120" cy="70" r="14" class="tk-node" fill="#f1f5f9" stroke="#94a3b8" style="animation:node-drop 2s 0.6s ease-in-out infinite;"/>
+  <text x="55" y="38" class="tk-lbl" fill="#92400e">0.9</text>
+  <text x="90" y="58" class="tk-lbl" fill="#92400e">0.8</text>
+  <text x="120" y="43" class="tk-lbl" fill="#92400e">0.7</text>
+  <text x="20" y="58" class="tk-lbl" fill="#94a3b8">0.2</text>
+  <text x="55" y="78" class="tk-lbl" fill="#94a3b8">0.1</text>
+  <text x="120" y="73" class="tk-lbl" fill="#94a3b8">0.3</text>
+  <!-- Arrow -->
+  <path d="M148,55 Q175,50 195,55" class="tk-arr"/>
+  <text x="172" y="43" class="tk-lbl" fill="#0d9488">top-k=3</text>
+  <!-- Pooled graph (3 nodes) -->
+  <text x="270" y="12" class="tk-lbl" font-weight="bold" fill="#1e293b">After pooling (3 nodes)</text>
+  <line x1="215" y1="55" x2="255" y2="35" class="tk-edge"/>
+  <line x1="255" y1="35" x2="295" y2="55" class="tk-edge"/>
+  <circle cx="215" cy="55" r="18" class="tk-node" fill="#fbbf24" stroke="#d97706"/>
+  <circle cx="255" cy="35" r="18" class="tk-node" fill="#fbbf24" stroke="#d97706"/>
+  <circle cx="295" cy="55" r="18" class="tk-node" fill="#fbbf24" stroke="#d97706"/>
+  <text x="215" y="58" class="tk-lbl" fill="#92400e">kept</text>
+  <text x="255" y="38" class="tk-lbl" fill="#92400e">kept</text>
+  <text x="295" y="58" class="tk-lbl" fill="#92400e">kept</text>
+</svg>
+<figcaption>TopKPool scores all 6 nodes, selects top-3 (gold), drops the rest (grey). The induced subgraph over selected nodes becomes the next level.</figcaption>
+</figure></div>
+
 ## The Motivation for Sparse Pooling
 
 DiffPool's soft assignment is expressive but quadratic in graph size. For large graphs, this is prohibitive. A simpler approach: **select a subset of nodes** (the "important" ones) and form the induced subgraph.

@@ -28,6 +28,62 @@ toc_label: "Contents"
 <div class="tldr-box"><strong>TL;DR:</strong> Robot safety is not just about performance — it is about guaranteeing that robots will not harm people or property. Safe RL extends MDPs with explicit safety constraints; control barrier functions provide hard real-time safety filters; reachability analysis proves formal safety properties; and industry standards like ISO 10218 define human-robot interaction requirements.</div>
 {% include figure image_path="/images/blog/robotics/brohan2022_rt1.png" alt="Safety in robot learning" caption="Safety-aware robot learning systems (Brohan et al., 2022)" %}
 
+<style>
+@keyframes robot-move {
+  0%   { transform: translateX(0px); }
+  40%  { transform: translateX(48px); }
+  60%  { transform: translateX(48px); }
+  100% { transform: translateX(0px); }
+}
+@keyframes cbf-glow {
+  0%, 100% { stroke-width: 2; opacity: 0.7; }
+  50%       { stroke-width: 4; opacity: 1.0; }
+}
+@keyframes label-fade {
+  0%, 30%  { opacity: 0; }
+  50%, 80% { opacity: 1; }
+  100%     { opacity: 0; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 580 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:580px;font-family:sans-serif;">
+  <rect width="580" height="210" fill="#f8fafc" rx="12"/>
+  <!-- Title -->
+  <text x="290" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#334155">C-free vs C-obstacle: CBF Safety Filter</text>
+  <!-- C-obstacle region (large ellipse, danger zone) -->
+  <ellipse cx="370" cy="115" rx="90" ry="70" fill="#fee2e2" stroke="#ef4444" stroke-width="2"
+           style="animation: cbf-glow 2s ease-in-out infinite;"/>
+  <text x="370" y="108" text-anchor="middle" font-size="10" font-weight="bold" fill="#b91c1c">C-obstacle</text>
+  <text x="370" y="122" text-anchor="middle" font-size="9" fill="#b91c1c">(human / wall)</text>
+  <!-- C-free region label -->
+  <text x="100" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">C-free</text>
+  <text x="100" y="130" text-anchor="middle" font-size="9" fill="#15803d">(safe workspace)</text>
+  <!-- CBF boundary arc -->
+  <ellipse cx="370" cy="115" rx="118" ry="92" fill="none" stroke="#f97316" stroke-width="2"
+           stroke-dasharray="6,4"/>
+  <text x="255" y="55" text-anchor="middle" font-size="9" fill="#ea580c">CBF boundary h(x)=0</text>
+  <!-- Robot (animated, approaches boundary then turns back) -->
+  <g style="animation: robot-move 3.5s ease-in-out infinite;">
+    <rect x="148" y="100" width="28" height="28" fill="#1d4ed8" rx="5"/>
+    <text x="162" y="119" text-anchor="middle" font-size="9" fill="white">R</text>
+    <!-- wheels -->
+    <circle cx="155" cy="130" r="4" fill="#1e40af"/>
+    <circle cx="169" cy="130" r="4" fill="#1e40af"/>
+  </g>
+  <!-- Nominal action arrow (unsafe direction) -->
+  <line x1="198" y1="114" x2="238" y2="114" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,3"/>
+  <polygon points="238,110 246,114 238,118" fill="#ef4444"/>
+  <text x="220" y="107" text-anchor="middle" font-size="8" fill="#b91c1c">u_nom (unsafe)</text>
+  <!-- Safe corrected action arrow -->
+  <line x1="198" y1="114" x2="215" y2="90" stroke="#16a34a" stroke-width="2"/>
+  <polygon points="211,90 218,83 221,93" fill="#16a34a"/>
+  <text x="195" y="80" text-anchor="middle" font-size="8" fill="#166534">u_safe (QP)</text>
+  <!-- Filter box -->
+  <rect x="30" y="165" width="510" height="28" fill="#fef9c3" stroke="#ca8a04" stroke-width="1" rx="6"/>
+  <text x="285" y="183" text-anchor="middle" font-size="9" fill="#92400e">Safety Filter: solve min‖u − u_nom‖² s.t. ḣ(x,u) + α(h(x)) ≥ 0  →  redirect to u_safe in microseconds</text>
+</svg>
+<figcaption>A CBF safety filter intercepts the policy's nominal (potentially unsafe) action and finds the closest action that keeps the robot inside the safe set C-free, in real time.</figcaption>
+</figure></div>
 
 ## Why Safety is Different from Performance
 

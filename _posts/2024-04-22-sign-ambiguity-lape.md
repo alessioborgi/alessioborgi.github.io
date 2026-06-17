@@ -28,6 +28,62 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Sign ambiguity in LapPE" caption="Sign ambiguity in Laplacian eigenvectors and its impact on PE (Dwivedi et al., 2022)" %}
 
 
+## Intuition First: The Two-Sided Mirror
+
+Imagine a ruler used to measure positions on a graph. Laplacian eigenvectors are like that ruler — but the ruler has no fixed orientation: it can point left or right arbitrarily. Two runs of the same eigendecomposition may return the ruler flipped. If you train a model to recognise "hub nodes are at position +0.4 on the ruler", it will fail on the next graph where the same hub appears at –0.4, even though the structural meaning is identical.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The sign ambiguity is not a numerical accident — it is algebraically guaranteed by the eigenvalue equation. The only correct fix is a sign-<em>invariant</em> (not sign-<em>equivariant</em>) output: f(u) + f(−u), which is identical regardless of which sign the solver chose.</div>
+
+<style>
+@keyframes sign-flip {
+  0%, 45% { transform: scaleX(1); }
+  50%, 95% { transform: scaleX(-1); }
+  100% { transform: scaleX(1); }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 340 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;display:block;margin:auto;">
+  <style>
+    .sa-node { stroke:#0d9488; stroke-width:2; }
+    .sa-lbl { font-size:10px; font-family:sans-serif; text-anchor:middle; }
+    .sa-edge { stroke:#94a3b8; stroke-width:1.5; }
+  </style>
+  <!-- Graph -->
+  <line x1="50" y1="55" x2="90" y2="30" class="sa-edge"/>
+  <line x1="50" y1="55" x2="90" y2="80" class="sa-edge"/>
+  <line x1="90" y1="30" x2="130" y2="55" class="sa-edge"/>
+  <line x1="90" y1="80" x2="130" y2="55" class="sa-edge"/>
+  <circle cx="50" cy="55" r="16" class="sa-node" fill="#dbeafe"/>
+  <circle cx="90" cy="30" r="16" class="sa-node" fill="#dbeafe"/>
+  <circle cx="90" cy="80" r="16" class="sa-node" fill="#dbeafe"/>
+  <circle cx="130" cy="55" r="16" class="sa-node" fill="#dbeafe"/>
+  <!-- PE values — run 1 -->
+  <text x="50" y="50" class="sa-lbl" fill="#1d4ed8">+0.5</text>
+  <text x="90" y="25" class="sa-lbl" fill="#1d4ed8">+0.3</text>
+  <text x="90" y="75" class="sa-lbl" fill="#1d4ed8">−0.3</text>
+  <text x="130" y="50" class="sa-lbl" fill="#1d4ed8">−0.5</text>
+  <text x="90" y="105" class="sa-lbl" fill="#0d9488">Run 1: u_k</text>
+  <!-- Arrow -->
+  <text x="170" y="58" font-size="20" font-family="sans-serif" fill="#f97316" text-anchor="middle" style="animation:sign-flip 3s ease-in-out infinite; display:inline-block; transform-origin:170px 58px;">⇄</text>
+  <text x="170" y="75" class="sa-lbl" fill="#f97316">sign flip</text>
+  <!-- PE values — run 2 -->
+  <circle cx="230" cy="55" r="16" class="sa-node" fill="#fee2e2"/>
+  <circle cx="270" cy="30" r="16" class="sa-node" fill="#fee2e2"/>
+  <circle cx="270" cy="80" r="16" class="sa-node" fill="#fee2e2"/>
+  <circle cx="310" cy="55" r="16" class="sa-node" fill="#fee2e2"/>
+  <line x1="230" y1="55" x2="270" y2="30" class="sa-edge"/>
+  <line x1="230" y1="55" x2="270" y2="80" class="sa-edge"/>
+  <line x1="270" y1="30" x2="310" y2="55" class="sa-edge"/>
+  <line x1="270" y1="80" x2="310" y2="55" class="sa-edge"/>
+  <text x="230" y="50" class="sa-lbl" fill="#dc2626">−0.5</text>
+  <text x="270" y="25" class="sa-lbl" fill="#dc2626">−0.3</text>
+  <text x="270" y="75" class="sa-lbl" fill="#dc2626">+0.3</text>
+  <text x="310" y="50" class="sa-lbl" fill="#dc2626">+0.5</text>
+  <text x="270" y="105" class="sa-lbl" fill="#dc2626">Run 2: −u_k</text>
+</svg>
+<figcaption>Same graph, same eigenvector — but two different sign conventions from the numerical solver create contradictory positional encodings for identical node positions.</figcaption>
+</figure></div>
+
 ## The Sign Problem
 
 Compute the k-th Laplacian eigenvector u_k for graph G. Now compute it again (different random seed in the numerical solver). You may get u_k one time and -u_k the next.
@@ -43,6 +99,14 @@ This is not a numerical bug. It is mathematically fundamental: the eigenvalue eq
 **Across training batches (different graphs):** if graph G₁ uses +u and graph G₂ (isomorphic to G₁) uses -u, the model sees different PE vectors for structurally identical positions in two different graphs. This creates an inconsistent training signal.
 
 **Generalisation:** a model trained on graphs where u_k happens to be positive for hub nodes will fail on test graphs where u_k is negative for hub nodes — even if the graphs are structurally identical.
+
+## Concrete Worked Example: Sign Flip Breaks Training
+
+Suppose you have two isomorphic graphs G₁ and G₂ in the same training batch. Both are 4-node paths. The 2nd Laplacian eigenvector for a path graph is u₂ = [0.65, 0.38, −0.38, −0.65] (roughly). The two eigendecomposition calls return:
+- **G₁:** u₂ = [+0.65, +0.38, −0.38, −0.65]
+- **G₂:** u₂ = [−0.65, −0.38, +0.38, +0.65] (sign flipped)
+
+Node 1 (hub at one end) gets PE = +0.65 in G₁ but PE = −0.65 in G₂. The model sees contradictory training signals for the structurally identical position. After many such examples, the model learns to ignore the PE — or worse, learns a noisy representation. SignNet resolves this: it computes φ(+0.65) + φ(−0.65) for both runs, which is always identical by the symmetry of addition.
 
 ## The Rotation Ambiguity
 

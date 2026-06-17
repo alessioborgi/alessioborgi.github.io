@@ -29,6 +29,10 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/robotics/andrychowicz2019_dactyl.png" alt="RL for robotic manipulation" caption="OpenAI Dactyl: RL for dexterous robotic manipulation (Andrychowicz et al., 2019)" %}
 
 
+## Intuition First: Why Robotics Is the Hardest RL Domain
+
+In Atari, a bad policy just loses points. In robotics, a bad policy breaks the robot, injures a human, or destroys expensive hardware. The simulator runs at 1000 Hz in MuJoCo but a real robot runs at real time — meaning one hour of real experience takes an hour to collect, not seconds. The sim-to-real gap is like training a surgeon on a rubber dummy and expecting flawless performance on a real patient: the mismatch in touch, friction, compliance, and noise can cause catastrophic failures. Domain randomisation is the community's answer: if the policy works on every plausible version of the simulation, it should work on the real world too.
+
 ## The Robotics Challenge
 
 Robotics is one of the most demanding application domains for RL. The challenges are qualitatively different from games:
@@ -60,6 +64,56 @@ OpenAI Dactyl (Andrychowicz et al. 2019) trained a Shadow Dexterous Hand to solv
 - PPO with LSTM to handle the history of partially observed states.
 
 The policy successfully solved the Rubik's cube on real hardware, demonstrating that extreme dexterity can emerge from sim-to-real transfer.
+
+## Domain Randomisation Visualised
+
+<style>
+@keyframes sim-vary { 0%,100%{fill:#dbeafe;} 33%{fill:#ede9fe;} 66%{fill:#fef3c7;} }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 160" xmlns="http://www.w3.org/2000/svg" style="max-width:460px;width:100%;display:block;margin:auto;">
+  <text x="230" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#334155">Domain Randomisation: Train across a distribution, deploy on reality</text>
+  <!-- Sim instances -->
+  <rect x="10"  y="30" width="80" height="60" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" style="animation:sim-vary 3s ease-in-out infinite;"/>
+  <text x="50"  y="55" text-anchor="middle" font-size="9" font-weight="bold" fill="#1d4ed8">Sim ξ₁</text>
+  <text x="50"  y="68" text-anchor="middle" font-size="7" fill="#1d4ed8">mass=1.0</text>
+  <text x="50"  y="79" text-anchor="middle" font-size="7" fill="#1d4ed8">friction=0.5</text>
+
+  <rect x="100" y="30" width="80" height="60" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5" style="animation:sim-vary 3s ease-in-out infinite 1s;"/>
+  <text x="140" y="55" text-anchor="middle" font-size="9" font-weight="bold" fill="#5b21b6">Sim ξ₂</text>
+  <text x="140" y="68" text-anchor="middle" font-size="7" fill="#5b21b6">mass=1.8</text>
+  <text x="140" y="79" text-anchor="middle" font-size="7" fill="#5b21b6">friction=0.3</text>
+
+  <rect x="190" y="30" width="80" height="60" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" style="animation:sim-vary 3s ease-in-out infinite 2s;"/>
+  <text x="230" y="55" text-anchor="middle" font-size="9" font-weight="bold" fill="#92400e">Sim ξ₃</text>
+  <text x="230" y="68" text-anchor="middle" font-size="7" fill="#92400e">mass=0.7</text>
+  <text x="230" y="79" text-anchor="middle" font-size="7" fill="#92400e">friction=0.8</text>
+
+  <text x="290" y="65" font-size="18" fill="#94a3b8">…</text>
+
+  <!-- Arrow to robust policy -->
+  <rect x="310" y="40" width="80" height="45" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="350" y="60" text-anchor="middle" font-size="9" font-weight="bold" fill="#15803d">Robust π*</text>
+  <text x="350" y="74" text-anchor="middle" font-size="7" fill="#15803d">works on all ξ</text>
+
+  <!-- Arrow to real robot -->
+  <rect x="400" y="40" width="55" height="45" rx="6" fill="#fce7f3" stroke="#ec4899" stroke-width="1.5"/>
+  <text x="427" y="60" text-anchor="middle" font-size="9" font-weight="bold" fill="#9d174d">Real</text>
+  <text x="427" y="73" text-anchor="middle" font-size="8" fill="#9d174d">robot ✓</text>
+
+  <line x1="390" y1="62" x2="399" y2="62" stroke="#16a34a" stroke-width="2"/>
+  <polygon points="399,58 405,62 399,66" fill="#16a34a"/>
+
+  <!-- Training arrow combining sims -->
+  <line x1="90"  y1="60" x2="308" y2="62" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <polygon points="308,58 314,62 308,66" fill="#94a3b8"/>
+
+  <!-- Labels -->
+  <text x="200" y="120" text-anchor="middle" font-size="9" fill="#64748b">Policy trained across randomised params ξ ~ p(ξ)</text>
+  <text x="200" y="135" text-anchor="middle" font-size="9" fill="#64748b">Real world = just another point in the distribution</text>
+</svg>
+<figcaption>Domain randomisation trains one policy across many simulated environments with randomised physical parameters. The real world is treated as one more sample from that distribution — closing the sim-to-real gap through breadth of training.</figcaption>
+</figure></div>
 
 ## MuJoCo Locomotion
 

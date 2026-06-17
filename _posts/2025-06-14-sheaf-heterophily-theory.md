@@ -97,6 +97,14 @@ toc_label: "Contents"
 <figcaption>GCN (left): class-A (red) and class-B (blue) nodes connected by a heterophilic edge. Standard aggregation blends their features toward purple then gray — erasing class information. Sheaf GNN (right): a −1 restriction map on the cross-class edge encodes anti-alignment; the sheaf energy is zero when x_A = −x_B, keeping classes distinct throughout diffusion.</figcaption>
 </figure></div>
 
+## Intuition First: Why GCN Fails on Heterophilic Graphs
+
+Imagine a checkerboard: black squares surrounded by white squares. GCN averages each black square with its white neighbours — every node becomes gray after a few steps. All class information is destroyed. The model is explicitly optimised to make neighbours similar, but on a checkerboard they are supposed to be different.
+
+**Sheaf maps fix this by redefining what "similar" means per edge.** For a cross-class edge (blue → red), the sheaf map can say: "feature +1 at blue and feature −1 at red are in agreement — the sign flip is exactly what the map encodes." The Sheaf Dirichlet energy is zero for this antipodal assignment, so diffusion has no incentive to push the classes together.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> GCN minimises E(H) = Σ ||h_u − h_v||² — forcing all adjacent pairs to have similar features. This is the wrong loss for heterophilic edges. Sheaf GNNs minimise E_F(H) = Σ ||F_{u▷e}h_u − F_{v▷e}h_v||² — which, with learned maps, can be zero even when h_u ≠ h_v. The maps absorb the heterophily, leaving the diffusion to find a richer equilibrium.</div>
+
 ## The Homophily Assumption in GCN
 
 Homophily: the tendency of nodes to connect to nodes of the same class. The homophily ratio h(G) = |{(u,v)∈E : y_u=y_v}| / |E| quantifies this.

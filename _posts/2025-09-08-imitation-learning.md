@@ -31,7 +31,45 @@ toc_label: "Contents"
 
 ## Why Imitation Learning?
 
+**Intuition first.** Think of learning to drive: you could try random steering until you accidentally stay in lane (RL with sparse reward), or you could sit next to an expert and copy what they do (imitation learning). Copying is far faster when good behaviour is easy to demonstrate but hard to describe with a score.
+
 Reinforcement learning requires a reward signal that can be difficult to specify for complex manipulation tasks — "pour water without spilling" is easy for a human to judge but hard to encode mathematically. Imitation learning sidesteps reward engineering by learning directly from expert demonstrations, making it practical for many real-world robotics tasks where human demonstrations are cheap to collect via teleoperation.
+
+<style>
+@keyframes slideDemo {
+  0%   { transform: translateX(0);   opacity:1; }
+  40%  { transform: translateX(80px); opacity:1; }
+  60%  { transform: translateX(80px); opacity:0.3; }
+  80%  { transform: translateX(80px); opacity:1; }
+  100% { transform: translateX(80px); opacity:1; }
+}
+@keyframes arrowPulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 380 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;background:#f8fafc;border-radius:8px;">
+  <!-- Expert demo phase -->
+  <rect x="10" y="20" width="100" height="40" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text x="60" y="36" text-anchor="middle" font-size="10" fill="#065f46" font-family="sans-serif">Expert</text>
+  <text x="60" y="50" text-anchor="middle" font-size="10" fill="#065f46" font-family="sans-serif">demonstration</text>
+  <!-- Dataset -->
+  <rect x="150" y="20" width="80" height="40" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="190" y="36" text-anchor="middle" font-size="10" fill="#1e40af" font-family="sans-serif">Dataset D</text>
+  <text x="190" y="50" text-anchor="middle" font-size="10" fill="#1e40af" font-family="sans-serif">{(s,a)}</text>
+  <!-- Policy -->
+  <rect x="280" y="20" width="85" height="40" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="323" y="36" text-anchor="middle" font-size="10" fill="#4c1d95" font-family="sans-serif">Policy π_θ</text>
+  <text x="323" y="50" text-anchor="middle" font-size="10" fill="#4c1d95" font-family="sans-serif">supervised</text>
+  <!-- Arrows -->
+  <line x1="110" y1="40" x2="148" y2="40" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="230" y1="40" x2="278" y2="40" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#374151"/></marker></defs>
+  <!-- Covariate shift warning -->
+  <rect x="10" y="80" width="355" height="35" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+  <text x="190" y="96" text-anchor="middle" font-size="10" fill="#92400e" font-family="sans-serif">At test time: policy visits NEW states not in D</text>
+  <text x="190" y="109" text-anchor="middle" font-size="10" fill="#92400e" font-family="sans-serif">→ errors compound (covariate shift)</text>
+</svg>
+<figcaption>Behaviour Cloning data flow. The policy sees only expert states during training; at deployment it drifts into unseen states, compounding errors.</figcaption>
+</figure></div>
 
 ## Behaviour Cloning
 
@@ -51,6 +89,15 @@ Despite its simplicity, BC has a fundamental flaw: **covariate shift**. During t
 
 This is made formal in Ross et al. (2011): the expected loss of a BC policy over a trajectory of length $$T$$ is bounded by $$O(\epsilon T^2)$$ where $$\epsilon$$ is the per-step imitation error, compared to $$O(\epsilon T)$$ for an oracle with interactive corrections.
 
+## Worked Example: Covariate Shift in One Step
+
+Suppose an expert always steers left when it sees a wall on the right. BC trains a policy with 5% per-step error. At step 1 the robot is in an expert-visited state and acts correctly. At step 2 it has drifted slightly: the wall appears a bit closer than any training state. The policy mis-steers, drifting further. By step 20 the robot is in completely uncharted territory and crashes.
+
+- BC error bound: $$O(\epsilon T^2) = O(0.05 \times 400) = 20$$ expected mistakes over 20 steps.
+- DAgger error bound: $$O(\epsilon T) = O(0.05 \times 20) = 1$$ expected mistake.
+
+The quadratic vs. linear scaling is the entire motivation for DAgger.
+
 ## DAgger: Dataset Aggregation
 
 **DAgger** (Dataset Aggregation, Ross et al. 2011) fixes covariate shift through an iterative, interactive data collection procedure:
@@ -62,6 +109,40 @@ This is made formal in Ross et al. (2011): the expected loss of a BC policy over
 5. Retrain $$\pi_{i+1}$$ on $$\mathcal{D}_{i+1}$$. Repeat.
 
 By training on states encountered by the learner (not just the expert), DAgger reduces the error bound to $$O(\epsilon T)$$, matching the oracle. The catch is that expert querying must occur online, which is costly if a human must label in real time. Variants like **SafeDAgger** and **EnsembleDAgger** reduce the number of human interventions needed.
+
+<style>
+@keyframes daggerLoop {
+  0%   { stroke-dashoffset: 300; }
+  100% { stroke-dashoffset: 0; }
+}
+.dagger-flow { stroke-dasharray: 300; animation: daggerLoop 2s ease-in-out infinite; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;background:#f8fafc;border-radius:8px;">
+  <defs><marker id="da" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#0d9488"/></marker></defs>
+  <!-- Boxes -->
+  <rect x="10"  y="55" width="80" height="40" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text x="50" y="73" text-anchor="middle" font-size="10" fill="#065f46" font-family="sans-serif">Policy π_i</text>
+  <text x="50" y="86" text-anchor="middle" font-size="9"  fill="#065f46" font-family="sans-serif">rolls out</text>
+  <rect x="155" y="55" width="90" height="40" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="200" y="73" text-anchor="middle" font-size="10" fill="#1e40af" font-family="sans-serif">Expert labels</text>
+  <text x="200" y="86" text-anchor="middle" font-size="9"  fill="#1e40af" font-family="sans-serif">π*(s_t)</text>
+  <rect x="305" y="55" width="85" height="40" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="348" y="73" text-anchor="middle" font-size="10" fill="#4c1d95" font-family="sans-serif">Retrain on</text>
+  <text x="348" y="86" text-anchor="middle" font-size="9"  fill="#4c1d95" font-family="sans-serif">D_i ∪ new</text>
+  <!-- Forward arrows -->
+  <line x1="90" y1="75" x2="153" y2="75" stroke="#0d9488" stroke-width="1.8" marker-end="url(#da)"/>
+  <line x1="245" y1="75" x2="303" y2="75" stroke="#0d9488" stroke-width="1.8" marker-end="url(#da)"/>
+  <!-- Loop back arrow -->
+  <path class="dagger-flow" d="M348,95 Q348,140 200,140 Q50,140 50,97" fill="none" stroke="#0d9488" stroke-width="1.8" marker-end="url(#da)"/>
+  <text x="200" y="155" text-anchor="middle" font-size="9" fill="#0d9488" font-family="sans-serif">iterate → π_{i+1}</text>
+  <!-- Step labels -->
+  <text x="50"  y="50" text-anchor="middle" font-size="9" fill="#374151" font-family="sans-serif">① rollout</text>
+  <text x="200" y="50" text-anchor="middle" font-size="9" fill="#374151" font-family="sans-serif">② query expert</text>
+  <text x="348" y="50" text-anchor="middle" font-size="9" fill="#374151" font-family="sans-serif">③ retrain</text>
+</svg>
+<figcaption>DAgger's interactive loop. The learner collects states it actually visits, an expert labels the correct action there, and the dataset grows to cover the learner's own error distribution.</figcaption>
+</figure></div>
 
 ## GAIL: Generative Adversarial Imitation Learning
 

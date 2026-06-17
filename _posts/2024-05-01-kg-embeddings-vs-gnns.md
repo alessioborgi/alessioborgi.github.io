@@ -29,6 +29,8 @@ toc_label: "Contents"
 
 ## The Knowledge Graph Completion Task
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Shallow KG embeddings are like a phone book — each entity gets exactly one entry, and lookup is instant. GNN-based methods are like a detective's case file — each entity's embedding is assembled from its neighbourhood context. The phone book scales to millions of entries but cannot handle a new person who just arrived; the case file generalises to new people but costs more to build.</div>
+
 A knowledge graph (KG) is a collection of triples (subject, relation, object) — e.g., (John_Lennon, member_of, The_Beatles). It is always incomplete: some true triples are missing. **KG completion** is the task of predicting missing triples.
 
 Evaluation: given (s, r, ?), rank all candidate objects. Metrics: MRR (mean reciprocal rank), Hits@k.
@@ -77,6 +79,21 @@ Relations as rotations in complex space. Handles symmetry, antisymmetry, inversi
 | Composition | Partial | No | No | Yes |
 
 **Transductive:** requires all entities seen during training. Cannot embed new entities at test time without retraining.
+
+## Worked Example: TransE vs R-GCN on a Mini-KG
+
+Consider a tiny KG with 3 entities {A, B, C} and 2 triples:
+- (A, *member_of*, B)
+- (A, *born_in*, C)
+
+**TransE** learns vectors: e_A, e_B, e_C, w_member_of, w_born_in in ℝ².
+- Score (A, member_of, B): maximise -||e_A + w_member_of - e_B||
+- Score (A, born_in, C): maximise -||e_A + w_born_in - e_C||
+- Entity B has no neighbours of its own — its embedding e_B only reflects "it is the target of A's member_of edge". No structural context.
+
+**R-GCN** on the same graph: when computing h_B, it aggregates from A via the inverse *member_of^{-1}* relation. Entity B's embedding now encodes "I am a group that A belongs to" — structural context that TransE cannot represent.
+
+If we then add triple (B, *located_in*, C) at test time, TransE must retrain (new entity interaction). R-GCN can immediately propagate C's information to B via message passing — inductive generalisation at work.
 
 ## GNN-Based KG Completion
 

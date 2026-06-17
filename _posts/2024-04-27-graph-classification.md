@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Graph Classification Pipeline
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Graph classification is the hardest test of a GNN because the entire graph — regardless of size — must be squashed into a single fixed-size vector. The readout step is the bottleneck: use mean pooling and you lose count information; use sum and you keep it but the scale grows with graph size. Choosing the right readout is as important as choosing the right message-passing architecture.</div>
+
 Given a dataset of graphs {(G₁, y₁), ..., (Gₙ, yₙ)}, the goal is to learn a function f: G → y. Unlike node classification (predict per-node label) or link prediction (predict edge existence), graph classification must process entire graphs of varying sizes.
 
 The standard pipeline:
@@ -62,6 +64,66 @@ h_G = READOUT( concat(h^(1)_v, h^(2)_v, ..., h^(K)_v) for v ∈ V )
 </div>
 
 This is particularly useful for graph classification: different nodes may require different receptive field sizes, and combining all layers ensures no scale is lost.
+
+## Worked Example: Why Sum Beats Mean for Graph Classification
+
+Consider two graphs both representing "benzene-like rings" but of different sizes:
+- **Graph A:** 6 nodes, each with feature value 1. Mean pooling: 6/6 = **1.0**. Sum pooling: **6**.
+- **Graph B:** 3 nodes, each with feature value 1. Mean pooling: 3/3 = **1.0**. Sum pooling: **3**.
+
+Mean pooling gives identical embeddings for A and B — the classifier cannot distinguish them. Sum pooling gives 6 vs 3 — the size difference is captured. For tasks where ring size matters (e.g., predicting molecule toxicity), this distinction is critical.
+
+<style>
+@keyframes highlight-bar {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;">
+  <!-- Graph A (6 nodes) -->
+  <text x="55" y="18" font-size="11" fill="#374151" text-anchor="middle" font-weight="bold">Graph A (6 nodes)</text>
+  <!-- hexagon nodes -->
+  <circle cx="55" cy="40" r="7" fill="#6366f1"/><circle cx="80" cy="30" r="7" fill="#6366f1"/>
+  <circle cx="105" cy="40" r="7" fill="#6366f1"/><circle cx="105" cy="65" r="7" fill="#6366f1"/>
+  <circle cx="80" cy="75" r="7" fill="#6366f1"/><circle cx="55" cy="65" r="7" fill="#6366f1"/>
+  <line x1="55" y1="40" x2="80" y2="30" stroke="#a5b4fc" stroke-width="1.5"/>
+  <line x1="80" y1="30" x2="105" y2="40" stroke="#a5b4fc" stroke-width="1.5"/>
+  <line x1="105" y1="40" x2="105" y2="65" stroke="#a5b4fc" stroke-width="1.5"/>
+  <line x1="105" y1="65" x2="80" y2="75" stroke="#a5b4fc" stroke-width="1.5"/>
+  <line x1="80" y1="75" x2="55" y2="65" stroke="#a5b4fc" stroke-width="1.5"/>
+  <line x1="55" y1="65" x2="55" y2="40" stroke="#a5b4fc" stroke-width="1.5"/>
+  <!-- Mean result A -->
+  <text x="55" y="100" font-size="10" fill="#64748b" text-anchor="middle">Mean = 1.0</text>
+  <rect x="20" y="106" width="70" height="14" rx="3" fill="#ef4444" opacity="0.25"/>
+  <text x="55" y="117" font-size="9" fill="#b91c1c" text-anchor="middle">Same as Graph B!</text>
+  <!-- Sum result A -->
+  <text x="55" y="133" font-size="10" fill="#15803d" text-anchor="middle" font-weight="bold">Sum = 6</text>
+
+  <!-- divider -->
+  <line x1="170" y1="15" x2="170" y2="135" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Graph B (3 nodes) -->
+  <text x="255" y="18" font-size="11" fill="#374151" text-anchor="middle" font-weight="bold">Graph B (3 nodes)</text>
+  <circle cx="235" cy="40" r="7" fill="#f97316"/><circle cx="265" cy="40" r="7" fill="#f97316"/>
+  <circle cx="250" cy="68" r="7" fill="#f97316"/>
+  <line x1="235" y1="40" x2="265" y2="40" stroke="#fed7aa" stroke-width="1.5"/>
+  <line x1="265" y1="40" x2="250" y2="68" stroke="#fed7aa" stroke-width="1.5"/>
+  <line x1="250" y1="68" x2="235" y2="40" stroke="#fed7aa" stroke-width="1.5"/>
+  <text x="255" y="100" font-size="10" fill="#64748b" text-anchor="middle">Mean = 1.0</text>
+  <rect x="210" y="106" width="90" height="14" rx="3" fill="#ef4444" opacity="0.25"/>
+  <text x="255" y="117" font-size="9" fill="#b91c1c" text-anchor="middle">Same as Graph A!</text>
+  <text x="255" y="133" font-size="10" fill="#15803d" text-anchor="middle" font-weight="bold">Sum = 3</text>
+
+  <!-- legend -->
+  <rect x="340" y="25" width="100" height="55" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <rect x="348" y="36" width="12" height="8" rx="2" fill="#ef4444" opacity="0.4"/>
+  <text x="364" y="44" font-size="9" fill="#374151">Mean: indistinguishable</text>
+  <rect x="348" y="54" width="12" height="8" rx="2" fill="#15803d" opacity="0.6"/>
+  <text x="364" y="62" font-size="9" fill="#374151">Sum: distinguishable</text>
+</svg>
+<figcaption>Mean pooling collapses both graphs to the same embedding; sum pooling preserves the size difference critical for graph-level tasks.</figcaption>
+</figure></div>
 
 ## The GIN Recipe for Graph Classification
 
@@ -114,6 +176,10 @@ Graph Transformers: ~92%+
 ```
 
 (Illustrative; exact numbers vary by split and implementation.)
+
+## End-to-End Training Intuition
+
+**Intuition first.** Think of graph classification like classifying handwritten digits: the convolutional layers (= message passing) extract local features; pooling (= readout) combines them into a fixed-size vector; the dense layers (= MLP) make the final call. The key difference is that graphs have no spatial grid — "pooling" must be permutation-invariant.
 
 ## Common Failure Modes
 

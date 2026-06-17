@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## TGN's Design Philosophy
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Think of each node as a person carrying a wallet-sized summary card (the memory s_v). When they meet someone new, they update their card — but they do not replay their entire life history. When you ask them for a full introduction, they pull out their card and also look around at who is nearby (temporal graph attention). TGN's separation of memory from embedding is exactly this: cheap persistent state plus rich on-demand context.</div>
+
 TGN separates two concerns:
 1. **Memory:** long-term history of a node's interactions, stored as a fixed-size vector s_v
 2. **Embedding:** current structural context, computed by aggregating recent neighbours
@@ -97,6 +99,82 @@ p(u, v, t) = σ( MLP( [h_u(t) || h_v(t)] ) )
 </div>
 
 Trained with binary cross-entropy + negative sampling (sample random non-interacting pairs as negatives).
+
+## Worked Example: One TGN Memory Update
+
+Suppose user u has memory s_u = [0.5, -0.2, 0.8] (d_s = 3). At time t=100, u interacts with item v (s_v = [0.1, 0.9, 0.3]) via edge features e_uv = [1] (e.g., a "click"). The time since u's last interaction: delta_t = 100 - 85 = 15.
+
+**Step 1: Raw message for u**
+```
+m_u = MSG_s(s_u, s_v, delta_t, e_uv)
+    = Linear([s_u || s_v || delta_t || e_uv])
+    = Linear([0.5, -0.2, 0.8,  0.1, 0.9, 0.3,  15,  1])
+    → suppose m_u = [0.3, 0.7, -0.1]   (after linear + activation)
+```
+
+**Step 2: GRU memory update**
+```
+s_u(t=100) = GRU(m_u, s_u(t^-))
+           = GRU([0.3, 0.7, -0.1],  [0.5, -0.2, 0.8])
+           → suppose s_u = [0.45, 0.6, 0.3]   (gate blends old + new)
+```
+
+The GRU's forget gate suppresses the old memory dimension 3 (0.8 → 0.3) because the new message strongly activates it differently. Dimension 2 rises (−0.2 → 0.6) reflecting the new interaction. This is all differentiable — gradients flow back through the GRU to learn what to remember.
+
+<style>
+@keyframes mem-update {
+  0%, 40% { fill: #6366f1; }
+  50%, 90% { fill: #f97316; }
+  100% { fill: #6366f1; }
+}
+@keyframes arrow-flow {
+  0% { stroke-dashoffset: 30; opacity: 0.4; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;">
+  <!-- Node u memory before -->
+  <rect x="15" y="50" width="70" height="40" rx="6" fill="#6366f1" opacity="0.85"/>
+  <text x="50" y="68" font-size="10" fill="white" text-anchor="middle" font-weight="bold">s_u(t⁻)</text>
+  <text x="50" y="82" font-size="9" fill="#e0e7ff" text-anchor="middle">[0.5,-0.2,0.8]</text>
+  <text x="50" y="105" font-size="9" fill="#64748b" text-anchor="middle">Memory before</text>
+
+  <!-- Event arrow -->
+  <line x1="85" y1="70" x2="135" y2="70" stroke="#f97316" stroke-width="2" stroke-dasharray="6,3" style="animation:arrow-flow 1.2s linear infinite;"/>
+  <polygon points="133,65 143,70 133,75" fill="#f97316"/>
+  <text x="110" y="62" font-size="9" fill="#f97316" text-anchor="middle">event</text>
+  <text x="110" y="85" font-size="8" fill="#94a3b8" text-anchor="middle">(u,v,t,e_uv)</text>
+
+  <!-- MSG box -->
+  <rect x="145" y="42" width="60" height="56" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="175" y="64" font-size="10" fill="#92400e" text-anchor="middle" font-weight="bold">MSG</text>
+  <text x="175" y="78" font-size="8" fill="#92400e" text-anchor="middle">Linear+act</text>
+  <text x="175" y="91" font-size="8" fill="#92400e" text-anchor="middle">m_u = [0.3,</text>
+  <text x="175" y="101" font-size="8" fill="#92400e" text-anchor="middle">0.7, -0.1]</text>
+
+  <!-- GRU arrow -->
+  <line x1="205" y1="70" x2="250" y2="70" stroke="#10b981" stroke-width="2" stroke-dasharray="6,3" style="animation:arrow-flow 1.2s linear 0.4s infinite;"/>
+  <polygon points="248,65 258,70 248,75" fill="#10b981"/>
+
+  <!-- GRU box -->
+  <rect x="260" y="42" width="60" height="56" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="290" y="66" font-size="10" fill="#065f46" text-anchor="middle" font-weight="bold">GRU</text>
+  <text x="290" y="80" font-size="8" fill="#065f46" text-anchor="middle">forget / update</text>
+  <text x="290" y="94" font-size="8" fill="#065f46" text-anchor="middle">gates</text>
+
+  <!-- Output arrow -->
+  <line x1="320" y1="70" x2="365" y2="70" stroke="#6366f1" stroke-width="2" stroke-dasharray="6,3" style="animation:arrow-flow 1.2s linear 0.8s infinite;"/>
+  <polygon points="363,65 373,70 363,75" fill="#6366f1"/>
+
+  <!-- Node u memory after -->
+  <rect x="375" y="50" width="70" height="40" rx="6" style="animation:mem-update 3s ease-in-out infinite;"/>
+  <text x="410" y="68" font-size="10" fill="white" text-anchor="middle" font-weight="bold">s_u(t)</text>
+  <text x="410" y="82" font-size="9" fill="#e0e7ff" text-anchor="middle">[0.45,0.6,0.3]</text>
+  <text x="410" y="105" font-size="9" fill="#64748b" text-anchor="middle">Memory after</text>
+</svg>
+<figcaption>TGN memory update cycle: the raw message MSG fuses the interaction context, then the GRU gates selectively blend the new message with the old memory state. The pulsing output node illustrates the memory transitioning from before (indigo) to after (orange) the event.</figcaption>
+</figure></div>
 
 ## The Full TGN Loop
 

@@ -31,6 +31,62 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/sheaf/bodnar2021_cwnetworks.png" alt="CW complex sheaf" caption="CW Networks: message passing on CW complexes with sheaf structure (Bodnar et al., 2021)" %}
 
 
+## Intuition First: Going Beyond Pairwise Relationships
+
+A graph only captures *pairwise* relationships — every edge connects exactly two nodes. But many real phenomena involve *three-way* or higher-order interactions that cannot be decomposed into pairs. A research triangle where three collaborators all directly influence each other is not the same as three separate pairs — the triangle has its own coherent meaning.
+
+A **simplicial complex** adds cells for these interactions: triangles for 3-way, tetrahedra for 4-way, and so on. A **sheaf on a simplicial complex** puts a local vector space and restriction map on every cell at every dimension, so data can live on nodes, edges, triangles, and tetrahedra simultaneously — all connected by restriction maps that say how lower-dimensional data relates to higher-dimensional data.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A standard GNN on a graph is a sheaf on a 1-dimensional CW complex (only nodes and edges). Moving to a 2-dimensional simplicial complex (adding triangles) is not just an architectural detail — it adds a new cohomology group H² that measures "how many independent 3-way interactions exist that cannot be explained by pairwise ones." Each new dimension adds expressive power that is provably beyond what graph-level message passing can capture.</div>
+
+<style>
+@keyframes triPulse {
+  0%,100% { fill-opacity: 0.15; }
+  50% { fill-opacity: 0.4; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 185" style="width:100%;max-width:500px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- LEFT: plain graph (no triangle fill) -->
+  <text x="100" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">Graph (1-D)</text>
+  <line x1="50"  y1="130" x2="100" y2="60"  stroke="#94a3b8" stroke-width="2"/>
+  <line x1="100" y1="60"  x2="155" y2="130" stroke="#94a3b8" stroke-width="2"/>
+  <line x1="50"  y1="130" x2="155" y2="130" stroke="#94a3b8" stroke-width="2"/>
+  <circle cx="50"  cy="130" r="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="100" cy="60"  r="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="155" cy="130" r="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="50"  y="134" text-anchor="middle" font-size="10" fill="#1e40af">v₁</text>
+  <text x="100" y="64"  text-anchor="middle" font-size="10" fill="#1e40af">v₂</text>
+  <text x="155" y="134" text-anchor="middle" font-size="10" fill="#1e40af">v₃</text>
+  <text x="100" y="162" text-anchor="middle" font-size="9" fill="#6b7280">only nodes + edges</text>
+  <text x="100" y="175" text-anchor="middle" font-size="9" fill="#6b7280">C⁰ → C¹  (2 levels)</text>
+
+  <!-- divider -->
+  <line x1="215" y1="25" x2="215" y2="180" stroke="#e5e7eb" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- RIGHT: simplicial complex (triangle filled) -->
+  <text x="340" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">Simplicial Complex (2-D)</text>
+  <polygon points="275,130 325,60 385,130" fill="#ede9fe" stroke="none">
+    <animate attributeName="fill-opacity" values="0.15;0.45;0.15" dur="3s" repeatCount="indefinite"/>
+  </polygon>
+  <line x1="275" y1="130" x2="325" y2="60"  stroke="#7c3aed" stroke-width="2"/>
+  <line x1="325" y1="60"  x2="385" y2="130" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="275" y1="130" x2="385" y2="130" stroke="#7c3aed" stroke-width="2"/>
+  <circle cx="275" cy="130" r="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="325" cy="60"  r="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="385" cy="130" r="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="275" y="134" text-anchor="middle" font-size="10" fill="#1e40af">v₁</text>
+  <text x="325" y="64"  text-anchor="middle" font-size="10" fill="#1e40af">v₂</text>
+  <text x="385" y="134" text-anchor="middle" font-size="10" fill="#1e40af">v₃</text>
+  <!-- triangle stalk label -->
+  <text x="328" y="110" text-anchor="middle" font-size="9" fill="#5b21b6">σ₁₂₃</text>
+  <text x="328" y="122" text-anchor="middle" font-size="8" fill="#5b21b6">triangle stalk</text>
+  <text x="330" y="162" text-anchor="middle" font-size="9" fill="#374151">nodes + edges + triangle</text>
+  <text x="330" y="175" text-anchor="middle" font-size="9" fill="#374151">C⁰ → C¹ → C²  (3 levels)</text>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Left: a graph has only node and edge stalks (two cochain levels). Right: a simplicial complex adds a triangle stalk (pulsing purple fill) and a second coboundary δ₁ connecting C¹ to C². This enables H² — a new cohomology group measuring triangle-level topological structure.</figcaption>
+</figure></div>
+
 ## From Graphs to Simplicial Complexes
 
 A **simplicial complex** K consists of:

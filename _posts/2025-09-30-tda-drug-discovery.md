@@ -24,6 +24,10 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> Molecular structures — atom position clouds with element types — are natural inputs for TDA. By building element-specific Rips filtrations (e.g., on carbon atoms, on nitrogen atoms, on C–N atom pairs), one computes persistence diagrams that encode ring systems, binding pockets, and molecular cavities. These topological molecular descriptors predict ADMET properties and binding affinities better than many classical fingerprints, especially when combined with GNNs.</div>
 
+## Intuition First
+
+A drug molecule is not just a graph of atom–bond connections — it is a 3D shape. Two molecules can have identical bond graphs but different 3D arrangements, and only one may fit the binding pocket. Traditional fingerprints count subgraph patterns; they are blind to 3D geometry. TDA sees geometry: it grows balls around atoms and tracks when ring-shaped voids appear (H₁ bars = aromatic rings, macrocycles) and when enclosed cavities form (H₂ bars = binding pockets). The birth scale of an H₁ bar directly encodes the ring's spatial diameter — information no 2D fingerprint captures.
+
 ## Molecular Topology
 
 A molecule can be represented as a **3D point cloud**: $$P = \{(x_i, \text{element}_i)\}$$ where $$x_i \in \mathbb{R}^3$$ is the 3D position of atom $$i$$ and $$\text{element}_i \in \{\text{C}, \text{N}, \text{O}, \text{S}, \ldots\}$$ is the element type.
@@ -57,6 +61,126 @@ Each element-specific diagram is vectorised (persistence images) and concatenate
 This gives a scale-parameterised pocket detection without requiring a threshold on solvent-accessible surface area.
 
 <div class="math-box">Binding pocket score: $$\mathrm{PS} = \max_{(b,d) \in H_2(\text{surface})} (d - b) \cdot d$$</div>
+
+## Worked Example: Benzene vs. Cyclohexane
+
+Both molecules have the formula C₆H₆ / C₆H₁₂ — a 6-membered carbon ring. Their 3D atom positions give very similar Rips filtrations on the carbon-only point cloud $$P_C$$:
+
+**Benzene** (flat, aromatic, bond length ≈ 1.40 Å):
+- At $$r \approx 0.70$$ Å: adjacent C atoms connect.
+- At $$r \approx 1.21$$ Å: the ring loop closes → $$H_1$$ bar born at $$(0.70, 2.42)$$, persistence $$= 1.72$$ Å.
+
+**Cyclohexane** (chair conformation, bond length ≈ 1.54 Å, puckered):
+- At $$r \approx 0.77$$ Å: adjacent C atoms connect.
+- At $$r \approx 1.54$$ Å: ring closes but at a larger scale → $$H_1$$ bar born at $$(0.77, 2.80)$$, persistence $$= 2.03$$ Å.
+
+The birth times differ (0.70 vs 0.77 Å) because aromatic C–C bonds are shorter. The death times differ because the ring diameter differs. A classifier using these H₁ birth/death values can distinguish aromatic from non-aromatic rings without any chemical domain knowledge — the geometry is encoded automatically.
+
+<style>
+@keyframes dd-grow {
+  0%   { r: 0; }
+  60%  { r: 22; }
+  100% { r: 22; }
+}
+@keyframes dd-ring {
+  0%,50%  { opacity: 0; }
+  80%,100% { opacity: 1; }
+}
+</style>
+
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;display:block;margin:auto;">
+  <!-- Drug discovery TDA pipeline -->
+  <text x="250" y="13" text-anchor="middle" font-size="10" fill="#1e293b" font-weight="bold">TDA Drug Discovery Pipeline</text>
+
+  <!-- Step 1: Molecule -->
+  <rect x="5" y="22" width="80" height="80" rx="5" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="45" y="38" text-anchor="middle" font-size="8" fill="#166534" font-weight="bold">Molecule</text>
+  <!-- Benzene ring schematic -->
+  <polygon points="45,55 60,63 60,79 45,87 30,79 30,63" fill="none" stroke="#0d9488" stroke-width="2"/>
+  <!-- aromatic circle inside -->
+  <circle cx="45" cy="71" r="10" fill="none" stroke="#0d9488" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- atom dots -->
+  <circle cx="45" cy="55" r="3" fill="#0d9488"/>
+  <circle cx="60" cy="63" r="3" fill="#0d9488"/>
+  <circle cx="60" cy="79" r="3" fill="#0d9488"/>
+  <circle cx="45" cy="87" r="3" fill="#0d9488"/>
+  <circle cx="30" cy="79" r="3" fill="#0d9488"/>
+  <circle cx="30" cy="63" r="3" fill="#0d9488"/>
+  <text x="45" y="112" text-anchor="middle" font-size="7" fill="#0d9488">3D atom cloud</text>
+
+  <!-- Arrow 1 -->
+  <text x="98" y="68" font-size="15" fill="#64748b">→</text>
+  <text x="90" y="82" font-size="7" fill="#64748b">element</text>
+  <text x="90" y="91" font-size="7" fill="#64748b">Rips(P_C)</text>
+
+  <!-- Step 2: Element filtrations -->
+  <rect x="115" y="22" width="90" height="80" rx="5" fill="#fefce8" stroke="#fde68a"/>
+  <text x="160" y="38" text-anchor="middle" font-size="8" fill="#92400e" font-weight="bold">Filtrations</text>
+  <!-- Growing balls animation -->
+  <circle cx="145" cy="68" r="0" fill="#0d9488" opacity="0.15">
+    <animate attributeName="r" values="0;22;22;0" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.15;0.15;0" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="145" cy="68" r="4" fill="#0d9488"/>
+  <circle cx="168" cy="55" r="4" fill="#0d9488"/>
+  <circle cx="175" cy="68" r="4" fill="#0d9488"/>
+  <circle cx="168" cy="81" r="4" fill="#0d9488"/>
+  <text x="160" y="112" text-anchor="middle" font-size="7" fill="#92400e">Rips(C), Rips(N), Rips(C,O)</text>
+
+  <!-- Arrow 2 -->
+  <text x="218" y="68" font-size="15" fill="#64748b">→</text>
+  <text x="212" y="82" font-size="7" fill="#64748b">persist.</text>
+
+  <!-- Step 3: Multi-channel diagrams -->
+  <rect x="235" y="22" width="90" height="80" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="280" y="38" text-anchor="middle" font-size="8" fill="#1e40af" font-weight="bold">Diagrams</text>
+  <!-- H1 bar (ring) -->
+  <text x="240" y="54" font-size="7" fill="#0d9488">C: H₁</text>
+  <rect x="260" y="47" height="8" fill="#0d9488" rx="2" width="0">
+    <animate attributeName="width" values="0;55" dur="0.6s" begin="0.5s" fill="freeze"/>
+  </rect>
+  <!-- H2 bar (pocket) -->
+  <text x="240" y="72" font-size="7" fill="#6366f1">C: H₂</text>
+  <rect x="260" y="65" height="8" fill="#6366f1" rx="2" width="0">
+    <animate attributeName="width" values="0;35" dur="0.6s" begin="0.8s" fill="freeze"/>
+  </rect>
+  <!-- N channel -->
+  <text x="240" y="90" font-size="7" fill="#f97316">N: H₁</text>
+  <rect x="260" y="83" height="8" fill="#f97316" rx="2" width="0">
+    <animate attributeName="width" values="0;28" dur="0.6s" begin="1.0s" fill="freeze"/>
+  </rect>
+  <text x="280" y="112" text-anchor="middle" font-size="7" fill="#1e40af">multi-channel fingerprint</text>
+
+  <!-- Arrow 3 -->
+  <text x="338" y="68" font-size="15" fill="#64748b">→</text>
+  <text x="332" y="82" font-size="7" fill="#64748b">persist.</text>
+  <text x="332" y="91" font-size="7" fill="#64748b">images</text>
+
+  <!-- Step 4: ML Prediction -->
+  <rect x="358" y="22" width="132" height="80" rx="5" fill="#fdf4ff" stroke="#e9d5ff"/>
+  <text x="424" y="38" text-anchor="middle" font-size="8" fill="#7c3aed" font-weight="bold">ML Prediction</text>
+  <!-- Feature bars -->
+  <rect x="366" y="48" width="70" height="10" rx="2" fill="#7c3aed" opacity="0.7"/>
+  <text x="440" y="57" font-size="7" fill="#7c3aed">topo feat.</text>
+  <rect x="366" y="63" width="50" height="10" rx="2" fill="#94a3b8" opacity="0.7"/>
+  <text x="420" y="72" font-size="7" fill="#64748b">GNN feat.</text>
+  <!-- Output -->
+  <rect x="366" y="80" width="116" height="14" rx="3" fill="#0d9488" opacity="0">
+    <animate attributeName="opacity" values="0;0.85" dur="0.5s" begin="1.5s" fill="freeze"/>
+  </rect>
+  <text x="424" y="91" text-anchor="middle" font-size="7" fill="#fff" opacity="0">ADMET / binding affinity
+    <animate attributeName="opacity" values="0;1" dur="0.5s" begin="1.5s" fill="freeze"/>
+  </text>
+  <text x="424" y="112" text-anchor="middle" font-size="7" fill="#7c3aed">property prediction</text>
+
+  <!-- Bottom caption row -->
+  <text x="250" y="178" text-anchor="middle" font-size="7.5" fill="#94a3b8">3D molecule → element-specific Rips filtrations → multi-channel persistence diagrams → ML model → predicted property</text>
+</svg>
+<figcaption>TDA drug discovery pipeline: element-specific Rips filtrations on 3D atom positions produce multi-channel persistence diagrams capturing rings (H₁) and pockets (H₂), fed into an ML model for property prediction.</figcaption>
+</figure>
+</div>
 
 ## Protein-Ligand Interaction
 

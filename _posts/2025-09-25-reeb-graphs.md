@@ -24,6 +24,10 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> The Reeb graph R(f) of f: M → ℝ is M/~ where x ~ y iff f(x) = f(y) and x, y are in the same connected component of f⁻¹(f(x)). Nodes in R(f) correspond to critical levels where the topology changes (births/deaths of components); edges correspond to ranges where the topology is stable. The merge tree is the Reeb graph for H₀ only; the contour tree handles both births and merges on simply-connected domains.</div>
 
+## Intuition First
+
+Imagine a mountain range as a terrain function $$f: M \to \mathbb{R}$$ (height). At sea level you see one large island. As you raise the water level, the island splits into two peaks, then each peak becomes a smaller cap. The Reeb graph records exactly these events: each split or merge is a node, and each continuous "strand" between events is an edge. It is the minimal graph that captures how the topology of the terrain changes with height — a topological skeleton stripped of all geometric detail.
+
 ## Definition
 
 Let $$M$$ be a smooth manifold and $$f: M \to \mathbb{R}$$ a Morse function. The **Reeb graph** $$\mathcal{R}(f)$$ is the quotient:
@@ -52,6 +56,110 @@ The persistence pairs from the $$H_0$$ persistence algorithm are exactly the edg
 - The **persistence** $$d - b$$ is the "lifetime" of the arc.
 
 For higher-dimensional homology, extended persistence on the Reeb graph captures $$H_k$$ features of the underlying manifold.
+
+## Worked Example: Reeb Graph of a Double-Peak Terrain
+
+Consider $$f: [0,1] \to \mathbb{R}$$ on a 1D graph with two bumps:
+
+$$f = \underbrace{0.1}_{\text{valley}} \to \underbrace{0.8}_{\text{peak 1}} \to \underbrace{0.3}_{\text{saddle}} \to \underbrace{0.9}_{\text{peak 2}} \to \underbrace{0.05}_{\text{valley}}$$
+
+Sweep from bottom up:
+- $$f=0.05$$: right valley appears — one component born.
+- $$f=0.1$$: left valley appears — second component born.
+- $$f=0.3$$: saddle — both components merge into one (elder rule: the one born at $$f=0.05$$ survives; the $$f=0.1$$ component dies, persistence $$= 0.3 - 0.1 = 0.2$$).
+- $$f=0.8$$: peak 1 — sublevel set gains a new local max; no new component (already connected).
+- $$f=0.9$$: peak 2 — global maximum.
+
+**Reeb graph**: two leaf nodes (the two valleys), one internal node (the saddle merge), and two leaf nodes at the peaks — forming a "Y then Y" shape. The merge tree records the single pair $$(0.1, 0.3)$$.
+
+<style>
+@keyframes reeb-rise {
+  0%   { transform: scaleY(0); transform-origin: bottom; }
+  100% { transform: scaleY(1); transform-origin: bottom; }
+}
+@keyframes reeb-node-appear {
+  0%,60%  { opacity: 0; r: 2; }
+  80%,100% { opacity: 1; r: 7; }
+}
+</style>
+
+<div class="blog-figure">
+<figure>
+<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:auto;">
+  <!-- Terrain curve -->
+  <text x="120" y="14" text-anchor="middle" font-size="10" fill="#1e293b" font-weight="bold">Terrain f(x)</text>
+  <polyline points="10,185 50,30 90,130 130,15 170,190" fill="none" stroke="#0d9488" stroke-width="2.5"/>
+  <!-- Critical point labels -->
+  <circle cx="10"  cy="185" r="5" fill="#6366f1"/>
+  <text x="10"  y="200" text-anchor="middle" font-size="8" fill="#6366f1">v₀.05</text>
+  <circle cx="50"  cy="30"  r="5" fill="#f97316"/>
+  <text x="50"  y="24"  text-anchor="middle" font-size="8" fill="#f97316">p₀.8</text>
+  <circle cx="90"  cy="130" r="5" fill="#ef4444"/>
+  <text x="90"  y="148" text-anchor="middle" font-size="8" fill="#ef4444">s₀.3</text>
+  <circle cx="130" cy="15"  r="5" fill="#f97316"/>
+  <text x="130" y="10"  text-anchor="middle" font-size="8" fill="#f97316">p₀.9</text>
+  <circle cx="170" cy="190" r="5" fill="#6366f1"/>
+  <text x="170" y="205" text-anchor="middle" font-size="8" fill="#6366f1">v₀.1</text>
+  <!-- sweep line animated -->
+  <line x1="0" y1="190" x2="180" y2="190" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,3">
+    <animate attributeName="y1" values="190;10;190" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="y2" values="190;10;190" dur="4s" repeatCount="indefinite"/>
+  </line>
+  <text x="90" y="155" text-anchor="middle" font-size="7" fill="#fbbf24">sweep →</text>
+
+  <!-- Arrow -->
+  <text x="210" y="105" font-size="20" fill="#64748b">→</text>
+  <text x="200" y="122" font-size="8" fill="#64748b">Reeb graph</text>
+
+  <!-- Reeb graph (merge tree) -->
+  <text x="340" y="14" text-anchor="middle" font-size="10" fill="#1e293b" font-weight="bold">Merge Tree</text>
+  <!-- Two leaf nodes (valleys) -->
+  <circle cx="290" cy="175" r="7" fill="#6366f1" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="0.3s" fill="freeze"/>
+  </circle>
+  <text x="290" y="192" text-anchor="middle" font-size="7" fill="#6366f1">f=0.05</text>
+  <circle cx="390" cy="175" r="7" fill="#6366f1" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="0.5s" fill="freeze"/>
+  </circle>
+  <text x="390" y="192" text-anchor="middle" font-size="7" fill="#6366f1">f=0.1</text>
+  <!-- Merge node (saddle) -->
+  <circle cx="340" cy="100" r="7" fill="#ef4444" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1s" fill="freeze"/>
+  </circle>
+  <text x="365" y="104" font-size="7" fill="#ef4444">saddle f=0.3</text>
+  <!-- Edges from valleys to saddle -->
+  <line x1="290" y1="168" x2="335" y2="107" stroke="#94a3b8" stroke-width="2" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.2s" fill="freeze"/>
+  </line>
+  <line x1="390" y1="168" x2="345" y2="107" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,3" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.3s" fill="freeze"/>
+  </line>
+  <!-- Two peaks from merge node -->
+  <circle cx="310" cy="40" r="7" fill="#f97316" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.5s" fill="freeze"/>
+  </circle>
+  <text x="295" y="35" font-size="7" fill="#f97316">p₀.8</text>
+  <circle cx="370" cy="25" r="7" fill="#f97316" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.6s" fill="freeze"/>
+  </circle>
+  <text x="388" y="22" font-size="7" fill="#f97316">p₀.9</text>
+  <line x1="340" y1="93" x2="315" y2="47" stroke="#94a3b8" stroke-width="2" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.7s" fill="freeze"/>
+  </line>
+  <line x1="340" y1="93" x2="367" y2="32" stroke="#94a3b8" stroke-width="2" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.8s" fill="freeze"/>
+  </line>
+  <!-- persistence annotation -->
+  <rect x="230" y="100" width="50" height="68" rx="3" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="2s" fill="freeze"/>
+  </rect>
+  <text x="255" y="115" text-anchor="middle" font-size="7" fill="#ef4444" opacity="0">pers=0.2
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="2s" fill="freeze"/>
+  </text>
+</svg>
+<figcaption>Sweep line (gold) rises through terrain. Critical events (coloured dots) become Reeb graph nodes. The two valleys merge at the saddle (f=0.3); persistence of the shorter-lived valley = 0.2.</figcaption>
+</figure>
+</div>
 
 ## Algorithms
 

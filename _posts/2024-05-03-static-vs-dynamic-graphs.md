@@ -29,6 +29,8 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/rossi2020_tgn.png" alt="Dynamic graph evolution" caption="Continuous-time dynamic graph: event stream processed by TGN (Rossi et al., 2020)" %}
 
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A static GNN is like a map printed once — it is accurate at print time but goes stale the moment a new road opens. A dynamic graph model is like a live navigation app — it ingests new events continuously and always reflects the current state. The choice between snapshot (DTDG) and event-stream (CTDG) models is really a question of how finely you need to track time: daily snapshots suffice for monthly patterns, but millisecond transactions demand continuous-time treatment.</div>
+
 ## Why Graphs Change Over Time
 
 Real-world networks are never truly static:
@@ -99,6 +101,69 @@ Not all past events are equally relevant. A social interaction from 3 years ago 
 <div class="insight-box">
 <strong>The memory bottleneck:</strong> Naive CTDG models replay all past events to compute current node states — O(history) per query. TGN and similar architectures solve this with fixed-size memory modules that summarise history efficiently, analogous to how LSTMs summarise sequence history in a fixed hidden state.
 </div>
+
+## Visualising DTDG vs CTDG
+
+<style>
+@keyframes event-appear {
+  0% { opacity: 0; transform: scale(0.5); }
+  30% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes snapshot-flash {
+  0%, 85%, 100% { opacity: 0.3; }
+  90%, 95% { opacity: 1; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;">
+  <!-- DTDG section -->
+  <text x="110" y="18" font-size="11" fill="#374151" text-anchor="middle" font-weight="bold">DTDG: Discrete Snapshots</text>
+  <!-- Timeline -->
+  <line x1="20" y1="50" x2="200" y2="50" stroke="#cbd5e1" stroke-width="1.5"/>
+  <!-- Snapshot boxes -->
+  <rect x="25" y="30" width="36" height="38" rx="4" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" style="animation:snapshot-flash 3s ease-in-out 0s infinite;"/>
+  <text x="43" y="53" font-size="9" fill="#1e40af" text-anchor="middle">G₁</text>
+  <rect x="80" y="30" width="36" height="38" rx="4" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" style="animation:snapshot-flash 3s ease-in-out 1s infinite;"/>
+  <text x="98" y="53" font-size="9" fill="#1e40af" text-anchor="middle">G₂</text>
+  <rect x="135" y="30" width="36" height="38" rx="4" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" style="animation:snapshot-flash 3s ease-in-out 2s infinite;"/>
+  <text x="153" y="53" font-size="9" fill="#1e40af" text-anchor="middle">G₃</text>
+  <!-- gap annotation -->
+  <text x="70" y="82" font-size="9" fill="#94a3b8" text-anchor="middle">gap: events lost</text>
+  <line x1="61" y1="68" x2="80" y2="68" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="43" y="95" font-size="9" fill="#64748b" text-anchor="middle">t=1</text>
+  <text x="98" y="95" font-size="9" fill="#64748b" text-anchor="middle">t=2</text>
+  <text x="153" y="95" font-size="9" fill="#64748b" text-anchor="middle">t=3</text>
+
+  <!-- Divider -->
+  <line x1="230" y1="10" x2="230" y2="170" stroke="#f1f5f9" stroke-width="2"/>
+
+  <!-- CTDG section -->
+  <text x="345" y="18" font-size="11" fill="#374151" text-anchor="middle" font-weight="bold">CTDG: Event Stream</text>
+  <!-- Timeline -->
+  <line x1="250" y1="80" x2="440" y2="80" stroke="#cbd5e1" stroke-width="1.5"/>
+  <polygon points="440,75 450,80 440,85" fill="#cbd5e1"/>
+  <!-- Events as dots on timeline -->
+  <circle cx="270" cy="80" r="6" fill="#10b981" style="animation:event-appear 3s ease-in-out 0.2s infinite;"/>
+  <circle cx="295" cy="80" r="6" fill="#10b981" style="animation:event-appear 3s ease-in-out 0.7s infinite;"/>
+  <circle cx="330" cy="80" r="6" fill="#f97316" style="animation:event-appear 3s ease-in-out 1.3s infinite;"/>
+  <circle cx="355" cy="80" r="6" fill="#10b981" style="animation:event-appear 3s ease-in-out 1.8s infinite;"/>
+  <circle cx="390" cy="80" r="6" fill="#f97316" style="animation:event-appear 3s ease-in-out 2.3s infinite;"/>
+  <circle cx="415" cy="80" r="6" fill="#10b981" style="animation:event-appear 3s ease-in-out 2.7s infinite;"/>
+  <!-- event labels -->
+  <text x="270" y="65" font-size="8" fill="#64748b" text-anchor="middle">t=1.2</text>
+  <text x="295" y="65" font-size="8" fill="#64748b" text-anchor="middle">t=1.7</text>
+  <text x="330" y="65" font-size="8" fill="#64748b" text-anchor="middle">t=3.1</text>
+  <text x="355" y="65" font-size="8" fill="#64748b" text-anchor="middle">t=3.9</text>
+  <text x="390" y="65" font-size="8" fill="#64748b" text-anchor="middle">t=5.5</text>
+  <text x="415" y="65" font-size="8" fill="#64748b" text-anchor="middle">t=6.2</text>
+  <!-- legend -->
+  <circle cx="255" cy="110" r="5" fill="#10b981"/><text x="265" y="114" font-size="9" fill="#64748b">edge add</text>
+  <circle cx="315" cy="110" r="5" fill="#f97316"/><text x="325" y="114" font-size="9" fill="#64748b">edge remove</text>
+  <text x="345" y="140" font-size="9" fill="#64748b" text-anchor="middle">Exact timestamps — no information lost</text>
+</svg>
+<figcaption>DTDG (left) collapses events between snapshots into a single state — fine for monthly data, but events between snapshots vanish. CTDG (right) records every event with its exact timestamp, preserving full temporal resolution at the cost of more complex modelling.</figcaption>
+</figure></div>
 
 ## DTDG vs CTDG: Practical Trade-offs
 

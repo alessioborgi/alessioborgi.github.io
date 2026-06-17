@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Long-Horizon Problem
 
+**Intuition first.** When you make a cup of tea, you do not plan every individual muscle contraction. Your brain operates at multiple levels simultaneously: a high level decides "boil water then steep the bag", a mid level sequences "walk to kettle, pick up kettle, fill kettle", and the low level handles the precise finger forces and wrist angles. This hierarchy is exactly what hierarchical robot learning tries to replicate — the high-level policy picks which *skill* to execute, and the low-level policy handles the motor details.
+
 Flat RL policies struggle with tasks that require many sequential decisions over long time horizons. Reward signals become extremely sparse — the robot might take thousands of actions before receiving any feedback — and the policy must simultaneously solve the exploration problem (finding a viable action sequence) and the optimisation problem (learning to execute it well).
 
 Humans tackle this through hierarchical decomposition: we think of "making coffee" as a sequence of skills — "boil water", "grind beans", "pour" — each of which is itself a sub-plan. Robots benefit from the same structure.
@@ -61,6 +63,44 @@ Rather than hand-designing options, **skill discovery** methods automatically ex
 
 <div class="insight-box"><strong>Key Insight:</strong> Skill discovery reframes the question from "what skills should we pre-program?" to "what skills naturally emerge from the task structure?" This allows skills to adapt to the specific robot and environment rather than being imposed by human designers.</div>
 
+<style>
+@keyframes skillSelect { 0%,100%{opacity:0.3;} 40%,60%{opacity:1;} }
+.skill-a { animation: skillSelect 3s ease-in-out infinite; animation-delay: 0s; }
+.skill-b { animation: skillSelect 3s ease-in-out infinite; animation-delay: 1s; }
+.skill-c { animation: skillSelect 3s ease-in-out infinite; animation-delay: 2s; }
+@keyframes execPulse { 0%,100%{stroke-dashoffset:80;} 50%{stroke-dashoffset:0;} }
+.exec-line { stroke-dasharray:80; animation: execPulse 1.5s linear infinite; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;background:#f8fafc;border-radius:8px;">
+  <defs><marker id="sk" markerWidth="7" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#374151"/></marker></defs>
+  <!-- High-level policy box -->
+  <rect x="10" y="60" width="110" height="50" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="65" y="82" text-anchor="middle" font-size="10" font-weight="bold" fill="#4c1d95" font-family="sans-serif">High-level</text>
+  <text x="65" y="96" text-anchor="middle" font-size="10" fill="#4c1d95" font-family="sans-serif">policy</text>
+  <text x="65" y="110" text-anchor="middle" font-size="9" fill="#6d28d9" font-family="sans-serif">picks skill z</text>
+  <!-- Skill library -->
+  <rect x="160" y="20" width="90" height="28" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.2"/>
+  <text x="205" y="39" text-anchor="middle" font-size="10" fill="#065f46" font-family="sans-serif" class="skill-a">pick_up(obj)</text>
+  <rect x="160" y="58" width="90" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.2"/>
+  <text x="205" y="77" text-anchor="middle" font-size="10" fill="#1e40af" font-family="sans-serif" class="skill-b">open_drawer</text>
+  <rect x="160" y="96" width="90" height="28" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+  <text x="205" y="115" text-anchor="middle" font-size="10" fill="#92400e" font-family="sans-serif" class="skill-c">place(loc)</text>
+  <text x="205" y="140" text-anchor="middle" font-size="9" fill="#64748b" font-family="sans-serif">skill library</text>
+  <!-- Low-level executor -->
+  <rect x="300" y="60" width="90" height="50" rx="8" fill="#fdf4ff" stroke="#a21caf" stroke-width="1.5"/>
+  <text x="345" y="82" text-anchor="middle" font-size="10" font-weight="bold" fill="#701a75" font-family="sans-serif">Low-level</text>
+  <text x="345" y="96" text-anchor="middle" font-size="10" fill="#701a75" font-family="sans-serif">policy</text>
+  <text x="345" y="110" text-anchor="middle" font-size="9" fill="#a21caf" font-family="sans-serif">joint torques</text>
+  <!-- Arrows -->
+  <line x1="120" y1="85" x2="158" y2="73" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#sk)"/>
+  <line class="exec-line" x1="252" y1="73" x2="298" y2="83" stroke="#059669" stroke-width="1.8" fill="none" marker-end="url(#sk)"/>
+  <!-- Labels -->
+  <text x="200" y="170" text-anchor="middle" font-size="9" fill="#475569" font-family="sans-serif">Hierarchical policy: high-level selects skill → low-level executes for k steps</text>
+</svg>
+<figcaption>Hierarchical robot policy. A high-level policy selects a skill (option) every k steps; a low-level skill policy executes it, outputting joint torques each timestep.</figcaption>
+</figure></div>
+
 ## SPiRL: Skill Prior RL
 
 **SPiRL** (Pertsch et al. 2021) pre-trains a skill encoder and decoder on offline datasets of robot behaviour, learning a compact latent skill space. During downstream RL, the high-level policy selects skill latents rather than primitive actions, and the decoder executes them as multi-step motor commands. A **skill prior** — the distribution of skills likely to be useful in a given state — regularises the high-level policy, dramatically accelerating learning:
@@ -70,6 +110,19 @@ J(pi) = E[sum r_t] - alpha * KL(pi(z|s) || p(z|s))
 </div>
 
 where $$p(z|s)$$ is the skill prior. The KL penalty prevents the policy from exploring random, unproductive skill combinations and instead focuses on skills that are plausible given the robot's current state. SPiRL was demonstrated to accelerate learning on long-horizon kitchen manipulation tasks by an order of magnitude compared to flat RL.
+
+## Worked Example: SayCan Skill Selection
+
+Given the instruction "bring me something to drink from the fridge", SayCan scores each candidate skill string:
+
+| Skill string | LLM score | Affordance score | Product |
+|---|---|---|---|
+| "pick up the water bottle" | 0.35 | 0.82 | **0.287** ← selected |
+| "pick up the apple juice" | 0.28 | 0.74 | 0.207 |
+| "open the fridge" | 0.22 | 0.91 | 0.200 |
+| "pick up the sandwich" | 0.04 | 0.88 | 0.035 |
+
+The LLM ranks drinks over food; the affordance model confirms the water bottle is reachable and graspable from the robot's current state. The product selects the skill that is both linguistically appropriate and physically feasible.
 
 ## SayCan: Language-Conditioned Skill Execution
 

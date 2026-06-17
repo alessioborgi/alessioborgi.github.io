@@ -27,6 +27,8 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> A temporal knowledge graph (TKG) extends the standard triple (s, r, o) to a quadruple (s, r, o, t) — each fact has a timestamp or validity interval. TKG completion asks: given (s, r, ?, t), predict the missing entity. This requires reasoning about temporal patterns: periodicity, recency, entity-relation-time interactions.
 </div>
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A static KG is a photograph — it captures one moment. A temporal KG is a film — facts have birth dates and expiry dates. The challenge is not just storing timestamps but reasoning about them: "Who was the CEO of Apple in 2005?" requires knowing that Steve Jobs held the role from 1997 to 2011, not just that he was ever CEO.</div>
+
 ## From Triples to Quadruples
 
 Standard KG: {(s, r, o)} — timeless facts.
@@ -90,6 +92,67 @@ Assigns time-encoding to edges and applies attention over temporal neighbourhood
 <div class="insight-box">
 <strong>Why temporal patterns matter:</strong> "CountryX will hold elections" is more likely if elections occurred ~4 years ago (periodicity). "PersonY will be appointed to a position" depends on whether they recently left another position (temporal sequence). TKG models that capture periodicity and recency dramatically outperform static KG models on extrapolation tasks.
 </div>
+
+## Worked Example: TTransE on a Political Event
+
+Suppose we want to predict: *(CountryX, holdsElection, ?, t=2024)*.
+
+Static TransE embeds CountryX and holdsElection without time — it either always predicts elections or never does, based on training frequency.
+
+TTransE scoring function: f(s, r, o, t) = -||e_s + w_r + w_t - e_o||
+
+With learned time embedding w_2024 ≈ w_2020 (both election years, similar temporal position in the 4-year cycle), TTransE will score 2024 candidates similarly to 2020 — capturing the **periodicity** pattern. For a non-election year like 2022, w_2022 is far from w_2020 in embedding space, so election predictions score low.
+
+This illustrates why time embeddings help: they encode position in recurring cycles, giving the model a "calendar sense" that static embeddings completely lack.
+
+<style>
+@keyframes tkg-tick {
+  0% { stroke-dashoffset: 60; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes tkg-dot {
+  0%, 100% { r: 4; fill: #94a3b8; }
+  50% { r: 7; fill: #f97316; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;">
+  <!-- Timeline axis -->
+  <line x1="30" y1="70" x2="430" y2="70" stroke="#cbd5e1" stroke-width="2"/>
+  <polygon points="430,65 440,70 430,75" fill="#cbd5e1"/>
+  <!-- Year ticks -->
+  <line x1="60"  y1="63" x2="60"  y2="77" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="140" y1="63" x2="140" y2="77" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="220" y1="63" x2="220" y2="77" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="300" y1="63" x2="300" y2="77" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="380" y1="63" x2="380" y2="77" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="60"  y="90" font-size="10" fill="#64748b" text-anchor="middle">2012</text>
+  <text x="140" y="90" font-size="10" fill="#64748b" text-anchor="middle">2016</text>
+  <text x="220" y="90" font-size="10" fill="#64748b" text-anchor="middle">2020</text>
+  <text x="300" y="90" font-size="10" fill="#64748b" text-anchor="middle">2024</text>
+  <text x="380" y="90" font-size="10" fill="#64748b" text-anchor="middle">2028</text>
+  <!-- Election events (orange dots) -->
+  <circle cx="60"  cy="70" r="7" fill="#f97316" style="animation:tkg-dot 2s ease-in-out 0s infinite;"/>
+  <circle cx="140" cy="70" r="7" fill="#f97316" style="animation:tkg-dot 2s ease-in-out 0.5s infinite;"/>
+  <circle cx="220" cy="70" r="7" fill="#f97316" style="animation:tkg-dot 2s ease-in-out 1s infinite;"/>
+  <!-- 2024: predicted (dashed) -->
+  <circle cx="300" cy="70" r="7" fill="none" stroke="#f97316" stroke-width="2" stroke-dasharray="3,2"/>
+  <text x="300" y="58" font-size="9" fill="#f97316" text-anchor="middle">predicted?</text>
+  <!-- Non-election years (grey) -->
+  <circle cx="100" cy="70" r="4" fill="#e2e8f0"/>
+  <circle cx="180" cy="70" r="4" fill="#e2e8f0"/>
+  <circle cx="260" cy="70" r="4" fill="#e2e8f0"/>
+  <text x="100" y="105" font-size="8" fill="#94a3b8" text-anchor="middle">2014</text>
+  <text x="180" y="105" font-size="8" fill="#94a3b8" text-anchor="middle">2018</text>
+  <text x="260" y="105" font-size="8" fill="#94a3b8" text-anchor="middle">2022</text>
+  <!-- legend -->
+  <circle cx="30" cy="112" r="5" fill="#f97316"/>
+  <text x="40" y="116" font-size="9" fill="#64748b">Election year</text>
+  <circle cx="120" cy="112" r="4" fill="#e2e8f0"/>
+  <text x="130" y="116" font-size="9" fill="#64748b">Non-election year</text>
+</svg>
+<figcaption>TKG extrapolation: the model sees election events at 2012, 2016, 2020 and must predict whether 2024 will also be an election year — exploiting the 4-year periodicity in the time embedding space.</figcaption>
+</figure></div>
 
 ## Temporal Reasoning Challenges
 

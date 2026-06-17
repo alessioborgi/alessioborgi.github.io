@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## Knowledge Graphs in Production
 
+**Intuition First:** A knowledge graph is like a massive, structured encyclopedia where every fact is a triple (subject, relation, object): (Barack Obama, bornIn, Hawaii), (Hawaii, partOf, USA). The graph is inevitably incomplete — millions of true facts are missing. GNNs address this by learning that entities with similar neighbourhood structures tend to share similar relations. "Obama's embedding looks like other Harvard Law alumni" — so the model infers the missing (Obama, educatedAt, HarvardLaw) triple from structural similarity to Bill Clinton's neighbourhood, not from memorising the fact directly.
+
 **Freebase:** 1.9B triples (deprecated, absorbed by Wikidata)
 **Wikidata:** 100M+ triples, multilingual, community-maintained
 **Google Knowledge Graph:** powers Google Search "knowledge panels"
@@ -93,6 +95,8 @@ This requires a chain of reasoning:
 3. Output scores over candidate entities → answer
 
 **GRAFT-Net, PullNet:** retrieve relevant subgraph from KG (k-hop around mentioned entities), run GNN, combine with document retrieval for hybrid KG+text QA.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The inductive capability of GNN-based KG models is their most practically important advantage. Shallow embedding methods (TransE, RotatE) assign a learned vector to every entity — they cannot handle new entities not seen during training. R-GCN and its successors compute entity embeddings from the neighbourhood graph structure, so a brand-new entity that appears in tomorrow's Wikipedia with its first triples immediately gets a meaningful embedding — without retraining. This is critical for production KGs that update millions of facts daily.</div>
 
 ## Challenges
 

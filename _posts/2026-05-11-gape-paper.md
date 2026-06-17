@@ -83,6 +83,86 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/papers/gape-paper.png" alt="First page of the GAPE paper" caption="Paper preview — Remember to Forget: Gated Adaptive Positional Encoding (Ali et al., 2026)." %}
 </div>
 
+## Intuition First: Selective Forgetting
+
+Imagine you are reading a 50-page document and must answer a question about a single crucial sentence on page 3. As you reach page 50, you have seen 49 pages of largely irrelevant content. A good reader can suppress the noise and keep page 3's key sentence accessible. A poor reader's working memory fills with distractor content and the crucial fact fades.
+
+RoPE at long context is the poor reader. All distant tokens — the crucial needle and the distracting haystack — are treated identically by the positional encoding. Once context grows beyond the training window, the rotary phases lose their calibration and attention spreads diffusely over everything.
+
+GAPE gives the model two explicit knobs:
+1. **Query gate g_i**: "how strongly should query i suppress everything far away?" — the forgetting dial.
+2. **Key (landmark) gate l_j**: "is key j important enough that no query should forget it?" — the protection dial.
+
+The model learns, for each head and layer, its own policy for what to forget and what to preserve.
+
+<div class="blog-figure">
+<figure>
+<style>
+@keyframes gate-pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+@keyframes landmark-shine { 0%,100%{stroke-width:2} 50%{stroke-width:5} }
+</style>
+<svg viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
+  <defs>
+    <marker id="gape-arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <text x="360" y="18" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">GAPE: Content-Aware Logit Mask on Long Context</text>
+
+  <!-- Key tokens along a long sequence -->
+  <line x1="30" y1="100" x2="690" y2="100" stroke="#e2e8f0" stroke-width="3"/>
+
+  <!-- Tokens: most are distractors (grey), one is the landmark (amber) -->
+  <circle cx="60"  cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.0s ease-in-out infinite"/>
+  <circle cx="100" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.1s ease-in-out infinite"/>
+  <circle cx="140" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.2s ease-in-out infinite"/>
+  <circle cx="180" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.3s ease-in-out infinite"/>
+  <!-- Landmark token -->
+  <circle cx="240" cy="100" r="14" fill="#f59e0b" stroke="#d97706" style="animation:landmark-shine 2s ease-in-out infinite"/>
+  <text x="240" y="130" text-anchor="middle" font-size="9" font-weight="700" fill="#d97706">landmark</text>
+  <text x="240" y="142" text-anchor="middle" font-size="9" fill="#92400e">l_j ≈ 1</text>
+  <circle cx="300" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.4s ease-in-out infinite"/>
+  <circle cx="340" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.5s ease-in-out infinite"/>
+  <circle cx="380" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.6s ease-in-out infinite"/>
+  <circle cx="420" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.7s ease-in-out infinite"/>
+  <circle cx="460" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.8s ease-in-out infinite"/>
+  <circle cx="500" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 0.9s ease-in-out infinite"/>
+  <circle cx="540" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 1.0s ease-in-out infinite"/>
+  <circle cx="580" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 1.1s ease-in-out infinite"/>
+  <circle cx="620" cy="100" r="10" fill="#94a3b8" style="animation:gate-pulse 2s 1.2s ease-in-out infinite"/>
+
+  <!-- Query at position far right -->
+  <circle cx="680" cy="100" r="13" fill="#7c3aed" stroke="#5b21b6" stroke-width="2"/>
+  <text x="680" y="130" text-anchor="middle" font-size="9" font-weight="700" fill="#5b21b6">query</text>
+  <text x="680" y="142" text-anchor="middle" font-size="9" fill="#5b21b6">g_i large</text>
+
+  <!-- Suppression arrows (thin, faded for distractors) -->
+  <path d="M680 88 Q490 50 60 88"  stroke="#ef4444" stroke-width="1" stroke-dasharray="4 3" fill="none" opacity="0.4"/>
+  <path d="M680 88 Q490 50 100 88" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 3" fill="none" opacity="0.4"/>
+  <path d="M680 88 Q490 50 300 88" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 3" fill="none" opacity="0.4"/>
+  <text x="360" y="55" text-anchor="middle" font-size="9" fill="#ef4444">query gate suppresses distant distractors</text>
+
+  <!-- Protected arrow (thick, solid for landmark) -->
+  <path d="M680 88 Q460 30 240 88" stroke="#f59e0b" stroke-width="3" fill="none"/>
+  <text x="460" y="28" text-anchor="middle" font-size="9" fill="#d97706" font-weight="700">landmark gate protects salient token</text>
+
+  <!-- Logit bars at bottom -->
+  <text x="360" y="165" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">Resulting attention logit profile from this query:</text>
+  <rect x="55"  y="175" width="8"  height="20" rx="2" fill="#ef4444" opacity="0.4"/>
+  <rect x="95"  y="175" width="8"  height="22" rx="2" fill="#ef4444" opacity="0.4"/>
+  <rect x="135" y="175" width="8"  height="18" rx="2" fill="#ef4444" opacity="0.4"/>
+  <rect x="175" y="175" width="8"  height="21" rx="2" fill="#ef4444" opacity="0.4"/>
+  <rect x="235" y="158" width="14" height="37" rx="2" fill="#f59e0b"/>
+  <rect x="295" y="175" width="8"  height="20" rx="2" fill="#ef4444" opacity="0.4"/>
+  <rect x="335" y="175" width="8"  height="19" rx="2" fill="#ef4444" opacity="0.4"/>
+  <rect x="375" y="175" width="8"  height="22" rx="2" fill="#ef4444" opacity="0.4"/>
+  <text x="240" y="200" text-anchor="middle" font-size="9" fill="#d97706" font-weight="700">spike at landmark</text>
+  <text x="440" y="200" text-anchor="middle" font-size="9" fill="#ef4444">suppressed distractors</text>
+</svg>
+<figcaption>GAPE's dual-gate mechanism in action. The query gate (purple) applies a content-dependent suppression to all distant tokens, reducing diffuse long-range attention. The key (landmark) gate (amber) exempts salient tokens from suppression — they remain accessible regardless of distance. The result: a sharp logit spike at the landmark, flat suppressed background elsewhere.</figcaption>
+</figure>
+</div>
+
 ## The RoPE Long-Context Problem
 
 **Rotary Positional Encoding (RoPE)** is the positional scheme used in almost every modern LLM — LLaMA, Mistral, Gemma, Qwen. It encodes position by rotating query and key vectors in frequency-specific planes, so the dot-product between a query at position *m* and a key at position *n* depends only on their relative distance *m−n*.

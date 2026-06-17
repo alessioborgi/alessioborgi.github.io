@@ -136,6 +136,12 @@ toc_label: "Contents"
 <figcaption>Information flow along a path u–v1–v2–v3–w. GCN (left): scalar signal decays exponentially — node w receives almost nothing from u. Sheaf GNN with d=2 (right): each edge carries 2 independent channels (2ch labels), the signal decays more slowly and w retains meaningful information from u.</figcaption>
 </figure></div>
 
+## Intuition First: The Bottleneck Telephone Game
+
+Oversquashing is like playing telephone across a long chain of people. After K hops, the original message has been whispered K times and grows faint. At a **bottleneck** — a single edge connecting two dense subgraphs — all information crossing must squeeze through one pipe. The narrower the pipe, the less signal arrives.
+
+Sheaf structure widens the pipe: the Jacobian at each hop becomes a d×d matrix rather than a scalar, so d independent signals can flow simultaneously through each bottleneck edge. However, sheaf maps cannot add extra paths — they only widen existing ones. True oversquashing from structural bottlenecks still requires graph rewiring.
+
 ## What Is Oversquashing?
 
 Oversquashing (Alon & Yahav, 2021) is the failure of message-passing GNNs to propagate information across long distances. After K layers, node v's representation depends on its K-hop neighbourhood:

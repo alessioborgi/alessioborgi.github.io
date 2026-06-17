@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## The Reality Gap
 
+**Intuition first.** Imagine learning to ride a bicycle on a perfect frictionless surface, then stepping onto a real road with gravel, wind, and bumps. Every skill you learned still helps — balance, steering — but the fine-tuned reflexes fail. The reality gap is this same mismatch between the clean simulator and the messy real world. Domain randomisation is the equivalent of practising on many different surfaces so that real gravel is just another surface you have already handled.
+
 Modern physics simulators (MuJoCo, Isaac Gym, PyBullet) enable massively parallel training of robot policies at virtually zero cost and with no hardware risk. A policy can experience millions of episodes in hours of simulation time that would take months on real hardware.
 
 The catch is **the reality gap**: simulators approximate the real world, and these approximations matter. Friction coefficients, motor backlash, sensor noise, contact dynamics, and rendering artifacts all differ between simulation and reality. A policy that exploits simulator quirks — a common outcome of deep RL — will fail catastrophically when those quirks disappear.
@@ -65,6 +67,47 @@ Key design choices included:
 
 The result: a policy that had never touched real hardware successfully solved in-hand manipulation tasks that previously required years of specialised robotics engineering.
 
+<style>
+@keyframes simPulse { 0%,100%{opacity:0.5;transform:scale(1);} 50%{opacity:1;transform:scale(1.05);} }
+@keyframes realFade  { 0%{opacity:0;} 100%{opacity:1;} }
+.sim-box  { animation: simPulse 2s ease-in-out infinite; transform-origin: 90px 55px; }
+.real-box { animation: realFade 2.5s ease forwards; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;background:#f8fafc;border-radius:8px;">
+  <defs><marker id="s2r" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#7c3aed"/></marker></defs>
+  <!-- Simulation side -->
+  <g class="sim-box">
+    <rect x="10" y="20" width="160" height="90" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="90" y="42" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af" font-family="sans-serif">Simulation</text>
+    <rect x="25" y="52" width="60" height="20" rx="4" fill="#93c5fd" opacity="0.8"/>
+    <text x="55" y="66" text-anchor="middle" font-size="9" fill="#1e3a8a" font-family="sans-serif">friction=0.3</text>
+    <rect x="95" y="52" width="60" height="20" rx="4" fill="#93c5fd" opacity="0.8"/>
+    <text x="125" y="66" text-anchor="middle" font-size="9" fill="#1e3a8a" font-family="sans-serif">mass=1.2 kg</text>
+    <rect x="25" y="78" width="60" height="20" rx="4" fill="#bfdbfe" opacity="0.8"/>
+    <text x="55" y="92" text-anchor="middle" font-size="9" fill="#1e3a8a" font-family="sans-serif">noise=0.01</text>
+    <rect x="95" y="78" width="60" height="20" rx="4" fill="#bfdbfe" opacity="0.8"/>
+    <text x="125" y="92" text-anchor="middle" font-size="9" fill="#1e3a8a" font-family="sans-serif">texture=rand</text>
+    <text x="90" y="120" text-anchor="middle" font-size="9" fill="#3730a3" font-family="sans-serif">randomise over P(Ξ)</text>
+  </g>
+  <!-- Arrow -->
+  <line x1="175" y1="65" x2="225" y2="65" stroke="#7c3aed" stroke-width="2" marker-end="url(#s2r)"/>
+  <text x="200" y="58" text-anchor="middle" font-size="9" fill="#7c3aed" font-family="sans-serif">zero-shot</text>
+  <!-- Real world side -->
+  <g class="real-box">
+    <rect x="230" y="20" width="160" height="90" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+    <text x="310" y="42" text-anchor="middle" font-size="11" font-weight="bold" fill="#065f46" font-family="sans-serif">Real Robot</text>
+    <rect x="245" y="52" width="130" height="20" rx="4" fill="#6ee7b7" opacity="0.8"/>
+    <text x="310" y="66" text-anchor="middle" font-size="9" fill="#064e3b" font-family="sans-serif">friction=? mass=? noise=?</text>
+    <text x="310" y="92" text-anchor="middle" font-size="10" fill="#065f46" font-family="sans-serif">policy already robust ✓</text>
+    <text x="310" y="120" text-anchor="middle" font-size="9" fill="#065f46" font-family="sans-serif">real world ∈ P(Ξ)</text>
+  </g>
+</svg>
+<figcaption>Domain randomisation: the simulator samples random physical parameters each episode (left). The real robot has unknown-but-fixed parameters — domain randomisation bets they fall within the training distribution.</figcaption>
+</figure></div>
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The wider you set the randomisation range, the more robust the policy — but also the harder the training problem. Automatic Domain Randomisation (ADR) solves this by starting narrow and progressively widening ranges only when the policy demonstrates competence, keeping the training problem tractable throughout.</div>
+
 ## Domain Adaptation
 
 An alternative to randomisation is **domain adaptation**: explicitly aligning the simulation and real domains using data from both. Approaches include:
@@ -72,6 +115,21 @@ An alternative to randomisation is **domain adaptation**: explicitly aligning th
 - **Feature-level adaptation**: train a domain-agnostic encoder such that simulation and real observations map to the same feature space (via adversarial training or maximum mean discrepancy).
 - **Image-to-image translation**: use CycleGAN or similar to translate simulated images to realistic ones before passing to a policy trained on realistic images.
 - **Pixel randomisation**: replace simulated textures with random natural images at training time (randomised-to-canonical adaptation).
+
+## Worked Example: What Gets Randomised in Dactyl
+
+Dactyl randomised over 100 physical parameters. To make this concrete, here is a subset:
+
+| Parameter | Range randomised |
+|---|---|
+| Object mass | 0.03 – 0.07 kg |
+| Fingertip friction | 0.5 – 1.5 (coefficient) |
+| Joint damping | 0.1× – 3× nominal |
+| Action delay | 0 – 3 control steps |
+| Visual lighting | random hue, intensity |
+| Object texture | random colour/pattern |
+
+Each episode samples a new combination. Over millions of episodes the policy experiences a dense grid of "possible realities" — so the actual Shadow Hand, with its single fixed set of parameters, is just one more sample.
 
 ## System Identification
 

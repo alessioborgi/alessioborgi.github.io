@@ -29,6 +29,78 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Over-squashing bottleneck" caption="Over-squashing and graph curvature as an information bottleneck (Topping et al., 2022)" %}
 
 
+## Intuition First: The Telephone Game Through a Bottleneck
+
+Imagine passing a message through a chain of people, but at one point the chain narrows to a single person who must relay messages from 1,000 people on one side to 1,000 people on the other. That single relay is a bottleneck: the message each person on the far side receives is an extremely compressed, noisy version of the original. Oversquashing is exactly this — distant node information must squeeze through bottleneck edges into a fixed-size embedding, losing fidelity exponentially with distance.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing and oversquashing are opposites in a sense: oversmoothing means <em>too much</em> information from nearby nodes floods the embedding; oversquashing means <em>too little</em> information from distant nodes reaches the embedding. More layers hurt oversmoothing but would help oversquashing — yet more layers also squash more. The root fix is changing the graph topology, not just depth.</div>
+
+<style>
+@keyframes flow-pulse {
+  0%, 100% { opacity: 0.2; r: 3; }
+  50% { opacity: 1; r: 5; }
+}
+@keyframes bottleneck-squeeze {
+  0%, 100% { stroke-width: 3; stroke: #f97316; }
+  50% { stroke-width: 6; stroke: #dc2626; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:580px;display:block;margin:auto;">
+  <style>
+    .sq-node { stroke:#0d9488; stroke-width:2; fill:#dbeafe; }
+    .sq-edge { stroke:#94a3b8; stroke-width:1.2; }
+    .sq-bot { stroke-width:3; stroke:#f97316; fill:none; }
+    .sq-lbl { font-size:9px; font-family:sans-serif; fill:#475569; text-anchor:middle; }
+  </style>
+  <!-- Left cluster: many nodes -->
+  <text x="70" y="12" class="sq-lbl" font-weight="bold">Large left subtree</text>
+  <circle cx="20" cy="45" r="10" class="sq-node"/>
+  <circle cx="20" cy="75" r="10" class="sq-node"/>
+  <circle cx="20" cy="105" r="10" class="sq-node"/>
+  <circle cx="55" cy="45" r="10" class="sq-node"/>
+  <circle cx="55" cy="75" r="10" class="sq-node"/>
+  <circle cx="55" cy="105" r="10" class="sq-node"/>
+  <circle cx="95" cy="60" r="10" class="sq-node"/>
+  <circle cx="95" cy="90" r="10" class="sq-node"/>
+  <line x1="20" y1="45" x2="55" y2="45" class="sq-edge"/>
+  <line x1="20" y1="75" x2="55" y2="75" class="sq-edge"/>
+  <line x1="20" y1="105" x2="55" y2="105" class="sq-edge"/>
+  <line x1="55" y1="45" x2="95" y2="60" class="sq-edge"/>
+  <line x1="55" y1="75" x2="95" y2="60" class="sq-edge"/>
+  <line x1="55" y1="75" x2="95" y2="90" class="sq-edge"/>
+  <line x1="55" y1="105" x2="95" y2="90" class="sq-edge"/>
+  <!-- Bottleneck edge -->
+  <line x1="105" y1="75" x2="195" y2="75" style="animation:bottleneck-squeeze 2s ease-in-out infinite;" class="sq-bot"/>
+  <text x="150" y="68" class="sq-lbl" fill="#dc2626" font-weight="bold">BOTTLENECK</text>
+  <!-- traveling dots -->
+  <circle cx="110" cy="75" r="4" fill="#f97316" style="animation:flow-pulse 1.5s 0s ease-in-out infinite;"/>
+  <circle cx="135" cy="75" r="4" fill="#f97316" style="animation:flow-pulse 1.5s 0.4s ease-in-out infinite;"/>
+  <circle cx="160" cy="75" r="4" fill="#f97316" style="animation:flow-pulse 1.5s 0.8s ease-in-out infinite;"/>
+  <circle cx="185" cy="75" r="4" fill="#f97316" style="animation:flow-pulse 1.5s 1.2s ease-in-out infinite;"/>
+  <!-- Right cluster -->
+  <text x="310" y="12" class="sq-lbl" font-weight="bold">Large right subtree</text>
+  <circle cx="205" cy="45" r="10" class="sq-node"/>
+  <circle cx="205" cy="75" r="10" class="sq-node"/>
+  <circle cx="205" cy="105" r="10" class="sq-node"/>
+  <circle cx="245" cy="60" r="10" class="sq-node"/>
+  <circle cx="245" cy="90" r="10" class="sq-node"/>
+  <circle cx="285" cy="45" r="10" class="sq-node"/>
+  <circle cx="285" cy="75" r="10" class="sq-node"/>
+  <circle cx="285" cy="105" r="10" class="sq-node"/>
+  <line x1="205" y1="45" x2="245" y2="60" class="sq-edge"/>
+  <line x1="205" y1="75" x2="245" y2="60" class="sq-edge"/>
+  <line x1="205" y1="75" x2="245" y2="90" class="sq-edge"/>
+  <line x1="205" y1="105" x2="245" y2="90" class="sq-edge"/>
+  <line x1="245" y1="60" x2="285" y2="45" class="sq-edge"/>
+  <line x1="245" y1="60" x2="285" y2="75" class="sq-edge"/>
+  <line x1="245" y1="90" x2="285" y2="75" class="sq-edge"/>
+  <line x1="245" y1="90" x2="285" y2="105" class="sq-edge"/>
+  <text x="200" y="128" class="sq-lbl" fill="#64748b">All left-subtree info must flow through one edge — exponential compression</text>
+</svg>
+<figcaption>Oversquashing: information from many left-subtree nodes must pass through a single bottleneck edge, arriving severely compressed on the right side.</figcaption>
+</figure></div>
+
 ## Two Different Problems
 
 Oversmoothing (too many layers → embeddings converge) and oversquashing (long-range info is lost at bottlenecks) are often confused. They are distinct:
@@ -85,6 +157,24 @@ Real examples where this matters:
 - **Molecular property prediction:** computing HOMO-LUMO gap requires whole-molecule reasoning; bottleneck edges are single bonds connecting large fragments
 - **Social network influence:** influence travels through single bridges between communities
 - **Traffic forecasting:** a road closure (bottleneck) affects distant nodes but the effect is diluted through many competing paths
+
+## Concrete Worked Example: Jacobian Decay on a Path
+
+Consider a path graph with 6 nodes: 1–2–3–4–5–6. Node 1 wants to influence node 6 via 5 hops. Suppose each message passing step multiplies by weight W with ||W|| = 0.9, and each node averages over degree d=2 neighbours.
+
+The Jacobian bound after 5 hops:
+
+```
+||∂h_6^(5)/∂x_1|| ≤ (0.9)^5 × (1/2)^5 = 0.59 × 0.031 ≈ 0.018
+```
+
+Now compare node 1 influencing node 2 (1 hop):
+
+```
+||∂h_2^(1)/∂x_1|| ≤ 0.9 × (1/2) = 0.45
+```
+
+Node 6's embedding is **25× less sensitive** to node 1's feature than node 2's is. If node 1's feature is the critical signal for a prediction at node 6, it is effectively invisible to the model.
 
 ## Measuring Oversquashing
 

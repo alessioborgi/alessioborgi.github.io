@@ -29,6 +29,8 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/gnn/wang2019_han.png" alt="Heterogeneous attention network" caption="Heterogeneous graph with multiple node and edge types (Wang et al., 2019)" %}
 
 
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A standard GNN is like a phone directory that treats every contact the same — it cannot tell your doctor from your friend. A heterogeneous GNN reads the type tag on every node and edge, applying different transformations to "doctor" and "friend" relationships. The type structure often carries as much information as the topology itself.</div>
+
 ## What Is a Heterogeneous Graph?
 
 A **heterogeneous graph** (or heterogeneous information network, HIN) is defined as:
@@ -75,6 +77,64 @@ applies the same message function to all neighbours, regardless of the edge type
 **3. Relation-aware attention:** attend differentially to different relation types when aggregating. Used in HAN, HGT.
 
 **4. Type-specific projections:** project all node types into a common embedding space with type-specific linear transforms before message passing. Used in HGT (Heterogeneous Graph Transformer).
+
+## Visualising a Bipartite Heterogeneous Graph
+
+<style>
+@keyframes edge-pulse {
+  0%, 100% { stroke-opacity: 0.4; }
+  50% { stroke-opacity: 1; }
+}
+@keyframes node-glow {
+  0%, 100% { filter: drop-shadow(0 0 0px transparent); }
+  50% { filter: drop-shadow(0 0 4px #6366f1); }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 460 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;">
+  <!-- User nodes (left) -->
+  <rect x="18" y="55" width="60" height="24" rx="12" fill="#6366f1" style="animation:node-glow 2.4s ease-in-out infinite;"/>
+  <text x="48" y="71" font-size="10" fill="white" text-anchor="middle">User A</text>
+  <rect x="18" y="95" width="60" height="24" rx="12" fill="#6366f1" style="animation:node-glow 2.4s ease-in-out 0.8s infinite;"/>
+  <text x="48" y="111" font-size="10" fill="white" text-anchor="middle">User B</text>
+  <rect x="18" y="135" width="60" height="24" rx="12" fill="#6366f1" style="animation:node-glow 2.4s ease-in-out 1.6s infinite;"/>
+  <text x="48" y="151" font-size="10" fill="white" text-anchor="middle">User C</text>
+  <text x="48" y="30" font-size="11" fill="#4338ca" text-anchor="middle" font-weight="bold">Users</text>
+  <!-- Item nodes (middle) -->
+  <rect x="190" y="35" width="60" height="24" rx="4" fill="#f97316"/>
+  <text x="220" y="51" font-size="10" fill="white" text-anchor="middle">Item 1</text>
+  <rect x="190" y="75" width="60" height="24" rx="4" fill="#f97316"/>
+  <text x="220" y="91" font-size="10" fill="white" text-anchor="middle">Item 2</text>
+  <rect x="190" y="115" width="60" height="24" rx="4" fill="#f97316"/>
+  <text x="220" y="131" font-size="10" fill="white" text-anchor="middle">Item 3</text>
+  <rect x="190" y="155" width="60" height="24" rx="4" fill="#f97316"/>
+  <text x="220" y="171" font-size="10" fill="white" text-anchor="middle">Item 4</text>
+  <text x="220" y="20" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="bold">Items</text>
+  <!-- Category nodes (right) -->
+  <rect x="370" y="55" width="72" height="24" rx="8" fill="#10b981"/>
+  <text x="406" y="71" font-size="10" fill="white" text-anchor="middle">Electronics</text>
+  <rect x="370" y="105" width="72" height="24" rx="8" fill="#10b981"/>
+  <text x="406" y="121" font-size="10" fill="white" text-anchor="middle">Books</text>
+  <text x="406" y="30" font-size="11" fill="#065f46" text-anchor="middle" font-weight="bold">Categories</text>
+  <!-- clicks edges (dashed orange) -->
+  <line x1="78" y1="67" x2="190" y2="47" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,2" style="animation:edge-pulse 2s ease-in-out infinite;"/>
+  <line x1="78" y1="67" x2="190" y2="87" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,2" style="animation:edge-pulse 2s ease-in-out 0.4s infinite;"/>
+  <line x1="78" y1="107" x2="190" y2="87" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,2" style="animation:edge-pulse 2s ease-in-out 0.8s infinite;"/>
+  <line x1="78" y1="107" x2="190" y2="127" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,2" style="animation:edge-pulse 2s ease-in-out 1.2s infinite;"/>
+  <line x1="78" y1="147" x2="190" y2="167" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,2" style="animation:edge-pulse 2s ease-in-out 1.6s infinite;"/>
+  <!-- belongs-to edges (solid green) -->
+  <line x1="250" y1="47" x2="370" y2="67" stroke="#10b981" stroke-width="1.5"/>
+  <line x1="250" y1="87" x2="370" y2="67" stroke="#10b981" stroke-width="1.5"/>
+  <line x1="250" y1="127" x2="370" y2="117" stroke="#10b981" stroke-width="1.5"/>
+  <line x1="250" y1="167" x2="370" y2="117" stroke="#10b981" stroke-width="1.5"/>
+  <!-- legend -->
+  <line x1="18" y1="185" x2="38" y2="185" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="42" y="189" font-size="9" fill="#64748b">clicks</text>
+  <line x1="90" y1="185" x2="110" y2="185" stroke="#10b981" stroke-width="1.5"/>
+  <text x="114" y="189" font-size="9" fill="#64748b">belongs-to</text>
+</svg>
+<figcaption>A heterogeneous bipartite graph: three node types (Users, Items, Categories) and two edge types (clicks, belongs-to). A standard GNN would process all edges identically — losing the semantic distinction between "User clicks Item" and "Item belongs-to Category".</figcaption>
+</figure></div>
 
 ## Meta-Paths: Semantic Bridges
 

@@ -31,9 +31,72 @@ toc_label: "Contents"
 
 ## The Locomotion Challenge
 
+**Intuition first.** Walking is a controlled fall: you lean forward, swing a leg out to catch yourself, then repeat. Each footstep is a brief collision with the ground that redirects momentum. The robot must time these collisions precisely — too early and it stumbles forward, too late and it falls. Classical controllers hand-craft these contact schedules; RL discovers them by trial and error in simulation, finding schedules that are not only correct but also robust to unexpected terrain.
+
 Legged locomotion is fundamentally a problem of controlling dynamic, underactuated systems in continuous contact with an uncertain environment. Classical approaches relied on carefully engineered gaits, zero-moment point (ZMP) control, and model predictive control with manually designed contact schedules. These methods work reliably on flat terrain but struggle with stairs, rubble, and dynamic disturbances.
 
 Deep reinforcement learning has changed this picture dramatically. RL-trained policies learn to coordinate many joints simultaneously, adapt contact schedules implicitly, and develop robust recovery behaviours — capabilities that took years to engineer classically.
+
+<style>
+@keyframes stepFL { 0%,100%{transform:translateY(0);} 25%{transform:translateY(-18px);} }
+@keyframes stepBR { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-18px);} }
+@keyframes stepFR { 0%,100%{transform:translateY(0);} 75%{transform:translateY(-18px);} }
+@keyframes stepBL { 0%,100%{transform:translateY(0);} 0%{transform:translateY(-18px);} }
+@keyframes bodyBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
+.leg-fl { animation: stepFL 1s ease-in-out infinite; transform-origin: 105px 75px; }
+.leg-br { animation: stepBR 1s ease-in-out infinite; transform-origin: 235px 75px; }
+.leg-fr { animation: stepFR 1s ease-in-out infinite; transform-origin: 235px 75px; }
+.leg-bl { animation: stepBL 1s ease-in-out infinite; transform-origin: 105px 75px; }
+.body-q { animation: bodyBob 1s ease-in-out infinite; transform-origin: 170px 70px; }
+</style>
+<div class="blog-figure"><figure>
+<svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto;background:#f0fdf4;border-radius:8px;">
+  <!-- Ground -->
+  <line x1="0" y1="135" x2="360" y2="135" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- Quadruped body -->
+  <g class="body-q">
+    <rect x="110" y="55" width="140" height="38" rx="10" fill="#0d9488" opacity="0.9"/>
+    <text x="180" y="79" text-anchor="middle" font-size="11" font-weight="bold" fill="white" font-family="sans-serif">ANYmal</text>
+    <!-- Head -->
+    <ellipse cx="250" cy="65" rx="18" ry="13" fill="#0f766e"/>
+    <circle cx="256" cy="61" r="3" fill="white"/><!-- eye -->
+    <!-- Front-left leg -->
+    <g class="leg-fl">
+      <line x1="130" y1="93" x2="118" y2="120" stroke="#065f46" stroke-width="5" stroke-linecap="round"/>
+      <line x1="118" y1="120" x2="112" y2="135" stroke="#065f46" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="112" cy="135" r="4" fill="#f59e0b"/>
+    </g>
+    <!-- Back-right leg -->
+    <g class="leg-br">
+      <line x1="230" y1="93" x2="242" y2="120" stroke="#065f46" stroke-width="5" stroke-linecap="round"/>
+      <line x1="242" y1="120" x2="248" y2="135" stroke="#065f46" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="248" cy="135" r="4" fill="#f59e0b"/>
+    </g>
+    <!-- Front-right leg -->
+    <g class="leg-fr">
+      <line x1="155" y1="93" x2="148" y2="115" stroke="#065f46" stroke-width="5" stroke-linecap="round"/>
+      <line x1="148" y1="115" x2="144" y2="135" stroke="#065f46" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="144" cy="135" r="4" fill="#94a3b8"/>
+    </g>
+    <!-- Back-left leg -->
+    <g class="leg-bl">
+      <line x1="210" y1="93" x2="218" y2="115" stroke="#065f46" stroke-width="5" stroke-linecap="round"/>
+      <line x1="218" y1="115" x2="222" y2="135" stroke="#065f46" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="222" cy="135" r="4" fill="#94a3b8"/>
+    </g>
+  </g>
+  <!-- Gait labels -->
+  <text x="112" y="152" text-anchor="middle" font-size="8" fill="#0d9488" font-family="sans-serif">FL swing</text>
+  <text x="248" y="152" text-anchor="middle" font-size="8" fill="#0d9488" font-family="sans-serif">BR swing</text>
+  <text x="144" y="152" text-anchor="middle" font-size="8" fill="#64748b" font-family="sans-serif">FR stance</text>
+  <text x="222" y="152" text-anchor="middle" font-size="8" fill="#64748b" font-family="sans-serif">BL stance</text>
+  <!-- Motion arrow -->
+  <line x1="20" y1="74" x2="95" y2="74" stroke="#7c3aed" stroke-width="2" marker-end="url(#mv)"/>
+  <text x="57" y="68" text-anchor="middle" font-size="9" fill="#7c3aed" font-family="sans-serif">motion</text>
+  <defs><marker id="mv" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#7c3aed"/></marker></defs>
+</svg>
+<figcaption>Quadruped trotting gait: diagonal leg pairs (FL+BR, FR+BL) alternate between swing and stance phases. RL discovers these contact schedules automatically from the forward-velocity reward.</figcaption>
+</figure></div>
 
 ## MuJoCo and the RL Locomotion Benchmark
 
@@ -57,6 +120,20 @@ Key design elements:
 - **Domain randomisation**: mass, friction, and actuator parameters are randomised to enable sim-to-real transfer.
 
 <div class="insight-box"><strong>Key Insight:</strong> The privileged-critic framework is powerful because it decouples "what the robot should do" (computed with full information) from "what the robot can sense" (the actor's constrained observations). The actor implicitly learns to estimate task-relevant quantities from its limited sensor suite.</div>
+
+## Worked Example: Reward Shaping for a Biped
+
+For a bipedal robot with target speed $$v^* = 1.0$$ m/s, a common reward at each timestep is:
+
+| Component | Formula | Typical weight |
+|---|---|---|
+| Forward velocity | $$\min(v_x, v^*) / v^*$$ | +1.0 |
+| Lateral drift | $$-\|v_y\|$$ | −0.3 |
+| Joint torques | $$-\|\tau\|^2 / \tau_\text{max}^2$$ | −0.01 |
+| Foot clearance | $$+\min(z_\text{foot}, 0.05)$$ during swing | +0.1 |
+| Termination | $$-1$$ on fall | −1.0 |
+
+The foot-clearance term nudges the policy to lift feet rather than drag them, naturally producing stepping behaviour. The torque penalty discourages energy waste, causing smooth, efficient gaits to emerge — not because they were programmed, but because they minimise cost.
 
 ## Rapid Motor Adaptation (RMA)
 

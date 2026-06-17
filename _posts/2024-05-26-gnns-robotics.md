@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 ## Why Graphs in Robotics
 
+**Intuition First:** A robot arm is a kinematic chain: each joint's position depends on every upstream joint. A flat neural network that takes all joint angles as a concatenated vector has no built-in knowledge of this chain structure — it must learn it from scratch. A GNN where each joint is a node connected to its upstream and downstream joints encodes the chain structure directly: messages flow along the kinematic graph, so joint 5's state naturally influences joint 6 and vice versa, without the model having to discover this from data.
+
 **Problem 1: Variable structure**
 A robot arm picking up objects faces different numbers of objects each time. A flat neural network with fixed input size cannot handle this. A GNN operates on graphs of any size.
 
@@ -98,6 +100,8 @@ Lidar sensors produce 3D point clouds — unordered sets of 3D points. GNNs can 
 **DGCNN (Wang et al., 2019):** dynamic graph CNN — rebuild the k-NN graph after each layer (in feature space, not just spatial). Achieves SOTA on ModelNet40 (3D object classification) and ShapeNet (part segmentation).
 
 **Equivariant GNNs for point clouds (EGNN):** maintain SE(3) equivariance — rotation-equivariant detection, regardless of LiDAR orientation.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The unifying theme across all robotics GNN applications is <em>compositionality</em> — the ability to apply learned rules to new combinations of known parts. A flat neural network trained on a 4-joint arm must be retrained for a 6-joint arm. A GNN trained on the same 4-joint arm can immediately handle 6 joints, because message passing is defined per-node and per-edge, not per-configuration. This compositionality is what makes GNN-based robotics policies genuinely transferable across hardware variants, scene configurations, and team sizes.</div>
 
 ## Summary
 

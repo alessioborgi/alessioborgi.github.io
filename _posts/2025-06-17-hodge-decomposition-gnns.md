@@ -31,6 +31,83 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/sheaf/bodnar2021_mpsn.png" alt="Hodge Laplacians on simplicial complex" caption="Hodge Laplacians on a simplicial complex: gradient, curl, harmonic (Bodnar et al., 2021)" %}
 
 
+## Intuition First: Decomposing a Flow on a City Map
+
+Imagine traffic flows on the roads of a city. Any traffic pattern can be split into three independent parts:
+
+1. **Gradient flow** — traffic driven by a pressure difference between intersections: cars flow from high-pressure areas to low-pressure areas along roads. This is like water running downhill. Remove the pressure gradient and this component vanishes.
+2. **Curl/rotational flow** — traffic circulating around city blocks in closed loops (e.g., a one-way roundabout). This component never builds up or dissipates — it just rotates.
+3. **Harmonic flow** — traffic that circulates around large-scale topological holes (e.g., the road network has a park in the middle that cars must drive around). This is neither a gradient (no pressure source) nor a small local curl — it is a global topological feature.
+
+The **Hodge decomposition** is precisely this split, applied to any graph signal. In sheaf diffusion: the gradient component of the input decays toward zero (diffusion resolves local disagreements); the harmonic component (H⁰ = ker Δ_F) is preserved; there is no "curl" component for a graph without triangles.
+
+<style>
+@keyframes gradientFlow {
+  0%,100% { stroke-dashoffset: 24; }
+  50% { stroke-dashoffset: 0; }
+}
+@keyframes curlFlow {
+  0%,100% { stroke-dashoffset: 30; }
+  50% { stroke-dashoffset: 0; }
+}
+@keyframes harmonicGlow {
+  0%,100% { stroke-opacity: 0.4; }
+  50% { stroke-opacity: 1; }
+}
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 190" style="width:100%;max-width:520px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- title -->
+  <text x="240" y="15" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">y = δ₀x (gradient) + h (harmonic)</text>
+  <!-- GRADIENT panel -->
+  <text x="95" y="35" text-anchor="middle" font-size="11" fill="#3b82f6" font-weight="bold">Gradient δ₀x</text>
+  <!-- two nodes with potential -->
+  <circle cx="40"  cy="95" r="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="150" cy="95" r="22" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="40"  cy="99" text-anchor="middle" font-size="10" fill="#1e40af">x=2</text>
+  <text x="150" cy="99" text-anchor="middle" font-size="10" fill="#1e40af">x=0</text>
+  <text x="40"  y="99" text-anchor="middle" font-size="10" fill="#1e40af">2</text>
+  <text x="150" y="99" text-anchor="middle" font-size="10" fill="#1e40af">0</text>
+  <!-- animated gradient arrow -->
+  <line x1="62" y1="95" x2="128" y2="95" stroke="#3b82f6" stroke-width="3"
+        stroke-dasharray="8,4" marker-end="url(#gArr)"
+        style="animation:gradientFlow 1.8s linear infinite;"/>
+  <text x="95" y="80" text-anchor="middle" font-size="9" fill="#3b82f6">δ₀x = x₂−x₁ = −2</text>
+  <text x="95" y="145" text-anchor="middle" font-size="9" fill="#6b7280">driven by node potential</text>
+  <text x="95" y="158" text-anchor="middle" font-size="9" fill="#6b7280">→ decays under diffusion</text>
+
+  <!-- divider -->
+  <line x1="195" y1="30" x2="195" y2="175" stroke="#e5e7eb" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- HARMONIC panel (cycle with non-trivial holonomy) -->
+  <text x="350" y="35" text-anchor="middle" font-size="11" fill="#7c3aed" font-weight="bold">Harmonic h ∈ ker(δ₀ᵀ)</text>
+  <!-- triangle -->
+  <circle cx="270" cy="130" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <circle cx="340" cy="60"  r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <circle cx="410" cy="130" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="270" y="134" text-anchor="middle" font-size="10" fill="#5b21b6">1</text>
+  <text x="340" y="64"  text-anchor="middle" font-size="10" fill="#5b21b6">2</text>
+  <text x="410" y="134" text-anchor="middle" font-size="10" fill="#5b21b6">3</text>
+  <!-- harmonic circulation arrows -->
+  <path d="M 285 120 Q 305 75 328 68" stroke="#7c3aed" stroke-width="2.5" fill="none"
+        stroke-dasharray="6,3" marker-end="url(#hArr)"
+        style="animation:harmonicGlow 2s ease-in-out infinite;"/>
+  <path d="M 355 68 Q 390 70 400 118" stroke="#7c3aed" stroke-width="2.5" fill="none"
+        stroke-dasharray="6,3" marker-end="url(#hArr)"
+        style="animation:harmonicGlow 2s ease-in-out infinite 0.7s;"/>
+  <path d="M 395 143 Q 345 165 288 142" stroke="#7c3aed" stroke-width="2.5" fill="none"
+        stroke-dasharray="6,3" marker-end="url(#hArr)"
+        style="animation:harmonicGlow 2s ease-in-out infinite 1.4s;"/>
+  <text x="350" y="158" text-anchor="middle" font-size="9" fill="#6b7280">no pressure source; </text>
+  <text x="350" y="170" text-anchor="middle" font-size="9" fill="#6b7280">→ preserved by diffusion</text>
+  <defs>
+    <marker id="gArr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#3b82f6"/></marker>
+    <marker id="hArr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7c3aed"/></marker>
+  </defs>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Hodge decomposition of a graph signal: the gradient component (left) is driven by a node-level potential and decays under sheaf diffusion. The harmonic component (right) circulates without a source and is preserved — it lives in ker(δ₀ᵀ), the co-closed subspace.</figcaption>
+</figure></div>
+
 ## The Classical Hodge Decomposition
 
 Let G be a simplicial complex (graph + triangles + higher cells). The **Hodge decomposition** states that for any edge flow y ∈ C¹(G) = ℝ^E:

@@ -31,6 +31,75 @@ toc_label: "Contents"
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Cosheaf vs sheaf duality" caption="Sheaf and cosheaf duality: restriction vs corestriction maps (Bodnar et al., 2022)" %}
 
 
+## Intuition First: Measuring vs Observing
+
+A **sheaf** is like a weather sensor network: each station (node) observes local temperature and the restriction maps say how to compare readings at adjacent stations — data *restricts* from nodes down to edges (you can always look at a subset).
+
+A **cosheaf** is like a water-flow network: the flow on each pipe (edge) *pushes up* to the junction (node) by accumulating — water from multiple pipes merges at an intersection. Data *extends* from edges up to nodes, and the question is whether the accumulated flows are consistent.
+
+The key difference in a machine learning context: sheaves model **fields** (temperature, node features, opinions), while cosheaves model **distributions or flows** (traffic, probability mass, gradients accumulating at nodes).
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> For standard node-feature GNNs, the sheaf is the right object — node features project onto edges via restriction maps. For edge-flow GNNs (traffic, transactions, electrical current), the cosheaf is more natural — edge signals accumulate at nodes via corestriction maps. Most sheaf GNN papers use the sheaf setting because node features are more common, but cosheaf GNNs are the correct choice whenever edge data is the primary modality.</div>
+
+<style>
+@keyframes sheafDown { 0%,100%{stroke-dashoffset:16} 50%{stroke-dashoffset:0} }
+@keyframes cosheafUp { 0%,100%{stroke-dashoffset:16} 50%{stroke-dashoffset:0} }
+</style>
+<div class="blog-figure"><figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 170" style="width:100%;max-width:500px;display:block;margin:0 auto;font-family:sans-serif;">
+  <!-- LEFT: Sheaf (node → edge) -->
+  <text x="100" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#3b82f6">Sheaf: node → edge</text>
+  <circle cx="60"  cy="70" r="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="140" cy="70" r="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <rect   cx="83"  cy="65" x="83" y="65" width="34" height="20" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="60"  y="74" text-anchor="middle" font-size="10" fill="#1e40af">F(v)</text>
+  <text x="140" y="74" text-anchor="middle" font-size="10" fill="#1e40af">F(u)</text>
+  <text x="100" y="78" text-anchor="middle" font-size="9"  fill="#92400e">F(e)</text>
+  <!-- arrows down to edge -->
+  <line x1="72"  y1="78" x2="87"  y2="78" stroke="#3b82f6" stroke-width="2"
+        stroke-dasharray="5,2" marker-end="url(#dArr)"
+        style="animation:sheafDown 2s linear infinite;"/>
+  <line x1="128" y1="78" x2="119" y2="78" stroke="#3b82f6" stroke-width="2"
+        stroke-dasharray="5,2" marker-end="url(#dArr2)"
+        style="animation:sheafDown 2s linear infinite 0.5s;"/>
+  <text x="72"  y="65" font-size="8" fill="#3b82f6">F_{v▷e}</text>
+  <text x="106" y="65" font-size="8" fill="#3b82f6">F_{u▷e}</text>
+  <text x="100" y="125" text-anchor="middle" font-size="9" fill="#6b7280">restriction: data flows down</text>
+  <text x="100" y="140" text-anchor="middle" font-size="9" fill="#6b7280">H⁰ = consistent node assignments</text>
+
+  <!-- divider -->
+  <line x1="220" y1="20" x2="220" y2="160" stroke="#e5e7eb" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- RIGHT: Cosheaf (edge → node) -->
+  <text x="350" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#16a34a">Cosheaf: edge → node</text>
+  <circle cx="310" cy="70" r="22" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <circle cx="390" cy="70" r="22" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <rect   x="333" y="65" width="34" height="20" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="310" y="74" text-anchor="middle" font-size="10" fill="#166534">G(v)</text>
+  <text x="390" y="74" text-anchor="middle" font-size="10" fill="#166534">G(u)</text>
+  <text x="350" y="78" text-anchor="middle" font-size="9"  fill="#92400e">G(e)</text>
+  <!-- arrows up from edge -->
+  <line x1="337" y1="78" x2="330" y2="78" stroke="#16a34a" stroke-width="2"
+        stroke-dasharray="5,2" marker-end="url(#uArr)"
+        style="animation:cosheafUp 2s linear infinite;"/>
+  <line x1="367" y1="78" x2="374" y2="78" stroke="#16a34a" stroke-width="2"
+        stroke-dasharray="5,2" marker-end="url(#uArr2)"
+        style="animation:cosheafUp 2s linear infinite 0.5s;"/>
+  <text x="318" y="65" font-size="8" fill="#16a34a">G_{e▷v}</text>
+  <text x="357" y="65" font-size="8" fill="#16a34a">G_{e▷u}</text>
+  <text x="350" y="125" text-anchor="middle" font-size="9" fill="#6b7280">corestriction: data flows up</text>
+  <text x="350" y="140" text-anchor="middle" font-size="9" fill="#6b7280">H₀ = cokernel of ∂₀</text>
+
+  <defs>
+    <marker id="dArr"  markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#3b82f6"/></marker>
+    <marker id="dArr2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="270"><path d="M0,0 L7,3.5 L0,7 Z" fill="#3b82f6"/></marker>
+    <marker id="uArr"  markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="180"><path d="M0,0 L7,3.5 L0,7 Z" fill="#16a34a"/></marker>
+    <marker id="uArr2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#16a34a"/></marker>
+  </defs>
+</svg>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Sheaf (left, blue): restriction maps send node data down to edge stalks — asking "do adjacent nodes agree?" Cosheaf (right, green): corestriction maps push edge data up to node stalks — asking "do edges consistently contribute to their nodes?" The arrows reverse direction; the cohomology groups swap roles.</figcaption>
+</figure></div>
+
 ## Sheaves vs Cosheaves: The Duality
 
 **Sheaf F:** data flows from larger to smaller via restriction maps F_{v▷e} : F(v) → F(e). The question is whether global data on nodes is consistent when restricted to edges.
