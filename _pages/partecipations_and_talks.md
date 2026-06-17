@@ -192,7 +192,6 @@ author_profile: true
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    margin-top: 0.7rem;
     padding: 0.45rem 0.82rem;
     border-radius: 999px;
     background: linear-gradient(135deg, #0f2a36 0%, #164e63 100%);
@@ -234,8 +233,8 @@ author_profile: true
             <p>Participated in the LoG Italian Meetup 2026, held on <strong>June 9-11, 2026</strong> at the University of Pisa, presenting work on Polynomial Neural Sheaf Diffusion.</p>
             <p>Side note: the Leaning Tower of Pisa is <em>actually</em> very crooked — way more than I was expecting up close! 🗼</p>
           </div>
-          <a class="pt-link-btn" href="/files/LoG_2026/PolyNSD_Poster_LoG.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
           <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/LoG_2026/PolyNSD_Poster_LoG.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--purple pt-badge">LoG Meetup 2026</span>
             <span class="pt-badge">Poster Presentation</span>
             <span class="pt-badge--blue pt-badge">Graph Learning</span>
@@ -253,8 +252,8 @@ author_profile: true
           <div class="pt-body">
             <p>Participated in the 2026 workshop on neural reasoning for scientific and mathematical discovery, held on <strong>March 23-24, 2026</strong> at the University of Cambridge.</p>
           </div>
-          <a class="pt-link-btn" href="/files/NEUREASON_2026/PolyNSD_Poster_Cambridge.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
           <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/NEUREASON_2026/PolyNSD_Poster_Cambridge.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--blue pt-badge">NEUREASON'26</span>
             <span class="pt-badge">Neural Reasoning</span>
             <span class="pt-badge--blue pt-badge">Scientific Discovery</span>
@@ -291,8 +290,8 @@ author_profile: true
           <div class="pt-body">
             <p>Participated in the one-day Montenegrin Machine Learning Workshop, a satellite event of the EEML summer school series focused on bringing top-tier AI talks and community building to Eastern Europe.</p>
           </div>
-          <a class="pt-link-btn" href="/files/MMLW_2025/PolySD_ESNN_EEML_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
           <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/MMLW_2025/PolySD_ESNN_EEML_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--purple pt-badge">EEML Workshop</span>
             <span class="pt-badge--blue pt-badge">ML Community</span>
           </div>
@@ -364,8 +363,8 @@ author_profile: true
             <p>Participated in the 9-13 September 2024 edition of M2L, covering current machine learning topics through lectures, poster sessions, and interactions with researchers across the Mediterranean ML community.</p>
             <p>Received the <strong>Best Poster Award</strong> for the poster <a href="https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024" target="_blank" rel="noopener">A Multi-Reference Style and Multi-Modal Context-Awareness Zero-Shot Style Alignment in Image Generation</a>.</p>
           </div>
-          <a class="pt-link-btn" href="/files/M2L_2024/Poster_M2L.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
           <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/M2L_2024/Poster_M2L.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--gold pt-badge">Best Poster Award</span>
             <span class="pt-badge">Machine Learning</span>
             <span class="pt-badge--blue pt-badge">Poster Session</span>
@@ -435,9 +434,9 @@ author_profile: true
             <p>Attended <strong>CVPR 2025</strong>, one of the leading international conferences in computer vision and machine learning.</p>
             <p>Presented the paper <strong>Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation</strong> at the <strong>CVEU Workshop</strong> held in conjunction with CVPR 2025.</p>
           </div>
-          <a class="pt-link-btn" href="/files/CVPR_2025/Z-SASLM_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
-          <a class="pt-link-btn" href="/blog/research/zsaslm-paper/">📘 Read the ML Blog Companion</a>
           <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/CVPR_2025/Z-SASLM_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
+            <a class="pt-link-btn" href="/blog/research/zsaslm-paper/">📘 Read the ML Blog Companion</a>
             <span class="pt-badge--purple pt-badge">CVPR 2025</span>
             <span class="pt-badge--blue pt-badge">CVEU Workshop</span>
             <span class="pt-badge">Paper Presentation</span>
