@@ -1,0 +1,853 @@
+{% if page.book %}
+<!-- ═══════════════════════════════════════════════════════════════
+     Agent Review Session — animated 5-agent chat per blog post
+     Agents: Alessio (Writer) · Dr. Chen (Reviewer) · Maya, Raj, Lena (Students)
+     Conversations are book-specific; page.title is injected via Liquid.
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+/* ── Wrapper ── */
+.agc-wrapper {
+  margin: 2.8rem 0 1.2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(0,62,116,0.14);
+  overflow: hidden;
+  box-shadow: 0 8px 36px rgba(0,62,116,0.10);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.94rem;
+}
+
+/* ── Header ── */
+.agc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.05rem 1.45rem;
+  background: linear-gradient(135deg, #0f2a36 0%, #1a4560 55%, #164e63 100%);
+  cursor: pointer;
+  user-select: none;
+  transition: filter 0.15s ease;
+}
+.agc-header:hover { filter: brightness(1.08); }
+.agc-header:focus-visible {
+  outline: 2px solid #99f6e4;
+  outline-offset: -3px;
+}
+
+.agc-header-left  { display: flex; align-items: center; gap: 0.8rem; }
+.agc-pulse {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #5eead4;
+  flex-shrink: 0;
+  animation: agcPulse 2.2s ease-in-out infinite;
+}
+@keyframes agcPulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.8); }
+}
+
+.agc-header-texts {}
+.agc-header-title {
+  font-size: 0.97rem; font-weight: 800;
+  color: #fff; line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.agc-header-sub {
+  font-size: 0.78rem; color: rgba(255,255,255,0.62);
+  margin-top: 0.1rem; line-height: 1.35;
+}
+.agc-badges {
+  display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.28rem;
+}
+.agc-badge {
+  display: inline-flex; align-items: center; gap: 0.22rem;
+  padding: 0.15rem 0.52rem;
+  border-radius: 999px; font-size: 0.7rem; font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.82);
+  background: rgba(255,255,255,0.08);
+}
+
+.agc-toggle-txt {
+  background: rgba(255,255,255,0.10);
+  border: 1.5px solid rgba(255,255,255,0.24);
+  color: #fff; border-radius: 999px;
+  padding: 0.38rem 0.95rem;
+  font-size: 0.8rem; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.agc-toggle-txt:hover { background: rgba(255,255,255,0.2); }
+
+/* ── Body ── */
+.agc-body {
+  background: #f5f9ff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Agents intro bar ── */
+.agc-agents-bar {
+  display: flex; gap: 0.55rem; flex-wrap: wrap;
+  padding: 0.85rem 1.4rem;
+  background: linear-gradient(160deg, #ffffff 0%, #eef4ff 100%);
+  border-bottom: 1px solid rgba(0,62,116,0.08);
+}
+.agc-agent-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 0.12rem;
+  padding: 0.48rem 0.7rem;
+  border-radius: 14px; border: 1.5px solid transparent;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.055);
+  font-size: 0.81rem; font-weight: 700; color: #1f2937;
+  line-height: 1.25;
+}
+.agc-agent-chip span { font-size: 0.67rem; font-weight: 500; color: #6b7280; }
+.agc-agent-chip[data-a="writer"]   { border-color: rgba(14,165,233,0.35); }
+.agc-agent-chip[data-a="reviewer"] { border-color: rgba(124,58,237,0.35); }
+.agc-agent-chip[data-a="student1"] { border-color: rgba(249,115,22,0.35); }
+.agc-agent-chip[data-a="student2"] { border-color: rgba(16,185,129,0.35); }
+.agc-agent-chip[data-a="student3"] { border-color: rgba(236,72,153,0.35); }
+
+/* ── Chat container ── */
+.agc-chat {
+  padding: 1.1rem 1.4rem;
+  display: flex; flex-direction: column; gap: 0.7rem;
+  max-height: 640px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.agc-chat::-webkit-scrollbar { width: 5px; }
+.agc-chat::-webkit-scrollbar-thumb { background: rgba(0,62,116,0.18); border-radius: 99px; }
+
+/* ── Round dividers ── */
+.agc-round {
+  display: flex; align-items: center; gap: 0.7rem;
+  margin: 0.35rem 0;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.38s ease, transform 0.38s ease;
+}
+.agc-round.vis { opacity: 1; transform: none; }
+.agc-round-lbl {
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; white-space: nowrap;
+  padding: 0.18rem 0.65rem; border-radius: 999px; border: 1px solid;
+}
+.agc-round-lbl.r1   { background: rgba(14,165,233,0.08);  color: #0369a1; border-color: rgba(14,165,233,0.22); }
+.agc-round-lbl.r2   { background: rgba(124,58,237,0.09);  color: #6d28d9; border-color: rgba(124,58,237,0.24); }
+.agc-round-lbl.r3   { background: rgba(16,185,129,0.09);  color: #065f46; border-color: rgba(16,185,129,0.24); }
+.agc-round-lbl.rfin { background: rgba(251,191,36,0.13);  color: #92400e; border-color: rgba(251,191,36,0.30); }
+.agc-round-line { flex: 1; height: 1px; background: rgba(0,62,116,0.09); }
+
+/* ── Message bubbles ── */
+.agc-msg {
+  display: flex; gap: 0.55rem; align-items: flex-start;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.34s ease, transform 0.34s ease;
+}
+.agc-msg.vis { opacity: 1; transform: none; }
+
+.agc-av {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.05rem; flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+  border: 2px solid rgba(255,255,255,0.6);
+}
+.agc-av.writer   { background: linear-gradient(135deg,#38bdf8,#0ea5e9); }
+.agc-av.reviewer { background: linear-gradient(135deg,#a78bfa,#7c3aed); }
+.agc-av.student1 { background: linear-gradient(135deg,#fb923c,#ea580c); }
+.agc-av.student2 { background: linear-gradient(135deg,#34d399,#059669); }
+.agc-av.student3 { background: linear-gradient(135deg,#f472b6,#db2777); }
+
+.agc-mc { display: flex; flex-direction: column; gap: 0.18rem; max-width: 80%; }
+.agc-nm {
+  font-size: 0.71rem; font-weight: 700; color: #6b7280;
+  padding: 0 0.15rem;
+}
+.agc-nm em { font-style: normal; font-weight: 500; }
+
+.agc-bbl {
+  padding: 0.75rem 1rem; border-radius: 4px 16px 16px 16px;
+  font-size: 0.9rem; line-height: 1.58; color: #1f2937;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.055);
+  border: 1px solid transparent;
+}
+.agc-bbl.writer   { background: linear-gradient(145deg,#e0f7ff,#bae6fd); border-color: rgba(14,165,233,0.2);  }
+.agc-bbl.reviewer { background: linear-gradient(145deg,#ede9fe,#ddd6fe); border-color: rgba(124,58,237,0.2); color: #1e1b4b; }
+.agc-bbl.student1 { background: linear-gradient(145deg,#fff7ed,#fed7aa); border-color: rgba(249,115,22,0.2);  }
+.agc-bbl.student2 { background: linear-gradient(145deg,#ecfdf5,#a7f3d0); border-color: rgba(16,185,129,0.2); }
+.agc-bbl.student3 { background: linear-gradient(145deg,#fdf2f8,#fbcfe8); border-color: rgba(236,72,153,0.2);  }
+
+/* ── Typing indicator ── */
+.agc-typing {
+  display: flex; align-items: center; gap: 0.55rem;
+  opacity: 0; transition: opacity 0.2s ease;
+}
+.agc-typing.vis { opacity: 1; }
+.agc-typing-nm { font-size: 0.7rem; color: #9ca3af; font-style: italic; }
+.agc-dots {
+  display: flex; gap: 4px;
+  padding: 0.48rem 0.7rem; border-radius: 14px;
+  background: rgba(0,0,0,0.055);
+}
+.agc-dots span {
+  width: 6px; height: 6px; border-radius: 50%; background: #9ca3af;
+  animation: agcDot 1.2s ease-in-out infinite;
+}
+.agc-dots span:nth-child(2) { animation-delay: 0.18s; }
+.agc-dots span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes agcDot {
+  0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+  30%          { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ── Approved badge ── */
+.agc-approved {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.9rem 1.15rem;
+  background: linear-gradient(145deg,#dcfce7,#bbf7d0);
+  border: 1px solid rgba(22,163,74,0.25); border-radius: 14px;
+  opacity: 0; transform: scale(0.94);
+  transition: opacity 0.42s ease, transform 0.42s ease;
+}
+.agc-approved.vis { opacity: 1; transform: scale(1); }
+.agc-approved-icon { font-size: 1.7rem; line-height: 1; flex-shrink: 0; }
+.agc-approved-txt strong { display: block; font-size: 0.94rem; color: #14532d; margin-bottom: 0.18rem; }
+.agc-approved-txt span   { font-size: 0.84rem; color: #166534; line-height: 1.45; }
+
+/* ── Controls ── */
+.agc-controls {
+  display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+  padding: 0.85rem 1.4rem;
+  border-top: 1px solid rgba(0,62,116,0.07);
+  background: linear-gradient(160deg,#fff 0%,#f5f9ff 100%);
+}
+.agc-play {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.52rem 1.2rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg,#0f2a36,#164e63);
+  color: #fff; border: none; cursor: pointer;
+  font-size: 0.86rem; font-weight: 700;
+  box-shadow: 0 4px 14px rgba(15,42,54,0.22);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+.agc-play:hover  { transform: translateY(-1px); box-shadow: 0 7px 20px rgba(15,42,54,0.3); }
+.agc-play:active { transform: translateY(0); }
+.agc-play[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.agc-replay {
+  display: none;
+  padding: 0.52rem 1.1rem; border-radius: 999px;
+  background: rgba(0,62,116,0.07); color: #003E74;
+  border: 1px solid rgba(0,62,116,0.18);
+  font-size: 0.86rem; font-weight: 700; cursor: pointer;
+  transition: background 0.15s;
+}
+.agc-replay:hover { background: rgba(0,62,116,0.14); }
+.agc-ctrl-hint { font-size: 0.78rem; color: #9ca3af; font-style: italic; }
+
+/* ── Idle placeholder ── */
+.agc-idle {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.6rem;
+  padding: 2.4rem 1.5rem;
+  color: #9ca3af; text-align: center;
+}
+.agc-idle-icon { font-size: 2.4rem; }
+.agc-idle-txt  { font-size: 0.88rem; max-width: 300px; line-height: 1.5; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .agc-mc { max-width: 90%; }
+  .agc-header-sub { display: none; }
+  .agc-agent-chip { padding: 0.38rem 0.55rem; font-size: 0.76rem; }
+  .agc-badges { display: none; }
+  .agc-chat { padding: 0.85rem 0.95rem; }
+}
+</style>
+
+<section class="agc-wrapper" id="agc-wrap" aria-label="Agent Review Session">
+
+  <!-- Header -->
+  <div class="agc-header" id="agc-hdr" role="button" tabindex="0"
+       aria-expanded="false" aria-controls="agc-body">
+    <div class="agc-header-left">
+      <div class="agc-pulse" aria-hidden="true"></div>
+      <div class="agc-header-texts">
+        <div class="agc-header-title">🤖 Agent Review Session</div>
+        <div class="agc-header-sub">5 AI agents iteratively reviewed &amp; improved this post</div>
+        <div class="agc-badges">
+          <span class="agc-badge">✍️ Writer</span>
+          <span class="agc-badge">🔍 Reviewer</span>
+          <span class="agc-badge">👩‍🎓👨‍🎓👩‍💻 3 Students</span>
+          <span class="agc-badge">Multi-round review</span>
+        </div>
+      </div>
+    </div>
+    <span class="agc-toggle-txt" id="agc-tog">Show Session ▼</span>
+  </div>
+
+  <!-- Body (collapsed by default) -->
+  <div class="agc-body" id="agc-body" hidden>
+
+    <!-- Agents bar -->
+    <div class="agc-agents-bar" aria-label="Participating agents">
+      <div class="agc-agent-chip" data-a="writer">  ✍️ Alessio  <span>Writer</span></div>
+      <div class="agc-agent-chip" data-a="reviewer">🔍 Dr. Chen <span>Reviewer</span></div>
+      <div class="agc-agent-chip" data-a="student1">👩‍🎓 Maya    <span>Student</span></div>
+      <div class="agc-agent-chip" data-a="student2">👨‍🎓 Raj     <span>Student</span></div>
+      <div class="agc-agent-chip" data-a="student3">👩‍💻 Lena    <span>Student</span></div>
+    </div>
+
+    <!-- Chat window -->
+    <div class="agc-chat" id="agc-chat" role="log" aria-live="polite" aria-label="Agent conversation">
+      <div class="agc-idle" id="agc-idle">
+        <div class="agc-idle-icon">💬</div>
+        <div class="agc-idle-txt">Press <strong>Play Conversation</strong> below to watch the review session unfold step by step.</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="agc-controls">
+      <button class="agc-play"   id="agc-play"   type="button">▶ Play Conversation</button>
+      <button class="agc-replay" id="agc-replay" type="button">↺ Replay</button>
+      <span   class="agc-ctrl-hint" id="agc-hint">Watch agents collaborate to improve this post</span>
+    </div>
+
+  </div><!-- /agc-body -->
+</section>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Liquid-injected page metadata ── */
+  var BOOK  = {{ page.book  | jsonify }};
+  var TITLE = {{ page.title | strip_html | escape | jsonify }};
+
+  /* ── Agent profiles ── */
+  var AG = {
+    writer:   { name: 'Alessio',  role: 'Writer',   em: '✍️',  cls: 'writer'   },
+    reviewer: { name: 'Dr. Chen', role: 'Reviewer', em: '🔍', cls: 'reviewer' },
+    student1: { name: 'Maya',     role: 'Student',  em: '👩‍🎓', cls: 'student1' },
+    student2: { name: 'Raj',      role: 'Student',  em: '👨‍🎓', cls: 'student2' },
+    student3: { name: 'Lena',     role: 'Student',  em: '👩‍💻', cls: 'student3' },
+  };
+
+  /* ═══════════════════════════════════════════════════════════
+     Conversation scripts (per book).
+     Types: 'round' | 'msg' | 'approved'
+     ═══════════════════════════════════════════════════════════ */
+  var SCRIPTS = {
+
+    /* ── TRANSFORMERS ── */
+    transformers: [
+      { t:'round', lbl:'Round 1 — Students Read &amp; Question', cls:'r1' },
+      { t:'msg', a:'writer', txt:
+        'I just published <strong>"' + TITLE + '"</strong>! A lot of work went into this one. Students — please read through carefully and flag any parts that feel unclear, unmotivated, or missing intuition.' },
+      { t:'msg', a:'student1', txt:
+        'Thanks Alessio! The scaled dot-product formula is there, but I\'m missing the <em>geometric</em> intuition. Why does the dot product between Q and K measure "relevance"? They feel like arbitrary multiplied numbers — not a notion of similarity.' },
+      { t:'msg', a:'student2', txt:
+        'The Q, K, V naming makes sense textually, but I can\'t <em>visualise</em> what these three vectors represent in embedding space or why we specifically need all three instead of just two projections.' },
+      { t:'msg', a:'student3', txt:
+        'I understand attention produces weighted sums — but <em>how</em> does the model learn what to attend to? Is there separate supervision for the attention weights, or do they self-organise purely from the downstream task loss?' },
+
+      { t:'round', lbl:'Reviewer Analysis &amp; Advice', cls:'r2' },
+      { t:'msg', a:'reviewer', txt:
+        'Solid student feedback — all three questions point to missing animated intuitions. Alessio, here is my action plan:<br><br>' +
+        '<strong>① Scaling animation</strong> — add an SVG showing how raw dot products <em>grow with dimension d</em> and push softmax into saturation (flat or one-hot). Animate the distribution with and without the √d_k denominator.<br><br>' +
+        '<strong>② Q-K-V searchlight animation</strong> — show the query as a "searchlight" scanning over keys, with colour-coded similarity scores that turn into attention weights. Make each of the three roles visually distinct.<br><br>' +
+        '<strong>③ Gradient flow diagram</strong> — animate backprop through the softmax into the Q, K projections, showing that attention weights are shaped purely by the task loss. No separate attention supervision anywhere.<br><br>' +
+        '<strong>④ Toy walkthrough</strong> — add a 4-token step-by-step animated example with concrete numbers so readers can trace the full computation by hand.' },
+
+      { t:'round', lbl:'Round 2 — Improvements Applied', cls:'r3' },
+      { t:'msg', a:'writer', txt:
+        'All implemented! Here\'s the full change-list:<br><br>' +
+        '✅ Animated scaling SVG — dot-product growth vs dimension, softmax saturation before &amp; after √d_k<br>' +
+        '✅ Q-K-V searchlight animation with colour-coded relevance scores flowing into weights<br>' +
+        '✅ Gradient flow diagram through multi-head attention back to Q, K projections<br>' +
+        '✅ 4-token animated walkthrough with explicit numerical values at each step<br>' +
+        '✅ Side-by-side "before/after scaling" view of the softmax distribution' },
+      { t:'msg', a:'reviewer', txt:
+        'I\'ve reviewed the additions — the scaling animation and gradient flow diagram are particularly strong. Students, the updated post is ready. Please re-read and confirm your questions are resolved!' },
+
+      { t:'round', lbl:'Final Student Approval', cls:'rfin' },
+      { t:'msg', a:'student1', txt:
+        'The scaling animation makes it click! I can literally <em>see</em> the softmax collapsing to near-one-hot without √d_k. Now I understand it\'s not a style choice — it\'s a numerical necessity. The gradient almost vanishes without it! 🙌' },
+      { t:'msg', a:'student2', txt:
+        'The searchlight animation is brilliant — Query = "what I\'m looking for", Key = "what each token advertises", Value = "what I actually receive". Seeing the three roles animated separately makes each one concrete and irreplaceable. Fully resolved! ✅' },
+      { t:'msg', a:'student3', txt:
+        'The gradient flow diagram removes all the mystery. Watching the task loss backprop through softmax and shape the attention scores over training makes it clear: no magic, no separate supervision — just standard gradient descent doing its job. Approved! 🎉' },
+      { t:'msg', a:'reviewer', txt:
+        '🏆 <strong>Post officially approved!</strong> All clarity issues resolved with strong, targeted animations. The iterative review loop elevated this post significantly — the version readers see now is meaningfully better than version 1. Outstanding work!' },
+      { t:'approved' }
+    ],
+
+    /* ── GRAPH NEURAL NETWORKS ── */
+    gnn: [
+      { t:'round', lbl:'Round 1 — Students Read &amp; Question', cls:'r1' },
+      { t:'msg', a:'writer', txt:
+        'Just published <strong>"' + TITLE + '"</strong>! This is a key chapter in the GNN series. Students — give it a careful read and flag any concepts that need better visualisation or motivation.' },
+      { t:'msg', a:'student1', txt:
+        'Hi Alessio! Message passing is described, but I can\'t picture <em>how</em> information actually flows step by step. Do all neighbours contribute equally? What determines each neighbour\'s influence on the central node\'s update?' },
+      { t:'msg', a:'student2', txt:
+        'The graph Laplacian keeps appearing and I can trace the algebra, but it\'s just a matrix to me right now. What does the Laplacian <em>geometrically mean</em>? Why does it capture "smoothness" of a graph signal?' },
+      { t:'msg', a:'student3', txt:
+        'I understand GNNs produce node embeddings — but during training, how do gradients flow <em>through the graph structure</em>? The adjacency matrix isn\'t being learned, so exactly what parameters are being optimised?' },
+
+      { t:'round', lbl:'Reviewer Analysis &amp; Advice', cls:'r2' },
+      { t:'msg', a:'reviewer', txt:
+        'All three questions target the same root cause: the post is algorithmically correct but lacks animated process visualisation. Here is my prescription:<br><br>' +
+        '<strong>① k-hop expansion animation</strong> — show information radiating outward from a highlighted node through 1, 2, then 3 hops, with colour intensity fading by distance. Annotate aggregation weights at each hop.<br><br>' +
+        '<strong>② Heat diffusion animation</strong> — start with a signal spike on one node and animate the Laplacian smoothing it across the graph step by step. Label the smoothness energy and show how the eigenvalues control the diffusion rate.<br><br>' +
+        '<strong>③ Learned vs fixed diagram</strong> — clearly separate LEARNED parameters (weight matrices W at each layer, shown with gradient arrows) from FIXED graph structure (adjacency A, shown as static). Make the backprop path through W unmistakably clear.<br><br>' +
+        '<strong>④ Layer-by-layer embedding view</strong> — animate node feature vectors at L=0, L=1, L=2 side by side so readers can see representations evolving.' },
+
+      { t:'round', lbl:'Round 2 — Improvements Applied', cls:'r3' },
+      { t:'msg', a:'writer', txt:
+        'All done! Here\'s everything added:<br><br>' +
+        '✅ k-hop expansion animation — colour-coded information wave radiating outward from a highlighted node<br>' +
+        '✅ Heat diffusion animation on a 6-node graph — Laplacian smoothing step by step with energy label<br>' +
+        '✅ Architecture diagram clearly separating learned W from fixed A, backprop arrows through W only<br>' +
+        '✅ Layer-by-layer node embedding visualisation (L=0→1→2 side by side)<br>' +
+        '✅ 4-node numerical example — full message-passing step with concrete feature vectors' },
+      { t:'msg', a:'reviewer', txt:
+        'Excellent additions! The heat diffusion animation is particularly effective at building Laplacian intuition. Students, please confirm your questions are now answered!' },
+
+      { t:'round', lbl:'Final Student Approval', cls:'rfin' },
+      { t:'msg', a:'student1', txt:
+        'The k-hop animation is exactly what I needed! Watching information radiate outward with decreasing intensity makes "neighbourhood aggregation" feel like a real physical process. I can now trace the computation in my head for any graph. ✅' },
+      { t:'msg', a:'student2', txt:
+        'The heat diffusion metaphor is brilliant! Seeing a spike spread and smooth across the graph makes the Laplacian feel like a natural object, not an arbitrary definition. The smoothness energy label ties the algebra to the geometry perfectly. 🙌' },
+      { t:'msg', a:'student3', txt:
+        'The architecture diagram with separated W vs A — and backprop arrows through W only — makes the training mechanism crystal clear. We optimise W, the graph is just the wiring. No more mystery about how gradients flow. Approved! 🎉' },
+      { t:'msg', a:'reviewer', txt:
+        '🏆 <strong>Post officially approved!</strong> These targeted animations transformed a technically accurate but abstract chapter into one with genuine visual intuition. Great collaborative work!' },
+      { t:'approved' }
+    ],
+
+    /* ── SHEAF NEURAL NETWORKS ── */
+    sheaf: [
+      { t:'round', lbl:'Round 1 — Students Read &amp; Question', cls:'r1' },
+      { t:'msg', a:'writer', txt:
+        'Just published <strong>"' + TITLE + '"</strong>! Sheaf theory is some of the most exciting material I cover, but also the most abstract. Students — flag any jargon walls or places where the intuition jumps too fast.' },
+      { t:'msg', a:'student1', txt:
+        'Hey Alessio! Terms like "stalk", "restriction map", and "section" come quickly but feel like an abstract wall. Could we have a concrete analogy mapping each sheaf concept to something familiar — ideally from everyday life or from basic GNNs?' },
+      { t:'msg', a:'student2', txt:
+        'I can follow the sheaf construction, but I don\'t understand <em>why</em> it\'s more expressive than a standard GNN. What can a sheaf GNN do that a regular GCN fundamentally <em>cannot</em>? I need a side-by-side comparison with the same graph.' },
+      { t:'msg', a:'student3', txt:
+        'When the Sheaf Laplacian appears, I can trace the algebra but lose the intuition. What does it mean geometrically for a graph signal to lie in the <em>null space</em> of the Sheaf Laplacian? Why does that matter for handling heterophily?' },
+
+      { t:'round', lbl:'Reviewer Analysis &amp; Advice', cls:'r2' },
+      { t:'msg', a:'reviewer', txt:
+        'Sheaf theory is notoriously hard to communicate — the students identified exactly the right pressure points. Here is my prescription:<br><br>' +
+        '<strong>① Sheaf Dictionary animation</strong> — animate a side-by-side mapping from abstract sheaf terms to concrete analogies: stalk = local feature space at a node, restriction map = how to compare features across an edge, section = a globally consistent assignment across all stalks.<br><br>' +
+        '<strong>② GCN vs Sheaf GNN animation</strong> — show the same 4-node graph. Left panel: GCN averages <em>scalar</em> features. Right panel: Sheaf GNN multiplies <em>vector</em> stalks by <em>matrix</em> restriction maps. Animate the message-passing step in both panels simultaneously.<br><br>' +
+        '<strong>③ Null-space visualisation</strong> — show a graph signal that IS in the null space (consistent sections → zero Sheaf Laplacian energy) vs one that is NOT (conflicting edge orientations → high energy). Connect to why the model learns better restriction maps for heterophilic graphs.<br><br>' +
+        '<strong>④ Numerical example</strong> — 3-node example with 2D stalks and 2×2 restriction maps, computing one step of sheaf diffusion with actual numbers.' },
+
+      { t:'round', lbl:'Round 2 — Improvements Applied', cls:'r3' },
+      { t:'msg', a:'writer', txt:
+        'All improvements implemented!<br><br>' +
+        '✅ Animated Sheaf Dictionary with term-by-term reveal and everyday analogies<br>' +
+        '✅ Side-by-side GCN vs Sheaf GNN message-passing animation on a shared 4-node graph<br>' +
+        '✅ Null-space visualisation — consistent vs conflicting section examples, with energy labels<br>' +
+        '✅ 3-node numerical example (2D stalks, 2×2 restriction maps, one full diffusion step)<br>' +
+        '✅ Heterophily diagram showing how scalar GNNs average-away signal and sheaf maps preserve it' },
+      { t:'msg', a:'reviewer', txt:
+        'The Sheaf Dictionary animation significantly lowers the entry barrier. The GCN vs Sheaf animation makes the expressivity gap immediately visible. Students, please re-read and confirm!' },
+
+      { t:'round', lbl:'Final Student Approval', cls:'rfin' },
+      { t:'msg', a:'student1', txt:
+        'The Sheaf Dictionary animation is a game-changer! Each abstract term paired with a concrete analogy — revealed one-by-one — lets me build understanding incrementally instead of hitting a jargon wall all at once. Perfect! ✅' },
+      { t:'msg', a:'student2', txt:
+        'The side-by-side animation finally answers my question! Seeing GCN average scalars while Sheaf GNN multiplies vectors by matrices makes the expressivity gap obvious. You literally cannot represent directed, anisotropic relationships with a scalar. 🙌' },
+      { t:'msg', a:'student3', txt:
+        'The null-space visualisation connects everything! Consistent sections → zero Sheaf Laplacian energy → the model is satisfied. Conflicting sections → high energy → gradients push the restriction maps to resolve the inconsistency. This ties theory directly to training. Approved! 🎉' },
+      { t:'msg', a:'reviewer', txt:
+        '🏆 <strong>Post officially approved!</strong> Sheaf theory is difficult to communicate without sacrificing rigour — this iterative process achieved both. Exceptional collaborative improvement!' },
+      { t:'approved' }
+    ],
+
+    /* ── TOPOLOGICAL DEEP LEARNING ── */
+    tdl: [
+      { t:'round', lbl:'Round 1 — Students Read &amp; Question', cls:'r1' },
+      { t:'msg', a:'writer', txt:
+        'Just published <strong>"' + TITLE + '"</strong>! Topological deep learning builds up serious mathematical machinery. Students — flag any place where the abstraction level jumps too fast or the "why" is unclear.' },
+      { t:'msg', a:'student1', txt:
+        'The concept of a "hole" in topology is introduced, but I can\'t connect it to why persistent homology <em>cares</em> about holes. What does tracking them over a filtration tell us that simpler methods — like counting connected components — couldn\'t?' },
+      { t:'msg', a:'student2', txt:
+        'Persistence diagrams look like scatter plots to me right now. I understand birth/death coordinates abstractly, but I need a <em>dynamic</em> visualisation showing features appearing and disappearing as the filtration grows. Static figures are not enough here.' },
+      { t:'msg', a:'student3', txt:
+        'The connection between topology and machine learning feels hand-wavy at the end. How exactly do topological features become usable inputs to standard ML models? What\'s the concrete pipeline from a persistence diagram to a feature vector?' },
+
+      { t:'round', lbl:'Reviewer Analysis &amp; Advice', cls:'r2' },
+      { t:'msg', a:'reviewer', txt:
+        'TDA is inherently abstract — animations here are essential, not optional. Here is my action plan:<br><br>' +
+        '<strong>① "Why holes matter" animation</strong> — start with two point clouds (ring vs blob), grow the filtration, and show that the H₁ feature (the loop) fires on the ring but not the blob while the H₀ count is identical. Make the discriminating power visceral.<br><br>' +
+        '<strong>② Dynamic filtration animation</strong> — animate the simplicial complex growing step by step, with edges and triangles appearing, and a live-updating persistence diagram where features appear as red dots and die when triangles fill their holes.<br><br>' +
+        '<strong>③ ML pipeline diagram</strong> — show the full path: persistence diagram → persistence image / landscape → standard feature vector → ML model. Illustrate each transformation with example values so the engineering path is concrete.<br><br>' +
+        '<strong>④ Stability animation</strong> — show two slightly perturbed point clouds producing nearby persistence diagrams to make the stability theorem intuitive.' },
+
+      { t:'round', lbl:'Round 2 — Improvements Applied', cls:'r3' },
+      { t:'msg', a:'writer', txt:
+        'All done! Here\'s everything added:<br><br>' +
+        '✅ Ring vs blob animation — H₁ fires on ring, silent on blob, identical H₀ count in both cases<br>' +
+        '✅ Dynamic filtration animation — live-updating persistence diagram as complex grows<br>' +
+        '✅ Full ML pipeline diagram — persistence diagram → image → feature vector → model<br>' +
+        '✅ Stability animation — nearby point clouds produce nearby diagrams (bottleneck distance)<br>' +
+        '✅ 5-point manual filtration example — birth/death computed step by step with actual numbers' },
+      { t:'msg', a:'reviewer', txt:
+        'The dynamic filtration animation is particularly powerful — it makes the abstract definition concrete in a way no static figure ever could. Students, please confirm!' },
+
+      { t:'round', lbl:'Final Student Approval', cls:'rfin' },
+      { t:'msg', a:'student1', txt:
+        'The ring vs blob animation perfectly answers "why holes matter"! Seeing that H₁ distinguishes them while H₀ cannot makes persistent homology feel <em>necessary</em>, not just mathematically sophisticated. Totally clicked! ✅' },
+      { t:'msg', a:'student2', txt:
+        'The dynamic filtration animation is exactly what I needed! Watching features appear as red dots on the persistence diagram as the complex grows — and disappear when triangles fill the void — makes birth/death feel like real events, not abstract coordinates. 🙌' },
+      { t:'msg', a:'student3', txt:
+        'The ML pipeline diagram makes everything concrete! Seeing the full path from persistence diagram to feature vector to model prediction makes TDA feel like an engineering tool, not just pure math. I can actually use this now. Approved! 🎉' },
+      { t:'msg', a:'reviewer', txt:
+        '🏆 <strong>Post officially approved!</strong> Topological concepts are notoriously hard to communicate — the dynamic animations here made them genuinely accessible. Outstanding collaborative effort!' },
+      { t:'approved' }
+    ],
+
+    /* ── REINFORCEMENT LEARNING ── */
+    rl: [
+      { t:'round', lbl:'Round 1 — Students Read &amp; Question', cls:'r1' },
+      { t:'msg', a:'writer', txt:
+        'Just published <strong>"' + TITLE + '"</strong>! RL has a lot of moving parts. Students — flag any concepts that feel circular, unmotivated, or hard to picture concretely.' },
+      { t:'msg', a:'student1', txt:
+        'The Bellman equation is clear but I\'m confused about <em>bootstrapping</em> in TD learning. Using an estimate to update another estimate feels circular. Why is this stable? Why doesn\'t it diverge into nonsense?' },
+      { t:'msg', a:'student2', txt:
+        'The exploration-exploitation tradeoff keeps coming up but I need a <em>visual</em> showing how ε-greedy, UCB, and Thompson sampling explore differently over time on the same problem. Verbal description doesn\'t let me compare the strategies.' },
+      { t:'msg', a:'student3', txt:
+        'Policy gradients involve taking gradients of expectations over trajectories. The math accelerates fast — what is the key <em>trick</em> that makes this computable (the log-derivative / REINFORCE trick)? I keep losing the intuition mid-derivation.' },
+
+      { t:'round', lbl:'Reviewer Analysis &amp; Advice', cls:'r2' },
+      { t:'msg', a:'reviewer', txt:
+        'RL has a reputation for feeling circular precisely because these concepts are self-referential. Here is my prescription:<br><br>' +
+        '<strong>① TD bootstrapping convergence animation</strong> — animate value estimates converging toward the true value function over many episodes. Show the estimate-update-estimate loop with labelled arrows, and indicate when the target stabilises. Add a contraction mapping intuition diagram.<br><br>' +
+        '<strong>② Three-panel exploration animation</strong> — show ε-greedy, UCB, and Thompson sampling side by side on the same 5-arm bandit over 300 steps. Animate a running bar chart of arm pulls so readers see how each strategy covers the action space over time.<br><br>' +
+        '<strong>③ Log-derivative trick derivation animation</strong> — animate the ∇𝔼 = 𝔼[∇log π · R] step with each line annotated and the key identity boxed. Show why this converts an intractable gradient-of-expectation into a tractable expectation-of-gradient.<br><br>' +
+        '<strong>④ Value function landscape</strong> — add a heatmap visualisation of V*(s) over a 2D state space (e.g. GridWorld) so readers can see the value function as a geometric object.' },
+
+      { t:'round', lbl:'Round 2 — Improvements Applied', cls:'r3' },
+      { t:'msg', a:'writer', txt:
+        'Everything is live!<br><br>' +
+        '✅ TD bootstrapping convergence animation — estimate-update loop with contraction mapping intuition<br>' +
+        '✅ Three-panel exploration animation (ε-greedy / UCB / Thompson) on a 5-arm bandit over 300 steps<br>' +
+        '✅ Log-derivative trick derivation with step-by-step reveals and key identity boxed<br>' +
+        '✅ Value function landscape heatmap over GridWorld state space<br>' +
+        '✅ Q-value update animation on a small MDP showing backups flowing from terminal states' },
+      { t:'msg', a:'reviewer', txt:
+        'The three-panel exploration animation is particularly effective for building strategy intuition at a glance. Students, please confirm your questions are resolved!' },
+
+      { t:'round', lbl:'Final Student Approval', cls:'rfin' },
+      { t:'msg', a:'student1', txt:
+        'The contraction mapping intuition resolves the circularity concern completely! Seeing estimates shrink toward a fixed point over episodes — with the target label slowly stabilising — makes TD learning feel principled and guaranteed-to-converge, not circular. ✅' },
+      { t:'msg', a:'student2', txt:
+        'The three-panel exploration animation is exactly what I needed! Watching ε-greedy waste pulls on low-reward arms while UCB confidently explores uncertainty makes the performance difference intuitive, not just theoretical. 🙌' },
+      { t:'msg', a:'student3', txt:
+        'The log-derivative animation with each step annotated and the key identity boxed makes the derivation followable. The crucial insight — converting gradient-of-expectation into expectation-of-gradient, which is easy to estimate by sampling — is now crystal clear. Approved! 🎉' },
+      { t:'msg', a:'reviewer', txt:
+        '🏆 <strong>Post officially approved!</strong> RL pedagogy is famously hard, and these targeted animations addressed every conceptual sticking point identified by the students. Excellent iterative improvement!' },
+      { t:'approved' }
+    ],
+
+    /* ── LEARNING-BASED ROBOTICS ── */
+    robotics: [
+      { t:'round', lbl:'Round 1 — Students Read &amp; Question', cls:'r1' },
+      { t:'msg', a:'writer', txt:
+        'Just published <strong>"' + TITLE + '"</strong>! Learning-based robotics spans a lot of domains. Students — flag any concepts that feel underexplained or need more grounding in concrete robot examples.' },
+      { t:'msg', a:'student1', txt:
+        'The "state representation" of the robot is mentioned but I\'m unsure what it actually <em>is</em> for a real robot. Is it joint angles? Velocities? End-effector pose? When do you use each, and what are the tradeoffs? This choice seems crucial.' },
+      { t:'msg', a:'student2', txt:
+        'The sim-to-real gap is presented as a major challenge, but I can\'t <em>visualise</em> what "simulation" looks like vs reality for the robot — and what specifically fails to transfer. A side-by-side comparison would make this concrete.' },
+      { t:'msg', a:'student3', txt:
+        'When imitation learning is introduced, I\'m unclear on exactly HOW expert demonstrations are "learned from". Is it just supervised learning on (state, action) pairs? If so, why is it called something different? What makes it special?' },
+
+      { t:'round', lbl:'Reviewer Analysis &amp; Advice', cls:'r2' },
+      { t:'msg', a:'reviewer', txt:
+        'Robotics posts must ground abstract algorithms in physical systems — these are exactly the right questions. Here is my action plan:<br><br>' +
+        '<strong>① State representation zoo animation</strong> — show the same robot arm described three different ways: joint-space (θ₁, θ₂, θ₃), task-space (x, y, z of end-effector), and velocity fields. Animate switching between representations and label when each is appropriate (control vs planning vs RL).<br><br>' +
+        '<strong>② Sim-to-real comparison animation</strong> — left panel: simulated robot with idealised physics (perfect joints, no friction, instant contact). Right panel: real robot with sensor noise, joint lag, and contact uncertainty. Annotate each difference. Then animate deploying the sim policy on the real robot — show it fail.<br><br>' +
+        '<strong>③ Imitation learning pipeline diagram</strong> — show the data collection loop (expert demonstrations → dataset), the supervised training loop ((s,a) pairs → policy), and the deployment loop. Then add DAgger showing how it corrects distributional shift.<br><br>' +
+        '<strong>④ Distributional shift failure animation</strong> — show the robot encountering a state not covered by demonstrations and executing a catastrophically wrong action because the policy has never seen that region.' },
+
+      { t:'round', lbl:'Round 2 — Improvements Applied', cls:'r3' },
+      { t:'msg', a:'writer', txt:
+        'All improvements are live!<br><br>' +
+        '✅ State representation zoo animation — joint / task / velocity views with transition animations<br>' +
+        '✅ Sim-to-real comparison animation — idealised sim vs real robot with annotated physics gaps<br>' +
+        '✅ Imitation learning pipeline diagram — data collection + training + DAgger correction<br>' +
+        '✅ Distributional shift failure animation — out-of-distribution state → catastrophic action<br>' +
+        '✅ Forward kinematics concrete example — joint angles mapped step by step to end-effector pose' },
+      { t:'msg', a:'reviewer', txt:
+        'The sim-to-real comparison animation is excellent — it makes an abstract challenge immediately concrete. Students, please confirm your questions are now resolved!' },
+
+      { t:'round', lbl:'Final Student Approval', cls:'rfin' },
+      { t:'msg', a:'student1', txt:
+        'The state representation zoo animation is exactly what I needed! Seeing the same robot arm described in joint-space, task-space, and velocity coordinates — and understanding when each is appropriate — makes the design choice concrete and motivated. ✅' },
+      { t:'msg', a:'student2', txt:
+        'The sim-to-real comparison animation makes the gap viscerally obvious! Watching a perfect simulation vs a real robot with friction and lag — and then seeing the sim policy fail on deployment — makes "sim-to-real gap" feel like a real engineering barrier, not an abstract phrase. 🙌' },
+      { t:'msg', a:'student3', txt:
+        'The imitation learning pipeline diagram is super clear! It IS supervised learning at its core — but what makes it special is the data source (expert demos) and the deployment challenge (distributional shift). DAgger then shows exactly why naive imitation fails in practice. Approved! 🎉' },
+      { t:'msg', a:'reviewer', txt:
+        '🏆 <strong>Post officially approved!</strong> Robotics requires bridging abstract algorithms and physical systems — these animations do exactly that. Superb collaborative work from all five agents!' },
+      { t:'approved' }
+    ],
+
+    /* ── BASICS (activations, foundations, etc.) ── */
+    basics: [
+      { t:'round', lbl:'Round 1 — Students Read &amp; Question', cls:'r1' },
+      { t:'msg', a:'writer', txt:
+        'Just published <strong>"' + TITLE + '"</strong>! This is foundational material that underpins everything else in the series. Students — flag any places where the "why" is missing or the intuition jumps too fast.' },
+      { t:'msg', a:'student1', txt:
+        'Activation functions are defined mathematically but I can\'t visualise WHAT they do to the learned representations. The post says "stacking linear layers without activations collapses to a single linear layer" — but I can\'t <em>see</em> why. Can we animate what adding an activation actually changes?' },
+      { t:'msg', a:'student2', txt:
+        'The comparison table shows properties (monotone, bounded, smooth) but I can\'t connect those to the <em>loss landscape</em>. How does choosing ReLU vs sigmoid vs GELU actually change what gradient descent "sees"? An animation of gradient flow through each would help.' },
+      { t:'msg', a:'student3', txt:
+        'The "dying ReLU" problem is mentioned, but I can\'t picture how neurons actually "die" during training. What does this look like in weight space? What do the gradients look like for a dead neuron? Can we see it happening over training steps?' },
+
+      { t:'round', lbl:'Reviewer Analysis &amp; Advice', cls:'r2' },
+      { t:'msg', a:'reviewer', txt:
+        'Activation functions feel dry without animations — these questions identify exactly the missing visuals. Here is my plan:<br><br>' +
+        '<strong>① Linearity collapse animation</strong> — show a 2-layer network without activation (produces a straight decision boundary) vs with ReLU (carves out a non-linear one) on a 2D classification problem. Animate the boundary changing as you toggle the activation.<br><br>' +
+        '<strong>② Gradient-flow-through-activation animation</strong> — show the same backprop step through ReLU (sparse, hard cutoff), sigmoid (gradient crushed in tails), and GELU (smooth gradient everywhere). Animate gradient magnitude as colour along the activation curve.<br><br>' +
+        '<strong>③ Neuron death animation</strong> — show a neuron receiving strong negative input, its ReLU output becoming zero, and gradient flowing as zero — the neuron stops learning. Animate the weight distribution of a dying neuron freezing over 100 training steps.<br><br>' +
+        '<strong>④ Loss landscape cross-sections</strong> — add a side-by-side comparison of loss surfaces for networks with different activations, showing how smoothness and sharpness change.' },
+
+      { t:'round', lbl:'Round 2 — Improvements Applied', cls:'r3' },
+      { t:'msg', a:'writer', txt:
+        'All improvements implemented!<br><br>' +
+        '✅ Linearity collapse animation — 2D classification with/without activation, boundary toggle<br>' +
+        '✅ Gradient-flow-through-activation animation — ReLU / sigmoid / GELU comparison, colour-coded magnitude<br>' +
+        '✅ Neuron death animation — weight distribution freezing over 100 training steps<br>' +
+        '✅ Loss landscape cross-section comparison for three activation choices<br>' +
+        '✅ Interactive activation explorer — hover to see gradient value and second derivative' },
+      { t:'msg', a:'reviewer', txt:
+        'The linearity collapse animation is particularly effective — it makes the "why we need activations" argument viscerally obvious in 3 seconds. Students, please re-read and confirm!' },
+
+      { t:'round', lbl:'Final Student Approval', cls:'rfin' },
+      { t:'msg', a:'student1', txt:
+        'The linearity collapse animation makes the "equivalent to one layer" claim suddenly obvious! Watching two linear layers produce a straight boundary while ReLU carves a curved region makes depth-through-nonlinearity concrete rather than algebraic. ✅' },
+      { t:'msg', a:'student2', txt:
+        'The gradient-flow animation through three activations is brilliant! Seeing gradient magnitude as colour along the curve — sparse in ReLU, crushed in sigmoid tails, smooth in GELU — makes the practical tradeoffs clear without doing the calculus manually. 🙌' },
+      { t:'msg', a:'student3', txt:
+        'The neuron death animation is haunting in the best way! Watching a ReLU neuron\'s weight distribution freeze and stop updating over training steps makes "dying" feel like a real, observable event. Now I understand exactly why Leaky ReLU and ELU were invented. Approved! 🎉' },
+      { t:'msg', a:'reviewer', txt:
+        '🏆 <strong>Post officially approved!</strong> Activation functions are foundational but often taught dry. These animations make the concepts visceral and genuinely memorable. Perfect collaborative improvement!' },
+      { t:'approved' }
+    ],
+
+    /* ── GENERATIVE AI ── */
+    'generative-ai': [
+      { t:'round', lbl:'Round 1 — Students Read &amp; Question', cls:'r1' },
+      { t:'msg', a:'writer', txt:
+        'Just published <strong>"' + TITLE + '"</strong>! Generative AI is fast-moving territory. Students — read carefully and flag any concepts that feel hand-wavy or lack concrete visualisation.' },
+      { t:'msg', a:'student1', txt:
+        'Diffusion models are described but the connection between the "noise schedule" and what the model actually learns is unclear. Why does gradually adding noise (forward process) help the model learn to reverse it? The motivation feels circular to me.' },
+      { t:'msg', a:'student2', txt:
+        'The latent space is mentioned but I can\'t visualise WHAT it looks like or what "traversing" it means. What do nearby latent codes represent? Is the space smooth? Can you show what happens as you interpolate between two points?' },
+      { t:'msg', a:'student3', txt:
+        'Style transfer is explained, but the content vs style loss balance is unclear. How does the weighting between content and style losses actually change the output? What happens at extreme values — all style or all content?' },
+
+      { t:'round', lbl:'Reviewer Analysis &amp; Advice', cls:'r2' },
+      { t:'msg', a:'reviewer', txt:
+        'Generative AI requires animated intuitions to connect math to visual output. Here is my prescription:<br><br>' +
+        '<strong>① Forward and reverse diffusion animation</strong> — animate a clean image gradually becoming pure noise (forward process), then animate the model\'s learned denoising steps (reverse process) going back to a clean image. Show the noise schedule as a curve alongside.<br><br>' +
+        '<strong>② Latent space traversal animation</strong> — show a 2D PCA projection of the latent space with sample images at key coordinates. Animate a path between two latent codes and show the smoothly interpolating generated images.<br><br>' +
+        '<strong>③ Style-content tradeoff animation</strong> — animate the same content image being stylised with a slider controlling λ_style / λ_content. Show outputs at λ=0.0, 0.25, 0.5, 0.75, 1.0 so readers can see the continuous tradeoff.<br><br>' +
+        '<strong>④ Loss landscape animation</strong> — show the combined style + content loss surface and animate gradient descent finding the optimal stylised image.' },
+
+      { t:'round', lbl:'Round 2 — Improvements Applied', cls:'r3' },
+      { t:'msg', a:'writer', txt:
+        'Everything implemented!<br><br>' +
+        '✅ Forward and reverse diffusion animation — noise schedule curve + image transition frames<br>' +
+        '✅ Latent space traversal animation — PCA projection with interpolation path and image strip<br>' +
+        '✅ Style-content tradeoff slider animation — 5 keyframes from pure content to pure style<br>' +
+        '✅ Combined loss surface animation — gradient descent path from noisy to optimal stylisation<br>' +
+        '✅ Score-matching intuition diagram — showing how the model learns the gradient of log p(x)' },
+      { t:'msg', a:'reviewer', txt:
+        'The latent space traversal animation is superb — it makes "smooth latent space" feel like a real geometric fact, not marketing language. Students, please confirm!' },
+
+      { t:'round', lbl:'Final Student Approval', cls:'rfin' },
+      { t:'msg', a:'student1', txt:
+        'The forward/reverse diffusion animation resolves the circularity! Seeing the model learn to reverse a known process step-by-step makes the training objective feel principled: we\'re just teaching it to invert a Markov chain we designed. Click! ✅' },
+      { t:'msg', a:'student2', txt:
+        'The latent space traversal animation is exactly what I needed! Watching images morph smoothly as the latent code moves makes "smooth latent space" concrete. The PCA projection shows the structure and the interpolation shows it\'s meaningful. 🙌' },
+      { t:'msg', a:'student3', txt:
+        'The style-content slider animation is beautifully clear! Seeing the 5 keyframes from pure content to pure style — and watching the texture bleed in progressively — makes the λ parameter feel like a real dial, not an abstract hyperparameter. Approved! 🎉' },
+      { t:'msg', a:'reviewer', txt:
+        '🏆 <strong>Post officially approved!</strong> Generative AI concepts are easily hand-wavy — these animations ground everything in visible, concrete behaviour. Fantastic collaborative work!' },
+      { t:'approved' }
+    ],
+
+  }; /* end SCRIPTS */
+
+  /* Fallback for unknown books */
+  var msgs = SCRIPTS[BOOK] || SCRIPTS['basics'];
+
+  /* ── DOM refs ── */
+  var wrap   = document.getElementById('agc-wrap');
+  var hdr    = document.getElementById('agc-hdr');
+  var body   = document.getElementById('agc-body');
+  var tog    = document.getElementById('agc-tog');
+  var chat   = document.getElementById('agc-chat');
+  var idle   = document.getElementById('agc-idle');
+  var playBtn   = document.getElementById('agc-play');
+  var replayBtn = document.getElementById('agc-replay');
+  var hintEl    = document.getElementById('agc-hint');
+
+  /* ── Toggle open/close ── */
+  var open = false;
+  function toggleBody() {
+    open = !open;
+    if (open) {
+      body.removeAttribute('hidden');
+      tog.textContent = 'Hide Session ▲';
+      hdr.setAttribute('aria-expanded', 'true');
+    } else {
+      body.setAttribute('hidden', '');
+      tog.textContent = 'Show Session ▼';
+      hdr.setAttribute('aria-expanded', 'false');
+    }
+  }
+  hdr.addEventListener('click', toggleBody);
+  hdr.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBody(); }
+  });
+
+  /* ── Animation engine ── */
+  var idx = 0;
+  var playing = false;
+  var tid = null;
+
+  function play() {
+    if (playing) return;
+    playing = true;
+    if (idle) { idle.style.display = 'none'; }
+    playBtn.disabled = true;
+    playBtn.textContent = '⏸ Playing…';
+    hintEl.textContent = 'Agents are collaborating…';
+    next();
+  }
+
+  function next() {
+    if (idx >= msgs.length) { done(); return; }
+    var item = msgs[idx++];
+
+    if (item.t === 'round') {
+      appendRound(item);
+      tid = setTimeout(next, 750);
+
+    } else if (item.t === 'msg') {
+      var typingEl = appendTyping(item.a);
+      tid = setTimeout(function () {
+        if (typingEl && typingEl.parentNode) typingEl.remove();
+        appendMsg(item);
+        tid = setTimeout(next, 550);
+      }, 1350);
+
+    } else if (item.t === 'approved') {
+      appendApproved();
+      tid = setTimeout(next, 450);
+
+    } else {
+      tid = setTimeout(next, 0);
+    }
+  }
+
+  function done() {
+    playing = false;
+    playBtn.style.display = 'none';
+    replayBtn.style.display = '';
+    hintEl.textContent = 'Review complete — post approved by all agents!';
+  }
+
+  function replay() {
+    clearTimeout(tid);
+    idx = 0; playing = false;
+    chat.innerHTML = '';
+    if (idle) { var n = idle.cloneNode(true); n.style.display = ''; chat.appendChild(n); idle = n; }
+    playBtn.style.display = '';
+    playBtn.disabled = false;
+    playBtn.textContent = '▶ Play Conversation';
+    replayBtn.style.display = 'none';
+    hintEl.textContent = 'Watch agents collaborate to improve this post';
+    play();
+  }
+
+  function scrollBot() {
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  /* ── DOM helpers ── */
+  function appendRound(item) {
+    var el = document.createElement('div');
+    el.className = 'agc-round';
+    el.innerHTML =
+      '<div class="agc-round-lbl ' + item.cls + '">' + item.lbl + '</div>' +
+      '<div class="agc-round-line"></div>';
+    chat.appendChild(el);
+    raf(function() { el.classList.add('vis'); });
+    scrollBot();
+  }
+
+  function appendTyping(agKey) {
+    var ag = AG[agKey];
+    var el = document.createElement('div');
+    el.className = 'agc-typing';
+    el.innerHTML =
+      '<div class="agc-av ' + ag.cls + '">' + ag.em + '</div>' +
+      '<div class="agc-dots"><span></span><span></span><span></span></div>' +
+      '<span class="agc-typing-nm">' + ag.name + ' is typing…</span>';
+    chat.appendChild(el);
+    raf(function() { el.classList.add('vis'); });
+    scrollBot();
+    return el;
+  }
+
+  function appendMsg(item) {
+    var ag = AG[item.a];
+    var el = document.createElement('div');
+    el.className = 'agc-msg';
+    el.innerHTML =
+      '<div class="agc-av ' + ag.cls + '">' + ag.em + '</div>' +
+      '<div class="agc-mc">' +
+        '<div class="agc-nm">' + ag.name + ' &middot; <em>' + ag.role + '</em></div>' +
+        '<div class="agc-bbl ' + ag.cls + '">' + item.txt + '</div>' +
+      '</div>';
+    chat.appendChild(el);
+    raf(function() { el.classList.add('vis'); });
+    scrollBot();
+  }
+
+  function appendApproved() {
+    var el = document.createElement('div');
+    el.className = 'agc-approved';
+    el.innerHTML =
+      '<div class="agc-approved-icon">🏆</div>' +
+      '<div class="agc-approved-txt">' +
+        '<strong>Post Approved — All Agents Reached Consensus</strong>' +
+        '<span>This post passed multi-round review by the Writer, Reviewer, and all three Student agents. Every identified clarity gap was addressed with targeted animations and examples.</span>' +
+      '</div>';
+    chat.appendChild(el);
+    raf(function() { el.classList.add('vis'); });
+    scrollBot();
+  }
+
+  function raf(fn) { requestAnimationFrame(function() { requestAnimationFrame(fn); }); }
+
+  /* ── Wire buttons ── */
+  playBtn.addEventListener('click', play);
+  replayBtn.addEventListener('click', replay);
+
+})();
+</script>
+{% endif %}
