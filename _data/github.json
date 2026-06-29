@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 75,
+  "total_stars": 76,
   "total_forks": 17,
   "public_repos": 31,
   "followers": 18,
@@ -80,20 +80,20 @@
       "language": "JavaScript"
     },
     {
+      "name": "MoonBot-Navigation",
+      "html_url": "https://github.com/alessioborgi/MoonBot-Navigation",
+      "description": "Autonomous robot for lunar navigation and object interaction, developed during TESP '25 at the Space Robotics Lab (Tohoku University). Features custom robot design, Dijkstra-based path planning, object detection with vision, and gripper control.",
+      "stars": 5,
+      "forks": 0,
+      "language": "C++"
+    },
+    {
       "name": "RoboMAT",
       "html_url": "https://github.com/alessioborgi/RoboMAT",
       "description": "A comprehensive MATLAB library for solving a wide range of robotics tasks, providing tools and functions for robotic simulations, control systems, kinematics, and path planning.",
       "stars": 5,
       "forks": 0,
       "language": "MATLAB"
-    },
-    {
-      "name": "MoonBot-Navigation",
-      "html_url": "https://github.com/alessioborgi/MoonBot-Navigation",
-      "description": "Autonomous robot for lunar navigation and object interaction, developed during TESP '25 at the Space Robotics Lab (Tohoku University). Features custom robot design, Dijkstra-based path planning, object detection with vision, and gripper control.",
-      "stars": 4,
-      "forks": 0,
-      "language": "C++"
     },
     {
       "name": "Z-SASLM",
