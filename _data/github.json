@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 77,
+  "total_stars": 78,
   "total_forks": 17,
   "public_repos": 31,
   "followers": 19,
@@ -59,7 +59,7 @@
       "name": "AMR_CleaningRobot",
       "html_url": "https://github.com/alessioborgi/AMR_CleaningRobot",
       "description": "Simulation of a Cleaning Robot with the capability of performing SLAM of the environment the robot is navigating, Planning Trajectories to calculate optimal paths considering static and dynamic obstacles, and Dynamic Obstacle Avoidance to detect and navigate around obstacles.",
-      "stars": 17,
+      "stars": 18,
       "forks": 1,
       "language": "C++"
     },
