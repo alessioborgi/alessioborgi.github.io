@@ -11,7 +11,7 @@ excerpt: "SheafPool solves a key missing piece in sheaf GNNs: graph-level poolin
 author_profile: true
 read_time: true
 icon: "🧭"
-read_mins: 5
+read_mins: 9
 permalink: /blog/sheaf/sheafpool/
 toc: true
 toc_label: "Contents"

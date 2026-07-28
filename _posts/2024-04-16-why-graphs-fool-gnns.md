@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🎭"
-read_mins: 4
+read_mins: 7
 permalink: /blog/gnn/why-graphs-fool-gnns/
 toc: true
 toc_label: "Contents"

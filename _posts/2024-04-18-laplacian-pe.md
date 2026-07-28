@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧮"
-read_mins: 5
+read_mins: 6
 permalink: /blog/gnn/laplacian-pe/
 toc: true
 toc_label: "Contents"
@@ -199,7 +199,7 @@ LapPE makes GNNs strictly more expressive than 1-WL — at the cost of a precomp
 | Captures | Global position, community structure, graph geometry |
 | Metric | Approximates commute time distance |
 | Sign issue | ±1 ambiguity per eigenvector; requires SignNet or random flipping |
-| Cost | O(k·|E|·T) with sparse solver |
+| Cost | O(k·\|E\|·T) with sparse solver |
 | Expressiveness | Strictly beyond 1-WL |
 | Used by | SAN, GPS, many Graph Transformer papers |
 

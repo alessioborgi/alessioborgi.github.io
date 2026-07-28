@@ -103,9 +103,9 @@ This is why SPD encoding is primarily used for small-graph tasks (molecules with
 
 | Encoding | Type | Captures | Cost |
 |---------|------|---------|------|
-| LapPE | Node PE | Global position | O(k·|E|·T) |
-| RWPE | Node PE | Local structural role | O(K·|E|) |
-| SPD | Edge/pair PE | Graph metric distances | O(N·(N+|E|)) |
+| LapPE | Node PE | Global position | O(k·\|E\|·T) |
+| RWPE | Node PE | Local structural role | O(K·\|E\|) |
+| SPD | Edge/pair PE | Graph metric distances | O(N·(N+\|E\|)) |
 
 SPD is a **pairwise** encoding — it's not a node property but a pair property. It cannot be used as a standard node embedding; it must be injected into the attention mechanism as a bias.
 

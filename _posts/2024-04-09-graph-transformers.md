@@ -130,7 +130,7 @@ Solutions:
 |----------|---------------------|------------------|
 | Receptive field | K-hop (K = number of layers) | All nodes (direct) |
 | Long-range dependencies | Requires many layers (oversmoothing) | Handled directly |
-| Complexity | O(K · |E| · d) | O(N² · d) |
+| Complexity | O(K · \|E\| · d) | O(N² · d) |
 | Graph structure encoding | Adjacency (message passing) | Positional encodings + attention biases |
 | Suitable graph size | Any (with neighbour sampling) | Small-medium (N < 10,000) |
 | Over-squashing | Yes | No |

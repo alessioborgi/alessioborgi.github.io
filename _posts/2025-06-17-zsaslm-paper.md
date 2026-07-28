@@ -11,7 +11,7 @@ excerpt: "Z-SASLM is a zero-shot, fine-tuning-free style blending pipeline that 
 author_profile: true
 read_time: true
 icon: "🎨"
-read_mins: 7
+read_mins: 9
 permalink: /blog/research/zsaslm-paper/
 toc: true
 toc_label: "Contents"

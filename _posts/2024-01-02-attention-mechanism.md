@@ -11,7 +11,7 @@ read_time: true
 is_overview: false
 subsection: core
 icon: "🔍"
-read_mins: 4
+read_mins: 5
 permalink: /blog/transformers/attention/
 toc: true
 toc_label: "Contents"

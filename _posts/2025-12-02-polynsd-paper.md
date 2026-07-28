@@ -11,7 +11,7 @@ excerpt: "PolyNSD replaces the NSD propagation operator with a degree-K Chebyshe
 author_profile: true
 read_time: true
 icon: "📐"
-read_mins: 8
+read_mins: 11
 permalink: /blog/sheaf/polynsd-paper/
 toc: true
 toc_label: "Contents"

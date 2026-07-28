@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: true
 icon: "⚡"
-read_mins: 5
+read_mins: 10
 permalink: /blog/basics/activation-functions/
 toc: true
 toc_label: "Contents"
@@ -601,9 +601,9 @@ The later chapters in this mini-series cover the smoother modern functions and t
   to   { stroke-dashoffset: 0;   }
 }
 </style>
-<div class=”act-svg-wrap”>
+<div class="act-svg-wrap">
 <figure>
-<svg xmlns=”http://www.w3.org/2000/svg” viewBox=”0 0 580 220” style=”max-width:580px;width:100%”>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 220" style="max-width:580px;width:100%">
   <style>
     .curve-fn  { fill:none; stroke-width:2.4; stroke-dasharray:700; stroke-dashoffset:700; }
     .curve-der { fill:none; stroke-width:1.8; stroke-dasharray:700; stroke-dashoffset:700; stroke-dasharray:6,3; }
@@ -619,50 +619,50 @@ The later chapters in this mini-series cover the smoother modern functions and t
   </style>
 
   <!-- SIGMOID panel -->
-  <rect x=”5” y=”5” width=”178” height=”210” rx=”9” fill=”#f0f9ff” stroke=”#bae6fd”/>
-  <text x=”94” y=”21” text-anchor=”middle” class=”panel-lbl” fill=”#0c4a6e”>Sigmoid</text>
-  <line x1=”15”  y1=”110” x2=”178” y2=”110” class=”panel-ax”/>
-  <line x1=”94”  y1=”30”  x2=”94”  y2=”200” class=”panel-ax”/>
+  <rect x="5" y="5" width="178" height="210" rx="9" fill="#f0f9ff" stroke="#bae6fd"/>
+  <text x="94" y="21" text-anchor="middle" class="panel-lbl" fill="#0c4a6e">Sigmoid</text>
+  <line x1="15"  y1="110" x2="178" y2="110" class="panel-ax"/>
+  <line x1="94"  y1="30"  x2="94"  y2="200" class="panel-ax"/>
   <!-- sigmoid curve (hand-approximated cubic spline) -->
-  <path d=”M18,185 C30,183 42,178 55,165 S78,130 94,110 S115,70 130,52 S158,35 180,33” class=”curve-fn c-sig-fn”/>
+  <path d="M18,185 C30,183 42,178 55,165 S78,130 94,110 S115,70 130,52 S158,35 180,33" class="curve-fn c-sig-fn"/>
   <!-- sigmoid derivative (peak at center ~0.25) -->
-  <path d=”M18,185 C30,184 45,180 60,170 S80,148 94,140 S112,148 128,170 S152,183 180,185” class=”curve-fn c-sig-der”/>
+  <path d="M18,185 C30,184 45,180 60,170 S80,148 94,140 S112,148 128,170 S152,183 180,185" class="curve-fn c-sig-der"/>
   <!-- legend -->
-  <line x1=”15” y1=”197” x2=”35” y2=”197” stroke=”#0891b2” stroke-width=”2”/>
-  <text x=”38” y=”200” class=”leg-txt” fill=”#0891b2”>f(x)</text>
-  <line x1=”70” y1=”197” x2=”90” y2=”197” stroke=”#7dd3e8” stroke-width=”2”/>
-  <text x=”93” y=”200” class=”leg-txt” fill=”#7dd3e8”>f′(x)</text>
-  <text x=”94” y=”211” text-anchor=”middle” font-family=”sans-serif” font-size=”8.5” fill=”#ef4444”>max f′=0.25 — saturates!</text>
+  <line x1="15" y1="197" x2="35" y2="197" stroke="#0891b2" stroke-width="2"/>
+  <text x="38" y="200" class="leg-txt" fill="#0891b2">f(x)</text>
+  <line x1="70" y1="197" x2="90" y2="197" stroke="#7dd3e8" stroke-width="2"/>
+  <text x="93" y="200" class="leg-txt" fill="#7dd3e8">f′(x)</text>
+  <text x="94" y="211" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#ef4444">max f′=0.25 — saturates!</text>
 
   <!-- TANH panel -->
-  <rect x=”200” y=”5” width=”178” height=”210” rx=”9” fill=”#fff7ed” stroke=”#fed7aa”/>
-  <text x=”289” y=”21” text-anchor=”middle” class=”panel-lbl” fill=”#7c2d12”>Tanh</text>
-  <line x1=”210” y1=”110” x2=”373” y2=”110” class=”panel-ax”/>
-  <line x1=”289” y1=”30”  x2=”289” y2=”200” class=”panel-ax”/>
+  <rect x="200" y="5" width="178" height="210" rx="9" fill="#fff7ed" stroke="#fed7aa"/>
+  <text x="289" y="21" text-anchor="middle" class="panel-lbl" fill="#7c2d12">Tanh</text>
+  <line x1="210" y1="110" x2="373" y2="110" class="panel-ax"/>
+  <line x1="289" y1="30"  x2="289" y2="200" class="panel-ax"/>
   <!-- tanh curve -->
-  <path d=”M213,185 C225,183 238,175 252,160 S275,120 289,110 S308,85 320,60 S350,37 372,34” class=”curve-fn c-tan-fn”/>
+  <path d="M213,185 C225,183 238,175 252,160 S275,120 289,110 S308,85 320,60 S350,37 372,34" class="curve-fn c-tan-fn"/>
   <!-- tanh derivative (peak at center ~1.0) -->
-  <path d=”M213,185 C228,183 245,175 260,162 S279,135 289,110 S302,76 315,60 S348,50 372,50” class=”curve-fn c-tan-der”/>
-  <line x1=”210” y1=”197” x2=”230” y2=”197” stroke=”#f97316” stroke-width=”2”/>
-  <text x=”233” y=”200” class=”leg-txt” fill=”#f97316”>f(x)</text>
-  <line x1=”265” y1=”197” x2=”285” y2=”197” stroke=”#fbbf80” stroke-width=”2”/>
-  <text x=”288” y=”200” class=”leg-txt” fill=”#fbbf80”>f′(x)</text>
-  <text x=”289” y=”211” text-anchor=”middle” font-family=”sans-serif” font-size=”8.5” fill=”#f97316”>zero-centered, still saturates</text>
+  <path d="M213,185 C228,183 245,175 260,162 S279,135 289,110 S302,76 315,60 S348,50 372,50" class="curve-fn c-tan-der"/>
+  <line x1="210" y1="197" x2="230" y2="197" stroke="#f97316" stroke-width="2"/>
+  <text x="233" y="200" class="leg-txt" fill="#f97316">f(x)</text>
+  <line x1="265" y1="197" x2="285" y2="197" stroke="#fbbf80" stroke-width="2"/>
+  <text x="288" y="200" class="leg-txt" fill="#fbbf80">f′(x)</text>
+  <text x="289" y="211" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#f97316">zero-centered, still saturates</text>
 
   <!-- ReLU panel -->
-  <rect x=”395” y=”5” width=”178” height=”210” rx=”9” fill=”#f0fdf4” stroke=”#bbf7d0”/>
-  <text x=”484” y=”21” text-anchor=”middle” class=”panel-lbl” fill=”#14532d”>ReLU</text>
-  <line x1=”405” y1=”110” x2=”568” y2=”110” class=”panel-ax”/>
-  <line x1=”484” y1=”30”  x2=”484” y2=”200” class=”panel-ax”/>
+  <rect x="395" y="5" width="178" height="210" rx="9" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="484" y="21" text-anchor="middle" class="panel-lbl" fill="#14532d">ReLU</text>
+  <line x1="405" y1="110" x2="568" y2="110" class="panel-ax"/>
+  <line x1="484" y1="30"  x2="484" y2="200" class="panel-ax"/>
   <!-- relu curve -->
-  <path d=”M408,110 H484 L568,30” class=”curve-fn c-rel-fn”/>
+  <path d="M408,110 H484 L568,30" class="curve-fn c-rel-fn"/>
   <!-- relu derivative: 0 left, 1 right -->
-  <path d=”M408,110 H484 L568,110” class=”curve-fn c-rel-der”/>
-  <line x1=”405” y1=”197” x2=”425” y2=”197” stroke=”#16a34a” stroke-width=”2”/>
-  <text x=”428” y=”200” class=”leg-txt” fill=”#16a34a”>f(x)</text>
-  <line x1=”460” y1=”197” x2=”480” y2=”197” stroke=”#86efac” stroke-width=”2”/>
-  <text x=”483” y=”200” class=”leg-txt” fill=”#86efac”>f′(x)</text>
-  <text x=”484” y=”211” text-anchor=”middle” font-family=”sans-serif” font-size=”8.5” fill=”#16a34a”>f′=1 always (positive side)</text>
+  <path d="M408,110 H484 L568,110" class="curve-fn c-rel-der"/>
+  <line x1="405" y1="197" x2="425" y2="197" stroke="#16a34a" stroke-width="2"/>
+  <text x="428" y="200" class="leg-txt" fill="#16a34a">f(x)</text>
+  <line x1="460" y1="197" x2="480" y2="197" stroke="#86efac" stroke-width="2"/>
+  <text x="483" y="200" class="leg-txt" fill="#86efac">f′(x)</text>
+  <text x="484" y="211" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#16a34a">f′=1 always (positive side)</text>
 </svg>
 <figcaption>Each panel shows the function (solid) and its derivative (dashed/lighter). Sigmoid and Tanh derivatives flatten to near-zero in the tails — vanishing gradient territory. ReLU's derivative is exactly 1 on the positive side, so gradients pass through undistorted for active neurons.</figcaption>
 </figure>

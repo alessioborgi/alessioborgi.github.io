@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🌐"
-read_mins: 4
+read_mins: 6
 permalink: /blog/gnn/gnns-knowledge-graphs/
 toc: true
 toc_label: "Contents"

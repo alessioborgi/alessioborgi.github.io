@@ -161,7 +161,7 @@ The aggregation combines all messages. It **must be permutation-invariant** (the
 | Aggregator | Formula | Properties |
 |---|---|---|
 | Sum | Σ m_u | Captures size of neighbourhood |
-| Mean | (1/|N|) Σ m_u | Normalised, size-invariant |
+| Mean | (1/\|N\|) Σ m_u | Normalised, size-invariant |
 | Max | max_u m_u | Captures the most extreme feature |
 | Attention-weighted | Σ α_u m_u | Adaptive, like GAT |
 

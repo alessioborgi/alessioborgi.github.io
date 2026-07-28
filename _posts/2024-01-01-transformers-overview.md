@@ -10,7 +10,7 @@ author_profile: true
 read_time: true
 is_overview: true
 icon: "🤖"
-read_mins: 5
+read_mins: 7
 permalink: /blog/transformers/overview/
 toc: true
 toc_label: "Contents"

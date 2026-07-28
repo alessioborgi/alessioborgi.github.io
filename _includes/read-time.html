@@ -1,7 +1,46 @@
+{% comment %}
+  Estimate reading time from prose only.
+
+  `strip_html` removes tags but keeps the *text* inside them, so the CSS in a
+  post's inline <style> block, the JS in its <script> blocks, and the label text
+  and path data inside hand-built <svg> figures were all counted as words. Posts
+  in this repo carry sizeable inline stylesheets and inline SVGs, so the estimate
+  was badly inflated (a 1.3k-word article reported "8 minute read"). Remove those
+  blocks first, then count.
+{% endcomment %}
+
 {% if post.read_time %}
-  {% assign words = post.content | strip_html | number_of_words %}
+  {% assign rt_clean = post.content %}
 {% elsif page.read_time %}
-  {% assign words = page.content | strip_html | number_of_words %}
+  {% assign rt_clean = page.content %}
+{% endif %}
+
+{% if rt_clean %}
+  {% assign rt_chunks = rt_clean | split: '<style' %}
+  {% assign rt_acc = rt_chunks[0] %}
+  {% for rt_chunk in rt_chunks offset:1 %}
+    {% assign rt_tail = rt_chunk | split: '</style>' %}
+    {% assign rt_acc = rt_acc | append: rt_tail[1] %}
+  {% endfor %}
+  {% assign rt_clean = rt_acc %}
+
+  {% assign rt_chunks = rt_clean | split: '<script' %}
+  {% assign rt_acc = rt_chunks[0] %}
+  {% for rt_chunk in rt_chunks offset:1 %}
+    {% assign rt_tail = rt_chunk | split: '</script>' %}
+    {% assign rt_acc = rt_acc | append: rt_tail[1] %}
+  {% endfor %}
+  {% assign rt_clean = rt_acc %}
+
+  {% assign rt_chunks = rt_clean | split: '<svg' %}
+  {% assign rt_acc = rt_chunks[0] %}
+  {% for rt_chunk in rt_chunks offset:1 %}
+    {% assign rt_tail = rt_chunk | split: '</svg>' %}
+    {% assign rt_acc = rt_acc | append: rt_tail[1] %}
+  {% endfor %}
+  {% assign rt_clean = rt_acc %}
+
+  {% assign words = rt_clean | strip_html | number_of_words %}
 {% endif %}
 
 {% if site.words_per_minute %}
