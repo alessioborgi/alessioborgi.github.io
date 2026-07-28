@@ -200,6 +200,19 @@
     color: #e6f5ff;
     cursor: pointer;
     z-index: 100;
+
+    /* `outline: none` above removes the only focus affordance these controls
+       have. Restore it for keyboard users without showing a ring on click. */
+    &:focus-visible {
+      outline: 3px solid #ffd166;
+      outline-offset: 2px;
+    }
+  }
+
+  a:focus-visible,
+  .theme-toggle__btn:focus-visible {
+    outline: 3px solid #ffd166;
+    outline-offset: 2px;
   }
 
   .visible-links {
@@ -226,11 +239,27 @@
     }
 
     #theme-toggle {
-      a {
+      a,
+      .theme-toggle__btn {
         width: 25px;
         display: flex;
         justify-content: center;
         cursor: pointer;
+      }
+
+      /* The toggle is a real <button> so it is keyboard focusable (an <a>
+         without href is not). It therefore has to opt out of the absolutely
+         positioned `.greedy-nav button` rule used by the mobile nav toggle. */
+      .theme-toggle__btn {
+        position: static;
+        align-items: center;
+        height: auto;
+        padding: 0;
+        background: transparent;
+        color: inherit;
+        border: 0;
+        font-size: inherit;
+        line-height: inherit;
       }
     }
 
