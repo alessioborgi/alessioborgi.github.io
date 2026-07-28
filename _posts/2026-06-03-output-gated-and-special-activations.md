@@ -1,698 +1,300 @@
 ---
 layout: single
-title: "Output, Gated, and Special Activations: Softmax, GLU, SIREN, and More"
-date: 2026-06-01
+title: "Output and Gated Activations: Softmax, Sparsemax, GLU, and SIREN"
+date: 2026-06-03
 categories: [basics]
 book: basics
 subsection: activation-functions
-tags: [softmax, glu, swiglu, sparsemax, siren]
-excerpt: "Not every activation is a hidden-layer curve. Some produce probabilities, some implement learned gates, some shrink values toward zero, and some are designed for very specialized settings such as implicit neural representations."
+tags: [softmax, sparsemax, glu, swiglu, siren]
+excerpt: "The last activation in your network is not a modelling preference — it is a contract with your loss function. Break it and training stops meaning anything. Here is the contract, and what changes when the activation itself becomes learned."
 author_profile: true
 read_time: true
 is_overview: false
 icon: "🧰"
-read_mins: 5
+read_mins: 7
 permalink: /blog/basics/output-gated-and-special-activations/
 toc: true
 toc_label: "Contents"
 ---
 <style>
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 980px); display: block; margin: 0 auto; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,62,116,0.12); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .55rem; font-style: italic; }
-.tldr-box, .insight-box, .summary-box, .warning-box, .formula-box {
-  border-radius: 10px;
-  padding: 1rem 1.15rem;
-  margin: 1.2rem 0;
-}
-.tldr-box { background: linear-gradient(145deg,#ecfeff,#dbeafe); border-left: 4px solid #0891b2; }
-.insight-box { background: #eff6ff; border-left: 4px solid #2563eb; }
-.summary-box { background: #f8fbff; border: 1px solid #dbe7f5; }
-.warning-box { background: #fff7ed; border-left: 4px solid #f97316; }
-.formula-box {
-  background: #f8fafc;
-  border: 1px solid #dbeafe;
-  text-align: center;
-  color: #1e3a5f;
-}
-.formula-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: .85rem;
-  margin: 1rem 0 1.2rem;
-}
-.formula-card {
-  background: linear-gradient(155deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid #dbe7f5;
+/* Page-specific only. Callouts, figures, formula boxes, table overflow,
+   reduced-motion and dark-mode handling now live in
+   _sass/layout/_blog-components.scss and are shared across all posts. */
+.temp-demo {
+  background: linear-gradient(145deg, #f8fafc, #f0f4f8);
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: .9rem 1rem;
-  overflow: hidden;
+  padding: 1rem 1.15rem 1.2rem;
+  margin: 1.25rem 0;
 }
-.formula-card strong {
-  display: block;
-  margin-bottom: .45rem;
+.temp-demo__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.7rem;
+}
+.temp-demo__controls label {
+  font-weight: 700;
   color: #0f2a36;
+  font-size: 0.9rem;
 }
-.formula-card mjx-container[display="true"],
-.formula-box mjx-container[display="true"] {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: .15rem;
+.temp-demo__controls input[type="range"] {
+  flex: 1 1 200px;
+  min-width: 160px;
+  height: 1.75rem;
 }
-.formula-card mjx-container {
-  font-size: 90% !important;
+.temp-demo__readout {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: #0c4a6e;
+  min-width: 4.5rem;
 }
-.formula-grid--shrink {
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+.temp-demo__note {
+  font-size: 0.82rem;
+  color: #4b5563;
+  margin: 0.6rem 0 0;
+  font-style: italic;
 }
-.formula-grid--shrink .formula-card mjx-container {
-  font-size: 78% !important;
-}
-.formula-grid--gated {
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-}
-.formula-grid--gated .formula-card mjx-container {
-  font-size: 82% !important;
-}
-.formula-grid--special {
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-}
-.formula-grid--special .formula-card mjx-container {
-  font-size: 80% !important;
-}
-@media (max-width: 900px) {
-  .formula-grid--gated,
-  .formula-grid--shrink,
-  .formula-grid--special {
-    grid-template-columns: 1fr;
-  }
-}
-.mini-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0 1.2rem;
-  font-size: .93rem;
-}
-.mini-table th, .mini-table td {
-  border: 1px solid #dbe7f5;
-  padding: .72rem .8rem;
-  text-align: left;
-  vertical-align: top;
-}
-.mini-table th { background: #eff6ff; color: #0f2a36; }
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Many important activations are not “hidden-layer curves” at all. Softmax and sigmoid control outputs, GLU-style activations learn gates, shrinkage activations push values toward zero, and specialized activations such as SIREN or Gaussian RBFs are built for niche but powerful settings.
+  <strong>TL;DR:</strong> The activation on your final layer is fixed by the loss you chose, not by taste. The commonest bug in the whole topic follows from that: <code>CrossEntropyLoss</code> already applies log-softmax, so calling softmax before it applies the normalisation twice and flattens your gradients. Inside the network the logic inverts — there the activation is a free design choice, and the modern answer is to make part of it learned.
 </div>
 
-## Output Activations Have a Different Job
+<p><em>Part 3 of 3. <a href="/blog/basics/activation-functions/">Part 1</a> covers what activations do; <a href="/blog/basics/modern-activation-functions/">Part 2</a> covers ReLU, GELU and SiLU. This page assumes you have met those.</em></p>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> In hidden layers, activations shape what the network <em>thinks</em>. At the output layer, activations shape what the network <em>says</em>. They must convert raw scores (logits) into the exact format the loss function expects. Using the wrong output activation is not just suboptimal — it breaks the loss's mathematical assumptions and can make training completely undefined.</div>
+## The output layer is a contract with the loss
 
-In hidden layers, activation functions mainly shape representation learning and gradient flow. At the output layer, they must match the task.
+Hidden-layer activations shape what a network *thinks*. The output activation decides what it *says*, and must hand the loss exactly the object that loss was derived for.
 
-### The three most important output cases
-
-| Task | Typical activation | Why |
+| Task | Output activation | What the loss needs |
 | --- | --- | --- |
-| Binary classification | <strong>Sigmoid</strong> | Turns one logit into a probability in `[0, 1]` |
-| Multi-class classification | <strong>Softmax</strong> | Converts logits into a probability distribution that sums to `1` |
-| Regression | <strong>Linear / Identity</strong> | Leaves the output unconstrained |
+| Binary classification | Sigmoid | One probability in \\((0, 1)\\) |
+| Multi-class classification | Softmax | A vector on the probability simplex\* |
+| Regression | Identity | An unconstrained real value |
 
-The softmax formula is:
+\*The **probability simplex** is just the set of valid probability vectors: all entries non-negative, summing to one. Softmax turns \\(K\\) logits into a point in it:
 
 <div class="formula-box">
 \[
-\operatorname{softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}
+\operatorname{softmax}(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}},
+\qquad \mathbf{z}\in\mathbb{R}^{K}
 \]
 </div>
 
-**Concrete step-by-step: softmax on 3 logits**
+The subscript sits on the *output*: softmax maps a whole vector to a whole vector, so \\(\operatorname{softmax}(z_i)\\) is not a meaningful expression.
 
-Say a 3-class classifier produces logits `z = [2.0, 1.0, 0.1]`.
+**Worked example.** A three-class classifier emits logits \\(\mathbf{z} = [2.0,\ 1.0,\ 0.1]\\).
 
 | Step | Computation | Result |
 |---|---|---|
-| Exponentiate | e², e¹, e^0.1 | 7.389, 2.718, 1.105 |
+| Exponentiate | \\(e^{2.0},\ e^{1.0},\ e^{0.1}\\) | 7.389, 2.718, 1.105 |
 | Sum | 7.389 + 2.718 + 1.105 | **11.212** |
-| Normalize | 7.389/11.212, 2.718/11.212, 1.105/11.212 | **0.659, 0.242, 0.099** |
-| Check | 0.659 + 0.242 + 0.099 | = 1.000 ✓ |
+| Normalise | each divided by 11.212 | **0.659, 0.242, 0.099** |
 
-The original logit differences (2.0 vs 1.0 vs 0.1) are now calibrated probabilities summing to 1. Note that a 1-unit logit advantage roughly triples the probability — the exponential makes the winner-take-most effect strong.
+These are *normalised*, not *calibrated* — trained networks are usually over-confident, which is why temperature scaling exists. Note 0.659 / 0.242 = 2.72: one unit of logit advantage multiplies the odds by \\(e\\).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — temperature:</strong> Dividing logits by a temperature T before softmax controls sharpness. T→0 makes softmax behave like argmax (one-hot). T→∞ makes it uniform. This is why temperature scaling is the standard post-hoc calibration technique: the model's weights stay frozen, only the output distribution is reshaped.</div>
+Dividing logits by a temperature \\(T\\) before exponentiating rescales that sharpness. Drag the slider:
 
-<!-- Animated: softmax with temperature — bars morphing -->
-<style>
-@keyframes growSoftmax {
-  from { height: 0; y: 155; }
-}
-@keyframes growSoftmaxB {
-  from { height: 0; y: 155; }
-}
-</style>
+<div class="temp-demo">
+  <div class="temp-demo__controls">
+    <label for="temp-slider">Temperature <em>T</em></label>
+    <input type="range" id="temp-slider" min="0.1" max="5" step="0.1" value="1"
+           aria-describedby="temp-readout">
+    <span class="temp-demo__readout" id="temp-readout" role="status" aria-live="polite">T = 1.0</span>
+  </div>
+  <svg id="temp-svg" role="img" aria-labelledby="temp-title temp-desc"
+       viewBox="0 0 460 152" style="max-width:460px;width:100%;height:auto;display:block;margin:0 auto">
+    <title id="temp-title">Softmax probabilities at the selected temperature</title>
+    <desc id="temp-desc">Three bars for classes C1, C2 and C3, from logits 2.0, 1.0 and 0.1. At T = 1 they read 66%, 24% and 10%. Lowering T concentrates probability on C1 until it approaches 100%; raising T flattens the bars toward 33% each.</desc>
+    <line x1="42" y1="130" x2="440" y2="130" stroke="#475569" stroke-width="1.5"/>
+    <text x="34" y="50"  font-size="10" fill="#475569" text-anchor="end">100%</text>
+    <text x="34" y="133" font-size="10" fill="#475569" text-anchor="end">0%</text>
+    <g id="temp-bars">
+      <rect x="90"  y="74.6"  width="70" height="55.4" rx="3" fill="#0e7490"/>
+      <rect x="200" y="109.7" width="70" height="20.3" rx="3" fill="#0e7490"/>
+      <rect x="310" y="121.7" width="70" height="8.3"  rx="3" fill="#0e7490"/>
+    </g>
+    <g id="temp-vals" font-size="12" font-weight="700" fill="#0f2a36" text-anchor="middle">
+      <text x="125" y="68.6">66%</text>
+      <text x="235" y="103.7">24%</text>
+      <text x="345" y="115.7">10%</text>
+    </g>
+    <g font-size="10.5" fill="#374151" text-anchor="middle">
+      <text x="125" y="146">C1 (z = 2.0)</text>
+      <text x="235" y="146">C2 (z = 1.0)</text>
+      <text x="345" y="146">C3 (z = 0.1)</text>
+    </g>
+  </svg>
+  <p class="temp-demo__note">As <em>T</em> → 0 softmax approaches one-hot; as <em>T</em> → ∞ it approaches uniform. Distillation uses high <em>T</em> to expose the ratios between losing classes.</p>
+</div>
+
+<script>
+(function () {
+  var slider = document.getElementById('temp-slider');
+  if (!slider) return;
+  var logits = [2.0, 1.0, 0.1], BASE = 130, SCALE = 0.84;
+  var bars = document.querySelectorAll('#temp-bars rect');
+  var vals = document.querySelectorAll('#temp-vals text');
+  var readout = document.getElementById('temp-readout');
+  function render() {
+    var T = parseFloat(slider.value);
+    var m = Math.max.apply(null, logits);
+    var e = logits.map(function (z) { return Math.exp((z - m) / T); });
+    var s = e.reduce(function (a, b) { return a + b; }, 0);
+    e.forEach(function (v, i) {
+      var p = v / s, h = p * 100 * SCALE;
+      bars[i].setAttribute('y', (BASE - h).toFixed(1));
+      bars[i].setAttribute('height', Math.max(h, 0.5).toFixed(1));
+      vals[i].setAttribute('y', (BASE - h - 5.4).toFixed(1));
+      vals[i].textContent = (p * 100).toFixed(0) + '%';
+    });
+    readout.textContent = 'T = ' + T.toFixed(1);
+  }
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
+
+### When you need exact zeros: sparsemax
+
+Softmax never returns a zero — every class keeps some mass. **Sparsemax** instead takes the logit vector and finds the *nearest* valid probability vector to it in ordinary Euclidean distance. Because the nearest point often lies on an edge or corner of the simplex, entries genuinely hit zero:
+
+<div class="formula-box">
+\[
+\operatorname{sparsemax}(\mathbf{z}) = \arg\min_{\mathbf{p}\in\Delta^{K-1}} \lVert \mathbf{p}-\mathbf{z}\rVert_2^2
+= \big[\,z_i - \tau(\mathbf{z})\,\big]_+
+\]
+</div>
+
+The threshold \\(\tau\\) is set so the clipped values sum to one. (**Entmax** interpolates between the two.)
+
 <div class="blog-figure">
 <figure>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 185" style="max-width:480px;width:100%">
-  <style>
-    .bar { rx:4; transition: all 0.4s; }
-    .bar-hot  { fill:#0891b2; animation: growSoftmax 1s ease-out forwards; }
-    .bar-warm { fill:#60a5fa; animation: growSoftmax 1.3s ease-out forwards; }
-    .bar-cool { fill:#bae6fd; animation: growSoftmax 1.6s ease-out forwards; }
-    .bar-lbl  { font-family:sans-serif; font-size:10px; fill:#374151; }
-    .ax-fine  { stroke:#e2e8f0; stroke-width:1; }
-    .grp-lbl  { font-family:sans-serif; font-size:10.5px; font-weight:700; }
-  </style>
-
-  <rect x="1" y="1" width="478" height="183" rx="9" fill="#f8fafc" stroke="#dbe7f5"/>
-
-  <!-- T=0.5 (sharp) -->
-  <text x="90" y="16" text-anchor="middle" class="grp-lbl" fill="#0c4a6e">T = 0.5 (sharp)</text>
-  <line x1="15" y1="155" x2="175" y2="155" class="ax-fine"/>
-  <!-- class 1: prob≈0.88 → height 88*1.1=97 -->
-  <rect x="25"  y="58"  width="35" height="97" class="bar bar-hot"/>
-  <text x="42"  y="53"  text-anchor="middle" class="bar-lbl">88%</text>
-  <!-- class 2: prob≈0.10 → height 11 -->
-  <rect x="75"  y="144" width="35" height="11" class="bar bar-warm"/>
-  <text x="92"  y="140" text-anchor="middle" class="bar-lbl">10%</text>
-  <!-- class 3: prob≈0.02 → height 2 -->
-  <rect x="125" y="153" width="35" height="2" class="bar bar-cool"/>
-  <text x="142" y="149" text-anchor="middle" class="bar-lbl">2%</text>
-  <text x="42"  y="168" text-anchor="middle" class="bar-lbl">C1</text>
-  <text x="92"  y="168" text-anchor="middle" class="bar-lbl">C2</text>
-  <text x="142" y="168" text-anchor="middle" class="bar-lbl">C3</text>
-
-  <!-- T=1.0 (standard) -->
-  <text x="250" y="16" text-anchor="middle" class="grp-lbl" fill="#0f766e">T = 1.0 (standard)</text>
-  <line x1="175" y1="155" x2="335" y2="155" class="ax-fine"/>
-  <!-- 66%, 24%, 10% -->
-  <rect x="185" y="82"  width="35" height="73" class="bar bar-hot"/>
-  <text x="202" y="77"  text-anchor="middle" class="bar-lbl">66%</text>
-  <rect x="235" y="128" width="35" height="27" class="bar bar-warm"/>
-  <text x="252" y="123" text-anchor="middle" class="bar-lbl">24%</text>
-  <rect x="285" y="144" width="35" height="11" class="bar bar-cool"/>
-  <text x="302" y="140" text-anchor="middle" class="bar-lbl">10%</text>
-  <text x="202" y="168" text-anchor="middle" class="bar-lbl">C1</text>
-  <text x="252" y="168" text-anchor="middle" class="bar-lbl">C2</text>
-  <text x="302" y="168" text-anchor="middle" class="bar-lbl">C3</text>
-
-  <!-- T=3.0 (soft) -->
-  <text x="412" y="16" text-anchor="middle" class="grp-lbl" fill="#7c3aed">T = 3.0 (soft)</text>
-  <line x1="335" y1="155" x2="475" y2="155" class="ax-fine"/>
-  <!-- ~42%, 33%, 25% -->
-  <rect x="345" y="109" width="35" height="46" class="bar bar-hot"/>
-  <text x="362" y="104" text-anchor="middle" class="bar-lbl">42%</text>
-  <rect x="395" y="118" width="35" height="37" class="bar bar-warm"/>
-  <text x="412" y="113" text-anchor="middle" class="bar-lbl">33%</text>
-  <rect x="440" y="127" width="27" height="28" class="bar bar-cool"/>
-  <text x="453" y="122" text-anchor="middle" class="bar-lbl">25%</text>
-  <text x="362" y="168" text-anchor="middle" class="bar-lbl">C1</text>
-  <text x="412" y="168" text-anchor="middle" class="bar-lbl">C2</text>
-  <text x="453" y="168" text-anchor="middle" class="bar-lbl">C3</text>
+<svg role="img" aria-labelledby="sp-title sp-desc" viewBox="0 0 460 168" style="max-width:460px;width:100%;height:auto">
+  <title id="sp-title">Softmax compared with sparsemax on identical logits</title>
+  <desc id="sp-desc">Two bar charts built from logits 3, 2.4, 0, minus 1 and minus 2. Softmax gives 61.6, 33.8, 3.1, 1.1 and 0.4 percent, so every class keeps some mass. Sparsemax gives 80, 20, 0, 0 and 0 percent, so the last three classes are exactly zero.</desc>
+  <rect x="1" y="1" width="458" height="166" rx="9" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="118" y="19" text-anchor="middle" font-size="11" font-weight="700" fill="#0c4a6e">Softmax (dense)</text>
+  <text x="342" y="19" text-anchor="middle" font-size="11" font-weight="700" fill="#9a3412">Sparsemax (sparse)</text>
+  <line x1="25" y1="130" x2="212" y2="130" stroke="#475569" stroke-width="1.3"/>
+  <line x1="250" y1="130" x2="437" y2="130" stroke="#475569" stroke-width="1.3"/>
+  <!-- softmax = 61.6 33.8 3.1 1.1 0.4 percent, drawn at 0.8 px per percent -->
+  <g fill="#0e7490">
+    <rect x="33"  y="80.7"  width="24" height="49.3" rx="2"/>
+    <rect x="69"  y="102.9" width="24" height="27.1" rx="2"/>
+    <rect x="105" y="127.5" width="24" height="2.5"  rx="1"/>
+    <rect x="141" y="129.1" width="24" height="0.9"  rx="1"/>
+    <rect x="177" y="129.4" width="24" height="0.6"  rx="1"/>
+  </g>
+  <g font-size="9.5" fill="#334155" text-anchor="middle">
+    <text x="45"  y="76">61.6%</text><text x="81"  y="98">33.8%</text>
+    <text x="117" y="123">3.1%</text><text x="153" y="123">1.1%</text><text x="189" y="123">0.4%</text>
+  </g>
+  <!-- sparsemax = 80 20 0 0 0 percent -->
+  <g fill="#c2410c">
+    <rect x="258" y="66"    width="24" height="64"  rx="2"/>
+    <rect x="294" y="114"   width="24" height="16"  rx="2"/>
+    <rect x="330" y="129.4" width="24" height="0.6" rx="0.3"/>
+    <rect x="366" y="129.4" width="24" height="0.6" rx="0.3"/>
+    <rect x="402" y="129.4" width="24" height="0.6" rx="0.3"/>
+  </g>
+  <g font-size="9.5" fill="#334155" text-anchor="middle">
+    <text x="270" y="61">80%</text><text x="306" y="109">20%</text>
+    <text x="342" y="123">0</text><text x="378" y="123">0</text><text x="414" y="123">0</text>
+  </g>
+  <g font-size="9.5" fill="#475569" text-anchor="middle">
+    <text x="45"  y="144">C1</text><text x="81"  y="144">C2</text><text x="117" y="144">C3</text>
+    <text x="153" y="144">C4</text><text x="189" y="144">C5</text>
+    <text x="270" y="144">C1</text><text x="306" y="144">C2</text><text x="342" y="144">C3</text>
+    <text x="378" y="144">C4</text><text x="414" y="144">C5</text>
+  </g>
+  <text x="230" y="161" text-anchor="middle" font-size="9.5" fill="#475569">logits z = [3, 2.4, 0, −1, −2]</text>
 </svg>
-<figcaption>The same logits [2.0, 1.0, 0.1] passed through softmax at three temperatures. Low T (left) collapses probability onto the top class — useful for greedy decoding. High T (right) spreads probability more evenly — useful for knowledge distillation. T=1 is the standard training setting.</figcaption>
+<figcaption>Softmax leaves C3–C5 holding 3.1%, 1.1% and 0.4% — small, but never zero. Sparsemax zeroes them exactly, which is what sparse attention needs when some tokens must receive no weight. The trade-off: classes outside the support receive no gradient.</figcaption>
 </figure>
 </div>
 
-## Why Gated Activations Became So Important
+Sparsemax is often filed beside the elementwise *shrinkage* maps (SoftShrink, HardShrink), but those treat each coordinate independently with no normalisation, whereas sparsemax acts on the whole vector at once.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> A classic activation like ReLU asks one question of each neuron: <em>"should this value pass?"</em> A gated activation asks two neurons to collaborate: one produces content, the other produces a gate score. The gate modulates how much of the content flows forward. This is conceptually identical to the gating mechanism in LSTMs and GRUs — the same idea, applied at every feed-forward layer. It is why gated variants consistently outperform plain ReLU in large Transformer models.</div>
+## Gating: when part of the activation is learned
 
-Modern architectures often do not use a single scalar curve after an affine transform. Instead, they split the channel dimension and let one part gate another.
+A ReLU asks one question per unit: *should this value pass?* A gated activation asks two projections to collaborate — one produces content, the other a per-channel gate that scales it:
 
-That gives you:
-
-- **GLU:** one linear branch gates another
-- **SwiGLU:** same idea, but with a SiLU/Swish-style gate
-- **GeGLU:** GELU gate
-- **ReGLU:** ReLU gate
-
-<div class="formula-grid formula-grid--gated">
-  <div class="formula-card">
-    <strong>GLU</strong>
-    \[
-    \operatorname{GLU}(x) = a \otimes \sigma(b)
-    \]
-  </div>
-  <div class="formula-card">
-    <strong>SwiGLU</strong>
-    \[
-    \operatorname{SwiGLU}(x) = a \otimes \operatorname{SiLU}(b)
-    \]
-  </div>
-  <div class="formula-card">
-    <strong>GeGLU / ReGLU</strong>
-    \[
-    \operatorname{GeGLU}(x) = a \otimes \operatorname{GELU}(b), \qquad
-    \operatorname{ReGLU}(x) = a \otimes \operatorname{ReLU}(b)
-    \]
-  </div>
+<div class="formula-box">
+\[
+\operatorname{GLU}(\mathbf{x}) = \underbrace{(W_1\mathbf{x} + \mathbf{b}_1)}_{\text{content }\mathbf{a}}
+\;\odot\;
+\sigma\big(\underbrace{W_2\mathbf{x} + \mathbf{b}_2}_{\text{gate input }\mathbf{b}}\big)
+\]
 </div>
 
-This family matters because large Transformers often rely more on **gated feed-forward blocks** than on plain ReLU-style MLPs.
+Here \\(\odot\\) is the elementwise product. Swapping the gate nonlinearity gives the family: **SwiGLU** (SiLU), **GeGLU** (GELU), **ReGLU** (ReLU).
 
-<div class=”insight-box”>
-<strong>Useful mental model:</strong> ReLU asks “should this neuron pass?” GLU-like activations ask “how strongly should this feature gate another feature?”
-</div>
+**Worked example.** With content \\(\mathbf{a} = [1.2,\ -0.4,\ 0.8]\\) and gate input \\(\mathbf{b} = [2.1,\ -1.5,\ 0.3]\\):
 
-**Worked example — GLU vs. plain linear, step by step:**
-
-Suppose an input vector is split into two halves: `a = [1.2, −0.4, 0.8]` (content) and `b = [2.1, −1.5, 0.3]` (gate input).
-
-| Step | GLU | Plain linear (no gate) |
+| Step | GLU | Plain linear |
 |---|---|---|
-| Compute gate | σ(b) = [0.89, 0.18, 0.57] | — |
-| Element-wise product | a ⊗ σ(b) = [1.07, −0.07, 0.46] | a = [1.2, −0.4, 0.8] |
-| Effect | The −0.4 signal is suppressed to −0.07 by a low gate value | −0.4 passes through unchanged |
+| Gate | \\(\sigma(\mathbf{b}) = [0.89,\ 0.18,\ 0.57]\\) | — |
+| Output | \\(\mathbf{a} \odot \sigma(\mathbf{b}) = [1.07,\ -0.07,\ 0.46]\\) | \\([1.2,\ -0.4,\ 0.8]\\) |
 
-The gate learned that the second feature is unreliable (low σ(b)=0.18) and almost entirely suppressed it. Plain linear cannot make this context-dependent decision.
+The second channel drops from −0.4 to −0.07 because its gate value is 0.18. Since \\(\mathbf{b}\\) is learned from the input, that suppression varies per example — a decision no plain linear layer can make.
 
-<!-- Animated: GLU data-flow diagram -->
-<style>
-@keyframes flowGLU {
-  0%   { stroke-dashoffset: 300; opacity: 0.2; }
-  100% { stroke-dashoffset: 0;   opacity: 1;   }
-}
-@keyframes popBox {
-  0%   { transform: scale(0.7); opacity: 0; }
-  60%  { transform: scale(1.05); }
-  100% { transform: scale(1);   opacity: 1; }
-}
-</style>
-<div class=”blog-figure”>
-<figure>
-<svg xmlns=”http://www.w3.org/2000/svg” viewBox=”0 0 520 175” style=”max-width:520px;width:100%”>
-  <style>
-    .glu-wire { fill:none; stroke-width:2; stroke-dasharray:300; stroke-dashoffset:300;
-                animation: flowGLU 1.2s ease-out forwards; }
-    .glu-w1 { stroke:#0891b2; animation-delay:0.1s; }
-    .glu-w2 { stroke:#f97316; animation-delay:0.5s; }
-    .glu-w3 { stroke:#16a34a; animation-delay:1.1s; }
-    .glu-box { animation: popBox 0.5s ease-out forwards; opacity:0; }
-    .glu-b1 { animation-delay:0.0s; }
-    .glu-b2 { animation-delay:0.4s; }
-    .glu-b3 { animation-delay:0.8s; }
-    .glu-b4 { animation-delay:1.0s; }
-    .bx-lbl { font-family:sans-serif; font-size:10px; font-weight:700; }
-    .sm-lbl { font-family:sans-serif; font-size:9px; fill:#64748b; }
-  </style>
-  <rect x=”1” y=”1” width=”518” height=”173” rx=”9” fill=”#f8fafc” stroke=”#dbe7f5”/>
-
-  <!-- Input box -->
-  <g class=”glu-box glu-b1”>
-    <rect x=”15” y=”65” width=”70” height=”45” rx=”7” fill=”#eff6ff” stroke=”#93c5fd” stroke-width=”1.5”/>
-    <text x=”50” y=”85” text-anchor=”middle” class=”bx-lbl” fill=”#1e3a8a”>Input x</text>
-    <text x=”50” y=”100” text-anchor=”middle” class=”sm-lbl”>dim d</text>
-  </g>
-
-  <!-- Split arrow up and down -->
-  <path d=”M85,88 H120 L120,55” class=”glu-wire glu-w1”/>
-  <path d=”M85,88 H120 L120,120” class=”glu-wire glu-w2”/>
-
-  <!-- Linear branch a (content) -->
-  <g class=”glu-box glu-b1”>
-    <rect x=”120” y=”28” width=”80” height=”40” rx=”7” fill=”#f0fdf4” stroke=”#86efac” stroke-width=”1.5”/>
-    <text x=”160” y=”46” text-anchor=”middle” class=”bx-lbl” fill=”#166534”>Linear W₁</text>
-    <text x=”160” y=”59” text-anchor=”middle” class=”sm-lbl”>→ a</text>
-  </g>
-
-  <!-- Linear branch b (gate) -->
-  <g class=”glu-box glu-b2”>
-    <rect x=”120” y=”107” width=”80” height=”40” rx=”7” fill=”#fff7ed” stroke=”#fdba74” stroke-width=”1.5”/>
-    <text x=”160” y=”124” text-anchor=”middle” class=”bx-lbl” fill=”#9a3412”>Linear W₂</text>
-    <text x=”160” y=”137” text-anchor=”middle” class=”sm-lbl”>→ b</text>
-  </g>
-
-  <!-- gate activation -->
-  <path d=”M200,127 H250” class=”glu-wire glu-w2”/>
-  <g class=”glu-box glu-b2”>
-    <rect x=”250” y=”107” width=”65” height=”40” rx=”7” fill=”#fef9c3” stroke=”#fde047” stroke-width=”1.5”/>
-    <text x=”282” y=”124” text-anchor=”middle” class=”bx-lbl” fill=”#713f12”>σ(b)</text>
-    <text x=”282” y=”137” text-anchor=”middle” class=”sm-lbl”>gate</text>
-  </g>
-
-  <!-- a path -->
-  <path d=”M200,48 H315 L315,88” class=”glu-wire glu-w1”/>
-  <!-- b → gate path to multiply -->
-  <path d=”M315,127 L315,108” class=”glu-wire glu-w2”/>
-
-  <!-- multiply -->
-  <g class=”glu-box glu-b3”>
-    <circle cx=”315” cy=”88” r=”18” fill=”#e0f2fe” stroke=”#38bdf8” stroke-width=”1.5”/>
-    <text x=”315” y=”93” text-anchor=”middle” class=”bx-lbl” fill=”#0c4a6e”>⊗</text>
-  </g>
-
-  <!-- output -->
-  <path d=”M333,88 H400” class=”glu-wire glu-w3”/>
-  <g class=”glu-box glu-b4”>
-    <rect x=”400” y=”65” width=”105” height=”45” rx=”7” fill=”#f0fdf4” stroke=”#4ade80” stroke-width=”1.5”/>
-    <text x=”452” y=”84” text-anchor=”middle” class=”bx-lbl” fill=”#14532d”>GLU output</text>
-    <text x=”452” y=”99” text-anchor=”middle” class=”sm-lbl”>a ⊗ σ(b)</text>
-  </g>
-</svg>
-<figcaption>Animated GLU data-flow. The input is projected by two independent linear layers. The content branch (a) passes through unchanged. The gate branch (b) is squashed by sigmoid to produce per-channel gate values in (0,1). The element-wise product lets the gate selectively suppress or pass each content feature — all learned end-to-end.</figcaption>
-</figure>
+<div class="insight-box">
+  <strong>Key Insight — the parameter budget:</strong> A GLU block needs <em>three</em> matrices (\(W_1\), \(W_2\), and the down-projection) where a plain MLP needs two, so a like-for-like comparison has to shrink the hidden width to \(\tfrac{2}{3}\) of \(4d_{\text{model}}\). At \(d_{\text{model}} = 4096\) that is LLaMA's width of 11008, which brings SwiGLU back to ≈135M parameters against the GELU MLP's ≈134M — without the correction it would be ≈201M. The reported gains are real but modest, and Shazeer offers no theory for <em>why</em> Swish beats GELU as the gate.
 </div>
 
-<div style=”background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;”><strong>Key Insight — SwiGLU in LLaMA/GPT-4 style FFN blocks:</strong> SwiGLU(x) = (W₁x) ⊗ SiLU(W₂x). Compared to a standard two-layer MLP with a single activation, SwiGLU uses <em>three</em> weight matrices (W₁, W₂, W₃ for the final projection) but achieves better perplexity at the same parameter budget. The reason is expressivity: the gate is a full learned linear transformation, not just a fixed nonlinearity applied to the same pre-activation. This is why nearly every modern open-source LLM (LLaMA, Mistral, Gemma) uses SwiGLU in its feed-forward blocks instead of plain GELU-MLP.</div>
+Only the original sigmoid gate is bounded in \\((0,1)\\); SwiGLU, GeGLU and ReGLU gates are unbounded above, so they can amplify a channel, not just attenuate it. LLaMA, Mistral and Qwen use SwiGLU; Gemma uses GeGLU.
 
-<div class="blog-figure">
-<figure>
-<img src="/images/blog/basics/activation-output-map.svg" alt="Diagram contrasting hidden-layer activations, output activations, and gated activations">
-<figcaption>Figure 1 — Not all activations play the same role. Hidden-layer activations shape features, output activations shape the prediction object, and gated activations decide how one feature stream modulates another.</figcaption>
-</figure>
+## SIREN: when you need derivatives, not just values
+
+Inside the network the activation is a free choice, and sometimes the task dictates it just as firmly as a loss does. To store an image or 3-D shape *as a function* from coordinates to values — an implicit neural representation — a ReLU network is a poor fit: it is piecewise linear, so its second derivative is zero almost everywhere. If you need the field's curvature, that is fatal. **SIREN** uses a sine, whose derivatives are again sines:
+
+<div class="formula-box">
+\[
+\Phi_i(\mathbf{x}) = \sin\!\big(\omega_0 (W_i\mathbf{x} + \mathbf{b}_i)\big), \qquad \omega_0 = 30
+\]
 </div>
 
-## Shrinkage and Sparse Activations
+The \\(\omega_0\\) factor is not cosmetic, and neither is its initialisation: weights are drawn from \\(\mathcal{U}\!\left(-\sqrt{6/n}/\omega_0,\ +\sqrt{6/n}/\omega_0\right)\\), where \\(n\\) is the layer's fan-in. That keeps the pre-activation distribution stable with depth. Sine activations predate SIREN; this initialisation is what made deep ones trainable — implement \\(\sin(\omega x)\\) without it and the network will not converge.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Standard activations pass strong signals and block weak ones. Shrinkage activations go further: they push <em>small</em> values all the way to zero, creating genuine sparsity in the representation. Think of it as denoising — treat small activations as noise and eliminate them, keep only the confidently large values. Sparsemax takes this idea to the output layer: unlike softmax which distributes probability mass everywhere, Sparsemax assigns exact zero probability to unlikely classes, producing a sparse probability vector. This is especially valuable for attention mechanisms and structured prediction.</div>
-
-Another family is built around sparsity or denoising:
-
-- **TanhShrink:** returns `x - tanh(x)`
-- **SoftShrink:** softly pushes small values toward zero
-- **HardShrink:** zeroes small values completely
-- **Sparsemax:** like softmax, but can produce exact zeros
-- **Entmax:** interpolates between dense softmax and sparse alternatives
-
-<div class="formula-grid formula-grid--shrink">
-  <div class="formula-card">
-    <strong>TanhShrink</strong>
-    \[
-    \operatorname{TanhShrink}(x) = x - \tanh(x)
-    \]
-  </div>
-  <div class="formula-card">
-    <strong>SoftShrink</strong>
-    \[
-    \operatorname{SoftShrink}(x) =
-    \begin{cases}
-      x - \lambda, & x > \lambda \\
-      0, & |x| \le \lambda \\
-      x + \lambda, & x < -\lambda
-    \end{cases}
-    \]
-  </div>
-  <div class="formula-card">
-    <strong>HardShrink</strong>
-    \[
-    \operatorname{HardShrink}(x) =
-    \begin{cases}
-      x, & |x| > \lambda \\
-      0, & |x| \le \lambda
-    \end{cases}
-    \]
-  </div>
-</div>
-
-These are useful when you want more structured or selective outputs rather than dense probability mass everywhere.
-
-**Concrete example — SoftShrink vs HardShrink vs Sparsemax (λ=0.5):**
-
-| Input value | SoftShrink (λ=0.5) | HardShrink (λ=0.5) | Notes |
-|---|---|---|---|
-| 2.0 | 1.5 | 2.0 | Large value: both pass through |
-| 0.8 | 0.3 | 0.8 | SoftShrink reduces, HardShrink passes |
-| 0.4 | 0.0 | 0.0 | Both zero — below threshold |
-| 0.1 | 0.0 | 0.0 | Both zero — below threshold |
-| −0.6 | −0.1 | −0.6 | SoftShrink clips toward zero |
-| −1.5 | −1.0 | −1.5 | Large negative: both pass |
-
-SoftShrink always shrinks by λ before zeroing; HardShrink either passes completely or zeros. SoftShrink is the classical wavelet/signal denoising shrinkage — it corresponds to solving a LASSO-style proximal operator.
-
-<!-- Animated: softmax vs sparsemax probability bars -->
-<style>
-@keyframes riseBar {
-  from { height:0; y:130; }
-}
-</style>
-<div class="blog-figure">
-<figure>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 165" style="max-width:460px;width:100%">
-  <style>
-    .sp-bar { rx:4; }
-    .sp-sm  { fill:#0891b2; animation: riseBar 1.1s ease-out forwards; }
-    .sp-sp  { fill:#f97316; animation: riseBar 1.1s ease-out 0.7s both; }
-    .sp-ax  { stroke:#e2e8f0; stroke-width:1; }
-    .sp-lbl { font-family:sans-serif; font-size:9.5px; fill:#374151; }
-    .sp-ttl { font-family:sans-serif; font-size:11px; font-weight:700; }
-  </style>
-  <rect x="1" y="1" width="458" height="163" rx="9" fill="#f8fafc" stroke="#dbe7f5"/>
-
-  <!-- Softmax panel — all classes get some mass -->
-  <text x="115" y="16" text-anchor="middle" class="sp-ttl" fill="#0c4a6e">Softmax (dense)</text>
-  <line x1="20" y1="130" x2="215" y2="130" class="sp-ax"/>
-  <!-- 5 classes: z=[3,1,0,-1,-2] → sm≈[0.70,0.10,0.09,0.06,0.05] -->
-  <rect x="30"  y="53"  width="26" height="77" class="sp-bar sp-sm"/>
-  <text x="43"  y="48"  text-anchor="middle" class="sp-lbl">70%</text>
-  <rect x="66"  y="119" width="26" height="11" class="sp-bar sp-sm"/>
-  <text x="79"  y="114" text-anchor="middle" class="sp-lbl">10%</text>
-  <rect x="102" y="120" width="26" height="10" class="sp-bar sp-sm"/>
-  <text x="115" y="115" text-anchor="middle" class="sp-lbl">9%</text>
-  <rect x="138" y="123" width="26" height="7" class="sp-bar sp-sm"/>
-  <text x="151" y="118" text-anchor="middle" class="sp-lbl">6%</text>
-  <rect x="174" y="124" width="26" height="6" class="sp-bar sp-sm"/>
-  <text x="187" y="119" text-anchor="middle" class="sp-lbl">5%</text>
-  <text x="43" y="143" text-anchor="middle" class="sp-lbl">C1</text>
-  <text x="79" y="143" text-anchor="middle" class="sp-lbl">C2</text>
-  <text x="115" y="143" text-anchor="middle" class="sp-lbl">C3</text>
-  <text x="151" y="143" text-anchor="middle" class="sp-lbl">C4</text>
-  <text x="187" y="143" text-anchor="middle" class="sp-lbl">C5</text>
-
-  <!-- Sparsemax panel — only top classes get mass -->
-  <text x="345" y="16" text-anchor="middle" class="sp-ttl" fill="#c2410c">Sparsemax (sparse)</text>
-  <line x1="245" y1="130" x2="445" y2="130" class="sp-ax"/>
-  <!-- sparsemax on same z=[3,1,0,-1,-2] → ~[0.80,0.20,0,0,0] -->
-  <rect x="255" y="42"  width="26" height="88" class="sp-bar sp-sp"/>
-  <text x="268" y="37"  text-anchor="middle" class="sp-lbl">80%</text>
-  <rect x="291" y="108" width="26" height="22" class="sp-bar sp-sp"/>
-  <text x="304" y="103" text-anchor="middle" class="sp-lbl">20%</text>
-  <!-- zeros for C3-C5 — thin line -->
-  <rect x="327" y="130" width="26" height="0.5" fill="#94a3b8"/>
-  <text x="340" y="145" text-anchor="middle" class="sp-lbl" fill="#94a3b8">0%</text>
-  <rect x="363" y="130" width="26" height="0.5" fill="#94a3b8"/>
-  <text x="376" y="145" text-anchor="middle" class="sp-lbl" fill="#94a3b8">0%</text>
-  <rect x="399" y="130" width="26" height="0.5" fill="#94a3b8"/>
-  <text x="412" y="145" text-anchor="middle" class="sp-lbl" fill="#94a3b8">0%</text>
-  <text x="268" y="143" text-anchor="middle" class="sp-lbl">C1</text>
-  <text x="304" y="143" text-anchor="middle" class="sp-lbl">C2</text>
-  <text x="340" y="143" text-anchor="middle" class="sp-lbl">C3</text>
-  <text x="376" y="143" text-anchor="middle" class="sp-lbl">C4</text>
-  <text x="412" y="143" text-anchor="middle" class="sp-lbl">C5</text>
-  <text x="345" y="158" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#c2410c">exact zeros — interpretable sparse attention</text>
-</svg>
-<figcaption>Same logits [3, 1, 0, −1, −2] through Softmax (left) vs. Sparsemax (right). Softmax distributes probability everywhere — even irrelevant classes C4, C5 receive 5–6%. Sparsemax projects onto the probability simplex using a thresholding operation, producing exact zeros for low-scoring classes. This is critical for sparse attention mechanisms where you want some tokens to receive literally zero weight.</figcaption>
-</figure>
-</div>
-
-## Special-Purpose Activations
-
-Some activations are not mainstream in basic classifiers, but they are extremely important in the right niche.
-
-- **Maxout:** takes the maximum over several learned affine responses
-- **Sin / SIREN:** uses sinusoidal activations for implicit neural representations
-- **Gaussian / RBF:** activates by distance from a center
-- **Soft Exponential:** learns whether to behave more like a log, linear, or exponential function
-- **KAN / spline activations:** learns the activation shape itself rather than choosing a fixed closed-form function
-
-<div class="formula-grid formula-grid--special">
-  <div class="formula-card">
-    <strong>SIREN</strong>
-    \[
-    f(x) = \sin(\omega x)
-    \]
-  </div>
-  <div class="formula-card">
-    <strong>Gaussian / RBF</strong>
-    \[
-    \phi(x) = \exp\!\left(-\frac{\|x-c\|^2}{2\sigma^2}\right)
-    \]
-  </div>
-  <div class="formula-card">
-    <strong>Soft Exponential</strong>
-    \[
-    f_\alpha(x) =
-    \begin{cases}
-      -\frac{\log(1-\alpha(x+\alpha))}{\alpha}, & \alpha < 0 \\
-      x, & \alpha = 0 \\
-      \frac{e^{\alpha x}-1}{\alpha} + \alpha, & \alpha > 0
-    \end{cases}
-    \]
-  </div>
-</div>
-
-These remind us that “activation function” is a much broader design space than just ReLU vs GELU.
-
-<div style=”background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;”><strong>Key Insight — why SIREN works for implicit representations:</strong> Modeling a continuous signal (image, shape, audio) as a neural function f(x,y)→RGB requires the network to represent fine-grained detail. ReLU-based networks produce piecewise-linear outputs — they cannot represent smooth higher-order derivatives. SIREN uses sin(ωx), whose derivatives are also sinusoids, so the network naturally represents smooth periodic structure at every layer. The frequency ω controls the scale of detail captured. SIREN networks have been shown to exactly fit high-resolution images with far fewer parameters than ReLU networks because every layer contributes smoothly to all derivative orders — not just the zeroth.</div>
-
-<!-- Animated: SIREN sinusoidal wave vs ReLU piecewise approximation -->
-<style>
-@keyframes traceSIREN {
-  from { stroke-dashoffset: 800; }
-  to   { stroke-dashoffset: 0;   }
-}
-</style>
-<div class=”blog-figure”>
-<figure>
-<svg xmlns=”http://www.w3.org/2000/svg” viewBox=”0 0 520 175” style=”max-width:520px;width:100%”>
-  <style>
-    .si-ax   { stroke:#e2e8f0; stroke-width:1; }
-    .si-sin  { fill:none; stroke:#0891b2; stroke-width:2.4;
-               stroke-dasharray:800; stroke-dashoffset:800;
-               animation: traceSIREN 2s ease-out 0.3s forwards; }
-    .si-relu { fill:none; stroke:#94a3b8; stroke-width:2;
-               stroke-dasharray:800; stroke-dashoffset:800;
-               animation: traceSIREN 2s ease-out 1.2s forwards; }
-    .si-lbl  { font-family:sans-serif; font-size:9.5px; fill:#94a3b8; }
-    .si-ttl  { font-family:sans-serif; font-size:11px; font-weight:700; }
-    .si-leg  { font-family:sans-serif; font-size:10px; }
-  </style>
-  <rect x=”1” y=”1” width=”518” height=”173” rx=”9” fill=”#f8fafc” stroke=”#dbe7f5”/>
-  <text x=”260” y=”17” text-anchor=”middle” class=”si-ttl” fill=”#0f2a36”>SIREN sin(ωx) vs. ReLU piecewise approximation</text>
-  <!-- x-axis -->
-  <line x1=”30” y1=”100” x2=”500” y2=”100” class=”si-ax”/>
-  <line x1=”30” y1=”20”  x2=”30”  y2=”145” class=”si-ax”/>
-  <!-- tick labels -->
-  <text x=”30”  y=”158” text-anchor=”middle” class=”si-lbl”>0</text>
-  <text x=”147” y=”158” text-anchor=”middle” class=”si-lbl”>π</text>
-  <text x=”264” y=”158” text-anchor=”middle” class=”si-lbl”>2π</text>
-  <text x=”381” y=”158” text-anchor=”middle” class=”si-lbl”>3π</text>
-  <text x=”498” y=”158” text-anchor=”middle” class=”si-lbl”>4π</text>
-  <!-- SIREN: sin curve — hand-approximated with cubic beziers for 4 periods -->
-  <path d=”M30,100
-    C50,100 60,30 87,30 S120,100 147,100
-    C165,100 175,170 200,170 S235,100 264,100
-    C282,100 292,30  317,30  S350,100 381,100
-    C399,100 409,170 434,170 S469,100 498,100”
-    class=”si-sin”/>
-  <!-- ReLU piecewise approximation of the same curve — jagged steps -->
-  <path d=”M30,100 L57,100 L57,30 L114,30 L114,100 L171,100 L171,170 L228,170 L228,100 L264,100 L264,30 L321,30 L321,100 L381,100 L381,170 L435,170 L435,100 L498,100”
-    class=”si-relu”/>
-  <!-- legend -->
-  <line x1=”40”  y1=”168” x2=”65”  y2=”168” stroke=”#0891b2” stroke-width=”2.4”/>
-  <text x=”70”  y=”172” class=”si-leg” fill=”#0891b2”>SIREN sin(ωx) — smooth all derivatives</text>
-  <line x1=”280” y1=”168” x2=”305” y2=”168” stroke=”#94a3b8” stroke-width=”2”/>
-  <text x=”310” y=”172” class=”si-leg” fill=”#94a3b8”>ReLU approx — piecewise, no smooth derivatives</text>
-</svg>
-<figcaption>SIREN (blue, smooth) vs. a ReLU piecewise approximation of the same sinusoidal target. The SIREN represents the true smooth signal exactly because its activations have infinite-order smooth derivatives. ReLU can approximate it, but only with many more layers and with derivative discontinuities that limit precision in applications like physics-based neural fields.</figcaption>
-</figure>
-</div>
-
-<div class="blog-figure">
-<figure>
-<img src="/images/blog/basics/activation-special-grid.svg" alt="Grid of output, gated, sparse, and special activations including Softmax, LogSoftmax, Maxout, GLU, SwiGLU, GeGLU, ReGLU, TanhShrink, SoftShrink, HardShrink, Sparsemax, Entmax, SIREN, Gaussian RBF, Soft Exponential, and spline-style activations">
-<figcaption>Figure 2 — This last family is much more diverse. Some activations map logits to probabilities, some implement feature gating, some encourage sparsity, and some are designed for special function classes such as implicit fields or spline-based networks.</figcaption>
-</figure>
-</div>
-
-## Common Mistakes
+## Common mistakes
 
 <div class="warning-box">
-  <strong>Four mistakes that show up constantly:</strong>
+  <strong>Three that show up constantly:</strong>
   <ol>
-    <li><strong>Applying softmax before `CrossEntropyLoss` in PyTorch.</strong> That loss expects raw logits.</li>
-    <li><strong>Using sigmoid for mutually exclusive multi-class classification.</strong> Usually you want softmax instead.</li>
-    <li><strong>Ignoring the output activation entirely.</strong> The last-layer activation should match both the task and the loss.</li>
-    <li><strong>Assuming all gating activations are interchangeable.</strong> SwiGLU, GeGLU, and ReGLU can change optimization noticeably in large models.</li>
+    <li><strong>Applying softmax before <code>CrossEntropyLoss</code>.</strong> That loss already applies log-softmax internally — hand it raw logits.</li>
+    <li><strong>Using sigmoid for mutually exclusive classes.</strong> Independent per-class probabilities will not sum to one; use softmax.</li>
+    <li><strong>Treating gate variants as drop-in swaps.</strong> Moving from SwiGLU to GeGLU changes optimisation behaviour, and changing the hidden width changes the parameter count.</li>
   </ol>
 </div>
 
-## Practical Recommendation Map
+Why the first one bites: the fused loss evaluates \\(\log \sum_j e^{z_j} = m + \log \sum_j e^{z_j - m}\\) with \\(m = \max_j z_j\\), which cannot overflow. Normalising yourself throws that away *and* normalises twice:
 
-<div class="summary-box">
-  <table class="mini-table">
-    <thead>
-      <tr>
-        <th>Use case</th>
-        <th>Recommended activation</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Binary classification output</td>
-        <td><strong>Sigmoid</strong></td>
-      </tr>
-      <tr>
-        <td>Multi-class classification output</td>
-        <td><strong>Softmax</strong></td>
-      </tr>
-      <tr>
-        <td>Regression output</td>
-        <td><strong>Linear</strong></td>
-      </tr>
-      <tr>
-        <td>Transformer feed-forward blocks</td>
-        <td><strong>GELU</strong> or <strong>SwiGLU</strong></td>
-      </tr>
-      <tr>
-        <td>Sparse probability-like outputs</td>
-        <td><strong>Sparsemax</strong> or <strong>Entmax</strong></td>
-      </tr>
-      <tr>
-        <td>Implicit neural representations</td>
-        <td><strong>SIREN</strong></td>
-      </tr>
-      <tr>
-        <td>Radial similarity models</td>
-        <td><strong>Gaussian / RBF</strong></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+```python
+logits = model(x)                    # no softmax inside the model
+loss = F.cross_entropy(logits, y)    # applies log_softmax internally
+probs = logits.softmax(-1)           # only for reporting
+```
 
-## What Can Go Wrong with Output and Special Activations?
+## Which one to reach for
 
-<div class="summary-box">
-  <table class="mini-table">
-    <thead>
-      <tr>
-        <th>Activation family</th>
-        <th>Potential problem</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Softmax</strong></td>
-        <td>Easy to misuse with the wrong loss pipeline, especially if you apply it before losses that expect raw logits.</td>
-      </tr>
-      <tr>
-        <td><strong>Sigmoid outputs</strong></td>
-        <td>Wrong choice for mutually exclusive multi-class prediction, where softmax is usually the right tool.</td>
-      </tr>
-      <tr>
-        <td><strong>GLU-style gating</strong></td>
-        <td>More expressive, but also more parameter-heavy and architecture-dependent.</td>
-      </tr>
-      <tr>
-        <td><strong>Sparsemax / Entmax</strong></td>
-        <td>Useful for sparsity, but can change optimization behavior enough that they are not just drop-in replacements for softmax.</td>
-      </tr>
-      <tr>
-        <td><strong>SIREN / RBF / spline-style activations</strong></td>
-        <td>Very powerful in the right niche, but usually a poor default if the model and task were not designed for them.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+The three output cases are in the table at the top. Beyond those:
 
-## Final Takeaway
+| Use case | Activation | Watch out for |
+|---|---|---|
+| Transformer feed-forward | SwiGLU or GeGLU | Shrink hidden width by 2/3 to keep parameters matched |
+| Sparse attention weights | Sparsemax or Entmax | Not in PyTorch core (`pip install entmax`); zeroed classes get no gradient |
+| Implicit neural fields | SIREN | Useless without the \\(\omega_0\\) initialisation |
 
-Activation functions are not a side detail. They define:
-
-1. how information flows forward,
-2. how gradients flow backward,
-3. what geometry the model can represent,
-4. and what kind of output object the network produces.
-
-That is why the full story needs more than one chapter. ReLU, GELU, Softmax, SwiGLU, Sparsemax, and SIREN are not solving the same problem. They all live under the same name, but they serve very different roles.
+Output activations answer to the loss. Everything inside answers to the task.
 
 ## References
 
-1. Dauphin, Y. N. et al. “Language Modeling with Gated Convolutional Networks.” 2017.
-2. Shazeer, N. “GLU Variants Improve Transformer.” 2020.
-3. Martins, A. and Astudillo, R. “From Softmax to Sparsemax.” ICML 2016.
-4. Peters, B. et al. “Sparse Sequence-to-Sequence Models.” ACL 2019.
-5. Sitzmann, V. et al. “Implicit Neural Representations with Periodic Activation Functions.” NeurIPS 2020.
+1. Dauphin, Y. N., Fan, A., Auli, M., & Grangier, D. [Language Modeling with Gated Convolutional Networks](https://arxiv.org/abs/1612.08083). *ICML 2017*.
+2. Shazeer, N. [GLU Variants Improve Transformer](https://arxiv.org/abs/2002.05202). arXiv:2002.05202, 2020.
+3. Martins, A. & Astudillo, R. [From Softmax to Sparsemax](https://arxiv.org/abs/1602.02068). *ICML 2016*.
+4. Peters, B., Niculae, V., & Martins, A. [Sparse Sequence-to-Sequence Models](https://arxiv.org/abs/1905.05702). *ACL 2019*.
+5. Sitzmann, V., Martel, J., Bergman, A., Lindell, D., & Wetzstein, G. [Implicit Neural Representations with Periodic Activation Functions](https://arxiv.org/abs/2006.09661). *NeurIPS 2020*.
+6. Guo, C., Pleiss, G., Sun, Y., & Weinberger, K. [On Calibration of Modern Neural Networks](https://arxiv.org/abs/1706.04599). *ICML 2017*.
