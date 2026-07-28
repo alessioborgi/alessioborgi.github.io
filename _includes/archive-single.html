@@ -34,7 +34,13 @@
       </div>
     {% endif %}
 
-    <h2 class="archive__item-title" itemprop="headline">
+    {%- comment -%}
+      Grid variant renders the "You May Also Enjoy" / related-items cards, which
+      sit under that section's h2, so they must be h3. The default variant is a
+      top-level archive listing, where h2 is correct.
+    {%- endcomment -%}
+    {%- if include.type == "grid" -%}{%- assign item_h = "h3" -%}{%- else -%}{%- assign item_h = "h2" -%}{%- endif -%}
+    <{{ item_h }} class="archive__item-title" itemprop="headline">
       {% if use_pub_card %}
         <span class="pub-emoji" aria-hidden="true">
           {%- assign lt = title | downcase -%}
@@ -54,7 +60,7 @@
       {% else %}
         <a href="{{ primary_url }}" rel="permalink">{{ title }}</a>
       {% endif %}
-    </h2>
+    </{{ item_h }}>
     
     {% if post.read_time %}
       <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>

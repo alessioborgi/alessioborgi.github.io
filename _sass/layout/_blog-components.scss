@@ -176,17 +176,47 @@
 
 /* --------------------------------------------------------------------------
    Tables
-   Markdown tables in posts are emitted bare, with no scroll container. Long
-   rows (complexity columns, step-by-step arithmetic) otherwise force the whole
-   page to scroll horizontally on a phone.
+
+   Markdown tables are emitted bare, with no scroll container, so a wide row
+   (complexity columns, step-by-step arithmetic) forces the whole page to
+   scroll sideways on a phone.
+
+   The usual fix — `display: block` on the <table> itself — is not safe: it
+   drops the implicit ARIA table/row/cell roles in Firefox and Safari, so
+   screen-reader users lose row and column navigation. Scroll a wrapper
+   instead; assets/js/table-scroll.js adds it, and the table keeps its
+   semantics either way.
    -------------------------------------------------------------------------- */
 
-.page__content table {
-  display: block;
-  width: 100%;
-  max-width: 100%;
+.page__content .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.page__content table {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Focus
+
+   The theme ships `input:focus { outline: 0 }` with only an IE-era
+   `outline: thin dotted \9` fallback, which no current browser honours. The
+   replacement cue is a border-colour change to --global-border-color, which
+   on white is ~1.11:1 — fainter than the resting border. Keyboard users get
+   no usable focus indicator on any form control, including the temperature
+   slider on the activations post.
+   -------------------------------------------------------------------------- */
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #ffd166;
+  outline-offset: 2px;
 }
 
 /* --------------------------------------------------------------------------

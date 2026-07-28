@@ -83,28 +83,28 @@ Normalisation is simply: "before passing information to the next layer, rescale 
   <text x="540" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#0d9488">After LayerNorm — unit variance</text>
 
   <!-- before bars (raw activations, varying heights) -->
-  <rect x="40"  y="170" width="22" height="-90" rx="3" fill="#fca5a5" style="transform-origin:40px 170px;animation:norm-bars 3s ease-in-out infinite"/>
-  <rect x="72"  y="170" width="22" height="-18" rx="3" fill="#fca5a5" style="transform-origin:72px 170px;animation:norm-bars 3s 0.1s ease-in-out infinite"/>
-  <rect x="104" y="170" width="22" height="-140"rx="3" fill="#ef4444" style="transform-origin:104px 170px;animation:norm-bars 3s 0.2s ease-in-out infinite"/>
-  <rect x="136" y="170" width="22" height="-55" rx="3" fill="#fca5a5" style="transform-origin:136px 170px;animation:norm-bars 3s 0.3s ease-in-out infinite"/>
-  <rect x="168" y="170" width="22" height="-120"rx="3" fill="#ef4444" style="transform-origin:168px 170px;animation:norm-bars 3s 0.4s ease-in-out infinite"/>
-  <rect x="200" y="170" width="22" height="-30" rx="3" fill="#fca5a5" style="transform-origin:200px 170px;animation:norm-bars 3s 0.5s ease-in-out infinite"/>
-  <rect x="232" y="170" width="22" height="-75" rx="3" fill="#fca5a5" style="transform-origin:232px 170px;animation:norm-bars 3s 0.6s ease-in-out infinite"/>
-  <rect x="264" y="170" width="22" height="-48" rx="3" fill="#fca5a5" style="transform-origin:264px 170px;animation:norm-bars 3s 0.7s ease-in-out infinite"/>
+  <rect x="40"  y="80" width="22" height="90" rx="3" fill="#fca5a5" style="transform-origin:40px 170px;animation:norm-bars 3s ease-in-out infinite"/>
+  <rect x="72"  y="152" width="22" height="18" rx="3" fill="#fca5a5" style="transform-origin:72px 170px;animation:norm-bars 3s 0.1s ease-in-out infinite"/>
+  <rect x="104" y="30" width="22" height="140" rx="3" fill="#ef4444" style="transform-origin:104px 170px;animation:norm-bars 3s 0.2s ease-in-out infinite"/>
+  <rect x="136" y="115" width="22" height="55" rx="3" fill="#fca5a5" style="transform-origin:136px 170px;animation:norm-bars 3s 0.3s ease-in-out infinite"/>
+  <rect x="168" y="50" width="22" height="120" rx="3" fill="#ef4444" style="transform-origin:168px 170px;animation:norm-bars 3s 0.4s ease-in-out infinite"/>
+  <rect x="200" y="140" width="22" height="30" rx="3" fill="#fca5a5" style="transform-origin:200px 170px;animation:norm-bars 3s 0.5s ease-in-out infinite"/>
+  <rect x="232" y="95" width="22" height="75" rx="3" fill="#fca5a5" style="transform-origin:232px 170px;animation:norm-bars 3s 0.6s ease-in-out infinite"/>
+  <rect x="264" y="122" width="22" height="48" rx="3" fill="#fca5a5" style="transform-origin:264px 170px;animation:norm-bars 3s 0.7s ease-in-out infinite"/>
   <line x1="30" y1="170" x2="300" y2="170" stroke="#94a3b8" stroke-width="2"/>
   <text x="165" y="195" text-anchor="middle" font-size="11" fill="#64748b">features (d_model dimensions)</text>
 
   <text x="360" y="95" text-anchor="middle" font-size="24" fill="#0f172a">→</text>
 
   <!-- after bars (normalised, uniform heights) -->
-  <rect x="400" y="170" width="22" height="-65" rx="3" fill="#5eead4" style="transform-origin:400px 170px;animation:norm-bars2 3s ease-in-out infinite"/>
-  <rect x="432" y="170" width="22" height="-68" rx="3" fill="#5eead4" style="transform-origin:432px 170px;animation:norm-bars2 3s 0.1s ease-in-out infinite"/>
-  <rect x="464" y="170" width="22" height="-70" rx="3" fill="#14b8a6" style="transform-origin:464px 170px;animation:norm-bars2 3s 0.2s ease-in-out infinite"/>
-  <rect x="496" y="170" width="22" height="-64" rx="3" fill="#5eead4" style="transform-origin:496px 170px;animation:norm-bars2 3s 0.3s ease-in-out infinite"/>
-  <rect x="528" y="170" width="22" height="-72" rx="3" fill="#14b8a6" style="transform-origin:528px 170px;animation:norm-bars2 3s 0.4s ease-in-out infinite"/>
-  <rect x="560" y="170" width="22" height="-63" rx="3" fill="#5eead4" style="transform-origin:560px 170px;animation:norm-bars2 3s 0.5s ease-in-out infinite"/>
-  <rect x="592" y="170" width="22" height="-67" rx="3" fill="#5eead4" style="transform-origin:592px 170px;animation:norm-bars2 3s 0.6s ease-in-out infinite"/>
-  <rect x="624" y="170" width="22" height="-66" rx="3" fill="#5eead4" style="transform-origin:624px 170px;animation:norm-bars2 3s 0.7s ease-in-out infinite"/>
+  <rect x="400" y="105" width="22" height="65" rx="3" fill="#5eead4" style="transform-origin:400px 170px;animation:norm-bars2 3s ease-in-out infinite"/>
+  <rect x="432" y="102" width="22" height="68" rx="3" fill="#5eead4" style="transform-origin:432px 170px;animation:norm-bars2 3s 0.1s ease-in-out infinite"/>
+  <rect x="464" y="100" width="22" height="70" rx="3" fill="#14b8a6" style="transform-origin:464px 170px;animation:norm-bars2 3s 0.2s ease-in-out infinite"/>
+  <rect x="496" y="106" width="22" height="64" rx="3" fill="#5eead4" style="transform-origin:496px 170px;animation:norm-bars2 3s 0.3s ease-in-out infinite"/>
+  <rect x="528" y="98" width="22" height="72" rx="3" fill="#14b8a6" style="transform-origin:528px 170px;animation:norm-bars2 3s 0.4s ease-in-out infinite"/>
+  <rect x="560" y="107" width="22" height="63" rx="3" fill="#5eead4" style="transform-origin:560px 170px;animation:norm-bars2 3s 0.5s ease-in-out infinite"/>
+  <rect x="592" y="103" width="22" height="67" rx="3" fill="#5eead4" style="transform-origin:592px 170px;animation:norm-bars2 3s 0.6s ease-in-out infinite"/>
+  <rect x="624" y="104" width="22" height="66" rx="3" fill="#5eead4" style="transform-origin:624px 170px;animation:norm-bars2 3s 0.7s ease-in-out infinite"/>
   <line x1="390" y1="170" x2="660" y2="170" stroke="#94a3b8" stroke-width="2"/>
   <text x="525" y="195" text-anchor="middle" font-size="11" fill="#64748b">features re-centered to mean 0, std 1</text>
 </svg>

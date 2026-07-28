@@ -113,13 +113,13 @@ Dividing logits by a temperature \\(T\\) before exponentiating rescales that sha
     <text x="34" y="133" font-size="10" fill="#475569" text-anchor="end">0%</text>
     <g id="temp-bars">
       <rect x="90"  y="74.6"  width="70" height="55.4" rx="3" fill="#0e7490"/>
-      <rect x="200" y="109.7" width="70" height="20.3" rx="3" fill="#0e7490"/>
+      <rect x="200" y="109.6" width="70" height="20.4" rx="3" fill="#0e7490"/>
       <rect x="310" y="121.7" width="70" height="8.3"  rx="3" fill="#0e7490"/>
     </g>
     <g id="temp-vals" font-size="12" font-weight="700" fill="#0f2a36" text-anchor="middle">
-      <text x="125" y="68.6">66%</text>
-      <text x="235" y="103.7">24%</text>
-      <text x="345" y="115.7">10%</text>
+      <text x="125" y="69.2">66%</text>
+      <text x="235" y="104.2">24%</text>
+      <text x="345" y="116.3">10%</text>
     </g>
     <g font-size="10.5" fill="#374151" text-anchor="middle">
       <text x="125" y="146">C1 (z = 2.0)</text>
@@ -257,7 +257,7 @@ Inside the network the activation is a free choice, and sometimes the task dicta
 \]
 </div>
 
-The \\(\omega_0\\) factor is not cosmetic, and neither is its initialisation: weights are drawn from \\(\mathcal{U}\!\left(-\sqrt{6/n}/\omega_0,\ +\sqrt{6/n}/\omega_0\right)\\), where \\(n\\) is the layer's fan-in. That keeps the pre-activation distribution stable with depth. Sine activations predate SIREN; this initialisation is what made deep ones trainable — implement \\(\sin(\omega x)\\) without it and the network will not converge.
+The \\(\omega_0\\) factor is not cosmetic, and neither is its initialisation: hidden-layer weights are drawn from \\(\mathcal{U}\\!\left(-\sqrt{6/n}/\omega_0,\ +\sqrt{6/n}/\omega_0\right)\\) for fan-in \\(n\\) (the first layer uses \\(\mathcal{U}(-1/n,\ 1/n)\\) instead). That keeps the pre-activation distribution stable with depth. Sine activations predate SIREN; this initialisation is what made deep ones trainable — implement \\(\sin(\omega x)\\) without it and the network will not converge.
 
 ## Common mistakes
 
