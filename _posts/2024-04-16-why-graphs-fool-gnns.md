@@ -145,7 +145,15 @@ Take the carbon skeletons of two structures, each with 6 carbons and each carbon
 
 A GNN given only this connectivity will assign the two the same graph-level embedding — and therefore the same prediction — even though only benzene is aromatic. This is not a data issue; it is an architectural limit. (In practice, real molecular GNNs also receive atom and bond features, which is precisely why they are not this helpless; the point is that the *topology alone* is not enough.)
 
-The fix: add ring-membership or structural features, or use subgraph GNNs that explicitly detect cycles. Random-walk positional encodings (RWPE) are the standard cheap option — with $P = D^{-1}A$ the random-walk matrix, the return probability $$(P^{3})_{vv}$$ is nonzero exactly when $v$ lies on a triangle, and the vector $\bigl((P)_{vv}, (P^2)_{vv}, \ldots, (P^m)_{vv}\bigr)$ gives each node a signature that 1-WL could never compute for itself.
+The fix: add ring-membership or structural features, or use subgraph GNNs that explicitly detect cycles. Random-walk positional encodings (RWPE) are the standard cheap option. With $P = D^{-1}A$ the random-walk transition matrix, give each node its vector of return probabilities:
+
+<div class="formula-box">
+\[
+\mathrm{RWPE}(v) \;=\; \Bigl( (P)_{vv},\ (P^{2})_{vv},\ \ldots,\ (P^{m})_{vv} \Bigr) \in \mathbb{R}^{m}.
+\]
+</div>
+
+The entry $$(P^{k})_{vv}$$ is the probability that a walk started at $v$ is back at $v$ after $k$ steps, which is positive exactly when $v$ lies on a closed walk of length $k$. In particular $$(P^{3})_{vv} > 0$$ if and only if $v$ lies on a triangle. RWPE therefore hands the network precisely the cycle information that colour refinement can never derive for itself — and it separates the two carbon skeletons above, since the cyclopropane rings have $$(P^{3})_{vv} > 0$$ while benzene has $$(P^{3})_{vv} = 0$$.
 
 ## Why This Matters in Practice
 

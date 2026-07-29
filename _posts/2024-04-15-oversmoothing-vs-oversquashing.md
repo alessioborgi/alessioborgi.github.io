@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "⚖️"
-read_mins: 7
+read_mins: 8
 permalink: /blog/gnn/oversmoothing-vs-oversquashing/
 toc: true
 toc_label: "Contents"
@@ -158,8 +158,26 @@ Both Li et al. (oversmoothing) and Alon & Yahav (oversquashing) can be read as d
 
 ```
 Short range:  Oversmoothing dominates (too many hops → convergence)
-Long range:   Oversquashing dominates (too few paths → bottlenecks)
+Long range:   Oversquashing dominates (too little mass reaches distant nodes)
 ```
+
+What makes them genuinely two sides of one coin is that both are statements about the *same* matrix, $\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$, read in two different ways. Oversmoothing is about the **limit** of its powers,
+
+<div class="formula-box">
+\[
+\hat{A}^{K} \;\xrightarrow[K \to \infty]{}\; u_1 u_1^{\top}, \qquad u_1 = \frac{\tilde{D}^{1/2}\mathbf{1}}{\lVert \tilde{D}^{1/2}\mathbf{1}\rVert},
+\]
+</div>
+
+a rank-one collapse controlled by the spectral gap. Oversquashing is about an **individual entry** of the same power, which upper-bounds how much one node can influence another:
+
+<div class="formula-box">
+\[
+\left\lVert \frac{\partial h_v^{(K)}}{\partial x_u} \right\rVert \;\le\; (cw)^{K} \bigl(\hat{A}^{K}\bigr)_{vu}.
+\]
+</div>
+
+So one pathology says the powers of $\hat{A}$ converge to something uninformative, while the other says specific entries of those powers are too small. Depth pushes on both at once — which is exactly why it cannot resolve either.
 
 They create opposing pressures on depth:
 - Oversmoothing says: use FEWER layers

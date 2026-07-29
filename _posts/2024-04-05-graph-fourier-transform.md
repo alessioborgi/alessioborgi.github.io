@@ -59,7 +59,15 @@ Where:
 - $\lambda_1 = 0$ always, because $$L_{\mathrm{sym}} D^{1/2}\mathbf{1} = D^{-1/2} L \mathbf{1} = 0$$. The eigenvector is therefore $u_1 \propto D^{1/2}\mathbf{1}$, i.e. $u_1[v] \propto \sqrt{d_v}$ — **not** the constant vector. (The constant vector $\mathbf{1}/\sqrt{N}$ is the $\lambda = 0$ eigenvector of the *combinatorial* Laplacian $L$, not of $$L_{\mathrm{sym}}$$. The two coincide only on regular graphs.)
 - The multiplicity of $\lambda = 0$ equals the number of connected components of the graph.
 
-**The spectrum of $$L_{\mathrm{sym}}$$ lies in $[0, 2]$.** The lower bound is positive semi-definiteness. For the upper bound, note that $$L_{\mathrm{sym}} = I - D^{-1/2}AD^{-1/2}$$ and $$2I - L_{\mathrm{sym}} = I + D^{-1/2}AD^{-1/2}$$ is the normalised Laplacian of the *signed* graph, which is also PSD; hence $\lambda_N \le 2$, with equality **if and only if** at least one connected component is bipartite.
+**The spectrum of $$L_{\mathrm{sym}}$$ lies in $[0, 2]$.** The lower bound is positive semi-definiteness, from the quadratic form below. For the upper bound, consider the *signless* counterpart $$2I - L_{\mathrm{sym}} = I + D^{-1/2}AD^{-1/2}$$, whose quadratic form is
+
+<div class="formula-box">
+\[
+f^{\top}\bigl(2I - L_{\mathrm{sym}}\bigr) f \;=\; \sum_{(u,v)\in E}\left(\frac{f[u]}{\sqrt{d_u}} + \frac{f[v]}{\sqrt{d_v}}\right)^{2} \;\ge\; 0 .
+\]
+</div>
+
+So $2I - L_{\mathrm{sym}}$ is also positive semi-definite, giving $\lambda_N \le 2$. Equality holds **if and only if** at least one connected component is bipartite: the sum vanishes exactly when $f[u]/\sqrt{d_u} = -f[v]/\sqrt{d_v}$ across every edge, which is possible precisely when the component admits a two-colouring.
 
 ## Graph Signals and Frequencies
 
