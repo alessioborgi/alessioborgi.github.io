@@ -11,19 +11,14 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🎯"
-read_mins: 5
+read_mins: 7
 permalink: /blog/gnn/graph-tasks/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> GNN tasks fall into three levels. Node-level: classify or regress each node (e.g., paper topic). Edge-level: predict edge existence or type (e.g., drug-target interaction). Graph-level: classify or regress the entire graph (e.g., molecule toxicity). The GNN backbone is shared; the output head changes.
+<strong>TL;DR:</strong> GNN tasks fall into three levels. <em>Node-level</em>: classify or regress each node (e.g. paper topic). <em>Edge-level</em>: predict edge existence or type (e.g. drug-target interaction). <em>Graph-level</em>: classify or regress the whole graph (e.g. molecule toxicity). One further axis cuts across all three: whether the test nodes and graphs were visible during training (<em>transductive</em>) or not (<em>inductive</em>). The GNN backbone is shared throughout; only the output head changes.
 </div>
 
 ## Why Task Level Matters
@@ -34,7 +29,17 @@ The task level determines:
 - How you compute the loss
 - Whether you need graph pooling
 
-The GNN backbone — the stack of message-passing layers that produces node embeddings — is broadly the same. The key differences are in what you do with those embeddings at the end.
+The GNN backbone — the stack of message-passing layers producing node embeddings $$h_v^{(k)}$$ — is broadly the same. The key differences are in what you do with those embeddings at the end.
+
+## The Second Axis: Transductive vs Inductive
+
+Cutting across all three levels is the question of what the model is allowed to see at training time.
+
+**Transductive.** There is a single fixed graph $$G = (V, E)$$. The whole graph — including the structure and features of validation and test nodes — is available during training; only the *labels* of those nodes are withheld. Message passing therefore already produces embeddings for test nodes while training runs, and the model is never asked to handle a node it has not seen. Cora, CiteSeer and ogbn-arxiv are the standard examples.
+
+**Inductive.** The model must produce embeddings for nodes or graphs that were entirely absent at training time — a new snapshot of a social graph, a fresh molecule, a held-out protein interaction network. Nothing about them entered the message-passing computation during training, so the model has to generalise the *aggregation function*, not memorise per-node vectors. This rules out methods that learn a free embedding table indexed by node id (DeepWalk, node2vec, matrix factorisation) and is precisely what GraphSAGE was designed for.
+
+The distinction is a property of the evaluation protocol, not of the architecture: the same GCN can be trained transductively on one dataset and inductively on another.
 
 ## Task 1: Node-Level Prediction
 
@@ -48,15 +53,17 @@ The GNN backbone — the stack of message-passing layers that produces node embe
 
 **Output head:**
 
-```
-h_v ∈ ℝ^d  →  Linear(h_v)  →  ŷ_v ∈ ℝ^C
-```
+<div class="formula-box">
+\[
+\hat{y}_v = \mathrm{softmax}\!\left( W\, h_v^{(K)} + b \right), \qquad h_v^{(K)} \in \mathbb{R}^{d}, \quad \hat{y}_v \in \mathbb{R}^{C}.
+\]
+</div>
 
-Apply a linear (or MLP) classifier to each node embedding independently.
+Apply a linear (or MLP) classifier to each node embedding independently — the same $$W$$ for every node, which is what makes the head independent of $$N$$.
 
-**Training setup:** many node-level tasks use a **single large graph** with a split into labelled train/validation/test nodes. The GNN processes the full graph (including test nodes) but is supervised only on train nodes — this is **transductive learning**. New nodes at test time can see other test nodes' features through message passing.
+**Training setup:** most node-level benchmarks are **transductive** — one large graph, split into labelled train/validation/test nodes. The GNN runs message passing over the *full* graph, so test-node features and edges do influence the training-time computation; only the test *labels* are withheld from the loss.
 
-**Inductive setting:** you may also train on one set of graphs and test on entirely new graphs (e.g., PPI dataset). Then test nodes cannot attend to train nodes.
+**Inductive setting:** you may instead train on one set of graphs and evaluate on entirely new ones (the PPI dataset is the standard example). Here the test graph never enters training at all, so the model must generalise the learned aggregation to unseen structure.
 
 ## Task 2: Edge-Level Prediction
 
@@ -70,11 +77,14 @@ Apply a linear (or MLP) classifier to each node embedding independently.
 
 **Output head:**
 
-```
-h_u, h_v ∈ ℝ^d  →  f(h_u, h_v)  →  ŷ_{uv} ∈ ℝ
-```
+<div class="formula-box">
+\[
+\hat{y}_{uv} = f\!\left( h_u^{(K)},\, h_v^{(K)} \right) \in \mathbb{R},
+\qquad h_u^{(K)}, h_v^{(K)} \in \mathbb{R}^{d}.
+\]
+</div>
 
-Where f is a scoring function (dot product, concatenation + MLP, Hadamard product + MLP).
+Here $$f$$ is a scoring function — a dot product $$h_u^\top h_v$$, a concatenation fed to an MLP, or a Hadamard product $$h_u \odot h_v$$ fed to an MLP.
 
 **Training setup:** typically, the training edges are used to compute node embeddings, and a subset of edges (plus negative samples) are used as supervision. Care must be taken not to include test edges in the message-passing graph during training.
 
@@ -96,19 +106,31 @@ Where f is a scoring function (dot product, concatenation + MLP, Hadamard produc
 
 **Output head:**
 
-```
-{h_v : v ∈ V}  →  READOUT  →  h_G ∈ ℝ^d  →  Linear  →  ŷ_G
-```
+<div class="formula-box">
+\[
+h_G = \mathrm{READOUT}\!\left( \{\, h_v^{(K)} : v \in V \,\} \right) \in \mathbb{R}^{d},
+\qquad
+\hat{y}_G = \mathrm{softmax}\!\left( W h_G + b \right).
+\]
+</div>
 
-The **READOUT** (also called pooling or global pooling) aggregates all node embeddings into a single graph embedding. Common choices:
-- Global mean pool: h_G = mean({h_v})
-- Global sum pool: h_G = sum({h_v})
-- Global max pool: h_G = max({h_v})
-- Hierarchical pooling: DiffPool, TopKPool
+The **READOUT** (also called pooling or global pooling) aggregates all node embeddings into a single graph embedding. It must be *permutation invariant*, since the node ordering is arbitrary. Common choices:
+
+<div class="formula-box">
+\[
+h_G = \frac{1}{N}\sum_{v \in V} h_v^{(K)},
+\qquad
+h_G = \sum_{v \in V} h_v^{(K)},
+\qquad
+h_G = \max_{v \in V} h_v^{(K)}.
+\]
+</div>
+
+Sum pooling preserves graph size and is the choice that keeps GIN maximally expressive; mean pooling discards size but is more stable across graphs of very different scale. Hierarchical alternatives (DiffPool, TopKPool) coarsen the graph in stages instead of collapsing it in one step.
 
 **Training setup:** each graph is an independent data point. Standard train/val/test split across graphs. Multiple graphs per batch (mini-batch training with graph-level batching).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight: The GNN Backbone Is Shared.</strong> The same stack of message-passing layers produces node embeddings for all three task levels. What differs is only the output head: for node tasks, apply a linear layer to each h_v independently; for edge tasks, combine h_u and h_v for each pair; for graph tasks, pool all h_v into a single vector first. This modularity means you can swap task heads without retraining the backbone.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight: The GNN Backbone Is Shared.</strong> The same stack of message-passing layers produces the node embeddings \(h_v^{(K)}\) for all three task levels. What differs is only the output head: for node tasks, apply a linear layer to each \(h_v^{(K)}\) independently; for edge tasks, combine \(h_u^{(K)}\) and \(h_v^{(K)}\) for each pair; for graph tasks, pool all \(h_v^{(K)}\) into a single vector first. This modularity means you can swap task heads without redesigning the backbone.</div>
 
 ## Task 4: Node Regression
 
@@ -133,7 +155,7 @@ Predict a continuous value for the whole graph.
 
 | Task | Prediction level | Output per item | Loss | Key challenge |
 |------|-----------------|----------------|------|--------------|
-| Node classification | Node | Class label | Cross-entropy | Transductive/inductive split |
+| Node classification | Node | Class label | Cross-entropy | Transductive vs inductive split |
 | Node regression | Node | Scalar/vector | MSE | Aggregation quality |
 | Link prediction | Edge (u,v) pair | Binary/rank | BCE or ranking | Negative sampling |
 | Relation classification | Edge | Class label | Cross-entropy | Multi-relational edges |
@@ -145,5 +167,5 @@ All tasks share the same GNN backbone. Mastering graph-level tasks requires unde
 ## References
 
 - Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.
-- Hamilton, W. L., Ying, R., & Leskovec, J. (2017). [Inductive Representation Learning on Large Graphs](https://arxiv.org/abs/1706.02216). *NeurIPS 2017* (GraphSAGE — introduces the node/link/graph task taxonomy).
+- Hamilton, W. L., Ying, R., & Leskovec, J. (2017). [Inductive Representation Learning on Large Graphs](https://arxiv.org/abs/1706.02216). *NeurIPS 2017* (GraphSAGE — the reference treatment of the inductive setting, learning an aggregation function rather than a per-node embedding table).
 - Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv preprint*.

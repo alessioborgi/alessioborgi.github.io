@@ -11,20 +11,11 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧺"
-read_mins: 5
+read_mins: 6
 permalink: /blog/gnn/global-pooling/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> After message passing, a readout function aggregates all node embeddings into a single graph embedding. Mean pooling is permutation-invariant and size-normalised. Sum pooling retains count information. Max pooling captures extremes. Each has different expressivity — sum is the most expressive for distinguishing graph sizes and multisets.
@@ -89,7 +80,7 @@ After message passing you have a bag of node embeddings — an unordered set of 
 
 ## The Readout Problem
 
-A K-layer GNN produces a set of node embeddings {h^{(K)}_v : v ∈ V}. For node-level tasks (node classification, link prediction), these are used directly. For **graph-level tasks** (graph classification, graph regression), they must be compressed into a single vector h_G.
+A $$K$$-layer GNN produces a set of node embeddings $$\{h_v^{(K)} : v \in V\}$$ — equivalently the layer matrix $$H^{(K)} \in \mathbb{R}^{N \times d}$$ with one row per node. For node-level tasks (node classification, link prediction), these are used directly. For **graph-level tasks** (graph classification, graph regression), they must be compressed into a single vector $$h_G$$.
 
 This compression is the **readout** or **global pooling** step. It must be:
 1. **Permutation-invariant:** the same graph regardless of node ordering
@@ -98,14 +89,16 @@ This compression is the **readout** or **global pooling** step. It must be:
 
 ## Mean Pooling
 
-<div class="math-box">
-h_G = (1/|V|) Σ_{v ∈ V} h^{(K)}_v
+<div class="formula-box">
+\[
+h_G \;=\; \frac{1}{\lvert V \rvert}\sum_{v \in V} h_v^{(K)}
+\]
 </div>
 
 **Properties:**
-- Permutation-invariant: ✓
-- Normalised by graph size: yes (divides by |V|)
-- Sensitive to graph size: no (a graph with 10 nodes and 100 identical nodes → same embedding)
+- Permutation-invariant: yes
+- Normalised by graph size: yes (divides by $$\lvert V \rvert$$)
+- Sensitive to graph size: no — a graph with 10 identical nodes and one with 100 identical nodes give the same embedding
 - Captures average node behaviour
 
 **When to use:** tasks where the typical node matters — e.g., average atom property in a molecule, average sentiment in a document graph.
@@ -114,50 +107,58 @@ h_G = (1/|V|) Σ_{v ∈ V} h^{(K)}_v
 
 ## Sum Pooling
 
-<div class="math-box">
-h_G = Σ_{v ∈ V} h^{(K)}_v
+<div class="formula-box">
+\[
+h_G \;=\; \sum_{v \in V} h_v^{(K)}
+\]
 </div>
 
 **Properties:**
-- Permutation-invariant: ✓
+- Permutation-invariant: yes
 - Sensitive to graph size: yes (more nodes → larger magnitude)
-- Injective over multisets of bounded node embeddings: yes (under the right conditions)
+- Injective over multisets: yes, when composed with a learnable node-wise transform and the feature space is countable
 - Captures total contribution of all nodes
 
 **When to use:** tasks where the total matters — e.g., total charge of a molecule, total influence in a social network.
 
-**Expressive power:** Xu et al. (GIN, 2019) proved that sum readout is strictly more expressive than mean or max for distinguishing non-isomorphic graphs. Mean collapses count information; sum preserves it.
+**Expressive power:** Xu et al. (GIN, 2019) show that a readout of the form $$h_G = \sum_{v} \phi(h_v^{(K)})$$ with a learnable $$\phi$$ can represent any function of the multiset of node embeddings, provided the embeddings come from a countable set. Neither mean nor max has that property: mean discards multiplicities, max discards everything but the per-dimension extremes.
 
-**Failure case:** sensitive to graph size in ways that may not be desired — a graph with 100 zero-embedding nodes has the same sum as a graph with 0 nodes.
+**Failure case:** the magnitude of $$h_G$$ scales with $$\lvert V \rvert$$, so a downstream MLP sees inputs whose scale varies across the dataset. Nodes with near-zero embeddings also contribute nothing, so sum cannot separate a graph with 10 such nodes from one with 100.
 
 ## Max Pooling
 
-<div class="math-box">
-h_G[i] = max_{v ∈ V} h^{(K)}_v[i]   (elementwise maximum)
+<div class="formula-box">
+\[
+\bigl(h_G\bigr)_i \;=\; \max_{v \in V}\,\bigl(h_v^{(K)}\bigr)_i, \qquad i = 1,\dots,d
+\]
 </div>
 
 **Properties:**
-- Permutation-invariant: ✓
+- Permutation-invariant: yes
 - Captures the most prominent feature value in each dimension
 - Insensitive to count of nodes with non-maximal features
 
 **When to use:** tasks where the extreme matters — e.g., is there any toxic functional group? Does any node have property X?
 
-**Failure case:** cannot distinguish {1, 2} from {2} — max pooling drops information about non-maximal elements.
+**Failure case:** cannot distinguish $$\{1, 2\}$$ from $$\{2\}$$ — max pooling drops information about non-maximal elements.
 
 <div class="insight-box">
-<strong>The multiset analogy:</strong> Think of pooling as summarising a multiset of vectors. Mean collapses {1,1,1} and {1} to the same value. Max collapses {1,2} and {2}. Sum distinguishes all three — but loses ordering (which is intended for permutation invariance).
+<strong>The multiset analogy:</strong> Think of pooling as summarising a multiset of vectors. Mean collapses \(\{1,1,1\}\) and \(\{1\}\) to the same value. Max collapses \(\{1,2\}\) and \(\{2\}\). Sum separates both pairs — while still discarding ordering, which is exactly what permutation invariance requires.
 </div>
 
 ## Expressivity Ranking
 
-For graph-level tasks requiring discrimination between non-isomorphic graphs:
+Composed with a learnable node-wise transform, sum readout is the most expressive of the three: it is the only one of them that can represent an arbitrary function of the multiset of node embeddings drawn from a countable universe. This is what allows GIN to reach the 1-WL bound at graph level — and 1-WL is an upper bound on what *any* message-passing GNN can distinguish.
 
-```
-Sum > Mean ≈ Max (in terms of distinguishing power)
-```
+Compared as bare statistics, though, mean and max are not simply "weaker than sum": they are incomparable to each other, and each separates some multisets that sum does not.
 
-Sum aggregation is the foundation of GIN's graph-level expressiveness. The GIN paper proved: if node-level embeddings are injective and readout is sum, the resulting graph-level model is as expressive as 1-WL on graphs.
+| Multiset pair | Mean | Max | Sum |
+|---|---|---|---|
+| $$\{1\}$$ vs $$\{1,1,1\}$$ | same | same | **different** |
+| $$\{1,3\}$$ vs $$\{2,2\}$$ | same | **different** | same |
+| $$\{1,2\}$$ vs $$\{2\}$$ | **different** | same | **different** |
+
+The practical reading: sum is the safe default because a learned $$\phi$$ can always recover mean-like or max-like behaviour from it, but only if the network is given the capacity to do so.
 
 ## Combinations and Hierarchical Pooling
 
@@ -175,14 +176,14 @@ For graphs where structure at different scales matters (molecules with atoms and
 
 | Pooling | Formula | Sensitive to Size | Information Captured | Best For |
 |---------|---------|-----------------|---------------------|----------|
-| Mean | Σh / \|V\| | No | Average node behaviour | Distribution of properties |
-| Sum | Σh | Yes | Total + count | Additive properties |
-| Max | max(h) | No | Extreme values | Existence queries |
-| Concat(all) | [mean; sum; max] | Partial | Combined | General tasks |
+| Mean | $$\frac{1}{\lvert V\rvert}\sum_v h_v$$ | No | Average node behaviour | Distribution of properties |
+| Sum | $$\sum_v h_v$$ | Yes | Total + count | Additive properties |
+| Max | $$\max_v h_v$$ (elementwise) | No | Extreme values | Existence queries |
+| Concat(all) | $$[\,\text{mean};\text{sum};\text{max}\,]$$ | Partial | Combined | General tasks |
 
-The choice of readout is as important as the choice of message passing architecture. On graph classification benchmarks, switching from mean to sum pooling alone can change accuracy by 5-10 percentage points.
+The choice of readout is as important as the choice of message passing architecture: on graph-level tasks where the count of a substructure is what the label depends on, swapping mean for sum is the difference between a model that can express the target function and one that provably cannot — no amount of extra message-passing depth compensates for a readout that has already thrown the information away.
 
 ## References
 
-- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826). *ICLR 2019* (proves sum readout is strictly more expressive than mean or max).
+- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826). *ICLR 2019* (sum aggregation with a learnable transform is injective over multisets; mean and max are not).
 - Zaheer, M., Kottur, S., Ravanbakhsh, S., Poczos, B., Salakhutdinov, R., & Smola, A. J. (2017). [Deep Sets](https://arxiv.org/abs/1703.06114). *NeurIPS 2017* (theory of permutation-invariant functions over sets).

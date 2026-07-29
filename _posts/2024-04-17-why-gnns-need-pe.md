@@ -11,22 +11,13 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "📍"
-read_mins: 5
+read_mins: 7
 permalink: /blog/gnn/why-gnns-need-pe/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
-
 <div class="tldr-box">
-<strong>TL;DR:</strong> GNNs are permutation-equivariant: relabelling nodes does not change the output. This means two structurally identical but geometrically different nodes get the same embedding. Positional encodings break this symmetry — injecting node-specific structural information that message passing alone cannot provide.
+<strong>TL;DR:</strong> Message-passing GNNs are permutation-equivariant, and their node representations are refinements of the 1-WL colouring. Two nodes that 1-WL cannot separate get the same embedding, however far apart they sit in the graph. Positional encodings add node-specific structural information computed from the graph — Laplacian eigenvectors, random-walk return profiles, distances to anchors — that message passing alone cannot derive.
 </div>
 {% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Why GNNs need positional encodings" caption="Positional encodings as graph structure signals (Dwivedi et al., 2022)" %}
 
@@ -56,7 +47,7 @@ Graphs face the same problem, but harder: there is no canonical position 1, 2, 3
   <line x1="102" y1="70" x2="128" y2="70" class="pe-edge"/>
   <line x1="152" y1="70" x2="178" y2="70" class="pe-edge"/>
   <line x1="202" y1="70" x2="228" y2="70" class="pe-edge"/>
-  <text x="115" y="105" class="pe-label">B and D: both degree-2, same 2-hop tree → same GNN output</text>
+  <text x="115" y="105" class="pe-label">B and D: same 1-WL colour at every round → same GNN output</text>
   <text x="115" y="118" class="pe-label">but B is 2nd node from A; D is 4th — different global positions</text>
   <!-- divider -->
   <line x1="270" y1="10" x2="270" y2="125" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4"/>
@@ -68,10 +59,10 @@ Graphs face the same problem, but harder: there is no canonical position 1, 2, 3
   <line x1="302" y1="70" x2="323" y2="70" class="pe-edge"/>
   <line x1="347" y1="70" x2="368" y2="70" class="pe-edge"/>
   <line x1="392" y1="70" x2="413" y2="70" class="pe-edge"/>
-  <text x="370" y="105" class="pe-label">Fiedler vector: B gets +0.4, D gets −0.1</text>
-  <text x="370" y="118" class="pe-label">Now the model can distinguish them</text>
+  <text x="370" y="105" class="pe-label">Fiedler vector on P₅: B gets +0.37, D gets −0.37</text>
+  <text x="370" y="118" class="pe-label">Now the model can separate them</text>
 </svg>
-<figcaption>Path graph A–B–C–D–E. B and D have identical local structure (degree 2, same 2-hop tree). Without positional encodings a GNN assigns them the same embedding. Laplacian PE gives each node a unique coordinate in graph space.</figcaption>
+<figcaption>Path graph A–B–C–D–E. Message passing gives B and D the same 1-WL colour at every round, so a GNN assigns them the same embedding. The Fiedler vector of \(P_5\) is \(u_2 \approx [0.602,\, 0.372,\, 0,\, -0.372,\, -0.602]\), which separates them — but note it does so only through the <em>sign</em>: \(\lvert u_2(B)\rvert = \lvert u_2(D)\rvert\). B and D are exchanged by the path-reversal automorphism, so any sign-invariant treatment of the eigenvector puts them back together. See the post on sign ambiguity.</figcaption>
 </figure></div>
 
 ## Permutation Equivariance: A Double-Edged Sword
@@ -80,17 +71,21 @@ GNNs are designed to be permutation equivariant: the result of processing a grap
 
 This is a desirable property — the graph has no canonical ordering, so the model should not depend on one.
 
-But equivariance creates a problem: **two nodes with identical structural roles get identical embeddings**, even if their global position in the graph is different.
+But it has a sharp consequence. A message-passing GNN's node representations are always a *refinement of the 1-WL colouring*: if 1-WL assigns two nodes the same colour after $$k$$ rounds, no $$k$$-layer MPNN can give them different embeddings. Whatever 1-WL cannot see, message passing cannot see either.
+
+Two distinct things get conflated here, and it is worth separating them:
+- **Automorphic nodes.** If some automorphism of the graph maps $$v$$ to $$w$$, then *every* permutation-equivariant function — GNN, Laplacian eigenvector, random-walk profile, anything computed from the graph alone — must assign them the same value. This is not a limitation of message passing; it is a theorem about equivariance, and no positional encoding escapes it.
+- **1-WL-equivalent but non-automorphic nodes.** These are merely invisible *to message passing*. A positional encoding computed by other means can separate them, and this is the gap that graph PEs actually fill.
 
 ## The Symmetric Node Problem
 
 Consider a path graph: A — B — C — D — E
 
-Nodes B and D are structurally symmetric: both have degree 2, and their 2-hop neighbourhoods are identical. A 2-layer GNN will assign B and D the same embedding.
+1-WL colours B and D identically at every round — from either node's perspective the graph looks the same — so no MPNN of any depth separates them. And in this example they are genuinely automorphic (reverse the path), so this is the hard case: nothing equivariant will give them different values, and LapPE separates them only up to the eigenvector's sign.
 
-But B and D may need different predictions: if A has a specific feature that makes "the second node from A" important, but the GNN cannot distinguish B from D (both look the same locally), it cannot leverage this.
+But B and D may still need different predictions. If A carries a feature that makes "the second node from A" meaningful, the model needs some way to break the tie — which in practice means either a task-specific anchor (distance from A, which is not permutation-invariant by design) or accepting sign information from the eigenvectors.
 
-More extreme: in a perfectly regular graph (every node has the same degree), all nodes have identical K-hop neighbourhoods for all K → all nodes get the same embedding.
+More extreme: in a regular graph with uniform initial node features, 1-WL never refines past a single colour, so all nodes get the *same* embedding for any depth. (With distinct input features, message passing can of course still tell nodes apart — the collapse is about what structure alone provides.)
 
 ## Why Sequences Don't Have This Problem
 
@@ -100,11 +95,14 @@ In graphs, there is no canonical position 3. The graph has no start, no end, no 
 
 ## What Positional Encodings Can Provide
 
-A good graph PE x_pe_v should:
-1. **Be unique** (or near-unique) for each node — distinguishes it from others
-2. **Encode structural role** — similar nodes get similar encodings
-3. **Be computationally efficient** — no O(N³) precomputation
-4. **Be transferable** — PE computed on training graphs should generalise to test graphs
+A good graph PE $$p_v$$ should:
+1. **Separate as much as possible** — ideally distinct values for nodes that are not automorphic (full uniqueness is unattainable, since automorphic nodes must tie)
+2. **Vary continuously with structure** — structurally similar nodes get similar encodings, so small perturbations of the graph do not scramble the representation
+3. **Be computationally affordable** — no dense $$O(N^3)$$ eigendecomposition
+4. **Be well defined** — free of arbitrary choices (sign, basis, anchor selection) that differ between two runs on the same graph
+5. **Be transferable** — a PE computed on training graphs should carry the same meaning on test graphs
+
+Points 1 and 2 pull against each other, and point 4 is exactly where Laplacian eigenvectors get into trouble.
 
 ## Types of Graph Positional Information
 
@@ -128,10 +126,10 @@ With Laplacian eigenvector PEs: the model can compute attention scores that refl
 
 | Without PEs | With PEs |
 |------------|---------|
-| Symmetric nodes are indistinguishable | Each node has a unique structural fingerprint |
-| Regular graphs: all nodes identical | Eigenvector PEs break symmetry |
-| Graph Transformer ignores structure | Structure encoded via PE attention biases |
-| Limited to 1-WL expressiveness | Can exceed 1-WL |
+| 1-WL-equivalent nodes are indistinguishable | Nodes get a structural fingerprint that message passing cannot derive |
+| Regular graph + uniform features: all nodes identical | Eigenvector and random-walk PEs separate many such nodes |
+| Graph Transformer ignores structure entirely | Structure enters via node PEs and pairwise attention biases |
+| Bounded by 1-WL | Can exceed 1-WL — though automorphic nodes still tie, for any equivariant encoding |
 
 The next posts cover specific PE methods: Laplacian eigenvectors, random walk PEs, shortest-path encodings, and the challenges they introduce.
 

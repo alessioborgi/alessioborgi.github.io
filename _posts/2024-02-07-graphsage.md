@@ -11,7 +11,7 @@ read_time: true
 is_overview: false
 subsection: architectures
 icon: "🌐"
-read_mins: 5
+read_mins: 4
 permalink: /blog/gnn/graphsage/
 toc: true
 toc_label: "Contents"

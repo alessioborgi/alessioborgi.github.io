@@ -16,15 +16,6 @@ permalink: /blog/gnn/heterogeneous-graphs/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> A heterogeneous graph has multiple node types and edge types. Standard GNNs use a single message function and aggregation — they cannot differentiate a "cites" edge from an "is-authored-by" edge. Handling heterogeneity requires type-specific message functions, meta-path decomposition, or relation-aware aggregation.
@@ -38,11 +29,17 @@ toc_label: "Contents"
 
 A **heterogeneous graph** (or heterogeneous information network, HIN) is defined as:
 
-<div class="math-box">
-G = (V, E, τ, φ)
+<div class="formula-box">
+\[
+G = \bigl(V,\; E,\; \tau,\; \phi\bigr),
+\qquad
+\tau : V \to \mathcal{A},
+\qquad
+\phi : E \to \mathcal{R}
+\]
 </div>
 
-where τ: V → A maps each node to a node type (|A| > 1) and φ: E → R maps each edge to an edge type (|R| > 1).
+where $$\tau$$ maps each node to a node type from the type set $$\mathcal{A}$$, and $$\phi$$ maps each edge to a relation from the relation set $$\mathcal{R}$$. The graph is heterogeneous when $$\lvert\mathcal{A}\rvert > 1$$ **or** $$\lvert\mathcal{R}\rvert > 1$$ — one of the two suffices. A knowledge graph with a single entity type but hundreds of relations is heterogeneous; so is a bipartite user–item graph with a single edge type. The homogeneous case that standard GNNs assume is $$\lvert\mathcal{A}\rvert = \lvert\mathcal{R}\rvert = 1$$.
 
 **Examples:**
 
@@ -62,18 +59,20 @@ Biomedical knowledge graph:
 
 Standard message passing:
 
-<div class="math-box">
-h^{(k)}_v = UPDATE( h^{(k-1)}_v, AGG({ h^{(k-1)}_u : u ∈ N(v) }) )
+<div class="formula-box">
+\[
+h_v^{(k)} \;=\; \mathrm{UPDATE}\Bigl(h_v^{(k-1)},\; \mathrm{AGG}\bigl(\bigl\{\,h_u^{(k-1)} : u \in \mathcal{N}(v) \,\bigr\}\bigr)\Bigr)
+\]
 </div>
 
-applies the same message function to all neighbours, regardless of the edge type connecting them. This conflates semantically very different relationships:
+applies the same message function to every neighbour in $$\mathcal{N}(v)$$, regardless of the edge type connecting them. This conflates semantically very different relationships:
 - "User A clicked Item B" and "Item B belongs-to Category C" are both aggregated identically
 - The model cannot learn that "cites" edges carry different information than "co-authored-by" edges
 - Node type differences are ignored — a Gene node and a Drug node are processed identically
 
 ## Solutions Overview
 
-**1. Type-specific message functions:** learn a separate weight matrix W_r for each relation type r. Messages of type r are W_r h_u. Used in R-GCN.
+**1. Type-specific message functions:** learn a separate weight matrix $$W_r$$ for each relation $$r \in \mathcal{R}$$. A message arriving over relation $$r$$ is $$W_r h_u$$. Used in R-GCN.
 
 **2. Meta-path decomposition:** define semantically meaningful paths through the graph (e.g., Author → Paper → Author = co-authorship). Run separate GNNs along each meta-path. Used in HAN.
 
@@ -148,7 +147,7 @@ Author -[writes]→ Paper -[written-by]→ Author
 = APA (Author-Paper-Author) = co-authorship
 
 Paper -[cites]→ Paper -[published-in]→ Venue -[publishes]→ Paper
-= PCPC (complex multi-hop semantic relation)
+= PPVP (a longer multi-hop semantic relation)
 ```
 
 Meta-paths allow encoding domain knowledge into the graph structure. A model operating on the APA meta-path captures co-authorship patterns; one on the APVPA meta-path (Author → Paper → Venue → Paper → Author) captures researchers working in the same venue.
@@ -159,17 +158,19 @@ Meta-paths allow encoding domain knowledge into the graph structure. A model ope
 
 ## Node Projection to Common Space
 
-When node types have different feature dimensions (e.g., Papers have text embeddings, Authors have profile embeddings), we must first project all types to a common dimension d:
+When node types have different feature dimensions (e.g., Papers have text embeddings, Authors have profile embeddings), we must first project all types to a common dimension $$d$$:
 
-<div class="math-box">
-h^{(0)}_v = W_{τ(v)} x_v + b_{τ(v)}
+<div class="formula-box">
+\[
+h_v^{(0)} \;=\; W_{\tau(v)}\, x_v \;+\; b_{\tau(v)}
+\]
 </div>
 
-A separate linear projection W_{τ(v)} per node type ensures all nodes live in the same embedding space before message passing begins.
+A separate linear projection $$W_{\tau(v)}$$ per node type ensures all nodes live in the same embedding space before message passing begins. Note this is indexed by *node* type $$\tau(v)$$, not relation type — it is a different mechanism from the relation-specific $$W_r$$ above, and a full heterogeneous architecture typically needs both.
 
 ## Heterogeneous Graph Benchmarks
 
-- **OGB-MAG** (Open Graph Benchmark: Microsoft Academic Graph): 736,389 papers, 59,965 authors, citation + authorship edges
+- **ogbn-mag** (Open Graph Benchmark: Microsoft Academic Graph): four node types — 736,389 papers, 1,134,649 authors, 8,740 institutions and 59,965 fields of study — connected by citation, authorship, affiliation and topic edges. Only papers carry input features; the other three types do not, which is itself a defining difficulty of the benchmark.
 - **IMDB (heterogeneous):** Movies, Actors, Directors — classify movie genre
 - **ACM:** Papers, Authors, Subjects — classify research area
 - **DBLP:** Authors, Papers, Venues, Terms — author classification
@@ -178,7 +179,7 @@ A separate linear projection W_{τ(v)} per node type ensures all nodes live in t
 
 | Approach | How it handles heterogeneity | Example |
 |----------|----------------------------|---------|
-| Type-specific weights | Separate W_r per relation | R-GCN |
+| Type-specific weights | Separate $$W_r$$ per relation $$r \in \mathcal{R}$$ | R-GCN |
 | Meta-path aggregation | Run GNNs on meta-path subgraphs | HAN |
 | Relation-aware attention | Attention over relation types | HAN, HGT |
 | Type projection | Map all types to common space | HGT |

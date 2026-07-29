@@ -11,23 +11,14 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🎯"
-read_mins: 5
+read_mins: 6
 permalink: /blog/gnn/gnns-recommender-systems/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> The user-item interaction graph is bipartite: users on one side, items on the other, with edges representing clicks/purchases/ratings. GCN-style propagation on this graph captures multi-hop collaborative signals — "users who liked what you liked also liked X." LightGCN simplifies this to pure propagation without transformation, achieving state-of-the-art efficiency.
+<strong>TL;DR:</strong> The user-item interaction graph is bipartite: users on one side, items on the other, with edges representing clicks, purchases or ratings. GCN-style propagation on this graph captures multi-hop collaborative signals — "users who liked what you liked also liked X." LightGCN strips the layer down to pure normalised propagation, dropping both the weight matrix and the non-linearity, and reports better accuracy <em>and</em> fewer parameters than the NGCF design it ablates.
 </div>
 {% include figure image_path="/images/blog/gnn/ying2018_pinsage.png" alt="PinSage recommendation GNN" caption="PinSage: graph convolutional network for web-scale recommender systems (Ying et al., 2018)" %}
 
@@ -36,83 +27,89 @@ toc_label: "Contents"
 
 **Intuition First:** Matrix factorisation is like learning that "Alice likes comedies" and "this film is a comedy" and multiplying those two vectors. It captures direct user–item similarity but cannot represent the chain: "Alice liked this film, Bob also liked it, Bob also liked that other film, so Alice might like that other film too." GNNs capture this multi-hop chain by propagating information along the bipartite graph — 2-hop neighbours of Alice (items liked by users who liked Alice's items) are exactly the collaborative filtering signal that matrix factorisation misses.
 
-**Traditional collaborative filtering:** learn user embedding e_u and item embedding e_i; predict score as e_u · e_i. This captures pairwise similarity but not higher-order structure.
+**Traditional collaborative filtering:** learn a user embedding $$e_u$$ and an item embedding $$e_i$$, then predict the score as $$\hat{y}_{ui} = e_u^{\top} e_i$$. This captures pairwise similarity but not higher-order structure.
 
-**GNN approach:** build a bipartite graph where user u is connected to item i if u interacted with i. Run GNN to produce user/item embeddings that capture multi-hop neighbourhood structure:
-- 1-hop: items u has interacted with (or users who interacted with i)
-- 2-hop: items interacted with by users who also interacted with u's items ("collaborative filtering signal")
+**GNN approach:** build a bipartite graph in which user $$u$$ is joined to item $$i$$ whenever $$u$$ interacted with $$i$$. Run a GNN to produce embeddings that capture multi-hop neighbourhood structure:
+- 1-hop: items $$u$$ has interacted with (or users who interacted with $$i$$)
+- 2-hop: items interacted with by users who also interacted with $$u$$'s items — the collaborative filtering signal
 - 3-hop: transitive similarities
 
 ## The Bipartite User-Item Graph
 
-<div class="math-box">
-G = (U ∪ I, E)   where (u, i) ∈ E if user u interacted with item i
+Let $$U$$ be the users and $$I$$ the items, with $$V = U \sqcup I$$:
+
+<div class="formula-box">
+\[
+G = (U \sqcup I,\; E), \qquad (u, i) \in E \iff \text{user } u \text{ interacted with item } i .
+\]
 </div>
 
-Message passing on this bipartite graph:
+Because the graph is bipartite, message passing alternates sides — users only ever hear from items, and items only from users:
 
-**User aggregation (from items):**
-<div class="math-box">
-h^{(k)}_u = AGG({ h^{(k-1)}_i : i ∈ N(u) })
+<div class="formula-box">
+\[
+h_u^{(k)} = \mathrm{AGG}\!\left( \{\, h_i^{(k-1)} : i \in \mathcal{N}(u) \,\} \right),
+\qquad
+h_i^{(k)} = \mathrm{AGG}\!\left( \{\, h_u^{(k-1)} : u \in \mathcal{N}(i) \,\} \right).
+\]
 </div>
 
-**Item aggregation (from users):**
-<div class="math-box">
-h^{(k)}_i = AGG({ h^{(k-1)}_u : u ∈ N(i) })
-</div>
-
-After K layers, h^{(K)}_u encodes the K-hop neighbourhood — capturing collaborative filtering signals up to K hops.
+After $$K$$ layers, $$h_u^{(K)}$$ encodes the $$K$$-hop neighbourhood. Note the parity: odd $$k$$ mixes in items, even $$k$$ mixes in other *users*, so it takes at least two layers before any collaborative signal reaches $$u$$ at all.
 
 ## LightGCN (He et al., 2020)
 
-LightGCN makes a key simplification: **remove weight matrices and non-linearities**. The propagation is pure averaging:
+LightGCN makes a key simplification: **remove the weight matrices and the non-linearities**. Each layer is nothing but symmetrically normalised averaging over the bipartite graph:
 
-<div class="math-box">
-h^{(k)}_u = Σ_{i ∈ N(u)} (1/√|N(u)||N(i)|) h^{(k-1)}_i
-h^{(k)}_i = Σ_{u ∈ N(i)} (1/√|N(i)||N(u)|) h^{(k-1)}_u
+<div class="formula-box">
+\[
+h_u^{(k)} = \sum_{i \in \mathcal{N}(u)} \frac{1}{\sqrt{\lvert \mathcal{N}(u) \rvert \, \lvert \mathcal{N}(i) \rvert}}\, h_i^{(k-1)},
+\qquad
+h_i^{(k)} = \sum_{u \in \mathcal{N}(i)} \frac{1}{\sqrt{\lvert \mathcal{N}(i) \rvert \, \lvert \mathcal{N}(u) \rvert}}\, h_u^{(k-1)}.
+\]
 </div>
 
-Final embedding: weighted combination of all layers:
+The final embedding is a weighted combination of every layer, which is how the model retains the 0-hop signal instead of over-smoothing it away:
 
-<div class="math-box">
-e_u = Σ_{k=0}^{K} α_k h^{(k)}_u
+<div class="formula-box">
+\[
+e_u = \sum_{k=0}^{K} \alpha_k\, h_u^{(k)},
+\qquad
+\alpha_k = \frac{1}{K+1},
+\qquad
+\hat{y}_{ui} = e_u^{\top} e_i .
+\]
 </div>
 
-Where α_k = 1/(K+1) typically. Score: ê_{ui} = e_u · e_i.
-
-**Why remove transformations?** Empirically, on collaborative filtering benchmarks, removing W_k and σ(·) improves performance. The collaborative filtering signal is in the propagation, not the transformation — adding learnable matrices introduces overfitting without expressiveness gains.
+**Why remove the transformations?** Because on these benchmarks there is nothing for them to transform. The paper's ablation removes $$W_k$$ and $$\sigma(\cdot)$$ one at a time and finds that each removal helps, with the combined removal helping most: the collaborative signal lives in the propagation, and extra learnable matrices mainly add capacity to overfit.
 
 <div class="insight-box">
-<strong>LightGCN's key insight:</strong> Standard GCNs were designed for graphs with rich node features. In collaborative filtering, nodes have only ID embeddings (no features). The transformation W is not useful — it merely maps one random initialisation to another. Pure propagation propagates collaborative signals without adding noise. This is the recommender-system-specific reason why simpler is better.
+<strong>LightGCN's key insight:</strong> Standard GCNs were designed for graphs with rich node features, where \(W\) does real work reprojecting them. In pure collaborative filtering the only input is a free ID embedding, already learned end to end — so \(W\) merely reparameterises a vector the model was free to choose anyway, buying no expressiveness while adding parameters and an optimisation burden. Stripping it back leaves the normalised propagation, which is the part that actually carries collaborative signal. This is a recommender-specific argument, not a general claim that simpler GNNs are better.
 </div>
 
 ## PinSage (Ying et al., 2018)
 
-Pinterest's GNN for image recommendation — one of the first industrial deployments of GNNs.
+Pinterest's GNN for image recommendation, and one of the first published industrial deployments of a GNN.
 
-**Scale:** 3 billion nodes (pins + boards), 18 billion edges, 7500 GPUs.
+**Scale:** the paper reports a bipartite pin–board graph of 3 billion nodes and roughly 18 billion edges.
 
 **Key innovations:**
-1. **GraphSAGE-style sampling:** for each node, sample a fixed-size neighbourhood (not full neighbourhood) — makes computation tractable at scale
-2. **Random walk importance sampling:** sample neighbours by importance (how often they co-occur in random walks), not uniformly
-3. **Curriculum training:** gradually increase neighbourhood size during training
+1. **GraphSAGE-style sampling:** for each node, sample a fixed-size neighbourhood rather than the full one — this is what makes the computation tractable, since a full-neighbourhood pass over a graph this size is hopeless
+2. **Random-walk importance sampling:** choose neighbours by how often they are visited in short random walks from the target node, not uniformly, and weight their messages by that visit count
+3. **Curriculum training:** feed progressively harder negative examples as training proceeds
 
 ## NGCF and Variants
 
-**NGCF (Wang et al., 2019):** adds explicit feature interaction in message passing:
+**NGCF (Wang et al., 2019):** adds an explicit feature interaction to the message:
 
-<div class="math-box">
-m_{ui} = (W_1 h_i + W_2 (h_i ⊙ h_u)) / √|N(u)||N(i)|
+<div class="formula-box">
+\[
+m_{u \leftarrow i} = \frac{1}{\sqrt{\lvert \mathcal{N}(u) \rvert \, \lvert \mathcal{N}(i) \rvert}}
+\Big( W_1 h_i + W_2 \left( h_i \odot h_u \right) \Big).
+\]
 </div>
 
-The Hadamard product h_i ⊙ h_u captures user-item feature interactions. LightGCN showed this adds overfitting without expressive benefit on standard benchmarks — but for rich feature settings it can help.
+The Hadamard product $$h_i \odot h_u$$ is meant to capture user-item feature interaction. LightGCN's ablation found that on the standard collaborative-filtering benchmarks this term costs more in overfitting than it returns in expressiveness — though the argument is specific to the ID-embedding-only setting, and richer side features change the calculus.
 
-<style>
-@keyframes hop-flash {
-  0%,100% { opacity: 0.3; }
-  50%      { opacity: 1.0; }
-}
-</style>
 <div class="blog-figure">
 <figure>
 <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto;">
@@ -157,15 +154,15 @@ Benefit: cold-start items with no interactions can leverage KG features (genre, 
 
 ## Summary
 
-| Model | Key idea | Scale |
+| Model | Key idea | Hops used |
 |-------|---------|-------|
-| Matrix Factorisation | Pairwise similarity only | Any |
-| NGCF | GCN + feature interaction | Millions |
-| LightGCN | GCN without transformation | Billions (efficient) |
-| PinSage | GraphSAGE + importance sampling | 3 billion nodes |
-| SR-GNN | Session graph + GCN | Millions |
+| Matrix factorisation | Pairwise similarity only | 0 (direct inner product) |
+| NGCF | GCN + explicit feature interaction | $$K$$ hops, with $$W_1, W_2$$ per layer |
+| LightGCN | Normalised propagation, no $$W$$ or $$\sigma$$ | $$K$$ hops, layer-combined |
+| PinSage | GraphSAGE + random-walk importance sampling | Sampled 2-hop neighbourhoods |
+| SR-GNN | Session graph + gated GNN | Within-session transitions |
 
-GNNs are now the dominant paradigm for production recommendation systems at scale — deployed by Pinterest, Alibaba, Amazon, Netflix, and most major e-commerce platforms.
+The mechanism that unifies these is the one worth remembering: on a bipartite interaction graph, a $$K$$-layer GNN gives every user an embedding that already contains the items liked by users like them. That is collaborative filtering expressed as message passing, and it is why PinSage could be deployed at Pinterest's graph scale while a dense user-item matrix could not.
 
 ## References
 

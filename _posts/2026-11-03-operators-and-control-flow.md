@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🔀"
-read_mins: 10
+read_mins: 7
 permalink: /blog/python-primer/operators-and-control-flow/
 toc: true
 toc_label: "Contents"

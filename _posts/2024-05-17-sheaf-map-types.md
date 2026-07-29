@@ -11,127 +11,141 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🎛️"
-read_mins: 6
+read_mins: 8
 permalink: /blog/gnn/sheaf-map-types/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Sheaf restriction maps F_{u→e} can be scalars (d=1), diagonal (d parameters), orthogonal (d(d-1)/2 parameters), or general d×d matrices (d² parameters). General maps are most expressive but expensive. Orthogonal maps offer a good trade-off: they can represent rotations and reflections (enough for most geometric relationships) at lower cost than general maps.
+<strong>TL;DR:</strong> Restriction maps \(\mathcal{F}_{v \trianglelefteq e}\) can be scalars (\(d = 1\)), diagonal (\(d\) degrees of freedom), orthogonal (\(d(d-1)/2\)), or general \(d \times d\) matrices (\(d^2\)). General maps are the most flexible but the hardest to normalise and the easiest to overfit. Orthogonal maps are often the sweet spot: they mix the stalk coordinates, they constrain the model, and they make the Laplacian's diagonal blocks collapse to \(\deg(v) I_d\).
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Sheaf map types comparison" caption="Restriction map types in neural sheaf diffusion (Bodnar et al., 2022)" %}
 
 
 ## The Design Space of Restriction Maps
 
-**Intuition First:** Think of the four map types as four different ways to describe the relationship between two people's views of the same object. A scalar map says "person B sees things 3× more intensely than person A." A diagonal map says "person B emphasises different colour channels differently." An orthogonal map says "person B is looking from a rotated angle — same information, different frame." A general map says "person B's perception is a completely arbitrary linear combination of person A's." The richer the map class, the more relationships you can model — but the more parameters you need per edge.
+**Intuition First:** Think of the four map types as four ways to describe the relationship between two people's views of the same object. A scalar map says "person B sees things three times more intensely than person A — and possibly with the opposite sign." A diagonal map says "person B weights each channel differently." An orthogonal map says "person B is looking from a rotated angle — same information, different frame." A general map says "person B's perception is an arbitrary linear combination of person A's." The richer the class, the more relationships the sheaf can represent — and the more numbers the predictor must output per edge.
 
-In Neural Sheaf Diffusion, the MLP outputs a restriction map F_{u→e} for each directed edge. The choice of matrix class constrains both what relationships the sheaf can represent and how much computation is required.
+In Neural Sheaf Diffusion the predictor $$\Phi$$ outputs a restriction map $$\mathcal{F}_{v \trianglelefteq e}$$ for each *incidence* (node, incident edge) — so two maps per undirected edge. The counts below are the degrees of freedom of the matrix $$\Phi$$ must produce, which fixes its output width; they are not free parameters stored per edge.
 
-## Scalar Maps (d_e = 1)
+## Scalar Maps ($$d = 1$$)
 
-<div class="math-box">
-F_{u→e} ∈ ℝ   (a single scalar)
+<div class="formula-box">
+\[
+\mathcal{F}_{v \trianglelefteq e} \in \mathbb{R} \qquad (\text{one real number per incidence})
+\]
 </div>
 
-**Parameters per edge:** 1 (from the original d-dimensional node space to a 1-dimensional edge space).
+**Degrees of freedom per incidence:** 1. All stalks are $$\mathbb{R}$$, so the sheaf Laplacian is $$n \times n$$.
 
-**What it represents:** attention weight — how much of u's contribution flows to edge e.
+**What it represents:** a signed edge weight. The off-diagonal block reduces to
 
-**Sheaf Laplacian block:** (Δ_F)_{uv} = -f_{u→e} · f_{v→e} where f are scalars.
+<div class="formula-box">
+\[
+(L_{\mathcal{F}})_{vu} \;=\; -\,\mathcal{F}_{v \trianglelefteq e}\,\mathcal{F}_{u \trianglelefteq e},
+\]
+</div>
 
-**Connection to existing models:** scalar sheaf maps recover GAT (graph attention network) with fixed attention weights.
+so the transport along the edge is $$\mathcal{F}_{v \trianglelefteq e}\mathcal{F}_{u \trianglelefteq e}$$ — positive for "these should agree", negative for "these should be opposite".
 
-**Limitation:** cannot represent directional transformations — just scaling.
+**Connection to existing models:** if the two endpoint maps are forced to be *equal*, the resulting operators are exactly the positively-weighted graph Laplacians — the family GCN and ChebNet already use. Allowing them to differ in sign is what buys anything new, and it recovers signed-attention models such as FAGCN rather than GAT (whose softmax weights cannot be negative).
+
+**Limitation:** the harmonic space of a $$d = 1$$ sheaf is at most one-dimensional, so no scalar sheaf can linearly separate three or more classes in the diffusion limit, no matter how the signs are chosen. That is the argument for widening the stalks.
 
 ## Diagonal Maps
 
-<div class="math-box">
-F_{u→e} = diag(f_1, ..., f_d) ∈ ℝ^{d×d}   (d parameters)
+<div class="formula-box">
+\[
+\mathcal{F}_{v \trianglelefteq e} = \operatorname{diag}(f_1, \dots, f_d) \in \mathbb{R}^{d \times d}
+\qquad (d \text{ degrees of freedom})
+\]
 </div>
 
-**What it represents:** per-dimension scaling — emphasise some feature dimensions over others.
+**What it represents:** per-coordinate scaling and sign flipping — a set of $$d$$ independent scalar sheaves stacked into one.
 
-**Sheaf Laplacian block:** (Δ_F)_{uv} = -diag(f_1^u f_1^v, ..., f_d^u f_d^v). This is a diagonal matrix — the Sheaf Laplacian is block-diagonal in each feature dimension, so different dimensions are independent.
+**Sheaf Laplacian block:** $$(L_{\mathcal{F}})_{vu} = -\operatorname{diag}(f^v_1 f^u_1, \dots, f^v_d f^u_d)$$, itself diagonal. The Laplacian therefore decouples across the $$d$$ stalk coordinates: they interact only through the left multiplication by $$W_1$$ in the NSD layer.
 
-**Advantage:** O(d) parameters per edge (vs O(d²) for general); fast Sheaf Laplacian construction.
+**Advantage:** $$O(d)$$ outputs per incidence instead of $$O(d^2)$$, diagonal blocks, and cheaper sparse products.
 
-**Limitation:** cannot model inter-dimensional coupling — what node u thinks dimension 1 means is the same as what node v thinks dimension 1 means. Only magnitudes differ, not directions.
+**Separation capacity:** since a diagonal sheaf is $$d$$ independent scalar sheaves, a one-vs-all construction shows that $$d \ge C$$ suffices to linearly separate $$C$$ classes — expressive, but only by spending stalk width.
+
+**Limitation:** no coupling between stalk coordinates inside the operator. What node $$u$$ means by coordinate 1 is what node $$v$$ means by coordinate 1; only magnitudes and signs differ, not directions.
 
 ## Orthogonal Maps
 
-<div class="math-box">
-F_{u→e} ∈ O(d) = {Q ∈ ℝ^{d×d} : Q^T Q = I}
+<div class="formula-box">
+\[
+\mathcal{F}_{v \trianglelefteq e} \in O(d) = \left\{ Q \in \mathbb{R}^{d \times d} : Q^{\top} Q = I_d \right\}
+\]
 </div>
 
-**Parameters per edge:** d(d-1)/2 (dimensions of the Lie group O(d)).
+**Degrees of freedom per incidence:** $$d(d-1)/2$$, the dimension of the Lie group $$O(d)$$. In NSD these are realised as a composition of Householder reflections.
 
-**What it represents:** rotations and reflections — a rigid transformation of feature space.
+**What it represents:** rotations and reflections — a rigid change of frame.
 
-**Key property:** F^T_{u→e} F_{u→e} = I_d, so the diagonal block simplifies:
+**Key property:** $$\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e} = I_d$$, so the diagonal blocks collapse:
 
-<div class="math-box">
-(Δ_F)_{vv} = Σ_{e ∋ v} F^T_{v→e} F_{v→e} = deg(v) · I_d
+<div class="formula-box">
+\[
+(L_{\mathcal{F}})_{vv} = \sum_{v \trianglelefteq e} \mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e} = \deg(v)\, I_d .
+\]
 </div>
 
-This means the diagonal blocks are scalar multiples of the identity — greatly simplifying the Sheaf Laplacian.
+This makes the normalisation $$D^{-1/2}$$ trivial — $$D$$ is just the degrees — whereas for general maps it requires the inverse square root of a genuine positive semi-definite block matrix.
 
 <div class="insight-box">
-<strong>Why orthogonal maps are special:</strong> With orthogonal restriction maps, the Sheaf Laplacian block (Δ_F)_{uv} = -Q_u^T Q_v where Q_u, Q_v ∈ O(d). This is a rotation matrix — it expresses "how much the feature spaces of u and v are rotated relative to each other." Sheaf diffusion with orthogonal maps is equivalent to diffusion on a graph where each node has its own coordinate frame, and the edge maps express the frame rotation between neighbours. This is the discrete analogue of a connection Laplacian in differential geometry.
+<strong>Why orthogonal maps are special:</strong> with orthogonal restriction maps the off-diagonal block is \((L_{\mathcal{F}})_{vu} = -Q_v^{\top} Q_u\), itself an orthogonal matrix (a rotation or a reflection, depending on the determinants). It expresses how much the feature frames of \(u\) and \(v\) are rotated relative to one another. Sheaf diffusion with orthogonal maps is diffusion on a graph where each node carries its own coordinate frame and each edge specifies the frame change — the discrete analogue of a connection Laplacian in differential geometry.
 </div>
 
-**Connection geometry:** orthogonal sheaves on graphs correspond exactly to **flat vector bundles with orthogonal structure group** — a classical object in differential geometry. This gives orthogonal sheaf GNNs a rich theoretical foundation connecting graph learning to Riemannian geometry.
+**Separation capacity:** orthogonal maps use the available stalk space more efficiently than diagonal ones. Bodnar et al. show that $$C \le 2d$$ classes can be separated with $$O(d)$$-bundles (proved for $$d \in \{2, 4\}$$), against $$d \ge C$$ for diagonal maps.
+
+**Connection geometry:** a sheaf with orthogonal restriction maps is a **discrete $$O(d)$$-bundle** — a discrete analogue of a vector bundle with orthogonal structure group, where the maps play the role of parallel transport. It is *flat* only when the holonomy around every cycle is the identity; that is a property a given sheaf may or may not have, not part of the definition. This is what gives orthogonal sheaf GNNs a foothold in differential geometry, and it is developed further in the post on equivariant sheaf GNNs.
 
 ## General Linear Maps
 
-<div class="math-box">
-F_{u→e} ∈ ℝ^{d_e × d}   (d_e · d parameters)
+<div class="formula-box">
+\[
+\mathcal{F}_{v \trianglelefteq e} \in \mathbb{R}^{d_e \times d} \qquad (d_e \cdot d \text{ degrees of freedom})
+\]
 </div>
 
-**Parameters per edge:** d² (for square d×d maps) or d_e × d (for rectangular).
+**Degrees of freedom per incidence:** $$d^2$$ for square $$d \times d$$ maps.
 
-**What it represents:** arbitrary linear transformations — mixing, scaling, rotating, and projecting features.
+**What it represents:** arbitrary linear transformations — mixing, scaling, rotating, and projecting features. Any linear relationship between the two endpoint stalks is representable.
 
-**Most expressive:** can represent any linear relationship between u's and v's feature spaces.
-
-**Cost:** O(d²) parameters per edge, O(d²) per Sheaf Laplacian block, O(E d²) total for the full Sheaf Laplacian.
+**Costs:** $$O(d^2)$$ outputs per incidence, dense blocks, $$O(\lvert E \rvert d^2)$$ storage for the Laplacian — and, more awkwardly, the normalisation requires computing $$D^{-1/2}$$ for a positive semi-definite block matrix rather than reading off degrees. Maximal flexibility also brings the highest risk of overfitting, which is why the most general class is not automatically the best-performing one.
 
 ## Summary Comparison
 
-| Map type | Parameters/edge | Feature coupling | Geometric meaning |
-|----------|----------------|-----------------|------------------|
-| Scalar | 1 | None | Attention weight |
-| Diagonal | d | Per-dimension | Feature selection |
-| Orthogonal | d(d-1)/2 | Full (rotation) | Frame rotation |
-| General | d² | Full | Arbitrary linear |
+| Map type | DoF per incidence | Stalk-coordinate coupling | Geometric meaning | Classes separable |
+|----------|------------------|--------------------------|-------------------|-------------------|
+| Scalar ($$d=1$$) | 1 | n/a | Signed edge weight | $$\le 2$$ |
+| Diagonal | $$d$$ | None (only via $$W_1$$) | Per-coordinate scaling and sign | $$C \le d$$ |
+| Orthogonal | $$d(d-1)/2$$ | Full | Frame rotation / reflection | $$C \le 2d$$ |
+| General | $$d^2$$ | Full | Arbitrary linear | — |
 
 ## Practical Recommendations
 
-**Use diagonal maps when:** graphs are large (E >> 1000), computation is a bottleneck, and per-dimension scaling is sufficient.
+**Use diagonal maps when:** the graph is large, the Laplacian must be cheap to build and multiply, and per-coordinate scaling with sign flips is enough. In practice this class is surprisingly competitive.
 
-**Use orthogonal maps when:** geometry of the feature space matters (the maps should be interpretable as rotations), or when the theoretical connection to differential geometry is valuable.
+**Use orthogonal maps when:** the geometry of the feature space matters, numerical stability of the normalisation matters, or the connection-Laplacian interpretation is useful. In the NSD experiments the $$O(d)$$-bundle model was the strongest overall.
 
-**Use general maps when:** maximum expressiveness is needed and the graph is small enough (molecules, proteins with E < 10,000).
+**Use general maps when:** you have reason to believe the task needs feature mixing that a rigid frame change cannot express, and you have enough data to avoid overfitting.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Orthogonal maps are the sweet spot for most practical sheaf GNN applications. Because Q^T Q = I, the diagonal blocks of the Sheaf Laplacian simplify to deg(v) · I — reducing the matrix-vector product cost by ~50% compared to general maps. Meanwhile, orthogonal maps can still represent arbitrary rotations and reflections between feature frames, which is enough to encode the structural relationships present in most heterophilic benchmarks. General maps only start outperforming orthogonal ones when the task requires feature mixing (not just frame rotation) across edges.</div>
+<div class="insight-box"><strong>Key Insight:</strong> More expressive is not automatically better. General maps strictly contain the orthogonal ones, yet in the NSD benchmarks the \(O(d)\)-bundle and diagonal variants matched or beat the general one. Two reasons: the orthogonality constraint acts as a regulariser, and \(\mathcal{F}^{\top}\mathcal{F} = I\) makes the Laplacian's normalisation exact and numerically clean instead of an inverse square root that must be approximated. Choose the smallest class that can express the relationship you actually need.</div>
 
 ## Impact on Sheaf Laplacian Sparsity
 
-For all map types, the Sheaf Laplacian Δ_F has the same sparsity pattern as the standard graph Laplacian, but each scalar entry is replaced by a d×d block. The total size is (Nd) × (Nd) with at most 2E non-zero blocks (plus N diagonal blocks).
+For every map type the sheaf Laplacian has the same *block* sparsity pattern as the graph Laplacian: an $$(nd) \times (nd)$$ matrix with at most $$2\lvert E \rvert$$ off-diagonal blocks plus $$n$$ diagonal blocks. What changes is the density inside each block.
 
-For diagonal maps, each block is diagonal — the Sheaf Laplacian is sparse in the d-expanded sense, enabling efficient sparse operations.
-
-For general maps, each block is dense — the full Sheaf Laplacian requires O(E d²) storage.
+- **Diagonal maps:** each block is diagonal, so the whole operator is sparse even in the expanded $$nd$$ indexing.
+- **Orthogonal maps:** off-diagonal blocks are dense, but the diagonal blocks are $$\deg(v) I_d$$ and cost nothing to store.
+- **General maps:** every block is dense, giving $$O(\lvert E \rvert d^2)$$ storage.
 
 ## References
 
-- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: compares scalar, diagonal, and general restriction map types, providing the theoretical and empirical analysis of each).
-- Barbero, F., Bodnar, C., de Ocáriz Borde, H. S., Bronstein, M., Veličković, P., & Liò, P. (2022). [Sheaf Attention Networks](https://arxiv.org/abs/2210.01066). *NeurIPS 2022 Workshop* (SheafAN: orthogonal restriction maps combined with attention, improving expressiveness and stability).
-- Laplacian, H., & Curve, R. (2020). [Orthogonal sheaf maps and connection Laplacians for robust graph learning](https://arxiv.org/abs/2001.11479). *arXiv 2020* (theoretical analysis of orthogonal restriction maps and their connection to gauge-equivariant diffusion on graphs).
+- Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (defines the hierarchy of symmetric, diagonal, orthogonal, and general restriction maps, with the separation results and the empirical comparison quoted above).
+- Hansen, J., & Ghrist, R. (2019). [Toward a Spectral Theory of Cellular Sheaves](https://arxiv.org/abs/1808.01513). *Journal of Applied and Computational Topology* (spectral properties of sheaf Laplacians that the map classes inherit).
+- Barbero, F., Bodnar, C., Sáez de Ocáriz Borde, H., Bronstein, M., Veličković, P., & Liò, P. (2022). [Sheaf Neural Networks with Connection Laplacians](https://arxiv.org/abs/2206.08702). *ICML 2022 Workshop on Topology, Algebra, and Geometry in Machine Learning* (computes orthogonal restriction maps geometrically instead of learning them end-to-end, cutting the cost and the overfitting risk of fully learned maps).
+- Barbero, F., Bodnar, C., Sáez de Ocáriz Borde, H., & Liò, P. (2022). [Sheaf Attention Networks](https://neurips.cc/virtual/2022/60824). *NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations* (combines restriction maps with attention, trading some of the cost of dense maps for a sparser, attention-weighted operator).

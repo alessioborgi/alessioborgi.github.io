@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "📂"
-read_mins: 9
+read_mins: 7
 permalink: /blog/python-primer/files-and-context-managers/
 toc: true
 toc_label: "Contents"
@@ -41,7 +41,7 @@ f.write("first line\n")
 f.close()   # easy to forget, and never runs if write() raises
 ```
 
-That last comment is the whole problem. If `write()` raises partway through a longer block, `f.close()` is skipped and the descriptor leaks for the rest of the process. `with` fixes this structurally:
+If `write()` raises partway through, `f.close()` is skipped and the descriptor leaks for the rest of the process. `with` fixes this structurally:
 
 ```python
 with open("notes.txt", "a", encoding="utf-8") as f:
@@ -50,7 +50,7 @@ with open("notes.txt", "a", encoding="utf-8") as f:
 # f.close() has already run by the time this line would print
 ```
 
-`open()` returns an object whose type implements the context manager protocol, so `with` calls `f.close()` on the way out of the block regardless of how it exits — normal completion, `return`, `break`, or an exception propagating through. This is the same mechanism behind `finally` from [errors and exceptions](/blog/python-primer/errors-and-exceptions/), applied automatically.
+`open()` returns an object whose type implements the context manager protocol, so `with` calls `f.close()` on the way out of the block regardless of how it exits — normal completion, `return`, `break`, or an exception propagating through, the same mechanism behind `finally` from [errors and exceptions](/blog/python-primer/errors-and-exceptions/).
 
 <div class="warning-box">
   <strong>Classic trap — "it gets closed anyway".</strong> In CPython, an unreferenced file object is usually collected almost immediately because CPython uses reference counting — so <code>f = open(...); f.write(...)</code> with no <code>close()</code> often <em>appears</em> to work in a short script. Three things break that illusion: a long-running process where the object stays reachable for a while, a loop that opens thousands of files and hits the OS's open-file-descriptor limit first, and PyPy or Jython, which do not use reference counting and can leave a file open indefinitely. Buffered writes not yet flushed are also lost if the process crashes first. There is no version of "don't bother with <code>with</code>" that is actually safe.
@@ -209,13 +209,7 @@ Use the class form when the manager needs to expose state through `as` beyond wh
 
 <div class="key-takeaways">
   <h3>Recap</h3>
-  <ul>
-    <li><code>with open(...) as f:</code> guarantees the descriptor closes on every exit path; relying on garbage collection to close it is an implementation-specific accident, not a guarantee.</li>
-    <li>Always pass <code>encoding="utf-8"</code> to text-mode <code>open()</code> — the platform default has historically differed between operating systems.</li>
-    <li>Iterate over a file object line by line for large files; a single <code>read()</code> or <code>readlines()</code> loads the whole thing into memory first.</li>
-    <li><code>pathlib.Path</code> replaces <code>os.path</code> string joining with an object that overloads <code>/</code> and exposes <code>read_text</code>/<code>write_text</code>/<code>glob</code>/<code>mkdir</code> directly.</li>
-    <li>Write a context manager as a class with <code>__enter__</code>/<code>__exit__</code> when it needs to expose state; use <code>@contextlib.contextmanager</code> on a generator for everything simpler.</li>
-  </ul>
+  <p>The five habits above — <code>with</code> for closing, explicit <code>encoding="utf-8"</code>, line-by-line reads for large files, <code>pathlib</code> over <code>os.path</code>, and a context manager sized to the job — are the difference between code that works on your machine today and code that still works in production next year.</p>
 </div>
 
 Next: [standard library tour](/blog/python-primer/standard-library-tour/), the other modules worth knowing before reaching for a third-party package.

@@ -11,33 +11,23 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "⚡"
-read_mins: 6
+read_mins: 8
 permalink: /blog/gnn/temporal-graph-networks/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
-
 <div class="tldr-box">
-<strong>TL;DR:</strong> TGN (Rossi et al., 2020) processes a continuous stream of interaction events. Each node maintains a memory vector s_v that is updated by a memory updater (GRU-based) when v participates in an event. When node embeddings are needed, a temporal graph attention module aggregates from recent neighbours using time-aware features. This combines persistent memory with structural context.
+<strong>TL;DR:</strong> TGN (Rossi et al., 2020) processes a continuous stream of interaction events. Each node maintains a memory vector \(s_v\) that is updated by a memory updater (GRU-based) when \(v\) participates in an event. When node embeddings are needed, a temporal graph attention module aggregates from recent neighbours using time-aware features. This combines persistent memory with structural context — while only ever reading events that have already happened.
 </div>
 {% include figure image_path="/images/blog/gnn/rossi2020_tgn.png" alt="TGN memory module" caption="Temporal Graph Network (TGN): memory module and interaction processing (Rossi et al., 2020)" %}
 
 
 ## TGN's Design Philosophy
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Think of each node as a person carrying a wallet-sized summary card (the memory s_v). When they meet someone new, they update their card — but they do not replay their entire life history. When you ask them for a full introduction, they pull out their card and also look around at who is nearby (temporal graph attention). TGN's separation of memory from embedding is exactly this: cheap persistent state plus rich on-demand context.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Think of each node as a person carrying a wallet-sized summary card (the memory \(s_v\)). When they meet someone new, they update their card — but they do not replay their entire life history. When you ask them for a full introduction, they pull out their card and also look around at who is nearby (temporal graph attention). TGN's separation of memory from embedding is exactly this: cheap persistent state plus rich on-demand context.</div>
 
 TGN separates two concerns:
-1. **Memory:** long-term history of a node's interactions, stored as a fixed-size vector s_v
+1. **Memory:** long-term history of a node's interactions, stored as a fixed-size vector $$s_v$$
 2. **Embedding:** current structural context, computed by aggregating recent neighbours
 
 This separation allows efficient online updates (only memory changes on each event) while preserving rich structural context when embeddings are needed.
@@ -46,66 +36,77 @@ This separation allows efficient online updates (only memory changes on each eve
 
 ### 1. Memory Module
 
-Each node v has a memory state s_v ∈ ℝ^{d_s}. Initially s_v = 0.
+Each node $$v$$ has a memory state $$s_v \in \mathbb{R}^{d_s}$$. A node that has never been seen starts from $$s_v = 0$$.
 
-When an interaction (u, v, t, e_{uv}) occurs:
-- Node u interacts with node v at time t with edge features e_{uv}
+When an interaction $$(u, v, t, e_{uv})$$ occurs — node $$u$$ interacting with node $$v$$ at time $$t$$ with edge features $$e_{uv}$$ — a **raw message** is computed for each of the two endpoints:
 
-**Raw messages** are computed for both interacting nodes:
-
-<div class="math-box">
-m_u(t) = MSG_s( s_u(t^-), s_v(t^-), Δt, e_{uv} )
-m_v(t) = MSG_d( s_v(t^-), s_u(t^-), Δt, e_{uv} )
+<div class="formula-box">
+\[
+\begin{aligned}
+m_u(t) &= \mathrm{msg}_{\text{s}}\big( s_u(t^-),\, s_v(t^-),\, \Delta t_u,\, e_{uv} \big) \\[2pt]
+m_v(t) &= \mathrm{msg}_{\text{d}}\big( s_v(t^-),\, s_u(t^-),\, \Delta t_v,\, e_{uv} \big)
+\end{aligned}
+\]
 </div>
 
-Where s_u(t^-) is u's memory just before the event, and Δt = t - t_last_u is the time since u's last interaction.
+Here $$s_u(t^-)$$ is $$u$$'s memory just *before* the event, and $$\Delta t_u = t - t_u^-$$ is the time elapsed since $$u$$'s last memory update. Source and destination get separate message functions $$\mathrm{msg}_{\text{s}}$$ and $$\mathrm{msg}_{\text{d}}$$, because an interaction is not symmetric (a user clicking an item is not the same event as an item being clicked by a user).
 
-**Memory update** (GRU):
+**Memory update** (a GRU cell, with the message as input and the old memory as hidden state):
 
-<div class="math-box">
-s_u(t) = MEM( m_u(t), s_u(t^-) )
-s_v(t) = MEM( m_v(t), s_v(t^-) )
+<div class="formula-box">
+\[
+s_u(t) = \mathrm{mem}\big( m_u(t),\, s_u(t^-) \big), \qquad
+s_v(t) = \mathrm{mem}\big( m_v(t),\, s_v(t^-) \big)
+\]
 </div>
 
 The GRU's gating mechanism naturally handles the trade-off between old memory and new information.
 
+If several events touching $$u$$ arrive in the same batch, TGN first collapses their raw messages into one with an aggregator (the paper's default is simply "keep the most recent"), then applies a single memory update.
+
 ### 2. Temporal Graph Attention (Embedding Module)
 
-When we need node u's embedding at time t (for inference), we aggregate from temporal neighbours:
+When we need node $$u$$'s embedding at time $$t$$ (for inference), we aggregate from temporal neighbours:
 
-**Time encoding:** encode elapsed time as a feature using random Fourier features or learnable frequencies:
+**Time encoding:** encode elapsed time as a feature using learnable frequencies — the Bochner-theorem construction of TGAT:
 
-<div class="math-box">
-φ(Δt) = [cos(ω₁ Δt + b₁), ..., cos(ω_d Δt + b_d)]
+<div class="formula-box">
+\[
+\varphi(\Delta t) = \big[\, \cos(\omega_1 \Delta t + b_1),\ \dots,\ \cos(\omega_d \Delta t + b_d) \,\big]
+\]
 </div>
 
 This gives the model a sense of recency — events further in the past have lower encoded similarity to the current time.
 
 **Temporal attention over neighbours:**
 
-<div class="math-box">
-h_u(t) = AGG( s_u(t), { (s_v(t), e_{uv}, φ(t - t_{uv})) : (v, t_{uv}) ∈ N_k(u, t) } )
+<div class="formula-box">
+\[
+h_u(t) = \mathrm{AGG}\Big( s_u(t),\ \big\{ \big( s_w(t),\, e_{uw},\, \varphi(t - t_{uw}) \big) \ :\ (w, t_{uw}) \in \mathcal{N}_k(u, t) \big\} \Big)
+\]
 </div>
 
-Where N_k(u, t) is the k most recent temporal neighbours of u before time t.
+where $$\mathcal{N}_k(u, t) = \{(w, t_{uw}) : t_{uw} < t\}$$ restricted to the $$k$$ most recent such neighbours. The strict inequality is the point: the neighbourhood is defined by a *temporal* cut, so an embedding at time $$t$$ can never see an edge that has not happened yet.
 
 <div class="insight-box">
-<strong>Why time encoding matters:</strong> An interaction 1 second ago should have more influence than one from 1 year ago. Time encoding φ(Δt) provides this recency signal explicitly. The model learns to weight recent interactions more heavily for tasks where recency is informative (e.g., click prediction), or weight them equally for tasks where history matters uniformly.
+<strong>Why time encoding matters:</strong> An interaction 1 second ago should have more influence than one from 1 year ago. Time encoding \(\varphi(\Delta t)\) provides this recency signal explicitly. The model learns to weight recent interactions more heavily for tasks where recency is informative (e.g. click prediction), or weight them equally for tasks where history matters uniformly.
 </div>
 
 ### 3. Link Prediction Decoder
 
-Given node embeddings h_u(t) and h_v(t), compute interaction probability:
+Given node embeddings $$h_u(t)$$ and $$h_v(t)$$, compute interaction probability:
 
-<div class="math-box">
-p(u, v, t) = σ( MLP( [h_u(t) || h_v(t)] ) )
+<div class="formula-box">
+\[
+p(u, v, t) = \sigma\Big( \mathrm{MLP}\big( [\, h_u(t) \,\Vert\, h_v(t) \,] \big) \Big)
+\]
 </div>
 
 Trained with binary cross-entropy + negative sampling (sample random non-interacting pairs as negatives).
 
 ## Worked Example: One TGN Memory Update
 
-Suppose user u has memory s_u = [0.5, -0.2, 0.8] (d_s = 3). At time t=100, u interacts with item v (s_v = [0.1, 0.9, 0.3]) via edge features e_uv = [1] (e.g., a "click"). The time since u's last interaction: delta_t = 100 - 85 = 15.
+Suppose user $$u$$ has memory $$s_u = [0.5, -0.2, 0.8]$$ (so $$d_s = 3$$). At time $$t = 100$$, $$u$$ interacts with item $$v$$ (memory $$s_v = [0.1, 0.9, 0.3]$$) via edge features $$e_{uv} = [1]$$ (e.g. a "click"). The time since $$u$$'s last memory update is $$\Delta t_u = 100 - 85 = 15$$.
 
 **Step 1: Raw message for u**
 ```
@@ -181,46 +182,58 @@ The GRU's forget gate suppresses the old memory dimension 3 (0.8 → 0.3) becaus
 
 ## The Full TGN Loop
 
+The ordering matters more than it looks. The memory used to predict an event must be the memory *before* that event:
+
 ```
-For each event (u, v, t, e_{uv}) in the stream:
-  1. Retrieve memories s_u(t^-), s_v(t^-)
-  2. Compute messages m_u, m_v
-  3. Update memories: s_u(t), s_v(t)
-  4. When evaluation needed:
-     a. Compute temporal embeddings h_u(t), h_v(t)
-     b. Predict p(u, v, t)
+For each batch of events, in chronological order:
+  1. Flush the raw-message store: update memories using the
+     messages generated by EARLIER batches only
+  2. Compute temporal embeddings h_u(t), h_v(t) from the
+     updated memories + neighbours with timestamp < t
+  3. Predict p(u, v, t) and compute the loss
+  4. Compute the raw messages for THIS batch's events and
+     push them to the store — to be consumed at step 1
+     of the next batch
 ```
+
+Steps 1 and 4 are what keep the model causal. If you updated the memory with an event and then predicted that same event, the target would already be encoded in the input and the reported accuracy would be meaningless.
 
 ## Variants and Ablations
 
-TGN subsumes several prior architectures:
+Several prior architectures fall out of the TGN template as particular choices of memory updater, message function and embedding module:
 
-| Architecture | Memory | Embedding |
+| Architecture | Memory | Embedding module |
 |-------------|--------|-----------|
-| DeepCoevolve | GRU | None (memory = embedding) |
-| JODIE | RNN | Linear projection |
-| DyRep | None | Temporal attention |
+| JODIE | RNN | Time projection of the memory |
+| DyRep | RNN | Identity (embedding = memory); attention enters via the message function |
 | TGAT | None | Temporal graph attention |
-| TGN-attn | GRU memory | Temporal graph attention |
+| TGN-attn | GRU | Temporal graph attention |
 
-TGN-attn (full TGN) outperforms all ablations on link prediction benchmarks (Wikipedia, Reddit, MOOC, LastFM).
+Note that DyRep *does* carry a memory — what distinguishes it from TGN-attn is that its embedding module is the identity, so the memory is used directly as the node representation, and the graph attention is folded into how its messages are built.
+
+In the paper's ablations, TGN-attn is the strongest of these variants on the Wikipedia and Reddit link-prediction benchmarks, and it is also the most expensive: memory plus attention is strictly more computation than either alone.
 
 ## Inductive Capability
 
-TGN naturally handles new nodes: when a previously unseen node v appears, its memory is initialised to 0. After its first few interactions, the memory accumulates history. This is the key advantage over transductive methods that require all nodes at training time.
+TGN naturally handles new nodes: when a previously unseen node $$v$$ appears, its memory is initialised to $$0$$. After its first few interactions, the memory accumulates history. This is the key advantage over transductive methods that require all nodes at training time. The caveat is that a node's first prediction is made from an empty memory, so inductive performance leans on the embedding module and edge features rather than the memory.
 
 ## Batch Processing and Training
 
-Online event processing is not directly compatible with batched GPU training. TGN uses a trick: process events in chronological order within batches, carrying memory states forward. Memory updates are detached from the computation graph to avoid BPTT over the full event history — only the embedding computation and the final prediction are differentiated.
+Online, one-event-at-a-time processing is not directly compatible with batched GPU training, and there is a subtler problem: if the memory is updated with an interaction and the loss is then computed on that same interaction, the memory-related modules receive no useful gradient at all — the answer is already in the input.
+
+TGN's fix is the raw-message store described above. Within a batch, memories are brought up to date using messages *from previous batches*, the loss is computed, and only then are this batch's messages stored. The memory updater therefore sits on the path from an earlier batch's events to the current batch's prediction, and does receive gradient. Backpropagation is truncated at the batch boundary rather than run over the entire event history.
+
+A consequence worth remembering: batch size is not a free hyperparameter in TGN. Larger batches mean staler memory at prediction time, which changes the model, not just the optimisation.
 
 ## Summary
 
 | Component | Purpose |
 |-----------|---------|
-| Memory s_v | Long-term history (fixed-size, GRU-updated) |
+| Memory $$s_v$$ | Long-term history (fixed-size, GRU-updated) |
 | Raw messages | Per-event information for memory update |
+| Raw-message store | Defers updates by one batch — keeps the model causal and trainable |
 | Time encoding | Recency signal for temporal attention |
-| Temporal attention | Structural context from recent neighbours |
+| Temporal attention | Structural context from neighbours strictly before $$t$$ |
 | Link decoder | Interaction probability from embeddings |
 
 TGN is the standard baseline for continuous-time dynamic graph link prediction. Its modular design (memory + embedding + decoder) allows ablation studies and component swapping — making it a useful research framework as well as a practical model.

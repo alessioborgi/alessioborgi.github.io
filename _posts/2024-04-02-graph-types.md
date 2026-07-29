@@ -11,27 +11,19 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "↔️"
-read_mins: 5
+read_mins: 7
 permalink: /blog/gnn/graph-types/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Undirected graphs have symmetric relationships; directed graphs have asymmetric ones (A ≠ Aᵀ). Weighted graphs encode relationship strength. Heterogeneous graphs have multiple node/edge types. Each variant arises naturally in real data and requires adapted GNN designs.
+<strong>TL;DR:</strong> Undirected graphs have symmetric relationships; directed graphs have asymmetric ones (\(A \neq A^{\top}\)). Weighted graphs encode relationship strength. Bipartite, multigraph, multi-relational, heterogeneous, and hypergraph structures each relax a different assumption. Every variant arises naturally in real data and requires an adapted GNN design.
 </div>
 
 ## Undirected Graphs
 
-In an **undirected graph**, edges have no direction — (u,v) ∈ E implies (v,u) ∈ E. The adjacency matrix is symmetric: A = Aᵀ.
+In an **undirected graph**, edges have no direction — $$(u,v) \in E$$ implies $$(v,u) \in E$$. The adjacency matrix is symmetric: $$A = A^{\top}$$.
 
 **Real examples:** molecular bonds (a bond between C and O is mutual), social friendships (Facebook), co-authorship networks.
 
@@ -39,7 +31,7 @@ In an **undirected graph**, edges have no direction — (u,v) ∈ E implies (v,u
 
 ## Directed Graphs
 
-In a **directed graph** (digraph), edges have a direction. Edge (u→v) ∈ E does not imply (v→u). The adjacency matrix is generally asymmetric: A ≠ Aᵀ.
+In a **directed graph** (digraph), edges are ordered pairs. An edge $$(u,v) \in E$$ points from $$u$$ to $$v$$ and does not imply $$(v,u) \in E$$, so the adjacency matrix is generally asymmetric: $$A \neq A^{\top}$$, with $$A_{uv} = 1$$ recording the edge $$u \to v$$.
 
 **Real examples:** citation networks (A cites B, but B doesn't cite A), Twitter follows, web links, dependency graphs.
 
@@ -47,7 +39,7 @@ In a **directed graph** (digraph), edges have a direction. Edge (u→v) ∈ E do
 
 ## Weighted Graphs
 
-In a **weighted graph**, each edge has a scalar (or vector) weight w_{uv} ∈ ℝ. The adjacency matrix becomes A[u,v] = w_{uv}.
+In a **weighted graph**, each edge carries a scalar weight $$w_{uv} \in \mathbb{R}$$, and the adjacency matrix stores that weight rather than a 0/1 indicator: $$A_{uv} = w_{uv}$$ when $$(u,v) \in E$$, and $$0$$ otherwise.
 
 **Real examples:** road networks (road distance), correlation networks (feature correlation), similarity graphs (cosine similarity between embeddings).
 
@@ -55,23 +47,33 @@ In a **weighted graph**, each edge has a scalar (or vector) weight w_{uv} ∈ �
 
 ## Bipartite Graphs
 
-A **bipartite graph** has two disjoint node sets U and V, with edges only between U and V (never within U or within V).
+A **bipartite graph** partitions the node set into two disjoint parts, $$V = U \sqcup W$$, with every edge joining a node in $$U$$ to a node in $$W$$ — never two nodes within the same part. Equivalently, a graph is bipartite exactly when it contains no odd-length cycle.
 
 **Real examples:** user-item graphs (recommendation), author-paper graphs (authorship), drug-protein interaction graphs.
 
 **GNN implication:** message passing alternates between the two node sets. Specialised bipartite GNNs propagate information from items to users and back.
 
-## Multiplex and Multi-relational Graphs
+## Multigraphs
 
-A **multi-relational graph** has multiple edge types — the same pair of nodes can be connected by edges of different types.
+A **multigraph** allows more than one edge between the same ordered pair of nodes (**parallel edges**), and often self-loops $$(v,v)$$ as well. The edge set is therefore a multiset rather than a subset of $$V \times V$$, and a single 0/1 adjacency matrix can no longer represent the graph — you either store integer edge counts in $$A$$ or keep an explicit edge list.
 
-**Real examples:** knowledge graphs (TransE, DistMult) where entity pairs are connected by typed relations (was_born_in, works_at, married_to); social networks with typed interactions (friend, colleague, family).
+**Real examples:** flight networks (several distinct flights between the same two airports), transaction networks (repeated payments between the same two accounts), road networks with parallel carriageways.
 
-**GNN implication:** R-GCN and similar architectures learn separate weight matrices per relation type, aggregating typed messages separately before combining.
+**GNN implication:** parallel edges each send their own message, so a node can receive several distinct messages from the same neighbour. Frameworks that index messages by edge (rather than by neighbour) handle this without modification.
+
+**Careful:** a multigraph is about *how many* edges may join a pair of nodes; a multi-relational graph, next, is about *what type* those edges are. The two are independent, and a graph can be both.
+
+## Multi-relational Graphs
+
+A **multi-relational graph** attaches a type $$r \in \mathcal{R}$$ to every edge, so edges are triples $$(u, r, v)$$. The same pair of nodes may be connected by edges of several different types, and there is one adjacency matrix $$A_r$$ per relation.
+
+**Real examples:** knowledge graphs such as Freebase and Wikidata, where entity pairs are connected by typed relations (`born_in`, `works_at`, `married_to`); social networks with typed interactions (friend, colleague, family). TransE and DistMult are *embedding models* for such graphs, not graph types themselves.
+
+**GNN implication:** R-GCN and similar architectures learn a separate weight matrix per relation type, aggregating typed messages separately before combining them.
 
 ## Heterogeneous Graphs
 
-A **heterogeneous graph** has multiple **node types** and multiple **edge types**:
+A **heterogeneous graph** comes with a type map on *both* nodes and edges: $$\tau : V \to \mathcal{T}_V$$ and $$\phi : E \to \mathcal{T}_E$$, where $$\lvert \mathcal{T}_V \rvert > 1$$. A multi-relational graph is the special case with many edge types but a single node type; a heterogeneous graph relaxes the node side too.
 
 ```
 Node types: {Paper, Author, Venue}
@@ -90,11 +92,11 @@ Edge types: {Author→Paper: wrote, Paper→Venue: published_at, Paper→Paper: 
 
 ## Hypergraphs
 
-A **hypergraph** generalises graphs: hyperedges can connect any number of nodes (not just pairs).
+A **hypergraph** $$H = (V, \mathcal{E})$$ generalises graphs by letting each hyperedge be an arbitrary subset of nodes, $$e \subseteq V$$, rather than a pair. An ordinary graph is the special case where every hyperedge has $$\lvert e \rvert = 2$$. Structure is stored as an incidence matrix $$B \in \{0,1\}^{N \times \lvert \mathcal{E} \rvert}$$ with $$B_{ve} = 1$$ when $$v \in e$$.
 
-**Real examples:** group memberships (a paper can have 5 authors — one hyperedge connecting all 5), co-purchase events, multi-agent interactions.
+**Real examples:** group memberships (a paper with five authors is one hyperedge over all five), co-purchase baskets, multi-agent interactions.
 
-**GNN implication:** hypergraph neural networks convert hyperedges to bipartite graphs (node–hyperedge–node) and propagate through both.
+**GNN implication:** hypergraph neural networks typically expand each hyperedge into a bipartite node–hyperedge incidence structure and propagate node → hyperedge → node, so a message reaches all co-members of a group in one round rather than only pairwise partners.
 
 <style>
 @keyframes directed-flow {
@@ -157,14 +159,15 @@ A **dynamic graph** evolves over time: nodes and edges appear and disappear.
 
 | Graph type | Key property | Example | GNN challenge |
 |-----------|-------------|---------|--------------|
-| Undirected | A = Aᵀ | Molecules, friendships | Symmetric aggregation |
-| Directed | A ≠ Aᵀ | Citations, follows | Direction-aware aggregation |
-| Weighted | A[u,v] = w | Roads, correlations | Weight-modulated messages |
-| Bipartite | Two node sets | User-item, author-paper | Alternating propagation |
-| Multi-relational | Multiple edge types | Knowledge graphs | Type-specific weights |
-| Heterogeneous | Multiple node+edge types | Academic networks | Type-aware architectures |
-| Hypergraph | Edges connect >2 nodes | Group memberships | Hyperedge aggregation |
-| Dynamic | Graph changes over time | Communication networks | Temporal modeling |
+| Undirected | $$A = A^{\top}$$ | Molecules, friendships | Symmetric aggregation |
+| Directed | $$A \neq A^{\top}$$ | Citations, follows | Direction-aware aggregation |
+| Weighted | $$A_{uv} = w_{uv}$$ | Roads, correlations | Weight-modulated messages |
+| Bipartite | $$V = U \sqcup W$$, edges only across | User-item, author-paper | Alternating propagation |
+| Multigraph | Parallel edges, self-loops allowed | Flights, transactions | Per-edge (not per-neighbour) messages |
+| Multi-relational | Typed edges $$(u, r, v)$$ | Knowledge graphs | Type-specific weights |
+| Heterogeneous | Multiple node *and* edge types | Academic networks | Type-aware architectures |
+| Hypergraph | Hyperedge is any subset of $$V$$ | Group memberships | Hyperedge aggregation |
+| Dynamic | Graph changes over time | Communication networks | Temporal modelling |
 
 Recognising which graph type your data is determines which GNN variant to use. Starting with a homogeneous GNN on a heterogeneous graph is a common and costly mistake.
 

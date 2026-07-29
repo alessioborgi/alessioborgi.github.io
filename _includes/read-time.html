@@ -40,6 +40,33 @@
   {% endfor %}
   {% assign rt_clean = rt_acc %}
 
+  {% comment %}
+    Code blocks. Fenced code renders as <pre>...</pre>; counting it as prose
+    badly inflates the estimate on the programming posts (one 970-word article
+    reported a 10 minute read). A reader scans code, they do not read it at
+    prose speed.
+  {% endcomment %}
+  {% assign rt_chunks = rt_clean | split: '<pre' %}
+  {% assign rt_acc = rt_chunks[0] %}
+  {% for rt_chunk in rt_chunks offset:1 %}
+    {% assign rt_tail = rt_chunk | split: '</pre>' %}
+    {% assign rt_acc = rt_acc | append: rt_tail[1] %}
+  {% endfor %}
+  {% assign rt_clean = rt_acc %}
+
+  {% comment %}
+    Display maths. MathJax delimiters survive into the HTML as literal \[ ... \]
+    text, so the LaTeX source was being counted word by word — which inflated
+    every post as its pseudo-maths was converted to real LaTeX.
+  {% endcomment %}
+  {% assign rt_chunks = rt_clean | split: '\[' %}
+  {% assign rt_acc = rt_chunks[0] %}
+  {% for rt_chunk in rt_chunks offset:1 %}
+    {% assign rt_tail = rt_chunk | split: '\]' %}
+    {% assign rt_acc = rt_acc | append: rt_tail[1] %}
+  {% endfor %}
+  {% assign rt_clean = rt_acc %}
+
   {% assign words = rt_clean | strip_html | number_of_words %}
 {% endif %}
 

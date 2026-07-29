@@ -11,37 +11,29 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "⏰"
-read_mins: 5
+read_mins: 7
 permalink: /blog/gnn/temporal-knowledge-graphs/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A temporal knowledge graph (TKG) extends the standard triple (s, r, o) to a quadruple (s, r, o, t) — each fact has a timestamp or validity interval. TKG completion asks: given (s, r, ?, t), predict the missing entity. This requires reasoning about temporal patterns: periodicity, recency, entity-relation-time interactions.
+<strong>TL;DR:</strong> A temporal knowledge graph (TKG) extends the standard triple \((s, r, o)\) to a quadruple \((s, r, o, t)\) — each fact carries a timestamp or a validity interval. TKG completion asks: given \((s, r, ?, t)\), predict the missing entity. This requires reasoning about temporal patterns: periodicity, recency, and entity–relation–time interactions.
 </div>
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A static KG is a photograph — it captures one moment. A temporal KG is a film — facts have birth dates and expiry dates. The challenge is not just storing timestamps but reasoning about them: "Who was the CEO of Apple in 2005?" requires knowing that Steve Jobs held the role from 1997 to 2011, not just that he was ever CEO.</div>
 
 ## From Triples to Quadruples
 
-Standard KG: {(s, r, o)} — timeless facts.
+Standard KG: $$\{(s, r, o)\}$$ — timeless facts.
 
-Temporal KG: {(s, r, o, t)} where t is a timestamp or interval [t_start, t_end].
+Temporal KG: $$\{(s, r, o, t)\}$$ where $$t$$ is a timestamp or an interval $$[t_{\text{start}}, t_{\text{end}}]$$.
 
 Examples:
-- (Barack_Obama, presidentOf, USA, [2009, 2017])
-- (Bayern_Munich, wonChampionsLeague, 2020)
-- (Apple, ceoIs, Steve_Jobs, [1976, 1985] ∪ [1997, 2011])
+
+- (Barack Obama, presidentOf, USA, [2009, 2017])
+- (Bayern Munich, wonChampionsLeague, 2020)
+- (Apple, ceoIs, Steve Jobs, [1997, 2011])
 
 **Two types of TKG facts:**
 1. **Instantaneous:** single timestamp (sports results, news events)
@@ -59,54 +51,58 @@ Extrapolation is the harder and more practically relevant task.
 
 ### TTransE (Time-aware TransE)
 
-Adds time to the TransE scoring function:
+Adds time to the TransE scoring function as a second translation:
 
-<div class="math-box">
-f(s, r, o, t) = -||e_s + w_r + w_t - e_o||
+<div class="formula-box">
+\[
+f(s, r, o, t) \;=\; -\,\bigl\lVert e_s + w_r + w_t - e_o \bigr\rVert
+\]
 </div>
 
-Learns a separate time embedding w_t and treats time as another "relation" that shifts entity positions. Simple extension but ignores temporal dynamics.
+Each timestamp gets its own embedding $$w_t$$, and time acts as another "relation" that shifts entity positions. It is the simplest possible temporal extension, and it inherits both TransE's limits (no symmetric relations) and one of its own: $$w_t$$ is a lookup table over observed timestamps, so a timestamp never seen in training has no embedding. That makes plain TTransE an interpolation model — extrapolating to future times needs either a parametric function of $$t$$ or a model that reasons over history.
 
-### TNTComplEx
+### TComplEx / TNTComplEx
 
-Extends ComplEx to quadruples by adding temporal embeddings as additional mode:
+Extends ComplEx to quadruples by treating time as a fourth mode of the tensor:
 
-<div class="math-box">
-f(s, r, o, t) = Re( e_s · w_r · e_o · w_t )
+<div class="formula-box">
+\[
+f(s, r, o, t) \;=\; \mathrm{Re}\Bigl(\bigl\langle\, e_s,\; w_r,\; \overline{e_o},\; w_t \,\bigr\rangle\Bigr)
+\;=\;
+\mathrm{Re}\Bigl(\sum_{k} \bigl(e_s\bigr)_k \bigl(w_r\bigr)_k \overline{\bigl(e_o\bigr)_k} \bigl(w_t\bigr)_k\Bigr)
+\]
 </div>
 
-(4th-order tensor decomposition with complex embeddings.)
+This 4th-order decomposition with complex embeddings is **TComplEx**. **TNTComplEx** ("temporal and non-temporal") adds a second, time-independent ComplEx term to the score, so a relation that never changes — *bornIn* — is modelled by the static part rather than being forced to reproduce itself across every timestamp. Splitting the two is the paper's main contribution over the plain temporal factorisation.
 
 ### RE-NET (Recurrent Event Network)
 
-Uses a recurrent architecture to model temporal sequences:
+Models the sequence of a subject's past events autoregressively:
 
-1. For each entity pair (s, o), collect the sequence of relations over time
-2. Encode with GRU/LSTM to get history representation
-3. Aggregate with a GNN over the event subgraph at time t
-4. Score candidate triples for t+1
+1. For a subject $$s$$ (optionally conditioned on a relation $$r$$), collect its events grouped by timestamp
+2. At each past timestep, a neighbourhood aggregator summarises the set of concurrent events involving $$s$$ into one vector
+3. An RNN encodes that sequence of per-timestep summaries into a history representation
+4. Score candidate objects for the next timestep from the history
 
-RE-NET explicitly models the temporal ordering of events — capturing recurrence patterns like "Player X scores goals in consecutive matches."
+The ordering of events is what the RNN consumes, so RE-NET can capture recurrence and sequence patterns — "Player X scores in consecutive matches", or a state visit following a state visit — that a model treating each timestamp independently cannot.
 
 ### TGAT (Temporal Graph Attention Network)
 
-Assigns time-encoding to edges and applies attention over temporal neighbourhoods. Each neighbour message is weighted by both structural importance (attention) and temporal proximity (time encoding).
+Attaches a **functional** time encoding to each edge and applies attention over temporal neighbourhoods, so each neighbour message is weighted by both structural importance (attention) and temporal proximity. The word "functional" carries the weight here: TGAT's encoding is a continuous function of the elapsed time rather than a lookup table over observed timestamps, so unlike TTransE it can be evaluated at a time it has never seen. That is what makes it usable for extrapolation.
 
 <div class="insight-box">
-<strong>Why temporal patterns matter:</strong> "CountryX will hold elections" is more likely if elections occurred ~4 years ago (periodicity). "PersonY will be appointed to a position" depends on whether they recently left another position (temporal sequence). TKG models that capture periodicity and recency dramatically outperform static KG models on extrapolation tasks.
+<strong>Why temporal patterns matter:</strong> "CountryX will hold elections" is far more likely if elections occurred roughly four years ago (periodicity). "PersonY will be appointed to a position" depends on whether they recently left another one (temporal sequence). A static KG model has no way to express either regularity — it sees only that the fact occurred at some point, so it can rank candidates but cannot say <em>when</em>. That is a difference in what the model can represent, which is why extrapolation is where temporal modelling earns its cost.
 </div>
 
 ## Worked Example: TTransE on a Political Event
 
-Suppose we want to predict: *(CountryX, holdsElection, ?, t=2024)*.
+Suppose we want to predict $$(\text{CountryX},\ \textit{holdsElection},\ ?,\ t = 2024)$$.
 
-Static TransE embeds CountryX and holdsElection without time — it either always predicts elections or never does, based on training frequency.
+Static TransE embeds CountryX and *holdsElection* with no notion of time — its score is the same for every year, so it either always ranks an election highly or never does, according to training frequency.
 
-TTransE scoring function: f(s, r, o, t) = -||e_s + w_r + w_t - e_o||
+TTransE scores with $$f(s, r, o, t) = -\lVert e_s + w_r + w_t - e_o\rVert$$. If training has driven $$w_{2024}$$ close to $$w_{2020}$$ — both election years, the same phase of a four-year cycle — then 2024 candidates score much as 2020's did, and the periodicity is captured. A non-election year like 2022 has a $$w_{2022}$$ far from $$w_{2020}$$, so election predictions there score low.
 
-With learned time embedding w_2024 ≈ w_2020 (both election years, similar temporal position in the 4-year cycle), TTransE will score 2024 candidates similarly to 2020 — capturing the **periodicity** pattern. For a non-election year like 2022, w_2022 is far from w_2020 in embedding space, so election predictions score low.
-
-This illustrates why time embeddings help: they encode position in recurring cycles, giving the model a "calendar sense" that static embeddings completely lack.
+Two caveats keep this honest. First, nothing in TTransE *makes* $$w_{2024}$$ resemble $$w_{2020}$$ — the time embeddings are free parameters, and they only end up near each other if enough training quadruples pull them there. Second, and more restrictive, $$w_{2024}$$ has to exist at all: if 2024 never appears in training, TTransE has no embedding for it and cannot score the query. Genuine extrapolation therefore needs either time embeddings that are a smooth function of $$t$$ (so unseen timestamps can be evaluated) or a history-based model like RE-NET that conditions on the past rather than looking up the future.
 
 <style>
 @keyframes tkg-tick {
@@ -174,16 +170,16 @@ This illustrates why time embeddings help: they encode position in recurring cyc
 - **YAGO15K:** static YAGO with temporal annotations
 - **WikiData (temporal subset):** entity facts with validity intervals
 
-Standard splits: train on t ≤ T, validate on T < t ≤ T', test on t > T'.
+Standard splits are chronological, not random: train on $$t \le T$$, validate on $$T < t \le T'$$, test on $$t > T'$$. A random split would leak future information into training and inflate results.
 
 ## Summary
 
-| Model | Approach | Temporal pattern captured |
-|-------|----------|--------------------------|
-| TTransE | Time embedding + TransE | Basic time displacement |
-| TNTComplEx | 4-order tensor with time | Complex temporal interactions |
-| RE-NET | GNN + RNN | Temporal event sequences |
-| TGAT | Temporal attention | Recency-weighted neighbourhood |
+| Model | Approach | Temporal pattern captured | Interpolation / extrapolation |
+|-------|----------|--------------------------|---------------|
+| TTransE | Time embedding added to the TransE translation | Time as a displacement | Interpolation — unseen timestamps have no embedding |
+| TComplEx / TNTComplEx | 4th-order complex tensor factorisation, plus a static term | Time-varying and time-invariant relations, kept separate | Interpolation |
+| RE-NET | Neighbourhood aggregator + RNN over event history | Temporal event sequences, recurrence | Extrapolation |
+| TGAT | Attention with functional time encoding | Recency-weighted neighbourhood | Extrapolation — the encoding is a function of $$t$$ |
 
 Temporal knowledge graphs are a stepping stone from static relational reasoning to full temporal graph learning (covered in the Dynamic Graphs section). The key insight: facts have lifetimes, and reasoning about the world requires reasoning about when facts were true — not just whether they are true.
 

@@ -11,20 +11,11 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🗂️"
-read_mins: 5
+read_mins: 7
 permalink: /blog/gnn/structural-vs-positional-pe/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
-
 <div class="tldr-box">
 <strong>TL;DR:</strong> Positional encoding: "node v is at position (x,y) in graph space" — globally unique identifiers. Structural encoding: "node v is a hub/leaf/bridge" — role descriptors independent of global position. Two nodes can have the same structural role in different positions, or the same position with different roles. Both types of information matter for different tasks.
 </div>
@@ -103,10 +94,12 @@ Analogy: your job title (engineer, manager, intern). Two engineers at different 
 Two molecules where atom A is always the central carbon, but one has 3 bonds (sp2 hybridised) and another has 4 (sp3). Their global "position" (central atom) is the same, but their structural role differs.
 
 **Same structure, different position:**  
-In a path graph A-B-C-D-E, nodes B and D both have degree 2. Their structural roles are identical (leaf-of-interior), but they are at different global positions (2nd vs 4th from the start).
+In the path A–B–C–D–E, nodes B and D are both interior degree-2 nodes with identical local neighbourhoods. Their structural role is the same, but they sit at different global positions — 2nd and 4th from the start.
+
+This example also shows the limit of the distinction. B and D are exchanged by the path-reversal automorphism, so they are not merely structurally alike, they are *genuinely equivalent* under the graph's symmetry. No permutation-equivariant encoding — positional or structural — can assign them different values. LapPE separates them only through the eigenvector's sign, which is itself an arbitrary choice. The clean cases for "same structure, different position" are graphs without that symmetry: two degree-3 hubs sitting in different communities of an asymmetric network.
 
 <div class="insight-box">
-<strong>Key test:</strong> Would two nodes in two *different* graphs (or two copies of the same graph) deserve the same encoding? If yes → structural. If no → positional (position only makes sense within one fixed graph).
+<strong>Key test:</strong> Would two nodes in two <em>different</em> graphs deserve the same encoding? If yes → structural, and the encoding transfers. If no → positional: it is a coordinate within one fixed graph, and the coordinate system does not carry over.
 </div>
 
 ## Classification of Common Encodings
@@ -138,23 +131,32 @@ In a path graph A-B-C-D-E, nodes B and D both have degree 2. Their structural ro
 
 ## Equivariance Considerations
 
-Positional encodings break node permutation equivariance — the representation of node v now depends on its global position, which changes if you relabel nodes.
+It is often said that positional encodings "break permutation equivariance". That is not quite right, and getting it right clarifies what SignNet is actually for.
 
-Structural encodings preserve permutation equivariance up to isomorphism — relabelling nodes permutes structural encodings accordingly. This is the "right" property for structural encodings.
+Both families are computed from the graph, so both are permutation *equivariant*: relabel the nodes and the encodings permute along with them. Neither depends on the node ordering.
 
-SignNet and similar approaches attempt to make LapPE (which is technically positional but has sign ambiguity) equivariant by handling sign symmetries correctly.
+The real difference is **which extra choice the construction requires**:
+
+- **Structural encodings** (degree, RWPE, clustering coefficient, orbit counts) are deterministic functions of the graph. Nothing is chosen. They are automorphism-invariant by construction, and they are directly comparable across graphs — the same role gives the same number anywhere.
+- **Positional encodings** are only defined *up to a symmetry group of the construction*. Laplacian eigenvectors carry $$2^k$$ sign choices plus an $$O(m)$$ basis choice inside each degenerate eigenspace; anchor-distance encodings carry the random anchor draw. Fix a choice and you get a usable coordinate system, but the choice is arbitrary, so two runs on the same graph can disagree and two different graphs are not comparable at all.
+
+That is what SignNet and BasisNet address: not equivariance, which was never lost, but **invariance to the construction's own symmetry group**. They convert an encoding defined up to sign or basis into one that is a genuine function of the graph — recovering comparability across runs and across graphs, at the cost of discarding whatever information lived in the arbitrary choice.
+
+One consequence follows for both families alike: since every such encoding is a function of the graph, nodes in the same automorphism orbit receive identical values. No encoding of this kind assigns "globally unique node IDs" in a symmetric graph.
 
 ## Summary
 
 | | Positional | Structural |
 |--|-----------|-----------|
-| Uniqueness | Globally unique | Shared across isomorphic roles |
-| Transferable across graphs | No (each graph has its own coordinate system) | Yes (same role in different graphs) |
-| Permutation equivariant | No (depends on labelling) | Yes (up to isomorphism) |
-| Examples | LapPE, SPD, anchor distances | RWPE, degree, orbits |
-| Best for | Tasks needing unique node IDs | Tasks needing role classification |
+| Separating power | Distinguishes non-automorphic nodes by global placement | Distinguishes nodes by local role only |
+| Transferable across graphs | No — each graph gets its own coordinate frame | Yes — the same role gives the same value anywhere |
+| Permutation equivariant | Yes | Yes |
+| Extra choice required | Sign, basis, or anchor draw — needs invariantisation | None |
+| Ties automorphic nodes | Yes (unavoidable) | Yes (unavoidable) |
+| Examples | LapPE, SPD biases, anchor distances | RWPE, degree, clustering coefficient, orbit counts |
+| Best for | Tasks turning on where a node sits | Tasks turning on what a node is like |
 
-The distinction is not academic — choosing the wrong type of encoding is a common source of suboptimal performance in GNN and Graph Transformer design.
+The distinction is not academic. Choosing a structural encoding for a task that needs position, or vice versa, is a common and quiet source of underperformance in GNN and Graph Transformer design.
 
 ## References
 

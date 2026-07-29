@@ -11,20 +11,14 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "📚"
-read_mins: 7
+read_mins: 8
 permalink: /blog/gnn/what-is-a-sheaf/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A cellular sheaf on a graph assigns a vector space ("stalk") to each node and each edge, with linear "restriction maps" from node stalks to adjacent edge stalks. A global section is an assignment of vectors to all nodes that is "consistent" — the restriction maps agree at every edge. The Sheaf Laplacian measures the degree of global inconsistency.
+<strong>TL;DR:</strong> A cellular sheaf on a graph assigns a vector space ("stalk") to each node and each edge, with linear "restriction maps" from node stalks to adjacent edge stalks. A global section is an assignment of vectors to all nodes that is "consistent" — the restriction maps agree at every edge. The sheaf Laplacian \(L_{\mathcal{F}} = \delta^{\top}\delta\) measures the degree of global inconsistency.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Sheaf structure on a graph" caption="Cellular sheaf on a graph: node/edge stalks and restriction maps (Bodnar et al., 2022)" %}
 
@@ -41,47 +35,66 @@ For our purposes (cellular sheaves on graphs), we use a discretisation: the "top
 
 ## Cellular Sheaves on Graphs
 
-A **cellular sheaf** F on graph G = (V, E) assigns:
+A **cellular sheaf** $$\mathcal{F}$$ on a graph $$G = (V, E)$$ assigns:
 
-1. **Node stalks:** a vector space F(v) = ℝ^{d_v} to each node v
-2. **Edge stalks:** a vector space F(e) = ℝ^{d_e} to each edge e
-3. **Restriction maps:** for each edge e = (u,v) and each incident node w ∈ {u,v}:
-   - F(w ⊴ e): F(w) → F(e) — a linear map from the node stalk to the edge stalk
+1. **Node stalks:** a vector space $$\mathcal{F}(v) = \mathbb{R}^{d_v}$$ to each node $$v$$
+2. **Edge stalks:** a vector space $$\mathcal{F}(e) = \mathbb{R}^{d_e}$$ to each edge $$e$$
+3. **Restriction maps:** for each edge $$e = (u,v)$$ and each incident node $$w \in \{u,v\}$$, a linear map
 
-**Notation:** F_{v→e} denotes the restriction map from node v to edge e.
+<div class="formula-box">
+\[
+\mathcal{F}_{w \trianglelefteq e} : \mathcal{F}(w) \longrightarrow \mathcal{F}(e).
+\]
+</div>
+
+**Notation:** $$w \trianglelefteq e$$ reads "$$w$$ is a face of $$e$$", i.e. $$w$$ is an endpoint of the edge $$e$$. Throughout this book we fix a common stalk dimension $$d_v = d_e = d$$, so every restriction map is a $$d \times d$$ matrix.
 
 ## The Cochain Complex
 
 The stalks and restriction maps define a **cochain complex**:
 
-<div class="math-box">
-C^0(G, F) --δ₀--> C^1(G, F)
+<div class="formula-box">
+\[
+C^0(G;\mathcal{F}) \;\xrightarrow{\ \delta\ }\; C^1(G;\mathcal{F})
+\]
 </div>
 
 Where:
-- C^0 = ⊕_v F(v): the space of all node assignments (0-cochains)
-- C^1 = ⊕_e F(e): the space of all edge assignments (1-cochains)
-- δ₀: C^0 → C^1 is the **coboundary map** (codifferential):
+- $$C^0(G;\mathcal{F}) = \bigoplus_{v \in V} \mathcal{F}(v)$$: the space of all node assignments (0-cochains)
+- $$C^1(G;\mathcal{F}) = \bigoplus_{e \in E} \mathcal{F}(e)$$: the space of all edge assignments (1-cochains)
+- $$\delta : C^0 \to C^1$$ is the **coboundary map**, defined for an oriented edge $$e = (u,v)$$ by
 
-<div class="math-box">
-(δ₀ x)_e = F_{v→e} x_v - F_{u→e} x_u   for edge e = (u,v)
+<div class="formula-box">
+\[
+(\delta x)_e \;=\; \mathcal{F}_{v \trianglelefteq e}\, x_v \;-\; \mathcal{F}_{u \trianglelefteq e}\, x_u .
+\]
 </div>
 
-The coboundary δ₀ x measures the **disagreement** between u's and v's contributions to edge e.
+The coboundary $$\delta x$$ measures the **disagreement** between $$u$$'s and $$v$$'s contributions to edge $$e$$. (The choice of orientation only flips the sign of $$(\delta x)_e$$, so nothing below depends on it.)
 
 ## Global Sections
 
-A **global section** is a vector x ∈ C^0 (assignment of vectors to all nodes) such that:
+A **global section** is a 0-cochain $$x \in C^0(G;\mathcal{F})$$ such that
 
-<div class="math-box">
-(δ₀ x)_e = 0   for all edges e
+<div class="formula-box">
+\[
+(\delta x)_e = 0 \quad \text{for all } e \in E,
+\]
 </div>
 
-i.e., F_{v→e} x_v = F_{u→e} x_u for all edges e=(u,v). The two endpoints "agree" at every edge.
+i.e. $$\mathcal{F}_{v \trianglelefteq e}\, x_v = \mathcal{F}_{u \trianglelefteq e}\, x_u$$ for every edge $$e = (u,v)$$. The two endpoints "agree" at every edge.
 
-The space of global sections ker(δ₀) measures how much consistent global data the sheaf supports.
+The space of global sections is the zeroth sheaf cohomology,
 
-**Special case — trivial sheaf:** F(v) = ℝ, F(e) = ℝ, all restriction maps = 1. Then δ₀ x = x_v - x_u is just the ordinary graph gradient, and global sections are constant functions on connected components. This recovers the standard GCN setting.
+<div class="formula-box">
+\[
+H^0(G;\mathcal{F}) \;=\; \ker \delta ,
+\]
+</div>
+
+and it measures how much consistent global data the sheaf supports.
+
+**Special case — trivial sheaf:** $$\mathcal{F}(v) = \mathbb{R}$$, $$\mathcal{F}(e) = \mathbb{R}$$, all restriction maps equal to $$1$$. Then $$(\delta x)_e = x_v - x_u$$ is just the ordinary graph gradient, and global sections are the functions that are constant on each connected component. This is exactly the setting in which the sheaf Laplacian becomes the ordinary graph Laplacian.
 
 <div class="insight-box">
 <strong>Intuition via temperature:</strong> Imagine nodes are thermometers at different locations. The "sheaf" models how readings should relate across edges — maybe a north-facing thermometer at A and a south-facing one at B should read slightly differently even if they measure the same "true" temperature. The restriction maps encode this "transformation rule." A global section represents a consistent temperature assignment across the network after applying all local transformations.
@@ -89,37 +102,70 @@ The space of global sections ker(δ₀) measures how much consistent global data
 
 ## The Standard Graph as a Trivial Sheaf
 
-Standard GCN corresponds to the trivial sheaf:
-- F(v) = ℝ^d for all v (all stalks the same space)
-- F(e) = ℝ^d for all e
-- F_{v→e} = I_d (identity map) for all v, e
+The graph Laplacian is the special case of the sheaf Laplacian in which
 
-The coboundary δ₀ x = x_v - x_u is just the edge-difference of features. The Sheaf Laplacian reduces to the standard graph Laplacian L = δ₀^T δ₀.
+<div class="formula-box">
+\[
+\mathcal{F}(v) = \mathbb{R} \ \ \forall v, \qquad
+\mathcal{F}(e) = \mathbb{R} \ \ \forall e, \qquad
+\mathcal{F}_{v \trianglelefteq e} = \mathrm{id}_{\mathbb{R}} \ \ \forall\, v \trianglelefteq e .
+\]
+</div>
 
-GCN propagation H ← (I - L/2) H is graph diffusion — it minimises the Dirichlet energy Σ_{(u,v)} ||x_u - x_v||².
+Then $$(\delta x)_e = x_v - x_u$$ is the edge-difference operator and
+
+<div class="formula-box">
+\[
+L_{\mathcal{F}} \;=\; \delta^{\top}\delta \;=\; D - A \;=\; L,
+\]
+</div>
+
+the ordinary $$\lvert V \rvert \times \lvert V \rvert$$ graph Laplacian. If instead the stalks are $$\mathbb{R}^d$$ with identity restriction maps, one gets the block version $$L \otimes I_d$$, which applies the same scalar Laplacian independently to each of the $$d$$ coordinates. Either way, no per-edge structure is available — the sheaf is trivial.
+
+GCN's propagation $$\hat{A} H = (I - \tilde{\Delta})H$$, with $$\tilde{\Delta}$$ the symmetric normalised Laplacian of the self-looped graph, is one Euler step of heat diffusion; and heat diffusion $$\dot{x} = -Lx$$ is precisely gradient flow on the Dirichlet energy $$\tfrac12\sum_{(u,v) \in E} \lVert x_u - x_v \rVert^2$$. Each layer therefore *decreases* that energy — which is another way of saying it pushes neighbours toward equality.
 
 ## Non-Trivial Sheaves Allow Disagreement
 
-With non-trivial restriction maps, the "agreement" condition becomes F_{u→e} x_u = F_{v→e} x_v — x_u and x_v are not required to be equal, only to agree after transformation.
+With non-trivial restriction maps, the "agreement" condition becomes $$\mathcal{F}_{u \trianglelefteq e} x_u = \mathcal{F}_{v \trianglelefteq e} x_v$$ — $$x_u$$ and $$x_v$$ are not required to be equal, only to agree after transformation.
 
 This allows adjacent nodes to have **different but compatible** features. In a heterophilic graph, two nodes with different labels might have very different features, but a learned sheaf map could rotate one into the other's space — making them "consistent" under the sheaf even though they are numerically different.
 
 ## Worked Example: Global Section on a Triangle Graph
 
-**Setup:** triangle graph with nodes u, v, w. All stalks R^1 (scalars). Restriction maps: F_{u→e_uv}=1, F_{v→e_uv}=1, F_{v→e_vw}=2, F_{w→e_vw}=1, F_{u→e_uw}=1, F_{w→e_uw}=3.
+**Setup:** triangle graph with nodes $$u, v, w$$ and edges $$e_{uv}, e_{vw}, e_{uw}$$, all stalks $$\mathbb{R}$$. Restriction maps:
 
-**Coboundary at edge e_uv:** (δ₀ x)_{e_uv} = F_{v→e_uv} x_v − F_{u→e_uv} x_u = x_v − x_u
+<div class="formula-box">
+\[
+\mathcal{F}_{u \trianglelefteq e_{uv}} = 1,\quad
+\mathcal{F}_{v \trianglelefteq e_{uv}} = 1,\quad
+\mathcal{F}_{v \trianglelefteq e_{vw}} = 2,\quad
+\mathcal{F}_{w \trianglelefteq e_{vw}} = 1,\quad
+\mathcal{F}_{u \trianglelefteq e_{uw}} = 1,\quad
+\mathcal{F}_{w \trianglelefteq e_{uw}} = 3 .
+\]
+</div>
 
-**Coboundary at edge e_vw:** (δ₀ x)_{e_vw} = F_{w→e_vw} x_w − F_{v→e_vw} x_v = x_w − 2 x_v
+Orienting each edge from the alphabetically earlier node to the later one, the coboundary is
 
-**Global section condition** (all coboundaries = 0):
-1. x_v − x_u = 0  →  x_v = x_u
-2. x_w − 2 x_v = 0  →  x_w = 2 x_u
-3. 3 x_w − x_u = 0  →  3(2 x_u) − x_u = 5 x_u = 0  →  x_u = 0
+<div class="formula-box">
+\[
+\begin{aligned}
+(\delta x)_{e_{uv}} &= \mathcal{F}_{v \trianglelefteq e_{uv}} x_v - \mathcal{F}_{u \trianglelefteq e_{uv}} x_u = x_v - x_u,\\[2pt]
+(\delta x)_{e_{vw}} &= \mathcal{F}_{w \trianglelefteq e_{vw}} x_w - \mathcal{F}_{v \trianglelefteq e_{vw}} x_v = x_w - 2 x_v,\\[2pt]
+(\delta x)_{e_{uw}} &= \mathcal{F}_{w \trianglelefteq e_{uw}} x_w - \mathcal{F}_{u \trianglelefteq e_{uw}} x_u = 3 x_w - x_u .
+\end{aligned}
+\]
+</div>
 
-**Conclusion:** the only global section is the zero vector — this sheaf has no non-trivial consistent signal. The non-trivial restriction maps made the three consistency constraints overdetermined.
+**Global section condition** (all three coboundaries vanish):
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The dimension of the global section space (null space of δ₀) tells you how much "consistent information" the sheaf can carry. The trivial sheaf (all maps = identity) on a connected graph always has a 1D null space — the constant function. Non-trivial maps can expand or shrink this space, which directly controls how diffusion with the Sheaf Laplacian behaves at long times.</div>
+1. Edge $$e_{uv}$$ gives $$x_v - x_u = 0$$, hence $$x_v = x_u$$.
+2. Edge $$e_{vw}$$ gives $$x_w - 2 x_v = 0$$, hence $$x_w = 2 x_u$$.
+3. Edge $$e_{uw}$$ gives $$3 x_w - x_u = 0$$, and substituting gives $$3(2 x_u) - x_u = 5 x_u = 0$$, hence $$x_u = 0$$.
+
+**Conclusion:** $$H^0(G;\mathcal{F}) = 0$$ — the only global section is the zero vector, so this sheaf carries no non-trivial consistent signal. What killed it is the *cycle*: going around the triangle multiplies a value by $$2 \cdot 3 / 1 \neq 1$$, so the three edge constraints are mutually incompatible. On a tree the same maps would leave a one-dimensional space of sections, because there is no cycle to close.
+
+<div class="insight-box"><strong>Key Insight:</strong> The dimension of \(H^0(G;\mathcal{F}) = \ker \delta\) tells you how much "consistent information" the sheaf can carry. The trivial sheaf on a connected graph has a one-dimensional space of sections — the constants (\(d\)-dimensional if the stalks are \(\mathbb{R}^d\)). Non-trivial maps can shrink this space, and with the right maps can make it carry class information instead of a constant, which directly controls how diffusion with the sheaf Laplacian behaves at long times.</div>
 
 ## Why Sheaves for Graphs?
 
@@ -127,23 +173,24 @@ The sheaf framework provides:
 
 1. **Richer aggregation:** edges have their own "mediation" structure (restriction maps)
 2. **Heterophily handling:** adjacent nodes with different features are not forced to agree — the restriction maps can accommodate difference
-3. **Mathematical guarantees:** the Sheaf Laplacian inherits spectral theory from the standard Laplacian, with richer structure
-4. **Interpretability:** the consistency defect ||δ₀ x||² measures "how heterophilic" the data is under the learned sheaf
+3. **Mathematical guarantees:** the sheaf Laplacian inherits spectral theory from the standard Laplacian, with richer structure
+4. **Interpretability:** the consistency defect $$\lVert \delta x \rVert^2$$ measures "how inconsistent" the data is under the learned sheaf
 
 ## Summary
 
 | Concept | Standard GCN | Cellular Sheaf |
 |---------|-------------|---------------|
-| Node data | Vectors h_v ∈ ℝ^d | Vectors x_v ∈ F(v) = ℝ^{d_v} |
-| Edge data | None | Vectors x_e ∈ F(e) = ℝ^{d_e} |
-| Agreement condition | h_u = h_v at edges | F_{u→e} x_u = F_{v→e} x_v |
-| Laplacian | L = D - A | Δ_F = δ₀^T δ₀ (Sheaf Laplacian) |
-| Global sections | Constant functions | ker(δ₀): consistent assignments |
+| Node data | Vectors $$h_v \in \mathbb{R}^d$$ | Vectors $$x_v \in \mathcal{F}(v)$$ |
+| Edge data | None | Vectors $$x_e \in \mathcal{F}(e)$$ |
+| Agreement condition | $$h_u = h_v$$ at edges | $$\mathcal{F}_{u \trianglelefteq e} x_u = \mathcal{F}_{v \trianglelefteq e} x_v$$ |
+| Laplacian | $$L = D - A$$ | $$L_{\mathcal{F}} = \delta^{\top}\delta$$ |
+| Global sections | Constant functions | $$H^0(G;\mathcal{F}) = \ker\delta$$ |
 
-The sheaf framework generalises the standard graph to a richer structure that can encode per-edge relational information. The Sheaf Laplacian, covered in the next post, is the key operator that makes this actionable for graph learning.
+The sheaf framework generalises the standard graph to a richer structure that can encode per-edge relational information. The sheaf Laplacian, covered in the next post, is the key operator that makes this actionable for graph learning.
 
 ## References
 
-- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (introduces cellular sheaves for graph learning; defines stalks, restriction maps, coboundary operator, and global sections in the GNN context).
-- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: learns sheaf restriction maps from node features, building on the cellular sheaf theory from Hansen & Gebhart).
-- Curry, J. (2014). [Sheaves, Cosheaves and Applications](https://arxiv.org/abs/1303.3255). *PhD Thesis, University of Pennsylvania 2014* (mathematical foundation of cellular sheaf theory underlying sheaf neural networks).
+- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (first use of cellular sheaves for graph learning, with a hand-crafted sheaf Laplacian).
+- Hansen, J., & Ghrist, R. (2019). [Toward a Spectral Theory of Cellular Sheaves](https://arxiv.org/abs/1808.01513). *Journal of Applied and Computational Topology* (defines the sheaf Laplacian, its harmonic space, and the isomorphism \(\ker L_{\mathcal{F}} \cong H^0(G;\mathcal{F})\)).
+- Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: learns sheaf restriction maps from node features, building on the cellular sheaf theory above).
+- Curry, J. (2014). [Sheaves, Cosheaves and Applications](https://arxiv.org/abs/1303.3255). *PhD Thesis, University of Pennsylvania* (mathematical foundation of cellular sheaf theory underlying sheaf neural networks).

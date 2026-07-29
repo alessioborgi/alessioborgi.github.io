@@ -11,30 +11,20 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧮"
-read_mins: 6
+read_mins: 11
 permalink: /blog/gnn/laplacian-pe/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
-
 <div class="tldr-box">
-<strong>TL;DR:</strong> The k smallest eigenvectors of the graph Laplacian form a k-dimensional coordinate system where distance in embedding space approximates graph distance. Nodes with similar structural positions get similar Laplacian PE vectors. This is the most theoretically grounded graph PE — but sign ambiguity requires careful handling.
+<strong>TL;DR:</strong> The eigenvectors \(u_2, \dots, u_{k+1}\) belonging to the \(k\) smallest non-zero eigenvalues of the graph Laplacian give each node a \(k\)-dimensional coordinate. Nodes close in the graph tend to get similar coordinates, and the construction is closely tied to commute-time distance. This is the most theoretically grounded graph PE — but the eigenvectors are only defined up to a sign per eigenvector, and up to an orthogonal change of basis inside any repeated eigenvalue, so they need careful handling before a model can use them.
 </div>
 {% include figure image_path="/images/blog/gnn/dwivedi2022_laplacian_pe.png" alt="Laplacian eigenvector PE" caption="Laplacian eigenvector positional encodings (Dwivedi et al., 2022)" %}
 
 
 ## Intuition First
 
-Imagine stretching a rubber graph flat on a table so that connected nodes end up close together and disconnected nodes end up far apart. The optimal 1D layout (minimising edge lengths) is exactly the Fiedler vector u₂. The optimal 2D layout is (u₂, u₃). These eigenvectors give the graph its natural coordinate system.
+Imagine stretching a rubber graph flat on a table so that connected nodes end up close together. The 1D layout that minimises total squared edge length, subject to being centred and unit-norm so the layout cannot collapse to a point, is exactly the Fiedler vector $$u_2$$. Adding a second coordinate orthogonal to the first gives $$u_3$$. These eigenvectors give the graph its natural coordinate system.
 
 Nodes with similar graph positions get similar Laplacian PE vectors — not because we designed it that way, but because the eigenvectors mathematically encode the graph's geometry.
 
@@ -90,85 +80,109 @@ Nodes with similar graph positions get similar Laplacian PE vectors — not beca
   <text x="455" y="92" class="lpe-text">+0.4</text>
   <text x="390" y="115" class="lpe-text">Community 1 (purple) ←→ Community 2 (orange)</text>
 </svg>
-<figcaption>The Fiedler vector u₂ splits the graph at its biggest structural gap. Purple community gets negative values; orange community gets positive values. The bridge node (light purple/orange) sits near zero — it truly is "in between."</figcaption>
+<figcaption>Schematic: the Fiedler vector \(u_2\) splits the graph across its sparsest cut. The purple community takes negative values, the orange community positive ones, and the bridge nodes sit near zero — they genuinely are "in between". The numbers are illustrative rather than computed from this exact drawing.</figcaption>
 </figure></div>
 
 ## The Graph Laplacian Eigen-Embedding
 
-The graph Laplacian L = D − A (or its normalised form) has eigendecomposition:
+The combinatorial graph Laplacian $$L = D - A$$ is symmetric and positive semi-definite, so it has an orthonormal eigendecomposition:
 
-<div class="math-box">
-L = U Λ Uᵀ,   λ₁ ≤ λ₂ ≤ ... ≤ λₙ
+<div class="formula-box">
+\[
+L = U \Lambda U^{\top},
+\qquad
+0 = \lambda_1 \le \lambda_2 \le \cdots \le \lambda_N .
+\]
 </div>
 
-The **Laplacian Positional Encoding (LapPE)** for node v is its row in the matrix U restricted to the first k eigenvectors:
+The **Laplacian Positional Encoding (LapPE)** for node $$v$$ is that node's entry in each of the first $$k$$ non-trivial eigenvectors:
 
-<div class="math-box">
-pe_v = [u₂(v), u₃(v), ..., u_{k+1}(v)] ∈ ℝᵏ
+<div class="formula-box">
+\[
+p_v = \big[\,u_2(v),\, u_3(v),\, \dots,\, u_{k+1}(v)\,\big] \in \mathbb{R}^{k}.
+\]
 </div>
 
-(We skip u₁ = 1/√N, the constant eigenvector, as it carries no positional information.)
+We skip $$u_1$$, which spans the kernel of $$L$$. For a *connected* graph and $$L = D - A$$ this is the constant vector $$\mathbf{1}/\sqrt{N}$$, carrying no positional information. Two caveats: if the graph has $$c$$ connected components then $$\lambda_1 = \dots = \lambda_c = 0$$ and the whole kernel is $$c$$-dimensional, so more than one eigenvector must be discarded (or, better, the components handled separately); and if you use $$L_{\mathrm{sym}} = I - D^{-1/2}AD^{-1/2}$$ instead, the trivial eigenvector is $$D^{1/2}\mathbf{1}$$ normalised, which is *not* constant — it encodes degree.
 
 ## Why Eigenvectors Encode Position
 
-The key property: **eigenvectors minimise the Laplacian quadratic form subject to orthogonality**. The first non-trivial eigenvector u₂ (the Fiedler vector) is the smoothest non-constant signal on the graph — it varies as slowly as possible across edges.
+The key property is a variational one. For any vector $$x$$,
+
+<div class="formula-box">
+\[
+x^{\top} L x = \sum_{(u,v) \in E} \big(x_u - x_v\big)^2 ,
+\]
+</div>
+
+so minimising $$x^{\top}Lx$$ means making the signal vary as little as possible across edges. Subject to $$\lVert x \rVert = 1$$ and $$x \perp u_1$$, the minimiser is exactly $$u_2$$ — the smoothest non-constant signal the graph admits. Each subsequent $$u_i$$ is the smoothest signal orthogonal to all the previous ones.
 
 Concretely:
-- u₂ splits the graph at the largest "gap" — values are negative on one side, positive on the other. It approximates a 1D embedding of the graph along its longest axis.
-- u₃ gives the second most orthogonal smooth direction
-- Together, u₂ and u₃ embed the graph in 2D, capturing its global shape
+- $$u_2$$ (the Fiedler vector) splits the graph across its sparsest cut — negative on one side, positive on the other. Its relation to the true minimum-conductance cut is a relaxation, made rigorous by Cheeger's inequality rather than an exact correspondence.
+- $$u_3$$ gives the smoothest direction orthogonal to $$u_2$$
+- Together $$u_2$$ and $$u_3$$ embed the graph in 2D, capturing its coarse global shape
 
-Nodes close in the graph (short geodesic distance) tend to have similar eigenvector values. The k-dimensional LapPE approximates the metric structure of the graph.
+Nodes close in the graph tend to have similar eigenvector values — though "close in the graph" here means well connected, not necessarily short geodesic distance; two nodes joined by a single bridge can be one hop apart yet land far apart in $$u_2$$.
 
 ## Algebraic and Spectral Graph Theory Connection
 
-The commute time distance between nodes i and j (expected random walk steps to travel from i to j and back) is:
+The commute-time distance between $$i$$ and $$j$$ — the expected number of random-walk steps to go from $$i$$ to $$j$$ and back — has an exact spectral expression:
 
-<div class="math-box">
-CT(i,j) = Vol(G) · ||e_i − e_j||²_L⁺   ≈ Σₖ (uₖ(i) − uₖ(j))² / λₖ
+<div class="formula-box">
+\[
+\mathrm{CT}(i,j) \;=\; \mathrm{vol}(G)\,\big\lVert e_i - e_j \big\rVert^{2}_{L^{+}}
+\;=\; \mathrm{vol}(G) \sum_{m=2}^{N} \frac{\big(u_m(i) - u_m(j)\big)^{2}}{\lambda_m},
+\]
 </div>
 
-Where L⁺ is the pseudoinverse of L. This is essentially the squared distance in the space spanned by eigenvectors weighted by 1/λₖ.
+where $$L^{+}$$ is the Moore–Penrose pseudoinverse of $$L$$ and $$\mathrm{vol}(G) = \sum_v d_v = 2\lvert E\rvert$$. Note this is an identity, not an approximation, and the sum starts at $$m = 2$$ because the kernel direction contributes nothing.
 
-LapPE (without the 1/λₖ weighting) approximates this — nearby nodes in the graph get similar PE vectors.
+Truncating to $$k$$ terms and dropping the $$1/\lambda_m$$ weights — which is what plain LapPE does — is therefore *not* the commute-time metric. It is a related coordinate system: the truncation keeps the terms with the smallest $$\lambda_m$$, which are precisely the ones commute time weights most heavily, so the low-frequency structure survives; but the reweighting is discarded, so Euclidean distance between LapPE vectors should be read as a heuristic proxy for graph proximity, not as $$\mathrm{CT}$$.
 
-## Sign Ambiguity
+## Sign and Basis Ambiguity
 
-A critical problem: if u is an eigenvector of L, so is -u. Eigenvectors are only defined up to sign (and up to rotation within eigenspaces of multiplicity > 1).
+A critical problem: if $$u$$ is an eigenvector of $$L$$, so is $$-u$$. Eigenvectors come with two distinct ambiguities:
 
-This means: if you run the eigenvector computation on the same graph twice, you may get u₂ one time and -u₂ the next. For nodes in two different graphs, the sign convention is arbitrary — you cannot compare PEs across graphs.
+- **Sign.** Each eigenvector of a *simple* (multiplicity-one) eigenvalue is determined only up to $$\pm 1$$. Taking $$k$$ eigenvectors, that is $$2^{k}$$ equally valid encodings of the same graph.
+- **Basis.** If an eigenvalue has multiplicity $$m > 1$$, any orthonormal basis of its $$m$$-dimensional eigenspace is equally valid — the ambiguity is the full orthogonal group $$O(m)$$, not a finite set. This is common: cycles have doubly degenerate eigenvalues, and $$K_N$$ has one eigenvalue of multiplicity $$N-1$$.
+
+So two runs of the same solver on the same graph can return $$u_2$$ and $$-u_2$$, and PE vectors are not directly comparable across graphs.
 
 **Solutions:**
-- **Random sign flipping during training:** at each training step, randomly flip the sign of each eigenvector. This teaches the model to be sign-invariant.
-- **SignNet (Lim et al., 2022):** use a sign-invariant function (e.g., f(u) + f(-u)) to process eigenvectors before using them as PEs.
-- **BasisNet:** handles rotation ambiguity in higher-dimensional eigenspaces.
+- **Random sign flipping during training:** sample a fresh $$s_i \in \{-1,+1\}$$ per eigenvector each step. Cheap data augmentation that pushes the model toward sign invariance without guaranteeing it, and it does nothing about basis ambiguity.
+- **SignNet (Lim et al., 2022):** build the encoding from $$\phi(u_i) + \phi(-u_i)$$, which is sign-invariant by construction rather than by training.
+- **BasisNet (same work):** extends this to invariance under $$O(m)$$ within each eigenspace, by acting on the eigenspace *projectors* $$U_m U_m^{\top}$$, which are basis-independent.
+
+Neither fixes the deeper limit: any such invariant encoding is a function of the graph, so automorphic nodes still receive identical values.
 
 ## LapPE in Graph Transformers
 
 LapPE is used in:
-- **SAN (2021):** full Laplacian spectrum as PE
-- **Graphormer:** adds degree centrality (not LapPE, but related)
-- **GPS (2022):** LapPE or RWPE as PE, fed into Transformer attention
+- **SAN (2021):** learns its PE by running a Transformer over the $$(\lambda_i, u_i(v))$$ pairs, so the encoding is a function of the spectrum rather than of raw eigenvector entries
+- **Graphormer:** uses degree centrality and shortest-path biases instead — related in spirit, but not spectral
+- **GPS (2022):** LapPE or RWPE, fed in alongside node features
 
-Typical usage: concatenate pe_v to node features x_v, or add them as a separate encoding:
+Typical usage: project the PE and add it to the projected node features, so the two live in the same space:
 
-<div class="math-box">
-h_v = Linear(x_v) + Linear(pe_v)
+<div class="formula-box">
+\[
+h_v^{(0)} = W_x\, x_v + W_p\, p_v .
+\]
 </div>
 
 ## Computational Cost
 
-Computing k eigenvectors of an N×N Laplacian:
-- **Dense:** O(N³) — infeasible for large graphs
-- **Sparse Lanczos/LOBPCG:** O(k · |E|) per iteration, O(k · |E| · T) total — feasible for moderate N
+Computing the $$k$$ smallest non-trivial eigenvectors of an $$N \times N$$ Laplacian:
+- **Dense (full eigendecomposition):** $$O(N^3)$$ time, $$O(N^2)$$ memory — fine for a 30-atom molecule, infeasible beyond a few thousand nodes
+- **Sparse iterative (Lanczos / LOBPCG):** each iteration costs $$O(k\lvert E\rvert)$$, giving $$O(k\lvert E\rvert T)$$ for $$T$$ iterations
 
-For large graphs (N > 100,000), LapPE becomes expensive. Random walk PEs (next post) are a cheaper alternative.
+The iterative bound deserves a caveat: $$T$$ is not a constant you control. It depends on the *spectral gap* separating the eigenvalues you want from the rest. On a graph with well-separated low eigenvalues convergence is fast; on one with a cluster of near-equal eigenvalues — exactly the degenerate case that also causes basis ambiguity — it can be slow, and the returned basis within the cluster is numerically unstable into the bargain. So the honest statement is that LapPE is cheap on small or well-separated graphs and unreliable in cost on large or highly symmetric ones. Random-walk PEs (next post) sidestep this entirely.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The Fiedler vector u₂ is the graph's "principal axis" — it places nodes along the dimension of maximum structural variation. Think of it like PCA for the graph's topology: the first component captures the biggest split (communities), the second captures the next biggest, etc. This is why LapPE works so well for community-structured graphs and poorly for graphs where global position is meaningless (random Erdos-Renyi graphs).</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The Fiedler vector \(u_2\) is the graph's "principal axis" — it places nodes along the direction of slowest variation over edges. The analogy with PCA is close but worth stating precisely: PCA finds directions of maximum variance in a feature matrix, whereas the Laplacian eigenvectors find directions of <em>minimum</em> variation across edges. Both diagonalise a symmetric matrix and both order components by an eigenvalue; the objectives are opposite in sign. This is why LapPE is informative on community-structured graphs, where there really is a low-frequency split to find, and much less so on a dense Erdős–Rényi graph, where the low eigenvalues are close together and the corresponding eigenvectors carry little stable signal.</div>
 
 ## Worked Numerical Example
 
-Consider the path graph P₄: nodes {1, 2, 3, 4} with edges {1–2, 2–3, 3–4}.
+Consider the path graph $$P_4$$: nodes $$1,2,3,4$$ with edges $$1$$–$$2$$, $$2$$–$$3$$, $$3$$–$$4$$.
 
 The graph Laplacian is:
 ```
@@ -179,31 +193,47 @@ L = D - A =
 [ 0   0  -1   1 ]
 ```
 
-Eigenvalues: λ₁=0, λ₂≈0.586, λ₃=2, λ₄≈3.414
+For a path $$P_n$$ the eigenvalues are $$\lambda_m = 2 - 2\cos\!\big(\pi (m-1)/n\big)$$ and the eigenvectors are $$u_m(i) \propto \cos\!\big(\pi (m-1)(i - \tfrac12)/n\big)$$. For $$n = 4$$:
 
-Fiedler vector (u₂): approximately [−0.600, −0.371, +0.371, +0.600]
+$$\lambda_1 = 0$$, $$\lambda_2 = 2-\sqrt{2} \approx 0.586$$, $$\lambda_3 = 2$$, $$\lambda_4 = 2+\sqrt{2} \approx 3.414$$.
 
-This assigns node 1 a negative value (one end), node 4 a positive value (other end), and nodes 2 and 3 intermediate values — perfectly encoding the linear order of the path. A 2-layer GCN with these PE values can now distinguish nodes 1 from 4, and 2 from 3.
+Fiedler vector, normalised to unit length:
+
+<div class="formula-box">
+\[
+u_2 \;=\; \big[\,0.653,\; 0.271,\; -0.271,\; -0.653\,\big]^{\top}
+\quad\text{(or its negation).}
+\]
+</div>
+
+Node 1 sits at one extreme, node 4 at the other, and nodes 2 and 3 in between — recovering the linear order of the path. A GNN given these values as extra features can now separate node 1 from node 4 and node 2 from node 3, which no amount of message passing would achieve on its own.
+
+But read the "or its negation" seriously. All four values flip together, and $$P_4$$'s reversal automorphism means node 1 and node 4 are automorphic: the encoding tells them apart only by sign, and a sign-invariant read-out puts them back together. What LapPE genuinely adds here is the *relative* geometry — that 1 and 4 are at opposite extremes while 2 and 3 are central.
 
 ## What LapPE Can Distinguish
 
-LapPE can distinguish nodes that 1-WL cannot: two nodes in the same regular graph (all same neighbourhood multisets) will have different eigenvector values if their global positions differ.
+Adding any graph-derived feature to node inputs can only increase what an MPNN separates, so LapPE-augmented GNNs are at least as expressive as 1-WL, and there exist pairs they separate that 1-WL cannot — for example two nodes in a regular graph, where 1-WL assigns a single colour but the eigenvectors vary.
 
-LapPE makes GNNs strictly more expressive than 1-WL — at the cost of a precomputation step and sign ambiguity handling.
+Three conditions temper that:
+- **Cospectral graphs.** Two non-isomorphic graphs can share an identical Laplacian spectrum. Where the eigenvalues also fail to distinguish the relevant nodes, LapPE adds nothing that 1-WL did not already have.
+- **Automorphism.** Nodes in the same automorphism orbit cannot be separated by any equivariant encoding.
+- **Invariance costs power.** The sign- and basis-invariant treatments needed to make LapPE usable discard information. What you can actually exploit is what survives the invariantisation, not the raw eigenvector.
+
+So: strictly more expressive than 1-WL on some inputs, not uniformly, and the gain depends on how the ambiguity is handled.
 
 ## Summary
 
 | Property | LapPE |
 |----------|-------|
-| Basis | k smallest non-trivial Laplacian eigenvectors |
-| Captures | Global position, community structure, graph geometry |
-| Metric | Approximates commute time distance |
-| Sign issue | ±1 ambiguity per eigenvector; requires SignNet or random flipping |
-| Cost | O(k·\|E\|·T) with sparse solver |
-| Expressiveness | Strictly beyond 1-WL |
+| Basis | Eigenvectors of the $$k$$ smallest non-zero Laplacian eigenvalues |
+| Captures | Low-frequency structure: community splits, coarse global geometry |
+| Metric | Related to commute time, but the unweighted truncation is a proxy, not equal to it |
+| Sign / basis issue | $$2^k$$ sign choices, plus $$O(m)$$ freedom in any multiplicity-$$m$$ eigenspace |
+| Cost | $$O(k\lvert E\rvert T)$$ with a sparse solver, where $$T$$ depends on the spectral gap |
+| Expressiveness | Exceeds 1-WL on some pairs; automorphic nodes still tie |
 | Used by | SAN, GPS, many Graph Transformer papers |
 
-LapPE is the gold standard for graph positional encodings when global structural position matters and computational cost is manageable.
+LapPE is the reference choice for graph positional encodings when low-frequency global position is what the task needs, the graph is small enough for a reliable eigensolve, and you are willing to handle sign and basis ambiguity properly.
 
 ## References
 

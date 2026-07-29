@@ -10,20 +10,12 @@ author_profile: true
 read_time: true
 is_overview: true
 icon: "🕸️"
-read_mins: 4
+read_mins: 6
 permalink: /blog/gnn/overview/
 toc: true
 toc_label: "Contents"
 ---
 <style>
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
-.tldr-box strong { color: #0f2a36; }
-.key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
-.key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
-.key-takeaways ul { margin: 0; padding-left: 1.2rem; }
-.key-takeaways li { margin-bottom: .3rem; font-size: .95rem; }
 .next-posts { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.2rem; }
 .next-posts h3 { margin-top: 0; font-size: 1rem; color: #374151; }
 .next-posts ul { margin: 0; padding-left: 1.2rem; }
@@ -31,17 +23,17 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> GNNs learn vector representations for nodes (and graphs) by iteratively aggregating information from neighbourhoods. They outperform flat neural networks on any data that is naturally relational — molecules, social graphs, knowledge graphs, road networks, and more.
+  <strong>TL;DR:</strong> GNNs learn vector representations for nodes (and graphs) by iteratively aggregating information from neighbourhoods, producing \(h_v^{(k)}\) after \(k\) rounds. Because the relational structure is built into the model rather than learned from scratch, they are a natural fit for data that is inherently relational — molecules, social graphs, knowledge graphs, road networks, and more.
 </div>
 
 > **Series note:** This Graph Neural Networks track is organised as short, self-contained 3-5 minute posts. The fundamentals are aligned with the presentation in William L. Hamilton's *Graph Representation Learning*, which is the main background reference for the basic graph concepts used throughout the series.
 
 ## Graphs Are Everywhere
 
-A **graph** G = (V, E) consists of:
-- **Nodes** (V): entities — atoms, people, papers, intersections.
-- **Edges** (E): relationships — bonds, friendships, citations, roads.
-- **Features** on nodes and/or edges: atom type, age, year, speed limit.
+A **graph** $$G = (V, E)$$ consists of:
+- **Nodes** $$V$$: entities — atoms, people, papers, intersections. We write $$N = \lvert V \rvert$$.
+- **Edges** $$E$$: relationships — bonds, friendships, citations, roads, collected in an adjacency matrix $$A$$.
+- **Features** on nodes and/or edges: atom type, age, year, speed limit. Node features are stacked into $$X \in \mathbb{R}^{N \times d}$$.
 
 Real-world data that's naturally a graph:
 - **Molecules:** atoms = nodes, bonds = edges. Predicting drug toxicity or binding affinity.
@@ -116,20 +108,36 @@ GNNs are designed to respect all three of these properties.
 
 ## The Core Idea: Aggregate from Neighbours
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Imagine rumours spreading in a social network. After one round, each person knows what their direct friends heard. After two rounds, they know what their friends' friends heard. A GNN works exactly like this — each "layer" is one round of information spreading, and after k layers every node has gathered news from up to k hops away.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Imagine rumours spreading in a social network. After one round, each person knows what their direct friends heard. After two rounds, they know what their friends' friends heard. A GNN works exactly like this — each "layer" is one round of information spreading, and after \(k\) layers every node has gathered news from up to \(k\) hops away.</div>
 
-Every GNN follows the same fundamental principle, called **message passing**:
+Every GNN follows the same fundamental principle, called **message passing**. Writing $$h_v^{(k)}$$ for the representation of node $$v$$ after $$k$$ rounds and $$\mathcal{N}(v)$$ for its neighbourhood:
 
-> Each node's new representation = function(its current representation, representations of its neighbours)
+<div class="formula-box">
+\[
+h_v^{(k)} = \mathrm{UPDATE}^{(k)}\!\left(
+  h_v^{(k-1)},\;
+  \mathrm{AGGREGATE}^{(k)}\!\left( \{\, h_u^{(k-1)} : u \in \mathcal{N}(v) \,\} \right)
+\right),
+\qquad h_v^{(0)} = x_v.
+\]
+</div>
 
-After k iterations, node v's embedding captures information from all nodes up to k hops away (its k-hop neighbourhood).
+In words: each node's new representation is a learned function of its own current representation together with a permutation-invariant summary of its neighbours' representations. After $$k$$ iterations, $$h_v^{(k)}$$ captures information from all nodes up to $$k$$ hops away — its $$k$$-hop neighbourhood.
 
-This is beautiful because:
+This is elegant because:
 - Nearby nodes influence each other (just like in the real world).
-- The same aggregation function works on graphs of any size.
+- The same aggregation function works on graphs of any size, since it is defined per node.
 - The function is learned from data, so it adapts to the task.
 
-**Concrete numerical example.** Suppose node A has feature vector [1, 0] and its two neighbours B=[0,1] and C=[1,1]. After one GCN-style layer (mean aggregation + identity weights), A's new representation is the mean of A, B, C: ([1,0]+[0,1]+[1,1])/3 = [0.67, 0.67]. After a second layer, A's representation will also absorb B's and C's updated neighbours — capturing the 2-hop neighbourhood.
+**Concrete numerical example.** Suppose node $$A$$ has feature vector $$[1, 0]$$ and its two neighbours are $$B = [0,1]$$ and $$C = [1,1]$$. Under one GCN-style layer with mean aggregation over $$\{A\} \cup \mathcal{N}(A)$$ and identity weights:
+
+<div class="formula-box">
+\[
+h_A^{(1)} = \frac{[1,0] + [0,1] + [1,1]}{3} = \frac{[2,2]}{3} \approx [0.67,\, 0.67].
+\]
+</div>
+
+After a second layer, $$h_A^{(2)}$$ also absorbs the updated representations of $$B$$ and $$C$$ — which already summarise *their* neighbours — so $$A$$ ends up seeing its 2-hop neighbourhood.
 
 ## Animated Information Flow
 
@@ -205,31 +213,34 @@ This is beautiful because:
 
 GNNs can produce predictions at three granularities:
 
-| Level | What you predict | Example |
-|---|---|---|
-| **Node** | Label for each node | Is this user a bot? |
-| **Edge** | Label or score for each edge | Will A befriend B? |
-| **Graph** | Label for the whole graph | Is this molecule toxic? |
+| Level | What you predict | Output built from | Example |
+|---|---|---|---|
+| **Node** | Label for each node | $$h_v^{(K)}$$ | Is this user a bot? |
+| **Edge** | Label or score for each pair | $$f(h_u^{(K)}, h_v^{(K)})$$ | Will A befriend B? |
+| **Graph** | Label for the whole graph | $$h_G = \mathrm{READOUT}(\{h_v^{(K)}\})$$ | Is this molecule toxic? |
 
-For node tasks: use the node embeddings directly. For graph tasks: **readout** (pooling) the node embeddings into a single graph vector.
+For node tasks, use the node embeddings directly. For edge tasks, score a pair of embeddings. For graph tasks, **readout** (pool) all node embeddings into a single graph vector first.
+
+A second, orthogonal distinction is whether the graph you are evaluated on was visible during training. In the **transductive** setting there is one fixed graph and only test *labels* are withheld; in the **inductive** setting the model must embed nodes or graphs it has never seen, so it has to generalise the aggregation function rather than memorise per-node vectors.
 
 ## The Landscape of GNN Architectures
 
-| Model | Year | Key idea |
+| Model | Venue | Key idea |
 |---|---|---|
-| GCN | 2016 | Spectral convolution → normalised averaging |
-| GAT | 2018 | Attention weights on edges |
-| GraphSAGE | 2017 | Inductive learning via neighbourhood sampling |
-| GIN | 2019 | Most expressive aggregator (sum + MLP) |
-| Sheaf NN | 2022+ | Section-space diffusion, generalises GCN |
+| GCN | ICLR 2017 | Spectral convolution simplified to degree-normalised averaging |
+| GraphSAGE | NeurIPS 2017 | Inductive learning via neighbourhood sampling |
+| GAT | ICLR 2018 | Learned attention weights over neighbours |
+| GIN | ICLR 2019 | Sum aggregation + MLP; as expressive as the 1-WL test |
+| Sheaf NN | NeurIPS 2022 | Diffusion over a sheaf's section space, generalising GCN |
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li>Graphs model relational data: atoms, users, papers, intersections — any entities with relationships.</li>
-  <li>GNNs learn by <strong>iterative neighbourhood aggregation</strong>: after k layers, each node knows about its k-hop neighbourhood.</li>
-  <li>The same model works on graphs of any size and any node ordering — it's permutation invariant/equivariant.</li>
-  <li>Supports node-, edge-, and graph-level predictions via readout pooling.</li>
+  <li>GNNs learn by <strong>iterative neighbourhood aggregation</strong>: after \(k\) layers, \(h_v^{(k)}\) summarises the \(k\)-hop neighbourhood of \(v\).</li>
+  <li>The same model works on graphs of any size and any node ordering — node-level outputs are permutation equivariant, graph-level outputs permutation invariant.</li>
+  <li>Supports node-, edge-, and graph-level predictions from the same backbone; only the output head changes, with readout pooling for graph-level tasks.</li>
+  <li>Evaluation splits into <strong>transductive</strong> (one fixed graph, labels withheld) and <strong>inductive</strong> (unseen nodes or graphs at test time).</li>
 </ul>
 </div>
 

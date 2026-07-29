@@ -11,20 +11,13 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🌐"
-read_mins: 5
+read_mins: 6
 permalink: /blog/gnn/graph-transformers/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
-
 <div class="tldr-box">
-<strong>TL;DR:</strong> A Graph Transformer treats each node as a token and runs full self-attention across all N nodes — every node can attend to every other node directly. Graph structure is injected via positional encodings (Laplacian eigenvectors, random walks) or attention biases. This overcomes over-squashing and long-range dependency limits of local message passing.
+<strong>TL;DR:</strong> A Graph Transformer treats each node as a token and runs full self-attention across all \(N\) nodes — every node can attend to every other node directly. Graph structure has to be injected explicitly, via positional encodings (Laplacian eigenvectors, random walks) or attention biases, because attention alone sees only an unordered set of feature vectors. This removes the topological bottlenecks that cause over-squashing and makes long-range interactions a single hop, at a cost of \(O(N^2)\) attention.
 </div>
 {% include figure image_path="/images/blog/gnn/dwivedi2021_graph_transformer.png" alt="Graph Transformer" caption="Generalised Graph Transformer with Laplacian PE (Dwivedi & Bresson, 2021)" %}
 
@@ -43,55 +36,66 @@ The solution: full attention — every node attends to every other.
 
 A Graph Transformer layer is essentially a standard Transformer self-attention layer, but applied to graph nodes:
 
-<div class="math-box">
-Q = H W_Q, &nbsp; K = H W_K, &nbsp; V = H W_V
-</div>
-<div class="math-box">
-A_{ij} = softmax_j( QᵢKⱼᵀ / √d_k + b_{ij} )
-</div>
-<div class="math-box">
-H'ᵢ = Σⱼ A_{ij} Vⱼ
+<div class="formula-box">
+\[
+Q = H W_Q, \qquad K = H W_K, \qquad V = H W_V,
+\]
+\[
+A_{ij} = \operatorname*{softmax}_{j}\!\left(\frac{q_i^{\top} k_j}{\sqrt{d_k}} + b_{ij}\right),
+\qquad
+h'_i = \sum_{j} A_{ij}\, v_j .
+\]
 </div>
 
-Where **b_{ij}** is an optional attention bias encoding the graph structure between nodes i and j.
+Here $$b_{ij}$$ is an optional attention bias encoding the graph structure between nodes $$i$$ and $$j$$.
 
-Without b_{ij}: the model ignores the graph and is a standard Transformer on node features.  
-With b_{ij}: graph structure guides attention (edge presence, distance, structural similarity).
+Without $$b_{ij}$$ and without positional encodings, the layer is permutation-**invariant** over the node set: it computes exactly the same thing whether the nodes form a path or a clique. The graph is simply absent from the computation.  
+With $$b_{ij}$$: graph structure guides attention (edge presence, distance, structural similarity).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition: Why Positional Encodings Are Essential.</strong> In a sentence Transformer, position 3 is unambiguously "the third word." In a graph, there is no position 3. Two structurally equivalent nodes in different graphs should get similar positional encodings — but two nodes with identical features in different structural roles (hub vs. leaf) should get different ones. Without positional encodings, a Graph Transformer with no b_ij term is completely blind to graph structure — it would produce the same output for a path graph and a complete graph with the same node features.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition: Why Positional Encodings Are Essential.</strong> In a sentence Transformer, position 3 is unambiguously "the third word." In a graph, there is no position 3. Two structurally equivalent nodes in different graphs should get similar encodings — but two nodes with identical features in different structural roles (hub vs. leaf) should get different ones. Without positional encodings, a Graph Transformer with no \(b_{ij}\) term is blind to topology: it would produce identical output for a path graph and a complete graph carrying the same multiset of node features.</div>
 
 ## The Key Challenge: Positional Encodings for Graphs
 
 Sequences have a natural positional order (position 1, 2, 3, ...). Graphs do not — there is no canonical node ordering. Without positional information, nodes with identical features but different structural roles are indistinguishable.
 
 Graph Transformers use graph-based positional encodings (covered in depth in the Graph PE section):
-- **Laplacian eigenvectors:** the k smallest eigenvectors of the graph Laplacian
-- **Random walk PEs:** landing probabilities from node i to node j in k steps
-- **Shortest path distances:** encoded as integer biases on attention scores
+- **Laplacian eigenvectors:** the $$k$$ eigenvectors of $$L$$ (or $$L_{\mathrm{sym}}$$) with the smallest non-zero eigenvalues, i.e. $$u_2, \dots, u_{k+1}$$
+- **Random walk PEs:** the diagonal landing probabilities $$P^k[v,v]$$ of a $$k$$-step walk returning to $$v$$
+- **Shortest path distances:** encoded as learned scalar biases on attention scores
 
 ## Graphormer (2021)
 
-Graphormer (Ying et al., Microsoft) biases attention scores by three structural features:
+Graphormer (Ying et al., Microsoft) injects three structural signals:
 
-1. **Spatial encoding:** b_{ij} = φ(dist(i,j)) — a learned function of the shortest path distance
-2. **Edge encoding:** for each edge on the path i→j, add edge features to the attention score
-3. **Centrality encoding:** add degree-based biases to node embeddings at input
+1. **Centrality encoding:** degree embeddings added to the node features *before* the QKV projection
+2. **Spatial encoding:** $$b_{ij} = \varphi\big(\mathrm{dist}(i,j)\big)$$ — a learned scalar per distance value, added to the attention logits
+3. **Edge encoding:** edge features along the shortest path $$i \to j$$, aggregated into a second scalar bias $$c_{ij}$$
 
-<div class="math-box">
-A_{ij} = softmax( (Qᵢ + z_{deg(i)}) (Kⱼ + z_{deg(j)})ᵀ / √d + b_dist(i,j) + b_edge(i,j) ) / √d
+<div class="formula-box">
+\[
+h_v^{(0)} = x_v + z_{\deg(v)},
+\qquad
+A_{ij} = \operatorname*{softmax}_{j}\!\left(\frac{q_i^{\top} k_j}{\sqrt{d}} + \varphi\big(\mathrm{dist}(i,j)\big) + c_{ij}\right).
+\]
 </div>
 
-Graphormer achieved state-of-the-art on OGB-LSC molecular property prediction (PCQM4Mv2).
+Note that the centrality term enters through the *input embedding*, so it is projected by $$W_Q$$ and $$W_K$$ along with the features — it is not added to $$q_i$$ and $$k_j$$ after the projection. Graphormer won the KDD Cup 2021 OGB-LSC quantum-property track (PCQM4M-LSC), and the architecture became the reference point for graph Transformers on molecules.
 
 ## SAN (Spectral Attention Network)
 
-SAN (Kreuzer et al., 2021) uses Laplacian eigenvectors as positional encodings and computes full attention over all node pairs, distinguishing connected from non-connected pairs:
+SAN (Kreuzer et al., 2021) computes its positional encoding by running a small Transformer over the *pairs* $$(\lambda_i, u_i(v))$$, so the PE is a learned function of the spectrum rather than the raw eigenvectors. It then attends over all node pairs, but with two separate sets of query/key projections — one used when $$(i,j)$$ is an edge, another when it is not, with a hyperparameter $$\gamma$$ balancing the two:
 
-<div class="math-box">
-A_{ij} = softmax( edge(i,j) · QᵢKⱼᵀ + (1-edge(i,j)) · Q̃ᵢK̃ⱼᵀ )
+<div class="formula-box">
+\[
+e_{ij} \;\propto\;
+\begin{cases}
+\dfrac{1}{1+\gamma}\, \dfrac{q_i^{\top} k_j}{\sqrt{d}} & \text{if } (i,j) \in E,\\[2ex]
+\dfrac{\gamma}{1+\gamma}\, \dfrac{\tilde{q}_i^{\top} \tilde{k}_j}{\sqrt{d}} & \text{if } (i,j) \notin E .
+\end{cases}
+\]
 </div>
 
-Separate query-key matrices for existing edges and non-edges — the model can attend differently to connected and non-connected nodes.
+The point is that the model can treat "connected" and "not connected" as genuinely different relations rather than folding both into one score.
 
 ## GPS (General, Powerful, Scalable Graph Transformer)
 
@@ -106,36 +110,37 @@ GPS layer:
   h_out    ← LN(h + h_local + h_global) + FFN
 ```
 
-GPS achieves state-of-the-art on the Long-Range Graph Benchmark (LRGB) — a benchmark specifically designed to test long-range dependency learning.
+GPS reported strong results on the Long-Range Graph Benchmark (LRGB), a suite designed to require long-range dependency learning. Worth knowing: later work re-examined LRGB and found that carefully tuned plain MPNN baselines close much of the reported gap, so the benchmark separates architectures less cleanly than it first appeared. The hybrid design is still a sensible default; the evidence for how much the global branch buys you is weaker than headline numbers suggest.
 
 <div class="insight-box">
 <strong>Why combine MPNN and attention?</strong> Local MPNN is good at short-range structural reasoning (counting triangles, identifying motifs). Global attention is good at long-range reasoning (connecting distant relevant nodes). They are complementary, not competing.
 </div>
 
-## Complexity: The O(N²) Challenge
+## Complexity: The $$O(N^2)$$ Challenge
 
-Full attention on graphs of N nodes costs O(N²) — the same as self-attention in Transformers.
+Full attention on a graph of $$N$$ nodes costs $$O(N^2 d)$$ time and $$O(N^2)$$ memory — the same as self-attention in sequence Transformers, and independent of $$\lvert E\rvert$$. If the model also uses a pairwise bias such as shortest-path distance, that bias matrix is itself $$O(N^2)$$ to store.
 
-For small graphs (molecules with N < 100): no problem.
-For large graphs (social networks with N > 100,000): prohibitive.
+For small graphs (molecules with $$N < 100$$): no problem.
+For large graphs (social networks with $$N > 100{,}000$$): prohibitive.
 
 Solutions:
-- **K-nearest-neighbor attention:** each node attends to only its K nearest neighbours in feature space
-- **Linformer-style:** approximate full attention with a low-rank decomposition
-- **Cluster-based:** run full attention within clusters, then inter-cluster attention
+- **Sparse or $$k$$-nearest-neighbour attention:** each node attends only to a restricted candidate set
+- **Linear-attention / low-rank approximations:** replace the softmax kernel so cost becomes linear in $$N$$
+- **Cluster-based:** full attention within clusters, then attention between cluster summaries
+- **Hybrid (GPS-style):** keep the sparse MPNN branch and use a cheaper global branch
 
 ## Summary
 
 | Property | Local MPNN (GCN, GAT) | Graph Transformer |
 |----------|---------------------|------------------|
-| Receptive field | K-hop (K = number of layers) | All nodes (direct) |
-| Long-range dependencies | Requires many layers (oversmoothing) | Handled directly |
-| Complexity | O(K · \|E\| · d) | O(N² · d) |
+| Receptive field | $$K$$-hop ($$K$$ = number of layers) | All nodes, in one layer |
+| Long-range dependencies | Needs depth, which risks over-smoothing | Handled directly |
+| Complexity | $$O(K \lvert E\rvert d)$$ | $$O(N^2 d)$$ |
 | Graph structure encoding | Adjacency (message passing) | Positional encodings + attention biases |
-| Suitable graph size | Any (with neighbour sampling) | Small-medium (N < 10,000) |
-| Over-squashing | Yes | No |
+| Suitable graph size | Any (with neighbour sampling) | Small–medium, or with an approximation |
+| Over-squashing | Yes — bottleneck edges compress exponentially many paths | Removed as a *topological* bottleneck; finite attention capacity still limits how much can be routed |
 
-Graph Transformers trade O(N²) computation for the ability to directly connect any pair of nodes. For small graphs (molecules, proteins, small networks), this is the current state of the art. For large graphs, GPS-style hybrid approaches (local MPNN + global attention) are the practical frontier.
+Graph Transformers trade $$O(N^2)$$ computation for the ability to connect any pair of nodes directly. On small graphs (molecules, proteins) this is a good trade. On large graphs, hybrid designs that keep a sparse local branch alongside an approximate global one are the practical frontier.
 
 ## References
 

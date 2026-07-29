@@ -11,20 +11,11 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🎯"
-read_mins: 6
+read_mins: 8
 permalink: /blog/gnn/set2set-attention-readout/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> Attention readout weights node embeddings by learned importance scores before summing — nodes that matter more for the task contribute more to the graph embedding. Set2Set extends this with an LSTM that makes T passes over the node set, each time computing a different attention query. This yields a richer, order-invariant graph summary.
@@ -95,88 +86,108 @@ Mean and sum pooling treat all nodes identically. But for most tasks, nodes diff
   <text x="340" y="148" font-size="10" fill="#64748b" text-anchor="middle">Attention weights</text>
   <text x="440" y="148" font-size="10" fill="#64748b" text-anchor="middle">Embedding</text>
 </svg>
-<figcaption>Attention readout: the high-importance node (orange, large) receives a high attention weight α₃, dominating the graph embedding h_G.</figcaption>
+<figcaption>Attention readout: the high-importance node (orange, large) receives a high attention weight \(\alpha_3\), dominating the graph embedding \(h_G\).</figcaption>
 </figure></div>
 
 ## Attention Readout (Global Attention Pooling)
 
-For each node v, compute a scalar importance score:
+For each node $$v$$, compute a scalar importance score:
 
-<div class="math-box">
-a_v = MLP_gate( h_v )   ∈ ℝ
+<div class="formula-box">
+\[
+a_v \;=\; \mathrm{MLP}_{\text{gate}}\bigl(h_v\bigr) \;\in\; \mathbb{R}
+\]
 </div>
 
-Normalise scores with softmax:
+Normalise the scores across the graph with a softmax:
 
-<div class="math-box">
-α_v = exp(a_v) / Σ_{u ∈ V} exp(a_u)
+<div class="formula-box">
+\[
+\alpha_v \;=\; \frac{\exp(a_v)}{\sum_{u \in V} \exp(a_u)}
+\]
 </div>
 
 Compute the graph embedding as a weighted sum:
 
-<div class="math-box">
-h_G = Σ_{v ∈ V} α_v · MLP_out(h_v)
+<div class="formula-box">
+\[
+h_G \;=\; \sum_{v \in V} \alpha_v \, \mathrm{MLP}_{\text{out}}\bigl(h_v\bigr)
+\]
 </div>
 
-This is a single-pass soft attention over all nodes. The model learns which nodes to weight highly for the specific prediction task.
+This is a single-pass soft attention over all nodes. The model learns which nodes to weight highly for the specific prediction task. (The original gated readout in Gated Graph Sequence Neural Networks used an unnormalised sigmoid gate rather than a softmax; the softmax-normalised form above is the variant most libraries implement, and it makes $$h_G$$ a convex combination, so its scale does not grow with graph size.)
 
 **Properties:**
-- Permutation-invariant (softmax and weighted sum are unordered)
+- Permutation-invariant: the softmax denominator is a sum over all nodes and the output is a sum of weighted terms, both unordered
 - Differentiable: all operations are smooth
-- Task-conditioned: α_v depends on h_v which encodes local neighbourhood
+- Task-conditioned: $$\alpha_v$$ depends on $$h_v$$, which already encodes $$v$$'s local neighbourhood
 
-**Limitation:** each node is scored independently. The attention over node v does not account for what other nodes contribute — the weights are computed in isolation.
+**Limitation:** the *logit* $$a_v$$ is computed from $$h_v$$ alone. The softmax does couple the nodes, but only through a single global normaliser — it can rescale the weights, not change their relative order. So a node cannot be judged important *because of* what some other node contributes; the ranking of nodes is fixed before any comparison between them happens.
 
-## Set2Set (Vinyals et al., 2015)
+## Set2Set (Vinyals et al., 2016)
 
-**Intuition first.** Imagine reading a complex document by scanning it T times, each time looking for something different. On scan 1 you find the main claim; on scan 2 you look for supporting evidence; on scan 3 you check for caveats. Set2Set does the same for a graph: each LSTM step issues a different "query" that attends to a different subset of nodes, building a richer summary than any single pass could.
+**Intuition first.** Imagine reading a complex document by scanning it $$T$$ times, each time looking for something different. On scan 1 you find the main claim; on scan 2 you look for supporting evidence; on scan 3 you check for caveats. Set2Set does the same for a graph: each LSTM step issues a different "query" that attends to a different subset of nodes, building a richer summary than any single pass could.
 
-Set2Set produces a graph embedding using **T steps of LSTM-driven attention**. At each step t, the LSTM maintains a query vector q_t, which is used to compute attention over all nodes:
+Set2Set produces a graph embedding using **$$T$$ steps of LSTM-driven attention**. At each step $$t$$ the LSTM emits a query vector $$q_t$$, which is used to attend over all nodes:
 
-**Step t:**
+**Step $$t$$:**
 
-<div class="math-box">
-e^t_v = q_t · h_v   (attention score for node v)
-α^t_v = softmax(e^t_v)
-m_t = Σ_v α^t_v h_v   (weighted sum at step t)
+<div class="formula-box">
+\[
+e_{v}^{t} = q_t^{\top} h_v,
+\qquad
+\alpha_v^{t} = \frac{\exp\bigl(e_v^{t}\bigr)}{\sum_{u \in V}\exp\bigl(e_u^{t}\bigr)},
+\qquad
+m_t = \sum_{v \in V} \alpha_v^{t}\, h_v
+\]
 </div>
 
-Update the LSTM:
+The LSTM then consumes the read vector and produces the next query:
 
-<div class="math-box">
-(q_{t+1}, c_{t+1}) = LSTM( [q_t ; m_t], c_t )
+<div class="formula-box">
+\[
+\bigl(q_{t+1},\, c_{t+1}\bigr) \;=\; \mathrm{LSTM}\bigl([\,q_t \,;\, m_t\,],\; c_t\bigr)
+\]
 </div>
 
-After T steps, the final graph embedding is:
+After $$T$$ steps, the final graph embedding is the concatenation of the last query and the last attended message:
 
-<div class="math-box">
-h_G = [q_T ; m_T]
+<div class="formula-box">
+\[
+h_G \;=\; [\,q_T \,;\, m_T\,] \;\in\; \mathbb{R}^{2d}
+\]
 </div>
 
-(concatenation of LSTM hidden state and final attended message)
+### Why an LSTM Readout Is Still Order-Invariant
+
+An LSTM is the archetypal order-*sensitive* module, so its presence in a readout looks like a contradiction. It is not, and the reason is worth being precise about: **the LSTM does not consume the nodes**. It is unrolled over $$T$$ *processing steps*, a number fixed as a hyperparameter and completely independent of $$N$$. The nodes enter only through $$e_v^t$$, the softmax, and the weighted sum $$m_t$$ — and every one of those three is a symmetric function of the node set. Permute the nodes and each $$\alpha_v^t$$ follows its node, $$m_t$$ is unchanged, so $$q_{t+1}$$ is unchanged, and by induction $$h_G$$ is unchanged.
+
+This is exactly the point of the paper's title, *Order Matters*: feeding a set to a sequence model in some arbitrary order makes the output depend on that order, which is wrong. Set2Set's fix is to let the recurrence run over reads of the set rather than over its elements.
 
 <div class="insight-box">
-<strong>Why multiple passes?</strong> At step t=1, the query q_1 is random — the model attends roughly uniformly. At step t=2, q_2 has seen what step 1 attended to, and can direct attention elsewhere. By step T, the LSTM has built up a rich query sequence — each step "reads" a different aspect of the node set. This is analogous to multi-head attention reading different subspaces.
+<strong>Why multiple passes?</strong> At step \(t=1\) the query \(q_1\) comes from the initial LSTM state and carries no information about the graph, so attention is close to uniform. At step \(t=2\) the query has been conditioned on what step 1 read, and can direct attention elsewhere. By step \(T\) the LSTM has produced a sequence of queries, each "reading" a different aspect of the node set. This is analogous to multi-head attention reading different subspaces — with the difference that Set2Set's reads are sequential and conditioned on each other, whereas attention heads are computed in parallel and independently.
 </div>
 
 ## Worked Example: Set2Set on a 3-Node Graph
 
-Consider a graph with 3 nodes and embeddings h₁ = [1, 0], h₂ = [0, 1], h₃ = [1, 1] (d=2). Set2Set with T=2 steps:
+Consider a graph with 3 nodes and embeddings $$h_1 = [1, 0]$$, $$h_2 = [0, 1]$$, $$h_3 = [1, 1]$$ (so $$d = 2$$). Run Set2Set with $$T = 2$$ steps.
 
-**Step t=1:** initial query q₁ = [0.5, 0.5] (learned init)
-- Scores: e¹₁ = q₁·h₁ = 0.5,  e¹₂ = q₁·h₂ = 0.5,  e¹₃ = q₁·h₃ = 1.0
-- After softmax: α¹ ≈ [0.27, 0.27, 0.46] — node 3 wins (largest score)
-- Attended message: m₁ = 0.27·[1,0] + 0.27·[0,1] + 0.46·[1,1] = [0.73, 0.73]
-- LSTM update: (q₂, c₂) = LSTM([q₁; m₁], c₁)  →  suppose q₂ ≈ [0.8, 0.2]
+**Step $$t=1$$:** initial query $$q_1 = [0.5, 0.5]$$ (from the learned initial LSTM state)
 
-**Step t=2:** new query q₂ = [0.8, 0.2] emphasises the first dimension
-- Scores: e²₁ = 0.8,  e²₂ = 0.2,  e²₃ = 1.0
-- After softmax: α² ≈ [0.31, 0.12, 0.57] — node 3 still dominant, but now node 1 > node 2
-- Attended message: m₂ = 0.31·[1,0] + 0.12·[0,1] + 0.57·[1,1] = [0.88, 0.69]
+- Scores: $$e_1^1 = q_1^{\top}h_1 = 0.5$$, $$e_2^1 = 0.5$$, $$e_3^1 = 1.0$$
+- Softmax over $$(0.5,\,0.5,\,1.0)$$: $$\alpha^1 \approx [0.274,\; 0.274,\; 0.452]$$ — node 3 wins, and nodes 1 and 2 are tied
+- Attended message: $$m_1 = 0.274\,[1,0] + 0.274\,[0,1] + 0.452\,[1,1] \approx [0.726,\; 0.726]$$
+- LSTM update: $$(q_2, c_2) = \mathrm{LSTM}([q_1 ; m_1], c_1)$$ — suppose it returns $$q_2 \approx [0.8, 0.2]$$
 
-**Final embedding:** h_G = [q₂; m₂] = [0.8, 0.2, 0.88, 0.69]  (dimension 2d = 4)
+**Step $$t=2$$:** the new query $$q_2 = [0.8, 0.2]$$ emphasises the first dimension
 
-Notice how the two steps captured different aspects: step 1 treated the graph symmetrically; step 2 distinguished node 1 from node 2. A single attention pass would have produced the same α for nodes 1 and 2.
+- Scores: $$e_1^2 = 0.8$$, $$e_2^2 = 0.2$$, $$e_3^2 = 1.0$$
+- Softmax over $$(0.8,\,0.2,\,1.0)$$: $$\alpha^2 \approx [0.361,\; 0.198,\; 0.441]$$ — node 3 is still the largest, but node 1 has now overtaken node 2
+- Attended message: $$m_2 = 0.361\,[1,0] + 0.198\,[0,1] + 0.441\,[1,1] \approx [0.802,\; 0.639]$$
+
+**Final embedding:** $$h_G = [q_2 ; m_2] \approx [0.8,\; 0.2,\; 0.80,\; 0.64]$$, of dimension $$2d = 4$$.
+
+Notice what the second step bought: step 1 could not separate nodes 1 and 2 at all — its query was symmetric in the two coordinates, so they received identical weights. Step 2's query, conditioned on what step 1 read, breaks that tie. A single attention pass with a symmetric query would have left nodes 1 and 2 indistinguishable in the summary.
 
 ## Set2Set vs Attention Readout vs Sum
 
@@ -185,8 +196,8 @@ Notice how the two steps captured different aspects: step 1 treated the graph sy
 | Weights nodes uniformly | Yes | No | No |
 | Learns importance | No | Yes (independently) | Yes (iteratively) |
 | Multiple passes over nodes | No | No | Yes (T passes) |
-| Output dimension | d | d | 2d |
-| Complexity | O(N d) | O(N d) | O(T N d) |
+| Output dimension | $$d$$ | $$d$$ | $$2d$$ |
+| Complexity | $$O(Nd)$$ | $$O(Nd)$$ | $$O(TNd)$$ |
 | Permutation-invariant | Yes | Yes | Yes |
 
 ## When Set2Set Helps
@@ -196,14 +207,16 @@ Set2Set is particularly effective when:
 - Different "aspects" of the graph matter for the prediction (Set2Set reads each in turn)
 - The graph size varies widely across the dataset (attention readout adapts better than fixed pooling)
 
-On molecular benchmarks (QM9 for molecular property prediction), Set2Set significantly outperforms mean/sum pooling and slightly outperforms single-pass attention.
+Set2Set is the readout used in the MPNN of Gilmer et al. (2017) for molecular property prediction on QM9, chosen there over sum or mean precisely because it is both order-invariant and able to attend to several parts of a molecule in turn.
 
 ## Multi-head Attention Readout
 
-A simpler extension of attention readout: compute K independent attention heads, each with its own gate MLP:
+A simpler extension of attention readout: compute $$K$$ independent attention heads, each with its own gate MLP, and concatenate:
 
-<div class="math-box">
-h_G = concat( Σ_v α^1_v h_v, ..., Σ_v α^K_v h_v )
+<div class="formula-box">
+\[
+h_G \;=\; \Bigl[\; \sum_{v \in V} \alpha_v^{1} h_v \;;\; \dots \;;\; \sum_{v \in V} \alpha_v^{K} h_v \;\Bigr] \;\in\; \mathbb{R}^{Kd}
+\]
 </div>
 
 Each head learns to attend to a different subset of important nodes. This gives multi-aspect graph summarisation without the LSTM overhead of Set2Set.
@@ -217,10 +230,10 @@ Each head learns to attend to a different subset of important nodes. This gives 
 | Set2Set | LSTM queries node set T times | Rich multi-pass summary |
 | Multi-head attention | Multiple independent attention pools | Balanced expressiveness/cost |
 
-For small graphs (molecules, proteins), Set2Set and multi-head attention provide meaningful improvements over flat pooling. For large graphs, the O(T N d) cost of Set2Set may be prohibitive, making single-pass attention readout the preferred choice.
+For small graphs (molecules, proteins), Set2Set and multi-head attention are the readouts to reach for when a single weighted average is too blunt a summary. For large graphs, the $$O(TNd)$$ cost of Set2Set and its inherently sequential $$T$$ steps make single-pass attention readout the preferred choice.
 
 ## References
 
-- Vinyals, O., Bengio, S., & Kudlur, M. (2015). [Order Matters: Sequence to Sequence for Sets](https://arxiv.org/abs/1511.06391). *ICLR 2016* (Set2Set).
-- Li, Y., Tarlow, D., Brockschmidt, M., & Zemel, R. (2016). [Gated Graph Sequence Neural Networks](https://arxiv.org/abs/1511.05493). *ICLR 2016* (global attention readout).
-- Gilmer, J., Schütt, K. T., Matera, G., Deisenroth, M. P., & Müller, K.-R. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017* (uses Set2Set for molecular property prediction).
+- Vinyals, O., Bengio, S., & Kudlur, M. (2016). [Order Matters: Sequence to Sequence for Sets](https://arxiv.org/abs/1511.06391). *ICLR 2016* (Set2Set).
+- Li, Y., Tarlow, D., Brockschmidt, M., & Zemel, R. (2016). [Gated Graph Sequence Neural Networks](https://arxiv.org/abs/1511.05493). *ICLR 2016* (gated global readout).
+- Gilmer, J., Schoenholz, S. S., Riley, P. F., Vinyals, O., & Dahl, G. E. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017* (uses Set2Set as the readout for molecular property prediction).

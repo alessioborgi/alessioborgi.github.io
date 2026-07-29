@@ -11,21 +11,11 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🌊"
-read_mins: 5
+read_mins: 6
 permalink: /blog/gnn/static-vs-dynamic-graphs/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
-
 <div class="tldr-box">
 <strong>TL;DR:</strong> A static graph has fixed topology throughout learning. A dynamic graph changes over time: edges form and dissolve, nodes arrive and depart, features drift. Dynamic graphs come in two forms — discrete-time (snapshots) and continuous-time (event streams). Each requires different modelling assumptions.
 </div>
@@ -51,11 +41,13 @@ A static GNN trained once on a snapshot cannot predict future edges or adapt to 
 
 The graph is observed as a sequence of snapshots:
 
-<div class="math-box">
-G = {G_1, G_2, ..., G_T}   where G_t = (V_t, E_t, X_t)
+<div class="formula-box">
+\[
+\mathcal{G} = \{G_1, G_2, \dots, G_T\}, \qquad G_t = (V_t, E_t, X_t)
+\]
 </div>
 
-Each snapshot G_t is a full graph at time t. Between snapshots, changes are not tracked — only the state at each observation.
+Each snapshot $$G_t$$ is a full graph at time $$t$$, with its own node set $$V_t$$, edge set $$E_t$$ and feature matrix $$X_t$$. Between snapshots, changes are not tracked — only the state at each observation.
 
 **Modelling approach:** run a GNN on each snapshot, then apply a temporal model (RNN/Transformer) across snapshots to capture evolution.
 
@@ -70,13 +62,15 @@ Each snapshot G_t is a full graph at time t. Between snapshots, changes are not 
 
 The graph is a stream of timestamped events:
 
-<div class="math-box">
-E = {(u_i, v_i, t_i, f_i)}_{i=1}^{N}
+<div class="formula-box">
+\[
+\mathcal{E} = \big\{ (u_i, v_i, t_i, f_i) \big\}_{i=1}^{N}, \qquad t_1 \le t_2 \le \dots \le t_N
+\]
 </div>
 
-Where each event is an edge (u_i, v_i) occurring at time t_i with optional features f_i. Nodes may also have state updates at specific times.
+Each event is an interaction between $$u_i$$ and $$v_i$$ occurring at time $$t_i$$ with optional features $$f_i$$. Nodes may also have state updates at specific times.
 
-**Modelling approach:** maintain a memory state for each node, updated upon each interaction. Compute node embeddings on demand for any time t.
+**Modelling approach:** maintain a memory state for each node, updated upon each interaction. Compute node embeddings on demand for any time $$t$$ — using only events with timestamp $$\le t$$, never later ones.
 
 **Examples:**
 - Reddit posts (user posts to subreddit at timestamp)
@@ -95,14 +89,18 @@ New edges and nodes arrive continuously. The model must incorporate new informat
 
 ### 2. Temporal Dependencies
 
-Events at time t may depend on events at t-k (historical context). Capturing long-range temporal dependencies while maintaining efficient updates is the core challenge.
+Events at time $$t$$ may depend on events at $$t - k$$ (historical context). Capturing long-range temporal dependencies while maintaining efficient updates is the core challenge.
+
+### 4. Causality
+
+Every prediction about time $$t$$ must be computed from events strictly in the past. Shuffling an event stream before splitting into train and test — as one would for i.i.d. data — leaks future edges into the past and inflates results. Dynamic-graph splits are always chronological.
 
 ### 3. Forgetting and Recency
 
 Not all past events are equally relevant. A social interaction from 3 years ago matters less than one from last week. Models must balance memory capacity with relevance weighting.
 
 <div class="insight-box">
-<strong>The memory bottleneck:</strong> Naive CTDG models replay all past events to compute current node states — O(history) per query. TGN and similar architectures solve this with fixed-size memory modules that summarise history efficiently, analogous to how LSTMs summarise sequence history in a fixed hidden state.
+<strong>The memory bottleneck:</strong> Naive CTDG models replay all past events to compute current node states — \(O(\lvert \text{history} \rvert)\) per query. TGN and similar architectures solve this with fixed-size memory modules that summarise history efficiently, analogous to how LSTMs summarise sequence history in a fixed hidden state.
 </div>
 
 ## Visualising DTDG vs CTDG
@@ -196,13 +194,13 @@ Not all past events are equally relevant. A social interaction from 3 years ago 
 
 | Concept | Definition |
 |---------|-----------|
-| Static graph | Fixed (V, E, X) — standard GNN setting |
-| Snapshot graph | Series G_1, ..., G_T of static graphs |
+| Static graph | Fixed $$(V, E, X)$$ — standard GNN setting |
+| Snapshot graph | Series $$G_1, \dots, G_T$$ of static graphs |
 | Event stream | Ordered sequence of timestamped interactions |
 | Inductive | Generalises to nodes not seen during training |
 | Memory module | Fixed-size state capturing interaction history |
 
-Dynamic graph learning adds the temporal dimension to all GNN tasks: link prediction becomes "will u and v interact in the future?", node classification becomes "what is v's state now?", and graph-level tasks must account for structural evolution. The field is rapidly developing, with TGN as the current dominant framework for CTDG.
+Dynamic graph learning adds the temporal dimension to all GNN tasks: link prediction becomes "will $$u$$ and $$v$$ interact after time $$t$$?", node classification becomes "what is $$v$$'s state at time $$t$$?", and graph-level tasks must account for structural evolution. Whatever the task, the model may only look at events with timestamp $$\le t$$. TGN is the most widely used CTDG framework and the usual first baseline.
 
 ## References
 

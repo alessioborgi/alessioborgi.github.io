@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🎯"
-read_mins: 9
+read_mins: 8
 permalink: /blog/math-basics/convexity-and-optimisation/
 toc: true
 toc_label: "Contents"

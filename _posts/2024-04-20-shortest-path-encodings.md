@@ -11,22 +11,13 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🗺️"
-read_mins: 4
+read_mins: 6
 permalink: /blog/gnn/shortest-path-encodings/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
-
 <div class="tldr-box">
-<strong>TL;DR:</strong> For Graph Transformers, the shortest path distance dist(i,j) between every node pair can be used as an attention bias — biasing attention scores to decrease with distance, encoding the graph's metric structure without message passing.
+<strong>TL;DR:</strong> For Graph Transformers, the shortest-path distance \(\mathrm{dist}(i,j)\) between every node pair can be added to the attention logits as a learned scalar bias. This injects the graph's metric structure directly into attention without any message passing — at the price of computing and storing all-pairs distances, which is \(O(N(N+\lvert E\rvert))\) time and \(O(N^2)\) memory.
 </div>
 {% include figure image_path="/images/blog/gnn/ying2021_graphormer.png" alt="Shortest path distance bias" caption="Spatial encoding via shortest path distances in Graphormer (Ying et al., 2021)" %}
 
@@ -35,7 +26,7 @@ toc_label: "Contents"
 
 In a standard Transformer, every token can attend to every other token — but the attention score is purely based on content similarity. For graphs, two distant nodes might have very similar features yet share no direct structural relationship. SPD encoding adds a "distance penalty" to attention: nodes far apart in the graph should attend less strongly, regardless of feature similarity.
 
-Think of it like gravity — the force of attraction decays with distance, but the model learns the exact decay rate from data (not just 1/d²).
+Think of it loosely like gravity — attraction weakens with distance. But the analogy only goes so far: gravity decays as a fixed $$1/d^2$$, whereas here the model learns one free scalar per distance value and is under no obligation to make the profile decreasing at all.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;display:block;margin:auto">
@@ -63,13 +54,13 @@ Think of it like gravity — the force of attraction decays with distance, but t
   <path d="M 60 66 Q 180 -5 300 66" class="spd-attn" stroke="#a5b4fc" stroke-width="1.5" opacity="0.5"/>
   <path d="M 60 66 Q 220 -18 380 66" class="spd-attn" stroke="#c7d2fe" stroke-width="1"   opacity="0.3"/>
   <text x="60"  y="108" class="spd-text">v</text>
-  <text x="100" y="52"  class="spd-text">dist=1, φ=+1.2</text>
+  <text x="100" y="52"  class="spd-text">dist=1, φ(1)=+1.2</text>
   <text x="170" y="32"  class="spd-text">dist=2, φ=+0.4</text>
   <text x="240" y="16"  class="spd-text">dist=3, φ=−0.1</text>
   <text x="310" y="8"   class="spd-text">dist=4, φ=−0.6</text>
   <text x="250" y="130" class="spd-text">Learned φ_SPD values (one scalar per distance bucket) bias attention scores</text>
 </svg>
-<figcaption>Graphormer's spatial encoding: attention from node v to its 1-hop, 2-hop, 3-hop, and 4-hop neighbours. The bias φ_SPD(d) is a learned scalar per distance — the model learns to attend less as distance grows, but the exact shape is data-driven.</figcaption>
+<figcaption>Graphormer's spatial encoding: attention from node \(v\) to its 1-, 2-, 3- and 4-hop neighbours. The bias \(\varphi(d)\) is one learned scalar per distance. The decreasing profile shown here is what typically emerges from training, not something the architecture imposes — the values are free parameters.</figcaption>
 </figure></div>
 
 ## Why Shortest Paths?
@@ -78,54 +69,66 @@ In Graphormer (Ying et al., 2021), every pair of nodes can attend to each other.
 
 Shortest-path distance (SPD) encoding injects this directly as an attention bias:
 
-<div class="math-box">
-A_{ij} = softmax_j( QᵢKⱼᵀ / √d + φ_SPD(dist(i,j)) )
+<div class="formula-box">
+\[
+A_{ij} = \operatorname*{softmax}_{j}\!\left(\frac{q_i^{\top} k_j}{\sqrt{d}} + \varphi\big(\mathrm{dist}(i,j)\big)\right).
+\]
 </div>
 
-Where φ_SPD is a learned embedding: one scalar per distance value (0, 1, 2, 3, ..., max_dist, ∞).
+$$\varphi$$ is a lookup table of learned scalars, one per distance value $$0, 1, 2, \dots, d_{\max}$$, plus one for "no path". In Graphormer it is learned separately per attention head, so different heads can specialise to different ranges.
 
 ## What It Captures
 
-- **Immediate neighbours** (dist=1): strongest attention bias
-- **2-hop neighbours** (dist=2): moderate bias
-- **Distant nodes** (dist=10): small or negative bias
-- **Disconnected** (dist=∞): special "no path" embedding
+- **Self** ($$\mathrm{dist} = 0$$): its own entry
+- **Immediate neighbours** ($$\mathrm{dist} = 1$$): typically the largest bias
+- **2-hop neighbours** ($$\mathrm{dist} = 2$$): moderate
+- **Distant nodes**: small or negative
+- **Disconnected** ($$\mathrm{dist} = \infty$$): a dedicated "no path" entry
 
-The model learns how distance should affect attention strength — this is not fixed (e.g., always decaying); the learned φ_SPD can assign different weights to each distance bucket.
+Two things are worth being precise about. First, nothing constrains $$\varphi$$ to decrease with distance — it is a free table of scalars, and the model may well learn a non-monotone profile if the task rewards it. Second, it is a *bias on the logits*, not a mask: a large content match $$q_i^{\top}k_j$$ can still outweigh a strongly negative $$\varphi$$, so distant nodes remain reachable. That is precisely what distinguishes it from a hard $$k$$-hop restriction.
 
 ## All-Pairs Shortest Paths: Computation Cost
 
-Computing all-pairs shortest paths (APSP) costs O(N · (N + |E|)) with BFS from every node. For small graphs (N < 1000): cheap, precomputable. For large graphs (N > 100,000): prohibitive.
+On an unweighted graph, BFS from every node gives all-pairs distances in $$O(N(N + \lvert E\rvert))$$ time. The output is an $$N \times N$$ integer matrix, so memory is $$\Theta(N^2)$$ regardless of how sparse the graph is — and in a Transformer that matrix must sit alongside the attention matrix, which is also $$N \times N$$.
 
-This is why SPD encoding is primarily used for small-graph tasks (molecules with N < 100, protein structure graphs with N < 500).
+For small graphs ($$N < 1000$$) this is cheap and computed once per graph as a preprocessing step. At $$N > 10^5$$ the memory alone rules it out, well before the time cost does. This is why SPD encoding is used mainly for molecules ($$N$$ in the tens) and small protein or structure graphs.
 
 ## SPD vs LapPE vs RWPE
 
 | Encoding | Type | Captures | Cost |
 |---------|------|---------|------|
-| LapPE | Node PE | Global position | O(k·\|E\|·T) |
-| RWPE | Node PE | Local structural role | O(K·\|E\|) |
-| SPD | Edge/pair PE | Graph metric distances | O(N·(N+\|E\|)) |
+| LapPE | Node PE | Low-frequency global position | $$O(k\lvert E\rvert T)$$, $$T$$ gap-dependent |
+| RWPE | Node PE | Local closed-walk structure | $$O(K N \lvert E\rvert)$$ time, $$O(N^2)$$ memory |
+| SPD | Pairwise bias | Exact graph metric between every pair | $$O(N(N+\lvert E\rvert))$$ time, $$O(N^2)$$ memory |
 
-SPD is a **pairwise** encoding — it's not a node property but a pair property. It cannot be used as a standard node embedding; it must be injected into the attention mechanism as a bias.
+SPD is a **pairwise** encoding — a property of a pair, not of a node. It cannot be concatenated to node features; it has to enter through the attention mechanism as a bias. That is a genuine architectural constraint: SPD is unavailable to a plain message-passing GNN, which has no pairwise scoring step to attach it to.
 
-## Beyond SPD: Distance Encoding (DE)
+## Beyond SPD: Distance Encoding and Anchor Sets
 
-Distance Encoding (Li et al., 2020) uses SPD from each node to a set of landmark nodes as a node-level encoding. With landmark set S:
+Two related ideas turn pairwise distances into something node-level, and they are often conflated.
 
-<div class="math-box">
-pe_v = [dist(v, s₁), dist(v, s₂), ..., dist(v, s_k)]
+**Distance Encoding (Li et al., 2020)** measures distance from every node to the *target node set* of the prediction — the node or node pair being classified. For link prediction on $$(u,v)$$, each node $$w$$ is featurised by its distances to $$u$$ and to $$v$$. The encoding is therefore task-relative, recomputed per query, and this is exactly what gives it provable power beyond 1-WL: it breaks the symmetry between nodes that are structurally equivalent but differently placed relative to the target.
+
+**Anchor sets (P-GNN, You et al., 2019)** take the other route: sample random anchor sets $$S_1, \dots, S_k$$ once, and featurise each node by its distance to each anchor:
+
+<div class="formula-box">
+\[
+p_v = \big[\,\mathrm{dist}(v, S_1),\; \mathrm{dist}(v, S_2),\; \dots,\; \mathrm{dist}(v, S_k)\,\big].
+\]
 </div>
 
-This converts pairwise distances into node features (by fixing anchor nodes), making it usable as standard node PE. With random landmark selection, it approximates SPD information efficiently.
+This is a fixed node-level encoding, cheaper than full APSP, and it is genuinely *positional* — it depends on the random anchor draw, so it is not a function of the graph alone and two runs give different encodings.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> SPD encoding is the only PE that directly injects <em>pairwise</em> graph metric information. LapPE and RWPE are node-level — they encode each node independently. SPD is edge-level — it encodes the relationship between every pair. This makes SPD strictly more informative for attention, but strictly more expensive to compute. The O(N²) cost is why SPD is limited to molecule-scale graphs (N &lt; 500).</div>
+The distinction matters: DE is task-relative and permutation-equivariant; anchor distances are position-like but carry an arbitrary random choice, much as Laplacian eigenvectors carry an arbitrary sign.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> SPD is the only encoding here that injects <em>pairwise</em> metric information directly. LapPE and RWPE are node-level: each node gets a vector, and the model must infer relationships between nodes from those vectors. SPD hands the relationship over explicitly. That is more informative <em>about distance specifically</em> — but it is not uniformly stronger, since it says nothing about a node's own local structure, which is exactly what RWPE supplies. The three are complementary, not ranked. The \(O(N^2)\) memory is what confines SPD to molecule-scale graphs.</div>
 
 ## Summary
 
-SPD encoding directly injects graph metric structure into Graph Transformer attention. It is simple, interpretable, and effective for small graphs. For large graphs, it is too expensive — use RWPE or LapPE instead, which capture distance information implicitly through local structure.
+SPD encoding injects graph metric structure straight into Graph Transformer attention. It is simple, interpretable, and effective on small graphs. Its ceiling is memory, not cleverness: the $$N \times N$$ distance matrix scales with the attention matrix, so SPD is viable exactly where full attention already is. For larger graphs, use RWPE or LapPE, which encode structure per node rather than per pair — accepting that neither gives the model an exact distance between two specified nodes.
 
 ## References
 
 - Ying, C., Cai, T., Luo, S., Zheng, S., Ke, G., He, D., Shen, Y., & Liu, T.-Y. (2021). [Do Transformers Really Perform Bad for Graph Representation?](https://arxiv.org/abs/2106.05234). *NeurIPS 2021* (Graphormer — introduces SPD and edge-distance encodings).
 - Li, P., Wang, Y., Wang, H., & Leskovec, J. (2020). [Distance Encoding: Design Provably More Powerful Graph Neural Networks for Structural Representation Learning](https://arxiv.org/abs/2009.00142). *NeurIPS 2020*.
+- You, J., Ying, R., & Leskovec, J. (2019). [Position-aware Graph Neural Networks](https://arxiv.org/abs/1906.04817). *ICML 2019* (P-GNN — introduces random anchor sets).

@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🏷️"
-read_mins: 9
+read_mins: 7
 permalink: /blog/python-primer/syntax-and-variables/
 toc: true
 toc_label: "Contents"

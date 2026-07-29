@@ -11,17 +11,11 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🚦"
-read_mins: 6
+read_mins: 8
 permalink: /blog/gnn/gnns-traffic/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> A city's sensor network is a fixed graph (sensors = nodes, road connections = edges). At each timestamp, sensors report speed/volume. The task: given the last T timesteps, predict the next H timesteps. GNNs capture "traffic jam propagates downstream" (spatial); RNNs/convolutions capture "rush hour occurs every morning" (temporal). The best models combine both.
@@ -31,13 +25,13 @@ toc_label: "Contents"
 
 ## The Traffic Forecasting Task
 
-**Intuition First:** Traffic networks are like dominoes: a slowdown at one sensor topples the next. An ARIMA model at each sensor sees its own history but is blind to the upstream jam that caused its own slowdown — it only "learns" the pattern after the slowdown arrives. A GNN-augmented model receives advance warning: neighbouring sensors upstream are already slowing down, so the spatial signal arrives before the temporal consequence does. This is why adding graph structure consistently cuts prediction error by 20–30% over temporal-only baselines.
+**Intuition First:** Traffic networks are like dominoes: a slowdown at one sensor topples the next. An ARIMA model at each sensor sees its own history but is blind to the upstream jam that caused its own slowdown — it only "learns" the pattern once the slowdown arrives. A GNN-augmented model receives advance warning: neighbouring sensors upstream are already slowing, so the spatial signal arrives before the temporal consequence does. That advance warning is the whole reason graph structure helps here, and the benefit grows with the forecasting horizon — at 5 minutes ahead your own history is nearly sufficient, at an hour ahead it is not.
 
-**Input:** X ∈ ℝ^{N × T × d} — N sensor readings over T past timesteps, each with d features (speed, volume, occupancy)
+**Input:** $$X \in \mathbb{R}^{N \times T \times d}$$ — readings from $$N$$ sensors over $$T$$ past timesteps, each with $$d$$ features (speed, volume, occupancy)
 
-**Output:** X̂ ∈ ℝ^{N × H × d} — predictions for H future timesteps
+**Output:** $$\hat{X} \in \mathbb{R}^{N \times H \times d}$$ — predictions for $$H$$ future timesteps
 
-**Graph:** G = (V, E, W) where V = sensors, E = road segments connecting sensors, W = edge weights (distance, travel time, or correlation)
+**Graph:** $$G = (V, E, W)$$ where $$V$$ is the sensor set, $$E$$ the road segments connecting them, and $$W$$ the edge weights (road distance, travel time, or measured correlation)
 
 **Standard benchmarks:**
 - METR-LA: 207 sensors on LA freeways, 4 months, 5-min intervals
@@ -59,18 +53,24 @@ DCRNN (Li et al., 2018) uses **bidirectional random walk diffusion** as the spat
 
 **Diffusion convolution (captures directional traffic flow):**
 
-<div class="math-box">
-H = Σ_{k=0}^{K} ( (D_O^{-1} A)^k X W_k^{fwd} + (D_I^{-1} A^T)^k X W_k^{bwd} )
+<div class="formula-box">
+\[
+H = \sum_{k=0}^{K} \left(
+\left( D_O^{-1} A \right)^{k} X\, W_k^{\text{fwd}}
++
+\left( D_I^{-1} A^{\top} \right)^{k} X\, W_k^{\text{bwd}}
+\right),
+\]
 </div>
 
-Forward diffusion follows traffic direction (upstream → downstream). Backward diffusion captures reverse influence (road closure downstream affects upstream traffic).
+where $$D_O$$ and $$D_I$$ are the out-degree and in-degree matrices, so $$D_O^{-1} A$$ is the row-stochastic transition matrix of a random walk along the direction of travel. Raising it to the power $$k$$ gives the distribution after $$k$$ steps: forward diffusion follows traffic downstream, backward diffusion carries the reverse influence (a closure downstream backs traffic up).
 
-**Encoder-decoder:** DCRNN encodes T past steps with a diffusion-GRU encoder, decodes H future steps with a decoder using scheduled sampling (avoids exposure bias).
+**Encoder-decoder:** DCRNN encodes the $$T$$ past steps with a diffusion-GRU encoder and decodes $$H$$ future steps, using scheduled sampling to reduce exposure bias.
 
-**Result on METR-LA:** MAE 2.77 for 60-min horizon, vs 3.99 for LSTM (without graph) — 31% improvement.
+**Result on METR-LA:** DCRNN lowers MAE against both statistical baselines (ARIMA, VAR) and temporal-only neural ones (FC-LSTM) at every horizon reported in the paper, and the margin over the graph-free baselines widens as the horizon lengthens — which is exactly what the "advance warning" story predicts.
 
 <div class="insight-box">
-<strong>Why diffusion (not standard GCN)?</strong> Traffic is a directed flow — a jam at sensor A propagates to sensors A' downstream, not to sensors A'' upstream. Standard GCN uses a symmetric adjacency (undirected). Diffusion convolution with directed adjacency D^{-1}_O A captures the directional flow correctly. This is a domain-specific structural choice that significantly improves accuracy.
+<strong>Why diffusion, not a standard GCN?</strong> Traffic is a directed flow: a jam at sensor \(A\) propagates to the sensors downstream of it, and only weakly and with different dynamics to those upstream. A standard GCN symmetrises the adjacency, which throws that asymmetry away — it would send the identical message in both directions along a one-way road. Diffusion convolution keeps the directed transition matrix \(D_O^{-1} A\) and learns separate forward and backward weights, so the two directions are modelled as the distinct physical phenomena they are.
 </div>
 
 ## STGCN (Spatio-Temporal Graph Convolutional Network)
@@ -81,43 +81,56 @@ STGCN (Yu et al., 2018) replaces recurrence with 1D temporal convolutions for sp
 Block: [Temporal gated conv] → [Spatial ChebNet] → [Temporal gated conv]
 ```
 
-Temporal gated convolution (GLU):
+Temporal gated convolution (GLU), where $$*$$ is 1D convolution along time and $$\odot$$ is element-wise product:
 
-<div class="math-box">
-Y = X * Θ_1 ⊙ σ(X * Θ_2)   (element-wise gating)
+<div class="formula-box">
+\[
+Y = \left( X * \Theta_1 \right) \odot \sigma\!\left( X * \Theta_2 \right).
+\]
 </div>
 
-No recurrence → fully parallelisable over time → 10× faster training than DCRNN.
+The second branch acts as a learned gate deciding how much of the first branch passes through at each timestep. Because there is no recurrence, the whole temporal dimension is computed in parallel rather than step by step, which is where the training-time advantage over DCRNN comes from.
 
-**Result:** similar accuracy to DCRNN on METR-LA, much faster training.
+**Result:** the paper reports accuracy comparable to DCRNN on the standard benchmarks at substantially lower training cost.
 
 ## Graph Wave Net (Wu et al., 2019)
 
-Adds an **adaptive adjacency matrix** that is learned from data, not just from road geometry:
+Adds an **adaptive adjacency matrix** learned from data rather than read off the road geometry:
 
-<div class="math-box">
-Â = softmax( ReLU( E_1 E_2^T ) )
+<div class="formula-box">
+\[
+\tilde{A} = \mathrm{softmax}\!\left( \mathrm{ReLU}\!\left( E_1 E_2^{\top} \right) \right),
+\qquad E_1, E_2 \in \mathbb{R}^{N \times d}.
+\]
 </div>
 
-Where E_1, E_2 ∈ ℝ^{N × d} are learnable node embeddings. The adaptive adjacency captures non-geographic correlations (sensors far apart but behaviourally correlated — e.g., parallel highways).
+$$E_1$$ and $$E_2$$ are learnable node embeddings, so the model discovers which sensors influence each other instead of assuming that road adjacency is the only channel. The ReLU zeroes out negative affinities to keep $$\tilde{A}$$ sparse, and the row-wise softmax normalises it into a transition matrix. This picks up non-geographic correlations — sensors that are far apart yet behave alike, such as parallel highways carrying the same commute.
 
 Also uses **dilated causal convolutions** (like WaveNet) for temporal modelling — wider receptive field than standard 1D conv without more parameters.
 
 ## Worked Example: Spatial vs Temporal Signal
 
-**Setup:** 3 sensors A→B→C (chain). At t=0: A=60 mph, B=60 mph, C=60 mph. A traffic incident causes sensor A to drop: at t=1 A=20 mph (jam), B=55 mph, C=60 mph.
+This is an illustrative toy scenario, not measured data — the point is the mechanism, not the digits.
 
-**LSTM (per-sensor, no graph):** sensor B's history is [60, 55] — it sees a mild slowdown. Predicted B at t=2: ~52 mph. Actual: 30 mph (jam propagation).
+**Setup:** three sensors in a chain, $$A \to B \to C$$. At $$t=0$$ all three read 60 mph. An incident hits $$A$$, so at $$t=1$$ we observe $$A = 20$$, $$B = 55$$, $$C = 60$$ mph.
 
-**DCRNN (graph-aware):** at t=1, sensor A reports 20 mph to B via the graph edge. DCRNN's diffusion convolution computes B's message as a weighted combination of A and B's readings: 0.6×20 + 0.4×55 = 34 mph spatial signal. Combined with B's temporal history: predicted B at t=2 ≈ 33 mph — much closer to the actual 30 mph.
+**LSTM (per-sensor, no graph):** sensor $$B$$'s history is $$[60, 55]$$ — a mild slowdown, extrapolating to roughly 52 mph at $$t=2$$. But the jam is about to arrive, and $$B$$'s own history contains no trace of it yet.
 
-**The gain:** DCRNN gets advance warning from A's spatial signal before B's own temporal history reflects the jam. This is the core reason GNNs cut 60-min forecast MAE from 3.99 (LSTM) to 2.77 (DCRNN) on METR-LA.
+**DCRNN (graph-aware):** the edge $$A \to B$$ delivers $$A$$'s reading to $$B$$ at $$t=1$$. With diffusion weights of, say, 0.6 on the upstream neighbour and 0.4 on $$B$$ itself, the spatial term is
+
+<div class="formula-box">
+\[
+0.6 \times 20 + 0.4 \times 55 = 12 + 22 = 34 \text{ mph},
+\]
+</div>
+
+which drags the prediction down towards the incoming jam instead of extrapolating $$B$$'s own gentle decline.
+
+**The gain:** the graph gives $$B$$ advance warning that its own temporal history cannot contain yet, because the information physically has not reached $$B$$'s sensor. This is why the advantage of graph-based models over temporal-only ones grows with the forecast horizon — the further ahead you predict, the more of the answer is currently sitting at some *other* node.
 
 ## Industrial Deployment
 
-**Google Maps:** uses graph-based models for ETA (estimated time of arrival) prediction. The road network is a graph; historical traffic patterns are the training signal. GNNs helped reduce ETA prediction error by 50%+ in some regions.
-
-**DiDi / Uber:** ride-hailing platforms use traffic forecasting to optimise driver positioning and surge pricing. GNNs process city-wide sensor networks in real-time.
+The best-documented deployment is Google Maps. Derrow-Pinion et al. (2021) describe the GNN ETA model that went into production there, and the mechanism is a direct application of everything above: the road network is partitioned into *supersegments* — sequences of connected road segments corresponding to plausible routes — and each supersegment becomes a graph whose nodes are segments and whose edges are their connections. A GNN over that graph predicts travel time, with the graph structure supplying exactly the upstream/downstream context a per-segment model would miss. The authors report substantial reductions in negative ETA outcomes across several metropolitan areas relative to the previous production baseline.
 
 ## Summary
 
@@ -129,10 +142,11 @@ Also uses **dilated causal convolutions** (like WaveNet) for temporal modelling 
 | STGCN | ChebNet | Gated 1D conv | Fast (parallel) |
 | Graph Wave Net | Adaptive adjacency | Dilated causal conv | Fast |
 
-Traffic forecasting is the canonical spatio-temporal GNN application — clean problem definition, public benchmarks, and real-world deployment at scale. Progress here has directly translated into improved navigation systems, logistics optimisation, and urban planning tools.
+Traffic forecasting is the canonical spatio-temporal GNN application — a clean problem definition, public benchmarks, and at least one thoroughly documented production deployment. The mechanism worth carrying away is narrow and concrete: because congestion physically travels along roads, the information needed to predict a sensor's near future is currently located at its upstream neighbours, and a GNN is simply the machinery for reading it from there.
 
 ## References
 
 - Li, Y., Yu, R., Shahabi, C., & Liu, Y. (2018). [Diffusion Convolutional Recurrent Neural Network: Data-Driven Traffic Forecasting](https://arxiv.org/abs/1707.01926). *ICLR 2018* (DCRNN: bidirectional diffusion convolution on road graphs combined with GRU encoder-decoder for traffic speed prediction).
 - Yu, B., Yin, H., & Zhu, Z. (2018). [Spatio-Temporal Graph Convolutional Networks: A Deep Learning Framework for Traffic Forecasting](https://arxiv.org/abs/1709.04875). *IJCAI 2018* (STGCN: fully convolutional approach replacing recurrent temporal processing with gated 1D convolution for faster training).
-- Wu, Z., Pan, S., Long, G., Jiang, J., Chang, X., & Zhang, C. (2020). [Connecting the Dots: Multivariate Time Series Forecasting with Graph Neural Networks](https://arxiv.org/abs/2005.11650). *KDD 2020* (GWaveNet: learns the graph structure adaptively alongside dilated causal convolutions for long-range traffic patterns).
+- Wu, Z., Pan, S., Long, G., Jiang, J., Chang, X., & Zhang, C. (2020). [Connecting the Dots: Multivariate Time Series Forecasting with Graph Neural Networks](https://arxiv.org/abs/2005.11650). *KDD 2020* (learns the graph structure adaptively alongside dilated causal convolutions for long-range temporal patterns).
+- Derrow-Pinion, A., She, J., Wong, D., Lange, O., Hester, T., Perez, L., Nunkesser, M., Lee, S., Guo, X., Wiltshire, B., Battaglia, P. W., Gupta, V., Li, A., Xu, Z., Sanchez-Gonzalez, A., Li, Y., & Veličković, P. (2021). [ETA Prediction with Graph Neural Networks in Google Maps](https://arxiv.org/abs/2108.11482). *CIKM 2021* (the production GNN ETA model in Google Maps, built on road-network supersegments).

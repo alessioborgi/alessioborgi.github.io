@@ -11,20 +11,11 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🗂️"
-read_mins: 6
+read_mins: 7
 permalink: /blog/gnn/graph-classification/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> A graph classifier has three stages: (1) message passing to build node embeddings; (2) readout to collapse node embeddings into a graph embedding; (3) an MLP to predict from the graph embedding. The expressiveness bottleneck is usually the readout step, not the message passing. Choosing sum readout + GIN + MLP achieves 1-WL expressiveness for graph-level tasks.
@@ -36,7 +27,7 @@ toc_label: "Contents"
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Graph classification is the hardest test of a GNN because the entire graph — regardless of size — must be squashed into a single fixed-size vector. The readout step is the bottleneck: use mean pooling and you lose count information; use sum and you keep it but the scale grows with graph size. Choosing the right readout is as important as choosing the right message-passing architecture.</div>
 
-Given a dataset of graphs {(G₁, y₁), ..., (Gₙ, yₙ)}, the goal is to learn a function f: G → y. Unlike node classification (predict per-node label) or link prediction (predict edge existence), graph classification must process entire graphs of varying sizes.
+Given a dataset of graphs $$\{(G_1, y_1), \dots, (G_n, y_n)\}$$, the goal is to learn a function $$f : G \mapsto y$$. Unlike node classification (predict a per-node label) or link prediction (predict edge existence), graph classification must process entire graphs of varying sizes.
 
 The standard pipeline:
 
@@ -60,13 +51,15 @@ Prediction ŷ
 
 The message passing stage is the same as for node-level tasks. The only difference: we do not use the final node embeddings directly — we aggregate them.
 
-**JK-Net readout:** rather than using only the last-layer embeddings, JK-Net concatenates all intermediate embeddings before pooling:
+**JK-Net readout:** rather than using only the last-layer embeddings, JK-Net concatenates each node's intermediate embeddings across layers before pooling:
 
-<div class="math-box">
-h_G = READOUT( concat(h^(1)_v, h^(2)_v, ..., h^(K)_v) for v ∈ V )
+<div class="formula-box">
+\[
+h_G \;=\; \mathrm{READOUT}\Bigl(\bigl\{\,[\,h_v^{(1)} ; h_v^{(2)} ; \dots ; h_v^{(K)}\,] \;:\; v \in V \,\bigr\}\Bigr)
+\]
 </div>
 
-This is particularly useful for graph classification: different nodes may require different receptive field sizes, and combining all layers ensures no scale is lost.
+This is particularly useful for graph classification: different nodes may require different receptive field sizes, and keeping every layer's output ensures no scale is lost to oversmoothing in the deepest layer.
 
 ## Worked Example: Why Sum Beats Mean for Graph Classification
 
@@ -130,23 +123,23 @@ Mean pooling gives identical embeddings for A and B — the classifier cannot di
 
 ## The GIN Recipe for Graph Classification
 
-GIN (Graph Isomorphism Network) achieves 1-WL expressiveness. For graph classification:
+GIN (Graph Isomorphism Network) matches the 1-WL test — the strongest any message-passing GNN can be. For graph classification:
 
-1. **K layers of GIN message passing** (sum aggregation + injective MLP)
-2. **Sum readout over all layer outputs:**
+1. **$$K$$ layers of GIN message passing** (sum aggregation + injective MLP)
+2. **Sum readout within each layer, concatenation across layers:**
 
-<div class="math-box">
-h_G = Σ_{k=0}^{K} Σ_{v ∈ V} h^{(k)}_v
+<div class="formula-box">
+\[
+h_G \;=\; \Bigl[\; \sum_{v \in V} h_v^{(0)} \;;\; \sum_{v \in V} h_v^{(1)} \;;\; \dots \;;\; \sum_{v \in V} h_v^{(K)} \;\Bigr]
+\]
 </div>
 
-This double-sum ensures both layer-wise and node-wise information is captured.
+3. **MLP classifier** on $$h_G$$ to produce $$\hat{y}$$
 
-3. **MLP classifier** on h_G → ŷ
-
-The combination of sum aggregation (injective over multisets) + sum readout (preserves count information) + MLP (universal approximator) achieves the maximum expressiveness of any MPNN.
+The combination of sum aggregation (injective over multisets), sum readout (preserves count information), and an MLP (universal approximator) reaches the maximum expressiveness available to an MPNN.
 
 <div class="insight-box">
-<strong>Why sum over all layers?</strong> This is the GIN paper's key insight. Summing over all K layer outputs means the graph embedding represents the collection of all K-hop neighbourhoods for all nodes. Two graphs with different structures at any scale will have different sums — unlike using only the final layer, which captures only K-hop structure.
+<strong>Concatenate across layers, do not sum across them.</strong> This is worth getting right: GIN sums <em>within</em> each layer to pool nodes, then <em>concatenates</em> the \(K+1\) per-layer graph vectors. Summing across layers too would collapse information from different hop radii into one vector, and a structure visible at hop 2 could then be cancelled by one at hop 4. Concatenation keeps each scale addressable by the classifier, which is the same reasoning behind the JK-Net readout above.
 </div>
 
 ## Benchmarks and Datasets
@@ -165,20 +158,17 @@ The combination of sum aggregation (injective over multisets) + sum readout (pre
 - **ogbg-molpcba:** molecular property prediction (437,929 molecules)
 - **ogbg-ppa:** protein function prediction (158,100 protein interaction graphs)
 
-## Baseline vs State-of-the-Art Performance
+## What Actually Moves the Needle
 
-On MUTAG and similar small datasets, the performance hierarchy is roughly:
+Rather than quote accuracy figures — which on these datasets vary enormously with the split, the folds, and the hyperparameter budget — it is more useful to state the ordering that theory predicts and that ablations consistently reproduce:
 
-```
-GCN + mean pooling: ~73%
-GCN + sum pooling:  ~80%
-GIN + sum pooling:  ~89%
-DiffPool:           ~87%
-Set2Set + MPNN:     ~91%
-Graph Transformers: ~92%+
-```
+- Swapping **mean readout for sum** is the single largest architectural change available on tasks whose label depends on counts or on graph size. It is a change in what the model *can* express, not a tuning improvement.
+- Swapping **GCN aggregation for GIN aggregation** matters for the same reason one level down: it makes the neighbourhood aggregation injective rather than averaging.
+- **Hierarchical pooling** (DiffPool, SAGPool) and **learned readout** (Set2Set, attention) help when the label depends on intermediate-scale structure that a single flat pool blurs away. When it does not, they mostly add parameters.
 
-(Illustrative; exact numbers vary by split and implementation.)
+<div class="warning-box">
+<strong>On reading reported numbers:</strong> published accuracies on the small TUDatasets are not comparable across papers unless the evaluation protocol matches exactly. Differences of a couple of points on MUTAG (188 graphs — roughly 19 graphs per test fold in 10-fold CV) are within the noise of which fold split was drawn. Treat the ordering above as the reliable signal and any specific number as protocol-dependent.
+</div>
 
 ## End-to-End Training Intuition
 
@@ -194,7 +184,7 @@ Graph Transformers: ~92%+
 
 ## End-to-End Training
 
-The entire pipeline (GNN + readout + MLP) is trained end-to-end with a single loss (cross-entropy for classification, MSE for regression). The readout step is differentiable for all standard choices (sum/mean/max are differentiable; attention readout is differentiable; DiffPool is differentiable via soft assignment; TopKPool is approximately differentiable via score gating).
+The entire pipeline (GNN + readout + MLP) is trained end-to-end with a single loss (cross-entropy for classification, MSE for regression). The readout step admits gradients for all standard choices: sum, mean and max are differentiable almost everywhere; attention readout is smooth; DiffPool is fully differentiable through its soft assignment; TopKPool and SAGPool are differentiable only through the score gating — the top-$$k$$ selection itself contributes no gradient, so dropped nodes receive no learning signal.
 
 ## Summary
 

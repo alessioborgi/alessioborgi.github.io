@@ -11,22 +11,16 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🤖"
-read_mins: 6
+read_mins: 9
 permalink: /blog/gnn/gnns-robotics/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Robotics problems are inherently relational: robot links form kinematic graphs, objects on a table have spatial proximity graphs, multiple robots form communication graphs. GNNs that process these graphs generalise across different numbers of objects, different robot morphologies, and different team sizes — enabling compositionality that flat neural networks cannot achieve.
+<strong>TL;DR:</strong> Robotics problems are inherently relational: robot links form kinematic graphs, objects on a table form spatial proximity graphs, multiple robots form communication graphs. Because message passing is defined per node and per edge, a GNN policy trained on one graph size transfers to another — different numbers of objects, different robot morphologies, different team sizes. That is the compositionality a fixed-input-size network structurally cannot have.
 </div>
-{% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="Equivariant GNN for robotics" caption="Equivariant GNNs for 3D robot perception and manipulation (Satorras et al., 2021)" %}
+{% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="E(n)-equivariant graph neural network" caption="E(n)-equivariant graph neural networks: message passing on geometric graphs, the basis for equivariant 3D perception and dynamics models (Satorras et al., 2021)" %}
 
 
 ## Why Graphs in Robotics
@@ -49,9 +43,9 @@ A policy trained on a 4-link robot should generalise to a 6-link robot. A GNN tr
 - Edges = kinematic connections (joint → joint)
 - Node features = joint state (angle, velocity)
 
-GNN propagates information along the kinematic chain. The policy maps joint-level graph → actions. Crucially, the same GNN policy works for robots with different numbers of joints — tested on 2-link, 4-link, and 6-link robots from the same policy.
+Messages propagate along the kinematic chain, and a per-node output head turns each joint's final embedding into that joint's action. Because both the message function and the output head are shared across nodes, the parameter count does not depend on the number of joints — which is exactly what makes a single policy applicable to bodies of different sizes.
 
-**Advantage:** policy generalises to robot variants not seen during training — e.g., train on 4 legs, test on 3 legs or 5 legs.
+**Advantage:** the paper evaluates this on MuJoCo agents whose morphology can be varied systematically — centipede bodies with more or fewer segments, snakes of different lengths — and transfers a policy learned on one size to bodies with a different number of limbs. A flat MLP policy cannot even be *applied* to such a body, since its input dimension no longer matches.
 
 ## Application 2: Object Manipulation
 
@@ -71,20 +65,28 @@ GNN encodes the current state; planning algorithm searches over sequences of act
 
 **Decentralised multi-robot planning:** N robots must coordinate without a central controller. Each robot observes local state and communicates with nearby robots.
 
-**CommNet / GMMN:** model inter-robot communication as a GNN. At each step:
-1. Each robot sends a message to nearby robots (edge to edge in proximity graph)
-2. Each robot aggregates received messages
-3. Each robot decides its action based on own state + aggregated messages
+**Learned communication as message passing (CommNet; Tolstaya et al., 2020):** model the swarm as a proximity graph, with an edge between two robots when they are close enough to communicate. At each control step:
+1. Each robot sends a message along its edges — a learned function of its local state
+2. Each robot aggregates the messages it received, with a permutation-invariant operator
+3. Each robot picks its action from its own state plus that aggregate
 
-The GNN is the communication protocol. Training via multi-agent RL.
+The GNN *is* the communication protocol: the message function and the aggregator are learned end to end rather than hand-designed, so the network discovers what is worth transmitting.
 
-**Key results:**
-- GNN-based communication outperforms no-communication baselines by 40%+ on cooperative navigation tasks
-- Scales from N=5 to N=20 robots without retraining (variable graph size)
+**Why this matters structurally:** each robot only ever reads its own local aggregate, so the controller is genuinely decentralised — no robot needs global state. And because the same message and update functions run at every node, a policy trained on a small team can be executed by a larger one; the graph simply has more nodes. That is the property the centralised alternative lacks, since a joint controller over $$N$$ robots has an action space that grows with $$N$$.
 
 ## Application 4: Physics Simulation and Model-Based RL
 
-**Interaction networks (Battaglia et al., 2016):** model physical systems as graphs. Nodes = objects, edges = interactions. GNN predicts next state from current state.
+**Interaction networks (Battaglia et al., 2016):** model a physical system as a graph — nodes are objects, edges are the interactions between them — and learn to predict the next state from the current one:
+
+<div class="formula-box">
+\[
+m_{uv} = f_{\text{rel}}\!\left( h_u,\, h_v,\, e_{uv} \right),
+\qquad
+h_v' = f_{\text{obj}}\!\left( h_v,\, \sum_{u \in \mathcal{N}(v)} m_{uv} \right).
+\]
+</div>
+
+The split is the whole idea: $$f_{\text{rel}}$$ is a single learned model of *how any pair interacts* (a spring, a collision, gravity), and $$f_{\text{obj}}$$ a single model of how an object responds to the forces on it. Neither is indexed by which object it is, so a system with more objects needs no new parameters — you just sum over more messages.
 
 Applications:
 - Cloth simulation: nodes = vertices, edges = cloth edges
@@ -97,9 +99,9 @@ Applications:
 
 Lidar sensors produce 3D point clouds — unordered sets of 3D points. GNNs can process point clouds by constructing a graph (k-nearest neighbours) and running message passing:
 
-**DGCNN (Wang et al., 2019):** dynamic graph CNN — rebuild the k-NN graph after each layer (in feature space, not just spatial). Achieves SOTA on ModelNet40 (3D object classification) and ShapeNet (part segmentation).
+**DGCNN (Wang et al., 2019):** dynamic graph CNN — recompute the $$k$$-NN graph after every layer, in the *current feature space* rather than in 3D space. Points that are far apart physically but semantically alike (two wingtips of an aircraft) become neighbours in later layers, so the receptive field stops being purely geometric. The paper reports strong results on ModelNet40 classification and ShapeNet part segmentation.
 
-**Equivariant GNNs for point clouds (EGNN):** maintain SE(3) equivariance — rotation-equivariant detection, regardless of LiDAR orientation.
+**Equivariant GNNs (EGNN, Satorras et al., 2021):** keep node coordinates as a separate channel updated only through relative displacements, which makes the layer equivariant to rotations and translations by construction. A rotated point cloud produces a correspondingly rotated output rather than an unrelated one — so the model does not have to learn rotation invariance from augmented data, which matters when the sensor's orientation varies.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The unifying theme across all robotics GNN applications is <em>compositionality</em> — the ability to apply learned rules to new combinations of known parts. A flat neural network trained on a 4-joint arm must be retrained for a 6-joint arm. A GNN trained on the same 4-joint arm can immediately handle 6 joints, because message passing is defined per-node and per-edge, not per-configuration. This compositionality is what makes GNN-based robotics policies genuinely transferable across hardware variants, scene configurations, and team sizes.</div>
 
@@ -113,10 +115,11 @@ Lidar sensors produce 3D point clouds — unordered sets of 3D points. GNNs can 
 | Physics simulation | Particle/object interaction graph | Generalise to new configurations |
 | Point cloud perception | k-NN graph | Unordered 3D data |
 
-Robotics is one of the most natural application domains for GNNs — physical and relational structure is explicit and actionable. The field is rapidly adopting GNN-based representations for perception, dynamics modelling, planning, and multi-agent control.
+Robotics is one of the most natural application domains for GNNs, because the relational structure is not a modelling convenience — it is physically there. Joints really are connected in a chain, objects really do rest on one another, robots really can only talk to those in range. Encoding that graph directly, and sharing one message function across all of it, is what buys transfer across hardware variants, scene configurations, and team sizes.
 
 ## References
 
 - Wang, T., Liao, R., Ba, J., & Fidler, S. (2018). [NerveNet: Learning Structured Policy with Graph Neural Networks](https://openreview.net/forum?id=S1sqHMZCb). *ICLR 2018* (NerveNet: kinematic graph GNNs for robot locomotion policies that generalise across morphologies).
 - Battaglia, P., Pascanu, R., Lai, M., Rezende, D. J., & Kavukcuoglu, K. (2016). [Interaction Networks for Learning about Objects, Relations and Physics](https://arxiv.org/abs/1612.00222). *NeurIPS 2016* (Interaction Networks: object-relation graphs for physics simulation — foundational for GNN robotics applications).
-- Tolstaya, E., Gama, F., Paulos, J., Pappas, G., Kumar, V., & Ribeiro, A. (2020). [Learning Decentralized Controllers for Robot Swarms with Graph Neural Networks](https://arxiv.org/abs/1903.10527). *CoRL 2020* (GNN-based decentralised multi-robot coordination that scales to large swarms without per-robot retraining).
+- Tolstaya, E., Gama, F., Paulos, J., Pappas, G., Kumar, V., & Ribeiro, A. (2020). [Learning Decentralized Controllers for Robot Swarms with Graph Neural Networks](https://arxiv.org/abs/1903.10527). *CoRL 2020* (GNN-based decentralised multi-robot coordination, with the communication graph as the message-passing graph).
+- Satorras, V. G., Hoogeboom, E., & Welling, M. (2021). [E(n) Equivariant Graph Neural Networks](https://arxiv.org/abs/2102.09844). *ICML 2021* (EGNN: message passing on geometric graphs that is equivariant to rotations, translations and reflections by construction).

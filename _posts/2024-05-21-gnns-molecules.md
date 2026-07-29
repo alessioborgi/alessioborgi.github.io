@@ -11,29 +11,23 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧪"
-read_mins: 5
+read_mins: 7
 permalink: /blog/gnn/gnns-molecules/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Drug discovery requires predicting how molecules interact with biological targets — a task that historically required either expensive experiments or domain-expert features. GNNs learn directly from molecular graphs, outperforming Morgan fingerprints on most property prediction benchmarks and enabling virtual screening of billions of compounds.
+<strong>TL;DR:</strong> Drug discovery requires predicting how molecules interact with biological targets — a task that historically required either expensive experiments or hand-designed descriptors. A molecule is a graph \(G = (V, E)\) with atoms as nodes and bonds as edges, so a GNN can learn its representation end to end instead of consuming a fixed fingerprint. Gilmer et al. (2017) showed this works on the QM9 quantum-chemistry benchmark, and the same recipe now underpins large-scale virtual screening.
 </div>
 {% include figure image_path="/images/blog/gnn/gilmer2017_mpnn.png" alt="MPNN for molecular property prediction" caption="MPNN for molecular property prediction on QM9 (Gilmer et al., 2017)" %}
 
 
 ## The Drug Discovery Pipeline
 
-**Intuition First:** Finding a drug is like searching for a key that fits a specific lock (the protein target). Chemical space contains roughly 10^60 possible drug-like molecules — far too many to test physically. A GNN is trained on known key–lock pairs to predict which untested keys are likely to fit. It learns that certain atom arrangements near certain bond types correlate with good binding — then uses those patterns to score billions of virtual molecules in seconds rather than years.
+**Intuition First:** Finding a drug is like searching for a key that fits a specific lock (the protein target). Drug-like chemical space is commonly estimated at around $$10^{60}$$ molecules — far too many to test physically. A GNN is trained on known key–lock pairs to predict which untested keys are likely to fit. It learns that certain atom arrangements near certain bond types correlate with good binding, then uses those patterns to score large virtual libraries far faster than any experimental campaign could.
 
-Drug discovery takes 10-15 years and \\$2B+ per approved drug. GNNs accelerate three key stages:
+Industry estimates put the cost of an approved drug at over a decade of work and \\$2B+ in capitalised R&D spend. GNNs are used to accelerate three stages:
 
 1. **Virtual screening:** filter billions of candidate molecules to thousands using property predictions
 2. **Lead optimisation:** predict ADMET (absorption, distribution, metabolism, excretion, toxicity) properties
@@ -79,28 +73,43 @@ SMILES string → RDKit graph → Atom/bond features
 
 ## Key Models for Molecular Property Prediction
 
-**MPNN (Gilmer et al., 2017):** introduced the message passing neural network framework for molecules. First systematic study showing GNNs outperform Morgan fingerprints on QM9.
+**MPNN (Gilmer et al., 2017):** unified several earlier molecular GNNs under a single message-passing framework, and benchmarked it systematically on the twelve QM9 quantum-chemistry targets.
+
+The framework is exactly the message-passing recipe, specialised so that bond features $$e_{uv}$$ parameterise the message:
+
+<div class="formula-box">
+\[
+m_v^{(k)} = \sum_{u \in \mathcal{N}(v)} M^{(k)}\!\left( h_u^{(k-1)},\, e_{uv} \right),
+\qquad
+h_v^{(k)} = U^{(k)}\!\left( h_v^{(k-1)},\, m_v^{(k)} \right),
+\]
+\[
+\hat{y}_G = R\!\left( \{\, h_v^{(K)} : v \in V \,\} \right).
+\]
+</div>
+
+Here $$M^{(k)}$$ is the message function, $$U^{(k)}$$ the update function (a GRU in the original paper), and $$R$$ a permutation-invariant readout. Because the message depends on $$e_{uv}$$, a double bond and a single bond between the same atom types send different messages — which is the whole point for chemistry.
 
 **AttentiveFP (Xiong et al., 2019):** adds graph attention for molecular property prediction. Handles multi-task learning across different ADMET endpoints.
 
-**Grover (Rong et al., 2020):** self-supervised pre-training on 10M unlabelled molecules, then fine-tune on small labelled datasets. Solves the labelled data scarcity problem in drug discovery.
+**GROVER (Rong et al., 2020):** self-supervised pre-training of a graph transformer on 10M unlabelled molecules, then fine-tuning on small labelled datasets. This mitigates — rather than solves — label scarcity in drug discovery.
 
-**MolBERT / ChemBERTa:** treat SMILES as a sequence, apply BERT-style pre-training. Competitive with graph-based methods on many benchmarks.
+**MolBERT / ChemBERTa:** treat SMILES as a token sequence and apply BERT-style pre-training. Competitive with graph-based methods on several benchmarks, which is a useful reminder that the graph inductive bias is not always decisive.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Why pre-training matters:</strong> Labelled molecular data is expensive — assaying binding affinity for 1000 compounds costs \$100K+. GNNs trained from scratch on small datasets overfit. Pre-training on 10M+ unlabelled molecules (ChEMBL, PubChem) provides a strong starting point. Fine-tuning on 1000 labelled examples then reaches performance previously requiring 100K+ labels.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Why pre-training matters:</strong> Labelled molecular data is expensive — a binding-affinity assay across a compound series easily runs to \$100K+, so labelled sets are small while unlabelled ones are not. GNNs trained from scratch on a few thousand labelled molecules overfit readily. Pre-training on millions of unlabelled molecules from ChEMBL or PubChem gives a much better starting point, and Hu et al. (2020) show that the choice of pre-training strategy matters: naive pre-training can transfer <em>negatively</em>, and gains appear reliably only when node-level and graph-level objectives are combined.</div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The most impactful use of GNNs in drug discovery is not replacing wet-lab experiments — it is prioritising them. A GNN-based screening pass over 1 billion virtual compounds (taking hours on GPU) narrows candidates down to 10,000, which are then docked computationally (days), narrowed to 1,000, then synthesised and assayed experimentally (weeks). Without the GNN filter, you would need to synthesise and test millions of compounds — years of work and hundreds of millions of dollars. The GNN adds value as a cheap, fast first filter, not as a replacement for experiments.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The most impactful use of GNNs in drug discovery is not replacing wet-lab experiments — it is prioritising them. Screening is a funnel: a GNN scores a very large virtual library cheaply, the surviving candidates go to physics-based docking, and only the last, smallest tier is actually synthesised and assayed. Each stage is orders of magnitude more expensive per molecule than the one before it, so the GNN earns its keep purely by improving the ranking at the widest, cheapest point of the funnel. It is a first-pass filter, not a replacement for experiment — and a filter with modest precision is still valuable when the alternative is choosing at random.</div>
 
 ## Virtual Screening at Scale
 
-**The challenge:** DrugBank has 13,000 approved drugs. PubChem has 100M compounds. Synthesisable chemical space has ~10^{60} molecules. Which to test?
+**The challenge:** the numbers span many orders of magnitude. A few thousand small molecules have been approved as drugs; PubChem catalogues on the order of $$10^{8}$$ compounds; drug-like chemical space is estimated at around $$10^{60}$$ molecules. Which of them do you test?
 
 **GNN-based screening:**
-1. Train GNN on known active/inactive pairs for target protein
-2. Run inference on virtual library (billions of molecules)
-3. Select top-k predicted actives for experimental validation
+1. Train a GNN on known actives and inactives for the target protein
+2. Run inference over a large virtual library
+3. Select the top-$$k$$ predicted actives for experimental validation
 
-Companies like Insilico Medicine, Schrödinger, and Recursion use GNN-based virtual screening as a core workflow.
+The value here is not that the GNN is right about any individual molecule — it is that inference costs a forward pass while an assay costs reagents and weeks, so even a modestly accurate ranking changes which experiments get run.
 
 ## Protein-Ligand Interaction
 
@@ -122,7 +131,7 @@ Beyond single-molecule property prediction: predicting how a small molecule (lig
 
 ## Summary
 
-GNNs have become the default molecular representation learning method in computational drug discovery, replacing handcrafted Morgan fingerprints. The key advantages: end-to-end learning, generalisation across chemical space, and compatibility with both 2D connectivity and 3D geometric information. With pre-training on large unlabelled databases, GNN-based models now approach expert-level performance on standard ADMET prediction benchmarks.
+GNNs are now a standard molecular representation-learning method in computational chemistry, sitting alongside — rather than wholly replacing — handcrafted fingerprints, which remain surprisingly competitive baselines on small datasets. The distinctive advantages are end-to-end learning of the representation, the ability to condition messages on bond features, and compatibility with both 2D connectivity and 3D geometry through equivariant variants. The honest summary of the benchmark literature is that GNNs win consistently where data is plentiful and structure matters (QM9, large PCBA-style assay collections), and win less clearly on small, noisy ADMET endpoints.
 
 ## References
 

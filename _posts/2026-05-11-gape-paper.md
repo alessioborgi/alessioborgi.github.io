@@ -10,7 +10,7 @@ excerpt: "GAPE is a drop-in RoPE augmentation that adds content-aware attention 
 author_profile: true
 read_time: true
 icon: "🔑"
-read_mins: 10
+read_mins: 9
 permalink: /blog/transformers/gape-paper/
 toc: true
 toc_label: "Contents"

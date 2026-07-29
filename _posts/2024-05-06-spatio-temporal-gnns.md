@@ -11,21 +11,11 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🗺️"
-read_mins: 6
+read_mins: 8
 permalink: /blog/gnn/spatio-temporal-gnns/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
-
 <div class="tldr-box">
 <strong>TL;DR:</strong> In spatio-temporal GNNs, the graph structure is fixed (road network, sensor grid) but node features evolve over time as time series. The model combines a GNN (spatial: neighbours influence each other) with a sequence model (temporal: past influences future). Two architectures — DCRNN (GNN inside RNN) and STGCN (GNN + 1D conv) — dominate traffic forecasting benchmarks.
 </div>
@@ -37,9 +27,17 @@ toc_label: "Contents"
 **Intuition First:** Imagine a city-wide network of traffic sensors. At any moment, sensor A reports 30 mph while sensor B (one mile downstream) still reports 60 mph — but in 5 minutes, B will slow down too. A purely temporal model sees each sensor in isolation and misses this propagation. A purely spatial model has no sense of time. ST-GNNs handle both at once: they let each sensor "talk" to its road-network neighbours at every timestep.
 
 Given:
-- Fixed graph G = (V, E) — the spatial structure (road network, weather stations)
-- Time series at each node: X_t ∈ ℝ^{N × d} for t = 1, ..., T
-- Goal: predict X_{T+1}, ..., X_{T+H} from X_{T-τ+1}, ..., X_T
+- Fixed graph $$G = (V, E)$$ — the spatial structure (road network, weather stations)
+- Time series at each node: $$X_t \in \mathbb{R}^{N \times d}$$ for $$t = 1, \dots, T$$
+- Goal: predict $$X_{T+1}, \dots, X_{T+H}$$ from the last $$\tau$$ observations $$X_{T-\tau+1}, \dots, X_T$$
+
+<div class="formula-box">
+\[
+\big[ X_{T-\tau+1}, \dots, X_T \big] \;\xrightarrow{\;\Phi(\cdot\,;\, G)\;}\; \big[ \hat{X}_{T+1}, \dots, \hat{X}_{T+H} \big]
+\]
+</div>
+
+The model $$\Phi$$ is a function of the past window only. As with any temporal graph model, train/test splits must be chronological — shuffling timesteps leaks the future into the past.
 
 **The key insight:** sensors at nearby nodes are correlated. A traffic jam upstream affects downstream sensors. A temperature reading in Paris is informative for predicting Frankfurt. The graph structure encodes *which nodes influence each other*.
 
@@ -99,22 +97,32 @@ Given:
 DCRNN replaces the linear transformation in a GRU with a **diffusion convolution** — a GNN layer that captures directional information flow:
 
 Standard GRU update:
-<div class="math-box">
-h_t = GRU( x_t, h_{t-1} )
+
+<div class="formula-box">
+\[
+h_t = \mathrm{GRU}\big( x_t,\, h_{t-1} \big)
+\]
 </div>
 
-DCRNN (replace linear with graph conv):
-<div class="math-box">
-h_t = GRU( GCN(x_t, A), GCN(h_{t-1}, A) )
+DCRNN replaces every matrix multiplication inside the GRU's gates with a diffusion convolution $$\star_{\mathcal{G}}$$, so that the gates themselves are graph-aware:
+
+<div class="formula-box">
+\[
+h_t = \mathrm{GRU}\big( X_t \star_{\mathcal{G}} \Theta,\ h_{t-1} \star_{\mathcal{G}} \Theta' \big)
+\]
 </div>
 
-Specifically, DCRNN uses bidirectional random walk diffusion to capture both forward and backward traffic flow directions:
+The diffusion convolution itself is a bidirectional random walk, which matters because road networks are directed:
 
-<div class="math-box">
-GCN(X) = Σ_{k=0}^{K} ( (D_O^{-1} A)^k W_k^{fwd} + (D_I^{-1} A^T)^k W_k^{bwd} ) X
+<div class="formula-box">
+\[
+X \star_{\mathcal{G}} \Theta \;=\; \sum_{k=0}^{K-1} \Big( \big(D_O^{-1} A\big)^{k} X\, \Theta_{k,1} \;+\; \big(D_I^{-1} A^{\!\top}\big)^{k} X\, \Theta_{k,2} \Big)
+\]
 </div>
 
-For traffic: forward diffusion follows traffic direction; backward diffusion captures reverse influence.
+$$D_O$$ and $$D_I$$ are the out- and in-degree matrices, so $$D_O^{-1}A$$ is the forward random-walk transition matrix and $$D_I^{-1}A^{\!\top}$$ the reverse one. Note that the graph powers act on the node axis (left multiplication) while the learned weights $$\Theta_{k,\cdot}$$ act on the feature axis (right multiplication) — they operate on different sides and do not commute.
+
+For traffic: forward diffusion follows traffic direction; backward diffusion captures reverse influence, which is exactly how congestion propagates.
 
 **Encoder-decoder:** DCRNN uses an encoder (GRU on past T steps) and a decoder (GRU for future H steps), with scheduled sampling to avoid exposure bias.
 
@@ -141,21 +149,26 @@ Each temporal block uses a gated 1D convolution (GLU: gated linear unit) across 
 **Advantage over DCRNN:** all-convolutional — no recurrence → parallelisable across time steps → much faster training.
 
 <div class="insight-box">
-<strong>DCRNN vs STGCN:</strong> DCRNN captures long-range temporal dependencies via GRU hidden states but is sequential (slow training). STGCN is faster (parallel convolutions) but has limited temporal receptive field (fixed kernel size × number of layers). On standard traffic benchmarks (METR-LA, PEMS-BAY), both achieve similar accuracy; STGCN is preferred when training speed matters.
+<strong>DCRNN vs STGCN:</strong> DCRNN carries temporal context in GRU hidden states, so its temporal receptive field is unbounded in principle, but training is sequential and therefore slow. STGCN is faster (parallel convolutions) but its temporal receptive field is bounded by the architecture: with \(L\) temporal layers of kernel size \(k\) it spans \(L(k-1)+1\) timesteps, so long-horizon context has to be bought with depth or dilation. Both report comparable accuracy on the standard traffic benchmarks (METR-LA, PEMS-BAY) in their original papers; STGCN is preferred when training speed matters.
 </div>
 
 ## Worked Example: One STGCN Step
 
-**Setup:** 3 sensors (A, B, C) on a road, each with 1 feature (speed in mph). Current readings: A=60, B=30 (jam), C=55. Adjacency A=[0,1,0; 1,0,1; 0,1,0], symmetric.
+**Setup:** 3 sensors (A, B, C) on a road, each with 1 feature (speed in mph). Current readings: A = 60, B = 30 (jam), C = 55. The graph is the path A — B — C, so the (symmetric) adjacency has $$A_{AB} = A_{BC} = 1$$ and degrees $$(1, 2, 1)$$.
 
 **Temporal gated conv (GLU) — kernel size 3, 1 input channel, 1 output channel:**
-Suppose at times t-2,t-1,t sensor B reads [40, 35, 30]. With kernel weights θ₁=[0.2,0.5,0.3] and θ₂=[0.1,0.3,0.6]:
-- Gate input g = 0.2×40 + 0.5×35 + 0.3×30 = 8+17.5+9 = 34.5
-- Gating mask σ(0.1×40+0.3×35+0.6×30) = σ(4+10.5+18) = σ(32.5) ≈ 1.0
-- Temporal output for B ≈ 34.5 × 1.0 = 34.5
+Suppose at times $$t-2, t-1, t$$ sensor B reads $$[40, 35, 30]$$. With kernel weights $$\theta_1 = [0.2, 0.5, 0.3]$$ and $$\theta_2 = [0.1, 0.3, 0.6]$$:
+- Linear branch: $$0.2 \times 40 + 0.5 \times 35 + 0.3 \times 30 = 34.5$$
+- Gate branch: $$\sigma(0.1 \times 40 + 0.3 \times 35 + 0.6 \times 30) = \sigma(32.5) \approx 1.0$$
+- Temporal output for B $$\approx 34.5 \times 1.0 = 34.5$$
 
-**Spatial GCN step (normalised):** degree D = diag(1,2,1), Â = D^{-1/2} A D^{-1/2}
-- Updated B = mean of A's and C's temporal outputs: (60+55)/2 = 57.5 (pulled toward neighbours)
+The gate is completely saturated here — $$\sigma(32.5)$$ is 1 to fifteen decimal places — because raw mph values are fed in unscaled. That is precisely why traffic inputs are standardised before training: on unnormalised inputs the gate stops gating and its gradient vanishes.
+
+**Spatial step.** The normalisation you pick changes the arithmetic, so state it. With the *random-walk* normalisation $$D^{-1}A$$, aggregation is a plain neighbour mean:
+- Updated B $$= \tfrac{1}{2}(60 + 55) = 57.5$$ — pulled toward its free-flowing neighbours
+
+With the *symmetric* normalisation $$\hat{A} = D^{-1/2} A D^{-1/2}$$ the same aggregation is $$\tfrac{1}{\sqrt{2}}(60) + \tfrac{1}{\sqrt{2}}(55) \approx 81.3$$, since each edge carries weight $$1/\sqrt{\deg(B)\deg(\cdot)} = 1/\sqrt{2}$$ rather than $$1/2$$. Same graph, same features, different constant — worth checking which one a paper means before comparing numbers.
+
 - **Interpretation:** B's representation is now influenced by its free-flowing neighbours — the model learns that this discrepancy predicts an upcoming jam spreading to A and C.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The temporal conv captures "B has been slowing for 3 timesteps." The spatial conv then propagates that signal to neighbours A and C. This two-stage process is exactly why ST-GNNs outperform both standalone LSTMs (no spatial) and standalone GCNs (no temporal).</div>
@@ -170,22 +183,33 @@ The spatial graph is typically constructed from domain knowledge:
 
 **Energy:** node = power generator/consumer, edge = transmission line
 
-Some methods learn the graph adaptively:
-- **MTGNN:** learns the graph topology jointly with the ST-GNN
-- **GWaveNet:** adaptive adjacency matrix learned from data
+Some methods learn the graph adaptively, factorising a learned adjacency from node embeddings $$E_1, E_2$$:
+
+<div class="formula-box">
+\[
+A_{\text{adp}} = \mathrm{softmax}\big( \mathrm{ReLU}( E_1 E_2^{\!\top} ) \big)
+\]
+</div>
+
+- **Graph WaveNet:** adaptive adjacency matrix learned from data, used alongside (or instead of) the predefined one
+- **MTGNN:** learns the graph topology jointly with the ST-GNN, with a top-$$k$$ sparsification so the learned graph stays sparse
+
+Because $$E_1 E_2^{\!\top}$$ need not be symmetric, the learned graph is directed — appropriate for traffic, where influence genuinely runs one way.
 
 ## Benchmarks
 
 - **METR-LA:** 207 traffic sensors in Los Angeles, 4 months, 5-minute intervals
-- **PEMS-BAY:** 325 sensors in Bay Area, 6 months
-- **Solar-Energy:** 137 solar plants, 6 months of production data
-- **Electricity:** 321 electricity consumption time series
+- **PEMS-BAY:** 325 sensors in the Bay Area, 5-minute intervals
+- **Solar-Energy:** 137 photovoltaic plants, 10-minute production readings
+- **Electricity:** 321 clients, hourly consumption
 
 Standard task: 15/30/60-minute horizon prediction. Metrics: MAE, MAPE, RMSE.
 
 ## Recent Advances
 
-**GWaveNet (Wu et al., 2019):** adds an adaptive adjacency matrix (no predefined graph), trained jointly with the rest. This allows the model to capture non-geographic correlations (sensors far apart but behaviourally correlated).
+**Graph WaveNet (Wu et al., 2019):** adds an adaptive adjacency matrix (no predefined graph needed), trained jointly with the rest, together with dilated *causal* convolutions along time. The causality of the temporal kernel is not decoration — a non-causal kernel would let timestep $$t$$ read $$t+1$$ and quietly invalidate the forecast.
+
+**MTGNN (Wu et al., 2020):** the "Connecting the Dots" model — a graph-learning layer plus dilated inception convolutions, aimed at general multivariate time series where no graph is given at all.
 
 **AGCRN (Bai et al., 2020):** fully adaptive — learns node-specific patterns and graph structure simultaneously.
 
@@ -195,9 +219,10 @@ Standard task: 15/30/60-minute horizon prediction. Metrics: MAE, MAPE, RMSE.
 
 | Model | Spatial | Temporal | Parallel? |
 |-------|---------|---------|-----------|
-| DCRNN | Diffusion GCN | GRU encoder-decoder | No (recurrent) |
+| DCRNN | Bidirectional diffusion conv | GRU encoder-decoder | No (recurrent) |
 | STGCN | ChebNet/GCN | Gated 1D conv | Yes |
-| GWaveNet | Adaptive adjacency | Dilated causal conv | Yes |
+| Graph WaveNet | Predefined + adaptive adjacency | Dilated causal conv | Yes |
+| MTGNN | Learned sparse adjacency | Dilated inception conv | Yes |
 | GMAN | Spatial attention | Temporal attention | Yes |
 
 Spatio-temporal GNNs are the dominant framework for sensor network prediction — wherever measurements at graph nodes evolve over time and spatial correlations matter. The field is rapidly incorporating Transformer-style attention to replace both spatial and temporal convolutions.
@@ -206,4 +231,4 @@ Spatio-temporal GNNs are the dominant framework for sensor network prediction �
 
 - Li, Y., Yu, R., Shahabi, C., & Liu, Y. (2018). [Diffusion Convolutional Recurrent Neural Network: Data-Driven Traffic Forecasting](https://arxiv.org/abs/1707.01926). *ICLR 2018* (DCRNN: bidirectional diffusion GCN with GRU encoder-decoder for traffic prediction).
 - Yu, B., Yin, H., & Zhu, Z. (2018). [Spatio-Temporal Graph Convolutional Networks: A Deep Learning Framework for Traffic Forecasting](https://arxiv.org/abs/1709.04875). *IJCAI 2018* (STGCN: gated 1D temporal convolution + Chebyshev spatial convolution, fully parallelisable).
-- Wu, Z., Pan, S., Long, G., Jiang, J., Chang, X., & Zhang, C. (2020). [Connecting the Dots: Multivariate Time Series Forecasting with Graph Neural Networks](https://arxiv.org/abs/2005.11650). *KDD 2020* (GWaveNet: adaptive adjacency matrix + dilated causal convolution for long-range temporal patterns).
+- Wu, Z., Pan, S., Long, G., Jiang, J., Chang, X., & Zhang, C. (2020). [Connecting the Dots: Multivariate Time Series Forecasting with Graph Neural Networks](https://arxiv.org/abs/2005.11650). *KDD 2020* (MTGNN: a graph-learning layer that infers a sparse directed adjacency from data, paired with dilated inception convolutions — the successor to Graph WaveNet by the same group).

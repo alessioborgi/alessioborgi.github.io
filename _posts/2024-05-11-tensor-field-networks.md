@@ -11,138 +11,155 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🌀"
-read_mins: 6
+read_mins: 8
 permalink: /blog/gnn/tensor-field-networks/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
-
 <div class="tldr-box">
-<strong>TL;DR:</strong> TFN (Thomas et al., 2018) builds node features as collections of spherical harmonic coefficients at multiple degrees l. Message passing uses CG tensor products to combine features from different degrees. This is the rigorous algebraic foundation for SE(3) equivariance — EGNN and SE(3)-Transformers are both simplifications or extensions of this framework.
+<strong>TL;DR:</strong> TFN (Thomas et al., 2018) gives each node a set of features indexed by degree \(\ell\), each transforming under the Wigner-D matrix \(D^{\ell}(R)\). Messages combine node features with spherical harmonics of the edge direction through Clebsch–Gordan tensor products, weighted by learned functions of distance alone. This is the algebraic foundation on which SE(3)-Transformers, NequIP and MACE are built; EGNN is best read as a lightweight alternative to it rather than a special case of it.
 </div>
 {% include figure image_path="/images/blog/gnn/thomas2018_tfn.png" alt="Tensor Field Network" caption="Tensor Field Networks: SE(3)-equivariant graph neural networks (Thomas et al., 2018)" %}
 
 
 ## The TFN Framework
 
-**Intuition First:** Imagine describing wind at a weather station. A scalar (speed) tells you how hard the wind blows — that's an l=0 feature. A vector (velocity arrow) tells you direction too — that's l=1. A tensor (describing how wind shear twists in different planes) is l=2. TFN stores all of these simultaneously at every atom, each transforming correctly under rotation. The Clebsch-Gordan product is the rule for combining two such descriptors — just as combining a dipole and a quadrupole gives terms at degrees 1, 2, and 3.
+**Intuition First:** Imagine describing wind at a weather station. A scalar (speed) tells you how hard the wind blows — that's an $$\ell = 0$$ feature. A vector (velocity arrow) tells you direction too — that's $$\ell = 1$$. A quantity describing how the flow shears in different planes is $$\ell = 2$$. TFN stores all of these simultaneously at every atom, each transforming correctly under rotation. The Clebsch–Gordan product is the rule for combining two such descriptors — combining a dipole and a quadrupole, for instance, gives terms at degrees 1, 2 and 3.
 
-In TFN, each node i carries a **feature field** — a collection of irreducible representations:
+In TFN, each node $$i$$ carries a **feature field** — a collection of features, one block per degree:
 
-<div class="math-box">
-F_i = { f_i^{(l)} ∈ ℝ^{(2l+1) × c_l} : l = 0, 1, ..., L }
+<div class="formula-box">
+\[
+F_i = \Big\{\, f_i^{(\ell)} \in \mathbb{R}^{(2\ell+1) \times c_{\ell}} \ :\ \ell = 0, 1, \dots, L \,\Big\}
+\]
 </div>
 
-Where c_l is the number of channels at degree l. This is like having separate "colour channels" for each geometric degree:
-- c_0 channels of scalars (l=0)
-- c_1 channels of 3D vectors (l=1)
-- c_2 channels of 5D quadrupolar features (l=2)
-- etc.
+$$c_{\ell}$$ is the number of channels at degree $$\ell$$. This is like having separate "colour channels" for each geometric degree:
+- $$c_0$$ channels of scalars ($$\ell = 0$$)
+- $$c_1$$ channels of 3D vectors ($$\ell = 1$$)
+- $$c_2$$ channels of 5-dimensional $$\ell = 2$$ features
+- and so on
+
+The defining property is per-degree: under a rotation $$R$$, each block transforms as $$f_i^{(\ell)} \mapsto D^{\ell}(R)\, f_i^{(\ell)}$$, with the channel index untouched. Degrees never mix under the group action — only the network is allowed to mix them, and then only through the tensor product below.
 
 ## The TFN Layer
 
-Message from node j to node i (via edge direction r̂_{ij} = (r_i - r_j)/||r_i - r_j||):
+Message from node $$j$$ to node $$i$$, along the edge direction $$\hat{x}_{ij} = (x_i - x_j) / \lVert x_i - x_j \rVert$$:
 
-<div class="math-box">
-m_{ij}^{(l_out)} = Σ_{l_in, l_f} W^{l_in, l_f, l_out}(||r_{ij}||) · ( f_j^{(l_in)} ⊗_{l_f} Y^{l_f}(r̂_{ij}) )^{l_out}
+<div class="formula-box">
+\[
+m_{ij}^{(\ell_{\text{out}})} \;=\; \sum_{\ell_{\text{in}},\, \ell_f} W^{\ell_{\text{in}} \ell_f \ell_{\text{out}}}\big( \lVert x_{ij} \rVert \big)\, \Big( f_j^{(\ell_{\text{in}})} \otimes_{\text{CG}} Y^{\ell_f}(\hat{x}_{ij}) \Big)^{\ell_{\text{out}}}
+\]
 </div>
 
 Breaking this down:
-- Y^{l_f}(r̂_{ij}): spherical harmonics of degree l_f evaluated at the edge direction
-- f_j^{(l_in)} ⊗_{l_f} Y^{l_f}: CG tensor product combining node features (degree l_in) with geometric features (degree l_f) to produce output degree l_out
-- W^{...}(||r_{ij}||): radial weight function (depends only on distance, so invariant)
+- $$Y^{\ell_f}(\hat{x}_{ij})$$: spherical harmonics of degree $$\ell_f$$ evaluated at the edge direction — this is where all angular information enters
+- $$\otimes_{\text{CG}}$$: the Clebsch–Gordan tensor product, combining node features (degree $$\ell_{\text{in}}$$) with geometric features (degree $$\ell_f$$), projected onto output degree $$\ell_{\text{out}}$$
+- $$W^{\ell_{\text{in}} \ell_f \ell_{\text{out}}}(\lVert x_{ij} \rVert)$$: a learned radial function, depending only on the distance and therefore invariant
 
-The triangle rule determines which (l_in, l_f, l_out) combinations are non-zero: |l_in - l_f| ≤ l_out ≤ l_in + l_f.
+The separation in that last point is the load-bearing design decision. Everything learnable is a function of an invariant quantity; everything angular is a fixed, known-transforming basis. That is why the layer is equivariant regardless of what the network learns — training cannot break the symmetry, because no learnable parameter ever touches an orientation.
+
+The triangle rule fixes which $$(\ell_{\text{in}}, \ell_f, \ell_{\text{out}})$$ combinations are admissible:
+
+<div class="formula-box">
+\[
+\big\lvert \ell_{\text{in}} - \ell_f \big\rvert \;\le\; \ell_{\text{out}} \;\le\; \ell_{\text{in}} + \ell_f
+\]
+</div>
 
 **Aggregation and update:**
 
-<div class="math-box">
-f_i^{(l)} ← f_i^{(l)} + Σ_j m_{ij}^{(l)}   for each l
+<div class="formula-box">
+\[
+f_i^{(\ell)} \;\leftarrow\; f_i^{(\ell)} + \sum_{j \in \mathcal{N}(i)} m_{ij}^{(\ell)} \qquad \text{for each } \ell
+\]
 </div>
 
+Note that the sum is taken separately within each degree — adding an $$\ell = 1$$ message to an $$\ell = 2$$ feature is not merely wrong, it is not even type-correct.
+
 <div class="insight-box">
-<strong>What the CG product does:</strong> Combining a vector (l=1) with a quadrupole (l=2) via tensor product yields features at degrees 1, 2, 3. This is the 3D analogue of combining two signals — the result contains components at all geometrically meaningful frequencies. The radial function W provides distance-dependent weighting, allowing the model to distinguish nearby vs far interactions.
+<strong>What the CG product does:</strong> combining a vector (\(\ell=1\)) with a quadrupole (\(\ell=2\)) yields features at degrees 1, 2 and 3. This is the 3D analogue of multiplying two signals — the result contains components at all geometrically admissible frequencies. The radial function \(W\) supplies distance-dependent weighting, letting the model distinguish near from far interactions without ever referring to absolute orientation.
 </div>
 
 ## The Geometric Deep Learning Blueprint
 
 The TFN paper, together with Bronstein et al. (2021) "Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges," established a unified framework:
 
-**Every neural network architecture = symmetry group + representation + invariant/equivariant layers**
+**An architecture is a choice of symmetry group $$G$$, a choice of representation $$\rho$$ on each feature space, and layers constrained to satisfy $$\Phi(\rho_{\text{in}}(g)x) = \rho_{\text{out}}(g)\Phi(x)$$**
 
 | Architecture | Group | Domain | Type |
 |-------------|-------|--------|------|
-| CNN | Translation (ℤ²) | Images | Equivariant |
-| Spherical CNN | SO(3) | Sphere | Equivariant |
-| Standard GNN | Permutation S_N | Graphs | Equivariant |
-| TFN / EGNN | SE(3) / E(n) | 3D point clouds | Equivariant |
-| Graph Transformer | Permutation | Graphs | Invariant readout |
+| CNN | Translation ($$\mathbb{Z}^2$$) | Images | Equivariant |
+| Spherical CNN | $$\mathrm{SO}(3)$$ | Sphere | Equivariant |
+| Standard GNN | Permutation $$S_N$$ | Graphs | Equivariant (node-wise); invariant after pooling |
+| TFN | $$\mathrm{SE}(3)$$ × permutation | 3D point clouds | Equivariant |
+| EGNN | $$\mathrm{E}(n)$$ × permutation | 3D point clouds | Equivariant |
+| Graph Transformer | Permutation | Graphs | Equivariant, with invariant readout |
 
 This unification shows that architectural choices are really choices about which symmetries to encode — and which geometric domain the data lives in.
 
 ## From TFN to NequIP and MACE
 
 **NequIP (Batzner et al., 2022):** extends TFN with:
-- Message passing framework (not just pair interactions)
-- Gate nonlinearity: f^{(l)} ← f^{(l)} · σ(f^{(0)}) (scalars gate higher-order features)
-- Achieves state-of-the-art in molecular force fields with very few training points
+- A full message-passing framework, so information travels beyond immediate pairs
+- Gate nonlinearities, in which invariant scalars modulate higher-degree features
+- Reported strong accuracy on interatomic potentials from notably small training sets — the data efficiency being the headline claim of the paper
 
-**MACE (Batatia et al., 2022):** extends NequIP with:
-- Higher-body-order interactions (not just pairwise — triplets, quadruplets)
-- Many-body basis functions via tensor product pooling
-- State-of-the-art on MD17 (molecular dynamics benchmark)
+**MACE (Batatia et al., 2022):** extends the same lineage with:
+- Higher body-order interactions — not just pairwise, but triplets and beyond
+- A many-body basis assembled by repeated tensor products of the edge features, which reaches high body order without a correspondingly deep network
+- Among the strongest reported results on MD17 and similar force-field benchmarks
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> You cannot apply ReLU to a vector feature and keep equivariance. ReLU(Rx) ≠ R·ReLU(x) for a rotation R. The two equivariant nonlinearity designs (gate activation and norm nonlinearity) preserve equivariance by applying nonlinearities only to scalars or norms — quantities that are already invariant. Higher-order features are then scaled by these invariant quantities, which keeps their transformation behaviour intact.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> You cannot apply ReLU to a vector feature and keep equivariance: in general \(\mathrm{ReLU}(Rx) \ne R\,\mathrm{ReLU}(x)\), since clipping components to zero depends on which frame you wrote them in. The two standard fixes (gate activation and norm nonlinearity) both work the same way — apply the nonlinearity only to <em>invariant</em> quantities, then use the result to <em>scale</em> the higher-degree features. Multiplying a type-\(\ell\) feature by an invariant scalar leaves its transformation law untouched.</div>
 
 ## Equivariant Nonlinearities
 
-Standard MLPs (ReLU, sigmoid) break equivariance when applied to l>0 features — the result is not equivariant. Two equivariant nonlinearity designs:
+Standard elementwise nonlinearities (ReLU, sigmoid) break equivariance when applied to $$\ell > 0$$ features. Two designs that do not:
 
-**Gate activation:** multiply l>0 features by a gating scalar (l=0):
+**Gate activation:** apply nonlinearities freely to the $$\ell = 0$$ channels, then use those scalars to gate the higher degrees:
 
-<div class="math-box">
-f^{(l)} ← f^{(l)} · σ( W^{(0)} f^{(0)} )
+<div class="formula-box">
+\[
+f^{(\ell)} \;\leftarrow\; f^{(\ell)} \cdot \sigma\big( W^{(0)} f^{(0)} \big), \qquad \ell > 0
+\]
 </div>
 
-Scalars are gated by nonlinear functions; higher-order features are gated by scalars (maintaining equivariance).
+**Norm nonlinearity:** split each feature into its (invariant) norm and its (equivariant) direction, and act only on the norm:
 
-**Norm nonlinearity:** apply nonlinearity to the norm of each feature vector:
-
-<div class="math-box">
-f^{(l)} ← f^{(l)} / ||f^{(l)}|| · σ(||f^{(l)}||)
+<div class="formula-box">
+\[
+f^{(\ell)} \;\leftarrow\; \frac{f^{(\ell)}}{\lVert f^{(\ell)} \rVert} \cdot \sigma\big( \lVert f^{(\ell)} \rVert + b \big)
+\]
 </div>
 
-Norm is invariant; normalised direction is equivariant. Applying σ to the norm and scaling preserves equivariance.
+The norm is invariant because $$D^{\ell}(R)$$ is orthogonal; the normalised direction carries the equivariance. Applying $$\sigma$$ to the norm and rescaling therefore preserves the transformation law.
 
 ## Worked Example: Gate Nonlinearity
 
-**Setup:** node i has a scalar channel f^(0) = 2.5 and a vector channel f^(1) = (1, 0, −1).
+**Setup:** node $$i$$ has a scalar channel $$f^{(0)} = 2.5$$ and a vector channel $$f^{(1)} = (1, 0, -1)$$.
 
 **Gate activation:**
-- Compute gate: g = σ(W^(0) · f^(0)) = σ(0.8 × 2.5) = σ(2.0) ≈ 0.88
-- Apply to vector: f^(1)_new = f^(1) · g = (0.88, 0, −0.88)
+- Compute the gate: $$g = \sigma\big( W^{(0)} f^{(0)} \big) = \sigma(0.8 \times 2.5) = \sigma(2.0) \approx 0.88$$
+- Apply to the vector: $$f^{(1)}_{\text{new}} = 0.88 \cdot (1, 0, -1) = (0.88,\, 0,\, -0.88)$$
 
-**Equivariance check:** rotate f^(1) by 90° around z-axis first → f^(1)_rot = (0, 1, −1).
-- Gate g depends only on f^(0) (scalar, invariant) → g = 0.88 unchanged
-- f^(1)_new after rotation = (0, 0.88, −0.88) = R · (0.88, 0, −0.88) ✓ equivariance preserved
+**Equivariance check.** Rotate by 90° about the $$z$$-axis, $$R : (a, b, c) \mapsto (-b, a, c)$$, so $$f^{(1)} \to (0, 1, -1)$$.
+- The gate depends only on $$f^{(0)}$$, which is invariant, so $$g = 0.88$$ is unchanged — this is the whole trick
+- Gating the rotated feature: $$0.88 \cdot (0, 1, -1) = (0,\, 0.88,\, -0.88)$$
+- And $$R \cdot (0.88, 0, -0.88) = (0,\, 0.88,\, -0.88)$$ ✓ — the two agree, so equivariance is preserved
+
+Contrast with $$\mathrm{ReLU}$$ applied componentwise: $$\mathrm{ReLU}(1, 0, -1) = (1, 0, 0)$$, whose rotation is $$(0, 1, 0)$$, while $$\mathrm{ReLU}(0, 1, -1) = (0, 1, 0)$$. Those happen to agree here, but $$\mathrm{ReLU}(1, 1, 0) = (1, 1, 0)$$ rotates to $$(-1, 1, 0)$$, whereas $$\mathrm{ReLU}(-1, 1, 0) = (0, 1, 0)$$ — different, and the equivariance is gone.
 
 ## Summary
 
-| Architecture | Key contribution | Current status |
-|-------------|-----------------|----------------|
-| TFN | First SE(3)-equivariant MPNN using CG products | Foundation |
-| EGNN | Simple equivariance without CG (l=1 only) | Practical default |
-| SE(3)-Transformer | Equivariant attention | Strong baseline |
-| NequIP | TFN + MPNN + gating | State-of-the-art force fields |
-| MACE | Many-body interactions + tensor pooling | Current SOTA |
+| Architecture | Key contribution | Degrees | Group |
+|-------------|-----------------|---------|-------|
+| TFN | SE(3)-equivariant convolution via CG products | any $$\ell \le L$$ | $$\mathrm{SE}(3)$$ |
+| EGNN | Equivariance without CG, using distances and relative vectors | $$\ell \le 1$$ | $$\mathrm{E}(n)$$ |
+| SE(3)-Transformer | Invariant attention weights over equivariant values | any $$\ell \le L$$ | $$\mathrm{SE}(3)$$ |
+| NequIP | TFN kernel inside a message-passing network, with gating | any $$\ell \le L$$ | $$\mathrm{E}(3)$$ (parity-aware) |
+| MACE | Many-body basis via repeated tensor products | any $$\ell \le L$$ | $$\mathrm{E}(3)$$ (parity-aware) |
 
-TFN's contribution is not just an architecture — it is the mathematical language in which geometric deep learning is now written. Understanding spherical harmonics, CG products, and irreducible representations is prerequisite knowledge for reading the current state-of-the-art in equivariant GNNs.
+TFN's contribution is not just an architecture — it is the vocabulary in which equivariant deep learning is now written. Spherical harmonics, Clebsch–Gordan products and irreducible representations are the prerequisites for reading almost any recent paper in the area. Whether you *need* that machinery is a separate question: for $$\ell \le 1$$ targets, EGNN's two-line construction achieves the same symmetry guarantee for a fraction of the cost, which is why it remains the sensible default.
 
 ## References
 

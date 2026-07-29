@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: true
 icon: "🐍"
-read_mins: 8
+read_mins: 7
 permalink: /blog/python-primer/overview/
 toc: true
 toc_label: "Contents"

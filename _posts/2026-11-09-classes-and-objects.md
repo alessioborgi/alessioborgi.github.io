@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧱"
-read_mins: 8
+read_mins: 6
 permalink: /blog/python-primer/classes-and-objects/
 toc: true
 toc_label: "Contents"

@@ -16,15 +16,9 @@ permalink: /blog/gnn/what-is-a-graph/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A graph G = (V, E) has nodes (entities) and edges (relationships). Nodes carry feature vectors X; edges can carry feature vectors E. Labels Y can be at the node level, edge level, or graph level. GNNs learn to map (G, X) → Y.
+<strong>TL;DR:</strong> A graph \(G = (V, E)\) has nodes (entities) and edges (relationships). Node features are stacked into a matrix \(X\); edges can carry their own feature vectors. Labels may be attached at the node, edge, or graph level. A GNN learns a map \((G, X) \mapsto Y\).
 </div>
 
 ## Graphs Are Everywhere
@@ -41,31 +35,35 @@ Standard deep learning assumes inputs are grids (images), sequences (text), or f
 
 ## Graph Anatomy
 
-A graph **G = (V, E)** consists of:
+A graph $$G = (V, E)$$ consists of:
 
-- **V** — a set of **nodes** (also called vertices). |V| = N is the number of nodes.
-- **E ⊆ V × V** — a set of **edges**. Each edge (u, v) ∈ E indicates a relationship between nodes u and v.
+- $$V$$ — a set of **nodes** (also called vertices), with $$N = \lvert V \rvert$$ the number of nodes.
+- $$E \subseteq V \times V$$ — a set of **edges**. An edge $$(u, v) \in E$$ records a relationship between nodes $$u$$ and $$v$$.
 
-<div class="math-box">
-G = (V, E) &nbsp;&nbsp; |V| = N &nbsp;&nbsp; |E| = M
+<div class="formula-box">
+\[
+G = (V, E), \qquad N = \lvert V \rvert, \qquad M = \lvert E \rvert.
+\]
 </div>
 
 ### Node Features
 
-Nodes are rarely bare identifiers. Each node v ∈ V has a feature vector **x_v ∈ ℝ^d**. Stacked into a matrix:
+Nodes are rarely bare identifiers. Each node $$v \in V$$ carries a feature vector $$x_v \in \mathbb{R}^{d}$$. Stacking these row-wise gives the node feature matrix:
 
-<div class="math-box">
-X ∈ ℝ^{N × d}   where X[v] = x_v
+<div class="formula-box">
+\[
+X \in \mathbb{R}^{N \times d}, \qquad X_{v,:} = x_v^{\top}.
+\]
 </div>
 
 Examples:
-- In a citation network: x_v = bag-of-words representation of the paper
-- In a molecule: x_v = atom type, charge, hybridisation state
-- In a social network: x_v = age, location, activity features
+- In a citation network: $$x_v$$ = bag-of-words representation of the paper
+- In a molecule: $$x_v$$ = atom type, charge, hybridisation state
+- In a social network: $$x_v$$ = age, location, activity features
 
 ### Edge Features
 
-Edges can also carry features **e_{uv} ∈ ℝ^k**:
+Edges can also carry features $$e_{uv} \in \mathbb{R}^{k}$$, stacked into an edge feature matrix $$X_E \in \mathbb{R}^{M \times k}$$:
 - In a molecule: bond type (single/double/aromatic), bond length
 - In a knowledge graph: relation type (one-hot)
 - In a road network: distance, speed limit, traffic volume
@@ -76,18 +74,18 @@ What you want to predict determines the **task level**:
 
 | Task level | Label | Example |
 |-----------|-------|---------|
-| Node | y_v per node | Paper topic (node classification) |
-| Edge | y_{uv} per edge | Will users u and v become friends? (link prediction) |
-| Graph | y_G per graph | Is this molecule toxic? (graph classification) |
+| Node | $$y_v$$ per node | Paper topic (node classification) |
+| Edge | $$y_{uv}$$ per edge | Will users $$u$$ and $$v$$ become friends? (link prediction) |
+| Graph | $$y_G$$ per graph | Is this molecule toxic? (graph classification) |
 
 ## Concrete Example: A Molecule as a Graph
 
-Consider water (H₂O):
+Consider water (H₂O), using the feature template (atomic number, valence electrons, electronegativity × 10):
 - **Nodes:** O (oxygen, node 0), H (hydrogen, node 1), H (hydrogen, node 2)
-- **Node features:** x₀ = [8, 2, 6] (atomic number, valence electrons, electronegativity×10), x₁ = x₂ = [1, 1, 2]
-- **Edges:** (0,1) and (0,2) — two O–H bonds
-- **Edge features:** e₀₁ = e₀₂ = [1, 0.96] (bond order=1, bond length=0.96Å)
-- **Graph label:** y_G = 1 (polar molecule, for a classification task)
+- **Node features:** $$x_0 = [8,\, 6,\, 34]$$ for oxygen, and $$x_1 = x_2 = [1,\, 1,\, 22]$$ for the two hydrogens
+- **Edges:** $$(0,1)$$ and $$(0,2)$$ — two O–H bonds
+- **Edge features:** $$e_{01} = e_{02} = [1,\, 0.96]$$ (bond order 1, bond length 0.96 Å)
+- **Graph label:** $$y_G = 1$$ (polar molecule, for a binary classification task)
 
 This small example shows every component: node features capturing chemistry, edge features capturing bond properties, and a graph-level label for the prediction task.
 
@@ -95,55 +93,64 @@ This small example shows every component: node features capturing chemistry, edg
 
 ## The Adjacency Matrix
 
-A graph's structure is encoded in an **adjacency matrix A ∈ {0,1}^{N×N}**:
+A graph's structure is encoded in an **adjacency matrix** $$A \in \{0,1\}^{N \times N}$$:
 
-<div class="math-box">
-A[u,v] = 1 if (u,v) ∈ E, else 0
+<div class="formula-box">
+\[
+A_{uv} =
+\begin{cases}
+1 & \text{if } (u,v) \in E,\\[2pt]
+0 & \text{otherwise.}
+\end{cases}
+\]
 </div>
 
-For an undirected graph, A is symmetric. For a weighted graph, A[u,v] = weight of edge (u,v).
+For an undirected graph $$A$$ is symmetric, i.e. $$A = A^{\top}$$. For a weighted graph, $$A_{uv}$$ holds the weight of edge $$(u,v)$$ instead of a 0/1 indicator.
 
 The adjacency matrix is rarely stored explicitly for large graphs (too sparse) — instead, edge lists or sparse formats are used.
 
 ## Neighbourhood
 
-The **neighbourhood** of node v is the set of nodes directly connected to it:
+The **neighbourhood** of node $$v$$ is the set of nodes directly connected to it:
 
-<div class="math-box">
-N(v) = { u ∈ V : (u,v) ∈ E }
+<div class="formula-box">
+\[
+\mathcal{N}(v) = \{\, u \in V : (u,v) \in E \,\}.
+\]
 </div>
 
-The **degree** of node v is |N(v)| — the number of neighbours. Degree is one of the most fundamental structural properties of a node.
+The **degree** of node $$v$$ is $$\deg(v) = \lvert \mathcal{N}(v) \rvert$$ — the number of neighbours. Degree is one of the most fundamental structural properties of a node.
 
 ## What GNNs Learn
 
 A GNN takes as input:
 - The graph structure (adjacency matrix or edge list)
-- Node features X
-- (Optionally) Edge features
+- Node features $$X$$
+- (Optionally) edge features
 
 And produces as output:
-- **Node embeddings** h_v ∈ ℝ^d' for each node (used for node classification)
-- **Edge embeddings** h_{uv} for each edge (used for link prediction)
-- **Graph embedding** h_G ∈ ℝ^d' (used for graph classification)
+- **Node embeddings** $$h_v \in \mathbb{R}^{d'}$$ for each node (used for node classification)
+- **Edge embeddings** $$h_{uv}$$ for each edge (used for link prediction)
+- **Graph embedding** $$h_G \in \mathbb{R}^{d'}$$ (used for graph classification)
 
 The core operation: each node aggregates information from its neighbours, combines it with its own features, and updates its representation — iterating this over multiple rounds.
 
 <div class="insight-box">
-<strong>Key difference from grids and sequences:</strong> In a sequence, every position has exactly 2 neighbours (left and right). In an image, every pixel has exactly 8. In a graph, nodes can have 0 to thousands of neighbours, and there is no canonical ordering of those neighbours. This irregularity is the central challenge that GNN architectures must handle.
+<strong>Key difference from grids and sequences:</strong> In a sequence, an interior position has two neighbours in a fixed order — left and right. In an image, an interior pixel has eight neighbours under 8-connectivity, again in a fixed spatial arrangement. In a graph, a node may have anywhere from zero to many thousands of neighbours, and those neighbours come with no canonical ordering. This irregularity is the central challenge that GNN architectures must handle.
 </div>
 
 ## Summary
 
 | Concept | Notation | Example |
 |---------|---------|---------|
-| Node set | V, |V|=N | Papers, atoms, users |
-| Edge set | E, |E|=M | Citations, bonds, friendships |
-| Node features | X ∈ ℝ^{N×d} | Bag-of-words, atom type |
-| Edge features | E ∈ ℝ^{M×k} | Bond type, relation type |
-| Adjacency matrix | A ∈ {0,1}^{N×N} | Who is connected to whom |
-| Node label | y_v | Paper topic |
-| Graph label | y_G | Molecule toxicity |
+| Node set | $$V$$, with $$N = \lvert V \rvert$$ | Papers, atoms, users |
+| Edge set | $$E$$, with $$M = \lvert E \rvert$$ | Citations, bonds, friendships |
+| Node features | $$X \in \mathbb{R}^{N \times d}$$ | Bag-of-words, atom type |
+| Edge features | $$X_E \in \mathbb{R}^{M \times k}$$ | Bond type, relation type |
+| Adjacency matrix | $$A \in \{0,1\}^{N \times N}$$ | Who is connected to whom |
+| Neighbourhood | $$\mathcal{N}(v)$$ | Direct neighbours of $$v$$ |
+| Node label | $$y_v$$ | Paper topic |
+| Graph label | $$y_G$$ | Molecule toxicity |
 
 Graphs are the natural language of relational data. GNNs are the deep learning architectures that speak it.
 
