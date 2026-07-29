@@ -106,7 +106,7 @@ Given a fixed task sequence and waypoints, trajectory optimisation computes smoo
 
 **Differential Dynamic Programming (DDP)** optimises trajectories by iterating two steps: a backward pass that computes a second-order approximation of the value function, and a forward pass that updates the trajectory using the computed control gains.
 
-**Iterative Linear Quadratic Regulator (iLQR)** is a simplified form of DDP that retains only first-order dynamics approximations, reducing computation while preserving convergence properties. The cost to minimise over a horizon $$T$$ is:
+**Iterative Linear Quadratic Regulator (iLQR)** is a simplified form of DDP that retains only first-order dynamics approximations, reducing computation while preserving convergence properties. The cost to minimise over a horizon \(T\) is:
 
 <div class="math-box">
 J = Σ_{t=0}^{T} [ l(x_t, u_t) ] + l_f(x_T)
@@ -130,7 +130,7 @@ Consider a planar 2-link robot arm with link lengths $$l_1 = l_2 = 0.5\,\text{m}
 
 ## Model Predictive Control (MPC)
 
-Trajectory optimisation plans an entire trajectory offline. **Model Predictive Control (MPC)** closes the loop by re-solving the optimisation problem at every control step, using only a finite **receding horizon** $$H$$:
+Trajectory optimisation plans an entire trajectory offline. **Model Predictive Control (MPC)** closes the loop by re-solving the optimisation problem at every control step, using only a finite **receding horizon** \(H\):
 
 <div class="math-box">
 min_{u_{t:t+H}} Σ_{k=t}^{t+H} l(x_k, u_k)   s.t. x_{k+1} = f(x_k, u_k), constraints

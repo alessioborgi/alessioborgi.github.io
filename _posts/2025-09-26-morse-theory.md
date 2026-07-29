@@ -28,66 +28,66 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Think of a smooth landscape (a manifold) and a height function $$f$$. As you hike upward, most of the time the terrain is featureless — a flat slope. Only at special points (a hilltop, a valley bottom, a mountain pass) does the shape of the landscape qualitatively change. Those special points are **critical points**. Morse theory is the precise dictionary between the type of each critical point (local min, saddle, local max) and the topological event it causes (a new connected component born, a loop created or killed, a void enclosed). Persistent homology is simply the pairing of these birth and death events.
+Think of a smooth landscape (a manifold) and a height function \(f\). As you hike upward, most of the time the terrain is featureless — a flat slope. Only at special points (a hilltop, a valley bottom, a mountain pass) does the shape of the landscape qualitatively change. Those special points are **critical points**. Morse theory is the precise dictionary between the type of each critical point (local min, saddle, local max) and the topological event it causes (a new connected component born, a loop created or killed, a void enclosed). Persistent homology is simply the pairing of these birth and death events.
 
 ## Morse Functions
 
-A smooth function $$f: M \to \mathbb{R}$$ on a closed smooth manifold $$M^n$$ is a **Morse function** if all critical points (where $$\nabla f = 0$$) are **non-degenerate**: the Hessian matrix $$H_p f$$ is non-singular at every critical point $$p$$.
+A smooth function \(f: M \to \mathbb{R}\) on a closed smooth manifold \(M^n\) is a **Morse function** if all critical points (where \(\nabla f = 0\)) are **non-degenerate**: the Hessian matrix \(H_p f\) is non-singular at every critical point \(p\).
 
-The **index** $$\lambda(p)$$ of a critical point $$p$$ is the number of negative eigenvalues of $$H_p f$$ — the dimension of the "descending direction" at $$p$$.
+The **index** \(\lambda(p)\) of a critical point \(p\) is the number of negative eigenvalues of \(H_p f\) — the dimension of the "descending direction" at \(p\).
 
 **Generic Morse functions**: Morse functions are generic (dense in the space of smooth functions). Any smooth manifold admits a Morse function.
 
 ## The Sublevel Set Theorem
 
-**Theorem**: If $$f$$ has no critical values in $$[a,b]$$, then $$f^{-1}((-\infty, a])$$ is diffeomorphic to $$f^{-1}((-\infty, b])$$.
+**Theorem**: If \(f\) has no critical values in \([a,b]\), then \(f^{-1}((-\infty, a])\) is diffeomorphic to \(f^{-1}((-\infty, b])\).
 
-**Theorem (Handle attachment)**: If $$f$$ has a single critical point $$p$$ with $$f(p) = c \in (a,b)$$ and index $$\lambda$$, then:
+**Theorem (Handle attachment)**: If \(f\) has a single critical point \(p\) with \(f(p) = c \in (a,b)\) and index \(\lambda\), then:
 
-<div class="math-box">$$f^{-1}((-\infty, b]) \simeq f^{-1}((-\infty, a]) \cup_\varphi e^\lambda$$</div>
+<div class="math-box">\(f^{-1}((-\infty, b]) \simeq f^{-1}((-\infty, a]) \cup_\varphi e^\lambda\)</div>
 
-where $$e^\lambda = D^\lambda \times D^{n-\lambda}$$ is a $$\lambda$$-handle attached along $$S^{\lambda-1} \times D^{n-\lambda}$$.
+where \(e^\lambda = D^\lambda \times D^{n-\lambda}\) is a \(\lambda\)-handle attached along \(S^{\lambda-1} \times D^{n-\lambda}\).
 
-Attaching a $$\lambda$$-handle either:
-- Creates a new $$\lambda$$-dimensional homology class (if the attaching map is non-trivial in $$H_{\lambda-1}$$), or
-- Kills a $$(\lambda-1)$$-dimensional class.
+Attaching a \(\lambda\)-handle either:
+- Creates a new \(\lambda\)-dimensional homology class (if the attaching map is non-trivial in \(H_{\lambda-1}\)), or
+- Kills a \((\lambda-1)\)-dimensional class.
 
 ## Morse Inequalities
 
-Let $$c_k$$ denote the number of index-$$k$$ critical points of $$f$$. The **Morse inequalities** state:
+Let \(c_k\) denote the number of index-\(k\) critical points of \(f\). The **Morse inequalities** state:
 
-<div class="math-box">$$c_k \geq \beta_k(M) \quad \text{for all } k$$</div>
+<div class="math-box">\(c_k \geq \beta_k(M) \quad \text{for all } k\)</div>
 
-with equality in the **perfect Morse function** case $$\chi(M) = \sum_k (-1)^k c_k = \sum_k (-1)^k \beta_k$$.
+with equality in the **perfect Morse function** case \(\chi(M) = \sum_k (-1)^k c_k = \sum_k (-1)^k \beta_k\).
 
 ## Persistent Homology as Morse Theory
 
-The sublevel set persistent homology of $$f: M \to \mathbb{R}$$ is exactly the Morse-theoretic data:
-- Each $$H_k$$ persistence pair $$(b,d)$$ corresponds to a pair of critical points $$(p_b, p_d)$$ where:
-  - $$p_b$$ has index $$k$$ (creates a $$k$$-class at value $$b$$).
-  - $$p_d$$ has index $$k+1$$ (kills the class at value $$d$$).
+The sublevel set persistent homology of \(f: M \to \mathbb{R}\) is exactly the Morse-theoretic data:
+- Each \(H_k\) persistence pair \((b,d)\) corresponds to a pair of critical points \((p_b, p_d)\) where:
+  - \(p_b\) has index \(k\) (creates a \(k\)-class at value \(b\)).
+  - \(p_d\) has index \(k+1\) (kills the class at value \(d\)).
 - Unpaired critical points correspond to infinite persistence (essential classes).
 
-The **cancellation theorem**: if $$p_b$$ and $$p_d$$ are paired with $$d - b < \varepsilon$$, there exists a perturbation $$g$$ of $$f$$ with $$\|f - g\|_\infty < \varepsilon$$ that cancels the pair — removing both critical points. This is the smooth version of clearing.
+The **cancellation theorem**: if \(p_b\) and \(p_d\) are paired with \(d - b < \varepsilon\), there exists a perturbation \(g\) of \(f\) with \(\|f - g\|_\infty < \varepsilon\) that cancels the pair — removing both critical points. This is the smooth version of clearing.
 
 ## Worked Example: Torus Height Function
 
-Consider the torus $$T^2$$ standing upright, with height function $$f$$ = vertical coordinate. It has exactly 4 critical points:
+Consider the torus \(T^2\) standing upright, with height function \(f\) = vertical coordinate. It has exactly 4 critical points:
 
-| Critical point | Index $$\lambda$$ | Type | $$f$$ value | Topological event |
+| Critical point | Index \(\lambda\) | Type | \(f\) value | Topological event |
 |---|---|---|---|---|
-| $$p_0$$ | 0 | Local minimum | 0 | New component born ($$H_0$$) |
-| $$p_1$$ | 1 | Saddle (inner) | 0.3 | Loop created ($$H_1$$, inner equator) |
-| $$p_2$$ | 1 | Saddle (outer) | 0.7 | Loop created ($$H_1$$, outer equator) |
-| $$p_3$$ | 2 | Local maximum | 1 | 2-cycle born ($$H_2$$, encloses volume) |
+| \(p_0\) | 0 | Local minimum | 0 | New component born (\(H_0\)) |
+| \(p_1\) | 1 | Saddle (inner) | 0.3 | Loop created (\(H_1\), inner equator) |
+| \(p_2\) | 1 | Saddle (outer) | 0.7 | Loop created (\(H_1\), outer equator) |
+| \(p_3\) | 2 | Local maximum | 1 | 2-cycle born (\(H_2\), encloses volume) |
 
-**Morse inequalities check**: $$c_0=1, c_1=2, c_2=1$$.
-- $$\beta_0(T^2)=1 \leq c_0=1$$ ✓
-- $$\beta_1(T^2)=2 \leq c_1=2$$ ✓
-- $$\beta_2(T^2)=1 \leq c_2=1$$ ✓
-- Euler characteristic: $$\chi = 1-2+1=0 = \beta_0-\beta_1+\beta_2 = 1-2+1$$ ✓ (perfect Morse function).
+**Morse inequalities check**: \(c_0=1, c_1=2, c_2=1\).
+- \(\beta_0(T^2)=1 \leq c_0=1\) ✓
+- \(\beta_1(T^2)=2 \leq c_1=2\) ✓
+- \(\beta_2(T^2)=1 \leq c_2=1\) ✓
+- Euler characteristic: \(\chi = 1-2+1=0 = \beta_0-\beta_1+\beta_2 = 1-2+1\) ✓ (perfect Morse function).
 
-**Persistence pairs**: $$(p_0, \infty)$$ for $$H_0$$ (the torus is connected forever); $$(p_1, \infty)$$ and $$(p_2, \infty)$$ for the two essential $$H_1$$ classes; $$(p_3, \infty)$$ for $$H_2$$.
+**Persistence pairs**: \((p_0, \infty)\) for \(H_0\) (the torus is connected forever); \((p_1, \infty)\) and \((p_2, \infty)\) for the two essential \(H_1\) classes; \((p_3, \infty)\) for \(H_2\).
 
 <style>
 @keyframes morse-fill {

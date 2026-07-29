@@ -21,11 +21,11 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> Reading \(Ax\) as a linear combination of the columns of \(A\) makes almost everything else immediate. The reachable outputs are exactly the span of the columns — the column space — and its dimension is the rank. Whatever the map destroys lives in the null space. Rank–nullity says the domain is exactly split between the two: \(\operatorname{rank}(A) + \dim\ker(A) = n\). Matrix multiplication is composition of maps; conjugation \(P^{-1}AP\) is the same map read in a different basis.
 </div>
 
-## Two readings of $Ax$
+## Two readings of $$Ax$$
 
-The mechanical reading of $Ax$ is "row $i$ of $A$ dotted with $x$". It is correct and it explains nothing.
+The mechanical reading of $$Ax$$ is "row $$i$$ of $$A$$ dotted with $$x$$". It is correct and it explains nothing.
 
-The useful reading is by columns. If $A$ has columns $a_1,\dots,a_n$ and $x = (x_1,\dots,x_n)^\top$, then
+The useful reading is by columns. If $$A$$ has columns $$a_1,\dots,a_n$$ and $$x = (x_1,\dots,x_n)^\top$$, then
 
 <div class="formula-box">
 \[
@@ -33,9 +33,9 @@ Ax = x_1 a_1 + x_2 a_2 + \dots + x_n a_n .
 \]
 </div>
 
-So $A$ takes the coordinates in $x$ and uses them as mixing weights on a fixed set of output vectors. The set of everything you can produce this way is the **span** of the columns — the **column space** $\operatorname{col}(A)$. Nothing outside it is reachable, which is exactly why $Ax = b$ has a solution if and only if $b \in \operatorname{col}(A)$.
+So $$A$$ takes the coordinates in $$x$$ and uses them as mixing weights on a fixed set of output vectors. The set of everything you can produce this way is the **span** of the columns — the **column space** $$\operatorname{col}(A)$$. Nothing outside it is reachable, which is exactly why $$Ax = b$$ has a solution if and only if $$b \in \operatorname{col}(A)$$.
 
-A **basis** for a subspace is a spanning set with no redundancy, and every basis of a given subspace has the same size — that size is the dimension. The **rank** of $A$ is $\dim \operatorname{col}(A)$: the number of genuinely independent output directions. A $1000 \times 1000$ matrix of rank 3 maps a thousand-dimensional space onto a three-dimensional plane inside it.
+A **basis** for a subspace is a spanning set with no redundancy, and every basis of a given subspace has the same size — that size is the dimension. The **rank** of $$A$$ is $$\dim \operatorname{col}(A)$$: the number of genuinely independent output directions. A $$1000 \times 1000$$ matrix of rank 3 maps a thousand-dimensional space onto a three-dimensional plane inside it.
 
 ## What the map destroys
 
@@ -49,7 +49,7 @@ That gives the conservation law. Each input dimension either survives to contrib
 \]
 </div>
 
-This is **rank–nullity**, and read this way it is almost a tautology rather than a theorem. The genuinely non-obvious fact sitting alongside it is that row rank equals column rank: the number of independent rows and the number of independent columns are the same, so $\operatorname{rank}(A) = \operatorname{rank}(A^\top)$ even when $A$ is rectangular and the two spaces live in different places.
+This is **rank–nullity**, and read this way it is almost a tautology rather than a theorem. The genuinely non-obvious fact sitting alongside it is that row rank equals column rank: the number of independent rows and the number of independent columns are the same, so $$\operatorname{rank}(A) = \operatorname{rank}(A^\top)$$ even when $$A$$ is rectangular and the two spaces live in different places.
 
 ## A worked example
 
@@ -62,18 +62,18 @@ A = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix},
 \]
 </div>
 
-The first two columns $(1,4)^\top$ and $(2,5)^\top$ are independent, so the column space is all of $\mathbb{R}^2$ and $\operatorname{rank}(A) = 2$. The third column is redundant: $(3,6)^\top = -(1,4)^\top + 2\,(2,5)^\top$, since $-1 + 4 = 3$ and $-4 + 10 = 6$.
+The first two columns $$(1,4)^\top$$ and $$(2,5)^\top$$ are independent, so the column space is all of $$\mathbb{R}^2$$ and $$\operatorname{rank}(A) = 2$$. The third column is redundant: $$(3,6)^\top = -(1,4)^\top + 2\,(2,5)^\top$$, since $$-1 + 4 = 3$$ and $$-4 + 10 = 6$$.
 
-That dependency *is* the null space. It says $-1 \cdot a_1 + 2 \cdot a_2 - 1 \cdot a_3 = 0$, so $x = (1,-2,1)^\top$ satisfies $Ax = 0$: check $1 - 4 + 3 = 0$ and $4 - 10 + 6 = 0$. The null space is the line spanned by $(1,-2,1)^\top$, of dimension 1.
+That dependency *is* the null space. It says $$-1 \cdot a_1 + 2 \cdot a_2 - 1 \cdot a_3 = 0$$, so $$x = (1,-2,1)^\top$$ satisfies $$Ax = 0$$: check $$1 - 4 + 3 = 0$$ and $$4 - 10 + 6 = 0$$. The null space is the line spanned by $$(1,-2,1)^\top$$, of dimension 1.
 
 | Quantity | Value | Lives in |
 |---|---|---|
-| $\operatorname{rank}(A)$ | 2 | — |
-| $\operatorname{col}(A)$ | all of $\mathbb{R}^2$ | codomain $\mathbb{R}^2$ |
-| $\ker(A)$ | $$\operatorname{span}\{(1,-2,1)^\top\}$$ | domain $\mathbb{R}^3$ |
-| Rank–nullity | $2 + 1 = 3$ | $= n$, the 3 columns |
+| $$\operatorname{rank}(A)$$ | 2 | — |
+| $$\operatorname{col}(A)$$ | all of $$\mathbb{R}^2$$ | codomain $$\mathbb{R}^2$$ |
+| $$\ker(A)$$ | $$\operatorname{span}\{(1,-2,1)^\top\}$$ | domain $$\mathbb{R}^3$$ |
+| Rank–nullity | $$2 + 1 = 3$$ | $$= n$$, the 3 columns |
 
-Geometrically: $A$ flattens $\mathbb{R}^3$ onto the plane $\mathbb{R}^2$ by crushing one particular line to the origin. Solutions to $Ax = b$ are never unique — add any multiple of $(1,-2,1)^\top$ and you get another.
+Geometrically: $$A$$ flattens $$\mathbb{R}^3$$ onto the plane $$\mathbb{R}^2$$ by crushing one particular line to the origin. Solutions to $$Ax = b$$ are never unique — add any multiple of $$(1,-2,1)^\top$$ and you get another.
 
 <div class="blog-figure">
 <figure>
@@ -114,9 +114,9 @@ Geometrically: $A$ flattens $\mathbb{R}^3$ onto the plane $\mathbb{R}^2$ by crus
 
 ## Multiplication is composition; conjugation is a change of basis
 
-Because $(AB)x = A(Bx)$, the product $AB$ is the map "do $B$, then do $A$". Non-commutativity stops being strange: rotating then projecting is not projecting then rotating. It also explains the shape rule — the output dimension of $B$ must be the input dimension of $A$ — and the bound $\operatorname{rank}(AB) \le \min(\operatorname{rank}A, \operatorname{rank}B)$, since a composition cannot recover dimensions an earlier stage destroyed.
+Because $$(AB)x = A(Bx)$$, the product $$AB$$ is the map "do $$B$$, then do $$A$$". Non-commutativity stops being strange: rotating then projecting is not projecting then rotating. It also explains the shape rule — the output dimension of $$B$$ must be the input dimension of $$A$$ — and the bound $$\operatorname{rank}(AB) \le \min(\operatorname{rank}A, \operatorname{rank}B)$$, since a composition cannot recover dimensions an earlier stage destroyed.
 
-The second reading of a product is a change of coordinates. Let $P$ have as its columns a new basis, written in the old coordinates. Then $P$ converts new coordinates into old ones, and $P^{-1}$ does the reverse. So
+The second reading of a product is a change of coordinates. Let $$P$$ have as its columns a new basis, written in the old coordinates. Then $$P$$ converts new coordinates into old ones, and $$P^{-1}$$ does the reverse. So
 
 <div class="formula-box">
 \[
@@ -124,7 +124,7 @@ B = P^{-1} A P
 \]
 </div>
 
-reads right to left as: take a vector in the new coordinates, convert to old ($P$), apply the map ($A$), convert back ($P^{-1}$). $A$ and $B$ are *the same linear map* described in two languages. This is why similar matrices share rank, trace, determinant and eigenvalues — those are properties of the map, not of the description. It is also the whole point of [diagonalisation](/blog/math-basics/eigen-and-svd/): find the basis in which the description is as simple as possible.
+reads right to left as: take a vector in the new coordinates, convert to old ($$P$$), apply the map ($$A$$), convert back ($$P^{-1}$$). $$A$$ and $$B$$ are *the same linear map* described in two languages. This is why similar matrices share rank, trace, determinant and eigenvalues — those are properties of the map, not of the description. It is also the whole point of [diagonalisation](/blog/math-basics/eigen-and-svd/): find the basis in which the description is as simple as possible.
 
 <div class="insight-box">
   <strong>Key Insight — rank is a statement about information, not about arithmetic:</strong> rank counts how many independent directions survive the map. Low rank means the output is confined to a thin slice of the space it nominally lives in, and that is why low-rank structure is exploitable — LoRA adapters, matrix factorisation for recommenders, and PCA all rest on the observation that a map with rank \(r\) can be stored and applied with \(r(m+n)\) numbers instead of \(mn\).
@@ -136,7 +136,7 @@ reads right to left as: take a vector in the new coordinates, convert to old ($P
 
 ## Why this matters in practice
 
-Rank deficiency is what makes $A^\top A$ singular in least squares, forcing ridge regularisation. Rank collapse in a transformer's attention matrices is a real failure mode. And the entire family of parameter-efficient fine-tuning methods is a bet that the *update* to a weight matrix has far lower rank than the matrix itself.
+Rank deficiency is what makes $$A^\top A$$ singular in least squares, forcing ridge regularisation. Rank collapse in a transformer's attention matrices is a real failure mode. And the entire family of parameter-efficient fine-tuning methods is a bet that the *update* to a weight matrix has far lower rank than the matrix itself.
 
 <div class="key-takeaways">
   <h3>Recap</h3>

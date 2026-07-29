@@ -28,15 +28,15 @@ This is the key insight behind all differentiable TDA: the topology (which pairs
 
 ## Gradient of Persistence Diagrams
 
-Let $f : K \to \mathbb{R}$ be a filtration function on a simplicial complex $K$ (e.g., the output of a neural network applied to each vertex). The persistence pairs $$\{(b_i, d_i)\} = \{(f(\sigma_i), f(\tau_i))\}$$ depend smoothly on $f$ **as long as no topological event (pairing change) occurs**.
+Let $$f : K \to \mathbb{R}$$ be a filtration function on a simplicial complex $$K$$ (e.g., the output of a neural network applied to each vertex). The persistence pairs $$\{(b_i, d_i)\} = \{(f(\sigma_i), f(\tau_i))\}$$ depend smoothly on $$f$$ **as long as no topological event (pairing change) occurs**.
 
-**Theorem (Subgradient of persistence, Poulenard et al., 2018).** Let $\mathcal{L}(\text{Dgm}(f))$ be a loss on the persistence diagram. Then:
+**Theorem (Subgradient of persistence, Poulenard et al., 2018).** Let $$\mathcal{L}(\text{Dgm}(f))$$ be a loss on the persistence diagram. Then:
 
 $$\frac{\partial \mathcal{L}}{\partial f(\sigma)} = \sum_{i : \sigma = \sigma_i} \frac{\partial \mathcal{L}}{\partial b_i} + \sum_{i : \sigma = \tau_i} \frac{\partial \mathcal{L}}{\partial d_i}$$
 
-Each simplex $\sigma$ appears as the birth simplex of at most one pair and the death simplex of at most one pair. The gradient is therefore a sparse sum — at most two nonzero terms per simplex.
+Each simplex $$\sigma$$ appears as the birth simplex of at most one pair and the death simplex of at most one pair. The gradient is therefore a sparse sum — at most two nonzero terms per simplex.
 
-In practice, this means: once you have the persistence pairs from a forward pass, the backward pass through the diagram is $O(m)$ — as fast as a single linear layer.
+In practice, this means: once you have the persistence pairs from a forward pass, the backward pass through the diagram is $$O(m)$$ — as fast as a single linear layer.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The gradient of a persistence-based loss is <em>extremely sparse</em>. Only the simplices that are birth or death simplices of a persistence pair receive nonzero gradient. In a typical filtration, this is a tiny fraction of all simplices — most simplices are in apparent pairs that contribute nothing to the loss, and their gradients are zero. This makes topological regularisation computationally cheap once the pairs are known.</div>
 
@@ -155,9 +155,9 @@ The key modules are the **PH computation** (forward only, outputs pairs) and the
 
 $$\mathcal{L}_{\text{topo}} = -\max_{i} (d_i^{H_1} - b_i^{H_1}) + \sum_{i \neq i^*} (d_i^{H_1} - b_i^{H_1})$$
 
-Maximise the most persistent $H_1$ feature while penalising all others — encourages exactly one loop.
+Maximise the most persistent $$H_1$$ feature while penalising all others — encourages exactly one loop.
 
-**Goal 2 — Push all $H_1$ bars to zero** (ensure simply-connected representation):
+**Goal 2 — Push all $$H_1$$ bars to zero** (ensure simply-connected representation):
 
 $$\mathcal{L}_{\text{topo}} = \sum_i (d_i^{H_1} - b_i^{H_1})^2$$
 
@@ -187,7 +187,7 @@ The topological autoencoder (Moor et al., 2020) trains a standard autoencoder wi
 
 $$\mathcal{L} = \|X - \hat{X}\|^2 + \lambda \cdot W_2(\text{Dgm}(X),\, \text{Dgm}(Z))$$
 
-where $Z$ is the latent representation. This encourages the encoder to be a topology-preserving map — loops in the input space appear as loops in the latent space.
+where $$Z$$ is the latent representation. This encourages the encoder to be a topology-preserving map — loops in the input space appear as loops in the latent space.
 
 In experiments on synthetic manifolds (sphere, torus, klein bottle), the topological autoencoder recovers the correct Betti numbers in the latent space, while standard autoencoders collapse topological structure.
 

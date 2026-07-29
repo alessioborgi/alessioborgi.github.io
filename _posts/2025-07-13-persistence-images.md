@@ -18,17 +18,17 @@ permalink: /blog/persistent-homology/persistence-images/
 
 ## Intuition First
 
-A persistence diagram is a point cloud in $\mathbb{R}^2$. Point clouds are awkward for machine learning: two diagrams can have different numbers of points, and the space of diagrams is not a vector space. You cannot average two diagrams the way you average two feature vectors.
+A persistence diagram is a point cloud in $$\mathbb{R}^2$$. Point clouds are awkward for machine learning: two diagrams can have different numbers of points, and the space of diagrams is not a vector space. You cannot average two diagrams the way you average two feature vectors.
 
-Persistence images solve this by treating each diagram point as a **blob of ink**: smear a small Gaussian around each point $(b, d)$, weight the blob by how persistent the feature is (so noise near the diagonal contributes little), then photograph the result on a fixed pixel grid. Every diagram now maps to the same $n \times n$ array — a genuine vector you can hand to any classifier.
+Persistence images solve this by treating each diagram point as a **blob of ink**: smear a small Gaussian around each point $$(b, d)$$, weight the blob by how persistent the feature is (so noise near the diagonal contributes little), then photograph the result on a fixed pixel grid. Every diagram now maps to the same $$n \times n$$ array — a genuine vector you can hand to any classifier.
 
 ---
 
 ## The Construction (Adams et al., 2017)
 
-**Step 1 — Change coordinates.** Map each point $(b, d)$ in the diagram to $(b, p)$ where $p = d - b$ is the **persistence**. Now all points have $p \geq 0$, and near-diagonal noise has $p \approx 0$.
+**Step 1 — Change coordinates.** Map each point $$(b, d)$$ in the diagram to $$(b, p)$$ where $$p = d - b$$ is the **persistence**. Now all points have $$p \geq 0$$, and near-diagonal noise has $$p \approx 0$$.
 
-**Step 2 — Weight by persistence.** Define a weighting function $$w : \mathbb{R}^2 \to \mathbb{R}_{\geq 0}$$ that is 0 on the diagonal ($p=0$) and increases with persistence. A common choice:
+**Step 2 — Weight by persistence.** Define a weighting function $$w : \mathbb{R}^2 \to \mathbb{R}_{\geq 0}$$ that is 0 on the diagonal ($$p=0$$) and increases with persistence. A common choice:
 
 $$w(b, p) = \begin{cases} 0 & p \leq 0 \\ p / p_{\max} & 0 < p \leq p_{\max} \\ 1 & p > p_{\max} \end{cases}$$
 
@@ -36,13 +36,13 @@ $$w(b, p) = \begin{cases} 0 & p \leq 0 \\ p / p_{\max} & 0 < p \leq p_{\max} \\ 
 
 $$\rho_T(z) = \sum_{(b,p) \in T} w(b,p) \cdot \phi_{(b,p)}(z)$$
 
-where $$\phi_{(b,p)}$$ is a 2D Gaussian with bandwidth $\sigma$ centred at $(b, p)$, and $T$ is the set of points in the persistence diagram (in the new coordinates).
+where $$\phi_{(b,p)}$$ is a 2D Gaussian with bandwidth $$\sigma$$ centred at $$(b, p)$$, and $$T$$ is the set of points in the persistence diagram (in the new coordinates).
 
-**Step 4 — Rasterise.** Discretise the surface $\rho_T$ on a fixed grid of pixels $$\{I_{ij}\}$$, integrating $\rho_T$ over each pixel cell:
+**Step 4 — Rasterise.** Discretise the surface $$\rho_T$$ on a fixed grid of pixels $$\{I_{ij}\}$$, integrating $$\rho_T$$ over each pixel cell:
 
 $$I_{ij} = \iint_{\text{pixel}_{ij}} \rho_T(z)\, dz$$
 
-The result is a vector $\mathbf{v}(T) \in \mathbb{R}^{n \times n}$ — the **persistence image**.
+The result is a vector $$\mathbf{v}(T) \in \mathbb{R}^{n \times n}$$ — the **persistence image**.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The weighting function is the critical design choice. Without it, near-diagonal noise (many low-persistence points) would dominate the image. With a linearly increasing weight, noise is suppressed and the image is dominated by topologically significant features. The weighting also makes the map stable: the persistence image distance is bounded by the Wasserstein distance between diagrams.</div>
 
@@ -156,30 +156,30 @@ The result is a vector $\mathbf{v}(T) \in \mathbb{R}^{n \times n}$ — the **per
 **Diagram:** $$T = \{(0.5, 2.0),\, (1.0, 1.2),\, (0.1, 0.15)\}$$ (birth, death pairs).
 
 **Step 1 — Convert to (b, p):**
-- $(0.5,\, 1.5)$ — persistence 1.5 (significant)
-- $(1.0,\, 0.2)$ — persistence 0.2 (moderate)
-- $(0.1,\, 0.05)$ — persistence 0.05 (near-diagonal noise)
+- $$(0.5,\, 1.5)$$ — persistence 1.5 (significant)
+- $$(1.0,\, 0.2)$$ — persistence 0.2 (moderate)
+- $$(0.1,\, 0.05)$$ — persistence 0.05 (near-diagonal noise)
 
 **Step 2 — Linear weights** with $$p_{\max} = 1.5$$:
-- $w(0.5, 1.5) = 1.0$
-- $w(1.0, 0.2) = 0.2/1.5 \approx 0.133$
-- $w(0.1, 0.05) = 0.05/1.5 \approx 0.033$
+- $$w(0.5, 1.5) = 1.0$$
+- $$w(1.0, 0.2) = 0.2/1.5 \approx 0.133$$
+- $$w(0.1, 0.05) = 0.05/1.5 \approx 0.033$$
 
-**Observation:** the near-diagonal point contributes only 3.3% of the weight of the most persistent feature. When rasterised on a $20 \times 20$ grid, its Gaussian barely registers. This is exactly the desired noise-suppression behaviour.
+**Observation:** the near-diagonal point contributes only 3.3% of the weight of the most persistent feature. When rasterised on a $$20 \times 20$$ grid, its Gaussian barely registers. This is exactly the desired noise-suppression behaviour.
 
-**Step 3 — Pixel values** are computed by integrating the weighted Gaussian mixture over each cell. Pixels near $(0.5, 1.5)$ will have large values; pixels near $(0.1, 0.05)$ will be nearly zero.
+**Step 3 — Pixel values** are computed by integrating the weighted Gaussian mixture over each cell. Pixels near $$(0.5, 1.5)$$ will have large values; pixels near $$(0.1, 0.05)$$ will be nearly zero.
 
 ---
 
 ## Stability Theorem
 
-**Theorem (Adams et al., 2017).** Let $\rho_w$ denote the map from persistence diagrams to persistence images using weighting function $w$ (assumed Lipschitz with constant $C$) and Gaussian bandwidth $\sigma$. Then:
+**Theorem (Adams et al., 2017).** Let $$\rho_w$$ denote the map from persistence diagrams to persistence images using weighting function $$w$$ (assumed Lipschitz with constant $$C$$) and Gaussian bandwidth $$\sigma$$. Then:
 
 $$\|\mathbf{v}(T_1) - \mathbf{v}(T_2)\|_\infty \;\leq\; \frac{C}{\sigma\sqrt{2\pi}} \cdot W_1(T_1, T_2)$$
 
-where $W_1$ is the 1-Wasserstein distance between diagrams.
+where $$W_1$$ is the 1-Wasserstein distance between diagrams.
 
-This confirms that persistence images are **stable**: small changes in the input data (hence small changes in the persistence diagram under $W_1$) produce small changes in the persistence image.
+This confirms that persistence images are **stable**: small changes in the input data (hence small changes in the persistence diagram under $$W_1$$) produce small changes in the persistence image.
 
 ---
 
@@ -187,12 +187,12 @@ This confirms that persistence images are **stable**: small changes in the input
 
 | Parameter | Typical range | Effect |
 |-----------|--------------|--------|
-| Grid resolution $n$ | 10–50 | Higher: finer detail, more dimensions |
-| Bandwidth $\sigma$ | 0.1–0.5 × diagram spread | Smaller: sharper but noisier |
+| Grid resolution $$n$$ | 10–50 | Higher: finer detail, more dimensions |
+| Bandwidth $$\sigma$$ | 0.1–0.5 × diagram spread | Smaller: sharper but noisier |
 | Weight function | Linear, sigmoid, constant | Controls noise suppression |
 | Coordinate range | Data-driven or fixed | Must cover all diagram points |
 
-In practice, grid resolution 20×20 with linear weighting and $\sigma$ set to ~10% of the birth/persistence range is a robust default.
+In practice, grid resolution 20×20 with linear weighting and $$\sigma$$ set to ~10% of the birth/persistence range is a robust default.
 
 ---
 

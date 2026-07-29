@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## What Is the Adjacency Matrix?
 
-Take a graph $G = (V, E)$ with $N = \lvert V \rvert$ nodes. The adjacency matrix $$A \in \{0,1\}^{N\times N}$$ is defined by
+Take a graph $$G = (V, E)$$ with $$N = \lvert V \rvert$$ nodes. The adjacency matrix $$A \in \{0,1\}^{N\times N}$$ is defined by
 
 <div class="formula-box">
 \[
@@ -117,9 +117,9 @@ A_{ij} =
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Think of the adjacency matrix as a truth table for "are these two nodes friends?" Row i, column j answers: did node i and node j shake hands? For undirected graphs the handshake is mutual, so the table is mirrored across the diagonal.</div>
 
-**Symmetry:** For undirected graphs, $A_{ij} = A_{ji}$ always — that is, $A = A^{\top}$. Directed graphs have asymmetric adjacency matrices.
+**Symmetry:** For undirected graphs, \(A_{ij} = A_{ji}\) always — that is, \(A = A^{\top}\). Directed graphs have asymmetric adjacency matrices.
 
-**Degree:** The **degree** $d_i$ of node $i$ is the number of edges incident to it. It equals the sum of row $i$ of $A$:
+**Degree:** The **degree** \(d_i\) of node \(i\) is the number of edges incident to it. It equals the sum of row \(i\) of \(A\):
 
 <div class="formula-box">
 \[
@@ -127,15 +127,15 @@ d_i = \sum_{j=1}^{N} A_{ij} = \lvert \mathcal{N}(i) \rvert,
 \]
 </div>
 
-where $\mathcal{N}(i)$ denotes the neighbourhood of node $i$. The degree matrix $D = \mathrm{diag}(d_1,\ldots,d_N)$ carries these degrees on its diagonal and zeros elsewhere.
+where $$\mathcal{N}(i)$$ denotes the neighbourhood of node $$i$$. The degree matrix $$D = \mathrm{diag}(d_1,\ldots,d_N)$$ carries these degrees on its diagonal and zeros elsewhere.
 
-**Sparsity:** Real-world graphs are sparse — most node pairs have no edge. A social network with $10^6$ users typically has on the order of $10^7$ edges, not the $10^{12}$ entries of the dense matrix. Sparse representations (edge lists, COO format) are crucial for efficiency.
+**Sparsity:** Real-world graphs are sparse — most node pairs have no edge. A social network with $$10^6$$ users typically has on the order of $$10^7$$ edges, not the $$10^{12}$$ entries of the dense matrix. Sparse representations (edge lists, COO format) are crucial for efficiency.
 
-**Powers of $A$:** the entry $$(A^2)_{ij}$$ counts the number of **walks** of length 2 from $i$ to $j$, and more generally $$(A^k)_{ij}$$ counts walks of length $k$. (A walk may repeat nodes and edges; a *path* may not, and there is no simple matrix formula for counting paths.) This is the mathematical basis for why a $k$-layer GNN captures the $k$-hop neighbourhood: $$(A^k)_{ij} > 0$$ exactly when $j$ is reachable from $i$ in $k$ steps.
+**Powers of $$A$$:** the entry $$(A^2)_{ij}$$ counts the number of **walks** of length 2 from $$i$$ to $$j$$, and more generally $$(A^k)_{ij}$$ counts walks of length $$k$$. (A walk may repeat nodes and edges; a *path* may not, and there is no simple matrix formula for counting paths.) This is the mathematical basis for why a $$k$$-layer GNN captures the $$k$$-hop neighbourhood: $$(A^k)_{ij} > 0$$ exactly when $$j$$ is reachable from $$i$$ in $$k$$ steps.
 
 ## Weighted Graphs
 
-In a weighted graph, $$A_{ij} = w_{ij}$$ — the weight of the edge between $i$ and $j$, and $0$ if there is no edge. For molecules this could be bond strength; for road networks, road capacity; for social networks, interaction frequency. The degree generalises to the *weighted degree* $$d_i = \sum_j w_{ij}$$.
+In a weighted graph, $$A_{ij} = w_{ij}$$ — the weight of the edge between $$i$$ and $$j$$, and $$0$$ if there is no edge. For molecules this could be bond strength; for road networks, road capacity; for social networks, interaction frequency. The degree generalises to the *weighted degree* $$d_i = \sum_j w_{ij}$$.
 
 ## Self-Loops
 
@@ -147,13 +147,13 @@ Some GNN formulations add self-loops by modifying the adjacency matrix:
 \]
 </div>
 
-where $I$ is the $N \times N$ identity matrix. This ensures each node "sees itself" during aggregation — without it, a node's own features would be dropped from the sum. The corresponding degree matrix is $\tilde{D} = D + I$.
+where $$I$$ is the $$N \times N$$ identity matrix. This ensures each node "sees itself" during aggregation — without it, a node's own features would be dropped from the sum. The corresponding degree matrix is $$\tilde{D} = D + I$$.
 
-This is exactly what GCN does, which then symmetrically normalises to form the propagation matrix $\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$ (see the GCN post).
+This is exactly what GCN does, which then symmetrically normalises to form the propagation matrix $$\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$$ (see the GCN post).
 
 ## In GNNs: Matrix Multiplication = Neighbourhood Aggregation
 
-The most important use of $A$ in GNNs: multiplying $A$ by the feature matrix $H \in \mathbb{R}^{N \times d}$ (row $v$ holds node $v$'s feature vector $h_v$) performs one round of neighbourhood aggregation:
+The most important use of $$A$$ in GNNs: multiplying $$A$$ by the feature matrix $$H \in \mathbb{R}^{N \times d}$$ (row $$v$$ holds node $$v$$'s feature vector $$h_v$$) performs one round of neighbourhood aggregation:
 
 <div class="formula-box">
 \[
@@ -161,7 +161,7 @@ H_{\text{new}} = A H, \qquad \text{so} \qquad (H_{\text{new}})_v = \sum_{u \in \
 \]
 </div>
 
-Row $v$ of $AH$ is the sum of the feature vectors of all neighbours of node $v$. This is precisely message passing: aggregate all neighbour features.
+Row $$v$$ of $$AH$$ is the sum of the feature vectors of all neighbours of node $$v$$. This is precisely message passing: aggregate all neighbour features.
 
 Normalising by degree gives the **mean** of neighbour features — the basis for many GNN designs:
 
@@ -186,7 +186,7 @@ A · H:
   row 3 = 0·[2] + 1·[4] + 0·[6] = [4]   ← node 3 collects from node 2
 ```
 
-With $\tilde{A} = A + I$ (self-loops added), node 2 would collect $2+4+6 = 12$ — including its own feature.
+With $$\tilde{A} = A + I$$ (self-loops added), node 2 would collect $$2+4+6 = 12$$ — including its own feature.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Matrix multiplication with A is <em>simultaneously</em> performing neighbourhood aggregation for every node in one shot. This is why GNNs can be implemented so efficiently — the entire graph is processed with a single sparse matrix multiply.</div>
 

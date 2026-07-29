@@ -99,7 +99,7 @@ toc_label: "Contents"
 <figcaption>A* on an 8×7 grid. Blue cells are already explored. Orange pulsing dots are the current frontier. The teal path animates from Start (green) to Goal (red), navigating around wall obstacles.</figcaption>
 </figure></div>
 
-A robot must navigate from an initial configuration $$q_{\text{start}}$$ to a goal $$q_{\text{goal}}$$ without colliding with obstacles. The space of all valid robot configurations is the **configuration space** (C-space). Obstacles in workspace map to forbidden regions in C-space, and the planner must find a path through the free region $$\mathcal{C}_{\text{free}}$$.
+A robot must navigate from an initial configuration \(q_{\text{start}}\) to a goal \(q_{\text{goal}}\) without colliding with obstacles. The space of all valid robot configurations is the **configuration space** (C-space). Obstacles in workspace map to forbidden regions in C-space, and the planner must find a path through the free region \(\mathcal{C}_{\text{free}}\).
 
 The challenge scales dramatically with dimensionality. A mobile robot in 2D has a 3D C-space (x, y, heading), but a robot arm with 7 joints lives in a 7D C-space, making exhaustive search intractable.
 
@@ -107,7 +107,7 @@ The challenge scales dramatically with dimensionality. A mobile robot in 2D has 
 
 **Dijkstra's algorithm** explores a weighted graph by always expanding the node with the smallest accumulated cost from the start. It is complete and optimal but explores in all directions equally, making it slow in large graphs.
 
-**A\*** improves on Dijkstra by adding a heuristic $$h(n)$$ that estimates the remaining cost to the goal. The node priority is:
+**A\*** improves on Dijkstra by adding a heuristic \(h(n)\) that estimates the remaining cost to the goal. The node priority is:
 
 <div class="math-box">
 f(n) = g(n) + h(n)

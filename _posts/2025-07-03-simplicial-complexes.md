@@ -75,10 +75,10 @@ permalink: /blog/persistent-homology/simplicial-complexes/
 
 ## Simplices: The Building Blocks
 
-A **k-simplex** is the convex hull of $$k+1$$ affinely independent points $$v_0, v_1, \ldots, v_k \in \mathbb{R}^n$$:
+A **k-simplex** is the convex hull of \(k+1\) affinely independent points \(v_0, v_1, \ldots, v_k \in \mathbb{R}^n\):
 
 <div class="math-box">
-$$\sigma = [v_0, v_1, \ldots, v_k] = \left\{ \sum_{i=0}^k \lambda_i v_i \;\Big|\; \lambda_i \geq 0,\; \sum_i \lambda_i = 1 \right\}$$
+\(\sigma = [v_0, v_1, \ldots, v_k] = \left\{ \sum_{i=0}^k \lambda_i v_i \;\Big|\; \lambda_i \geq 0,\; \sum_i \lambda_i = 1 \right\}\)
 </div>
 
 Low-dimensional simplices have familiar names:
@@ -114,7 +114,7 @@ Key examples:
 The **Euler characteristic** is the alternating sum of simplex counts:
 
 <div class="math-box">
-$$\chi(K) = \sum_{k=0}^{\dim K} (-1)^k \, |K_k| = V - E + F - T + \cdots$$
+\(\chi(K) = \sum_{k=0}^{\dim K} (-1)^k \, |K_k| = V - E + F - T + \cdots\)
 </div>
 
 where $$|K_k|$$ is the number of $$k$$-simplices. For a triangulated surface, $$\chi$$ is a topological invariant:

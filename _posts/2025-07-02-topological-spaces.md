@@ -29,7 +29,7 @@ permalink: /blog/persistent-homology/topological-spaces/
 {% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="Topological spaces in ML" caption="Topological concepts underpinning TDA (Hensel et al., 2021)" %}
 
 
-**Intuition First.** In metric geometry, "close" means "small distance." But topology asks a more primitive question: *can you tell two points apart without measuring?* Open sets encode the answer. If every open set containing $$x$$ also contains $$y$$, then $$x$$ and $$y$$ are topologically indistinguishable — no experiment using only the topology can separate them. This purely set-theoretic notion of nearness is what makes topology invariant under stretching, bending, and continuous deformation.
+**Intuition First.** In metric geometry, "close" means "small distance." But topology asks a more primitive question: *can you tell two points apart without measuring?* Open sets encode the answer. If every open set containing \(x\) also contains \(y\), then \(x\) and \(y\) are topologically indistinguishable — no experiment using only the topology can separate them. This purely set-theoretic notion of nearness is what makes topology invariant under stretching, bending, and continuous deformation.
 
 <style>
 @keyframes morph-shape {
@@ -67,26 +67,26 @@ permalink: /blog/persistent-homology/topological-spaces/
 
 ## Topological Spaces: Nearness Without Distance
 
-A **topological space** is a pair $$(X, \tau)$$ where $$X$$ is a set and $$\tau \subseteq \mathcal{P}(X)$$ is a collection of subsets called the **open sets**, satisfying three axioms:
+A **topological space** is a pair \((X, \tau)\) where \(X\) is a set and \(\tau \subseteq \mathcal{P}(X)\) is a collection of subsets called the **open sets**, satisfying three axioms:
 
-1. $$\emptyset \in \tau$$ and $$X \in \tau$$ (the empty set and whole space are open).
-2. If $$U_\alpha \in \tau$$ for all $$\alpha \in A$$, then $$\bigcup_{\alpha \in A} U_\alpha \in \tau$$ (arbitrary unions of open sets are open).
-3. If $$U_1, \ldots, U_n \in \tau$$, then $$\bigcap_{i=1}^n U_i \in \tau$$ (finite intersections of open sets are open).
+1. \(\emptyset \in \tau\) and \(X \in \tau\) (the empty set and whole space are open).
+2. If \(U_\alpha \in \tau\) for all \(\alpha \in A\), then \(\bigcup_{\alpha \in A} U_\alpha \in \tau\) (arbitrary unions of open sets are open).
+3. If \(U_1, \ldots, U_n \in \tau\), then \(\bigcap_{i=1}^n U_i \in \tau\) (finite intersections of open sets are open).
 
-This definition generalises metric spaces: given a metric $$d$$ on $$X$$, the collection of all unions of open balls $$\{B(x, r) : x \in X, r > 0\}$$ forms a topology — the **metric topology**. But many useful topologies do not arise from any metric.
+This definition generalises metric spaces: given a metric \(d\) on \(X\), the collection of all unions of open balls \(\{B(x, r) : x \in X, r > 0\}\) forms a topology — the **metric topology**. But many useful topologies do not arise from any metric.
 
 Key examples used in TDA:
 - **Discrete topology**: every subset is open. Every point is isolated.
-- **Indiscrete topology**: only $$\emptyset$$ and $$X$$ are open. No point can be separated from any other.
-- **Subspace topology**: if $$A \subseteq X$$, the subspace topology on $$A$$ consists of all sets $$A \cap U$$ where $$U \in \tau$$.
-- **Product topology**: if $$(X, \tau_X)$$ and $$(Y, \tau_Y)$$ are topological spaces, the product topology on $$X \times Y$$ has basis $$\{U \times V : U \in \tau_X, V \in \tau_Y\}$$.
+- **Indiscrete topology**: only \(\emptyset\) and \(X\) are open. No point can be separated from any other.
+- **Subspace topology**: if \(A \subseteq X\), the subspace topology on \(A\) consists of all sets \(A \cap U\) where \(U \in \tau\).
+- **Product topology**: if \((X, \tau_X)\) and \((Y, \tau_Y)\) are topological spaces, the product topology on \(X \times Y\) has basis \(\{U \times V : U \in \tau_X, V \in \tau_Y\}\).
 
 ## Continuous Maps and Homeomorphisms
 
-A map $$f: X \to Y$$ between topological spaces is **continuous** if the preimage of every open set in $$Y$$ is open in $$X$$:
+A map \(f: X \to Y\) between topological spaces is **continuous** if the preimage of every open set in \(Y\) is open in \(X\):
 
 <div class="math-box">
-$$f \text{ continuous} \iff \forall V \in \tau_Y,\; f^{-1}(V) \in \tau_X$$
+\(f \text{ continuous} \iff \forall V \in \tau_Y,\; f^{-1}(V) \in \tau_X\)
 </div>
 
 This generalises the $$\varepsilon$$-$$\delta$$ definition from metric spaces. Continuous maps are the morphisms of the category of topological spaces — they preserve the structure we care about.

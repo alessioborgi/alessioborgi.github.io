@@ -28,59 +28,59 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Think of a persistence diagram as a **scoreboard** where each row is a topological feature with its birth and death times. Those birth/death values are just specific entries in the filtration vector $$f$$. So when you ask "how does the loss change if I nudge $$f_i$$?", the answer is simple: look at every feature that was born or died at $$f_i$$, and propagate the loss gradient through those coordinates. The diagram is piecewise-linear in $$f$$ — only the combinatorial pairing (which simplex kills which) can change, and that happens on a set of measure zero.
+Think of a persistence diagram as a **scoreboard** where each row is a topological feature with its birth and death times. Those birth/death values are just specific entries in the filtration vector \(f\). So when you ask "how does the loss change if I nudge \(f_i\)?", the answer is simple: look at every feature that was born or died at \(f_i\), and propagate the loss gradient through those coordinates. The diagram is piecewise-linear in \(f\) — only the combinatorial pairing (which simplex kills which) can change, and that happens on a set of measure zero.
 
 ## Filtration Values and Diagrams
 
-Fix a simplicial complex $$K$$ with $$n$$ simplices. A **filtration** is determined by function values $$f = (f_1, \ldots, f_n) \in \mathbb{R}^n$$ on simplices (simplices enter in order of increasing $$f_i$$). The persistence diagram $$\mathrm{dgm}(f)$$ consists of birth-death pairs $$(f_i, f_j)$$ for paired simplices $$(\sigma_i, \sigma_j)$$.
+Fix a simplicial complex \(K\) with \(n\) simplices. A **filtration** is determined by function values \(f = (f_1, \ldots, f_n) \in \mathbb{R}^n\) on simplices (simplices enter in order of increasing \(f_i\)). The persistence diagram \(\mathrm{dgm}(f)\) consists of birth-death pairs \((f_i, f_j)\) for paired simplices \((\sigma_i, \sigma_j)\).
 
-**Key observation**: The map $$f \mapsto \mathrm{dgm}(f)$$ is piecewise linear. The combinatorial pairing (which simplex pairs with which) is fixed on each "chamber" of $$\mathbb{R}^n$$ where the ordering of $$f$$ values stays the same. Within a chamber, each diagram point is a linear function of $$f$$.
+**Key observation**: The map \(f \mapsto \mathrm{dgm}(f)\) is piecewise linear. The combinatorial pairing (which simplex pairs with which) is fixed on each "chamber" of \(\mathbb{R}^n\) where the ordering of \(f\) values stays the same. Within a chamber, each diagram point is a linear function of \(f\).
 
 ## The Gradient Formula
 
-For a loss $$\mathcal{L}(\mathrm{dgm}(f))$$ that depends on diagram points $$(b_k, d_k)$$:
+For a loss \(\mathcal{L}(\mathrm{dgm}(f))\) that depends on diagram points \((b_k, d_k)\):
 
-<div class="math-box">$$\frac{\partial \mathcal{L}}{\partial f_i} = \sum_{k : b_k = f_i} \frac{\partial \mathcal{L}}{\partial b_k} - \sum_{k : d_k = f_i} \frac{\partial \mathcal{L}}{\partial d_k}$$</div>
+<div class="math-box">\(\frac{\partial \mathcal{L}}{\partial f_i} = \sum_{k : b_k = f_i} \frac{\partial \mathcal{L}}{\partial b_k} - \sum_{k : d_k = f_i} \frac{\partial \mathcal{L}}{\partial d_k}\)</div>
 
-The $$-$$ sign for death comes from the convention that the pairing algorithm sets $$d_k = f_j$$ where $$\sigma_j$$ is the negative (death) simplex. Moving $$f_j$$ up increases the death time, prolonging the feature.
+The \(-\) sign for death comes from the convention that the pairing algorithm sets \(d_k = f_j\) where \(\sigma_j\) is the negative (death) simplex. Moving \(f_j\) up increases the death time, prolonging the feature.
 
 ## Topological Losses
 
 Several useful losses exploit this gradient:
 
 **Total persistence**:
-$$\mathcal{L}_{tp}(f) = \sum_{(b,d) \in \mathrm{dgm}(f)} (d - b)^p$$
+\(\mathcal{L}_{tp}(f) = \sum_{(b,d) \in \mathrm{dgm}(f)} (d - b)^p\)
 
 Minimising this pushes all features to die quickly (kills spurious topology). Maximising concentrates persistence into a few long-lived features.
 
 **Betti-matching loss**:
-$$\mathcal{L}_{bm}(f) = d_B(\mathrm{dgm}(f), \mathrm{dgm}_{\text{target}})^2$$
+\(\mathcal{L}_{bm}(f) = d_B(\mathrm{dgm}(f), \mathrm{dgm}_{\text{target}})^2\)
 
 Minimise the bottleneck (or Wasserstein) distance from a target diagram. Used to force a learned representation to have a prescribed topological structure.
 
-**Loop-length loss** (for cycles): penalise or reward the birth/death times of $$H_1$$ features.
+**Loop-length loss** (for cycles): penalise or reward the birth/death times of \(H_1\) features.
 
 ## Worked Example: Gradient Through a Small Complex
 
-Consider a triangle with 3 vertices $$v_1, v_2, v_3$$, 3 edges $$e_{12}, e_{13}, e_{23}$$, filtration values:
+Consider a triangle with 3 vertices \(v_1, v_2, v_3\), 3 edges \(e_{12}, e_{13}, e_{23}\), filtration values:
 
-$$f = (f_{v_1}, f_{v_2}, f_{v_3}, f_{e_{12}}, f_{e_{13}}, f_{e_{23}}) = (0.1, 0.4, 0.7, 0.5, 0.8, 0.9)$$
+\(f = (f_{v_1}, f_{v_2}, f_{v_3}, f_{e_{12}}, f_{e_{13}}, f_{e_{23}}) = (0.1, 0.4, 0.7, 0.5, 0.8, 0.9)\)
 
-Running persistence on $$H_0$$:
-- At $$t=0.1$$: $$v_1$$ born — component A starts.
-- At $$t=0.4$$: $$v_2$$ born — component B starts.
-- At $$t=0.5$$: $$e_{12}$$ merges A and B. Pair: $$(b,d) = (f_{v_2}, f_{e_{12}}) = (0.4, 0.5)$$. Persistence = 0.1.
-- At $$t=0.7$$: $$v_3$$ born — component C starts.
-- At $$t=0.8$$: $$e_{13}$$ merges C into A. Pair: $$(b,d) = (f_{v_3}, f_{e_{13}}) = (0.7, 0.8)$$. Persistence = 0.1.
-- $$v_1$$ lives forever (the elder rule — born first, never killed).
+Running persistence on \(H_0\):
+- At \(t=0.1\): \(v_1\) born — component A starts.
+- At \(t=0.4\): \(v_2\) born — component B starts.
+- At \(t=0.5\): \(e_{12}\) merges A and B. Pair: \((b,d) = (f_{v_2}, f_{e_{12}}) = (0.4, 0.5)\). Persistence = 0.1.
+- At \(t=0.7\): \(v_3\) born — component C starts.
+- At \(t=0.8\): \(e_{13}\) merges C into A. Pair: \((b,d) = (f_{v_3}, f_{e_{13}}) = (0.7, 0.8)\). Persistence = 0.1.
+- \(v_1\) lives forever (the elder rule — born first, never killed).
 
-Suppose loss $$\mathcal{L} = \sum (d-b)^2 = (0.1)^2 + (0.1)^2 = 0.02$$.
+Suppose loss \(\mathcal{L} = \sum (d-b)^2 = (0.1)^2 + (0.1)^2 = 0.02\).
 
 Gradients via chain rule:
-$$\frac{\partial \mathcal{L}}{\partial f_{v_2}} = \frac{\partial \mathcal{L}}{\partial b_1} = -2(d_1 - b_1) = -0.2 \quad \text{(increasing birth shortens lifetime)}$$
-$$\frac{\partial \mathcal{L}}{\partial f_{e_{12}}} = +2(d_1 - b_1) = +0.2 \quad \text{(increasing death lengthens lifetime)}$$
+\(\frac{\partial \mathcal{L}}{\partial f_{v_2}} = \frac{\partial \mathcal{L}}{\partial b_1} = -2(d_1 - b_1) = -0.2 \quad \text{(increasing birth shortens lifetime)}\)
+\(\frac{\partial \mathcal{L}}{\partial f_{e_{12}}} = +2(d_1 - b_1) = +0.2 \quad \text{(increasing death lengthens lifetime)}\)
 
-Minimising $$\mathcal{L}$$ pushes $$f_{v_2}$$ up and $$f_{e_{12}}$$ down — making that component die faster (killing short-lived noise).
+Minimising \(\mathcal{L}\) pushes \(f_{v_2}\) up and \(f_{e_{12}}\) down — making that component die faster (killing short-lived noise).
 
 <style>
 @keyframes dp-sweep {

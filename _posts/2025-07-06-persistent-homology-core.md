@@ -72,10 +72,10 @@ permalink: /blog/persistent-homology/persistent-homology-core/
 
 ## Persistence Modules
 
-Given a filtration $$\{K_\varepsilon\}_{\varepsilon \geq 0}$$, applying the $$k$$-th homology functor gives a **persistence module**: a family of vector spaces $$\{H_k(K_\varepsilon)\}_{\varepsilon \geq 0}$$ connected by linear maps induced by inclusions:
+Given a filtration \(\{K_\varepsilon\}_{\varepsilon \geq 0}\), applying the \(k\)-th homology functor gives a **persistence module**: a family of vector spaces \(\{H_k(K_\varepsilon)\}_{\varepsilon \geq 0}\) connected by linear maps induced by inclusions:
 
 <div class="math-box">
-$$\iota_{\varepsilon_1, \varepsilon_2}: H_k(K_{\varepsilon_1}) \to H_k(K_{\varepsilon_2}) \quad \text{for } \varepsilon_1 \leq \varepsilon_2$$
+\(\iota_{\varepsilon_1, \varepsilon_2}: H_k(K_{\varepsilon_1}) \to H_k(K_{\varepsilon_2}) \quad \text{for } \varepsilon_1 \leq \varepsilon_2\)
 </div>
 
 These maps are the homological shadows of the simplicial inclusions $$K_{\varepsilon_1} \hookrightarrow K_{\varepsilon_2}$$. The persistence module records how topological classes are created (born) and destroyed (die) as the filtration grows.
@@ -87,7 +87,7 @@ A persistence module is **pointwise finite-dimensional** if each $$H_k(K_\vareps
 **Theorem** (Zomorodian and Carlsson, 2005): Every pointwise finite-dimensional persistence module $$\mathbb{V}$$ over a field decomposes uniquely (up to isomorphism) as a direct sum of interval modules:
 
 <div class="math-box">
-$$\mathbb{V} \cong \bigoplus_{i} \mathbb{I}[b_i, d_i)$$
+\(\mathbb{V} \cong \bigoplus_{i} \mathbb{I}[b_i, d_i)\)
 </div>
 
 where each $$\mathbb{I}[b, d)$$ is the persistence module that equals the field $$\mathbf{k}$$ for $$\varepsilon \in [b, d)$$ and 0 otherwise, with identity maps within the interval.

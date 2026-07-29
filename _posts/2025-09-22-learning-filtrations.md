@@ -33,8 +33,8 @@ Imagine describing a social network with topology. If you filter by "number of c
 ## The Fixed Filtration Problem
 
 In classical TDA, the filtration is fixed by the data geometry:
-- Rips: $$f(\sigma) = \max_{u,v \in \sigma} d(u,v)$$.
-- Sublevel set: $$f(\sigma) = \max_{v \in \sigma} h(v)$$ for some fixed height function $$h$$.
+- Rips: \(f(\sigma) = \max_{u,v \in \sigma} d(u,v)\).
+- Sublevel set: \(f(\sigma) = \max_{v \in \sigma} h(v)\) for some fixed height function \(h\).
 
 But for graph classification, the "right" filtration depends on the task:
 - For classifying molecules by toxicity, bond lengths matter.
@@ -45,44 +45,44 @@ A fixed filtration cannot be simultaneously optimal for all tasks.
 
 ## Graph Filtration Learning
 
-**Setup**: Given a graph $$G = (V, E)$$ with node features $$X \in \mathbb{R}^{|V| \times d}$$, define:
+**Setup**: Given a graph \(G = (V, E)\) with node features \(X \in \mathbb{R}^{|V| \times d}\), define:
 
-1. A **parameterised filtration** $$f_\theta: V \cup E \to \mathbb{R}$$ using a GNN:
-   - Node values: $$f_\theta(v) = \mathrm{GNN}_\theta(v, X)$$
-   - Edge values: $$f_\theta(\{u,v\}) = \max(f_\theta(u), f_\theta(v))$$ (flag complex convention)
+1. A **parameterised filtration** \(f_\theta: V \cup E \to \mathbb{R}\) using a GNN:
+   - Node values: \(f_\theta(v) = \mathrm{GNN}_\theta(v, X)\)
+   - Edge values: \(f_\theta(\{u,v\}) = \max(f_\theta(u), f_\theta(v))\) (flag complex convention)
 
-2. Compute persistence diagram $$\mathrm{dgm}(f_\theta(G))$$ using the flag filtration.
+2. Compute persistence diagram \(\mathrm{dgm}(f_\theta(G))\) using the flag filtration.
 
 3. Vectorise via PersLay or persistence images → dense layers → classification.
 
-4. Train end-to-end: gradients flow back through PersLay → through $$\mathrm{dgm}$$ → to $$\theta$$ in the GNN.
+4. Train end-to-end: gradients flow back through PersLay → through \(\mathrm{dgm}\) → to \(\theta\) in the GNN.
 
-<div class="math-box">$$\theta^* = \arg\min_\theta \mathcal{L}(\mathrm{PersLay}(\mathrm{dgm}(f_\theta(G))), y)$$</div>
+<div class="math-box">\(\theta^* = \arg\min_\theta \mathcal{L}(\mathrm{PersLay}(\mathrm{dgm}(f_\theta(G))), y)\)</div>
 
 ## Expressive Power
 
-**Theorem (Hofer et al. 2020)**: Graph Filtration Learning is strictly more powerful than 1-WL GNNs on certain graph families. Two graphs that are indistinguishable by the Weisfeiler-Leman test can be distinguished by their persistent $$H_0$$ under a learned filtration.
+**Theorem (Hofer et al. 2020)**: Graph Filtration Learning is strictly more powerful than 1-WL GNNs on certain graph families. Two graphs that are indistinguishable by the Weisfeiler-Leman test can be distinguished by their persistent \(H_0\) under a learned filtration.
 
 The intuition: topology sees global structure (connectivity, cycles) that local message-passing misses.
 
 ## Extended to Higher Dimensions
 
-For $$H_1$$, $$H_2$$ persistence, one builds the **Rips filtration** on the learned node values:
-$$K_t = \{S \subseteq V : f_\theta(v) \leq t \ \forall v \in S, \mathrm{diam}(S) \leq t\}$$
+For \(H_1\), \(H_2\) persistence, one builds the **Rips filtration** on the learned node values:
+\(K_t = \{S \subseteq V : f_\theta(v) \leq t \ \forall v \in S, \mathrm{diam}(S) \leq t\}\)
 
 This captures loops and voids in the graph, weighted by learned node importance.
 
 ## Worked Example: Two Graphs, One Filtration Wins
 
-Consider two graphs $$G_1$$ (a ring of 6 nodes) and $$G_2$$ (a path of 6 nodes). Under the **degree filtration** (node value = degree):
+Consider two graphs \(G_1\) (a ring of 6 nodes) and \(G_2\) (a path of 6 nodes). Under the **degree filtration** (node value = degree):
 
 - Both graphs have all nodes with degree 2 (ring) or degree 1–2 (path) — the degree values are nearly identical, so the persistence diagrams are almost indistinguishable.
 
 Under a **learned filtration** trained to separate rings from paths, the GNN learns to assign:
-- $$G_1$$ nodes: values spread from 0.1 to 0.9 in a cyclic pattern → one long-lived $$H_1$$ bar (the ring dies late).
-- $$G_2$$ nodes: values monotone 0.1, 0.3, 0.5, 0.7, 0.9, 1.0 → no $$H_1$$ bar (path has no cycle).
+- \(G_1\) nodes: values spread from 0.1 to 0.9 in a cyclic pattern → one long-lived \(H_1\) bar (the ring dies late).
+- \(G_2\) nodes: values monotone 0.1, 0.3, 0.5, 0.7, 0.9, 1.0 → no \(H_1\) bar (path has no cycle).
 
-The persistent $$H_1$$ bar is now a perfect discriminator between the two graph classes — something no fixed filtration based on local structure could achieve.
+The persistent \(H_1\) bar is now a perfect discriminator between the two graph classes — something no fixed filtration based on local structure could achieve.
 
 <style>
 @keyframes gfl-pulse {

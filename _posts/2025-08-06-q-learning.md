@@ -36,7 +36,7 @@ toc_label: "Contents"
 Q-learning was introduced by Christopher Watkins in his 1989 PhD thesis. The core update rule is:
 
 <div class="math-box">
-$$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \underbrace{\left[r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t)\right]}_{\text{Q-learning TD error}}$$
+\(Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \underbrace{\left[r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t)\right]}_{\text{Q-learning TD error}}\)
 </div>
 
 The crucial difference from TD(0) (which evaluates a fixed policy) is the $$\max_{a'}$$ operator. By always bootstrapping from the best possible next action, Q-learning targets the optimal Q-function $$Q^*$$ directly, without requiring the agent's behaviour to match the optimal policy.
@@ -63,7 +63,7 @@ This is a major practical advantage: Q-learning can learn from any data — repl
 Compare with **SARSA** (on-policy TD control):
 
 <div class="math-box">
-$$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \left[r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t)\right]$$
+\(Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \left[r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t)\right]\)
 </div>
 
 SARSA uses the actual next action $$a_{t+1}$$ (sampled from the behaviour policy) rather than the max. As a result, SARSA learns the Q-function of the behaviour policy — which is safer in settings where exploration is risky (cliffs, dangerous states), because SARSA accounts for the exploration noise in its value estimates.

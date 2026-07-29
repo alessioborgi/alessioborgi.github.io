@@ -23,9 +23,9 @@ toc_label: "Contents"
 
 ## The metric is the only input
 
-A smooth manifold has tangent spaces but no way to measure anything in them. A **Riemannian metric** $g$ supplies one: a positive-definite inner product $g_p(\cdot,\cdot)$ on $T_pM$ for each $p$, depending smoothly on $p$. In coordinates it is a symmetric positive-definite matrix field $$g_{ij}(x)$$ — the first fundamental form of the [curvature](/blog/geometry-basics/curvature/) post, promoted to a definition rather than inherited from an ambient space.
+A smooth manifold has tangent spaces but no way to measure anything in them. A **Riemannian metric** $$g$$ supplies one: a positive-definite inner product $$g_p(\cdot,\cdot)$$ on $$T_pM$$ for each $$p$$, depending smoothly on $$p$$. In coordinates it is a symmetric positive-definite matrix field $$g_{ij}(x)$$ — the first fundamental form of the [curvature](/blog/geometry-basics/curvature/) post, promoted to a definition rather than inherited from an ambient space.
 
-Everything else follows. The length of a curve $\gamma:[0,1]\to M$ is
+Everything else follows. The length of a curve $$\gamma:[0,1]\to M$$ is
 
 <div class="formula-box">
 \[
@@ -33,7 +33,7 @@ L(\gamma) = \int_0^1 \sqrt{g_{\gamma(t)}\!\left(\dot\gamma(t), \dot\gamma(t)\rig
 \]
 </div>
 
-and the distance between two points is $$d(p,q) = \inf\\{L(\gamma) : \gamma(0)=p,\ \gamma(1)=q\\}$$. Angles come from $g$ the same way they do in flat space, and the volume element is $$\sqrt{\det g_{ij}}\,dx$$.
+and the distance between two points is $$d(p,q) = \inf\\{L(\gamma) : \gamma(0)=p,\ \gamma(1)=q\\}$$. Angles come from $$g$$ the same way they do in flat space, and the volume element is $$\sqrt{\det g_{ij}}\,dx$$.
 
 ## Geodesics
 
@@ -45,9 +45,9 @@ A **geodesic** is a constant-speed curve that is *locally* length-minimising: ev
 \]
 </div>
 
-where the Christoffel symbols $$\Gamma^k_{ij}$$ are built from first derivatives of $g$. The equation says the acceleration has no component inside the tangent space — the curve is as straight as the manifold permits.
+where the Christoffel symbols $$\Gamma^k_{ij}$$ are built from first derivatives of $$g$$. The equation says the acceleration has no component inside the tangent space — the curve is as straight as the manifold permits.
 
-"Locally" is doing real work. On the sphere, the geodesics are great circles, and a great-circle arc of $200^\circ$ is a geodesic but is emphatically not the shortest route; the complementary $160^\circ$ arc is. Geodesics are also not unique in general: antipodal points on a sphere are joined by infinitely many.
+"Locally" is doing real work. On the sphere, the geodesics are great circles, and a great-circle arc of $$200^\circ$$ is a geodesic but is emphatically not the shortest route; the complementary $$160^\circ$$ arc is. Geodesics are also not unique in general: antipodal points on a sphere are joined by infinitely many.
 
 <div class="blog-figure">
 <figure>
@@ -74,7 +74,7 @@ where the Christoffel symbols $$\Gamma^k_{ij}$$ are built from first derivatives
 
 ## Exponential and logarithmic maps
 
-Given $p \in M$ and $v \in T_pM$, let $\gamma_v$ be the unique geodesic with $\gamma_v(0)=p$, $\dot\gamma_v(0)=v$. Then
+Given $$p \in M$$ and $$v \in T_pM$$, let $$\gamma_v$$ be the unique geodesic with $$\gamma_v(0)=p$$, $$\dot\gamma_v(0)=v$$. Then
 
 <div class="formula-box">
 \[
@@ -82,9 +82,9 @@ Given $p \in M$ and $v \in T_pM$, let $\gamma_v$ be the unique geodesic with $\g
 \]
 </div>
 
-$\exp_p$ takes a tangent vector — a flat, linear object you can do arithmetic with — and returns a point on the manifold, travelling a distance $\lVert v\rVert_g$ in the direction $v$. $\log_p(q)$ returns the initial velocity needed to reach $q$. Together they are the standard device for optimisation on manifolds: pull the problem into $T_pM$, take a Euclidean step, push back with $\exp$. The inverse only exists locally — on the unit sphere the injectivity radius is $\pi$, and beyond that geodesics start colliding.
+$$\exp_p$$ takes a tangent vector — a flat, linear object you can do arithmetic with — and returns a point on the manifold, travelling a distance $$\lVert v\rVert_g$$ in the direction $$v$$. $$\log_p(q)$$ returns the initial velocity needed to reach $$q$$. Together they are the standard device for optimisation on manifolds: pull the problem into $$T_pM$$, take a Euclidean step, push back with $$\exp$$. The inverse only exists locally — on the unit sphere the injectivity radius is $$\pi$$, and beyond that geodesics start colliding.
 
-On the unit sphere $S^{n-1}$ the maps are explicit: $\exp_p(v) = \cos(\lVert v\rVert)\,p + \sin(\lVert v\rVert)\,v/\lVert v\rVert$. Feed that the tangent direction toward $q$ and you get spherical linear interpolation:
+On the unit sphere $$S^{n-1}$$ the maps are explicit: $$\exp_p(v) = \cos(\lVert v\rVert)\,p + \sin(\lVert v\rVert)\,v/\lVert v\rVert$$. Feed that the tangent direction toward $$q$$ and you get spherical linear interpolation:
 
 <div class="formula-box">
 \[
@@ -93,11 +93,11 @@ On the unit sphere $S^{n-1}$ the maps are explicit: $\exp_p(v) = \cos(\lVert v\r
 \]
 </div>
 
-SLERP is not a heuristic for interpolating unit vectors, it is $$\exp_p\\!\big(t\log_p(q)\big)$$ written out. It matters because linear interpolation shrinks: the midpoint of two unit vectors has norm $\cos(\Omega/2)$, so at $\Omega = 60^\circ$ the lerped midpoint has norm $0.866$ and at $\Omega = 120^\circ$ only $0.5$ — halfway between two latents, at half the radius, in a region the model never saw during training.
+SLERP is not a heuristic for interpolating unit vectors, it is $$\exp_p\\!\big(t\log_p(q)\big)$$ written out. It matters because linear interpolation shrinks: the midpoint of two unit vectors has norm $$\cos(\Omega/2)$$, so at $$\Omega = 60^\circ$$ the lerped midpoint has norm $$0.866$$ and at $$\Omega = 120^\circ$$ only $$0.5$$ — halfway between two latents, at half the radius, in a region the model never saw during training.
 
 ## Hyperbolic space and the volume argument
 
-Hyperbolic space $\mathbb{H}^d$ has constant negative curvature. The Poincaré ball model puts it on the open unit ball with the conformal metric $g_x = \lambda_x^2\,g^{\mathrm{E}}$, $\lambda_x = 2/(1-\lVert x\rVert^2)$, giving
+Hyperbolic space $$\mathbb{H}^d$$ has constant negative curvature. The Poincaré ball model puts it on the open unit ball with the conformal metric $$g_x = \lambda_x^2\,g^{\mathrm{E}}$$, $$\lambda_x = 2/(1-\lVert x\rVert^2)$$, giving
 
 <div class="formula-box">
 \[
@@ -105,13 +105,13 @@ d(u,v) = \operatorname{arcosh}\!\left(1 + 2\,\frac{\lVert u-v\rVert^2}{(1-\lVert
 \]
 </div>
 
-The metric blows up near the boundary, so the rim is infinitely far away and there is unlimited room out there. Quantitatively, a disc of radius $r$ in $\mathbb{H}^2$ has area $2\pi(\cosh r - 1)$, against $\pi r^2$ in the plane:
+The metric blows up near the boundary, so the rim is infinitely far away and there is unlimited room out there. Quantitatively, a disc of radius $$r$$ in $$\mathbb{H}^2$$ has area $$2\pi(\cosh r - 1)$$, against $$\pi r^2$$ in the plane:
 
-| $r$ | Hyperbolic area | Euclidean area | Ratio |
+| $$r$$ | Hyperbolic area | Euclidean area | Ratio |
 |---|---|---|---|
-| $2$ | $17.36$ | $12.57$ | $1.4$ |
-| $5$ | $460.0$ | $78.54$ | $5.9$ |
-| $10$ | $69{,}193$ | $314.2$ | $220$ |
+| $$2$$ | $$17.36$$ | $$12.57$$ | $$1.4$$ |
+| $$5$$ | $$460.0$$ | $$78.54$$ | $$5.9$$ |
+| $$10$$ | $$69{,}193$$ | $$314.2$$ | $$220$$ |
 
 <div class="insight-box">
   <strong>Key Insight — why trees fit:</strong> a complete \(b\)-ary tree has on the order of \(b^r\) nodes within \(r\) hops of the root, and if the embedding is to preserve distances, those nodes need room that also grows like \(b^r\). Euclidean space offers only \(r^d\) — polynomial against exponential — so the descendants get crushed together and distortion grows with depth. Hyperbolic area grows like \(\pi e^r\) for large \(r\), matching the tree's own growth rate. Sarkar's construction makes this exact: any tree embeds into \(\mathbb{H}^2\) with distortion arbitrarily close to \(1\). Negative curvature is not a trick for hierarchies, it is the same shape as a hierarchy.

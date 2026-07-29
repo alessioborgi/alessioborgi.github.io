@@ -75,7 +75,7 @@ Reinforcement learning requires a reward signal that can be difficult to specify
 
 ## Behaviour Cloning
 
-**Behaviour cloning (BC)** treats imitation as supervised learning. Given a dataset $$\mathcal{D} = \{(s_i, a_i)\}$$ of state-action pairs from an expert, we train a policy $$\pi_\theta$$ to minimise:
+**Behaviour cloning (BC)** treats imitation as supervised learning. Given a dataset \(\mathcal{D} = \{(s_i, a_i)\}\) of state-action pairs from an expert, we train a policy \(\pi_\theta\) to minimise:
 
 <div class="math-box">
 L(θ) = E_{(s,a) ~ D} [ -log π_θ(a | s) ]
@@ -89,14 +89,14 @@ Despite its simplicity, BC has a fundamental flaw: **covariate shift**. During t
 
 <div class="insight-box"><strong>Key Insight:</strong> BC's compounding error problem is not about fitting the training data well — it is about generalising to the distribution of states that the learner's own mistakes create. A policy with 1% error per step accumulates O(T²) total error over a horizon of T steps.</div>
 
-This is made formal in Ross et al. (2011): the expected loss of a BC policy over a trajectory of length $$T$$ is bounded by $$O(\epsilon T^2)$$ where $$\epsilon$$ is the per-step imitation error, compared to $$O(\epsilon T)$$ for an oracle with interactive corrections.
+This is made formal in Ross et al. (2011): the expected loss of a BC policy over a trajectory of length \(T\) is bounded by \(O(\epsilon T^2)\) where \(\epsilon\) is the per-step imitation error, compared to \(O(\epsilon T)\) for an oracle with interactive corrections.
 
 ## Worked Example: Covariate Shift in One Step
 
 Suppose an expert always steers left when it sees a wall on the right. BC trains a policy with 5% per-step error. At step 1 the robot is in an expert-visited state and acts correctly. At step 2 it has drifted slightly: the wall appears a bit closer than any training state. The policy mis-steers, drifting further. By step 20 the robot is in completely uncharted territory and crashes.
 
-- BC error bound: $$O(\epsilon T^2) = O(0.05 \times 400) = 20$$ expected mistakes over 20 steps.
-- DAgger error bound: $$O(\epsilon T) = O(0.05 \times 20) = 1$$ expected mistake.
+- BC error bound: \(O(\epsilon T^2) = O(0.05 \times 400) = 20\) expected mistakes over 20 steps.
+- DAgger error bound: \(O(\epsilon T) = O(0.05 \times 20) = 1\) expected mistake.
 
 The quadratic vs. linear scaling is the entire motivation for DAgger.
 
@@ -104,13 +104,13 @@ The quadratic vs. linear scaling is the entire motivation for DAgger.
 
 **DAgger** (Dataset Aggregation, Ross et al. 2011) fixes covariate shift through an iterative, interactive data collection procedure:
 
-1. Train an initial policy $$\pi_1$$ on expert data $$\mathcal{D}_1$$.
-2. Roll out $$\pi_i$$ in the environment to collect states $$\{s_t\}$$ visited by the learner.
-3. Query the expert for correct actions at those states: $$\{(s_t, \pi^*(s_t))\}$$.
-4. Aggregate: $$\mathcal{D}_{i+1} = \mathcal{D}_i \cup \{(s_t, \pi^*(s_t))\}$$.
-5. Retrain $$\pi_{i+1}$$ on $$\mathcal{D}_{i+1}$$. Repeat.
+1. Train an initial policy \(\pi_1\) on expert data \(\mathcal{D}_1\).
+2. Roll out \(\pi_i\) in the environment to collect states \(\{s_t\}\) visited by the learner.
+3. Query the expert for correct actions at those states: \(\{(s_t, \pi^*(s_t))\}\).
+4. Aggregate: \(\mathcal{D}_{i+1} = \mathcal{D}_i \cup \{(s_t, \pi^*(s_t))\}\).
+5. Retrain \(\pi_{i+1}\) on \(\mathcal{D}_{i+1}\). Repeat.
 
-By training on states encountered by the learner (not just the expert), DAgger reduces the error bound to $$O(\epsilon T)$$, matching the oracle. The catch is that expert querying must occur online, which is costly if a human must label in real time. Variants like **SafeDAgger** and **EnsembleDAgger** reduce the number of human interventions needed.
+By training on states encountered by the learner (not just the expert), DAgger reduces the error bound to \(O(\epsilon T)\), matching the oracle. The catch is that expert querying must occur online, which is costly if a human must label in real time. Variants like **SafeDAgger** and **EnsembleDAgger** reduce the number of human interventions needed.
 
 <style>
 @keyframes daggerLoop {
@@ -148,7 +148,7 @@ By training on states encountered by the learner (not just the expert), DAgger r
 
 ## GAIL: Generative Adversarial Imitation Learning
 
-**GAIL** (Ho & Ermon 2016, arXiv:1606.03476) reframes imitation learning as inverse reinforcement learning combined with policy optimisation. Rather than regressing on expert actions directly, GAIL trains a **discriminator** $$D_\phi$$ to distinguish expert state-action pairs from learner pairs, while the policy $$\pi_\theta$$ tries to fool the discriminator:
+**GAIL** (Ho & Ermon 2016, arXiv:1606.03476) reframes imitation learning as inverse reinforcement learning combined with policy optimisation. Rather than regressing on expert actions directly, GAIL trains a **discriminator** \(D_\phi\) to distinguish expert state-action pairs from learner pairs, while the policy \(\pi_\theta\) tries to fool the discriminator:
 
 <div class="math-box">
 min_π max_D  E_π[log D(s,a)] + E_{π*}[log(1 - D(s,a))]

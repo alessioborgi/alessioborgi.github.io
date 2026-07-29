@@ -43,16 +43,16 @@ Three approaches to policy evaluation form a triangle of trade-offs:
 | Monte Carlo | No | Yes | Zero | High |
 | Temporal Difference | No | No | Low | Low |
 
-**Monte Carlo** (MC) methods wait for the episode to end, then update using the actual return $$G_t = r_t + \gamma r_{t+1} + \cdots + \gamma^{T-t} r_T$$. This is unbiased but has high variance because $$G_t$$ is a long sum of random variables.
+**Monte Carlo** (MC) methods wait for the episode to end, then update using the actual return \(G_t = r_t + \gamma r_{t+1} + \cdots + \gamma^{T-t} r_T\). This is unbiased but has high variance because \(G_t\) is a long sum of random variables.
 
-**Temporal Difference** methods update after each step using an estimated return — the **TD target**: $$r_t + \gamma V(s_{t+1})$$. This introduces some bias ($$V$$ is not yet converged) but dramatically reduces variance.
+**Temporal Difference** methods update after each step using an estimated return — the **TD target**: \(r_t + \gamma V(s_{t+1})\). This introduces some bias (\(V\) is not yet converged) but dramatically reduces variance.
 
 ## TD(0): The Fundamental Update
 
 The simplest TD algorithm, **TD(0)**, updates the value function after each transition:
 
 <div class="math-box">
-$$V(s_t) \leftarrow V(s_t) + \alpha \underbrace{\left[r_t + \gamma V(s_{t+1}) - V(s_t)\right]}_{\delta_t \;=\; \text{TD error}}$$
+\(V(s_t) \leftarrow V(s_t) + \alpha \underbrace{\left[r_t + \gamma V(s_{t+1}) - V(s_t)\right]}_{\delta_t \;=\; \text{TD error}}\)
 </div>
 
 The **TD error** $$\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)$$ is the central object: it measures how much better (or worse) the outcome was compared to the current prediction. When $$\delta_t > 0$$, the agent was pleasantly surprised; when $$\delta_t < 0$$, the outcome was worse than expected.
@@ -77,30 +77,30 @@ for each episode:
 
 ## Worked Example: TD(0) Update by Hand
 
-A 4-state gridworld (S1 → S2 → S3 → Goal). Rewards: 0 everywhere except +1 at Goal. $$\gamma = 0.9$$, $$\alpha = 0.1$$. Initial estimates: $$V = [0, 0, 0, 0]$$.
+A 4-state gridworld (S1 → S2 → S3 → Goal). Rewards: 0 everywhere except +1 at Goal. \(\gamma = 0.9\), \(\alpha = 0.1\). Initial estimates: \(V = [0, 0, 0, 0]\).
 
 **Step 1**: Agent in S1, moves to S2, receives r=0.
-$$\delta = 0 + 0.9 \times V(S2) - V(S1) = 0 + 0 - 0 = 0$$
-$$V(S1) \leftarrow 0 + 0.1 \times 0 = 0$$ *(no change yet)*
+\(\delta = 0 + 0.9 \times V(S2) - V(S1) = 0 + 0 - 0 = 0\)
+\(V(S1) \leftarrow 0 + 0.1 \times 0 = 0\) *(no change yet)*
 
 **Step 2**: Agent in S3, moves to Goal, receives r=+1.
-$$\delta = 1 + 0.9 \times 0 - 0 = +1.0$$
-$$V(S3) \leftarrow 0 + 0.1 \times 1.0 = \mathbf{0.1}$$
+\(\delta = 1 + 0.9 \times 0 - 0 = +1.0\)
+\(V(S3) \leftarrow 0 + 0.1 \times 1.0 = \mathbf{0.1}\)
 
 **Step 3**: Agent in S2, moves to S3, receives r=0.
-$$\delta = 0 + 0.9 \times 0.1 - 0 = +0.09$$
-$$V(S2) \leftarrow 0 + 0.1 \times 0.09 = \mathbf{0.009}$$
+\(\delta = 0 + 0.9 \times 0.1 - 0 = +0.09\)
+\(V(S2) \leftarrow 0 + 0.1 \times 0.09 = \mathbf{0.009}\)
 
-The reward at Goal is slowly propagating backward — one hop per episode visit. After many episodes the values converge to $$[0.729, 0.81, 0.9, 0]$$ (the true $$\gamma$$-discounted values).
+The reward at Goal is slowly propagating backward — one hop per episode visit. After many episodes the values converge to \([0.729, 0.81, 0.9, 0]\) (the true \(\gamma\)-discounted values).
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> TD learning propagates reward information one step at a time. Crucially it does this <em>online</em> — updating after every transition rather than waiting for the episode to end. This is why TD is much faster to learn in long episodes than Monte Carlo.</div>
 
 ## n-Step Returns
 
-TD(0) uses a 1-step return. MC uses an $$\infty$$-step return. **n-step TD** interpolates between them:
+TD(0) uses a 1-step return. MC uses an \(\infty\)-step return. **n-step TD** interpolates between them:
 
 <div class="math-box">
-$$G_t^{(n)} = r_t + \gamma r_{t+1} + \cdots + \gamma^{n-1} r_{t+n-1} + \gamma^n V(s_{t+n})$$
+\(G_t^{(n)} = r_t + \gamma r_{t+1} + \cdots + \gamma^{n-1} r_{t+n-1} + \gamma^n V(s_{t+n})\)
 </div>
 
 The update is: $$V(s_t) \leftarrow V(s_t) + \alpha [G_t^{(n)} - V(s_t)]$$.

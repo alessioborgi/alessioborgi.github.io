@@ -32,7 +32,7 @@ Imagine folding a piece of paper into a cylinder — you have changed its shape 
 
 ## Standard Autoencoders and Topological Distortion
 
-A standard autoencoder minimises $$\|x - \hat{x}\|^2$$ (reconstruction loss). This encourages point-wise fidelity but makes no guarantees about the global structure of the latent space.
+A standard autoencoder minimises \(\|x - \hat{x}\|^2\) (reconstruction loss). This encourages point-wise fidelity but makes no guarantees about the global structure of the latent space.
 
 **Problem**: Methods like t-SNE and UMAP empirically preserve local structure (nearby points stay nearby) but can distort global topology — a single connected manifold can be fragmented into disconnected clusters, or a loop can be contracted to a point.
 
@@ -40,40 +40,40 @@ A standard autoencoder minimises $$\|x - \hat{x}\|^2$$ (reconstruction loss). Th
 
 **Topological Autoencoder** (Moor et al. 2020) defines:
 
-<div class="math-box">$$\mathcal{L}_{TopoAE} = \underbrace{\|X - \hat{X}\|^2}_{\text{reconstruction}} + \lambda \underbrace{d_{T}(\mathrm{dgm}(X), \mathrm{dgm}(Z))}_{\text{topological}}$$</div>
+<div class="math-box">\(\mathcal{L}_{TopoAE} = \underbrace{\|X - \hat{X}\|^2}_{\text{reconstruction}} + \lambda \underbrace{d_{T}(\mathrm{dgm}(X), \mathrm{dgm}(Z))}_{\text{topological}}\)</div>
 
 where:
-- $$\mathrm{dgm}(X)$$ = persistence diagram of the Rips filtration on input points $$X$$.
-- $$\mathrm{dgm}(Z)$$ = persistence diagram of the Rips filtration on latent codes $$Z = e_\theta(X)$$.
-- $$d_T$$ is a differentiable approximation to the bottleneck/Wasserstein distance.
+- \(\mathrm{dgm}(X)\) = persistence diagram of the Rips filtration on input points \(X\).
+- \(\mathrm{dgm}(Z)\) = persistence diagram of the Rips filtration on latent codes \(Z = e_\theta(X)\).
+- \(d_T\) is a differentiable approximation to the bottleneck/Wasserstein distance.
 
 ## Computing the Topological Loss
 
 The Wasserstein distance between diagrams can be computed via linear assignment (the Hungarian algorithm). For batches, the key insight is:
 
-1. Each diagram point $$(b_k, d_k)$$ in $$\mathrm{dgm}(X)$$ corresponds to a specific edge or simplex in the filtration.
-2. Each diagram point in $$\mathrm{dgm}(Z)$$ similarly corresponds to latent-space distances.
+1. Each diagram point \((b_k, d_k)\) in \(\mathrm{dgm}(X)\) corresponds to a specific edge or simplex in the filtration.
+2. Each diagram point in \(\mathrm{dgm}(Z)\) similarly corresponds to latent-space distances.
 3. Matching diagram points gives a correspondence between input-space features and latent-space features.
 4. The loss measures how much the birth/death times shift.
 
 Gradients flow back through:
-$$\mathrm{loss} \to d_k^{(Z)} \to d(z_i, z_j) \to z_i = e_\theta(x_i) \to \theta$$
+\(\mathrm{loss} \to d_k^{(Z)} \to d(z_i, z_j) \to z_i = e_\theta(x_i) \to \theta\)
 
 ## What Topology Is Preserved
 
-For $$H_0$$ (connected components): the encoder is forced to map disconnected components in $$X$$ to disconnected regions in $$Z$$, and connected data to connected latent space.
+For \(H_0\) (connected components): the encoder is forced to map disconnected components in \(X\) to disconnected regions in \(Z\), and connected data to connected latent space.
 
-For $$H_1$$ (loops): if the input data lies near a circle, the latent space is forced to also have a circular topology, not a line.
+For \(H_1\) (loops): if the input data lies near a circle, the latent space is forced to also have a circular topology, not a line.
 
 ## Worked Example: Circle Data
 
-Suppose input data $$X$$ is 100 points sampled from a circle $$S^1$$ in $$\mathbb{R}^2$$.
+Suppose input data \(X\) is 100 points sampled from a circle \(S^1\) in \(\mathbb{R}^2\).
 
-**Rips persistence of $$X$$**: one long-lived $$H_1$$ bar at $$(b, d) \approx (0.15, 0.85)$$ — the circle's loop.
+**Rips persistence of \(X\)**: one long-lived \(H_1\) bar at \((b, d) \approx (0.15, 0.85)\) — the circle's loop.
 
-**Standard AE** encodes to $$Z \subset \mathbb{R}^2$$ via reconstruction loss only. It may produce a crescent shape (no full loop), giving $$\mathrm{dgm}(Z)$$ with only short-lived $$H_1$$ bars. The single long bar from $$\mathrm{dgm}(X)$$ is unmatched — Wasserstein distance is large.
+**Standard AE** encodes to \(Z \subset \mathbb{R}^2\) via reconstruction loss only. It may produce a crescent shape (no full loop), giving \(\mathrm{dgm}(Z)\) with only short-lived \(H_1\) bars. The single long bar from \(\mathrm{dgm}(X)\) is unmatched — Wasserstein distance is large.
 
-**TopoAE**: the topological loss penalises this mismatch. Gradient flows back through the Rips filtration distance on $$Z$$, pushing the latent codes to complete the loop. After training, $$\mathrm{dgm}(Z)$$ has one long $$H_1$$ bar ≈ $$(0.15, 0.85)$$, matching $$\mathrm{dgm}(X)$$ with near-zero topological loss.
+**TopoAE**: the topological loss penalises this mismatch. Gradient flows back through the Rips filtration distance on \(Z\), pushing the latent codes to complete the loop. After training, \(\mathrm{dgm}(Z)\) has one long \(H_1\) bar ≈ \((0.15, 0.85)\), matching \(\mathrm{dgm}(X)\) with near-zero topological loss.
 
 <style>
 @keyframes tae-rotate {

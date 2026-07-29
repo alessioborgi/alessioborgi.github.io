@@ -22,7 +22,7 @@ Suppose you have 50 brain scans from healthy subjects and 50 from patients with 
 
 To do this, you need to **average** persistence diagrams and compute **confidence intervals**. But persistence diagrams are multisets — you cannot add two multisets and divide by two in any meaningful way. You need a representation that lives in a vector space.
 
-Persistence landscapes solve this by converting each diagram into a **sequence of tent functions** — piecewise-linear curves stacked on top of each other. These curves live in an $L^p$ function space, where averaging, variance, and the central limit theorem all apply. The first landscape function captures the most prominent topological features; subsequent ones capture the next layer down, and so on.
+Persistence landscapes solve this by converting each diagram into a **sequence of tent functions** — piecewise-linear curves stacked on top of each other. These curves live in an $$L^p$$ function space, where averaging, variance, and the central limit theorem all apply. The first landscape function captures the most prominent topological features; subsequent ones capture the next layer down, and so on.
 
 ---
 
@@ -36,17 +36,17 @@ d_i - t & \tfrac{b_i + d_i}{2} < t \leq d_i \\
 0 & \text{otherwise}
 \end{cases}$$
 
-This is a triangle with peak at $t = \frac{b_i + d_i}{2}$, height $\frac{d_i - b_i}{2}$ (half the persistence), and support $[b_i, d_i]$.
+This is a triangle with peak at $$t = \frac{b_i + d_i}{2}$$, height $$\frac{d_i - b_i}{2}$$ (half the persistence), and support $$[b_i, d_i]$$.
 
-The **$k$-th landscape function** is then:
+The **$$k$$-th landscape function** is then:
 
 $$\lambda_k(t) = \text{kmax}_{i}\, f_i(t)$$
 
-where $\text{kmax}$ denotes the $k$-th largest value. So $\lambda_1$ is the upper envelope, $\lambda_2$ is the second-highest, and so on.
+where $$\text{kmax}$$ denotes the $$k$$-th largest value. So $$\lambda_1$$ is the upper envelope, $$\lambda_2$$ is the second-highest, and so on.
 
-The **persistence landscape** is the sequence $\lambda = (\lambda_1, \lambda_2, \ldots)$, typically truncated at some $K$.
+The **persistence landscape** is the sequence $$\lambda = (\lambda_1, \lambda_2, \ldots)$$, typically truncated at some $$K$$.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Each landscape function $\lambda_k$ is piecewise-linear and lives in $L^p(\mathbb{R})$ for any $p \geq 1$. The full landscape lives in $\bigoplus_k L^p(\mathbb{R})$, a Banach space. This is why you can average landscapes: the mean landscape $\bar{\lambda}_k(t) = \frac{1}{n}\sum_{j=1}^n \lambda_k^{(j)}(t)$ is simply the pointwise average of functions — perfectly well-defined.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Each landscape function \(\lambda_k\) is piecewise-linear and lives in \(L^p(\mathbb{R})\) for any \(p \geq 1\). The full landscape lives in \(\bigoplus_k L^p(\mathbb{R})\), a Banach space. This is why you can average landscapes: the mean landscape \(\bar{\lambda}_k(t) = \frac{1}{n}\sum_{j=1}^n \lambda_k^{(j)}(t)\) is simply the pointwise average of functions — perfectly well-defined.</div>
 
 ---
 
@@ -158,29 +158,29 @@ The **persistence landscape** is the sequence $\lambda = (\lambda_1, \lambda_2, 
 
 **Diagram:** $$\{(1, 9),\, (2, 6),\, (3, 5)\}$$
 
-**Tent function values at $t = 4$:**
-- $$f_{[1,9]}(4) = 4 - 1 = 3$$ (ascending side, peak at $t=5$)
-- $$f_{[2,6]}(4) = 4 - 2 = 2$$ (ascending side, peak at $t=4$)
-- $$f_{[3,5]}(4) = 4 - 3 = 1$$ (ascending side, peak at $t=4$)
+**Tent function values at $$t = 4$$:**
+- $$f_{[1,9]}(4) = 4 - 1 = 3$$ (ascending side, peak at $$t=5$$)
+- $$f_{[2,6]}(4) = 4 - 2 = 2$$ (ascending side, peak at $$t=4$$)
+- $$f_{[3,5]}(4) = 4 - 3 = 1$$ (ascending side, peak at $$t=4$$)
 
-**Landscape values at $t = 4$:**
-- $\lambda_1(4) = \max(3, 2, 1) = 3$
-- $\lambda_2(4) = \text{2nd max}(3, 2, 1) = 2$
-- $\lambda_3(4) = \text{3rd max}(3, 2, 1) = 1$
+**Landscape values at $$t = 4$$:**
+- $$\lambda_1(4) = \max(3, 2, 1) = 3$$
+- $$\lambda_2(4) = \text{2nd max}(3, 2, 1) = 2$$
+- $$\lambda_3(4) = \text{3rd max}(3, 2, 1) = 1$$
 
-**Tent function values at $t = 7$:**
+**Tent function values at $$t = 7$$:**
 - $$f_{[1,9]}(7) = 9 - 7 = 2$$ (descending side)
-- $$f_{[2,6]}(7) = 0$$ (outside support $[2,6]$)
-- $$f_{[3,5]}(7) = 0$$ (outside support $[3,5]$)
+- $$f_{[2,6]}(7) = 0$$ (outside support $$[2,6]$$)
+- $$f_{[3,5]}(7) = 0$$ (outside support $$[3,5]$$)
 
-**Landscape values at $t = 7$:**
-- $\lambda_1(7) = 2$, $\lambda_2(7) = 0$, $\lambda_3(7) = 0$
+**Landscape values at $$t = 7$$:**
+- $$\lambda_1(7) = 2$$, $$\lambda_2(7) = 0$$, $$\lambda_3(7) = 0$$
 
 ---
 
 ## Statistical Properties
 
-Because landscapes live in $L^p(\mathbb{R})$, standard statistical tools apply directly:
+Because landscapes live in $$L^p(\mathbb{R})$$, standard statistical tools apply directly:
 
 **Mean landscape** of a sample $$\{\text{Dgm}^{(j)}\}_{j=1}^n$$:
 $$\bar{\lambda}_k(t) = \frac{1}{n} \sum_{j=1}^n \lambda_k^{(j)}(t)$$
@@ -188,7 +188,7 @@ $$\bar{\lambda}_k(t) = \frac{1}{n} \sum_{j=1}^n \lambda_k^{(j)}(t)$$
 **Variance:**
 $$\text{Var}_k(t) = \frac{1}{n} \sum_{j=1}^n \left(\lambda_k^{(j)}(t) - \bar{\lambda}_k(t)\right)^2$$
 
-**Central Limit Theorem (Bubenik & Dlotko, 2017):** Under mild conditions, $\sqrt{n}(\bar{\lambda} - \mathbb{E}[\lambda])$ converges in distribution to a Gaussian process in $L^2(\mathbb{R})$. This enables exact confidence bands and hypothesis tests.
+**Central Limit Theorem (Bubenik & Dlotko, 2017):** Under mild conditions, $$\sqrt{n}(\bar{\lambda} - \mathbb{E}[\lambda])$$ converges in distribution to a Gaussian process in $$L^2(\mathbb{R})$$. This enables exact confidence bands and hypothesis tests.
 
 **Permutation test** for two-sample comparison: compute the test statistic $$\|\bar{\lambda}_A - \bar{\lambda}_B\|_{L^2}$$ and compare to the permutation distribution.
 
@@ -198,7 +198,7 @@ $$\text{Var}_k(t) = \frac{1}{n} \sum_{j=1}^n \left(\lambda_k^{(j)}(t) - \bar{\la
 
 **Theorem.** $$\|\lambda(T_1) - \lambda(T_2)\|_{L^p} \leq W_p(T_1, T_2)$$
 
-Persistence landscapes are stable: small changes in the diagram produce small changes in the landscape in the $L^p$ norm. Combined with the CLT, this makes them the gold standard for statistical hypothesis testing in TDA.
+Persistence landscapes are stable: small changes in the diagram produce small changes in the landscape in the $$L^p$$ norm. Combined with the CLT, this makes them the gold standard for statistical hypothesis testing in TDA.
 
 ---
 
@@ -206,10 +206,10 @@ Persistence landscapes are stable: small changes in the diagram produce small ch
 
 | Property | Persistence Images | Persistence Landscapes |
 |----------|-------------------|----------------------|
-| Output space | $\mathbb{R}^{n \times n}$ (finite vector) | $L^p(\mathbb{R})$ (function sequence) |
-| Statistical tools | Ad-hoc | Full $L^p$ statistics, CLT |
-| Stability | $W_1$ stable | $W_p$ stable (exact) |
-| Hyperparameters | Grid size, bandwidth, weight | None (or truncation depth $K$) |
+| Output space | $$\mathbb{R}^{n \times n}$$ (finite vector) | $$L^p(\mathbb{R})$$ (function sequence) |
+| Statistical tools | Ad-hoc | Full $$L^p$$ statistics, CLT |
+| Stability | $$W_1$$ stable | $$W_p$$ stable (exact) |
+| Hyperparameters | Grid size, bandwidth, weight | None (or truncation depth $$K$$) |
 | Differentiability | Yes (smooth Gaussians) | Piecewise-linear (subgradient) |
 
 ---

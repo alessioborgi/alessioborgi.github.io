@@ -35,7 +35,7 @@ toc_label: "Contents"
 
 **Intuition first.** Imagine closing your eyes and having a friend place a mug somewhere on the table. To pick it up, you need to know two things: *where* it is (translation — x, y, z coordinates) and *which way* it faces (rotation — is the handle pointing left or right?). Together these six numbers fully describe the mug's pose. Miss the rotation by even 20 degrees and the robot's fingers close on air instead of the handle.
 
-A robot arm reaching for a mug needs to know not just where the mug is (3D position: x, y, z) but also how it is oriented (3 rotation angles: roll, pitch, yaw). Together these 6 degrees of freedom constitute the **6-DOF pose** of the object, typically represented as a rigid transformation $$T \in SE(3)$$:
+A robot arm reaching for a mug needs to know not just where the mug is (3D position: x, y, z) but also how it is oriented (3 rotation angles: roll, pitch, yaw). Together these 6 degrees of freedom constitute the **6-DOF pose** of the object, typically represented as a rigid transformation \(T \in SE(3)\):
 
 <div class="math-box">
 T = [R | t]   where R in SO(3), t in R^3
@@ -72,10 +72,10 @@ Suppose a mug has 4 known 3D keypoints (corners of its bounding box) in object f
 | K3 (bottom-left-front) | (−0.05, −0.07, 0.05) | (310, 228) |
 | K4 (bottom-right-front) | (0.05, −0.07, 0.05) | (376, 231) |
 
-With camera focal length $$f = 600\,\text{px}$$ and principal point $$(320, 240)$$, OpenCV's `solvePnP` recovers:
+With camera focal length \(f = 600\,\text{px}\) and principal point \((320, 240)\), OpenCV's `solvePnP` recovers:
 
-- **Translation:** $$t = [0.01, -0.02, 0.62]$$ m (mug is 62 cm in front of the camera, slightly right and up)
-- **Rotation:** $$R$$ corresponding to yaw ≈ 3° (mug nearly face-on)
+- **Translation:** \(t = [0.01, -0.02, 0.62]\) m (mug is 62 cm in front of the camera, slightly right and up)
+- **Rotation:** \(R\) corresponding to yaw ≈ 3° (mug nearly face-on)
 
 The 3° yaw error is small enough for a parallel-jaw gripper to compensate, but would matter for a precision screwdriver task. This is why ICP refinement on the depth map is applied as a post-processing step.
 

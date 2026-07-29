@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## The law of large numbers
 
-Let $X_1,\dots,X_n$ be i.i.d. with mean $\mu$, and $$\bar{X}_n = \frac1n\sum_i X_i$$. The **weak** law says that for every $\varepsilon>0$,
+Let $$X_1,\dots,X_n$$ be i.i.d. with mean $$\mu$$, and $$\bar{X}_n = \frac1n\sum_i X_i$$. The **weak** law says that for every $$\varepsilon>0$$,
 
 <div class="formula-box">
 \[
@@ -31,9 +31,9 @@ P\bigl(|\bar{X}_n - \mu| > \varepsilon\bigr) \longrightarrow 0 \quad \text{as } 
 \]
 </div>
 
-which requires only that $\mu$ exists. The **strong** law upgrades this to $$P(\lim_{n} \bar{X}_n = \mu) = 1$$: almost every infinite sequence of draws has a running average that settles on $\mu$ and stays there.
+which requires only that $$\mu$$ exists. The **strong** law upgrades this to $$P(\lim_{n} \bar{X}_n = \mu) = 1$$: almost every infinite sequence of draws has a running average that settles on $$\mu$$ and stays there.
 
-The difference is not pedantic. The weak law allows the sequence to keep making rare excursions away from $\mu$ forever, as long as each individual excursion becomes less likely. The strong law forbids that for all but a probability-zero set of sequences. Monte Carlo estimation is justified by the weak law; the claim that a single long simulation run converges is the strong law.
+The difference is not pedantic. The weak law allows the sequence to keep making rare excursions away from $$\mu$$ forever, as long as each individual excursion becomes less likely. The strong law forbids that for all but a probability-zero set of sequences. Monte Carlo estimation is justified by the weak law; the claim that a single long simulation run converges is the strong law.
 
 ## Three modes of convergence
 
@@ -43,13 +43,13 @@ X_n \xrightarrow{\text{a.s.}} X \quad\Longrightarrow\quad X_n \xrightarrow{\;p\;
 \]
 </div>
 
-**Almost surely**: the sequence of values converges, for every outcome outside a null set. **In probability**: $P(|X_n - X|>\varepsilon)\to0$ for each $\varepsilon$ — the values may keep jumping, but jumps become rare. **In distribution**: $F_n(x)\to F(x)$ at every continuity point of $F$ — only the *laws* converge, and $X_n$ need not live on the same probability space as $X$ at all.
+**Almost surely**: the sequence of values converges, for every outcome outside a null set. **In probability**: $$P(|X_n - X|>\varepsilon)\to0$$ for each $$\varepsilon$$ — the values may keep jumping, but jumps become rare. **In distribution**: $$F_n(x)\to F(x)$$ at every continuity point of $$F$$ — only the *laws* converge, and $$X_n$$ need not live on the same probability space as $$X$$ at all.
 
-The implications run one way only. The classic separating example: let $X_n$ be 1 on a window of width $1/n$ that marches repeatedly across $[0,1]$, and 0 elsewhere. Then $X_n\to0$ in probability, since the window shrinks, but for any fixed point the window returns infinitely often, so the sequence of values never settles — no almost-sure convergence. Convergence in distribution is weakest of all: if $X\sim\mathcal{N}(0,1)$ then the constant sequence $X_n = -X$ converges in distribution to $X$, while $|X_n - X| = 2|X|$ never shrinks.
+The implications run one way only. The classic separating example: let $$X_n$$ be 1 on a window of width $$1/n$$ that marches repeatedly across $$[0,1]$$, and 0 elsewhere. Then $$X_n\to0$$ in probability, since the window shrinks, but for any fixed point the window returns infinitely often, so the sequence of values never settles — no almost-sure convergence. Convergence in distribution is weakest of all: if $$X\sim\mathcal{N}(0,1)$$ then the constant sequence $$X_n = -X$$ converges in distribution to $$X$$, while $$|X_n - X| = 2|X|$$ never shrinks.
 
 ## The central limit theorem
 
-With finite variance $\sigma^2$,
+With finite variance $$\sigma^2$$,
 
 <div class="formula-box">
 \[
@@ -57,13 +57,13 @@ With finite variance $\sigma^2$,
 \]
 </div>
 
-Read it carefully. The theorem is about the *rescaled deviation*, not about $$\bar{X}_n$$ itself (which converges to a constant) and not about the data. The $\sqrt{n}$ is the exchange rate: fluctuations of the mean shrink like $1/\sqrt{n}$, so quartering the error costs sixteen times the samples.
+Read it carefully. The theorem is about the *rescaled deviation*, not about $$\bar{X}_n$$ itself (which converges to a constant) and not about the data. The $$\sqrt{n}$$ is the exchange rate: fluctuations of the mean shrink like $$1/\sqrt{n}$$, so quartering the error costs sixteen times the samples.
 
 What the CLT does **not** say:
 
-- **Nothing about any finite $n$.** It is a limit. The Berry–Esseen theorem supplies the missing rate — with a finite third moment, the uniform error in the Gaussian approximation is at most $C\rho/(\sigma^3\sqrt{n})$ for a universal constant below $0.5$ — but that error can be large for skewed data at modest $n$.
-- **Nothing without finite variance.** Averaging i.i.d. Cauchy draws gives a sample mean with exactly the same Cauchy distribution, for every $n$. No concentration, ever.
-- **Nothing about the tails.** Convergence in distribution is pointwise on the CDF near the centre; relative error in the far tail can stay enormous. Estimating a $10^{-6}$ quantile with a CLT approximation is a well-known way to be badly wrong.
+- **Nothing about any finite $$n$$.** It is a limit. The Berry–Esseen theorem supplies the missing rate — with a finite third moment, the uniform error in the Gaussian approximation is at most $$C\rho/(\sigma^3\sqrt{n})$$ for a universal constant below $$0.5$$ — but that error can be large for skewed data at modest $$n$$.
+- **Nothing without finite variance.** Averaging i.i.d. Cauchy draws gives a sample mean with exactly the same Cauchy distribution, for every $$n$$. No concentration, ever.
+- **Nothing about the tails.** Convergence in distribution is pointwise on the CDF near the centre; relative error in the far tail can stay enormous. Estimating a $$10^{-6}$$ quantile with a CLT approximation is a well-known way to be badly wrong.
 - **Nothing about maxima, minima or quantiles.** Those have their own limit theory (extreme value theory), with Gumbel, Fréchet and Weibull limits rather than Gaussian ones.
 
 <div class="warning-box">
@@ -72,9 +72,9 @@ What the CLT does **not** say:
 
 The CLT does explain the Gaussian's ubiquity: any quantity that is a sum of many small, roughly independent contributions with finite variance ends up approximately Gaussian regardless of what those contributions look like individually. Measurement error, aggregate demand, and the fluctuation of a minibatch gradient around the full-batch gradient all qualify. The Gaussian is a fixed point of averaging, not a fact about nature.
 
-## Concentration: guarantees at finite $n$
+## Concentration: guarantees at finite $$n$$
 
-Concentration inequalities bound deviation probabilities for a specific $n$, with no limits taken.
+Concentration inequalities bound deviation probabilities for a specific $$n$$, with no limits taken.
 
 <div class="formula-box">
 \[
@@ -84,7 +84,7 @@ Concentration inequalities bound deviation probabilities for a specific $n$, wit
 \]
 </div>
 
-Markov uses only the mean and non-negativity, and is correspondingly weak. Chebyshev is Markov applied to $(X-\mu)^2$, so it buys a $1/k^2$ decay for the price of knowing the variance. **Hoeffding's inequality** buys exponential decay for the price of bounded support: if each $X_i\in[a,b]$,
+Markov uses only the mean and non-negativity, and is correspondingly weak. Chebyshev is Markov applied to $$(X-\mu)^2$$, so it buys a $$1/k^2$$ decay for the price of knowing the variance. **Hoeffding's inequality** buys exponential decay for the price of bounded support: if each $$X_i\in[a,b]$$,
 
 <div class="formula-box">
 \[
@@ -92,14 +92,14 @@ P\bigl(|\bar{X}_n - \mu| \ge t\bigr) \le 2\exp\!\left(-\frac{2nt^2}{(b-a)^2}\rig
 \]
 </div>
 
-Take $n=100$ fair coin flips, so $\mu=0.5$, $\sigma^2 = 0.25$, $b-a=1$.
+Take $$n=100$$ fair coin flips, so $$\mu=0.5$$, $$\sigma^2 = 0.25$$, $$b-a=1$$.
 
-| $t$ | Chebyshev | Hoeffding | CLT approx. | Exact binomial |
+| $$t$$ | Chebyshev | Hoeffding | CLT approx. | Exact binomial |
 |---|---|---|---|---|
-| $0.1$ | $0.250$ | $0.271$ | $0.0455$ | $0.0569$ |
-| $0.2$ | $0.0625$ | $0.00067$ | — | $0.000079$ |
+| $$0.1$$ | $$0.250$$ | $$0.271$$ | $$0.0455$$ | $$0.0569$$ |
+| $$0.2$$ | $$0.0625$$ | $$0.00067$$ | — | $$0.000079$$ |
 
-At $t=0.1$ Chebyshev is actually the tighter bound, and both are five times the truth. At $t=0.2$ Hoeffding is a hundred times tighter than Chebyshev, because $e^{-2nt^2}$ falls off far faster than $1/t^2$. Meanwhile the CLT approximation, $2(1-\Phi(2)) = 0.0455$, is close to the exact $0.0569$ but is an *approximation* and not a bound — it happens to sit on the wrong side here, understating the true probability.
+At $$t=0.1$$ Chebyshev is actually the tighter bound, and both are five times the truth. At $$t=0.2$$ Hoeffding is a hundred times tighter than Chebyshev, because $$e^{-2nt^2}$$ falls off far faster than $$1/t^2$$. Meanwhile the CLT approximation, $$2(1-\Phi(2)) = 0.0455$$, is close to the exact $$0.0569$$ but is an *approximation* and not a bound — it happens to sit on the wrong side here, understating the true probability.
 
 <div class="insight-box">
   <strong>Key Insight — bounds and approximations answer different questions:</strong> the CLT tells you what the error typically looks like; Hoeffding tells you what it will never exceed, with a stated confidence, at your actual \(n\). Generalisation theory needs the second kind — a PAC bound of the form "with probability \(1-\delta\), test error \(\le\) train error \(+\sqrt{\log(2/\delta)/2n}\)" is Hoeffding's inequality rearranged for \(t\). No asymptotic statement can support a claim about the finite sample in front of you.

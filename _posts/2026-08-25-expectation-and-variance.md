@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## Expectation
 
-For a discrete variable $\mathbb{E}[X]=\sum_x x\,p(x)$; for a continuous one $\mathbb{E}[X]=\int x\,p(x)\,dx$. Both are the same object — an integral against the distribution — and both can fail to exist when the tails are heavy enough, as for the Cauchy.
+For a discrete variable $$\mathbb{E}[X]=\sum_x x\,p(x)$$; for a continuous one $$\mathbb{E}[X]=\int x\,p(x)\,dx$$. Both are the same object — an integral against the distribution — and both can fail to exist when the tails are heavy enough, as for the Cauchy.
 
 The property that matters is **linearity**:
 
@@ -33,9 +33,9 @@ The property that matters is **linearity**:
 \]
 </div>
 
-for any $a,b$ and *any* joint distribution of $X$ and $Y$. Dependence is irrelevant because the identity is a statement about the integral, which is linear before any probabilistic structure is imposed.
+for any $$a,b$$ and *any* joint distribution of $$X$$ and $$Y$$. Dependence is irrelevant because the identity is a statement about the integral, which is linear before any probabilistic structure is imposed.
 
-That freedom is what makes indicator decompositions so effective. Take a uniformly random permutation of $n$ items and count fixed points — elements left in their own position. Let $I_i = 1$ if item $i$ is fixed. The $I_i$ are heavily dependent, but $\mathbb{E}[I_i] = P(\text{item } i \text{ fixed}) = 1/n$, so
+That freedom is what makes indicator decompositions so effective. Take a uniformly random permutation of $$n$$ items and count fixed points — elements left in their own position. Let $$I_i = 1$$ if item $$i$$ is fixed. The $$I_i$$ are heavily dependent, but $$\mathbb{E}[I_i] = P(\text{item } i \text{ fixed}) = 1/n$$, so
 
 <div class="formula-box">
 \[
@@ -43,7 +43,7 @@ That freedom is what makes indicator decompositions so effective. Take a uniform
 \]
 </div>
 
-for every $n$. No inclusion–exclusion, no derangement formula. Whenever a quantity is a count, write it as a sum of indicators before doing anything else.
+for every $$n$$. No inclusion–exclusion, no derangement formula. Whenever a quantity is a count, write it as a sum of indicators before doing anything else.
 
 <div class="warning-box">
   <strong>Interview trap — assuming linearity needs independence:</strong> it does not. The common follow-up, "what about \(\mathbb{E}[XY]\)?", <em>does</em>: \(\mathbb{E}[XY]=\mathbb{E}[X]\mathbb{E}[Y]\) requires uncorrelatedness (which independence implies). Keep the two straight — sums are always free, products are not.
@@ -51,7 +51,7 @@ for every $n$. No inclusion–exclusion, no derangement formula. Whenever a quan
 
 ## Variance and the covariance term
 
-Variance is the expected squared deviation, $\operatorname{Var}(X)=\mathbb{E}[(X-\mathbb{E}X)^2] = \mathbb{E}[X^2]-(\mathbb{E}X)^2$. It is not linear: $\operatorname{Var}(aX)=a^2\operatorname{Var}(X)$, and constants shift the mean without moving the spread.
+Variance is the expected squared deviation, $$\operatorname{Var}(X)=\mathbb{E}[(X-\mathbb{E}X)^2] = \mathbb{E}[X^2]-(\mathbb{E}X)^2$$. It is not linear: $$\operatorname{Var}(aX)=a^2\operatorname{Var}(X)$$, and constants shift the mean without moving the spread.
 
 Expanding the square of a sum leaves a cross term:
 
@@ -62,9 +62,9 @@ Expanding the square of a sum leaves a cross term:
 \]
 </div>
 
-The cross term is why averaging $n$ model predictions reduces variance by a factor of $n$ only when their errors are uncorrelated. For an equally weighted ensemble with common variance $\sigma^2$ and pairwise correlation $\rho$, the variance of the average is $$\sigma^2\!\left[\rho + (1-\rho)/n\right]$$, which floors at $\rho\sigma^2$ however many members you add. Ensembling buys nothing beyond that floor, which is why diversity, not count, is the design objective.
+The cross term is why averaging $$n$$ model predictions reduces variance by a factor of $$n$$ only when their errors are uncorrelated. For an equally weighted ensemble with common variance $$\sigma^2$$ and pairwise correlation $$\rho$$, the variance of the average is $$\sigma^2\!\left[\rho + (1-\rho)/n\right]$$, which floors at $$\rho\sigma^2$$ however many members you add. Ensembling buys nothing beyond that floor, which is why diversity, not count, is the design objective.
 
-**Correlation** normalises covariance onto $[-1,1]$:
+**Correlation** normalises covariance onto $$[-1,1]$$:
 
 <div class="formula-box">
 \[
@@ -72,11 +72,11 @@ The cross term is why averaging $n$ model predictions reduces variance by a fact
 \]
 </div>
 
-The bound is Cauchy–Schwarz, and $|\rho|=1$ exactly when $Y$ is an affine function of $X$. Correlation is a measure of *linear* association, nothing more.
+The bound is Cauchy–Schwarz, and $$|\rho|=1$$ exactly when $$Y$$ is an affine function of $$X$$. Correlation is a measure of *linear* association, nothing more.
 
 ## Uncorrelated does not mean independent
 
-Let $X$ be uniform on $$\{-1,0,1\}$$ and set $Y = X^2$. Then $\mathbb{E}[X]=0$ and $\mathbb{E}[XY]=\mathbb{E}[X^3] = \tfrac13(-1+0+1) = 0$, so
+Let $$X$$ be uniform on $$\{-1,0,1\}$$ and set $$Y = X^2$$. Then $$\mathbb{E}[X]=0$$ and $$\mathbb{E}[XY]=\mathbb{E}[X^3] = \tfrac13(-1+0+1) = 0$$, so
 
 <div class="formula-box">
 \[
@@ -84,9 +84,9 @@ Let $X$ be uniform on $$\{-1,0,1\}$$ and set $Y = X^2$. Then $\mathbb{E}[X]=0$ a
 \]
 </div>
 
-Yet $Y$ is a deterministic function of $X$. Concretely, $P(Y=0)=\tfrac13$ while $P(Y=0\mid X=1)=0$, so the two are as dependent as it is possible to be. The same works for $X\sim\mathcal{N}(0,1)$, $Y=X^2$, since $\mathbb{E}[X^3]=0$ by symmetry.
+Yet $$Y$$ is a deterministic function of $$X$$. Concretely, $$P(Y=0)=\tfrac13$$ while $$P(Y=0\mid X=1)=0$$, so the two are as dependent as it is possible to be. The same works for $$X\sim\mathcal{N}(0,1)$$, $$Y=X^2$$, since $$\mathbb{E}[X^3]=0$$ by symmetry.
 
-The converse direction does hold: independence implies $\mathbb{E}[XY]=\mathbb{E}X\,\mathbb{E}Y$, hence zero covariance. The one place the implication reverses is the jointly Gaussian case — for a multivariate normal, zero covariance really does mean independence, which is why the trap is so easy to fall into after a term of working with Gaussians.
+The converse direction does hold: independence implies $$\mathbb{E}[XY]=\mathbb{E}X\,\mathbb{E}Y$$, hence zero covariance. The one place the implication reverses is the jointly Gaussian case — for a multivariate normal, zero covariance really does mean independence, which is why the trap is so easy to fall into after a term of working with Gaussians.
 
 <div class="blog-figure">
 <figure>
@@ -130,7 +130,7 @@ Conditioning gives two decompositions that are used constantly. The **law of tot
 \]
 </div>
 
-A worked case: a value comes from one of two groups with equal probability; group 0 has mean 0 and variance 1, group 1 has mean 4 and variance 1. Within-group term: $\mathbb{E}[\operatorname{Var}(Y\mid X)] = 1$. Between-group term: the conditional means are 0 and 4 with probability $\tfrac12$ each, so their variance is $8 - 2^2 = 4$. Total: $\operatorname{Var}(Y) = 1 + 4 = 5$. Checking directly, $\mathbb{E}[Y]=2$ and $\mathbb{E}[Y^2] = \tfrac12(1+0)+\tfrac12(1+16) = 9$, giving $9-4=5$.
+A worked case: a value comes from one of two groups with equal probability; group 0 has mean 0 and variance 1, group 1 has mean 4 and variance 1. Within-group term: $$\mathbb{E}[\operatorname{Var}(Y\mid X)] = 1$$. Between-group term: the conditional means are 0 and 4 with probability $$\tfrac12$$ each, so their variance is $$8 - 2^2 = 4$$. Total: $$\operatorname{Var}(Y) = 1 + 4 = 5$$. Checking directly, $$\mathbb{E}[Y]=2$$ and $$\mathbb{E}[Y^2] = \tfrac12(1+0)+\tfrac12(1+16) = 9$$, giving $$9-4=5$$.
 
 <div class="insight-box">
   <strong>Key Insight — total variance is the uncertainty decomposition:</strong> read \(X\) as "which model" in a deep ensemble and \(Y\) as the prediction. The within-group term \(\mathbb{E}[\operatorname{Var}(Y\mid X)]\) is <em>aleatoric</em> uncertainty — noise no model can remove — and the between-group term \(\operatorname{Var}(\mathbb{E}[Y\mid X])\) is <em>epistemic</em>, the disagreement between models, which more data can shrink. The split reported by Bayesian deep learning methods is precisely this identity.
@@ -138,7 +138,7 @@ A worked case: a value comes from one of two groups with equal probability; grou
 
 ## Where this goes next
 
-Means and variances for the standard families are tabulated in [common distributions](/blog/prob-basics/common-distributions/); what happens to a sample mean as $n$ grows is [limit theorems](/blog/prob-basics/limit-theorems/).
+Means and variances for the standard families are tabulated in [common distributions](/blog/prob-basics/common-distributions/); what happens to a sample mean as $$n$$ grows is [limit theorems](/blog/prob-basics/limit-theorems/).
 
 <div class="key-takeaways">
   <h3>Recap</h3>

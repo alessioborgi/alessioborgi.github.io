@@ -32,9 +32,9 @@ The two most impactful TDA tools in biology are:
 
 Mapper (Singh, Memoli, Carlsson, 2007) builds a graph-level summary of a high-dimensional dataset:
 
-1. **Filter function** $f : X \to \mathbb{R}$ — assign a scalar to each data point (e.g., first PCA component, pseudotime estimate, density).
-2. **Cover** the range of $f$ with overlapping intervals $$\{U_i\}$$.
-3. **Cluster** the preimage $f^{-1}(U_i)$ in the original space — each cluster becomes a node in the Mapper graph.
+1. **Filter function** $$f : X \to \mathbb{R}$$ — assign a scalar to each data point (e.g., first PCA component, pseudotime estimate, density).
+2. **Cover** the range of $$f$$ with overlapping intervals $$\{U_i\}$$.
+3. **Cluster** the preimage $$f^{-1}(U_i)$$ in the original space — each cluster becomes a node in the Mapper graph.
 4. **Connect** nodes whose corresponding clusters share data points (from overlapping intervals).
 
 The result is a **topological skeleton** — a graph that captures the rough shape of the data manifold without fixing a coordinate system.
@@ -48,7 +48,7 @@ The result is a **topological skeleton** — a graph that captures the rough sha
 Single-cell RNA sequencing measures gene expression in thousands of individual cells simultaneously. The cells lie along **differentiation trajectories** — continuous paths from stem cells to specialised cell types.
 
 **TDA pipeline:**
-1. Compute a $k$-NN graph on the high-dimensional expression matrix.
+1. Compute a \(k\)-NN graph on the high-dimensional expression matrix.
 2. Apply Mapper with a density-based or diffusion pseudotime filter.
 3. Read off the topology of the resulting skeleton:
    - Linear path: a simple differentiation trajectory.
@@ -66,9 +66,9 @@ Single-cell RNA sequencing measures gene expression in thousands of individual c
 Proteins are chains of amino acids that fold into 3D structures. The shape of the folded protein determines its function.
 
 **PH fingerprinting pipeline:**
-1. Represent the protein backbone as a point cloud in $\mathbb{R}^3$ (one point per C$\alpha$ atom).
+1. Represent the protein backbone as a point cloud in \(\mathbb{R}^3\) (one point per C\(\alpha\) atom).
 2. Compute the Vietoris-Rips or alpha complex filtration on this point cloud.
-3. Extract the persistence diagram — particularly $H_0$ (connectivity of backbone segments) and $H_1$ (loops and cavities in the folded structure).
+3. Extract the persistence diagram — particularly \(H_0\) (connectivity of backbone segments) and \(H_1\) (loops and cavities in the folded structure).
 
 **Key result (Xia & Wei, 2014):** Persistent homology features computed from protein structures outperform classical structural descriptors (secondary structure counts, solvent accessibility) for predicting protein-ligand binding affinity.
 
@@ -183,16 +183,16 @@ Tumours are heterogeneous — a single tumour contains multiple subpopulations o
 
 ## Worked Example: Circadian Gene Expression Loop
 
-**Setup.** Measure gene expression in mouse liver cells at 24 time points over 48 hours (two full circadian cycles). Each time point is a vector in $\mathbb{R}^{20000}$ (gene expression space).
+**Setup.** Measure gene expression in mouse liver cells at 24 time points over 48 hours (two full circadian cycles). Each time point is a vector in $$\mathbb{R}^{20000}$$ (gene expression space).
 
 **TDA analysis:**
 1. Reduce to top 50 PCs to remove noise.
 2. Compute Vietoris-Rips persistence up to dimension 1.
-3. **Expected result:** One very persistent $H_1$ bar spanning most of the filtration range — corresponding to the circular topology of the 24-hour cycle.
+3. **Expected result:** One very persistent $$H_1$$ bar spanning most of the filtration range — corresponding to the circular topology of the 24-hour cycle.
 
-**Verification:** The birth time of the $H_1$ bar corresponds to the scale at which the 24 time points form a connected loop. The persistence (death - birth) is large because the loop is geometrically prominent — the gene expression trajectory genuinely circles back on itself.
+**Verification:** The birth time of the $$H_1$$ bar corresponds to the scale at which the 24 time points form a connected loop. The persistence (death - birth) is large because the loop is geometrically prominent — the gene expression trajectory genuinely circles back on itself.
 
-**Control:** Shuffle the time labels randomly. The $H_1$ bar disappears (or becomes short and noisy) because the circular structure is destroyed.
+**Control:** Shuffle the time labels randomly. The $$H_1$$ bar disappears (or becomes short and noisy) because the circular structure is destroyed.
 
 This is a rigorous topological proof that circadian gene expression forms a cycle — not just a correlation-based claim.
 

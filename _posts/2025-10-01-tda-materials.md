@@ -41,17 +41,17 @@ Geometric statistics (mean pore size, surface area) average out the topological 
 
 ## Pore Structure Analysis
 
-For a porous material represented as a 3D point cloud of atom positions $$P$$:
+For a porous material represented as a 3D point cloud of atom positions \(P\):
 
 1. Build cubical complex from voxelised electron density.
 2. Compute sublevel set persistence (filter from vacuum to dense material).
 
 **Interpretation**:
-- $$H_0$$ bars: connected atom clusters (grain boundaries in polycrystals).
-- $$H_1$$ bars: channels/tunnels through the material. Long bars = persistent channels from large to small length scales.
-- $$H_2$$ bars: enclosed pores/cages. Birth $$b$$ = pore diameter; death $$d$$ = smallest "bottleneck" in the pore wall.
+- \(H_0\) bars: connected atom clusters (grain boundaries in polycrystals).
+- \(H_1\) bars: channels/tunnels through the material. Long bars = persistent channels from large to small length scales.
+- \(H_2\) bars: enclosed pores/cages. Birth \(b\) = pore diameter; death \(d\) = smallest "bottleneck" in the pore wall.
 
-<div class="math-box">Pore accessibility: $$\{(b_k, d_k) \in H_2 : b_k > r_{gas}\}$$ — cages accessible to molecules of radius $$r_{gas}$$</div>
+<div class="math-box">Pore accessibility: \(\{(b_k, d_k) \in H_2 : b_k > r_{gas}\}\) — cages accessible to molecules of radius \(r_{gas}\)</div>
 
 ## Worked Example: Sponge vs. Foam
 
@@ -59,16 +59,16 @@ Two porous materials, both with 30% void volume:
 
 **Material A — Interconnected channels** (like a zeolite):
 - Atom positions form a periodic lattice with 1D tunnels of diameter 4 Å.
-- Rips filtration: $$H_1$$ bars born at $$r \approx 2$$ Å (when tunnel edges connect), dying at $$r \approx 8$$ Å (when the tunnel is fully enclosed).
-- Persistence: $$8 - 2 = 6$$ Å — long-lived H₁ bars indicating persistent through-channels.
-- $$H_2 = \emptyset$$ (no closed voids — channels are open-ended).
+- Rips filtration: \(H_1\) bars born at \(r \approx 2\) Å (when tunnel edges connect), dying at \(r \approx 8\) Å (when the tunnel is fully enclosed).
+- Persistence: \(8 - 2 = 6\) Å — long-lived H₁ bars indicating persistent through-channels.
+- \(H_2 = \emptyset\) (no closed voids — channels are open-ended).
 
 **Material B — Closed-cell foam**:
 - Atom positions form closed bubble walls of diameter ≈ 10 Å.
-- $$H_1$$ bars: short (local ring structures in bubble walls), persistence ≈ 1–2 Å.
-- $$H_2$$ bar: $$(r_{\text{birth}} \approx 5, r_{\text{death}} \approx 12)$$, persistence $$= 7$$ Å — one large enclosed void per bubble.
+- \(H_1\) bars: short (local ring structures in bubble walls), persistence ≈ 1–2 Å.
+- \(H_2\) bar: \((r_{\text{birth}} \approx 5, r_{\text{death}} \approx 12)\), persistence \(= 7\) Å — one large enclosed void per bubble.
 
-**Prediction**: Material A will have $$10\times$$ higher gas diffusion (H₁ channels = gas highways). Material B will have higher acoustic absorption (closed voids trap sound). TDA distinguishes them; pore size distributions (both peak near 4–5 Å) do not.
+**Prediction**: Material A will have \(10\times\) higher gas diffusion (H₁ channels = gas highways). Material B will have higher acoustic absorption (closed voids trap sound). TDA distinguishes them; pore size distributions (both peak near 4–5 Å) do not.
 
 <style>
 @keyframes mat-grow {

@@ -33,32 +33,32 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Imagine you are lost in a maze and want to estimate how good each room is. You start with a guess — say, everything is worth 0. Then you look at a room's neighbours: if stepping into the next room plus the current reward is higher than your current estimate, you update upward. You keep doing this pass after pass until estimates stop changing. That iterative refinement *is* the Bellman operator in action. Convergence is guaranteed because each pass brings every room's estimate closer to reality — by exactly the factor $$\gamma$$.
+Imagine you are lost in a maze and want to estimate how good each room is. You start with a guess — say, everything is worth 0. Then you look at a room's neighbours: if stepping into the next room plus the current reward is higher than your current estimate, you update upward. You keep doing this pass after pass until estimates stop changing. That iterative refinement *is* the Bellman operator in action. Convergence is guaranteed because each pass brings every room's estimate closer to reality — by exactly the factor \(\gamma\).
 
 ## Bellman Expectation vs. Bellman Optimality
 
-The previous post introduced the **Bellman expectation equations**, which characterise the value of a *given* policy $$\pi$$. Now we ask: what is the *best possible* value at each state?
+The previous post introduced the **Bellman expectation equations**, which characterise the value of a *given* policy \(\pi\). Now we ask: what is the *best possible* value at each state?
 
-The **optimal state-value function** $$V^*(s)$$ is:
+The **optimal state-value function** \(V^*(s)\) is:
 
-$$V^*(s) = \max_\pi V^\pi(s) \qquad \forall s \in \mathcal{S}$$
+\(V^*(s) = \max_\pi V^\pi(s) \qquad \forall s \in \mathcal{S}\)
 
-There always exists a deterministic optimal policy $$\pi^*$$ that simultaneously achieves $$V^*$$ in all states (a key theorem of MDPs). The Bellman **optimality** equation for $$V^*$$ is:
+There always exists a deterministic optimal policy \(\pi^*\) that simultaneously achieves \(V^*\) in all states (a key theorem of MDPs). The Bellman **optimality** equation for \(V^*\) is:
 
 <div class="math-box">
-$$V^*(s) = \max_a \sum_{s'} P(s' \mid s, a)\!\left[R(s,a,s') + \gamma V^*(s')\right]$$
+\(V^*(s) = \max_a \sum_{s'} P(s' \mid s, a)\!\left[R(s,a,s') + \gamma V^*(s')\right]\)
 </div>
 
 For the optimal Q-function:
 
 <div class="math-box">
-$$Q^*(s, a) = \sum_{s'} P(s' \mid s, a)\!\left[R(s,a,s') + \gamma \max_{a'} Q^*(s', a')\right]$$
+\(Q^*(s, a) = \sum_{s'} P(s' \mid s, a)\!\left[R(s,a,s') + \gamma \max_{a'} Q^*(s', a')\right]\)
 </div>
 
 The optimal policy is then simply greedy with respect to $$Q^*$$:
 
 <div class="math-box">
-$$\pi^*(s) = \arg\max_a Q^*(s, a)$$
+\(\pi^*(s) = \arg\max_a Q^*(s, a)\)
 </div>
 
 Note the crucial difference: in the expectation equation, the action is averaged over $$\pi$$; in the optimality equation, it is maximised. The max operator makes the optimality equations **nonlinear**, which is why they cannot be solved by simple matrix inversion (unlike policy evaluation).

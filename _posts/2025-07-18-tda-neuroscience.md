@@ -30,11 +30,11 @@ Persistent homology is ideally suited to detect and quantify these higher-order 
 
 The landmark paper in topological neuroscience applied PH to the **Blue Brain Project** reconstruction of a rat neocortical microcircuit — a detailed digital model of 31,000 neurons and 8 million synapses.
 
-**Setup:** Build a directed graph where an edge $A \to B$ exists if neuron A synapses onto neuron B. Convert to an undirected graph and define a filtration by connection strength (synaptic weight).
+**Setup:** Build a directed graph where an edge $$A \to B$$ exists if neuron A synapses onto neuron B. Convert to an undirected graph and define a filtration by connection strength (synaptic weight).
 
 **Key finding:** The neocortical network contains **cliques** (fully connected subgraphs) of up to dimension 6 — groups of 7 neurons all mutually connected. The number of high-dimensional cliques is orders of magnitude greater than in Erdos-Renyi random graphs with the same edge density.
 
-**PH interpretation:** The Betti numbers $\beta_k$ (number of independent $k$-dimensional holes) are dramatically elevated compared to random controls, with peaks at high dimensions ($k = 4, 5$). This suggests the brain operates in a high-dimensional topological space — a finding that would be invisible to any analysis based only on pairwise statistics.
+**PH interpretation:** The Betti numbers $$\beta_k$$ (number of independent $$k$$-dimensional holes) are dramatically elevated compared to random controls, with peaks at high dimensions ($$k = 4, 5$$). This suggests the brain operates in a high-dimensional topological space — a finding that would be invisible to any analysis based only on pairwise statistics.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Persistent homology detected structures in neural circuits that had never been described before — not because they were small effects, but because they live in dimensions that pairwise methods are structurally blind to. A correlation matrix captures edges (1-simplices). PH captures triangles, tetrahedra, and beyond. This is not a refinement of existing methods; it is access to a qualitatively different level of structure.</div>
 
@@ -46,7 +46,7 @@ Functional MRI measures BOLD signal across ~100 brain regions over time. The sta
 
 **TDA upgrade:** Instead of using the raw correlation matrix, compute a **persistence diagram** from the correlation matrix treated as a weighted graph filtration:
 
-1. Threshold the correlation matrix at decreasing values $\varepsilon$ (from 1 down to 0).
+1. Threshold the correlation matrix at decreasing values \(\varepsilon\) (from 1 down to 0).
 2. At each threshold, record which region pairs are connected.
 3. Run PH on the resulting filtration.
 4. The persistence diagram encodes how brain regions cluster, merge, and form loops as connectivity threshold varies.
@@ -170,18 +170,18 @@ Consider a simplified connectome with 6 brain regions and the following correlat
 
 **Filtration** (decrease threshold from 1.0 to 0.0):
 
-- $\varepsilon = 0.85$: edge A-B. $\beta_0 = 5$ (5 components: {A,B}, C, D, E, F).
-- $\varepsilon = 0.80$: edge D-E. $\beta_0 = 4$.
-- $\varepsilon = 0.70$: edge B-C. $\beta_0 = 3$. Triangle A-B-C has all edges with corr $\geq 0.70$? No — A-C = 0.60 < 0.70. No triangle yet.
-- $\varepsilon = 0.65$: edge E-F. $\beta_0 = 3$. Triangle D-E-F: all edges $\geq 0.65$? D-E=0.80, E-F=0.65, D-F=0.55 — no.
-- $\varepsilon = 0.60$: edge A-C. $\beta_0 = 3$. Now triangle A-B-C complete (min edge = 0.60). Triangle filled, $\beta_1 = 0$ (cycle immediately killed).
-- $\varepsilon = 0.55$: edge D-F. Triangle D-E-F complete. $\beta_1 = 0$.
-- $\varepsilon = 0.40$: edge C-D. $\beta_0 = 1$ (all connected).
+- $$\varepsilon = 0.85$$: edge A-B. $$\beta_0 = 5$$ (5 components: {A,B}, C, D, E, F).
+- $$\varepsilon = 0.80$$: edge D-E. $$\beta_0 = 4$$.
+- $$\varepsilon = 0.70$$: edge B-C. $$\beta_0 = 3$$. Triangle A-B-C has all edges with corr $$\geq 0.70$$? No — A-C = 0.60 < 0.70. No triangle yet.
+- $$\varepsilon = 0.65$$: edge E-F. $$\beta_0 = 3$$. Triangle D-E-F: all edges $$\geq 0.65$$? D-E=0.80, E-F=0.65, D-F=0.55 — no.
+- $$\varepsilon = 0.60$$: edge A-C. $$\beta_0 = 3$$. Now triangle A-B-C complete (min edge = 0.60). Triangle filled, $$\beta_1 = 0$$ (cycle immediately killed).
+- $$\varepsilon = 0.55$$: edge D-F. Triangle D-E-F complete. $$\beta_1 = 0$$.
+- $$\varepsilon = 0.40$$: edge C-D. $$\beta_0 = 1$$ (all connected).
 
-**Persistence diagram ($H_0$):** bars $(1, 0.85)$, $(1, 0.80)$, $(1, 0.70)$, $(1, 0.65)$, $(1, \infty)$.
-**Persistence diagram ($H_1$):** no persistent loops — all triangles close and are immediately filled.
+**Persistence diagram ($$H_0$$):** bars $$(1, 0.85)$$, $$(1, 0.80)$$, $$(1, 0.70)$$, $$(1, 0.65)$$, $$(1, \infty)$$.
+**Persistence diagram ($$H_1$$):** no persistent loops — all triangles close and are immediately filled.
 
-The absence of persistent $H_1$ features here means the connectivity is "tree-like" at the scale of these correlations — consistent with a hierarchically organised brain network.
+The absence of persistent $$H_1$$ features here means the connectivity is "tree-like" at the scale of these correlations — consistent with a hierarchically organised brain network.
 
 ---
 

@@ -25,7 +25,7 @@ toc_label: "Contents"
 
 ## The Inductive vs. Transductive Distinction
 
-**Transductive GNNs (GCN, GAT):** as originally formulated, these operate on one fixed graph: the layer is a product with a normalised adjacency $\hat{A}$ built from the whole training graph. Add a new node tomorrow and $\hat{A}$ changes, so at minimum you must rebuild it and re-run a full-graph forward pass.
+**Transductive GNNs (GCN, GAT):** as originally formulated, these operate on one fixed graph: the layer is a product with a normalised adjacency $$\hat{A}$$ built from the whole training graph. Add a new node tomorrow and $$\hat{A}$$ changes, so at minimum you must rebuild it and re-run a full-graph forward pass.
 
 **Inductive GNNs (GraphSAGE):** learn a *function* that maps a node's local neighbourhood to an embedding. Apply this function to any neighbourhood — seen or unseen — to get an embedding.
 
@@ -35,7 +35,7 @@ This matters enormously in practice:
 
 ## The Algorithm
 
-For each node $v$ at each layer $k = 1, \dots, K$:
+For each node $$v$$ at each layer $$k = 1, \dots, K$$:
 
 <div class="formula-box">
 \[
@@ -49,12 +49,12 @@ For each node $v$ at each layer $k = 1, \dots, K$:
 </div>
 
 Where:
-- $K$ — the number of layers, equivalently the number of hops each node sees.
-- $S$ — the **fixed** neighbourhood sample size, a hyperparameter. Note that $$\mathcal{S}_v$$ always has exactly $S$ elements: when $\lvert \mathcal{N}(v) \rvert < S$ the sample is drawn with replacement, which is what keeps the per-node cost constant.
-- $\Vert$ — concatenation, so $W^{(k)}$ has twice as many input columns as $h$ has dimensions.
-- $\lVert \cdot \rVert_2$ — the Euclidean norm; step 4 projects every embedding onto the unit sphere.
+- $$K$$ — the number of layers, equivalently the number of hops each node sees.
+- $$S$$ — the **fixed** neighbourhood sample size, a hyperparameter. Note that $$\mathcal{S}_v$$ always has exactly $$S$$ elements: when $$\lvert \mathcal{N}(v) \rvert < S$$ the sample is drawn with replacement, which is what keeps the per-node cost constant.
+- $$\Vert$$ — concatenation, so $$W^{(k)}$$ has twice as many input columns as $$h$$ has dimensions.
+- $$\lVert \cdot \rVert_2$$ — the Euclidean norm; step 4 projects every embedding onto the unit sphere.
 
-The key novelty is step 3: concatenate the node's **own** previous representation with the aggregated neighbourhood representation, then apply a shared learned $W^{(k)}$. This ensures the node retains its own identity while incorporating neighbour information — and because $W^{(k)}$ does not depend on which node it is applied to, the same layer works for a node that was never seen during training.
+The key novelty is step 3: concatenate the node's **own** previous representation with the aggregated neighbourhood representation, then apply a shared learned $$W^{(k)}$$. This ensures the node retains its own identity while incorporating neighbour information — and because $$W^{(k)}$$ does not depend on which node it is applied to, the same layer works for a node that was never seen during training.
 
 <div class="blog-figure">
 <figure>
@@ -127,9 +127,9 @@ The key novelty is step 3: concatenate the node's **own** previous representatio
 
 ## Concrete Example: Embedding a New Node at Inference Time
 
-Suppose we trained GraphSAGE on a product graph. A new product $P$ is uploaded tonight with features $h_P = [0.8,\, 0.3,\, 0.1]$ and two existing, similar products as neighbours: $h_{n_1} = [0.7,\, 0.4,\, 0.2]$ and $h_{n_2} = [0.6,\, 0.5,\, 0.1]$.
+Suppose we trained GraphSAGE on a product graph. A new product \(P\) is uploaded tonight with features \(h_P = [0.8,\, 0.3,\, 0.1]\) and two existing, similar products as neighbours: \(h_{n_1} = [0.7,\, 0.4,\, 0.2]\) and \(h_{n_2} = [0.6,\, 0.5,\, 0.1]\).
 
-**Without retraining**, with one layer and sample size $S = 2$:
+**Without retraining**, with one layer and sample size \(S = 2\):
 
 <div class="formula-box">
 \[
@@ -142,7 +142,7 @@ Suppose we trained GraphSAGE on a product graph. A new product $P$ is uploaded t
 \]
 </div>
 
-The resulting embedding places $P$ in the correct region of the embedding space relative to existing products — ready for recommendation — all without touching the training set.
+The resulting embedding places $$P$$ in the correct region of the embedding space relative to existing products — ready for recommendation — all without touching the training set.
 
 ## Aggregator Choices
 
@@ -162,9 +162,9 @@ Because mean and max are not injective over multisets, none of these aggregators
 
 Because GraphSAGE uses neighbourhood sampling, it supports **mini-batch training** on arbitrarily large graphs:
 1. Sample a batch of target nodes.
-2. Sample their $K$-hop neighbourhoods, expanding the computation graph outwards — with a fixed sample size $S$ per hop, this costs $O(S^K)$ nodes per target instead of the whole graph.
+2. Sample their $$K$$-hop neighbourhoods, expanding the computation graph outwards — with a fixed sample size $$S$$ per hop, this costs $$O(S^K)$$ nodes per target instead of the whole graph.
 3. Compute embeddings bottom-up: 0-hop → 1-hop → … → target nodes.
-4. Update the $W^{(k)}$ via backprop.
+4. Update the $$W^{(k)}$$ via backprop.
 
 Pinterest's PinSage builds on exactly this idea to scale to a graph with billions of nodes and edges.
 

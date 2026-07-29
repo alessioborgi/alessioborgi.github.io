@@ -34,7 +34,7 @@ This post surveys the five most important open problems, each with a brief descr
 - A point cloud with noise: filter by both scale *and* density (points in sparse regions might be noise at any scale).
 - A time-varying graph: filter by both edge weight *and* time.
 
-With two parameters, you get a **2-parameter persistence module** — a family of vector spaces indexed by $\mathbb{R}^2$ rather than $\mathbb{R}$.
+With two parameters, you get a **2-parameter persistence module** — a family of vector spaces indexed by $$\mathbb{R}^2$$ rather than $$\mathbb{R}$$.
 
 **Why it is hard.** The structure theorem for 1-parameter persistence says: every persistence module decomposes uniquely into interval modules (bars). No such theorem exists in 2+ parameters — the algebraic structure is vastly more complex. There is no finite complete discrete invariant of a 2-parameter persistence module. This means there is no natural "2-parameter barcode."
 
@@ -50,17 +50,17 @@ With two parameters, you get a **2-parameter persistence module** — a family o
 
 ## Problem 2: Scalability
 
-**The problem.** Ripser can handle point clouds of ~100,000 points for $H_1$ in seconds. But modern datasets have millions of points (genomics, LiDAR, graph neural networks on large graphs). At $n = 10^6$, even storing the distance matrix ($n^2/2$ entries) requires 4 TB of memory.
+**The problem.** Ripser can handle point clouds of ~100,000 points for \(H_1\) in seconds. But modern datasets have millions of points (genomics, LiDAR, graph neural networks on large graphs). At \(n = 10^6\), even storing the distance matrix (\(n^2/2\) entries) requires 4 TB of memory.
 
 **Specific bottlenecks:**
-- The Vietoris-Rips complex has up to $2^n$ simplices — exponential in $n$.
-- Matrix reduction is $O(m^3)$ in the worst case, even with optimisations.
-- High-dimensional ($H_k$ for $k \geq 3$) computation is much slower than $H_1$.
+- The Vietoris-Rips complex has up to \(2^n\) simplices — exponential in \(n\).
+- Matrix reduction is \(O(m^3)\) in the worst case, even with optimisations.
+- High-dimensional (\(H_k\) for \(k \geq 3\)) computation is much slower than \(H_1\).
 
 **Partial progress:**
-- **Landmark/witness complexes** (de Silva & Carlsson, 2004): choose $L \ll n$ landmark points; include a simplex only if witnessed by a data point. Reduces to $O(L)$ simplices.
+- **Landmark/witness complexes** (de Silva & Carlsson, 2004): choose \(L \ll n\) landmark points; include a simplex only if witnessed by a data point. Reduces to \(O(L)\) simplices.
 - **Approximate PH** (Chazal et al., 2015): compute PH of a random subsample; approximate the full diagram with statistical guarantees.
-- **Sparse Rips** (Sheehy, 2013): build a sparse approximation of the full Rips complex in $O(n \log n)$ simplices with controlled approximation error.
+- **Sparse Rips** (Sheehy, 2013): build a sparse approximation of the full Rips complex in \(O(n \log n)\) simplices with controlled approximation error.
 - **GPU acceleration** (Morozov & Nigmetjanow, 2023): parallelize column reduction; 10x speedup on H_1.
 
 ---

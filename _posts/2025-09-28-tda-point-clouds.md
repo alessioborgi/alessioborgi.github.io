@@ -28,55 +28,55 @@ toc_label: "Contents"
 
 ## Intuition First
 
-A sculptor can recognise a donut shape even with their eyes closed — by feeling the hole. Persistent homology does the same for point clouds: it feels for holes, tunnels, and voids at every scale simultaneously. Build a ball of radius $$r$$ around each point; as $$r$$ grows, the balls merge, then enclose holes, then fill them in. The birth and death of each enclosed hole is recorded as a bar in the barcode. Long bars = robust geometric features of the underlying shape. Short bars = sampling noise.
+A sculptor can recognise a donut shape even with their eyes closed — by feeling the hole. Persistent homology does the same for point clouds: it feels for holes, tunnels, and voids at every scale simultaneously. Build a ball of radius \(r\) around each point; as \(r\) grows, the balls merge, then enclose holes, then fill them in. The birth and death of each enclosed hole is recorded as a bar in the barcode. Long bars = robust geometric features of the underlying shape. Short bars = sampling noise.
 
 ## The Sampling Setup
 
-**Goal**: Infer topological properties of an unknown shape $$X \subseteq \mathbb{R}^d$$ from a finite sample $$P = \{p_1, \ldots, p_n\}$$ drawn near $$X$$.
+**Goal**: Infer topological properties of an unknown shape \(X \subseteq \mathbb{R}^d\) from a finite sample \(P = \{p_1, \ldots, p_n\}\) drawn near \(X\).
 
-**Approach**: Build a Rips filtration $$\mathrm{Rips}(P, r)_{r \geq 0}$$ and compute its persistence diagram.
+**Approach**: Build a Rips filtration \(\mathrm{Rips}(P, r)_{r \geq 0}\) and compute its persistence diagram.
 
-**Key guarantee** (Chazal et al.): If $$P$$ is an $$\varepsilon$$-sample of $$X$$ (every point of $$X$$ is within $$\varepsilon$$ of some $$p \in P$$), then:
+**Key guarantee** (Chazal et al.): If \(P\) is an \(\varepsilon\)-sample of \(X\) (every point of \(X\) is within \(\varepsilon\) of some \(p \in P\)), then:
 
-<div class="math-box">$$d_B(\mathrm{dgm}(\mathrm{Rips}(P)), \mathrm{dgm}(\check{C}(X))) \leq O(\varepsilon)$$</div>
+<div class="math-box">\(d_B(\mathrm{dgm}(\mathrm{Rips}(P)), \mathrm{dgm}(\check{C}(X))) \leq O(\varepsilon)\)</div>
 
 So the diagram from the point cloud converges to the "true" diagram of the shape as sampling density increases.
 
 ## Reading the Diagram
 
-**$$H_0$$ diagram**: Bars $$(0, d_i)$$ for each connected component. The single infinite bar corresponds to the global component. Finite bars record when components merge; short bars indicate noisy clustering, long bars indicate clearly separated clusters.
+**\(H_0\) diagram**: Bars \((0, d_i)\) for each connected component. The single infinite bar corresponds to the global component. Finite bars record when components merge; short bars indicate noisy clustering, long bars indicate clearly separated clusters.
 
-**$$H_1$$ diagram**: Bars $$(b_i, d_i)$$ for loops/tunnels. A long bar $$(b, d)$$ with $$d \gg b$$ indicates a robust hole at scale $$[b, d]$$. For a sample from a circle $$S^1$$: one long $$H_1$$ bar, plus many short bars from sampling noise.
+**\(H_1\) diagram**: Bars \((b_i, d_i)\) for loops/tunnels. A long bar \((b, d)\) with \(d \gg b\) indicates a robust hole at scale \([b, d]\). For a sample from a circle \(S^1\): one long \(H_1\) bar, plus many short bars from sampling noise.
 
-**$$H_2$$ diagram**: Bars for enclosed voids/cavities. For a sample from $$S^2$$: one long $$H_2$$ bar. For a torus $$T^2$$: two $$H_1$$ bars and one $$H_2$$ bar.
+**\(H_2\) diagram**: Bars for enclosed voids/cavities. For a sample from \(S^2\): one long \(H_2\) bar. For a torus \(T^2\): two \(H_1\) bars and one \(H_2\) bar.
 
 ## Shape Comparison
 
 Persistence diagrams are **shape descriptors**: two point clouds sampled from the same shape have similar diagrams (stability), and different shapes produce different diagrams.
 
 **Applications**:
-- **Protein structure**: compare molecular shapes by their $$H_0, H_1, H_2$$ diagrams; similar shapes have similar diagrams regardless of orientation or small conformational changes.
-- **Medical imaging**: compare bone shapes between healthy and diseased patients using $$H_2$$ persistence of surface point clouds.
+- **Protein structure**: compare molecular shapes by their \(H_0, H_1, H_2\) diagrams; similar shapes have similar diagrams regardless of orientation or small conformational changes.
+- **Medical imaging**: compare bone shapes between healthy and diseased patients using \(H_2\) persistence of surface point clouds.
 - **3D object retrieval**: use persistence images of shape point clouds as fixed-size feature vectors for nearest-neighbour search.
 
 ## Worked Example: Circle vs. Sphere
 
-**Circle $$S^1$$** — 8 points evenly spaced, radius 1:
+**Circle \(S^1\)** — 8 points evenly spaced, radius 1:
 
-Points at angles $$0°, 45°, 90°, \ldots, 315°$$. Build Rips filtration:
-- At $$r \approx 0.77$$ (chord length for 45°): adjacent points connect — one component.
-- At $$r \approx 1.41$$ (diagonal chord): a loop forms, then at $$r \approx 2$$ the loop is filled by the triangle face.
+Points at angles \(0°, 45°, 90°, \ldots, 315°\). Build Rips filtration:
+- At \(r \approx 0.77\) (chord length for 45°): adjacent points connect — one component.
+- At \(r \approx 1.41\) (diagonal chord): a loop forms, then at \(r \approx 2\) the loop is filled by the triangle face.
 
-Persistence: $$H_1$$ bar $$(0.77, 2.0)$$, persistence $$= 1.23$$ — one clear long-lived loop. $$H_2 = \emptyset$$ (no enclosed volume for a circle).
+Persistence: \(H_1\) bar \((0.77, 2.0)\), persistence \(= 1.23\) — one clear long-lived loop. \(H_2 = \emptyset\) (no enclosed volume for a circle).
 
-**Sphere $$S^2$$** — 12 points (icosahedron vertices), radius 1:
+**Sphere \(S^2\)** — 12 points (icosahedron vertices), radius 1:
 
-- $$H_1$$: several short bars (triangulation noise), no long bars.
-- $$H_2$$: one long bar $$(b, d)$$ — the enclosed cavity, persistence $$\approx 1.0$$.
+- \(H_1\): several short bars (triangulation noise), no long bars.
+- \(H_2\): one long bar \((b, d)\) — the enclosed cavity, persistence \(\approx 1.0\).
 
 Reading the barcode:
-- Circle: long $$H_1$$ bar, empty $$H_2$$ → "it's a loop."
-- Sphere: empty $$H_1$$, long $$H_2$$ bar → "it's a cavity."
+- Circle: long \(H_1\) bar, empty \(H_2\) → "it's a loop."
+- Sphere: empty \(H_1\), long \(H_2\) bar → "it's a cavity."
 
 <style>
 @keyframes rips-grow {

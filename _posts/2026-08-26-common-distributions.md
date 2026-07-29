@@ -23,34 +23,34 @@ toc_label: "Contents"
 
 ## The reference table
 
-$\operatorname{Var}$ is the variance of a single draw; parameters are on the left.
+$$\operatorname{Var}$$ is the variance of a single draw; parameters are on the left.
 
 | Distribution | Models | Parameters | Mean | Variance |
 |---|---|---|---|---|
-| Bernoulli$(p)$ | one binary trial | $p\in[0,1]$ | $p$ | $p(1-p)$ |
-| Binomial$(n,p)$ | successes in $n$ trials | $n\in\mathbb{N},\,p$ | $np$ | $np(1-p)$ |
-| Categorical$(\boldsymbol{\pi})$ | one draw from $K$ classes | $\boldsymbol{\pi}$, $\sum_k\pi_k=1$ | $\boldsymbol{\pi}$ | $\operatorname{diag}(\boldsymbol{\pi})-\boldsymbol{\pi}\boldsymbol{\pi}^{\top}$ |
-| Poisson$(\lambda)$ | counts of rare independent events | $\lambda>0$ | $\lambda$ | $\lambda$ |
-| Uniform$(a,b)$ | no preference on an interval | $a \lt b$ | $\frac{a+b}{2}$ | $\frac{(b-a)^2}{12}$ |
-| Gaussian$(\mu,\sigma^2)$ | sums of many small effects | $\mu,\ \sigma^2>0$ | $\mu$ | $\sigma^2$ |
-| Exponential$(\lambda)$ | memoryless waiting time | $\lambda>0$ | $1/\lambda$ | $1/\lambda^2$ |
-| Beta$(\alpha,\beta)$ | an unknown probability | $\alpha,\beta>0$ | $\frac{\alpha}{\alpha+\beta}$ | $\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$ |
-| Dirichlet$(\boldsymbol{\alpha})$ | an unknown probability vector | $\alpha_k>0$, $\alpha_0=\sum_k\alpha_k$ | $\alpha_k/\alpha_0$ | $\frac{\alpha_k(\alpha_0-\alpha_k)}{\alpha_0^2(\alpha_0+1)}$ |
-| Laplace$(\mu,b)$ | sharply peaked, heavy-tailed noise | $\mu,\ b>0$ | $\mu$ | $2b^2$ |
+| Bernoulli$$(p)$$ | one binary trial | $$p\in[0,1]$$ | $$p$$ | $$p(1-p)$$ |
+| Binomial$$(n,p)$$ | successes in $$n$$ trials | $$n\in\mathbb{N},\,p$$ | $$np$$ | $$np(1-p)$$ |
+| Categorical$$(\boldsymbol{\pi})$$ | one draw from $$K$$ classes | $$\boldsymbol{\pi}$$, $$\sum_k\pi_k=1$$ | $$\boldsymbol{\pi}$$ | $$\operatorname{diag}(\boldsymbol{\pi})-\boldsymbol{\pi}\boldsymbol{\pi}^{\top}$$ |
+| Poisson$$(\lambda)$$ | counts of rare independent events | $$\lambda>0$$ | $$\lambda$$ | $$\lambda$$ |
+| Uniform$$(a,b)$$ | no preference on an interval | $$a \lt b$$ | $$\frac{a+b}{2}$$ | $$\frac{(b-a)^2}{12}$$ |
+| Gaussian$$(\mu,\sigma^2)$$ | sums of many small effects | $$\mu,\ \sigma^2>0$$ | $$\mu$$ | $$\sigma^2$$ |
+| Exponential$$(\lambda)$$ | memoryless waiting time | $$\lambda>0$$ | $$1/\lambda$$ | $$1/\lambda^2$$ |
+| Beta$$(\alpha,\beta)$$ | an unknown probability | $$\alpha,\beta>0$$ | $$\frac{\alpha}{\alpha+\beta}$$ | $$\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$$ |
+| Dirichlet$$(\boldsymbol{\alpha})$$ | an unknown probability vector | $$\alpha_k>0$$, $$\alpha_0=\sum_k\alpha_k$$ | $$\alpha_k/\alpha_0$$ | $$\frac{\alpha_k(\alpha_0-\alpha_k)}{\alpha_0^2(\alpha_0+1)}$$ |
+| Laplace$$(\mu,b)$$ | sharply peaked, heavy-tailed noise | $$\mu,\ b>0$$ | $$\mu$$ | $$2b^2$$ |
 
-Three relationships tie the table together. Binomial is a sum of independent Bernoullis. Poisson is the limit of Binomial$(n,\lambda/n)$ as $n\to\infty$, which is why it models rare events among many opportunities. Beta is the one-dimensional case of Dirichlet.
+Three relationships tie the table together. Binomial is a sum of independent Bernoullis. Poisson is the limit of Binomial$$(n,\lambda/n)$$ as $$n\to\infty$$, which is why it models rare events among many opportunities. Beta is the one-dimensional case of Dirichlet.
 
 ## The three that matter most in ML
 
-**Categorical.** Every classifier's output layer. A softmax over $K$ logits *is* a categorical parameter vector, and the training loss is the negative log-likelihood of the observed class under it. Its covariance $\operatorname{diag}(\boldsymbol{\pi})-\boldsymbol{\pi}\boldsymbol{\pi}^{\top}$ is exactly the Jacobian of the softmax, which is why the softmax–cross-entropy gradient collapses to $\hat{\mathbf{y}} - \mathbf{y}$.
+**Categorical.** Every classifier's output layer. A softmax over $$K$$ logits *is* a categorical parameter vector, and the training loss is the negative log-likelihood of the observed class under it. Its covariance $$\operatorname{diag}(\boldsymbol{\pi})-\boldsymbol{\pi}\boldsymbol{\pi}^{\top}$$ is exactly the Jacobian of the softmax, which is why the softmax–cross-entropy gradient collapses to $$\hat{\mathbf{y}} - \mathbf{y}$$.
 
-**Beta and Dirichlet.** These are the conjugate priors for Bernoulli and Categorical: start with Beta$(\alpha,\beta)$, observe $s$ successes and $f$ failures, and the posterior is Beta$(\alpha+s,\beta+f)$. The parameters act as pseudo-counts, which is the cleanest way to read Laplace smoothing — adding 1 to every count is a Dirichlet$(\mathbf{1})$ prior. Dirichlet is also what latent Dirichlet allocation puts over topic proportions.
+**Beta and Dirichlet.** These are the conjugate priors for Bernoulli and Categorical: start with Beta$$(\alpha,\beta)$$, observe $$s$$ successes and $$f$$ failures, and the posterior is Beta$$(\alpha+s,\beta+f)$$. The parameters act as pseudo-counts, which is the cleanest way to read Laplace smoothing — adding 1 to every count is a Dirichlet$$(\mathbf{1})$$ prior. Dirichlet is also what latent Dirichlet allocation puts over topic proportions.
 
-**Laplace.** Its log-density is $-|x-\mu|/b$ up to a constant, so a Laplace prior on weights gives an $\ell_1$ penalty and a Gaussian prior gives $\ell_2$. Lasso versus ridge is a choice of noise model, not just a choice of penalty.
+**Laplace.** Its log-density is $$-|x-\mu|/b$$ up to a constant, so a Laplace prior on weights gives an $$\ell_1$$ penalty and a Gaussian prior gives $$\ell_2$$. Lasso versus ridge is a choice of noise model, not just a choice of penalty.
 
 ## The multivariate Gaussian
 
-For $\mathbf{x}\in\mathbb{R}^d$ with mean $\boldsymbol{\mu}$ and positive-definite covariance $\boldsymbol{\Sigma}$:
+For $$\mathbf{x}\in\mathbb{R}^d$$ with mean $$\boldsymbol{\mu}$$ and positive-definite covariance $$\boldsymbol{\Sigma}$$:
 
 <div class="formula-box">
 \[
@@ -58,9 +58,9 @@ p(\mathbf{x}) = (2\pi)^{-d/2}\,|\boldsymbol{\Sigma}|^{-1/2}\exp\!\left(-\tfrac12
 \]
 </div>
 
-Everything about the shape is in the quadratic form. The quantity $\Delta^2 = (\mathbf{x}-\boldsymbol{\mu})^{\top}\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})$ is the squared **Mahalanobis distance**, and the density is constant wherever $\Delta$ is constant — so the level sets are ellipsoids.
+Everything about the shape is in the quadratic form. The quantity $$\Delta^2 = (\mathbf{x}-\boldsymbol{\mu})^{\top}\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})$$ is the squared **Mahalanobis distance**, and the density is constant wherever $$\Delta$$ is constant — so the level sets are ellipsoids.
 
-Diagonalise, $\boldsymbol{\Sigma} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{U}^{\top}$ with orthonormal eigenvectors $$\mathbf{u}_i$$ and eigenvalues $\lambda_i > 0$. The ellipsoid's axes point along the $$\mathbf{u}_i$$, and its semi-axis in direction $i$ has length proportional to $\sqrt{\lambda_i}$. Take
+Diagonalise, $$\boldsymbol{\Sigma} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{U}^{\top}$$ with orthonormal eigenvectors $$\mathbf{u}_i$$ and eigenvalues $$\lambda_i > 0$$. The ellipsoid's axes point along the $$\mathbf{u}_i$$, and its semi-axis in direction $$i$$ has length proportional to $$\sqrt{\lambda_i}$$. Take
 
 <div class="formula-box">
 \[
@@ -70,7 +70,7 @@ Diagonalise, $\boldsymbol{\Sigma} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{U}^{\t
 \]
 </div>
 
-The contours are ellipses tilted at 45°, elongated by $\sqrt{1.8/0.2} = 3$ — three times wider along the diagonal than across it. Strong positive correlation *is* that elongation.
+The contours are ellipses tilted at 45°, elongated by $$\sqrt{1.8/0.2} = 3$$ — three times wider along the diagonal than across it. Strong positive correlation *is* that elongation.
 
 <div class="blog-figure">
 <figure>
@@ -100,7 +100,7 @@ The contours are ellipses tilted at 45°, elongated by $\sqrt{1.8/0.2} = 3$ — 
 </figure>
 </div>
 
-Two structural facts make the family tractable. Marginals and conditionals of a Gaussian are Gaussian, with the conditional mean $$\boldsymbol{\mu}_1 + \boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}(\mathbf{x}_2-\boldsymbol{\mu}_2)$$ — linear in what you conditioned on, which is where linear regression and Kalman filters come from. And any affine map of a Gaussian is Gaussian: with $\boldsymbol{\Sigma}=\mathbf{L}\mathbf{L}^{\top}$, sampling is $\mathbf{x} = \boldsymbol{\mu}+\mathbf{L}\boldsymbol{\epsilon}$ with $\boldsymbol{\epsilon}\sim\mathcal{N}(\mathbf{0},\mathbf{I})$ — the reparameterisation trick that makes VAEs differentiable.
+Two structural facts make the family tractable. Marginals and conditionals of a Gaussian are Gaussian, with the conditional mean $$\boldsymbol{\mu}_1 + \boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}(\mathbf{x}_2-\boldsymbol{\mu}_2)$$ — linear in what you conditioned on, which is where linear regression and Kalman filters come from. And any affine map of a Gaussian is Gaussian: with $$\boldsymbol{\Sigma}=\mathbf{L}\mathbf{L}^{\top}$$, sampling is $$\mathbf{x} = \boldsymbol{\mu}+\mathbf{L}\boldsymbol{\epsilon}$$ with $$\boldsymbol{\epsilon}\sim\mathcal{N}(\mathbf{0},\mathbf{I})$$ — the reparameterisation trick that makes VAEs differentiable.
 
 <div class="warning-box">
   <strong>Interview trap — "Gaussian marginals plus zero correlation means independent":</strong> only if the pair is <em>jointly</em> Gaussian. Let \(X\sim\mathcal{N}(0,1)\) and let \(S=\pm1\) be an independent fair sign; put \(Y = SX\). Then \(Y\sim\mathcal{N}(0,1)\) too, and \(\operatorname{Cov}(X,Y)=\mathbb{E}[S]\,\mathbb{E}[X^2]=0\). But \(|Y|=|X|\) always, so they are strongly dependent — the joint distribution is not Gaussian, it is mass on two lines. Diagonal covariance implies independence only inside the joint-Gaussian family.

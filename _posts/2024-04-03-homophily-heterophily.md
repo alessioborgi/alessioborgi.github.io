@@ -27,7 +27,7 @@ The earliest and most influential GNN papers — GCN (Kipf & Welling, 2017), Gra
 
 These datasets have a property called **homophily**: connected nodes tend to belong to the same class. In a citation network, papers cite papers on similar topics. In a social network, people befriend people with similar interests (birds of a feather flock together).
 
-Formally, writing $y_v$ for the class label of node $v$, the **edge homophily ratio** of a graph is the fraction of edges whose endpoints share a label:
+Formally, writing $$y_v$$ for the class label of node $$v$$, the **edge homophily ratio** of a graph is the fraction of edges whose endpoints share a label:
 
 <div class="formula-box">
 \[
@@ -35,13 +35,13 @@ h \;=\; \frac{\bigl\lvert \{\, (u,v) \in E \ :\ y_u = y_v \,\} \bigr\rvert}{\lve
 \]
 </div>
 
-$h = 1$: every edge connects same-class nodes (perfect homophily). $h = 0$: every edge crosses classes (perfect heterophily).
+$$h = 1$$: every edge connects same-class nodes (perfect homophily). $$h = 0$$: every edge crosses classes (perfect heterophily).
 
-Commonly reported edge-homophily values: Cora $\approx 0.81$, CiteSeer $\approx 0.74$, Amazon-Photo $\approx 0.83$. These are the kind of benchmarks GCN was originally evaluated on.
+Commonly reported edge-homophily values: Cora $$\approx 0.81$$, CiteSeer $$\approx 0.74$$, Amazon-Photo $$\approx 0.83$$. These are the kind of benchmarks GCN was originally evaluated on.
 
 ## Why Standard GNNs Exploit Homophily
 
-Aggregation in a GCN layer is a degree-normalised average over the node and its neighbours. Writing $h_v^{(k)}$ for node $v$'s features at layer $k$ and $\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$ for the propagation matrix,
+Aggregation in a GCN layer is a degree-normalised average over the node and its neighbours. Writing $$h_v^{(k)}$$ for node $$v$$'s features at layer $$k$$ and $$\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$$ for the propagation matrix,
 
 <div class="formula-box">
 \[
@@ -49,9 +49,9 @@ h^{(k+1)}_v \;=\; \sigma\!\left( W^{(k)} \sum_{u \in \mathcal{N}(v)\cup\{v\}} \f
 \]
 </div>
 
-which is a weighted mean over the closed neighbourhood $\mathcal{N}(v)\cup\{v\}$ — the simpler unweighted mean $\tfrac{1}{\lvert\mathcal{N}(v)\rvert+1}\sum_{u} h_u$ is the same idea with uniform weights, as in GraphSAGE-mean.
+which is a weighted mean over the closed neighbourhood $$\mathcal{N}(v)\cup\{v\}$$ — the simpler unweighted mean $$\tfrac{1}{\lvert\mathcal{N}(v)\rvert+1}\sum_{u} h_u$$ is the same idea with uniform weights, as in GraphSAGE-mean.
 
-If the neighbours share $v$'s class, this averaging makes sense: the mean is a useful summary and $v$'s representation moves toward the centroid of its class cluster.
+If the neighbours share $$v$$'s class, this averaging makes sense: the mean is a useful summary and $$v$$'s representation moves toward the centroid of its class cluster.
 
 Under high homophily: aggregation ≡ denoising. Your neighbours' features are similar to yours; averaging refines your representation.
 
@@ -64,7 +64,7 @@ Now consider a **heterophilic graph**. Real examples:
 - **Chameleon and Squirrel datasets** (web page links): pages on different topics link to each other
 - **Roman-Empire dataset:** nodes are the words of a Wikipedia article, linked by their order in the text and by syntactic dependency; adjacent words rarely share a syntactic role
 
-In these graphs $h < 0.3$: a node's neighbours mostly belong to a *different* class.
+In these graphs $$h < 0.3$$: a node's neighbours mostly belong to a *different* class.
 
 Under GCN aggregation the weighted mean of the neighbours' features is now a mean of *different-class* features, so the aggregated representation is pushed *away* from the node's own class cluster. **Naïve neighbourhood averaging can hurt more than it helps on heterophilic graphs.**
 
@@ -74,7 +74,7 @@ Under GCN aggregation the weighted mean of the neighbours' features is now a mea
 
 ## Measuring Heterophily More Carefully
 
-The plain edge homophily ratio $h$ is misleading when classes are imbalanced: with one dominant class, most edges land inside it by accident and $h$ looks high even for a graph whose edges carry no class information at all. **Adjusted homophily** subtracts off that chance baseline:
+The plain edge homophily ratio $$h$$ is misleading when classes are imbalanced: with one dominant class, most edges land inside it by accident and $$h$$ looks high even for a graph whose edges carry no class information at all. **Adjusted homophily** subtracts off that chance baseline:
 
 <div class="formula-box">
 \[
@@ -84,7 +84,7 @@ p_k \;=\; \frac{\sum_{v : y_v = k} d_v}{2\lvert E \rvert}.
 \]
 </div>
 
-The weight $p_k$ is the share of *edge endpoints* belonging to class $k$ — a degree-weighted class proportion, not the plain fraction of nodes. That distinction matters: $\sum_k p_k^{2}$ is exactly the probability that a randomly rewired edge would connect two class-$k$ nodes, which is the baseline being removed. The result is $0$ for a graph with no class signal in its edges, $1$ for perfect homophily, and negative when a graph is *more* heterophilic than chance.
+The weight $$p_k$$ is the share of *edge endpoints* belonging to class $$k$$ — a degree-weighted class proportion, not the plain fraction of nodes. That distinction matters: $$\sum_k p_k^{2}$$ is exactly the probability that a randomly rewired edge would connect two class-$$k$$ nodes, which is the baseline being removed. The result is $$0$$ for a graph with no class signal in its edges, $$1$$ for perfect homophily, and negative when a graph is *more* heterophilic than chance.
 
 Another useful measure is **node homophily**: for each node compute the fraction of its neighbours that share its class, then average over nodes. This weights every node equally rather than every edge, so it is less dominated by hubs.
 
@@ -149,7 +149,7 @@ Include the node's own feature explicitly (not mixed with neighbours) at each la
 
 ### 3. Signed or directional aggregation
 
-FAGCN (Frequency Adaptive GCN) assigns *signed* attention weights $\alpha_{uv} \in [-1, 1]$ to each edge. A positive $\alpha_{uv}$ recovers ordinary low-pass averaging; a negative one turns the edge into a high-pass, difference-taking operation that pushes $h_u$ and $h_v$ apart. In the spectral language of the Graph Fourier Transform post, allowing negative weights is what lets the layer realise a filter that is not monotonically decreasing in $\lambda$ — which is exactly what a heterophilic (high-frequency) label signal requires.
+FAGCN (Frequency Adaptive GCN) assigns *signed* attention weights $$\alpha_{uv} \in [-1, 1]$$ to each edge. A positive $$\alpha_{uv}$$ recovers ordinary low-pass averaging; a negative one turns the edge into a high-pass, difference-taking operation that pushes $$h_u$$ and $$h_v$$ apart. In the spectral language of the Graph Fourier Transform post, allowing negative weights is what lets the layer realise a filter that is not monotonically decreasing in $$\lambda$$ — which is exactly what a heterophilic (high-frequency) label signal requires.
 
 ### 4. Graph Transformers
 
@@ -161,7 +161,7 @@ Sheaf GNNs (see the Sheaf section) attach a linear map to each edge — allowing
 
 ## Homophily and Over-Smoothing
 
-There is a deep connection. Over-smoothing — repeated application of $\hat{A}$ driving all node embeddings onto a single one-dimensional subspace — is caused by iterated averaging, and it happens on *every* graph regardless of homophily. What homophily changes is whether the intermediate smoothing is useful before the collapse sets in. On a homophilic graph, early convergence is within-class, so a few layers act as denoising. On a heterophilic graph, the very first averaging step already mixes across class boundaries, so there is no useful regime at all. Adding layers to reach longer-range dependencies therefore makes heterophily problems worse, not better.
+There is a deep connection. Over-smoothing — repeated application of $$\hat{A}$$ driving all node embeddings onto a single one-dimensional subspace — is caused by iterated averaging, and it happens on *every* graph regardless of homophily. What homophily changes is whether the intermediate smoothing is useful before the collapse sets in. On a homophilic graph, early convergence is within-class, so a few layers act as denoising. On a heterophilic graph, the very first averaging step already mixes across class boundaries, so there is no useful regime at all. Adding layers to reach longer-range dependencies therefore makes heterophily problems worse, not better.
 
 Note the direction of the argument: heterophily is not *caused* by over-smoothing, and it does not require depth. A single GCN layer on a heterophilic graph already blurs the classes.
 
@@ -170,7 +170,7 @@ Note the direction of the argument: heterophily is not *caused* by over-smoothin
 | Property | Homophilic graphs | Heterophilic graphs |
 |----------|------------------|---------------------|
 | Edge pattern | Same-class nodes connect | Different-class nodes connect |
-| $h$ (edge homophily) | $> 0.5$ | $< 0.3$ |
+| $$h$$ (edge homophily) | $$> 0.5$$ | $$< 0.3$$ |
 | Label signal, spectrally | Low-frequency (smooth over edges) | High-frequency (alternates over edges) |
 | Standard GCN | Works well | Often no better than a structure-blind MLP |
 | More layers | Helps up to a point | Makes it worse |

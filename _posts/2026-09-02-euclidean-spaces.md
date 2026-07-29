@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## The one structure everything else comes from
 
-A vector space on its own has no lengths and no angles; it only knows about addition and scaling. Add an inner product $\langle \cdot,\cdot\rangle$ — bilinear, symmetric, and positive definite ($\langle x,x\rangle > 0$ for $x \neq 0$) — and geometry appears. In $\mathbb{R}^n$ the standard choice is $\langle x,y\rangle = x^\top y$, and the norm it induces is
+A vector space on its own has no lengths and no angles; it only knows about addition and scaling. Add an inner product $$\langle \cdot,\cdot\rangle$$ — bilinear, symmetric, and positive definite ($$\langle x,x\rangle > 0$$ for $$x \neq 0$$) — and geometry appears. In $$\mathbb{R}^n$$ the standard choice is $$\langle x,y\rangle = x^\top y$$, and the norm it induces is
 
 <div class="formula-box">
 \[
@@ -31,7 +31,7 @@ A vector space on its own has no lengths and no angles; it only knows about addi
 \]
 </div>
 
-The Cauchy–Schwarz inequality $\lvert\langle x,y\rangle\rvert \le \lVert x\rVert\,\lVert y\rVert$ guarantees that the ratio $\langle x,y\rangle/(\lVert x\rVert \lVert y\rVert)$ always lies in $[-1,1]$, so it is legitimate to *define* the angle $\theta$ between two vectors by
+The Cauchy–Schwarz inequality $$\lvert\langle x,y\rangle\rvert \le \lVert x\rVert\,\lVert y\rVert$$ guarantees that the ratio $$\langle x,y\rangle/(\lVert x\rVert \lVert y\rVert)$$ always lies in $$[-1,1]$$, so it is legitimate to *define* the angle $$\theta$$ between two vectors by
 
 <div class="formula-box">
 \[
@@ -39,11 +39,11 @@ The Cauchy–Schwarz inequality $\lvert\langle x,y\rangle\rvert \le \lVert x\rVe
 \]
 </div>
 
-That definition is cosine similarity. It is not an analogy to angles; it is the angle. Orthogonality, $\langle x,y\rangle = 0$, is the case $\theta = 90^\circ$.
+That definition is cosine similarity. It is not an analogy to angles; it is the angle. Orthogonality, $$\langle x,y\rangle = 0$$, is the case $$\theta = 90^\circ$$.
 
 ## Projection, derived rather than quoted
 
-Given $x$ and a nonzero direction $u$, which multiple of $u$ is closest to $x$? Minimise the squared residual over the scalar $\alpha$:
+Given $$x$$ and a nonzero direction $$u$$, which multiple of $$u$$ is closest to $$x$$? Minimise the squared residual over the scalar $$\alpha$$:
 
 <div class="formula-box">
 \[
@@ -53,7 +53,7 @@ Given $x$ and a nonzero direction $u$, which multiple of $u$ is closest to $x$? 
 \]
 </div>
 
-So $\alpha^\star = \langle x,u\rangle/\lVert u\rVert^2$ and the projection is $$\mathrm{proj}_u(x) = \frac{\langle x,u\rangle}{\lVert u\rVert^2}\,u$$. The residual is automatically orthogonal to $u$, since $\langle x - \alpha^\star u,\ u\rangle = \langle x,u\rangle - \alpha^\star\lVert u\rVert^2 = 0$. Least squares is this same argument in higher dimensions: the fitted values are the projection of $y$ onto the column space of the design matrix, and the residual vector is orthogonal to every regressor.
+So $$\alpha^\star = \langle x,u\rangle/\lVert u\rVert^2$$ and the projection is $$\mathrm{proj}_u(x) = \frac{\langle x,u\rangle}{\lVert u\rVert^2}\,u$$. The residual is automatically orthogonal to $$u$$, since $$\langle x - \alpha^\star u,\ u\rangle = \langle x,u\rangle - \alpha^\star\lVert u\rVert^2 = 0$$. Least squares is this same argument in higher dimensions: the fitted values are the projection of $$y$$ onto the column space of the design matrix, and the residual vector is orthogonal to every regressor.
 
 <div class="blog-figure">
 <figure>
@@ -87,11 +87,11 @@ So $\alpha^\star = \langle x,u\rangle/\lVert u\rVert^2$ and the projection is $$
 </figure>
 </div>
 
-With $x = (3,4)$ and $u = (1,1)$: $\langle x,u\rangle = 7$, $\lVert u\rVert^2 = 2$, so $\alpha^\star = 3.5$ and the projection is $(3.5, 3.5)$. The residual $(-0.5, 0.5)$ has inner product $-0.5 + 0.5 = 0$ with $u$, as promised. The angle satisfies $\cos\theta = 7/(5\sqrt{2}) = 0.98995$, so $\theta = 8.13^\circ$.
+With $$x = (3,4)$$ and $$u = (1,1)$$: $$\langle x,u\rangle = 7$$, $$\lVert u\rVert^2 = 2$$, so $$\alpha^\star = 3.5$$ and the projection is $$(3.5, 3.5)$$. The residual $$(-0.5, 0.5)$$ has inner product $$-0.5 + 0.5 = 0$$ with $$u$$, as promised. The angle satisfies $$\cos\theta = 7/(5\sqrt{2}) = 0.98995$$, so $$\theta = 8.13^\circ$$.
 
 ## Orthonormal bases and Gram–Schmidt
 
-A basis $$\\{q_1,\dots,q_n\\}$$ is orthonormal when $$\langle q_i,q_j\rangle = \delta_{ij}$$. It is the convenient case: coordinates are just inner products, $x = \sum_i \langle x, q_i\rangle q_i$, and lengths are preserved by Parseval, $\lVert x\rVert^2 = \sum_i \langle x,q_i\rangle^2$. Gram–Schmidt manufactures one from any basis $$\\{a_1,\dots,a_n\\}$$ by repeatedly subtracting off what is already explained:
+A basis $$\\{q_1,\dots,q_n\\}$$ is orthonormal when $$\langle q_i,q_j\rangle = \delta_{ij}$$. It is the convenient case: coordinates are just inner products, $$x = \sum_i \langle x, q_i\rangle q_i$$, and lengths are preserved by Parseval, $$\lVert x\rVert^2 = \sum_i \langle x,q_i\rangle^2$$. Gram–Schmidt manufactures one from any basis $$\\{a_1,\dots,a_n\\}$$ by repeatedly subtracting off what is already explained:
 
 <div class="formula-box">
 \[
@@ -104,7 +104,7 @@ Each step is the projection formula applied and subtracted. In floating point, c
 
 ## Hyperplanes and the margin
 
-A hyperplane is the set $$H = \\{x : \mathbf{w}^\top x + b = 0\\}$$ with $\mathbf{w} \neq 0$. It is an $(n{-}1)$-dimensional affine subspace, and $\mathbf{w}$ is normal to it: for any $x_1, x_2 \in H$, $\mathbf{w}^\top(x_1 - x_2) = 0$. To find the distance from an arbitrary $x_0$, step from $x_0$ along $\mathbf{w}$ until you hit $H$. Write the foot as $x_0 - t\mathbf{w}$ and solve $\mathbf{w}^\top(x_0 - t\mathbf{w}) + b = 0$, giving $t = (\mathbf{w}^\top x_0 + b)/\lVert \mathbf{w}\rVert^2$. The distance is $\lVert t\mathbf{w}\rVert$:
+A hyperplane is the set $$H = \\{x : \mathbf{w}^\top x + b = 0\\}$$ with $$\mathbf{w} \neq 0$$. It is an $$(n{-}1)$$-dimensional affine subspace, and $$\mathbf{w}$$ is normal to it: for any $$x_1, x_2 \in H$$, $$\mathbf{w}^\top(x_1 - x_2) = 0$$. To find the distance from an arbitrary $$x_0$$, step from $$x_0$$ along $$\mathbf{w}$$ until you hit $$H$$. Write the foot as $$x_0 - t\mathbf{w}$$ and solve $$\mathbf{w}^\top(x_0 - t\mathbf{w}) + b = 0$$, giving $$t = (\mathbf{w}^\top x_0 + b)/\lVert \mathbf{w}\rVert^2$$. The distance is $$\lVert t\mathbf{w}\rVert$$:
 
 <div class="formula-box">
 \[
@@ -112,7 +112,7 @@ d(x_0, H) = \frac{\lvert \mathbf{w}^\top x_0 + b\rvert}{\lVert \mathbf{w}\rVert}
 \]
 </div>
 
-Take $\mathbf{w} = (2,1)$, $b = -4$ and $x_0 = (3,3)$: the numerator is $\lvert 6 + 3 - 4\rvert = 5$ and $\lVert\mathbf{w}\rVert = \sqrt 5$, so the distance is exactly $\sqrt 5 \approx 2.236$.
+Take $$\mathbf{w} = (2,1)$$, $$b = -4$$ and $$x_0 = (3,3)$$: the numerator is $$\lvert 6 + 3 - 4\rvert = 5$$ and $$\lVert\mathbf{w}\rVert = \sqrt 5$$, so the distance is exactly $$\sqrt 5 \approx 2.236$$.
 
 <div class="insight-box">
   <strong>Key Insight — where the SVM's \(2/\lVert \mathbf{w}\rVert\) comes from:</strong> the pair \((\mathbf{w}, b)\) is over-parameterised, since scaling both by \(c>0\) leaves the hyperplane unchanged. The hard-margin SVM removes that freedom by <em>fixing the scale</em> with the constraints \(y_i(\mathbf{w}^\top x_i + b)\ge 1\), so the closest points sit at \(\lvert \mathbf{w}^\top x + b\rvert = 1\). By the distance formula they are \(1/\lVert\mathbf{w}\rVert\) away, the two margins are \(2/\lVert\mathbf{w}\rVert\) apart, and maximising the margin becomes minimising \(\lVert\mathbf{w}\rVert^2\). The quadratic objective is not a modelling choice — it is the distance formula in disguise.
@@ -120,7 +120,7 @@ Take $\mathbf{w} = (2,1)$, $b = -4$ and $x_0 = (3,3)$: the numerator is $\lvert 
 
 ## What this means for a trained classifier
 
-The last layer of a neural classifier is a set of hyperplanes, one per class in the binary-versus-rest reading. The logit $$\mathbf{w}_c^\top h + b_c$$ is a *signed*, unnormalised distance from the penultimate feature $h$ to class $c$'s boundary; dividing by $$\lVert \mathbf{w}_c\rVert$$ turns it into an actual distance. This is why logit magnitudes are not comparable across classes with differently scaled weight vectors, and why weight normalisation and cosine-softmax variants exist at all.
+The last layer of a neural classifier is a set of hyperplanes, one per class in the binary-versus-rest reading. The logit $$\mathbf{w}_c^\top h + b_c$$ is a *signed*, unnormalised distance from the penultimate feature $$h$$ to class $$c$$'s boundary; dividing by $$\lVert \mathbf{w}_c\rVert$$ turns it into an actual distance. This is why logit magnitudes are not comparable across classes with differently scaled weight vectors, and why weight normalisation and cosine-softmax variants exist at all.
 
 <div class="warning-box">
   <strong>Interview trap:</strong> the formula \(\lvert\mathbf{w}^\top x_0 + b\rvert/\lVert\mathbf{w}\rVert\) is a distance only in the norm induced by the inner product you used. Under a different metric — a Mahalanobis inner product \(\langle x,y\rangle_A = x^\top A y\) with \(A \succ 0\), say — orthogonality, angles and the closest point on \(H\) all change. "Perpendicular" is a statement about a chosen inner product, never about the coordinates on the page.

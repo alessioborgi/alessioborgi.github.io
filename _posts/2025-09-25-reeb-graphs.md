@@ -28,51 +28,51 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Imagine a mountain range as a terrain function $$f: M \to \mathbb{R}$$ (height). At sea level you see one large island. As you raise the water level, the island splits into two peaks, then each peak becomes a smaller cap. The Reeb graph records exactly these events: each split or merge is a node, and each continuous "strand" between events is an edge. It is the minimal graph that captures how the topology of the terrain changes with height — a topological skeleton stripped of all geometric detail.
+Imagine a mountain range as a terrain function \(f: M \to \mathbb{R}\) (height). At sea level you see one large island. As you raise the water level, the island splits into two peaks, then each peak becomes a smaller cap. The Reeb graph records exactly these events: each split or merge is a node, and each continuous "strand" between events is an edge. It is the minimal graph that captures how the topology of the terrain changes with height — a topological skeleton stripped of all geometric detail.
 
 ## Definition
 
-Let $$M$$ be a smooth manifold and $$f: M \to \mathbb{R}$$ a Morse function. The **Reeb graph** $$\mathcal{R}(f)$$ is the quotient:
+Let \(M\) be a smooth manifold and \(f: M \to \mathbb{R}\) a Morse function. The **Reeb graph** \(\mathcal{R}(f)\) is the quotient:
 
-<div class="math-box">$$\mathcal{R}(f) = M / \!\sim \quad \text{where} \quad x \sim y \iff f(x) = f(y) \text{ and } x, y \text{ are in the same connected component of } f^{-1}(f(x))$$</div>
+<div class="math-box">\(\mathcal{R}(f) = M / \!\sim \quad \text{where} \quad x \sim y \iff f(x) = f(y) \text{ and } x, y \text{ are in the same connected component of } f^{-1}(f(x))\)</div>
 
-The quotient map $$\pi: M \to \mathcal{R}(f)$$ induces a function $$\bar{f}: \mathcal{R}(f) \to \mathbb{R}$$.
+The quotient map \(\pi: M \to \mathcal{R}(f)\) induces a function \(\bar{f}: \mathcal{R}(f) \to \mathbb{R}\).
 
 **Structure**: The Reeb graph is a graph whose:
-- **Nodes** correspond to critical values of $$f$$ where the topology of level sets changes.
-- **Edges** correspond to intervals $$[a,b]$$ over which the connected components of $$f^{-1}(t)$$ evolve smoothly.
+- **Nodes** correspond to critical values of \(f\) where the topology of level sets changes.
+- **Edges** correspond to intervals \([a,b]\) over which the connected components of \(f^{-1}(t)\) evolve smoothly.
 
 ## Merge Trees and Contour Trees
 
-**Merge tree** (split tree / join tree): Track only the birth and death of connected components in **sublevel sets** $$f^{-1}((-\infty, t])$$:
+**Merge tree** (split tree / join tree): Track only the birth and death of connected components in **sublevel sets** \(f^{-1}((-\infty, t])\):
 - A branch in the merge tree = a connected component of the sublevel set.
 - A merge = two components joining (a "death" of the younger one by the elder rule).
-- The merge tree is the Reeb graph restricted to $$H_0$$.
+- The merge tree is the Reeb graph restricted to \(H_0\).
 
-**Contour tree**: For $$f: M \to \mathbb{R}$$ on a simply-connected domain ($$H_1 = 0$$), the Reeb graph is a tree — the contour tree. It can be computed as the "gluing" of the join tree and split tree.
+**Contour tree**: For \(f: M \to \mathbb{R}\) on a simply-connected domain (\(H_1 = 0\)), the Reeb graph is a tree — the contour tree. It can be computed as the "gluing" of the join tree and split tree.
 
 ## Connection to Persistence
 
-The persistence pairs from the $$H_0$$ persistence algorithm are exactly the edges of the merge tree:
-- Each birth–death pair $$(b, d)$$ corresponds to an arc in the merge tree from creation to destruction of a component.
-- The **persistence** $$d - b$$ is the "lifetime" of the arc.
+The persistence pairs from the \(H_0\) persistence algorithm are exactly the edges of the merge tree:
+- Each birth–death pair \((b, d)\) corresponds to an arc in the merge tree from creation to destruction of a component.
+- The **persistence** \(d - b\) is the "lifetime" of the arc.
 
-For higher-dimensional homology, extended persistence on the Reeb graph captures $$H_k$$ features of the underlying manifold.
+For higher-dimensional homology, extended persistence on the Reeb graph captures \(H_k\) features of the underlying manifold.
 
 ## Worked Example: Reeb Graph of a Double-Peak Terrain
 
-Consider $$f: [0,1] \to \mathbb{R}$$ on a 1D graph with two bumps:
+Consider \(f: [0,1] \to \mathbb{R}\) on a 1D graph with two bumps:
 
-$$f = \underbrace{0.1}_{\text{valley}} \to \underbrace{0.8}_{\text{peak 1}} \to \underbrace{0.3}_{\text{saddle}} \to \underbrace{0.9}_{\text{peak 2}} \to \underbrace{0.05}_{\text{valley}}$$
+\(f = \underbrace{0.1}_{\text{valley}} \to \underbrace{0.8}_{\text{peak 1}} \to \underbrace{0.3}_{\text{saddle}} \to \underbrace{0.9}_{\text{peak 2}} \to \underbrace{0.05}_{\text{valley}}\)
 
 Sweep from bottom up:
-- $$f=0.05$$: right valley appears — one component born.
-- $$f=0.1$$: left valley appears — second component born.
-- $$f=0.3$$: saddle — both components merge into one (elder rule: the one born at $$f=0.05$$ survives; the $$f=0.1$$ component dies, persistence $$= 0.3 - 0.1 = 0.2$$).
-- $$f=0.8$$: peak 1 — sublevel set gains a new local max; no new component (already connected).
-- $$f=0.9$$: peak 2 — global maximum.
+- \(f=0.05\): right valley appears — one component born.
+- \(f=0.1\): left valley appears — second component born.
+- \(f=0.3\): saddle — both components merge into one (elder rule: the one born at \(f=0.05\) survives; the \(f=0.1\) component dies, persistence \(= 0.3 - 0.1 = 0.2\)).
+- \(f=0.8\): peak 1 — sublevel set gains a new local max; no new component (already connected).
+- \(f=0.9\): peak 2 — global maximum.
 
-**Reeb graph**: two leaf nodes (the two valleys), one internal node (the saddle merge), and two leaf nodes at the peaks — forming a "Y then Y" shape. The merge tree records the single pair $$(0.1, 0.3)$$.
+**Reeb graph**: two leaf nodes (the two valleys), one internal node (the saddle merge), and two leaf nodes at the peaks — forming a "Y then Y" shape. The merge tree records the single pair \((0.1, 0.3)\).
 
 <style>
 @keyframes reeb-rise {

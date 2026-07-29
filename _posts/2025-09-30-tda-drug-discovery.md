@@ -32,9 +32,9 @@ A drug molecule is not just a graph of atom–bond connections — it is a 3D sh
 
 ## Molecular Topology
 
-A molecule can be represented as a **3D point cloud**: $$P = \{(x_i, \text{element}_i)\}$$ where $$x_i \in \mathbb{R}^3$$ is the 3D position of atom $$i$$ and $$\text{element}_i \in \{\text{C}, \text{N}, \text{O}, \text{S}, \ldots\}$$ is the element type.
+A molecule can be represented as a **3D point cloud**: \(P = \{(x_i, \text{element}_i)\}\) where \(x_i \in \mathbb{R}^3\) is the 3D position of atom \(i\) and \(\text{element}_i \in \{\text{C}, \text{N}, \text{O}, \text{S}, \ldots\}\) is the element type.
 
-**Traditional fingerprints** (Morgan/ECFP, MACCS keys): encode local graph structure (subgraph patterns up to radius $$r$$). These miss:
+**Traditional fingerprints** (Morgan/ECFP, MACCS keys): encode local graph structure (subgraph patterns up to radius \(r\)). These miss:
 - 3D spatial arrangement.
 - Multi-scale geometric features.
 - Cavities and voids.
@@ -45,9 +45,9 @@ A molecule can be represented as a **3D point cloud**: $$P = \{(x_i, \text{eleme
 
 **Cang & Wei (2017)** introduced element-specific TDA: instead of one Rips filtration on all atoms, compute separate filtrations for each element type and pair:
 
-- $$\mathrm{Rips}(P_C)$$ — carbon-only complex; $$H_1$$ captures aromatic rings and ring systems.
-- $$\mathrm{Rips}(P_N)$$ — nitrogen atoms; encodes nitrogen-containing rings (pyridine, imidazole).
-- $$\mathrm{Rips}(P_{C,O})$$ — carbon-oxygen pairs; captures carbonyl and ether geometry.
+- \(\mathrm{Rips}(P_C)\) — carbon-only complex; \(H_1\) captures aromatic rings and ring systems.
+- \(\mathrm{Rips}(P_N)\) — nitrogen atoms; encodes nitrogen-containing rings (pyridine, imidazole).
+- \(\mathrm{Rips}(P_{C,O})\) — carbon-oxygen pairs; captures carbonyl and ether geometry.
 
 Each element-specific diagram is vectorised (persistence images) and concatenated into a multi-channel topological fingerprint.
 
@@ -57,24 +57,24 @@ Each element-specific diagram is vectorised (persistence images) and concatenate
 
 **H₂ persistence** of the protein surface point cloud captures **cavities** (enclosed voids) that correspond to binding pockets:
 
-- A large, long-lived $$H_2$$ bar = a deep, geometrically robust cavity.
-- Birth scale $$b$$ ≈ pocket entrance width; death scale $$d$$ ≈ pocket depth.
+- A large, long-lived \(H_2\) bar = a deep, geometrically robust cavity.
+- Birth scale \(b\) ≈ pocket entrance width; death scale \(d\) ≈ pocket depth.
 
 This gives a scale-parameterised pocket detection without requiring a threshold on solvent-accessible surface area.
 
-<div class="math-box">Binding pocket score: $$\mathrm{PS} = \max_{(b,d) \in H_2(\text{surface})} (d - b) \cdot d$$</div>
+<div class="math-box">Binding pocket score: \(\mathrm{PS} = \max_{(b,d) \in H_2(\text{surface})} (d - b) \cdot d\)</div>
 
 ## Worked Example: Benzene vs. Cyclohexane
 
-Both molecules have the formula C₆H₆ / C₆H₁₂ — a 6-membered carbon ring. Their 3D atom positions give very similar Rips filtrations on the carbon-only point cloud $$P_C$$:
+Both molecules have the formula C₆H₆ / C₆H₁₂ — a 6-membered carbon ring. Their 3D atom positions give very similar Rips filtrations on the carbon-only point cloud \(P_C\):
 
 **Benzene** (flat, aromatic, bond length ≈ 1.40 Å):
-- At $$r \approx 0.70$$ Å: adjacent C atoms connect.
-- At $$r \approx 1.21$$ Å: the ring loop closes → $$H_1$$ bar born at $$(0.70, 2.42)$$, persistence $$= 1.72$$ Å.
+- At \(r \approx 0.70\) Å: adjacent C atoms connect.
+- At \(r \approx 1.21\) Å: the ring loop closes → \(H_1\) bar born at \((0.70, 2.42)\), persistence \(= 1.72\) Å.
 
 **Cyclohexane** (chair conformation, bond length ≈ 1.54 Å, puckered):
-- At $$r \approx 0.77$$ Å: adjacent C atoms connect.
-- At $$r \approx 1.54$$ Å: ring closes but at a larger scale → $$H_1$$ bar born at $$(0.77, 2.80)$$, persistence $$= 2.03$$ Å.
+- At \(r \approx 0.77\) Å: adjacent C atoms connect.
+- At \(r \approx 1.54\) Å: ring closes but at a larger scale → \(H_1\) bar born at \((0.77, 2.80)\), persistence \(= 2.03\) Å.
 
 The birth times differ (0.70 vs 0.77 Å) because aromatic C–C bonds are shorter. The death times differ because the ring diameter differs. A classifier using these H₁ birth/death values can distinguish aromatic from non-aromatic rings without any chemical domain knowledge — the geometry is encoded automatically.
 

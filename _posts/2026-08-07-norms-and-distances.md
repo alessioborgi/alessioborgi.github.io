@@ -23,9 +23,9 @@ toc_label: "Contents"
 
 ## What a norm has to satisfy
 
-A norm $\lVert\cdot\rVert$ on $\mathbb{R}^n$ obeys three rules: $\lVert x\rVert \ge 0$ with equality only at $x = 0$; $\lVert \alpha x\rVert = \lvert\alpha\rvert\,\lVert x\rVert$; and the triangle inequality $\lVert x + y\rVert \le \lVert x\rVert + \lVert y\rVert$. Everything else follows, including the fact that $d(x,y) = \lVert x - y\rVert$ is a metric.
+A norm $$\lVert\cdot\rVert$$ on $$\mathbb{R}^n$$ obeys three rules: $$\lVert x\rVert \ge 0$$ with equality only at $$x = 0$$; $$\lVert \alpha x\rVert = \lvert\alpha\rvert\,\lVert x\rVert$$; and the triangle inequality $$\lVert x + y\rVert \le \lVert x\rVert + \lVert y\rVert$$. Everything else follows, including the fact that $$d(x,y) = \lVert x - y\rVert$$ is a metric.
 
-The $L^p$ family, for $p \ge 1$, is
+The $$L^p$$ family, for $$p \ge 1$$, is
 
 <div class="formula-box">
 \[
@@ -34,19 +34,19 @@ The $L^p$ family, for $p \ge 1$, is
 \]
 </div>
 
-The $p \ge 1$ restriction is not decoration. For $p < 1$ the triangle inequality fails — with $x = (1,0)$ and $y = (0,1)$, the "$L^{1/2}$ norm" of $x+y$ is $(1+1)^2 = 4$ while $\lVert x\rVert + \lVert y\rVert = 2$. The $L^0$ "norm", the count of non-zeros, is not a norm either, which is exactly why $L^1$ is used as its convex surrogate.
+The $$p \ge 1$$ restriction is not decoration. For $$p < 1$$ the triangle inequality fails — with $$x = (1,0)$$ and $$y = (0,1)$$, the "$$L^{1/2}$$ norm" of $$x+y$$ is $$(1+1)^2 = 4$$ while $$\lVert x\rVert + \lVert y\rVert = 2$$. The $$L^0$$ "norm", the count of non-zeros, is not a norm either, which is exactly why $$L^1$$ is used as its convex surrogate.
 
-For a concrete comparison take $v = (3, -4, 0, 12)$: $\lVert v\rVert_1 = 19$, $\lVert v\rVert_2 = \sqrt{9+16+144} = 13$, $$\lVert v\rVert_\infty = 12$$. The ordering $$\lVert v\rVert_\infty \le \lVert v\rVert_2 \le \lVert v\rVert_1$$ holds for every vector, and the reverse bounds $\lVert v\rVert_1 \le \sqrt{n}\,\lVert v\rVert_2$ and $$\lVert v\rVert_2 \le \sqrt{n}\,\lVert v\rVert_\infty$$ are both tight at $v = (1,1,\dots,1)$.
+For a concrete comparison take $$v = (3, -4, 0, 12)$$: $$\lVert v\rVert_1 = 19$$, $$\lVert v\rVert_2 = \sqrt{9+16+144} = 13$$, $$\lVert v\rVert_\infty = 12$$. The ordering $$\lVert v\rVert_\infty \le \lVert v\rVert_2 \le \lVert v\rVert_1$$ holds for every vector, and the reverse bounds $$\lVert v\rVert_1 \le \sqrt{n}\,\lVert v\rVert_2$$ and $$\lVert v\rVert_2 \le \sqrt{n}\,\lVert v\rVert_\infty$$ are both tight at $$v = (1,1,\dots,1)$$.
 
-## Unit balls, and why $L^1$ makes zeros
+## Unit balls, and why $$L^1$$ makes zeros
 
-The unit ball $$\{x : \lVert x\rVert \le 1\}$$ is a picture of the norm. In two dimensions: $L^1$ gives a diamond with vertices at $(\pm1,0)$ and $(0,\pm1)$, $L^2$ gives the circle, $L^\infty$ gives the square $[-1,1]^2$. All three contain the standard basis vectors on their boundary, and $L^1 \subset L^2 \subset L^\infty$ as sets.
+The unit ball $$\{x : \lVert x\rVert \le 1\}$$ is a picture of the norm. In two dimensions: $$L^1$$ gives a diamond with vertices at $$(\pm1,0)$$ and $$(0,\pm1)$$, $$L^2$$ gives the circle, $$L^\infty$$ gives the square $$[-1,1]^2$$. All three contain the standard basis vectors on their boundary, and $$L^1 \subset L^2 \subset L^\infty$$ as sets.
 
-Now pose the lasso in constrained form: minimise $\lVert Aw - b\rVert_2^2$ subject to $\lVert w\rVert_1 \le t$. Geometrically, grow the level sets of the loss outward from the unconstrained optimum until they first touch the constraint ball; that first contact is the solution.
+Now pose the lasso in constrained form: minimise $$\lVert Aw - b\rVert_2^2$$ subject to $$\lVert w\rVert_1 \le t$$. Geometrically, grow the level sets of the loss outward from the unconstrained optimum until they first touch the constraint ball; that first contact is the solution.
 
 The diamond's extreme points lie *on the coordinate axes*, and at those corners the boundary is non-smooth. A corner has a full-dimensional normal cone: an entire two-dimensional wedge of loss-gradient directions leads to the same corner. So contact at a corner is not a coincidence but the generic case, and a corner has some coordinates exactly zero.
 
-Replace the diamond with the circle and the argument collapses. At every point of a smooth boundary the normal cone is a single ray, so each contact point corresponds to essentially one gradient direction, and the set of directions producing an exact zero has measure zero. $L^2$ shrinks coefficients towards zero; it does not put them there.
+Replace the diamond with the circle and the argument collapses. At every point of a smooth boundary the normal cone is a single ray, so each contact point corresponds to essentially one gradient direction, and the set of directions producing an exact zero has measure zero. $$L^2$$ shrinks coefficients towards zero; it does not put them there.
 
 <div class="blog-figure">
 <figure>
@@ -96,24 +96,24 @@ An **induced** (operator) norm asks how much a matrix can stretch a vector:
 \]
 </div>
 
-Three of them are computable in closed form: $$\lVert A\rVert_2 = \sigma_{\max}$$, the largest [singular value](/blog/math-basics/eigen-and-svd/); $\lVert A\rVert_1$ is the largest absolute column sum; $$\lVert A\rVert_\infty$$ is the largest absolute row sum. Induced norms are submultiplicative, $\lVert AB\rVert \le \lVert A\rVert\lVert B\rVert$, and satisfy $\lVert I\rVert = 1$ by construction.
+Three of them are computable in closed form: $$\lVert A\rVert_2 = \sigma_{\max}$$, the largest [singular value](/blog/math-basics/eigen-and-svd/); $$\lVert A\rVert_1$$ is the largest absolute column sum; $$\lVert A\rVert_\infty$$ is the largest absolute row sum. Induced norms are submultiplicative, $$\lVert AB\rVert \le \lVert A\rVert\lVert B\rVert$$, and satisfy $$\lVert I\rVert = 1$$ by construction.
 
-The **Frobenius** norm treats the matrix as a long vector, $$\lVert A\rVert_F = \sqrt{\sum_{ij}a_{ij}^2} = \sqrt{\operatorname{tr}(A^\top A)} = \sqrt{\sum_i \sigma_i^2}$$. It is submultiplicative but *not* induced by any vector norm — the giveaway is $\lVert I_n\rVert_F = \sqrt{n} \ne 1$.
+The **Frobenius** norm treats the matrix as a long vector, $$\lVert A\rVert_F = \sqrt{\sum_{ij}a_{ij}^2} = \sqrt{\operatorname{tr}(A^\top A)} = \sqrt{\sum_i \sigma_i^2}$$. It is submultiplicative but *not* induced by any vector norm — the giveaway is $$\lVert I_n\rVert_F = \sqrt{n} \ne 1$$.
 
-Taking $$A = \begin{pmatrix} 3 & 0\\ 4 & 5\end{pmatrix}$$ from the SVD post, whose singular values are $3\sqrt5$ and $\sqrt5$:
+Taking $$A = \begin{pmatrix} 3 & 0\\ 4 & 5\end{pmatrix}$$ from the SVD post, whose singular values are $$3\sqrt5$$ and $$\sqrt5$$:
 
 | Norm | Value |
 |---|---|
-| $\lVert A\rVert_1$ (max column sum) | $\max(7, 5) = 7$ |
-| $$\lVert A\rVert_\infty$$ (max row sum) | $\max(3, 9) = 9$ |
-| $$\lVert A\rVert_2 = \sigma_{\max}$$ | $3\sqrt5 \approx 6.708$ |
-| $\lVert A\rVert_F$ | $\sqrt{50} \approx 7.071$ |
+| $$\lVert A\rVert_1$$ (max column sum) | $$\max(7, 5) = 7$$ |
+| $$\lVert A\rVert_\infty$$ (max row sum) | $$\max(3, 9) = 9$$ |
+| $$\lVert A\rVert_2 = \sigma_{\max}$$ | $$3\sqrt5 \approx 6.708$$ |
+| $$\lVert A\rVert_F$$ | $$\sqrt{50} \approx 7.071$$ |
 
-Note $\lVert A\rVert_2 \le \lVert A\rVert_F$ always, since $$\sigma_{\max}^2 \le \sum_i\sigma_i^2$$.
+Note $$\lVert A\rVert_2 \le \lVert A\rVert_F$$ always, since $$\sigma_{\max}^2 \le \sum_i\sigma_i^2$$.
 
 ## Inner products, orthogonality, Cauchy–Schwarz
 
-The Euclidean inner product $\langle x,y\rangle = x^\top y$ adds angle to length. Vectors are orthogonal when $\langle x,y\rangle = 0$, and **Cauchy–Schwarz** bounds the overlap:
+The Euclidean inner product $$\langle x,y\rangle = x^\top y$$ adds angle to length. Vectors are orthogonal when $$\langle x,y\rangle = 0$$, and **Cauchy–Schwarz** bounds the overlap:
 
 <div class="formula-box">
 \[
@@ -121,7 +121,7 @@ The Euclidean inner product $\langle x,y\rangle = x^\top y$ adds angle to length
 \]
 </div>
 
-with equality if and only if the vectors are parallel. This is what makes $\cos\theta = \langle x,y\rangle/(\lVert x\rVert\lVert y\rVert)$ well defined in $[-1,1]$, and it is also the inequality that proves the gradient is the [steepest-ascent direction](/blog/math-basics/derivatives-and-gradients/).
+with equality if and only if the vectors are parallel. This is what makes $$\cos\theta = \langle x,y\rangle/(\lVert x\rVert\lVert y\rVert)$$ well defined in $$[-1,1]$$, and it is also the inequality that proves the gradient is the [steepest-ascent direction](/blog/math-basics/derivatives-and-gradients/).
 
 ## Cosine or Euclidean?
 
@@ -133,9 +133,9 @@ Expand the squared distance:
 \]
 </div>
 
-If both vectors are $L^2$-normalised this collapses to $2 - 2\cos\theta$, a strictly decreasing function of the cosine. On the unit sphere the two measures are therefore *rank-equivalent*: nearest neighbours by cosine and by Euclidean distance are the same set, in the same order. Arguing about which to use for normalised embeddings is arguing about nothing.
+If both vectors are $$L^2$$-normalised this collapses to $$2 - 2\cos\theta$$, a strictly decreasing function of the cosine. On the unit sphere the two measures are therefore *rank-equivalent*: nearest neighbours by cosine and by Euclidean distance are the same set, in the same order. Arguing about which to use for normalised embeddings is arguing about nothing.
 
-They diverge when magnitude carries meaning. Cosine discards it: $(1,1)$ and $(100,100)$ are identical. Use cosine when direction is the signal and norm is an artefact — word embeddings, where norm tracks token frequency, or document term vectors of wildly different lengths. Use Euclidean when magnitude is part of the data: physical coordinates, k-means centroids, any regression target space.
+They diverge when magnitude carries meaning. Cosine discards it: $$(1,1)$$ and $$(100,100)$$ are identical. Use cosine when direction is the signal and norm is an artefact — word embeddings, where norm tracks token frequency, or document term vectors of wildly different lengths. Use Euclidean when magnitude is part of the data: physical coordinates, k-means centroids, any regression target space.
 
 <div class="insight-box">
   <strong>Key Insight — choosing a norm is choosing a geometry, and the geometry chooses the answer:</strong> the same optimisation problem gives dense solutions under \(L^2\), sparse ones under \(L^1\), and equal-magnitude ones under \(L^\infty\), purely because of the shape of the ball. The same logic reappears in optimisation: \(\lVert v\rVert_2 \le 1\) makes steepest descent follow the gradient, while \(\lVert v\rVert_\infty \le 1\) makes it follow \(\operatorname{sign}(\nabla f)\).

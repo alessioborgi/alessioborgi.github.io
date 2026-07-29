@@ -25,11 +25,11 @@ permalink: /blog/persistent-homology/homology-groups/
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Homology groups $$H_k$$ are algebraic invariants that count k-dimensional holes in a topological space: $$H_0$$ counts connected components, $$H_1$$ counts loops/tunnels, $$H_2$$ counts enclosed voids. They are computable from simplicial complexes via linear algebra over $$\mathbb{Z}_2$$, and their ranks — the Betti numbers $$\beta_k$$ — form the numerical shape fingerprint that persistent homology tracks across scales.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Homology groups \(H_k\) are algebraic invariants that count k-dimensional holes in a topological space: \(H_0\) counts connected components, \(H_1\) counts loops/tunnels, \(H_2\) counts enclosed voids. They are computable from simplicial complexes via linear algebra over \(\mathbb{Z}_2\), and their ranks — the Betti numbers \(\beta_k\) — form the numerical shape fingerprint that persistent homology tracks across scales.</div>
 {% include figure image_path="/images/blog/tdl/hofer2020_topological_layers.png" alt="Homology and topological layers" caption="Topological layer representations of homology (Hofer et al., 2020)" %}
 
 
-**Intuition First.** Homology answers the question: *how many independent holes does this shape have, in each dimension?* A hole is a cycle — a closed loop or surface with no boundary — that is not itself the boundary of something higher-dimensional. A disk has no $$H_1$$ because its boundary circle *bounds* the disk interior. A hollow sphere has $$H_2 = \mathbb{Z}$$ because its surface is a cycle but bounds nothing inside the complex (when the interior is empty). The chain complex machinery is just a systematic way to make "cycle" and "boundary" precise and computable.
+**Intuition First.** Homology answers the question: *how many independent holes does this shape have, in each dimension?* A hole is a cycle — a closed loop or surface with no boundary — that is not itself the boundary of something higher-dimensional. A disk has no \(H_1\) because its boundary circle *bounds* the disk interior. A hollow sphere has \(H_2 = \mathbb{Z}\) because its surface is a cycle but bounds nothing inside the complex (when the interior is empty). The chain complex machinery is just a systematic way to make "cycle" and "boundary" precise and computable.
 
 <style>
 @keyframes hole-pulse {
@@ -62,14 +62,14 @@ permalink: /blog/persistent-homology/homology-groups/
 
 ## Chain Groups and the Boundary Operator
 
-Given a simplicial complex $$K$$, the **k-th chain group** $$C_k(K)$$ is the vector space over $$\mathbb{Z}_2 = \{0, 1\}$$ (arithmetic mod 2) with basis the set of all k-simplices in $$K$$. An element of $$C_k$$ is a formal sum (with $$\mathbb{Z}_2$$ coefficients) of k-simplices — called a **k-chain**.
+Given a simplicial complex \(K\), the **k-th chain group** \(C_k(K)\) is the vector space over \(\mathbb{Z}_2 = \{0, 1\}\) (arithmetic mod 2) with basis the set of all k-simplices in \(K\). An element of \(C_k\) is a formal sum (with \(\mathbb{Z}_2\) coefficients) of k-simplices — called a **k-chain**.
 
-Working over $$\mathbb{Z}_2$$ has a major advantage: signs disappear ($$-1 = 1$$), so we never need to choose orientations for simplices. The theory works identically over $$\mathbb{Z}$$ or any field, but $$\mathbb{Z}_2$$ is standard in TDA software.
+Working over \(\mathbb{Z}_2\) has a major advantage: signs disappear (\(-1 = 1\)), so we never need to choose orientations for simplices. The theory works identically over \(\mathbb{Z}\) or any field, but \(\mathbb{Z}_2\) is standard in TDA software.
 
-The **boundary operator** $$\partial_k: C_k \to C_{k-1}$$ maps each k-simplex to the formal sum of its $$(k-1)$$-faces:
+The **boundary operator** \(\partial_k: C_k \to C_{k-1}\) maps each k-simplex to the formal sum of its \((k-1)\)-faces:
 
 <div class="math-box">
-$$\partial_k([v_0, v_1, \ldots, v_k]) = \sum_{i=0}^{k} [v_0, \ldots, \hat{v}_i, \ldots, v_k]$$
+\(\partial_k([v_0, v_1, \ldots, v_k]) = \sum_{i=0}^{k} [v_0, \ldots, \hat{v}_i, \ldots, v_k]\)
 </div>
 
 (over $$\mathbb{Z}_2$$, so each face appears with coefficient 1). Extended linearly to all chains.
@@ -81,7 +81,7 @@ $$\partial_k([v_0, v_1, \ldots, v_k]) = \sum_{i=0}^{k} [v_0, \ldots, \hat{v}_i, 
 The boundary operators chain together into a **chain complex**:
 
 <div class="math-box">
-$$\cdots \xrightarrow{\partial_{k+1}} C_k \xrightarrow{\partial_k} C_{k-1} \xrightarrow{\partial_{k-1}} \cdots \xrightarrow{\partial_1} C_0 \xrightarrow{\partial_0} 0$$
+\(\cdots \xrightarrow{\partial_{k+1}} C_k \xrightarrow{\partial_k} C_{k-1} \xrightarrow{\partial_{k-1}} \cdots \xrightarrow{\partial_1} C_0 \xrightarrow{\partial_0} 0\)
 </div>
 
 Because $$\partial_{k-1} \circ \partial_k = 0$$, we have $$\mathrm{im}(\partial_{k+1}) \subseteq \ker(\partial_k)$$. Define:
@@ -91,7 +91,7 @@ Because $$\partial_{k-1} \circ \partial_k = 0$$, we have $$\mathrm{im}(\partial_
 The **k-th homology group** is the quotient:
 
 <div class="math-box">
-$$H_k(K) = Z_k / B_k = \ker(\partial_k) \;/\; \mathrm{im}(\partial_{k+1})$$
+\(H_k(K) = Z_k / B_k = \ker(\partial_k) \;/\; \mathrm{im}(\partial_{k+1})\)
 </div>
 
 Two cycles that differ by a boundary represent the same homology class: they bound the same "hole." The homology group measures how many independent holes exist that are *not* boundaries of anything.

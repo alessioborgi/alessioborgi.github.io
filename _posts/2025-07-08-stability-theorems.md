@@ -25,11 +25,11 @@ permalink: /blog/persistent-homology/stability-theorems/
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> The bottleneck stability theorem guarantees that small perturbations in input data cause at most equally small changes in the persistence diagram. Formally: $$d_B(\mathrm{dgm}(f), \mathrm{dgm}(g)) \leq \|f - g\|_\infty$$. This makes TDA noise-robust — features with persistence larger than the noise level are genuine shape features, not artefacts of measurement error.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> The bottleneck stability theorem guarantees that small perturbations in input data cause at most equally small changes in the persistence diagram. Formally: \(d_B(\mathrm{dgm}(f), \mathrm{dgm}(g)) \leq \|f - g\|_\infty\). This makes TDA noise-robust — features with persistence larger than the noise level are genuine shape features, not artefacts of measurement error.</div>
 {% include figure image_path="/images/blog/tdl/hofer2020_topological_layers.png" alt="Stability of persistence" caption="Topological stability and layers (Hofer et al., 2020)" %}
 
 
-**Intuition First.** Imagine two persistence diagrams as two sets of dots in the plane. The bottleneck distance asks: what is the cheapest way to match every dot in diagram 1 to a dot in diagram 2, where unmatched dots get sent to the nearest point on the diagonal? The "cost" of a match is the maximum displacement of any single dot. The stability theorem says this cost is bounded by how much the underlying data changed — measured in the $$L^\infty$$ norm.
+**Intuition First.** Imagine two persistence diagrams as two sets of dots in the plane. The bottleneck distance asks: what is the cheapest way to match every dot in diagram 1 to a dot in diagram 2, where unmatched dots get sent to the nearest point on the diagonal? The "cost" of a match is the maximum displacement of any single dot. The stability theorem says this cost is bounded by how much the underlying data changed — measured in the \(L^\infty\) norm.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;font-family:sans-serif;">
@@ -63,10 +63,10 @@ permalink: /blog/persistent-homology/stability-theorems/
 
 ## The Bottleneck Distance
 
-To state the stability theorem, we first need a metric on persistence diagrams. The **bottleneck distance** between two diagrams $$D_1$$ and $$D_2$$ is:
+To state the stability theorem, we first need a metric on persistence diagrams. The **bottleneck distance** between two diagrams \(D_1\) and \(D_2\) is:
 
 <div class="math-box">
-$$d_B(D_1, D_2) = \inf_{\gamma: D_1 \to D_2} \sup_{x \in D_1} \|x - \gamma(x)\|_\infty$$
+\(d_B(D_1, D_2) = \inf_{\gamma: D_1 \to D_2} \sup_{x \in D_1} \|x - \gamma(x)\|_\infty\)
 </div>
 
 where the infimum is over all **partial matchings** $$\gamma$$ between $$D_1$$ and $$D_2$$. Unmatched points from either diagram must be matched to their closest point on the diagonal $$y = x$$ (at cost equal to their persistence divided by 2). The supremum then measures the worst-case matching cost.
@@ -80,7 +80,7 @@ The $$L^\infty$$ norm is used because it matches the algebraic structure: under 
 **Theorem** (Cohen-Steiner, Edelsbrunner, Harer 2007): Let $$f, g: X \to \mathbb{R}$$ be tame (finitely many topological changes), Lipschitz functions on a triangulable compact space $$X$$. Then:
 
 <div class="math-box">
-$$d_B\!\left(\mathrm{dgm}(f),\, \mathrm{dgm}(g)\right) \leq \|f - g\|_\infty$$
+\(d_B\!\left(\mathrm{dgm}(f),\, \mathrm{dgm}(g)\right) \leq \|f - g\|_\infty\)
 </div>
 
 This is a **1-Lipschitz** bound: the map from functions to persistence diagrams is non-expansive in these metrics. The proof uses the interleaving of the two sublevel-set filtrations induced by $$f$$ and $$g$$: since $$|f(x) - g(x)| \leq \delta$$ for all $$x$$, the filtrations are $$\delta$$-interleaved, which implies the diagrams are at bottleneck distance at most $$\delta$$.
@@ -92,7 +92,7 @@ This is a **1-Lipschitz** bound: the map from functions to persistence diagrams 
 The **p-Wasserstein distance** between diagrams is:
 
 <div class="math-box">
-$$W_p(D_1, D_2) = \left(\inf_{\gamma} \sum_{x \in D_1} \|x - \gamma(x)\|_\infty^p \right)^{1/p}$$
+\(W_p(D_1, D_2) = \left(\inf_{\gamma} \sum_{x \in D_1} \|x - \gamma(x)\|_\infty^p \right)^{1/p}\)
 </div>
 
 A corresponding Wasserstein stability theorem holds under stronger assumptions (q-tame modules, Chazal et al. 2016):

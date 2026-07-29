@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## Sets, functions, and the one guarantee
 
-A set $C$ is convex if the segment between any two of its points stays inside it. A function $f$ is convex if its domain is convex and
+A set $$C$$ is convex if the segment between any two of its points stays inside it. A function $$f$$ is convex if its domain is convex and
 
 <div class="formula-box">
 \[
@@ -34,11 +34,11 @@ f\bigl(\theta x + (1-\theta)y\bigr) \le \theta f(x) + (1-\theta)f(y)
 
 In words: the chord never dips below the graph. Equivalently, the epigraph — everything on or above the graph — is a convex set.
 
-The payoff is a single theorem. **Every local minimum of a convex function is a global minimum.** The argument is two lines: suppose $x$ is a local minimum but $f(y) < f(x)$ for some $y$. Then for small $\theta$ the point $\theta y + (1-\theta)x$ lies inside the neighbourhood where $x$ was supposed to be optimal, yet convexity bounds its value by $\theta f(y) + (1-\theta)f(x) < f(x)$ — a contradiction. That is the entire reason convex problems are considered solved: there is nowhere to get stuck.
+The payoff is a single theorem. **Every local minimum of a convex function is a global minimum.** The argument is two lines: suppose $$x$$ is a local minimum but $$f(y) < f(x)$$ for some $$y$$. Then for small $$\theta$$ the point $$\theta y + (1-\theta)x$$ lies inside the neighbourhood where $$x$$ was supposed to be optimal, yet convexity bounds its value by $$\theta f(y) + (1-\theta)f(x) < f(x)$$ — a contradiction. That is the entire reason convex problems are considered solved: there is nowhere to get stuck.
 
 ## The two characterisations you will be asked for
 
-For differentiable $f$, convexity is equivalent to the **first-order condition**
+For differentiable $$f$$, convexity is equivalent to the **first-order condition**
 
 <div class="formula-box">
 \[
@@ -46,13 +46,13 @@ f(y) \ge f(x) + \nabla f(x)^\top (y - x) \quad \text{for all } x, y .
 \]
 </div>
 
-The tangent plane at any point is a global underestimator. Set $\nabla f(x) = 0$ and the right-hand side becomes $f(x)$, so $f(y) \ge f(x)$ everywhere — a vanishing gradient certifies global optimality, which is exactly what fails in the non-convex case.
+The tangent plane at any point is a global underestimator. Set $$\nabla f(x) = 0$$ and the right-hand side becomes $$f(x)$$, so $$f(y) \ge f(x)$$ everywhere — a vanishing gradient certifies global optimality, which is exactly what fails in the non-convex case.
 
-For twice-differentiable $f$, the **second-order condition** is that the [Hessian](/blog/math-basics/jacobian-and-hessian/) is positive semi-definite everywhere, $\nabla^2 f(x) \succeq 0$: no direction of negative curvature exists anywhere. If moreover $\nabla^2 f \succeq \mu I$ with $\mu > 0$, $f$ is **$\mu$-strongly convex** — it is at least as curved as a quadratic bowl. If $\nabla^2 f \preceq L I$, $f$ is **$L$-smooth**: its gradient is Lipschitz with constant $L$.
+For twice-differentiable $$f$$, the **second-order condition** is that the [Hessian](/blog/math-basics/jacobian-and-hessian/) is positive semi-definite everywhere, $$\nabla^2 f(x) \succeq 0$$: no direction of negative curvature exists anywhere. If moreover $$\nabla^2 f \succeq \mu I$$ with $$\mu > 0$$, $$f$$ is **$$\mu$$-strongly convex** — it is at least as curved as a quadratic bowl. If $$\nabla^2 f \preceq L I$$, $$f$$ is **$$L$$-smooth**: its gradient is Lipschitz with constant $$L$$.
 
 ## The condition number sets the speed
 
-Convexity guarantees you arrive; $\kappa = L/\mu$ decides when. For $L$-smooth, $\mu$-strongly convex $f$, gradient descent with a fixed step contracts the distance to the optimum geometrically, and with the best fixed step $\eta = 2/(L+\mu)$ the factor per iteration is
+Convexity guarantees you arrive; $$\kappa = L/\mu$$ decides when. For $$L$$-smooth, $$\mu$$-strongly convex $$f$$, gradient descent with a fixed step contracts the distance to the optimum geometrically, and with the best fixed step $$\eta = 2/(L+\mu)$$ the factor per iteration is
 
 <div class="formula-box">
 \[
@@ -61,9 +61,9 @@ Convexity guarantees you arrive; $\kappa = L/\mu$ decides when. For $L$-smooth, 
 \]
 </div>
 
-Without strong convexity the rate degrades to $O(1/k)$, and Nesterov's accelerated method improves the strongly convex count to $O(\sqrt{\kappa}\log(1/\varepsilon))$ — which is optimal for first-order methods on this class.
+Without strong convexity the rate degrades to $$O(1/k)$$, and Nesterov's accelerated method improves the strongly convex count to $$O(\sqrt{\kappa}\log(1/\varepsilon))$$ — which is optimal for first-order methods on this class.
 
-Take $f(x,y) = \tfrac12(x^2 + 10y^2)$, so $\mu = 1$, $L = 10$, $\kappa = 10$. The optimal step is $2/11$, and the per-iteration factor is $9/11 \approx 0.818$: roughly 28 iterations to gain one digit of accuracy, for a problem in two variables. Starting from $(10, 3)$, the iterates are $(8.18, -2.45)$, $(6.69, 2.01)$, $(5.48, -1.64)$ — the second coordinate flips sign every step while the first crawls. The level sets are ellipses with axis ratio $\sqrt{\kappa} \approx 3.16$, and the gradient points across the valley rather than along it.
+Take $$f(x,y) = \tfrac12(x^2 + 10y^2)$$, so $$\mu = 1$$, $$L = 10$$, $$\kappa = 10$$. The optimal step is $$2/11$$, and the per-iteration factor is $$9/11 \approx 0.818$$: roughly 28 iterations to gain one digit of accuracy, for a problem in two variables. Starting from $$(10, 3)$$, the iterates are $$(8.18, -2.45)$$, $$(6.69, 2.01)$$, $$(5.48, -1.64)$$ — the second coordinate flips sign every step while the first crawls. The level sets are ellipses with axis ratio $$\sqrt{\kappa} \approx 3.16$$, and the gradient points across the valley rather than along it.
 
 <div class="blog-figure">
 <figure>
@@ -109,9 +109,9 @@ Take $f(x,y) = \tfrac12(x^2 + 10y^2)$, so $\mu = 1$, $L = 10$, $\kappa = 10$. Th
 
 ## Constraints: Lagrange and KKT
 
-With an equality constraint, minimise $f(x)$ subject to $h(x) = 0$. At an optimum you cannot move along the constraint surface and decrease $f$, which means $\nabla f$ has no component tangent to the surface — so it must be parallel to $\nabla h$. Introduce a multiplier and write the Lagrangian $\mathcal{L}(x,\nu) = f(x) + \nu\, h(x)$; stationarity in $x$ recovers $\nabla f + \nu \nabla h = 0$, and stationarity in $\nu$ recovers the constraint.
+With an equality constraint, minimise $$f(x)$$ subject to $$h(x) = 0$$. At an optimum you cannot move along the constraint surface and decrease $$f$$, which means $$\nabla f$$ has no component tangent to the surface — so it must be parallel to $$\nabla h$$. Introduce a multiplier and write the Lagrangian $$\mathcal{L}(x,\nu) = f(x) + \nu\, h(x)$$; stationarity in $$x$$ recovers $$\nabla f + \nu \nabla h = 0$$, and stationarity in $$\nu$$ recovers the constraint.
 
-Inequalities add one idea. For $\min f(x)$ subject to $g_i(x) \le 0$ and $h_j(x) = 0$, the **KKT conditions** at an optimum are
+Inequalities add one idea. For $$\min f(x)$$ subject to $$g_i(x) \le 0$$ and $$h_j(x) = 0$$, the **KKT conditions** at an optimum are
 
 <div class="formula-box">
 \[
@@ -120,7 +120,7 @@ g_i \le 0,\quad h_j = 0,\quad \lambda_i \ge 0,\quad \lambda_i\, g_i = 0 .
 \]
 </div>
 
-The last line is **complementary slackness**: either a constraint is active ($g_i = 0$) or its multiplier is zero, so inactive constraints exert no force. The sign condition $\lambda_i \ge 0$ encodes that an inequality pushes in one direction only. These are necessary at any optimum satisfying a constraint qualification, and for convex problems also *sufficient*. In a support vector machine the points with $\lambda_i > 0$ are precisely those on the margin — which is what "support vector" means.
+The last line is **complementary slackness**: either a constraint is active ($$g_i = 0$$) or its multiplier is zero, so inactive constraints exert no force. The sign condition $$\lambda_i \ge 0$$ encodes that an inequality pushes in one direction only. These are necessary at any optimum satisfying a constraint qualification, and for convex problems also *sufficient*. In a support vector machine the points with $$\lambda_i > 0$$ are precisely those on the margin — which is what "support vector" means.
 
 ## The non-convex elephant
 

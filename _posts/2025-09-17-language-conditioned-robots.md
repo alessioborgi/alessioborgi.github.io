@@ -103,7 +103,7 @@ The grounding problem is hard because language operates at a semantic level ("th
 **SayCan** (Ahn et al. 2022, arXiv:2204.01691) elegantly decomposes the grounding problem into two components:
 
 1. **Language probability**: a large language model (PaLM) scores how plausible each candidate skill string is given the user's instruction and task context.
-2. **Affordance probability**: for each candidate skill, a learned value function $$V(s, \text{skill})$$ estimates the probability that this skill can be successfully executed from the current robot state.
+2. **Affordance probability**: for each candidate skill, a learned value function \(V(s, \text{skill})\) estimates the probability that this skill can be successfully executed from the current robot state.
 
 The robot selects the skill maximising the product:
 

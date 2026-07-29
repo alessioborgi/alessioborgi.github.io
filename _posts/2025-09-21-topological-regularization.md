@@ -41,49 +41,49 @@ Standard regularisers (L1, L2, dropout) control the complexity of functions in t
 
 ## Topology-Preserving Segmentation
 
-Given a binary segmentation mask $$Y \in \{0,1\}^{m \times n}$$ and a ground truth $$Y^* \in \{0,1\}^{m \times n}$$:
+Given a binary segmentation mask \(Y \in \{0,1\}^{m \times n}\) and a ground truth \(Y^* \in \{0,1\}^{m \times n}\):
 
-1. Compute cubical persistence of $$Y$$ (filtered by predicted probability).
-2. Compute cubical persistence of $$Y^*$$ (filtered by distance transform).
+1. Compute cubical persistence of \(Y\) (filtered by predicted probability).
+2. Compute cubical persistence of \(Y^*\) (filtered by distance transform).
 3. Add a **Betti matching loss**:
 
-<div class="math-box">$$\mathcal{L}_{topo}(Y, Y^*) = d_W(\mathrm{dgm}(Y), \mathrm{dgm}(Y^*))$$</div>
+<div class="math-box">\(\mathcal{L}_{topo}(Y, Y^*) = d_W(\mathrm{dgm}(Y), \mathrm{dgm}(Y^*))\)</div>
 
-where $$d_W$$ is the Wasserstein distance between persistence diagrams. This penalises topological discrepancies: extra holes, missing connected components, etc.
+where \(d_W\) is the Wasserstein distance between persistence diagrams. This penalises topological discrepancies: extra holes, missing connected components, etc.
 
 **Hu et al. (2019)** demonstrated that this loss significantly reduces topological errors in neuron and vessel segmentation, even when the pixel-wise accuracy (cross-entropy loss) is similar.
 
 ## Latent Space Topology
 
-For autoencoders, the encoder $$e: X \to Z$$ maps data to a latent space $$Z$$. If we know the data lives near a manifold $$M$$ with known topology (e.g., a circle for periodic data), we can regularise:
+For autoencoders, the encoder \(e: X \to Z\) maps data to a latent space \(Z\). If we know the data lives near a manifold \(M\) with known topology (e.g., a circle for periodic data), we can regularise:
 
-$$\mathcal{L}_{latent} = d_B(\mathrm{dgm}(\mathrm{Rips}(e(X))), \mathrm{dgm}_{\text{target}})$$
+\(\mathcal{L}_{latent} = d_B(\mathrm{dgm}(\mathrm{Rips}(e(X))), \mathrm{dgm}_{\text{target}})\)
 
-This forces the latent space point cloud $$e(X)$$ to have the same topological structure as the target manifold.
+This forces the latent space point cloud \(e(X)\) to have the same topological structure as the target manifold.
 
 ## Decision Boundary Regularisation
 
-For classifiers, the decision boundary $$\{x : f(x) = 0.5\}$$ is a level set of the output function. Topological regularisation can:
+For classifiers, the decision boundary \(\{x : f(x) = 0.5\}\) is a level set of the output function. Topological regularisation can:
 
 - Encourage the boundary to be connected (one smooth surface, not many fragments).
-- Penalise high-persistence $$H_0$$ features in the boundary (no spurious isolated components).
+- Penalise high-persistence \(H_0\) features in the boundary (no spurious isolated components).
 
 ## Worked Example: Topology-Preserving Segmentation Loss
 
 Suppose a 5×5 binary segmentation mask predicts two disconnected blobs where the ground truth is one connected region.
 
-**Ground truth $$Y^*$$** has: $$\beta_0 = 1$$ (one component), $$\beta_1 = 0$$ (no holes).
-**Prediction $$Y$$** has: $$\beta_0 = 2$$ (two disconnected blobs), $$\beta_1 = 0$$.
+**Ground truth \(Y^*\)** has: \(\beta_0 = 1\) (one component), \(\beta_1 = 0\) (no holes).
+**Prediction \(Y\)** has: \(\beta_0 = 2\) (two disconnected blobs), \(\beta_1 = 0\).
 
 After cubical persistence:
-- $$\mathrm{dgm}(Y^*)$$: one $$H_0$$ bar $$(0, \infty)$$.
-- $$\mathrm{dgm}(Y)$$: two $$H_0$$ bars — $$(0, \infty)$$ for the larger component, $$(0, 0.3)$$ for the smaller (born at 0, dies at probability threshold 0.3 before they merge).
+- \(\mathrm{dgm}(Y^*)\): one \(H_0\) bar \((0, \infty)\).
+- \(\mathrm{dgm}(Y)\): two \(H_0\) bars — \((0, \infty)\) for the larger component, \((0, 0.3)\) for the smaller (born at 0, dies at probability threshold 0.3 before they merge).
 
-Wasserstein matching: the extra bar $$(0, 0.3)$$ in $$\mathrm{dgm}(Y)$$ is matched to the diagonal (the closest point on the diagonal is $$(0.15, 0.15)$$), contributing distance $$\|(0, 0.3) - (0.15, 0.15)\|_2 \approx 0.21$$.
+Wasserstein matching: the extra bar \((0, 0.3)\) in \(\mathrm{dgm}(Y)\) is matched to the diagonal (the closest point on the diagonal is \((0.15, 0.15)\)), contributing distance \(\|(0, 0.3) - (0.15, 0.15)\|_2 \approx 0.21\).
 
-$$\mathcal{L}_{topo} = 0.21^2 \approx 0.044$$
+\(\mathcal{L}_{topo} = 0.21^2 \approx 0.044\)
 
-The gradient of this loss w.r.t. the predicted probabilities pushes the "gap pixels" between the two blobs to increase their probability — merging the components and reducing $$\beta_0$$ to 1.
+The gradient of this loss w.r.t. the predicted probabilities pushes the "gap pixels" between the two blobs to increase their probability — merging the components and reducing \(\beta_0\) to 1.
 
 <style>
 @keyframes topo-fill {

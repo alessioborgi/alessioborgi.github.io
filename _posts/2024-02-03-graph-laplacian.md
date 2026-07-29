@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## What Is the Laplacian?
 
-Given a graph on $N$ nodes with adjacency matrix $A$ (where $$A_{ij} = 1$$ if $(i,j)$ is an edge) and degree matrix $D = \mathrm{diag}(d_1,\dots,d_N)$ with $$d_i = \sum_j A_{ij}$$, the **Graph Laplacian** is:
+Given a graph on $$N$$ nodes with adjacency matrix $$A$$ (where $$A_{ij} = 1$$ if $$(i,j)$$ is an edge) and degree matrix $$D = \mathrm{diag}(d_1,\dots,d_N)$$ with $$d_i = \sum_j A_{ij}$$, the **Graph Laplacian** is:
 
 <div class="formula-box">
 \[
@@ -40,13 +40,13 @@ L  = [0  2  0  0] - [1  0  1  0] = [-1  2 -1  0]
      [0  0  0  2]   [1  0  1  0]   [-1  0 -1  2]
 ```
 
-That is, $$L_{ij} = d_i$$ if $i = j$, $-1$ if $(i,j)$ is an edge, and $0$ otherwise.
+That is, $$L_{ij} = d_i$$ if $$i = j$$, $$-1$$ if $$(i,j)$$ is an edge, and $$0$$ otherwise.
 
 ## Why Does This Matter?
 
-The Laplacian is the **discrete analogue of the second derivative** (or more precisely, the negative of the Laplace operator $\nabla^2$). In continuous space, the Laplacian of a function $f$ measures how much $f$ at a point differs from $f$ at nearby points.
+The Laplacian is the **discrete analogue of the second derivative** (or more precisely, the negative of the Laplace operator $$\nabla^2$$). In continuous space, the Laplacian of a function $$f$$ measures how much $$f$$ at a point differs from $$f$$ at nearby points.
 
-On a graph, for a signal $f \in \mathbb{R}^N$,
+On a graph, for a signal $$f \in \mathbb{R}^N$$,
 
 <div class="formula-box">
 \[
@@ -54,7 +54,7 @@ On a graph, for a signal $f \in \mathbb{R}^N$,
 \]
 </div>
 
-where $\mathcal{N}(i)$ is the set of neighbours of node $i$. It measures how much node $i$'s value differs from its neighbours' values. If all neighbours have the same value as $i$, then $(Lf)[i] = 0$.
+where $$\mathcal{N}(i)$$ is the set of neighbours of node $$i$$. It measures how much node $$i$$'s value differs from its neighbours' values. If all neighbours have the same value as $$i$$, then $$(Lf)[i] = 0$$.
 
 <div class="insight-box">
 <strong>Intuition:</strong> Think of \(f\) as heat temperature at each node. The Laplacian measures how much heat wants to flow out of each node — the local "imbalance". The heat diffusion equation is \(df/dt = -Lf\), meaning heat flows from hot nodes to cold neighbours.
@@ -111,13 +111,13 @@ Check the "row sum = 0" property:
 Row 1: 3 + (-1) + (-1) + (-1) = 0  ✓
 ```
 
-This zero row-sum is crucial: it means the all-ones vector $\mathbf{1} = [1,1,1,1]^{\top}$ satisfies $L\mathbf{1} = 0$ — confirming $\lambda_1 = 0$.
+This zero row-sum is crucial: it means the all-ones vector $$\mathbf{1} = [1,1,1,1]^{\top}$$ satisfies $$L\mathbf{1} = 0$$ — confirming $$\lambda_1 = 0$$.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The Laplacian always has at least one zero eigenvalue, because the all-ones vector is always in its null space — connected or not. The <em>multiplicity</em> of the eigenvalue \(0\) equals the number of connected components: the null space is spanned by the indicator vectors of the components. So the graph is connected exactly when \(\lambda_2 > 0\). This is how you detect disconnected clusters with pure linear algebra, no search algorithm needed.</div>
 
 ## The Eigendecomposition: Graph Fourier Transform
 
-The Laplacian $L$ is symmetric — hence orthogonally diagonalisable — and positive semi-definite, since $f^{\top} L f = \sum_{(u,v)\in E}(f[u]-f[v])^2 \ge 0$ for every $f$. It can therefore be decomposed as:
+The Laplacian \(L\) is symmetric — hence orthogonally diagonalisable — and positive semi-definite, since \(f^{\top} L f = \sum_{(u,v)\in E}(f[u]-f[v])^2 \ge 0\) for every \(f\). It can therefore be decomposed as:
 
 <div class="formula-box">
 \[
@@ -125,20 +125,20 @@ L = U \Lambda U^{\top}, \qquad U^{\top}U = I,
 \]
 </div>
 
-where $U = [u_1, u_2, \ldots, u_N]$ holds the orthonormal eigenvectors and $\Lambda = \mathrm{diag}(\lambda_1 \le \lambda_2 \le \cdots \le \lambda_N)$ the eigenvalues.
+where $$U = [u_1, u_2, \ldots, u_N]$$ holds the orthonormal eigenvectors and $$\Lambda = \mathrm{diag}(\lambda_1 \le \lambda_2 \le \cdots \le \lambda_N)$$ the eigenvalues.
 
 This is exactly analogous to the Fourier transform:
-- **Eigenvectors $u_k$:** the "basis functions" — the graph's Fourier modes.
-- **Eigenvalues $\lambda_k$:** the "frequencies". Indeed $$\lambda_k = u_k^{\top} L u_k = \sum_{(u,v)\in E}(u_k[u]-u_k[v])^2$$, so a small $\lambda_k$ literally means a smooth, slowly varying mode and a large $\lambda_k$ a rapidly oscillating one.
+- **Eigenvectors $$u_k$$:** the "basis functions" — the graph's Fourier modes.
+- **Eigenvalues $$\lambda_k$$:** the "frequencies". Indeed $$\lambda_k = u_k^{\top} L u_k = \sum_{(u,v)\in E}(u_k[u]-u_k[v])^2$$, so a small $$\lambda_k$$ literally means a smooth, slowly varying mode and a large $$\lambda_k$$ a rapidly oscillating one.
 
-**Projecting a signal $f$ onto $U$** gives its frequency content, $\hat{f} = U^{\top}f$ — the Graph Fourier Transform.
+**Projecting a signal $$f$$ onto $$U$$** gives its frequency content, $$\hat{f} = U^{\top}f$$ — the Graph Fourier Transform.
 
 ## What Eigenvalues Tell You
 
-- **$\lambda_1 = 0$ always**, with eigenvector $\mathbf{1}$ (this holds for any graph, connected or not).
-- **The multiplicity of eigenvalue $0$ = the number of connected components.** A graph with 3 disconnected clusters has exactly 3 zero eigenvalues.
-- **$\lambda_2$ (the algebraic connectivity or Fiedler value):** zero when the graph is disconnected; close to $0$ means barely connected; large means well-connected and hard to cut.
-- **The eigenvector $u_2$ for $\lambda_2$ (the Fiedler vector)** suggests a partition of the graph into two communities by the sign of its entries — the basis of spectral clustering. It is a relaxation of the NP-hard minimum-ratio-cut problem, so it is a good heuristic rather than a guaranteed optimum.
+- **$$\lambda_1 = 0$$ always**, with eigenvector $$\mathbf{1}$$ (this holds for any graph, connected or not).
+- **The multiplicity of eigenvalue $$0$$ = the number of connected components.** A graph with 3 disconnected clusters has exactly 3 zero eigenvalues.
+- **$$\lambda_2$$ (the algebraic connectivity or Fiedler value):** zero when the graph is disconnected; close to $$0$$ means barely connected; large means well-connected and hard to cut.
+- **The eigenvector $$u_2$$ for $$\lambda_2$$ (the Fiedler vector)** suggests a partition of the graph into two communities by the sign of its entries — the basis of spectral clustering. It is a relaxation of the NP-hard minimum-ratio-cut problem, so it is a good heuristic rather than a guaranteed optimum.
 
 ## Animated Heat Diffusion
 
@@ -201,10 +201,10 @@ h *_G g_\theta \;=\; U\, g_\theta(\Lambda)\, U^{\top} h ,
 
 where $$g_\theta(\Lambda) = \mathrm{diag}\bigl(g_\theta(\lambda_1),\ldots,g_\theta(\lambda_N)\bigr)$$ reweights each frequency.
 
-This is computationally expensive (the eigendecomposition costs $O(N^3)$). GCN (Kipf & Welling, 2017) made two simplifications:
+This is computationally expensive (the eigendecomposition costs $$O(N^3)$$). GCN (Kipf & Welling, 2017) made two simplifications:
 
 1. Restrict $$g_\theta$$ to a low-order polynomial in $$L_{\mathrm{sym}}$$, so that $$U g_\theta(\Lambda) U^{\top} = g_\theta(L_{\mathrm{sym}})$$ and no eigendecomposition is needed. Truncating the Chebyshev expansion at first order gives $$g_\theta(L_{\mathrm{sym}}) \approx \theta_0 I + \theta_1 L_{\mathrm{sym}}$$.
-2. Tie the two coefficients ($\theta = \theta_0 = -\theta_1$) and apply the *renormalisation trick*: replace $I + D^{-1/2}AD^{-1/2}$, whose spectrum lies in $[0,2]$, with
+2. Tie the two coefficients ($$\theta = \theta_0 = -\theta_1$$) and apply the *renormalisation trick*: replace $$I + D^{-1/2}AD^{-1/2}$$, whose spectrum lies in $$[0,2]$$, with
 
 <div class="formula-box">
 \[
@@ -212,9 +212,9 @@ This is computationally expensive (the eigendecomposition costs $O(N^3)$). GCN (
 \]
 </div>
 
-whose spectrum lies in $(-1, 1]$ — bounded, so repeated application does not blow up.
+whose spectrum lies in $$(-1, 1]$$ — bounded, so repeated application does not blow up.
 
-Result: the GCN layer $H^{(k+1)} = \sigma\bigl(\hat{A} H^{(k)} W^{(k)}\bigr)$ — neighbourhood averaging with symmetric normalisation. (See the GCN post for details.)
+Result: the GCN layer $$H^{(k+1)} = \sigma\bigl(\hat{A} H^{(k)} W^{(k)}\bigr)$$ — neighbourhood averaging with symmetric normalisation. (See the GCN post for details.)
 
 ## The Normalised Laplacian
 
@@ -226,9 +226,9 @@ L_{\mathrm{sym}} \;=\; D^{-1/2} L D^{-1/2} \;=\; I - D^{-1/2} A D^{-1/2}.
 \]
 </div>
 
-Its eigenvalues lie in $[0, 2]$ — bounded regardless of graph size or degree, which is what makes it convenient for filter design. The upper bound $\lambda_N = 2$ is attained **if and only if** at least one connected component is bipartite; adding self-loops (as GCN does) destroys bipartiteness and pushes $\lambda_N$ strictly below $2$.
+Its eigenvalues lie in $$[0, 2]$$ — bounded regardless of graph size or degree, which is what makes it convenient for filter design. The upper bound $$\lambda_N = 2$$ is attained **if and only if** at least one connected component is bipartite; adding self-loops (as GCN does) destroys bipartiteness and pushes $$\lambda_N$$ strictly below $$2$$.
 
-Note that the $\lambda = 0$ eigenvector of $$L_{\mathrm{sym}}$$ is $D^{1/2}\mathbf{1}$, not $\mathbf{1}$: the two agree only when every node has the same degree. Its multiplicity still equals the number of connected components.
+Note that the $$\lambda = 0$$ eigenvector of $$L_{\mathrm{sym}}$$ is $$D^{1/2}\mathbf{1}$$, not $$\mathbf{1}$$: the two agree only when every node has the same degree. Its multiplicity still equals the number of connected components.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

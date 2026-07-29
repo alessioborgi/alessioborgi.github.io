@@ -48,10 +48,10 @@ Think of DQN as a car with six known weaknesses. Each Rainbow component is an in
 
 Standard DQN uses the same network to select and evaluate the greedy action, causing **maximisation bias** — Q-values are systematically overestimated because max is taken over noisy estimates.
 
-**Double DQN** decouples selection (online network $$\theta$$) from evaluation (target network $$\theta^-$$):
+**Double DQN** decouples selection (online network \(\theta\)) from evaluation (target network \(\theta^-\)):
 
 <div class="math-box">
-$$y^{DDQN} = r + \gamma Q\!\left(s',\, \arg\max_{a'} Q(s', a'; \theta);\, \theta^-\right)$$
+\(y^{DDQN} = r + \gamma Q\!\left(s',\, \arg\max_{a'} Q(s', a'; \theta);\, \theta^-\right)\)
 </div>
 
 The online network picks the best action; the target network evaluates it. This eliminates the upward bias, leading to more accurate Q-values and better final performance.
@@ -61,7 +61,7 @@ The online network picks the best action; the target network evaluates it. This 
 The **dueling network** decomposes Q into two streams: a state-value $$V(s)$$ and an advantage $$A(s, a) = Q(s, a) - V(s)$$:
 
 <div class="math-box">
-$$Q(s, a; \theta) = V(s; \theta_V) + \left[A(s, a; \theta_A) - \frac{1}{|\mathcal{A}|}\sum_{a'} A(s, a'; \theta_A)\right]$$
+\(Q(s, a; \theta) = V(s; \theta_V) + \left[A(s, a; \theta_A) - \frac{1}{|\mathcal{A}|}\sum_{a'} A(s, a'; \theta_A)\right]\)
 </div>
 
 The mean-subtraction ensures identifiability (otherwise V and A can be shifted arbitrarily). The advantage is that the value stream $$V(s)$$ can learn from every transition regardless of the action taken — useful in states where the action choice matters little.
@@ -87,7 +87,7 @@ Multi-step returns propagate reward information faster along trajectories, reduc
 Instead of learning $$\mathbb{E}[G_t]$$, **C51** (Bellemare et al., 2017) learns the full distribution of returns, represented as a categorical distribution over $$N=51$$ fixed atoms $$z_1, \ldots, z_{51}$$ spanning $$[V_{\min}, V_{\max}]$$:
 
 <div class="math-box">
-$$Z(s, a) = \sum_{i=1}^{51} p_i(s, a)\, \delta_{z_i}$$
+\(Z(s, a) = \sum_{i=1}^{51} p_i(s, a)\, \delta_{z_i}\)
 </div>
 
 The network outputs a softmax over 51 atoms for each action. The Bellman update projects the shifted distribution $$r + \gamma Z(s', a^*)$$ back onto the support atoms, and the loss is the cross-entropy between the projected and predicted distributions.

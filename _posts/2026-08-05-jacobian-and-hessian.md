@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## The Jacobian
 
-For $f : \mathbb{R}^n \to \mathbb{R}^m$, the derivative from the [previous post](/blog/math-basics/derivatives-and-gradients/) is represented by the $m\times n$ matrix
+For $$f : \mathbb{R}^n \to \mathbb{R}^m$$, the derivative from the [previous post](/blog/math-basics/derivatives-and-gradients/) is represented by the $$m\times n$$ matrix
 
 <div class="formula-box">
 \[
@@ -31,11 +31,11 @@ For $f : \mathbb{R}^n \to \mathbb{R}^m$, the derivative from the [previous post]
 \]
 </div>
 
-Row $i$ is the gradient of output $i$; column $j$ is the sensitivity of all outputs to input $j$. That is the whole object. When $m = n$, $\det J_f(x)$ has a clean geometric meaning: it is the factor by which $f$ scales infinitesimal volume at $x$, with the sign recording whether orientation is preserved.
+Row $$i$$ is the gradient of output $$i$$; column $$j$$ is the sensitivity of all outputs to input $$j$$. That is the whole object. When $$m = n$$, $$\det J_f(x)$$ has a clean geometric meaning: it is the factor by which $$f$$ scales infinitesimal volume at $$x$$, with the sign recording whether orientation is preserved.
 
 ## Change of variables, and the price flows pay
 
-Push a random variable $X$ with density $p_X$ through an invertible, differentiable $f$ to get $Y = f(X)$. Probability mass is conserved but the volume element is not, so
+Push a random variable $$X$$ with density $$p_X$$ through an invertible, differentiable $$f$$ to get $$Y = f(X)$$. Probability mass is conserved but the volume element is not, so
 
 <div class="formula-box">
 \[
@@ -51,9 +51,9 @@ or, in the form that actually appears in code,
 \]
 </div>
 
-Read it as an accounting identity: if $f$ expands a neighbourhood, the same probability mass is spread over more volume, so the density there must drop — hence the subtraction.
+Read it as an accounting identity: if $$f$$ expands a neighbourhood, the same probability mass is spread over more volume, so the density there must drop — hence the subtraction.
 
-This single term dictates the design of normalising flows. A general $\det J$ costs $O(n^3)$ to evaluate and is recomputed every training step, which is fatal. The fix is architectural: make $J$ triangular. An affine coupling layer splits the input and writes
+This single term dictates the design of normalising flows. A general $$\det J$$ costs $$O(n^3)$$ to evaluate and is recomputed every training step, which is fatal. The fix is architectural: make $$J$$ triangular. An affine coupling layer splits the input and writes
 
 <div class="formula-box">
 \[
@@ -61,7 +61,7 @@ y_1 = x_1, \qquad y_2 = x_2 \odot \exp\!\bigl(s(x_1)\bigr) + t(x_1),
 \]
 </div>
 
-where $s$ and $t$ are arbitrary networks. Because $y_1$ ignores $x_2$, the Jacobian is block lower-triangular with diagonal blocks $I$ and $\operatorname{diag}(\exp s(x_1))$. Its determinant is the product of the diagonal, so
+where $$s$$ and $$t$$ are arbitrary networks. Because $$y_1$$ ignores $$x_2$$, the Jacobian is block lower-triangular with diagonal blocks $$I$$ and $$\operatorname{diag}(\exp s(x_1))$$. Its determinant is the product of the diagonal, so
 
 <div class="formula-box">
 \[
@@ -69,11 +69,11 @@ where $s$ and $t$ are arbitrary networks. Because $y_1$ ignores $x_2$, the Jacob
 \]
 </div>
 
-an $O(n)$ sum. The networks $s$ and $t$ can be as expressive as you like and never appear in the determinant — the expensive term was engineered away, not approximated.
+an $$O(n)$$ sum. The networks $$s$$ and $$t$$ can be as expressive as you like and never appear in the determinant — the expensive term was engineered away, not approximated.
 
 ## The Hessian and curvature
 
-For scalar $f$, the Hessian collects second partials, $$H_{ij} = \partial^2 f/\partial x_i \partial x_j$$. For twice continuously differentiable $f$ the mixed partials commute, so $H$ is symmetric and the [spectral theorem](/blog/math-basics/eigen-and-svd/) applies: real eigenvalues, orthonormal eigenvectors. The second-order Taylor expansion is
+For scalar $$f$$, the Hessian collects second partials, $$H_{ij} = \partial^2 f/\partial x_i \partial x_j$$. For twice continuously differentiable $$f$$ the mixed partials commute, so $$H$$ is symmetric and the [spectral theorem](/blog/math-basics/eigen-and-svd/) applies: real eigenvalues, orthonormal eigenvectors. The second-order Taylor expansion is
 
 <div class="formula-box">
 \[
@@ -81,16 +81,16 @@ f(x + h) \approx f(x) + \nabla f(x)^\top h + \tfrac12 h^\top H(x)\, h .
 \]
 </div>
 
-Each eigenvalue of $H$ is the curvature along its eigenvector: positive means the surface bends upward there, negative means downward. Hence the standard conditions at a stationary point ($\nabla f = 0$):
+Each eigenvalue of $$H$$ is the curvature along its eigenvector: positive means the surface bends upward there, negative means downward. Hence the standard conditions at a stationary point ($$\nabla f = 0$$):
 
 | Hessian at the stationary point | Conclusion |
 |---|---|
-| positive definite, all $\lambda_i > 0$ | strict local minimum |
-| negative definite, all $\lambda_i < 0$ | strict local maximum |
+| positive definite, all $$\lambda_i > 0$$ | strict local minimum |
+| negative definite, all $$\lambda_i < 0$$ | strict local maximum |
 | indefinite, mixed signs | saddle point |
 | singular positive semi-definite | inconclusive from second order alone |
 
-A worked case. Let $f(x,y) = x^2 + 4xy + y^2$. Then $\nabla f = (2x + 4y,\ 4x + 2y)$, zero only at the origin, and
+A worked case. Let $$f(x,y) = x^2 + 4xy + y^2$$. Then $$\nabla f = (2x + 4y,\ 4x + 2y)$$, zero only at the origin, and
 
 <div class="formula-box">
 \[
@@ -99,7 +99,7 @@ H = \begin{pmatrix} 2 & 4 \\ 4 & 2\end{pmatrix},
 \]
 </div>
 
-Both diagonal entries are positive, yet the matrix is indefinite and the origin is a saddle. Check it directly: along the eigenvector $(1,1)$, $f(t,t) = 6t^2$ rises; along $(1,-1)$, $f(t,-t) = -2t^2$ falls.
+Both diagonal entries are positive, yet the matrix is indefinite and the origin is a saddle. Check it directly: along the eigenvector $$(1,1)$$, $$f(t,t) = 6t^2$$ rises; along $$(1,-1)$$, $$f(t,-t) = -2t^2$$ falls.
 
 <div class="warning-box">
   <strong>Interview trap — positive diagonal is not positive definite.</strong> The example above has \(H_{11}, H_{22} > 0\) and is still indefinite, because \(\det H = 4 - 16 = -12 < 0\). Definiteness is a statement about eigenvalues (or all leading principal minors), never about the diagonal alone. The related trap: \(\nabla f = 0\) alone establishes nothing — in high dimensions almost every stationary point of a deep network's loss is a saddle rather than a local minimum.
@@ -115,17 +115,17 @@ x_{k+1} = x_k - H(x_k)^{-1}\nabla f(x_k).
 \]
 </div>
 
-Two genuine advantages. It converges quadratically near a nondegenerate minimum — the number of correct digits roughly doubles per iteration. And it is affine invariant: reparameterise $x \mapsto Px$ and the iterates are unchanged, which repairs precisely the scale-sensitivity that makes plain gradient descent suffer on ill-conditioned problems.
+Two genuine advantages. It converges quadratically near a nondegenerate minimum — the number of correct digits roughly doubles per iteration. And it is affine invariant: reparameterise $$x \mapsto Px$$ and the iterates are unchanged, which repairs precisely the scale-sensitivity that makes plain gradient descent suffer on ill-conditioned problems.
 
 Three reasons it is nonetheless rare in deep learning:
 
-- **Storage.** $H$ has $n^2$ entries. At $n = 10^9$ that is $10^{18}$ numbers.
-- **Solve cost.** A direct solve is $O(n^3)$, per iteration.
-- **Indefiniteness.** Away from a minimum $H$ has negative eigenvalues, and $-H^{-1}\nabla f$ then points *uphill* along those directions. Newton's method is attracted to saddle points, not repelled by them, so it needs damping or a trust region to be safe at all.
+- **Storage.** $$H$$ has $$n^2$$ entries. At $$n = 10^9$$ that is $$10^{18}$$ numbers.
+- **Solve cost.** A direct solve is $$O(n^3)$$, per iteration.
+- **Indefiniteness.** Away from a minimum $$H$$ has negative eigenvalues, and $$-H^{-1}\nabla f$$ then points *uphill* along those directions. Newton's method is attracted to saddle points, not repelled by them, so it needs damping or a trust region to be safe at all.
 
 ## What quasi-Newton buys
 
-BFGS never forms $H$. It maintains an approximation $B_k$ satisfying the secant condition
+BFGS never forms $$H$$. It maintains an approximation $$B_k$$ satisfying the secant condition
 
 <div class="formula-box">
 \[
@@ -133,7 +133,7 @@ B_{k+1}\, s_k = y_k, \qquad s_k = x_{k+1}-x_k,\quad y_k = \nabla f(x_{k+1}) - \n
 \]
 </div>
 
-which is a finite-difference statement about curvature along the direction just travelled: gradients that changed a lot mean high curvature. L-BFGS goes further and stores only the last $m$ pairs $(s_k, y_k)$, typically $m$ between 5 and 20, reconstructing the step in $O(mn)$ time and memory. You get superlinear convergence in practice at roughly the cost of a gradient.
+which is a finite-difference statement about curvature along the direction just travelled: gradients that changed a lot mean high curvature. L-BFGS goes further and stores only the last $$m$$ pairs $$(s_k, y_k)$$, typically $$m$$ between 5 and 20, reconstructing the step in $$O(mn)$$ time and memory. You get superlinear convergence in practice at roughly the cost of a gradient.
 
 The honest caveat: the secant condition assumes the two gradients being differenced come from the *same* function. With minibatch gradients they do not, and the curvature pairs are corrupted by sampling noise. That is why L-BFGS is standard for deterministic, full-batch problems — logistic regression, CRFs, physics-informed fitting — and largely absent from stochastic deep learning, where cheap diagonal preconditioners such as Adam occupy the same niche.
 

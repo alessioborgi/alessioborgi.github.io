@@ -41,7 +41,7 @@ This is not a pathological edge case; it is the norm in real demonstrations coll
 
 ## Denoising Diffusion Probabilistic Models (DDPM)
 
-Diffusion models learn to generate samples from a data distribution by iteratively denoising Gaussian noise. The **forward process** adds noise to data over $$T$$ steps:
+Diffusion models learn to generate samples from a data distribution by iteratively denoising Gaussian noise. The **forward process** adds noise to data over \(T\) steps:
 
 <div class="math-box">
 q(a_k | a_{k-1}) = N(a_k; sqrt(1-beta_k) * a_{k-1}, beta_k * I)

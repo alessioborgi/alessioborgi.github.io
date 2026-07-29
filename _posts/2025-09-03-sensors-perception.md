@@ -93,10 +93,10 @@ toc_label: "Contents"
 
 ## Calibration: Intrinsic and Extrinsic
 
-**Intrinsic calibration** determines the camera's internal parameters. The pinhole camera model projects a 3D point $$\mathbf{P}_w$$ to image coordinates $$\mathbf{p}$$ via the camera matrix $$K$$:
+**Intrinsic calibration** determines the camera's internal parameters. The pinhole camera model projects a 3D point \(\mathbf{P}_w\) to image coordinates \(\mathbf{p}\) via the camera matrix \(K\):
 
 <div class="math-box">
-$$\mathbf{p} = K \begin{bmatrix} R \mid \mathbf{t} \end{bmatrix} \mathbf{P}_w, \quad K = \begin{pmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{pmatrix}$$
+\(\mathbf{p} = K \begin{bmatrix} R \mid \mathbf{t} \end{bmatrix} \mathbf{P}_w, \quad K = \begin{pmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{pmatrix}\)
 </div>
 
 where $$f_x, f_y$$ are focal lengths in pixels, $$(c_x, c_y)$$ is the principal point, and the extrinsic matrix $$[R \mid t]$$ maps world to camera coordinates. Lens distortion adds radial and tangential correction terms. Calibration uses checkerboard patterns (Zhang 2000) to solve for $$K$$ and distortion coefficients.
@@ -108,11 +108,11 @@ where $$f_x, f_y$$ are focal lengths in pixels, $$(c_x, c_y)$$ is the principal 
 The **Extended Kalman Filter (EKF)** is the standard tool for fusing IMU measurements with slower, noisier sensors (GPS, wheel odometry, vision). The filter maintains a Gaussian belief over robot state $$\mathbf{x}$$ (position, velocity, orientation):
 
 <div class="math-box">
-Predict: $$\hat{\mathbf{x}}_{k|k-1} = f(\mathbf{x}_{k-1}), \quad P_{k|k-1} = F P_{k-1} F^T + Q$$
+Predict: \(\hat{\mathbf{x}}_{k|k-1} = f(\mathbf{x}_{k-1}), \quad P_{k|k-1} = F P_{k-1} F^T + Q\)
 <br><br>
-Update: $$K_k = P_{k|k-1} H^T (H P_{k|k-1} H^T + R)^{-1}$$
+Update: \(K_k = P_{k|k-1} H^T (H P_{k|k-1} H^T + R)^{-1}\)
 <br>
-$$\mathbf{x}_k = \hat{\mathbf{x}}_{k|k-1} + K_k(z_k - h(\hat{\mathbf{x}}_{k|k-1}))$$
+\(\mathbf{x}_k = \hat{\mathbf{x}}_{k|k-1} + K_k(z_k - h(\hat{\mathbf{x}}_{k|k-1}))\)
 </div>
 
 The IMU provides high-rate predictions (predict step); GPS or visual odometry provides corrections (update step). The complementary filter structure makes the combination robust: IMU covers high-frequency motion, external sensors correct low-frequency drift.

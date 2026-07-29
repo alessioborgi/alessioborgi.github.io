@@ -23,11 +23,11 @@ toc_label: "Contents"
 
 ## The Wiener process
 
-Einstein's 1905 account of Brownian motion explained the jitter of pollen grains as the accumulated effect of molecular collisions. Its mathematical idealisation is the Wiener process $W_t$: $W_0 = 0$, independent increments, $W_t - W_s \sim \mathcal N(0, t-s)$ for $t>s$, and continuous sample paths.
+Einstein's 1905 account of Brownian motion explained the jitter of pollen grains as the accumulated effect of molecular collisions. Its mathematical idealisation is the Wiener process $$W_t$$: $$W_0 = 0$$, independent increments, $$W_t - W_s \sim \mathcal N(0, t-s)$$ for $$t>s$$, and continuous sample paths.
 
-The defining scaling is $\mathbb E[W_t^2] = t$, so typical displacement grows like $\sqrt t$. Over an interval $\Delta t$ the increment has size $\sqrt{\Delta t}$, which dwarfs $\Delta t$ as $\Delta t\to 0$ — this is why Wiener paths are nowhere differentiable and why stochastic calculus needs its own rules rather than the ordinary chain rule.
+The defining scaling is $$\mathbb E[W_t^2] = t$$, so typical displacement grows like $$\sqrt t$$. Over an interval $$\Delta t$$ the increment has size $$\sqrt{\Delta t}$$, which dwarfs $$\Delta t$$ as $$\Delta t\to 0$$ — this is why Wiener paths are nowhere differentiable and why stochastic calculus needs its own rules rather than the ordinary chain rule.
 
-Concretely, a 1 µm-diameter bead in water at 20 °C has $D = kT/(6\pi\eta a) \approx 0.43\ \mathrm{µm^2\,s^{-1}}$. Its root-mean-square displacement along one axis is $\sqrt{2Dt}$:
+Concretely, a 1 µm-diameter bead in water at 20 °C has $$D = kT/(6\pi\eta a) \approx 0.43\ \mathrm{µm^2\,s^{-1}}$$. Its root-mean-square displacement along one axis is $$\sqrt{2Dt}$$:
 
 | elapsed time | RMS displacement (one axis) |
 |---|---|
@@ -39,7 +39,7 @@ A hundredfold increase in time buys only a tenfold increase in distance. Diffusi
 
 ## Fick's law and the diffusion equation
 
-Particles flow from crowded regions to empty ones, at a rate proportional to the concentration gradient — Fick's first law, $\mathbf J = -D\nabla\rho$, with $\mathbf J$ the flux and $\rho$ the density. Combine it with conservation, $\partial_t\rho + \nabla\cdot\mathbf J = 0$, and the diffusion equation follows:
+Particles flow from crowded regions to empty ones, at a rate proportional to the concentration gradient — Fick's first law, $$\mathbf J = -D\nabla\rho$$, with $$\mathbf J$$ the flux and $$\rho$$ the density. Combine it with conservation, $$\partial_t\rho + \nabla\cdot\mathbf J = 0$$, and the diffusion equation follows:
 
 <div class="formula-box">
 \[
@@ -47,7 +47,7 @@ Particles flow from crowded regions to empty ones, at a rate proportional to the
 \]
 </div>
 
-Started from a point source in one dimension, the solution is a Gaussian $$\rho(x,t) = (4\pi D t)^{-1/2}\exp\!\left(-x^2/4Dt\right)$$ of variance $2Dt$ — the same $\sqrt t$ spreading, now as a statement about the whole density rather than one path.
+Started from a point source in one dimension, the solution is a Gaussian $$\rho(x,t) = (4\pi D t)^{-1/2}\exp\!\left(-x^2/4Dt\right)$$ of variance $$2Dt$$ — the same $$\sqrt t$$ spreading, now as a statement about the whole density rather than one path.
 
 <div class="blog-figure">
 <figure>
@@ -73,7 +73,7 @@ Started from a point source in one dimension, the solution is a Gaussian $$\rho(
 
 ## The Langevin equation
 
-Add a force. A heavy particle in a potential $V$, in a medium with friction coefficient $\gamma$, in the overdamped limit where inertia is negligible, obeys
+Add a force. A heavy particle in a potential $$V$$, in a medium with friction coefficient $$\gamma$$, in the overdamped limit where inertia is negligible, obeys
 
 <div class="formula-box">
 \[
@@ -81,11 +81,11 @@ dx \;=\; -\frac{1}{\gamma}\nabla V(x)\,dt \;+\; \sqrt{\tfrac{2kT}{\gamma}}\;dW .
 \]
 </div>
 
-Two terms, two roles: the **drift** $-\nabla V/\gamma$ pulls downhill, the **noise** kicks in random directions with a strength set by temperature. Their ratio is fixed by the fluctuation–dissipation relation, not free to choose — the same collisions that cause friction cause the kicks. The **Einstein relation** $D = \mu kT$, with mobility $\mu = 1/\gamma$, is exactly that statement.
+Two terms, two roles: the **drift** $$-\nabla V/\gamma$$ pulls downhill, the **noise** kicks in random directions with a strength set by temperature. Their ratio is fixed by the fluctuation–dissipation relation, not free to choose — the same collisions that cause friction cause the kicks. The **Einstein relation** $$D = \mu kT$$, with mobility $$\mu = 1/\gamma$$, is exactly that statement.
 
 ## Fokker–Planck: what the density does
 
-Track the density instead of the path. For $dx = f(x)\,dt + \sqrt{2D}\,dW$ the density evolves as
+Track the density instead of the path. For $$dx = f(x)\,dt + \sqrt{2D}\,dW$$ the density evolves as
 
 <div class="formula-box">
 \[
@@ -94,11 +94,11 @@ Track the density instead of the path. For $dx = f(x)\,dt + \sqrt{2D}\,dW$ the d
 \]
 </div>
 
-The first term transports probability along the drift; the second smooths it. Setting $f = -\nabla U$ and trying $$p_\infty \propto e^{-U/D}$$ gives $$D\nabla p_\infty = -\nabla U\,p_\infty = f p_\infty$$, so the current $J$ vanishes identically. The stationary state is not merely stationary but has zero flux — detailed balance. With $U = V$ and $D = kT/\gamma$ this reproduces the [Boltzmann distribution](/blog/physics-basics/statistical-mechanics/) $$p_\infty \propto e^{-V/kT}$$: equilibrium statistical mechanics falls out of a stochastic differential equation.
+The first term transports probability along the drift; the second smooths it. Setting $$f = -\nabla U$$ and trying $$p_\infty \propto e^{-U/D}$$ gives $$D\nabla p_\infty = -\nabla U\,p_\infty = f p_\infty$$, so the current $$J$$ vanishes identically. The stationary state is not merely stationary but has zero flux — detailed balance. With $$U = V$$ and $$D = kT/\gamma$$ this reproduces the [Boltzmann distribution](/blog/physics-basics/statistical-mechanics/) $$p_\infty \propto e^{-V/kT}$$: equilibrium statistical mechanics falls out of a stochastic differential equation.
 
 ## The line to score-based generative models
 
-Now run the argument backwards. You want to sample from $$p_{\text{data}}$$. Pick $$U = -\log p_{\text{data}}$$ and $D = \tfrac12$:
+Now run the argument backwards. You want to sample from $$p_{\text{data}}$$. Pick $$U = -\log p_{\text{data}}$$ and $$D = \tfrac12$$:
 
 <div class="formula-box">
 \[
@@ -108,7 +108,7 @@ p_\infty = p_{\text{data}} .
 \]
 </div>
 
-Discretised with step $\eta$, this is $$x_{k+1} = x_k + \tfrac{\eta}{2}\nabla_x\log p(x_k) + \sqrt{\eta}\,z_k$$ with $z_k\sim\mathcal N(0,I)$ — unadjusted Langevin. The only thing needed is the score $\nabla_x\log p$, which is free of the intractable normaliser, and that is precisely what a score network is trained to estimate. Song & Ermon (2019) run this at a ladder of noise levels, annealing from large to small; the continuous-time generalisation and its reverse-time SDE are covered in [score-based SDEs](/blog/diffusion/score-based-sde/).
+Discretised with step $$\eta$$, this is $$x_{k+1} = x_k + \tfrac{\eta}{2}\nabla_x\log p(x_k) + \sqrt{\eta}\,z_k$$ with $$z_k\sim\mathcal N(0,I)$$ — unadjusted Langevin. The only thing needed is the score $$\nabla_x\log p$$, which is free of the intractable normaliser, and that is precisely what a score network is trained to estimate. Song & Ermon (2019) run this at a ladder of noise levels, annealing from large to small; the continuous-time generalisation and its reverse-time SDE are covered in [score-based SDEs](/blog/diffusion/score-based-sde/).
 
 <div class="warning-box">
   <strong>Interview trap:</strong> the noise is not an implementation detail or a regulariser. Delete it and the update is plain gradient ascent on \(\log p\), which converges to a single mode — a point mass, not a sample. The noise term is what makes the stationary distribution \(p\) itself, and the fluctuation–dissipation ratio between drift and noise is what fixes <em>which</em> distribution you get. A second frequent slip: plain Langevin also struggles because the score is badly estimated where the data density is tiny, which is the motivation for annealing over noise scales rather than any property of the sampler itself.

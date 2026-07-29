@@ -18,12 +18,12 @@ permalink: /blog/persistent-homology/ripser-gudhi/
 
 ## Intuition First
 
-Computing persistent homology naively means building the entire Vietoris-Rips complex (exponentially many simplices) and then reducing its boundary matrix ($O(m^3)$ column operations). For a point cloud of 10,000 points at a moderate scale, this is completely infeasible.
+Computing persistent homology naively means building the entire Vietoris-Rips complex (exponentially many simplices) and then reducing its boundary matrix ($$O(m^3)$$ column operations). For a point cloud of 10,000 points at a moderate scale, this is completely infeasible.
 
 Ripser turns this around with two key insights:
 
 1. **Cohomology is dual to homology** — you get the same persistence pairs by reducing the *coboundary* matrix (rows become columns, the matrix is now lower-triangular). This is the "Ripser trick."
-2. **Most simplices are "apparent pairs"** — a simplex and its cofacet whose pair can be detected in $O(1)$ without any column operations. In practice, apparent pairs account for over 95% of all simplices in Rips complexes.
+2. **Most simplices are "apparent pairs"** — a simplex and its cofacet whose pair can be detected in $$O(1)$$ without any column operations. In practice, apparent pairs account for over 95% of all simplices in Rips complexes.
 
 The result: Ripser computes PH in seconds on point clouds where naive reduction would take hours.
 
@@ -33,9 +33,9 @@ The result: Ripser computes PH in seconds on point clouds where naive reduction 
 
 Before Ripser, the **clearing lemma** (Chen & Kerber, 2011) already gave a major speedup to homological reduction:
 
-**Lemma.** If simplex $\sigma_j$ is paired with $\sigma_i$ (i.e., column $j$ reduces to pivot row $i$), then every column corresponding to a face of $\sigma_j$ can be set to zero without changing the output.
+**Lemma.** If simplex $$\sigma_j$$ is paired with $$\sigma_i$$ (i.e., column $$j$$ reduces to pivot row $$i$$), then every column corresponding to a face of $$\sigma_j$$ can be set to zero without changing the output.
 
-This is because $\sigma_j$ "kills" the cycle born at $\sigma_i$, so all faces of $\sigma_j$ are already boundaries of earlier simplices. In practice, clearing removes most high-dimensional columns from the reduction entirely.
+This is because $$\sigma_j$$ "kills" the cycle born at $$\sigma_i$$, so all faces of $$\sigma_j$$ are already boundaries of earlier simplices. In practice, clearing removes most high-dimensional columns from the reduction entirely.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The clearing lemma lets you process dimensions in <em>decreasing</em> order: reduce dimension-2 first, then use the resulting pairs to clear the corresponding dimension-1 columns before reducing them. This cascading clearance means you never touch the vast majority of columns.</div>
 
@@ -43,19 +43,19 @@ This is because $\sigma_j$ "kills" the cycle born at $\sigma_i$, so all faces of
 
 ## Ripser's Apparent Pairs
 
-A **cofacet** of simplex $\sigma$ is any simplex $\tau$ with $\sigma \subset \tau$ and $\dim \tau = \dim \sigma + 1$.
+A **cofacet** of simplex \(\sigma\) is any simplex \(\tau\) with \(\sigma \subset \tau\) and \(\dim \tau = \dim \sigma + 1\).
 
-**Definition (Apparent pair).** The pair $(\sigma, \tau)$ is an *apparent pair* if:
-- $\tau$ is the unique **youngest cofacet** of $\sigma$ (the cofacet whose last-added vertex has the maximum index in the filtration ordering), AND
-- $\sigma$ is the unique **oldest facet** of $\tau$.
+**Definition (Apparent pair).** The pair \((\sigma, \tau)\) is an *apparent pair* if:
+- \(\tau\) is the unique **youngest cofacet** of \(\sigma\) (the cofacet whose last-added vertex has the maximum index in the filtration ordering), AND
+- \(\sigma\) is the unique **oldest facet** of \(\tau\).
 
-Apparent pairs can be checked in $O(d)$ time (where $d$ is the ambient dimension), and they always correspond to genuine persistence pairs. In typical Rips filtrations, apparent pairs account for 95–99% of all simplices.
+Apparent pairs can be checked in \(O(d)\) time (where \(d\) is the ambient dimension), and they always correspond to genuine persistence pairs. In typical Rips filtrations, apparent pairs account for 95–99% of all simplices.
 
 ---
 
 ## Cohomological Duality
 
-Instead of computing persistent homology directly, Ripser computes **persistent cohomology** via the coboundary matrix $\delta = \partial^T$. The resulting persistence pairs are identical (by the universal coefficient theorem for fields), but the coboundary matrix has different sparsity structure that makes it faster to reduce.
+Instead of computing persistent homology directly, Ripser computes **persistent cohomology** via the coboundary matrix \(\delta = \partial^T\). The resulting persistence pairs are identical (by the universal coefficient theorem for fields), but the coboundary matrix has different sparsity structure that makes it faster to reduce.
 
 The combination of cohomology + apparent pairs + clearing gives Ripser its enormous practical speedup — typically 10x–1000x over naive boundary matrix reduction.
 
@@ -203,16 +203,16 @@ h1_pairs = [(b, d) for dim, (b, d) in st.persistence() if dim == 1]
 
 ## Performance Benchmarks
 
-On a noisy circle with $n$ points (MacBook Pro M2, 2024):
+On a noisy circle with $$n$$ points (MacBook Pro M2, 2024):
 
-| $n$ | Ripser (ms) | Gudhi Alpha (ms) | Naive reduction (ms) |
+| $$n$$ | Ripser (ms) | Gudhi Alpha (ms) | Naive reduction (ms) |
 |-----|-------------|-----------------|---------------------|
 | 500 | 8 | 12 | 1,400 |
 | 2,000 | 45 | 60 | timeout |
 | 10,000 | 380 | 420 | — |
 | 50,000 | 4,200 | 6,100 | — |
 
-The gap widens with dimension: for $H_2$ computation, Ripser's apparent pairs dominate even more.
+The gap widens with dimension: for $$H_2$$ computation, Ripser's apparent pairs dominate even more.
 
 ---
 

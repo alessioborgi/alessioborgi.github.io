@@ -32,14 +32,14 @@ A letter "O" has one hole; a letter "B" has two; a letter "L" has none. Even a b
 
 ## Topological Features in Images
 
-An image $$I: \{1,\ldots,m\} \times \{1,\ldots,n\} \to \mathbb{R}$$ is a scalar function on a grid. Standard TDA applies directly:
+An image \(I: \{1,\ldots,m\} \times \{1,\ldots,n\} \to \mathbb{R}\) is a scalar function on a grid. Standard TDA applies directly:
 
-- **Sublevel set filtration** $$I^{-1}((-\infty, t])$$: as $$t$$ increases from dark to bright, bright regions appear and merge.
-- **Superlevel set filtration** $$I^{-1}([t, \infty))$$: as $$t$$ decreases, dark regions appear and merge.
+- **Sublevel set filtration** \(I^{-1}((-\infty, t])\): as \(t\) increases from dark to bright, bright regions appear and merge.
+- **Superlevel set filtration** \(I^{-1}([t, \infty))\): as \(t\) decreases, dark regions appear and merge.
 
-The resulting $$H_0$$ and $$H_1$$ persistence diagrams capture:
-- $$H_0$$: bright blobs (each bar born when a bright region appears, dies when it merges with a brighter region).
-- $$H_1$$: dark rings or holes surrounded by bright tissue.
+The resulting \(H_0\) and \(H_1\) persistence diagrams capture:
+- \(H_0\): bright blobs (each bar born when a bright region appears, dies when it merges with a brighter region).
+- \(H_1\): dark rings or holes surrounded by bright tissue.
 
 ## Texture Analysis
 
@@ -52,18 +52,18 @@ The key insight: texture is inherently a multi-scale phenomenon (features at dif
 
 ## Medical Image Analysis
 
-**Retinal fundus images**: The optic disc and blood vessels create characteristic topological patterns. $$H_1$$ features capture vessel loop structure; changes in loop persistence correlate with diabetic retinopathy severity.
+**Retinal fundus images**: The optic disc and blood vessels create characteristic topological patterns. \(H_1\) features capture vessel loop structure; changes in loop persistence correlate with diabetic retinopathy severity.
 
 **Brain MRI**: White matter lesions disrupt the topological structure of white matter connectivity. Persistence diagrams of DTI tractography graphs detect early neurodegeneration before volume-based measures.
 
-**Histopathology**: Cancer changes the topology of cell arrangements. Malignant tissue has more irregular hole patterns (high $$H_1$$ persistence variance) than benign tissue.
+**Histopathology**: Cancer changes the topology of cell arrangements. Malignant tissue has more irregular hole patterns (high \(H_1\) persistence variance) than benign tissue.
 
 ## Combining TDA with CNNs
 
 Two integration strategies:
 
 1. **Pre-computed features**: Compute persistence images from raw data → concatenate with CNN features → classify.
-2. **Topological regularisation**: Add a topological loss to the CNN training objective (e.g., ensure segmentation masks have correct $$\beta_0, \beta_1$$).
+2. **Topological regularisation**: Add a topological loss to the CNN training objective (e.g., ensure segmentation masks have correct \(\beta_0, \beta_1\)).
 
 **Clough et al. (2020)** used topological losses to train segmentation networks that produce topologically correct cardiac structures — significantly reducing clinically problematic disconnected regions.
 

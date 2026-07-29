@@ -109,14 +109,14 @@ They are often mentioned together or confused. But they are fundamentally differ
 | Property | Oversmoothing | Oversquashing |
 |----------|---------------|---------------|
 | **Root cause** | Iterated averaging → all embeddings become collinear | Receptive-field growth + bottleneck topology → info bottleneck |
-| **Formal statement** | $\hat{A}^{K} \to u_1u_1^{\top}$, with $u_1 \propto \tilde{D}^{1/2}\mathbf{1}$ | $\lVert \partial h_v^{(K)}/\partial x_u \rVert \le (cw)^{K}(\hat{A}^{K})_{vu}$ |
-| **Governed by** | Spectral gap $1 - \mu$, $\mu = \max_{i\ge2}\lvert\lambda_i\rvert$ | Entries of $\hat{A}^{K}$; effective resistance $R(u,v)$ |
+| **Formal statement** | \(\hat{A}^{K} \to u_1u_1^{\top}\), with \(u_1 \propto \tilde{D}^{1/2}\mathbf{1}\) | \(\lVert \partial h_v^{(K)}/\partial x_u \rVert \le (cw)^{K}(\hat{A}^{K})_{vu}\) |
+| **Governed by** | Spectral gap \(1 - \mu\), \(\mu = \max_{i\ge2}\lvert\lambda_i\rvert\) | Entries of \(\hat{A}^{K}\); effective resistance \(R(u,v)\) |
 | **Direction** | Forward pass (computation) | Both forward (dilution) and backward (gradient) |
 | **Which nodes affected** | All nodes, especially nearby ones | Nodes that are far apart (long paths) |
 | **Graph structure** | Worse on dense, well-connected graphs | Worse on tree-like, sparse graphs with bridge edges |
 | **With more layers** | Provably gets worse (converges to a rank-one limit) | Could get better (reach distant nodes) but squashing increases |
-| **Measure** | Dirichlet energy $\to 0$; MAD $\to 0$ | Jacobian norm $\to 0$ |
-| **Spectral view** | Low-pass filter removes high frequencies | Mostly topological (curvature, resistance), though $\hat{A}^{K}$ ties the two together |
+| **Measure** | Dirichlet energy \(\to 0\); MAD \(\to 0\) | Jacobian norm \(\to 0\) |
+| **Spectral view** | Low-pass filter removes high frequencies | Mostly topological (curvature, resistance), though \(\hat{A}^{K}\) ties the two together |
 | **Fix** | Residual connections, jump knowledge, APPNP | Graph rewiring, global attention, virtual nodes |
 
 ## When You Have Oversmoothing
@@ -139,14 +139,14 @@ You have a task requiring long-range reasoning (e.g., predicting whether two dis
 
 Consider a 4-layer GCN on a path graph: A — B — C — D — E — F — G — H — I — J (10 nodes, so the distance from A to J is 9).
 
-**Oversmoothing check:** track the Mean Average Distance (MAD) between node embeddings at each layer. As depth grows, MAD falls monotonically toward zero — the embeddings collapse onto $\mathrm{span}(u_1)$ and all nodes start to look alike. If you need to classify node A differently from node J, the model progressively loses the ability to do so.
+**Oversmoothing check:** track the Mean Average Distance (MAD) between node embeddings at each layer. As depth grows, MAD falls monotonically toward zero — the embeddings collapse onto \(\mathrm{span}(u_1)\) and all nodes start to look alike. If you need to classify node A differently from node J, the model progressively loses the ability to do so.
 
-**Oversquashing check:** look at the Jacobian $\partial h_A^{(K)} / \partial x_J$ — how much does node J's input affect node A's output?
+**Oversquashing check:** look at the Jacobian \(\partial h_A^{(K)} / \partial x_J\) — how much does node J's input affect node A's output?
 
-- With $K = 4$, node A's receptive field reaches only 4 hops, and $\mathrm{dist}(A,J) = 9 > 4$. So $(\hat{A}^{4})_{AJ} = 0$ and hence $\partial h_A^{(4)}/\partial x_J = 0$ exactly — A literally cannot see J. No training fixes this; it is a statement about the computation graph.
-- With $K = 9$ the receptive field does reach J, but $$(\hat{A}^{9})_{AJ}$$ is minuscule, so the bound $$\lVert \partial h_A^{(9)}/\partial x_J \rVert \le (cw)^{9}(\hat{A}^{9})_{AJ}$$ is near zero anyway.
+- With \(K = 4\), node A's receptive field reaches only 4 hops, and \(\mathrm{dist}(A,J) = 9 > 4\). So \((\hat{A}^{4})_{AJ} = 0\) and hence \(\partial h_A^{(4)}/\partial x_J = 0\) exactly — A literally cannot see J. No training fixes this; it is a statement about the computation graph.
+- With \(K = 9\) the receptive field does reach J, but \((\hat{A}^{9})_{AJ}\) is minuscule, so the bound \(\lVert \partial h_A^{(9)}/\partial x_J \rVert \le (cw)^{9}(\hat{A}^{9})_{AJ}\) is near zero anyway.
 
-A caveat on the second point, because it is a common overstatement: on a *path* the receptive field grows only linearly, not exponentially, and there is exactly one path from A to J. The decay here is not "exponentially many competing paths" — it comes from the random-walk mass spreading out over the whole 9-hop neighbourhood at every step, so that the share arriving from J alone is exponentially small in the distance. The exponential-fan-in story applies to tree-like or expander graphs; the effective-resistance story covers the path case too, and both are instances of the same $(\hat{A}^{K})_{vu}$ bound.
+A caveat on the second point, because it is a common overstatement: on a *path* the receptive field grows only linearly, not exponentially, and there is exactly one path from A to J. The decay here is not "exponentially many competing paths" — it comes from the random-walk mass spreading out over the whole 9-hop neighbourhood at every step, so that the share arriving from J alone is exponentially small in the distance. The exponential-fan-in story applies to tree-like or expander graphs; the effective-resistance story covers the path case too, and both are instances of the same \((\hat{A}^{K})_{vu}\) bound.
 
 Both problems can coexist: you need 9 layers to reach J (depth demand), but 9 layers cause oversmoothing. The fix is not "just add more layers."
 
@@ -161,7 +161,7 @@ Short range:  Oversmoothing dominates (too many hops → convergence)
 Long range:   Oversquashing dominates (too little mass reaches distant nodes)
 ```
 
-What makes them genuinely two sides of one coin is that both are statements about the *same* matrix, $\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$, read in two different ways. Oversmoothing is about the **limit** of its powers,
+What makes them genuinely two sides of one coin is that both are statements about the *same* matrix, \(\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}\), read in two different ways. Oversmoothing is about the **limit** of its powers,
 
 <div class="formula-box">
 \[
@@ -177,7 +177,7 @@ a rank-one collapse controlled by the spectral gap. Oversquashing is about an **
 \]
 </div>
 
-So one pathology says the powers of $\hat{A}$ converge to something uninformative, while the other says specific entries of those powers are too small. Depth pushes on both at once — which is exactly why it cannot resolve either.
+So one pathology says the powers of $$\hat{A}$$ converge to something uninformative, while the other says specific entries of those powers are too small. Depth pushes on both at once — which is exactly why it cannot resolve either.
 
 They create opposing pressures on depth:
 - Oversmoothing says: use FEWER layers

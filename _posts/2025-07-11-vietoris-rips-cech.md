@@ -18,9 +18,9 @@ permalink: /blog/persistent-homology/vietoris-rips-cech/
 
 ## Intuition First
 
-You have a cloud of GPS locations sampled from a running route. As you inflate a "bubble" of radius $\varepsilon$ around each point, bubbles that overlap suggest nearby points. When three bubbles all share a common intersection, those three points form a triangle. When all four of a group share a common point, they form a tetrahedron.
+You have a cloud of GPS locations sampled from a running route. As you inflate a "bubble" of radius $$\varepsilon$$ around each point, bubbles that overlap suggest nearby points. When three bubbles all share a common intersection, those three points form a triangle. When all four of a group share a common point, they form a tetrahedron.
 
-That is, at each scale $\varepsilon$, you get a simplicial complex. Varying $\varepsilon$ from 0 to $\infty$ gives you a **filtration** — a nested sequence of complexes — whose persistent homology reveals the topological shape of the route: isolated clusters at small $\varepsilon$, loops (if the route forms a circuit) at medium $\varepsilon$, and everything connected at large $\varepsilon$.
+That is, at each scale $$\varepsilon$$, you get a simplicial complex. Varying $$\varepsilon$$ from 0 to $$\infty$$ gives you a **filtration** — a nested sequence of complexes — whose persistent homology reveals the topological shape of the route: isolated clusters at small $$\varepsilon$$, loops (if the route forms a circuit) at medium $$\varepsilon$$, and everything connected at large $$\varepsilon$$.
 
 The three main constructions — Vietoris-Rips, Cech, and alpha — differ in which simplices they include and how efficiently they can be computed.
 
@@ -30,16 +30,16 @@ The three main constructions — Vietoris-Rips, Cech, and alpha — differ in wh
 
 ### Vietoris-Rips Complex
 
-**Definition.** Given a point cloud $X \subset \mathbb{R}^d$ and scale $\varepsilon \geq 0$:
+**Definition.** Given a point cloud $$X \subset \mathbb{R}^d$$ and scale $$\varepsilon \geq 0$$:
 
 $$\text{VR}(X, \varepsilon) = \{\sigma \subseteq X \mid \text{diam}(\sigma) \leq \varepsilon\}$$
 
-A simplex $\sigma$ is included if and only if every pair of its vertices is within distance $\varepsilon$ of each other (i.e., $\sigma$ is a **clique** in the $\varepsilon$-graph).
+A simplex $$\sigma$$ is included if and only if every pair of its vertices is within distance $$\varepsilon$$ of each other (i.e., $$\sigma$$ is a **clique** in the $$\varepsilon$$-graph).
 
 **Properties:**
-- Determined entirely by pairwise distances — works for any metric space, not just $\mathbb{R}^d$.
-- Easy to compute: construct the $\varepsilon$-graph, then find all cliques.
-- **Approximation:** $\text{VR}(X, \varepsilon) \supseteq \text{Cech}(X, \varepsilon) \supseteq \text{VR}(X, \varepsilon/2)$ — so Rips is a 2-approximation of the Cech complex.
+- Determined entirely by pairwise distances — works for any metric space, not just $$\mathbb{R}^d$$.
+- Easy to compute: construct the $$\varepsilon$$-graph, then find all cliques.
+- **Approximation:** $$\text{VR}(X, \varepsilon) \supseteq \text{Cech}(X, \varepsilon) \supseteq \text{VR}(X, \varepsilon/2)$$ — so Rips is a 2-approximation of the Cech complex.
 
 ### Čech Complex
 
@@ -47,23 +47,23 @@ A simplex $\sigma$ is included if and only if every pair of its vertices is with
 
 $$\text{Cech}(X, \varepsilon) = \{\sigma \subseteq X \mid \bigcap_{x \in \sigma} B(x, \varepsilon) \neq \emptyset\}$$
 
-A simplex is included if all the $\varepsilon$-balls around its vertices have a **common intersection**.
+A simplex is included if all the $$\varepsilon$$-balls around its vertices have a **common intersection**.
 
 **Properties:**
 - Homotopy-equivalent to $$\bigcup_{x \in X} B(x, \varepsilon)$$ by the nerve theorem.
 - Faithfully captures the topology of the union of balls.
 - Expensive to compute in high dimensions (requires checking ball intersections, i.e., smallest enclosing ball problems).
-- In $\mathbb{R}^1$: Cech = Rips. In $\mathbb{R}^2$: checking triple intersections is straightforward.
+- In $$\mathbb{R}^1$$: Cech = Rips. In $$\mathbb{R}^2$$: checking triple intersections is straightforward.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Nerve Theorem:</strong> The Cech complex of radius ε is homotopy equivalent to the union of ε-balls around the point cloud. This is the theorem that justifies TDA: the topology of the complex matches the topology of the underlying space sampled by the point cloud, provided ε is chosen appropriately relative to the sampling density.</div>
 
 ### Alpha Complex
 
-**Definition.** The alpha complex $\text{Alpha}(X, \varepsilon)$ is the restriction of the Delaunay triangulation of $X$ to simplices whose dual Voronoi cells intersect within radius $\varepsilon$.
+**Definition.** The alpha complex \(\text{Alpha}(X, \varepsilon)\) is the restriction of the Delaunay triangulation of \(X\) to simplices whose dual Voronoi cells intersect within radius \(\varepsilon\).
 
 **Properties:**
-- Subset of the Cech complex: $\text{Alpha}(X,\varepsilon) \subseteq \text{Cech}(X,\varepsilon)$, but homotopy equivalent to it.
-- Size $O(n)$ in $\mathbb{R}^2$, $O(n^{\lceil d/2 \rceil})$ in $\mathbb{R}^d$ — much smaller than Rips.
+- Subset of the Cech complex: \(\text{Alpha}(X,\varepsilon) \subseteq \text{Cech}(X,\varepsilon)\), but homotopy equivalent to it.
+- Size \(O(n)\) in \(\mathbb{R}^2\), \(O(n^{\lceil d/2 \rceil})\) in \(\mathbb{R}^d\) — much smaller than Rips.
 - Requires an ambient Euclidean space (cannot use arbitrary metric).
 - Default choice in GUDHI for point clouds in low-to-moderate dimensions.
 
@@ -181,15 +181,15 @@ Pairwise distances:
 
 **Vietoris-Rips filtration events:**
 
-- $\varepsilon = 0$: 4 isolated vertices. $H_0$: 4 components.
-- $\varepsilon = 1.00$: edges AB and AC appear. Two components merge: $$\{A,B,C\}$$ and $$\{D\}$$. $H_0$: 2 components.
-- $\varepsilon = 1.41$: edge BC appears. Triangle ABC is filled (all 3 pairwise distances $\leq 1.41$). The 1-cycle $A$-$B$-$C$-$A$ is born and immediately killed. $H_1$: 0.
-- $\varepsilon = 2.24$: edges BD and CD appear. D joins the main component. $H_0$: 1 component.
-- $\varepsilon = 2.83$: edge AD appears. No new topology.
+- $$\varepsilon = 0$$: 4 isolated vertices. $$H_0$$: 4 components.
+- $$\varepsilon = 1.00$$: edges AB and AC appear. Two components merge: $$\{A,B,C\}$$ and $$\{D\}$$. $$H_0$$: 2 components.
+- $$\varepsilon = 1.41$$: edge BC appears. Triangle ABC is filled (all 3 pairwise distances $$\leq 1.41$$). The 1-cycle $$A$$-$$B$$-$$C$$-$$A$$ is born and immediately killed. $$H_1$$: 0.
+- $$\varepsilon = 2.24$$: edges BD and CD appear. D joins the main component. $$H_0$$: 1 component.
+- $$\varepsilon = 2.83$$: edge AD appears. No new topology.
 
 **Persistence diagram (Rips):**
-- $H_0$: $(0, 1.00)$, $(0, 2.24)$, $(0, \infty)$
-- $H_1$: $(1.41, 1.41)$ — born and killed simultaneously, a zero-persistence feature (numerical artefact; in practice ignored by thresholding)
+- $$H_0$$: $$(0, 1.00)$$, $$(0, 2.24)$$, $$(0, \infty)$$
+- $$H_1$$: $$(1.41, 1.41)$$ — born and killed simultaneously, a zero-persistence feature (numerical artefact; in practice ignored by thresholding)
 
 ---
 
@@ -197,9 +197,9 @@ Pairwise distances:
 
 | Property | Vietoris-Rips | Čech | Alpha |
 |----------|--------------|------|-------|
-| Input | Any metric space | $\mathbb{R}^d$ | $\mathbb{R}^d$ |
+| Input | Any metric space | $$\mathbb{R}^d$$ | $$\mathbb{R}^d$$ |
 | Definition | Clique complex of ε-graph | Nerve of ε-balls | Restricted Delaunay |
-| Size | $O(2^n)$ worst case | $O(2^n)$ worst case | $O(n)$ in $\mathbb{R}^2$ |
+| Size | $$O(2^n)$$ worst case | $$O(2^n)$$ worst case | $$O(n)$$ in $$\mathbb{R}^2$$ |
 | Approximation | 2-approx of Čech | Exact (nerve theorem) | = Čech homotopy type |
 | Speed | Fast for sparse graphs | Slow (ball intersections) | Fast via Delaunay |
 | Software | Ripser, Gudhi | Gudhi | Gudhi |
@@ -208,9 +208,9 @@ Pairwise distances:
 
 ## The Nerve Theorem (Why Cech Works)
 
-**Theorem (Nerve lemma).** If $$\mathcal{U} = \{U_\alpha\}$$ is a cover of a space $X$ where every nonempty finite intersection $$U_{\alpha_1} \cap \cdots \cap U_{\alpha_k}$$ is contractible, then $X$ is homotopy equivalent to the nerve of $\mathcal{U}$.
+**Theorem (Nerve lemma).** If $$\mathcal{U} = \{U_\alpha\}$$ is a cover of a space $$X$$ where every nonempty finite intersection $$U_{\alpha_1} \cap \cdots \cap U_{\alpha_k}$$ is contractible, then $$X$$ is homotopy equivalent to the nerve of $$\mathcal{U}$$.
 
-For the Cech complex: $U_x = B(x, \varepsilon)$ are convex (hence contractible), and all finite intersections of convex sets are convex (hence contractible). So $$\text{Cech}(X, \varepsilon) \simeq \bigcup_{x \in X} B(x, \varepsilon)$$.
+For the Cech complex: $$U_x = B(x, \varepsilon)$$ are convex (hence contractible), and all finite intersections of convex sets are convex (hence contractible). So $$\text{Cech}(X, \varepsilon) \simeq \bigcup_{x \in X} B(x, \varepsilon)$$.
 
 This is the rigorous foundation for the claim that PH on the Cech filtration recovers the topology of the underlying sampled manifold.
 

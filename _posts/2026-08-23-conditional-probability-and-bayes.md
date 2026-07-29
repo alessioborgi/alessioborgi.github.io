@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## Conditioning is renormalisation
 
-Learning that $B$ occurred throws away every outcome outside $B$ and rescales what remains so it sums to one:
+Learning that $$B$$ occurred throws away every outcome outside $$B$$ and rescales what remains so it sums to one:
 
 <div class="formula-box">
 \[
@@ -31,9 +31,9 @@ P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \qquad P(B) > 0 .
 \]
 </div>
 
-$P(\cdot \mid B)$ is a genuine probability measure on the smaller space — it satisfies all three [Kolmogorov axioms](/blog/prob-basics/sample-spaces-and-axioms/) — so every identity you know still holds inside a conditional.
+$$P(\cdot \mid B)$$ is a genuine probability measure on the smaller space — it satisfies all three [Kolmogorov axioms](/blog/prob-basics/sample-spaces-and-axioms/) — so every identity you know still holds inside a conditional.
 
-Rearranging gives the **chain rule**, $P(A\cap B) = P(A\mid B)P(B)$, which iterates to any number of variables:
+Rearranging gives the **chain rule**, $$P(A\cap B) = P(A\mid B)P(B)$$, which iterates to any number of variables:
 
 <div class="formula-box">
 \[
@@ -43,11 +43,11 @@ P(x_1, \dots, x_n) = \prod_{t=1}^{n} P(x_t \mid x_1,\dots,x_{t-1}).
 
 That factorisation is exact, requires no assumptions, and is the entire justification for autoregressive language models: predicting the next token given the prefix is not an approximation to the joint distribution, it *is* the joint distribution.
 
-If $$\{B_1,\dots,B_k\}$$ partitions $\Omega$, the **law of total probability** reassembles a marginal from conditionals, $P(A) = \sum_i P(A\mid B_i)P(B_i)$ — averaging over cases, weighted by how often each case arises.
+If $$\{B_1,\dots,B_k\}$$ partitions $$\Omega$$, the **law of total probability** reassembles a marginal from conditionals, $$P(A) = \sum_i P(A\mid B_i)P(B_i)$$ — averaging over cases, weighted by how often each case arises.
 
 ## Bayes' theorem
 
-Write the joint two ways, $P(A\mid B)P(B) = P(B\mid A)P(A)$, and solve:
+Write the joint two ways, $$P(A\mid B)P(B) = P(B\mid A)P(A)$$, and solve:
 
 <div class="formula-box">
 \[
@@ -56,11 +56,11 @@ Write the joint two ways, $P(A\mid B)P(B) = P(B\mid A)P(A)$, and solve:
 \]
 </div>
 
-$H$ is a hypothesis, $E$ the evidence. The theorem is a one-line rearrangement; the difficulty is never the algebra, it is remembering that $P(E\mid H)$ and $P(H\mid E)$ are different numbers and that the prior $P(H)$ has a vote.
+$$H$$ is a hypothesis, $$E$$ the evidence. The theorem is a one-line rearrangement; the difficulty is never the algebra, it is remembering that $$P(E\mid H)$$ and $$P(H\mid E)$$ are different numbers and that the prior $$P(H)$$ has a vote.
 
 ## The medical test, computed
 
-A disease affects 1% of the screened population. The test has **sensitivity** $P(+\mid D) = 0.99$ and **specificity** $P(-\mid \neg D) = 0.95$, so its false-positive rate is $P(+\mid \neg D) = 0.05$. You test positive.
+A disease affects 1% of the screened population. The test has **sensitivity** $$P(+\mid D) = 0.99$$ and **specificity** $$P(-\mid \neg D) = 0.95$$, so its false-positive rate is $$P(+\mid \neg D) = 0.05$$. You test positive.
 
 Evidence first, by total probability:
 
@@ -86,7 +86,7 @@ Counting bodies makes it obvious. Screen 100,000 people:
 | Healthy | 99,000 | 4,950 |
 | **All positives** | | **5,940** |
 
-Of 5,940 positive results, 990 are genuine: $990/5940 = 1/6$. The false positives outnumber the true ones five to one purely because the healthy group is 99 times larger. Raise the base rate to 10% — testing a symptomatic group rather than screening everyone — and the same test gives $0.099/0.144 = 68.75\%$. The test did not change; the prior did.
+Of 5,940 positive results, 990 are genuine: $$990/5940 = 1/6$$. The false positives outnumber the true ones five to one purely because the healthy group is 99 times larger. Raise the base rate to 10% — testing a symptomatic group rather than screening everyone — and the same test gives $$0.099/0.144 = 68.75\%$$. The test did not change; the prior did.
 
 <div class="blog-figure">
 <figure>
@@ -127,11 +127,11 @@ Of 5,940 positive results, 990 are genuine: $990/5940 = 1/6$. The false positive
 
 ## Independence is not conditional independence
 
-$A$ and $B$ are **independent** when $P(A\cap B) = P(A)P(B)$, equivalently $P(A\mid B) = P(A)$: $B$ carries no information about $A$. They are **conditionally independent given $C$** when $P(A\cap B\mid C) = P(A\mid C)P(B\mid C)$. Neither condition implies the other.
+$$A$$ and $$B$$ are **independent** when $$P(A\cap B) = P(A)P(B)$$, equivalently $$P(A\mid B) = P(A)$$: $$B$$ carries no information about $$A$$. They are **conditionally independent given $$C$$** when $$P(A\cap B\mid C) = P(A\mid C)P(B\mid C)$$. Neither condition implies the other.
 
-**Independent, but not conditionally independent.** Flip two fair coins, $X$ and $Y$, and let $Z = X \oplus Y$ be their parity. $X$ and $Y$ are independent. Condition on $Z=1$: now $X=1$ forces $Y=0$, so given $Z$ they are perfectly dependent. Conditioning on a common *effect* creates dependence between its causes — the mechanism behind Berkson's paradox and behind collider bias in observational data.
+**Independent, but not conditionally independent.** Flip two fair coins, $$X$$ and $$Y$$, and let $$Z = X \oplus Y$$ be their parity. $$X$$ and $$Y$$ are independent. Condition on $$Z=1$$: now $$X=1$$ forces $$Y=0$$, so given $$Z$$ they are perfectly dependent. Conditioning on a common *effect* creates dependence between its causes — the mechanism behind Berkson's paradox and behind collider bias in observational data.
 
-**Conditionally independent, but not independent.** Pick one of two coins at random, $Z$: coin A lands heads with probability 0.9, coin B with probability 0.1. Flip the chosen coin twice, giving $X$ and $Y$. Given $Z$, the flips are independent by construction. Marginally they are not: $P(X=1)=P(Y=1)=0.5$, but $P(X=1,Y=1) = \tfrac12(0.81) + \tfrac12(0.01) = 0.41 \ne 0.25$. Seeing heads tells you which coin you are holding, which tells you about the second flip. This is exactly the structure of a latent-variable model — conditioning on the latent decouples the observations.
+**Conditionally independent, but not independent.** Pick one of two coins at random, $$Z$$: coin A lands heads with probability 0.9, coin B with probability 0.1. Flip the chosen coin twice, giving $$X$$ and $$Y$$. Given $$Z$$, the flips are independent by construction. Marginally they are not: $$P(X=1)=P(Y=1)=0.5$$, but $$P(X=1,Y=1) = \tfrac12(0.81) + \tfrac12(0.01) = 0.41 \ne 0.25$$. Seeing heads tells you which coin you are holding, which tells you about the second flip. This is exactly the structure of a latent-variable model — conditioning on the latent decouples the observations.
 
 <div class="insight-box">
   <strong>Key Insight — conditioning both creates and destroys dependence:</strong> conditioning on a common <em>cause</em> removes dependence between its effects; conditioning on a common <em>effect</em> creates dependence between its causes. Which one happens is a property of the graph, not of the numbers, which is why probabilistic graphical models draw arrows before they write any probabilities.

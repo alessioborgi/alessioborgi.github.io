@@ -23,13 +23,13 @@ toc_label: "Contents"
 
 ## The two layouts
 
-Everyone agrees that $\partial y/\partial x$ collects all the partials $\partial y_i/\partial x_j$. Nobody agrees how to arrange them.
+Everyone agrees that $$\partial y/\partial x$$ collects all the partials $$\partial y_i/\partial x_j$$. Nobody agrees how to arrange them.
 
-**Numerator layout** (also called Jacobian layout) puts the numerator's index down the rows: for $y\in\mathbb{R}^m$, $x\in\mathbb{R}^n$, the result is $m\times n$. A scalar function of a vector then has a $1\times n$ *row* derivative.
+**Numerator layout** (also called Jacobian layout) puts the numerator's index down the rows: for $$y\in\mathbb{R}^m$$, $$x\in\mathbb{R}^n$$, the result is $$m\times n$$. A scalar function of a vector then has a $$1\times n$$ *row* derivative.
 
-**Denominator layout** is the transpose of that: the result is $n \times m$, and a scalar function of a vector gives an $n\times1$ *column*.
+**Denominator layout** is the transpose of that: the result is $$n \times m$$, and a scalar function of a vector gives an $$n\times1$$ *column*.
 
-Machine learning almost always wants the second, for a mundane reason: the gradient is subtracted from the parameter, so it had better have the parameter's shape. This is the **shape convention**, and it is what `w.grad` holds in every autodiff framework. Numerical analysis and control theory tend to prefer numerator layout, because the chain rule then reads as plain left-to-right matrix multiplication, $D(f\circ g) = Df\,Dg$.
+Machine learning almost always wants the second, for a mundane reason: the gradient is subtracted from the parameter, so it had better have the parameter's shape. This is the **shape convention**, and it is what `w.grad` holds in every autodiff framework. Numerical analysis and control theory tend to prefer numerator layout, because the chain rule then reads as plain left-to-right matrix multiplication, $$D(f\circ g) = Df\,Dg$$.
 
 Both are correct. The damage comes from silently mixing them mid-derivation — you get an answer whose entries are all right and whose orientation is wrong, and a shape check that happens to pass because the matrix was square.
 
@@ -39,27 +39,27 @@ Both are correct. The damage comes from silently mixing them mid-derivation — 
 
 ## The reference table
 
-Vectors are columns; $x \in \mathbb{R}^n$, $a,b$ constant, $A$ constant, $X$ a matrix variable. Gradients follow the shape convention, so $\nabla_x f$ is $n\times 1$ and $\partial f/\partial X$ has the shape of $X$. Jacobians of vector-valued maps are given in numerator layout.
+Vectors are columns; $$x \in \mathbb{R}^n$$, $$a,b$$ constant, $$A$$ constant, $$X$$ a matrix variable. Gradients follow the shape convention, so $$\nabla_x f$$ is $$n\times 1$$ and $$\partial f/\partial X$$ has the shape of $$X$$. Jacobians of vector-valued maps are given in numerator layout.
 
 | Expression | Derivative | Notes |
 |---|---|---|
-| $a^\top x$ | $\nabla_x = a$ | also $x^\top a$ |
-| $x^\top x$ | $\nabla_x = 2x$ | |
-| $\lVert x\rVert_2$ | $\nabla_x = x/\lVert x\rVert_2$ | undefined at $x = 0$ |
-| $x^\top A x$ | $\nabla_x = (A + A^\top)x$ | $= 2Ax$ **iff** $A = A^\top$ |
-| $Ax$ | $J = A$ | shape $m\times n$ |
-| $\lVert Ax - b\rVert_2^2$ | $\nabla_x = 2A^\top(Ax - b)$ | zero $\Rightarrow$ normal equations |
-| $\log\sum_i e^{x_i}$ | $\nabla_x = \operatorname{softmax}(x)$ | |
-| $a^\top X b$ | $\partial/\partial X = ab^\top$ | rank one |
-| $\operatorname{tr}(AX)$ | $\partial/\partial X = A^\top$ | |
-| $\operatorname{tr}(X^\top A)$ | $\partial/\partial X = A$ | |
-| $\operatorname{tr}(AXB)$ | $\partial/\partial X = A^\top B^\top$ | via $\operatorname{tr}(AXB)=\operatorname{tr}(BAX)$ |
-| $\operatorname{tr}(X^\top A X)$ | $\partial/\partial X = (A + A^\top)X$ | matrix analogue of row 4 |
-| $\log\det X$ | $\partial/\partial X = X^{-\top}$ | $X$ invertible; $=X^{-1}$ if symmetric |
-| $\det X$ | $\partial/\partial X = \det(X)\,X^{-\top}$ | Jacobi's formula |
-| $X^{-1}$ | $d(X^{-1}) = -X^{-1}(dX)X^{-1}$ | differential form |
+| $$a^\top x$$ | $$\nabla_x = a$$ | also $$x^\top a$$ |
+| $$x^\top x$$ | $$\nabla_x = 2x$$ | |
+| $$\lVert x\rVert_2$$ | $$\nabla_x = x/\lVert x\rVert_2$$ | undefined at $$x = 0$$ |
+| $$x^\top A x$$ | $$\nabla_x = (A + A^\top)x$$ | $$= 2Ax$$ **iff** $$A = A^\top$$ |
+| $$Ax$$ | $$J = A$$ | shape $$m\times n$$ |
+| $$\lVert Ax - b\rVert_2^2$$ | $$\nabla_x = 2A^\top(Ax - b)$$ | zero $$\Rightarrow$$ normal equations |
+| $$\log\sum_i e^{x_i}$$ | $$\nabla_x = \operatorname{softmax}(x)$$ | |
+| $$a^\top X b$$ | $$\partial/\partial X = ab^\top$$ | rank one |
+| $$\operatorname{tr}(AX)$$ | $$\partial/\partial X = A^\top$$ | |
+| $$\operatorname{tr}(X^\top A)$$ | $$\partial/\partial X = A$$ | |
+| $$\operatorname{tr}(AXB)$$ | $$\partial/\partial X = A^\top B^\top$$ | via $$\operatorname{tr}(AXB)=\operatorname{tr}(BAX)$$ |
+| $$\operatorname{tr}(X^\top A X)$$ | $$\partial/\partial X = (A + A^\top)X$$ | matrix analogue of row 4 |
+| $$\log\det X$$ | $$\partial/\partial X = X^{-\top}$$ | $$X$$ invertible; $$=X^{-1}$$ if symmetric |
+| $$\det X$$ | $$\partial/\partial X = \det(X)\,X^{-\top}$$ | Jacobi's formula |
+| $$X^{-1}$$ | $$d(X^{-1}) = -X^{-1}(dX)X^{-1}$$ | differential form |
 
-Two of these deserve a caution. The trace identities assume the entries of $X$ are free; if $X$ is constrained to be symmetric and you differentiate with respect to the independent parameters only, the off-diagonal terms pick up a factor of two. And $\log\det$ is defined only where $\det X > 0$, which is why covariance parameterisations carry a Cholesky factor rather than the matrix itself.
+Two of these deserve a caution. The trace identities assume the entries of $$X$$ are free; if $$X$$ is constrained to be symmetric and you differentiate with respect to the independent parameters only, the off-diagonal terms pick up a factor of two. And $$\log\det$$ is defined only where $$\det X > 0$$, which is why covariance parameterisations carry a Cholesky factor rather than the matrix itself.
 
 ## One derivation, done properly
 
@@ -71,7 +71,7 @@ f(x) = \lVert Ax - b\rVert_2^2 = (Ax-b)^\top(Ax-b), \qquad r = Ax - b .
 \]
 </div>
 
-Perturb $x$ by $h$ and expand. Since $A(x+h) - b = r + Ah$,
+Perturb $$x$$ by $$h$$ and expand. Since $$A(x+h) - b = r + Ah$$,
 
 <div class="formula-box">
 \[
@@ -80,7 +80,7 @@ f(x+h) - f(x) = (r + Ah)^\top(r + Ah) - r^\top r
 \]
 </div>
 
-The cross terms combined because $r^\top A h$ and $h^\top A^\top r$ are the same scalar — a $1\times1$ matrix equals its own transpose, which is the one manipulation this method needs. By the [definition of the derivative](/blog/math-basics/derivatives-and-gradients/), the linear term *is* $Df(x)[h]$, and the quadratic remainder is $o(\lVert h\rVert)$. Now rewrite the linear term as an inner product with $h$:
+The cross terms combined because $$r^\top A h$$ and $$h^\top A^\top r$$ are the same scalar — a $$1\times1$$ matrix equals its own transpose, which is the one manipulation this method needs. By the [definition of the derivative](/blog/math-basics/derivatives-and-gradients/), the linear term *is* $$Df(x)[h]$$, and the quadratic remainder is $$o(\lVert h\rVert)$$. Now rewrite the linear term as an inner product with $$h$$:
 
 <div class="formula-box">
 \[
@@ -88,9 +88,9 @@ The cross terms combined because $r^\top A h$ and $h^\top A^\top r$ are the same
 \]
 </div>
 
-The transpose appeared for a reason you can see rather than recall: moving $A$ from acting on $h$ to acting on $r$ inside an inner product is exactly what the adjoint does. Setting the gradient to zero gives the normal equations $A^\top A x = A^\top b$, and the solution is unique precisely when $A$ has [full column rank](/blog/math-basics/vectors-and-matrices/), since that is when $A^\top A$ is invertible.
+The transpose appeared for a reason you can see rather than recall: moving $$A$$ from acting on $$h$$ to acting on $$r$$ inside an inner product is exactly what the adjoint does. Setting the gradient to zero gives the normal equations $$A^\top A x = A^\top b$$, and the solution is unique precisely when $$A$$ has [full column rank](/blog/math-basics/vectors-and-matrices/), since that is when $$A^\top A$$ is invertible.
 
-The same three lines give row 4 of the table. With $f(x) = x^\top A x$,
+The same three lines give row 4 of the table. With $$f(x) = x^\top A x$$,
 
 <div class="formula-box">
 \[
@@ -99,7 +99,7 @@ f(x+h) - f(x) = h^\top A x + x^\top A h + h^\top A h
 \]
 </div>
 
-because $h^\top A x = \langle h, Ax\rangle$ and $x^\top A h = \langle A^\top x, h\rangle$. The symmetric case collapses to $2Ax$; the general case does not.
+because $$h^\top A x = \langle h, Ax\rangle$$ and $$x^\top A h = \langle A^\top x, h\rangle$$. The symmetric case collapses to $$2Ax$$; the general case does not.
 
 <div class="insight-box">
   <strong>Key Insight — differentials are layout-free:</strong> write \(df = \langle G, dx\rangle\) for vectors, or \(df = \operatorname{tr}(G^\top dX)\) for matrices, and \(G\) <em>is</em> the gradient in the shape convention, automatically. You never choose a layout, so you cannot mix two. The trace form also explains why so many matrix identities are really one identity: cyclic invariance, \(\operatorname{tr}(ABC) = \operatorname{tr}(BCA)\), lets you shuffle \(dX\) into the rightmost position, and whatever is left multiplying it is the answer.
@@ -107,7 +107,7 @@ because $h^\top A x = \langle h, Ax\rangle$ and $x^\top A h = \langle A^\top x, 
 
 ## Checking yourself
 
-Three checks catch nearly every error before it reaches code. **Shapes**: the gradient must have the shape of the variable. **Scalars**: set $n = 1$ and confirm the expression reduces to ordinary calculus — $\nabla_x(ax^2)$ should give $2ax$. **Finite differences**: compare against $(f(x + \varepsilon e_i) - f(x - \varepsilon e_i))/2\varepsilon$ with $\varepsilon \approx 10^{-5}$; the central difference has $O(\varepsilon^2)$ error and will agree to five or six digits when the analytic gradient is right.
+Three checks catch nearly every error before it reaches code. **Shapes**: the gradient must have the shape of the variable. **Scalars**: set $$n = 1$$ and confirm the expression reduces to ordinary calculus — $$\nabla_x(ax^2)$$ should give $$2ax$$. **Finite differences**: compare against $$(f(x + \varepsilon e_i) - f(x - \varepsilon e_i))/2\varepsilon$$ with $$\varepsilon \approx 10^{-5}$$; the central difference has $$O(\varepsilon^2)$$ error and will agree to five or six digits when the analytic gradient is right.
 
 <div class="key-takeaways">
   <h3>Recap</h3>

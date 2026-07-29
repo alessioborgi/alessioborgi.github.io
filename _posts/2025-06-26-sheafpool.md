@@ -79,7 +79,7 @@ toc_label: "Contents"
 
 In a standard graph neural network, graph classification is conceptually simple: run message passing, get one embedding per node, then pool those embeddings with a sum, mean, or attention readout. That works because every node embedding lives in the same vector space.
 
-In a sheaf neural network, this assumption breaks. Each node feature is not just a plain vector in one shared ambient space. It lives in a **local stalk**, which means it is represented in a node-specific coordinate frame. Even if all stalks have the same dimensionality, there is no canonical reason why the basis at node $u$ should line up with the basis at node $v$.
+In a sheaf neural network, this assumption breaks. Each node feature is not just a plain vector in one shared ambient space. It lives in a **local stalk**, which means it is represented in a node-specific coordinate frame. Even if all stalks have the same dimensionality, there is no canonical reason why the basis at node $$u$$ should line up with the basis at node $$v$$.
 
 So naive pooling creates a real geometric bug: averaging stalk vectors directly can mix coordinates that mean different things in different local frames. The graph embedding then depends on arbitrary basis choices rather than only on the graph itself.
 

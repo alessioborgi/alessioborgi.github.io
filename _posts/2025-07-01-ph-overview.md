@@ -104,13 +104,13 @@ TDA is not a replacement for classical methods. It is complementary: where linea
 
 The persistent homology pipeline converts raw data into a topological summary in four steps:
 
-**Step 1: Point cloud.** Start with a finite metric space $$(P, d)$$ — a set of points with pairwise distances. This is the most natural input for TDA; any dataset with a notion of similarity can be embedded in a metric space.
+**Step 1: Point cloud.** Start with a finite metric space \((P, d)\) — a set of points with pairwise distances. This is the most natural input for TDA; any dataset with a notion of similarity can be embedded in a metric space.
 
-**Step 2: Filtration.** Build a nested sequence of simplicial complexes $$\emptyset = K_0 \subseteq K_1 \subseteq \cdots \subseteq K_n = K$$. Each $$K_i$$ is a combinatorial approximation of the "shape" of $$P$$ at scale $$\varepsilon_i$$. The canonical construction is the Vietoris-Rips filtration: add an edge between two points when their distance falls below $$2\varepsilon$$, and fill all cliques.
+**Step 2: Filtration.** Build a nested sequence of simplicial complexes \(\emptyset = K_0 \subseteq K_1 \subseteq \cdots \subseteq K_n = K\). Each \(K_i\) is a combinatorial approximation of the "shape" of \(P\) at scale \(\varepsilon_i\). The canonical construction is the Vietoris-Rips filtration: add an edge between two points when their distance falls below \(2\varepsilon\), and fill all cliques.
 
-**Step 3: Homology groups.** For each $$K_i$$, compute the homology groups $$H_k(K_i)$$. These are algebraic invariants: $$H_0$$ counts connected components, $$H_1$$ counts independent loops, $$H_2$$ counts enclosed voids.
+**Step 3: Homology groups.** For each \(K_i\), compute the homology groups \(H_k(K_i)\). These are algebraic invariants: \(H_0\) counts connected components, \(H_1\) counts independent loops, \(H_2\) counts enclosed voids.
 
-**Step 4: Persistence diagram.** Track how homology changes across the filtration. Each topological feature has a *birth time* $$b$$ (when it first appears) and a *death time* $$d$$ (when it merges with or is bounded by a previously existing feature). The pair $$(b, d)$$ is plotted as a point in the **persistence diagram** $$\mathrm{dgm}(P)$$. The collection of all intervals $$[b_i, d_i)$$ is the **barcode**.
+**Step 4: Persistence diagram.** Track how homology changes across the filtration. Each topological feature has a *birth time* \(b\) (when it first appears) and a *death time* \(d\) (when it merges with or is bounded by a previously existing feature). The pair \((b, d)\) is plotted as a point in the **persistence diagram** \(\mathrm{dgm}(P)\). The collection of all intervals \([b_i, d_i)\) is the **barcode**.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> TDA is <em>complementary</em> to classical statistics. Mean and covariance tell you <em>where</em> data lives; homology tells you the <em>shape</em> — how many holes, loops, and voids it has. A distribution on a torus and one on a sphere can have identical means and covariances but completely different persistence diagrams.</div>
 
@@ -118,10 +118,10 @@ The persistent homology pipeline converts raw data into a topological summary in
 
 The adjective "persistent" captures the key idea: features that persist over many scales are significant, while features that appear and disappear quickly are noise.
 
-Formally, given a filtration $$\{K_\varepsilon\}_{\varepsilon \geq 0}$$, the inclusions $$K_{\varepsilon_1} \hookrightarrow K_{\varepsilon_2}$$ (for $$\varepsilon_1 \leq \varepsilon_2$$) induce linear maps on homology $$H_k(K_{\varepsilon_1}) \to H_k(K_{\varepsilon_2})$$. A class $$\gamma \in H_k(K_b)$$ is **born** at $$\varepsilon = b$$ if it is not in the image of $$H_k(K_{b-\delta})$$ for any small $$\delta > 0$$. It **dies** at $$\varepsilon = d$$ if its image in $$H_k(K_d)$$ becomes trivial (or merges with an older class) for the first time.
+Formally, given a filtration \(\{K_\varepsilon\}_{\varepsilon \geq 0}\), the inclusions \(K_{\varepsilon_1} \hookrightarrow K_{\varepsilon_2}\) (for \(\varepsilon_1 \leq \varepsilon_2\)) induce linear maps on homology \(H_k(K_{\varepsilon_1}) \to H_k(K_{\varepsilon_2})\). A class \(\gamma \in H_k(K_b)\) is **born** at \(\varepsilon = b\) if it is not in the image of \(H_k(K_{b-\delta})\) for any small \(\delta > 0\). It **dies** at \(\varepsilon = d\) if its image in \(H_k(K_d)\) becomes trivial (or merges with an older class) for the first time.
 
 <div class="math-box">
-$$\text{persistence}(b, d) = d - b \quad \text{(larger = more significant feature)}$$
+\(\text{persistence}(b, d) = d - b \quad \text{(larger = more significant feature)}\)
 </div>
 
 The **elder rule** (or seniority rule) governs merges: when two features merge, the younger one dies and the older one survives. This ensures a unique pairing of births and deaths.

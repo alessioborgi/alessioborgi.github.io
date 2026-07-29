@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## Curves, arc length, tangents
 
-A parameterised curve is a smooth map $\gamma:[a,b]\to\mathbb{R}^n$. Its velocity $\gamma'(t)$ is the tangent vector, its speed is $\lVert\gamma'(t)\rVert$, and arc length is the integral of speed:
+A parameterised curve is a smooth map $$\gamma:[a,b]\to\mathbb{R}^n$$. Its velocity $$\gamma'(t)$$ is the tangent vector, its speed is $$\lVert\gamma'(t)\rVert$$, and arc length is the integral of speed:
 
 <div class="formula-box">
 \[
@@ -31,7 +31,7 @@ s(t) = \int_a^t \lVert \gamma'(\tau)\rVert\, d\tau .
 \]
 </div>
 
-Parameterisation is a choice, arc length is not — traverse the same track twice as fast and $\gamma'$ doubles while $s$ is unchanged. Reparameterising by arc length gives unit speed, $\lVert\gamma'(s)\rVert = 1$, and then the tangent $T = \gamma'$ only rotates, never lengthens. Curvature is exactly the rate of that rotation:
+Parameterisation is a choice, arc length is not — traverse the same track twice as fast and $$\gamma'$$ doubles while $$s$$ is unchanged. Reparameterising by arc length gives unit speed, $$\lVert\gamma'(s)\rVert = 1$$, and then the tangent $$T = \gamma'$$ only rotates, never lengthens. Curvature is exactly the rate of that rotation:
 
 <div class="formula-box">
 \[
@@ -39,7 +39,7 @@ Parameterisation is a choice, arc length is not — traverse the same track twic
 \]
 </div>
 
-In the usual non-unit-speed parameterisation $\gamma(t) = (x(t), y(t))$ this becomes $\kappa = \lvert x'y'' - y'x''\rvert/(x'^2+y'^2)^{3/2}$, and for a graph $y = f(x)$,
+In the usual non-unit-speed parameterisation $$\gamma(t) = (x(t), y(t))$$ this becomes $$\kappa = \lvert x'y'' - y'x''\rvert/(x'^2+y'^2)^{3/2}$$, and for a graph $$y = f(x)$$,
 
 <div class="formula-box">
 \[
@@ -47,7 +47,7 @@ In the usual non-unit-speed parameterisation $\gamma(t) = (x(t), y(t))$ this bec
 \]
 </div>
 
-Check it on a circle of radius $r$: with $\gamma(t) = (r\cos t, r\sin t)$ the numerator is $r^2$ and the denominator is $(r^2)^{3/2} = r^3$, giving $\kappa = 1/r$. Small circles curve hard. The reciprocal $1/\kappa$ is the radius of curvature, and the circle of that radius tangent to the curve is the osculating circle.
+Check it on a circle of radius $$r$$: with $$\gamma(t) = (r\cos t, r\sin t)$$ the numerator is $$r^2$$ and the denominator is $$(r^2)^{3/2} = r^3$$, giving $$\kappa = 1/r$$. Small circles curve hard. The reciprocal $$1/\kappa$$ is the radius of curvature, and the circle of that radius tangent to the curve is the osculating circle.
 
 <div class="blog-figure">
 <figure>
@@ -74,7 +74,7 @@ Check it on a circle of radius $r$: with $\gamma(t) = (r\cos t, r\sin t)$ the nu
 
 ## Surfaces and the first fundamental form
 
-Parameterise a surface as $\mathbf{r}(u,v)$. The tangent plane at a point is spanned by $$\mathbf{r}_u$$ and $$\mathbf{r}_v$$, and all *intrinsic* measurement — lengths of curves drawn on the surface, angles between them, areas — is governed by three functions:
+Parameterise a surface as $$\mathbf{r}(u,v)$$. The tangent plane at a point is spanned by $$\mathbf{r}_u$$ and $$\mathbf{r}_v$$, and all *intrinsic* measurement — lengths of curves drawn on the surface, angles between them, areas — is governed by three functions:
 
 <div class="formula-box">
 \[
@@ -86,9 +86,9 @@ ds^2 = E\,du^2 + 2F\,du\,dv + G\,dv^2 .
 \]
 </div>
 
-This is the first fundamental form: the inner product of the ambient space, restricted to the tangent plane and written in the $(u,v)$ coordinates. It is precisely what the surface-dwelling ant can measure with a ruler and a protractor, without ever leaving the surface.
+This is the first fundamental form: the inner product of the ambient space, restricted to the tangent plane and written in the $$(u,v)$$ coordinates. It is precisely what the surface-dwelling ant can measure with a ruler and a protractor, without ever leaving the surface.
 
-The *second* fundamental form, by contrast, involves the unit normal and records how the surface bends away from its tangent plane — information about the embedding, invisible from inside. Its eigenvalues are the principal curvatures $\kappa_1, \kappa_2$: the maximum and minimum curvature over all normal slices through the point.
+The *second* fundamental form, by contrast, involves the unit normal and records how the surface bends away from its tangent plane — information about the embedding, invisible from inside. Its eigenvalues are the principal curvatures $$\kappa_1, \kappa_2$$: the maximum and minimum curvature over all normal slices through the point.
 
 ## Gaussian versus mean curvature
 
@@ -99,20 +99,20 @@ H = \tfrac{1}{2}(\kappa_1 + \kappa_2) \qquad\text{(mean)}.
 \]
 </div>
 
-| Surface | $\kappa_1$ | $\kappa_2$ | $K$ | $H$ |
+| Surface | $$\kappa_1$$ | $$\kappa_2$$ | $$K$$ | $$H$$ |
 |---|---|---|---|---|
-| Plane | $0$ | $0$ | $0$ | $0$ |
-| Cylinder, radius $R$ | $1/R$ | $0$ | $0$ | $1/(2R)$ |
-| Sphere, radius $R$ | $1/R$ | $1/R$ | $1/R^2$ | $1/R$ |
-| Saddle | $>0$ | $<0$ | $<0$ | depends |
+| Plane | $$0$$ | $$0$$ | $$0$$ | $$0$$ |
+| Cylinder, radius $$R$$ | $$1/R$$ | $$0$$ | $$0$$ | $$1/(2R)$$ |
+| Sphere, radius $$R$$ | $$1/R$$ | $$1/R$$ | $$1/R^2$$ | $$1/R$$ |
+| Saddle | $$>0$$ | $$<0$$ | $$<0$$ | depends |
 
-The cylinder is the row that carries the argument. It obviously looks curved, and $H \neq 0$ confirms that — but $K = 0$, the same as a flat plane. And indeed you can roll a flat sheet of paper into a cylinder without stretching or tearing it. Bending is free; stretching is not.
+The cylinder is the row that carries the argument. It obviously looks curved, and $$H \neq 0$$ confirms that — but $$K = 0$$, the same as a flat plane. And indeed you can roll a flat sheet of paper into a cylinder without stretching or tearing it. Bending is free; stretching is not.
 
 ## Theorema Egregium, stated plainly
 
-**Gauss's Theorema Egregium (1827).** The Gaussian curvature $K$ of a surface is determined entirely by the first fundamental form — by $E$, $F$, $G$ and their first and second derivatives. Consequently $K$ is preserved by any local isometry: if two surfaces are locally isometric, corresponding points have equal Gaussian curvature.
+**Gauss's Theorema Egregium (1827).** The Gaussian curvature $$K$$ of a surface is determined entirely by the first fundamental form — by $$E$$, $$F$$, $$G$$ and their first and second derivatives. Consequently $$K$$ is preserved by any local isometry: if two surfaces are locally isometric, corresponding points have equal Gaussian curvature.
 
-"Remarkable" was Gauss's own word, and the surprise is genuine: $K$ was *defined* as a product of two extrinsic quantities, yet it turns out to be measurable from inside. The ant can determine $K$ without knowing the surface is embedded in anything at all — for instance by comparing the circumference of a small geodesic circle of radius $\rho$ against $2\pi\rho$, which comes up short on a sphere and long on a saddle.
+"Remarkable" was Gauss's own word, and the surprise is genuine: $$K$$ was *defined* as a product of two extrinsic quantities, yet it turns out to be measurable from inside. The ant can determine $$K$$ without knowing the surface is embedded in anything at all — for instance by comparing the circumference of a small geodesic circle of radius $$\rho$$ against $$2\pi\rho$$, which comes up short on a sphere and long on a saddle.
 
 <div class="insight-box">
   <strong>Key Insight — why every world map distorts:</strong> a sphere of radius \(R\) has \(K = 1/R^2 > 0\) everywhere; a sheet of paper has \(K = 0\) everywhere. A map projection that preserved all distances would be a local isometry, and by the Theorema Egregium a local isometry must preserve \(K\). Since \(1/R^2 \neq 0\), no such projection exists — not because cartographers have not tried hard enough, but as a theorem. Every projection therefore picks what to sacrifice: Mercator preserves angles and wrecks areas, which is why Greenland (2.17 million km²) looks comparable to Africa (30.4 million km², about fourteen times larger).
@@ -132,7 +132,7 @@ The cylinder is the row that carries the argument. It obviously looks curved, an
   </ul>
 </div>
 
-Curvature was defined here for surfaces sitting in $\mathbb{R}^3$. [Manifolds and tangent spaces](/blog/geometry-basics/manifolds-and-tangent-spaces/) drops the ambient space, and [Riemannian geometry](/blog/geometry-basics/riemannian-geometry/) rebuilds all of this from the metric alone.
+Curvature was defined here for surfaces sitting in $$\mathbb{R}^3$$. [Manifolds and tangent spaces](/blog/geometry-basics/manifolds-and-tangent-spaces/) drops the ambient space, and [Riemannian geometry](/blog/geometry-basics/riemannian-geometry/) rebuilds all of this from the metric alone.
 
 ## References
 

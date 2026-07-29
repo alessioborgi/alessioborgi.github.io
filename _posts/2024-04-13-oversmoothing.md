@@ -100,7 +100,7 @@ Why do deeper networks hurt in GNNs when they help in CNNs and Transformers? Bec
 
 ## The Mathematics of Oversmoothing
 
-Consider GCN's propagation step (ignoring learnable weights and non-linearities for clarity). Write $A$ for the adjacency matrix, $\tilde{A} = A + I$ for the self-looped adjacency, $\tilde{D}$ for its degree matrix, and
+Consider GCN's propagation step (ignoring learnable weights and non-linearities for clarity). Write \(A\) for the adjacency matrix, \(\tilde{A} = A + I\) for the self-looped adjacency, \(\tilde{D}\) for its degree matrix, and
 
 <div class="formula-box">
 \[
@@ -108,9 +108,9 @@ H^{(k+1)} = \hat{A} H^{(k)}, \qquad \hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}
 \]
 </div>
 
-where $H^{(k)} \in \mathbb{R}^{N\times d}$ stacks the node features $h_v^{(k)}$ as rows. After $K$ layers, $H^{(K)} = \hat{A}^K H^{(0)}$.
+where $$H^{(k)} \in \mathbb{R}^{N\times d}$$ stacks the node features $$h_v^{(k)}$$ as rows. After $$K$$ layers, $$H^{(K)} = \hat{A}^K H^{(0)}$$.
 
-$\hat{A}$ is symmetric, so it has an orthogonal eigendecomposition $\hat{A} = U\Lambda U^{\top}$ with real eigenvalues $\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_N$ and orthonormal eigenvectors $u_i$, and
+$$\hat{A}$$ is symmetric, so it has an orthogonal eigendecomposition $$\hat{A} = U\Lambda U^{\top}$$ with real eigenvalues $$\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_N$$ and orthonormal eigenvectors $$u_i$$, and
 
 <div class="formula-box">
 \[
@@ -118,18 +118,18 @@ $\hat{A}$ is symmetric, so it has an orthogonal eigendecomposition $\hat{A} = U\
 \]
 </div>
 
-**Where the spectrum of $\hat{A}$ actually lies.** Since $$\hat{A} = I - \tilde{L}_{\mathrm{sym}}$$, where $$\tilde{L}_{\mathrm{sym}}$$ is the symmetric normalised Laplacian of the self-looped graph and has spectrum in $[0,2]$, the spectrum of $\hat{A}$ lies in $[-1, 1]$. Two refinements matter:
+**Where the spectrum of $$\hat{A}$$ actually lies.** Since $$\hat{A} = I - \tilde{L}_{\mathrm{sym}}$$, where $$\tilde{L}_{\mathrm{sym}}$$ is the symmetric normalised Laplacian of the self-looped graph and has spectrum in $$[0,2]$$, the spectrum of $$\hat{A}$$ lies in $$[-1, 1]$$. Two refinements matter:
 
-- $\lambda_1 = 1$ exactly, with eigenvector $u_1 \propto \tilde{D}^{1/2}\mathbf{1}$, since $\hat{A}\tilde{D}^{1/2}\mathbf{1} = \tilde{D}^{-1/2}\tilde{A}\mathbf{1} = \tilde{D}^{-1/2}\tilde{D}\mathbf{1} = \tilde{D}^{1/2}\mathbf{1}$. On a connected graph this eigenvalue is simple.
-- $\lambda_N > -1$ strictly. Reaching $-1$ requires a bipartite component, and every self-loop is a closed walk of odd length 1, so the self-looped graph has no bipartite component at all. This is one reason GCN adds self-loops rather than using $D^{-1/2}AD^{-1/2}$ directly: without them a bipartite graph would have an eigenvalue of exactly $-1$ and the iteration would oscillate forever instead of converging.
+- $$\lambda_1 = 1$$ exactly, with eigenvector $$u_1 \propto \tilde{D}^{1/2}\mathbf{1}$$, since $$\hat{A}\tilde{D}^{1/2}\mathbf{1} = \tilde{D}^{-1/2}\tilde{A}\mathbf{1} = \tilde{D}^{-1/2}\tilde{D}\mathbf{1} = \tilde{D}^{1/2}\mathbf{1}$$. On a connected graph this eigenvalue is simple.
+- $$\lambda_N > -1$$ strictly. Reaching $$-1$$ requires a bipartite component, and every self-loop is a closed walk of odd length 1, so the self-looped graph has no bipartite component at all. This is one reason GCN adds self-loops rather than using $$D^{-1/2}AD^{-1/2}$$ directly: without them a bipartite graph would have an eigenvalue of exactly $$-1$$ and the iteration would oscillate forever instead of converging.
 
-So $\lvert\lambda_i\rvert < 1$ for all $i \ge 2$, and as $K \to \infty$:
+So $$\lvert\lambda_i\rvert < 1$$ for all $$i \ge 2$$, and as $$K \to \infty$$:
 
-- $\lambda_1 = 1 \Rightarrow \lambda_1^{K} = 1$ (unchanged)
-- $\lvert\lambda_i\rvert < 1 \Rightarrow \lambda_i^{K} \to 0$ (suppressed, geometrically)
-- $\lvert\lambda_i\rvert > 1$ is impossible
+- $$\lambda_1 = 1 \Rightarrow \lambda_1^{K} = 1$$ (unchanged)
+- $$\lvert\lambda_i\rvert < 1 \Rightarrow \lambda_i^{K} \to 0$$ (suppressed, geometrically)
+- $$\lvert\lambda_i\rvert > 1$$ is impossible
 
-Every eigen-direction except $u_1$ is annihilated, and the limit is the rank-one orthogonal projector onto $\mathrm{span}(u_1)$:
+Every eigen-direction except $$u_1$$ is annihilated, and the limit is the rank-one orthogonal projector onto $$\mathrm{span}(u_1)$$:
 
 <div class="formula-box">
 \[
@@ -151,9 +151,9 @@ h(\tilde\lambda) = 1 - \tilde\lambda, \qquad \tilde\lambda \in [0, 2),
 \]
 </div>
 
-so $K$ steps apply $h(\tilde\lambda)^K = (1-\tilde\lambda)^K$. This equals $1$ at $\tilde\lambda = 0$ and decays geometrically everywhere else. After many layers only the $\tilde\lambda = 0$ component survives — the degree-weighted global mean.
+so $$K$$ steps apply $$h(\tilde\lambda)^K = (1-\tilde\lambda)^K$$. This equals $$1$$ at $$\tilde\lambda = 0$$ and decays geometrically everywhere else. After many layers only the $$\tilde\lambda = 0$$ component survives — the degree-weighted global mean.
 
-The graph signal becomes as smooth as the operator allows: $$h_u^{(K)}/\sqrt{\tilde{d}_u} \approx h_v^{(K)}/\sqrt{\tilde{d}_v}$$ for adjacent $u, v$. For node classification, where you need to distinguish adjacent nodes (which often have different classes in heterophilic graphs), this is catastrophic.
+The graph signal becomes as smooth as the operator allows: $$h_u^{(K)}/\sqrt{\tilde{d}_u} \approx h_v^{(K)}/\sqrt{\tilde{d}_v}$$ for adjacent $$u, v$$. For node classification, where you need to distinguish adjacent nodes (which often have different classes in heterophilic graphs), this is catastrophic.
 
 ## How Fast Does Oversmoothing Happen?
 
@@ -165,12 +165,12 @@ The convergence rate is governed by the **second-largest eigenvalue in magnitude
 \]
 </div>
 
-because the component of $H^{(0)}$ orthogonal to $u_1$ decays like $\mu^{K}$. The **spectral gap** $1 - \mu$ therefore determines the speed:
+because the component of $$H^{(0)}$$ orthogonal to $$u_1$$ decays like $$\mu^{K}$$. The **spectral gap** $$1 - \mu$$ therefore determines the speed:
 
-- Large spectral gap ($\mu$ small — dense, well-connected, expander-like graph): fast oversmoothing, few layers needed to destroy information
-- Small spectral gap ($\mu$ close to 1 — sparse, weakly connected, high-diameter graph): slower oversmoothing
+- Large spectral gap ($$\mu$$ small — dense, well-connected, expander-like graph): fast oversmoothing, few layers needed to destroy information
+- Small spectral gap ($$\mu$$ close to 1 — sparse, weakly connected, high-diameter graph): slower oversmoothing
 
-At the extreme, on a complete graph with self-loops $\hat{A} = \tfrac{1}{N}\mathbf{1}\mathbf{1}^{\top}$ is *already* rank one, so oversmoothing is complete after a single step ($\mu = 0$). On a long path graph $\mu$ is close to 1 and the collapse takes many steps. Sparse citation graphs sit closer to the slow end, which is one reason the accuracy cliff there appears at a handful of layers rather than immediately.
+At the extreme, on a complete graph with self-loops $$\hat{A} = \tfrac{1}{N}\mathbf{1}\mathbf{1}^{\top}$$ is *already* rank one, so oversmoothing is complete after a single step ($$\mu = 0$$). On a long path graph $$\mu$$ is close to 1 and the collapse takes many steps. Sparse citation graphs sit closer to the slow end, which is one reason the accuracy cliff there appears at a handful of layers rather than immediately.
 
 <div class="insight-box">
 <strong>The diameter paradox:</strong> You might think: "I need \(K\) layers to reach nodes \(K\) hops away, so add more layers for better coverage." But adding more layers also accelerates oversmoothing for nearby nodes. The optimal depth trades coverage (more layers = larger receptive field) against smoothing (more layers = less discrimination). On the standard homophilic node-classification benchmarks that optimum is typically a small number of layers, often 2 or 3.
@@ -178,7 +178,7 @@ At the extreme, on a complete graph with self-loops $\hat{A} = \tfrac{1}{N}\math
 
 ## Concrete Worked Example: Dirichlet Energy Collapse
 
-Consider the path graph on 4 nodes, 1–2–3–4, with initial features $h^{(0)} = (1, 0, 1, 0)^{\top}$ (alternating — a maximally rough signal). The degrees are $(1,2,2,1)$, so with self-loops $\tilde{d} = (2,3,3,2)$ and
+Consider the path graph on 4 nodes, 1–2–3–4, with initial features $$h^{(0)} = (1, 0, 1, 0)^{\top}$$ (alternating — a maximally rough signal). The degrees are $$(1,2,2,1)$$, so with self-loops $$\tilde{d} = (2,3,3,2)$$ and
 
 <div class="formula-box">
 \[
@@ -199,7 +199,7 @@ Consider the path graph on 4 nodes, 1–2–3–4, with initial features $h^{(0)
 \]
 </div>
 
-Its spectrum is $$\{1,\ 0.729,\ 0.167,\ -0.229\}$$: the largest eigenvalue is exactly 1, the rest are strictly inside $(-1,1)$, and $\mu = 0.729$.
+Its spectrum is $$\{1,\ 0.729,\ 0.167,\ -0.229\}$$: the largest eigenvalue is exactly 1, the rest are strictly inside $$(-1,1)$$, and $$\mu = 0.729$$.
 
 The right quantity to track is the **normalised Dirichlet energy**, the quadratic form of the operator actually being iterated:
 
@@ -209,18 +209,18 @@ The right quantity to track is the **normalised Dirichlet energy**, the quadrati
 \]
 </div>
 
-which is zero exactly on $\mathrm{span}(u_1)$. Iterating $h^{(k+1)} = \hat{A}h^{(k)}$ gives:
+which is zero exactly on $$\mathrm{span}(u_1)$$. Iterating $$h^{(k+1)} = \hat{A}h^{(k)}$$ gives:
 
-| Layer $k$ | $h^{(k)}$ | $\mathcal{E}(h^{(k)})$ |
+| Layer $$k$$ | $$h^{(k)}$$ | $$\mathcal{E}(h^{(k)})$$ |
 |---|---|---|
-| 0 | $(1,\ 0,\ 1,\ 0)$ | 1.167 |
-| 1 | $(0.500,\ 0.742,\ 0.333,\ 0.408)$ | 0.070 |
-| 2 | $(0.553,\ 0.562,\ 0.525,\ 0.340)$ | 0.0088 |
-| 4 | $(0.493,\ 0.570,\ 0.520,\ 0.397)$ | 0.0016 |
-| 8 | $(0.458,\ 0.552,\ 0.538,\ 0.432)$ | 0.00013 |
-| $\infty$ | $(0.445,\ 0.545,\ 0.545,\ 0.445)$ | 0 |
+| 0 | $$(1,\ 0,\ 1,\ 0)$$ | 1.167 |
+| 1 | $$(0.500,\ 0.742,\ 0.333,\ 0.408)$$ | 0.070 |
+| 2 | $$(0.553,\ 0.562,\ 0.525,\ 0.340)$$ | 0.0088 |
+| 4 | $$(0.493,\ 0.570,\ 0.520,\ 0.397)$$ | 0.0016 |
+| 8 | $$(0.458,\ 0.552,\ 0.538,\ 0.432)$$ | 0.00013 |
+| $$\infty$$ | $$(0.445,\ 0.545,\ 0.545,\ 0.445)$$ | 0 |
 
-The limit is $\propto(\sqrt{2},\sqrt{3},\sqrt{3},\sqrt{2})$ — proportional to $$\sqrt{\tilde{d}_v}$$, exactly as the theory predicts, and *not* a constant vector. The energy falls by roughly the factor $\mu^2 \approx 0.53$ per layer once the transient has passed.
+The limit is $$\propto(\sqrt{2},\sqrt{3},\sqrt{3},\sqrt{2})$$ — proportional to $$\sqrt{\tilde{d}_v}$$, exactly as the theory predicts, and *not* a constant vector. The energy falls by roughly the factor $$\mu^2 \approx 0.53$$ per layer once the transient has passed.
 
 The Dirichlet energy tracks the collapse precisely. Monitoring it across layers during training tells you how many layers you can stack before representations become useless.
 
@@ -237,9 +237,9 @@ These are different phenomena:
 
 ## Measuring Oversmoothing
 
-**Mean Average Distance (MAD):** the average pairwise distance between node embeddings, usually computed with cosine distance so that it is invariant to the overall scaling of the features. MAD $\to 0$ as oversmoothing intensifies.
+**Mean Average Distance (MAD):** the average pairwise distance between node embeddings, usually computed with cosine distance so that it is invariant to the overall scaling of the features. MAD $$\to 0$$ as oversmoothing intensifies.
 
-**Dirichlet energy:** for the combinatorial Laplacian $L = D - A$,
+**Dirichlet energy:** for the combinatorial Laplacian $$L = D - A$$,
 
 <div class="formula-box">
 \[
@@ -247,9 +247,9 @@ E(H) \;=\; \sum_{(u,v)\in E} \bigl\lVert h_u - h_v \bigr\rVert^{2} \;=\; \operat
 \]
 </div>
 
-each undirected edge counted once. $E(H) \to 0$ means adjacent nodes have become identical.
+each undirected edge counted once. $$E(H) \to 0$$ means adjacent nodes have become identical.
 
-One caveat that is easy to miss: under $\hat{A}$-propagation it is the *normalised* energy $$\operatorname{tr}(H^{\top}\tilde{L}_{\mathrm{sym}}H)$$ that converges to zero, not this unnormalised one. The limit $u_1u_1^{\top}H^{(0)}$ has rows proportional to $$\sqrt{\tilde{d}_v}$$, so on an irregular graph $E(H)$ plateaus at a small non-zero value rather than reaching 0. Use $$\tilde{L}_{\mathrm{sym}}$$ if you want a quantity that genuinely vanishes; the two agree up to a constant on regular graphs.
+One caveat that is easy to miss: under $$\hat{A}$$-propagation it is the *normalised* energy $$\operatorname{tr}(H^{\top}\tilde{L}_{\mathrm{sym}}H)$$ that converges to zero, not this unnormalised one. The limit $$u_1u_1^{\top}H^{(0)}$$ has rows proportional to $$\sqrt{\tilde{d}_v}$$, so on an irregular graph $$E(H)$$ plateaus at a small non-zero value rather than reaching 0. Use $$\tilde{L}_{\mathrm{sym}}$$ if you want a quantity that genuinely vanishes; the two agree up to a constant on regular graphs.
 
 Monitoring the energy across layers reveals exactly when and how fast oversmoothing occurs.
 
@@ -269,9 +269,9 @@ Monitoring the energy across layers reveals exactly when and how fast oversmooth
 
 Oversmoothing is not a bug in implementation — it is a mathematical property of iterated graph averaging:
 
-1. **Spectral view:** repeated low-pass filtering, $h(\tilde\lambda)^K = (1-\tilde\lambda)^K$ → only the $\tilde\lambda = 0$ component survives
-2. **Power-iteration view:** $\hat{A}^K \to u_1u_1^{\top}$, a rank-one projection → all node embeddings become collinear, each scaled by $$\sqrt{\tilde{d}_v}$$ (identical only on regular graphs)
-3. **Rate:** governed by the spectral gap $1 - \mu$, where $$\mu = \max_{i\ge2}\lvert\lambda_i\rvert$$; the collapse is geometric, not gradual
+1. **Spectral view:** repeated low-pass filtering, $$h(\tilde\lambda)^K = (1-\tilde\lambda)^K$$ → only the $$\tilde\lambda = 0$$ component survives
+2. **Power-iteration view:** $$\hat{A}^K \to u_1u_1^{\top}$$, a rank-one projection → all node embeddings become collinear, each scaled by $$\sqrt{\tilde{d}_v}$$ (identical only on regular graphs)
+3. **Rate:** governed by the spectral gap $$1 - \mu$$, where $$\mu = \max_{i\ge2}\lvert\lambda_i\rvert$$; the collapse is geometric, not gradual
 4. **Practical consequence:** plain GCN/GAT stacks past a few layers typically lose accuracy on standard node-classification benchmarks
 5. **Fix:** prevent repeated pure averaging (residuals, separate propagation) or use global attention (Graph Transformers)
 

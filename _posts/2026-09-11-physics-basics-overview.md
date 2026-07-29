@@ -39,7 +39,7 @@ p_\theta(x) = \frac{e^{-E_\theta(x)}}{Z(\theta)}, \qquad Z(\theta) = \int e^{-E_
 \]
 </div>
 
-where $$E_\theta$$ is a learned energy and $Z(\theta)$ the partition function. This is the Boltzmann distribution at unit temperature. Every difficulty in training such a model — the intractable normaliser, the need for MCMC in the gradient, the role of temperature — is a difficulty statistical physics met first.
+where $$E_\theta$$ is a learned energy and $$Z(\theta)$$ the partition function. This is the Boltzmann distribution at unit temperature. Every difficulty in training such a model — the intractable normaliser, the need for MCMC in the gradient, the role of temperature — is a difficulty statistical physics met first.
 
 **Hamiltonian Monte Carlo comes from mechanics.** HMC invents a fictitious momentum, writes down a Hamiltonian, and integrates the resulting dynamics. It works because Hamiltonian flow preserves phase-space volume and is reversible, which is exactly what makes the Metropolis–Hastings acceptance ratio collapse to an energy difference. Neal's review (2011) is the standard reference.
 
@@ -77,9 +77,9 @@ where $$E_\theta$$ is a learned energy and $Z(\theta)$ the partition function. T
 
 ## Temperature, in one example
 
-The clearest single case is temperature. The Boltzmann distribution over states with energies $E_i$ at temperature $T$ is $p_i \propto e^{-E_i/T}$. A softmax over logits $z_i$ is $p_i \propto e^{z_i/T}$. These are the same expression with $E_i = -z_i$. Take logits $(2.0,\,1.0,\,0.5)$:
+The clearest single case is temperature. The Boltzmann distribution over states with energies $$E_i$$ at temperature $$T$$ is $$p_i \propto e^{-E_i/T}$$. A softmax over logits $$z_i$$ is $$p_i \propto e^{z_i/T}$$. These are the same expression with $$E_i = -z_i$$. Take logits $$(2.0,\,1.0,\,0.5)$$:
 
-| $T$ | resulting probabilities |
+| $$T$$ | resulting probabilities |
 |---|---|
 | 0.5 | 0.844, 0.114, 0.042 |
 | 1.0 | 0.629, 0.231, 0.140 |
@@ -93,7 +93,7 @@ Low temperature concentrates on the lowest-energy state; high temperature flatte
 
 ## What the rest of the book covers
 
-- **[Lagrangian mechanics](/blog/physics-basics/lagrangian-mechanics/)** — stationary action, $L = T - V$, the Euler–Lagrange equation, and why a variational formulation travels better than force balance.
+- **[Lagrangian mechanics](/blog/physics-basics/lagrangian-mechanics/)** — stationary action, $$L = T - V$$, the Euler–Lagrange equation, and why a variational formulation travels better than force balance.
 - **[Hamiltonian dynamics](/blog/physics-basics/hamiltonian-dynamics/)** — phase space, Liouville's theorem, and why HMC needs a symplectic integrator.
 - **[Statistical mechanics](/blog/physics-basics/statistical-mechanics/)** — microstates, the Boltzmann distribution, and what the partition function really is.
 - **[Entropy and thermodynamics](/blog/physics-basics/entropy-and-thermodynamics/)** — Gibbs versus Shannon entropy, free energy as the ELBO, and the non-equilibrium origin of diffusion.

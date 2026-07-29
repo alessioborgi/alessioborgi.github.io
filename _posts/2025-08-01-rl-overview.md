@@ -33,12 +33,12 @@ toc_label: "Contents"
 
 ## What is Reinforcement Learning?
 
-Reinforcement Learning (RL) is the computational study of decision-making. An **agent** interacts with an **environment** over discrete time steps: at each step, the agent observes a **state** $$s_t$$, selects an **action** $$a_t$$ according to its **policy** $$\pi$$, and receives a scalar **reward** $$r_t$$ along with the next state $$s_{t+1}$$.
+Reinforcement Learning (RL) is the computational study of decision-making. An **agent** interacts with an **environment** over discrete time steps: at each step, the agent observes a **state** \(s_t\), selects an **action** \(a_t\) according to its **policy** \(\pi\), and receives a scalar **reward** \(r_t\) along with the next state \(s_{t+1}\).
 
-The goal is to find a policy $$\pi$$ that maximises the **expected cumulative discounted return**:
+The goal is to find a policy \(\pi\) that maximises the **expected cumulative discounted return**:
 
 <div class="math-box">
-$$J(\pi) = \mathbb{E}_\pi\!\left[\sum_{t=0}^{\infty} \gamma^t r_t\right], \quad \gamma \in [0, 1)$$
+\(J(\pi) = \mathbb{E}_\pi\!\left[\sum_{t=0}^{\infty} \gamma^t r_t\right], \quad \gamma \in [0, 1)\)
 </div>
 
 The discount factor $$\gamma$$ balances immediate vs. future rewards. When $$\gamma \to 0$$ the agent is myopic; when $$\gamma \to 1$$ it cares about the distant future.

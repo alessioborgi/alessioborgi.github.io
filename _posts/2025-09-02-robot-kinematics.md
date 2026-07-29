@@ -76,16 +76,16 @@ toc_label: "Contents"
 <figcaption>Animated 2-link planar arm. Joint 1 (teal) rotates the whole arm; joint 2 (purple) bends the forearm independently. The orange end-effector traces an arc in Cartesian space.</figcaption>
 </figure></div>
 
-A serial robot manipulator consists of rigid links connected by joints. Given a vector of joint angles $$\mathbf{q} = [q_1, \dots, q_n]^T$$, **forward kinematics (FK)** computes the end-effector pose $$\mathbf{x} \in SE(3)$$:
+A serial robot manipulator consists of rigid links connected by joints. Given a vector of joint angles \(\mathbf{q} = [q_1, \dots, q_n]^T\), **forward kinematics (FK)** computes the end-effector pose \(\mathbf{x} \in SE(3)\):
 
 <div class="math-box">
-$$\mathbf{x} = \text{FK}(\mathbf{q}) = {}^0T_1(\mathbf{q}_1)\; {}^1T_2(\mathbf{q}_2) \cdots {}^{n-1}T_n(\mathbf{q}_n)$$
+\(\mathbf{x} = \text{FK}(\mathbf{q}) = {}^0T_1(\mathbf{q}_1)\; {}^1T_2(\mathbf{q}_2) \cdots {}^{n-1}T_n(\mathbf{q}_n)\)
 </div>
 
 Each $${}^{i-1}T_i$$ is a $$4 \times 4$$ homogeneous transformation matrix parameterised by the **Denavit-Hartenberg (DH) convention** using four parameters per joint: link length $$a_i$$, link twist $$\alpha_i$$, link offset $$d_i$$, and joint angle $$\theta_i$$. The DH matrix is:
 
 <div class="math-box">
-$${}^{i-1}T_i = \begin{pmatrix} c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\ s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\ 0 & s\alpha_i & c\alpha_i & d_i \\ 0 & 0 & 0 & 1 \end{pmatrix}$$
+\({}^{i-1}T_i = \begin{pmatrix} c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\ s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\ 0 & s\alpha_i & c\alpha_i & d_i \\ 0 & 0 & 0 & 1 \end{pmatrix}\)
 </div>
 
 FK is straightforward to compute — it is a simple chain of matrix multiplications — and always has a unique solution. This makes it useful for simulation, collision checking, and rendering.
@@ -97,8 +97,8 @@ Consider a 2-link planar arm with link lengths $$L_1 = 1.0\,\text{m}$$ and $$L_2
 The end-effector position is:
 
 <div class="math-box">
-$$x = L_1 \cos q_1 + L_2 \cos(q_1 + q_2)$$
-$$y = L_1 \sin q_1 + L_2 \sin(q_1 + q_2)$$
+\(x = L_1 \cos q_1 + L_2 \cos(q_1 + q_2)\)
+\(y = L_1 \sin q_1 + L_2 \sin(q_1 + q_2)\)
 </div>
 
 Plugging in numbers:
@@ -113,7 +113,7 @@ So the gripper tip reaches **(1.48 m, 0.91 m)** — purely by chaining two rotat
 The **Jacobian** $$J(\mathbf{q}) \in \mathbb{R}^{6 \times n}$$ relates joint velocities to end-effector velocities (linear and angular):
 
 <div class="math-box">
-$$\dot{\mathbf{x}} = J(\mathbf{q})\, \dot{\mathbf{q}}$$
+\(\dot{\mathbf{x}} = J(\mathbf{q})\, \dot{\mathbf{q}}\)
 </div>
 
 The Jacobian has two block components: the linear velocity Jacobian $$J_v$$ and the angular velocity Jacobian $$J_\omega$$. Each column $$J_i$$ corresponds to the contribution of joint $$i$$ to the end-effector velocity. For a revolute joint:
@@ -133,7 +133,7 @@ where $$\mathbf{z}_{i-1}$$ is the joint axis and $$\mathbf{p}_n - \mathbf{p}_{i-
 **Closed-form IK** exists for specific kinematic structures (e.g., robots with a spherical wrist) and is preferred for speed. **Numerical IK** iteratively updates $$\mathbf{q}$$ using the Jacobian pseudoinverse:
 
 <div class="math-box">
-$$\dot{\mathbf{q}} = J^+(\mathbf{q})\, \dot{\mathbf{x}}, \quad J^+ = J^T(JJ^T)^{-1}$$
+\(\dot{\mathbf{q}} = J^+(\mathbf{q})\, \dot{\mathbf{x}}, \quad J^+ = J^T(JJ^T)^{-1}\)
 </div>
 
 This minimises $$\|\dot{\mathbf{q}}\|$$ subject to achieving $$\dot{\mathbf{x}}$$. Damped least squares ($$J^+ = J^T(JJ^T + \lambda^2 I)^{-1}$$) avoids numerical blow-up near singularities. **Learning-based IK** trains a neural network $$q = f_\theta(x)$$ on large datasets of FK evaluations, providing fast inference at the cost of exactness.

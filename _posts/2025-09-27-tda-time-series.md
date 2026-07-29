@@ -28,45 +28,45 @@ toc_label: "Contents"
 
 ## Intuition First
 
-A pure sinusoid traces a perfect circle when you plot $$x(t)$$ against $$x(t + T/4)$$ — the delayed version. That circle is topologically a loop ($$H_1$$). A noisy or aperiodic signal traces a jumbled cloud instead — no loop. The sliding window embedding generalises this idea to higher dimensions: it wraps the time series into a point cloud in $$\mathbb{R}^d$$, and persistent homology asks "is there a robust loop here?" A long-lived $$H_1$$ bar means yes — the signal is periodic. TDA has thus converted a signal analysis question into a shape recognition question.
+A pure sinusoid traces a perfect circle when you plot \(x(t)\) against \(x(t + T/4)\) — the delayed version. That circle is topologically a loop (\(H_1\)). A noisy or aperiodic signal traces a jumbled cloud instead — no loop. The sliding window embedding generalises this idea to higher dimensions: it wraps the time series into a point cloud in \(\mathbb{R}^d\), and persistent homology asks "is there a robust loop here?" A long-lived \(H_1\) bar means yes — the signal is periodic. TDA has thus converted a signal analysis question into a shape recognition question.
 
 ## Sliding Window Embeddings
 
-For a time series $$x: \{0, 1, \ldots, T\} \to \mathbb{R}$$ and parameters $$d$$ (dimension) and $$\tau$$ (lag):
+For a time series \(x: \{0, 1, \ldots, T\} \to \mathbb{R}\) and parameters \(d\) (dimension) and \(\tau\) (lag):
 
-<div class="math-box">$$\mathrm{SW}_{d,\tau}(x)(t) = (x(t), x(t+\tau), x(t+2\tau), \ldots, x(t+(d-1)\tau)) \in \mathbb{R}^d$$</div>
+<div class="math-box">\(\mathrm{SW}_{d,\tau}(x)(t) = (x(t), x(t+\tau), x(t+2\tau), \ldots, x(t+(d-1)\tau)) \in \mathbb{R}^d\)</div>
 
-The sliding window point cloud $$P = \{\mathrm{SW}_{d,\tau}(x)(t) : t = 0, \ldots, T-(d-1)\tau\}$$.
+The sliding window point cloud \(P = \{\mathrm{SW}_{d,\tau}(x)(t) : t = 0, \ldots, T-(d-1)\tau\}\).
 
-**Takens' Theorem**: For a generic smooth dynamical system on an $$m$$-dimensional attractor, the sliding window embedding with $$d \geq 2m+1$$ gives a diffeomorphism between the attractor and $$P$$. Thus, $$P$$ has the same topology as the attractor.
+**Takens' Theorem**: For a generic smooth dynamical system on an \(m\)-dimensional attractor, the sliding window embedding with \(d \geq 2m+1\) gives a diffeomorphism between the attractor and \(P\). Thus, \(P\) has the same topology as the attractor.
 
 ## Topology of Different Signal Types
 
-**Periodic signal** $$x(t) = \sin(2\pi t / T_0)$$:
-- Sliding window traces an ellipse ≅ $$S^1$$.
-- $$H_0$$: one component; $$H_1$$: one generator (the loop).
-- Persistence diagram: single long-lived $$H_1$$ bar.
+**Periodic signal** \(x(t) = \sin(2\pi t / T_0)\):
+- Sliding window traces an ellipse ≅ \(S^1\).
+- \(H_0\): one component; \(H_1\): one generator (the loop).
+- Persistence diagram: single long-lived \(H_1\) bar.
 
-**Quasiperiodic signal** $$x(t) = \sin(2\pi t/T_1) + \sin(2\pi t/T_2)$$ with $$T_1/T_2 \notin \mathbb{Q}$$:
-- Attractor is a 2-torus $$T^2 = S^1 \times S^1$$.
-- $$H_1$$ has rank 2 (two generators).
-- Persistence diagram: two long-lived $$H_1$$ bars.
+**Quasiperiodic signal** \(x(t) = \sin(2\pi t/T_1) + \sin(2\pi t/T_2)\) with \(T_1/T_2 \notin \mathbb{Q}\):
+- Attractor is a 2-torus \(T^2 = S^1 \times S^1\).
+- \(H_1\) has rank 2 (two generators).
+- Persistence diagram: two long-lived \(H_1\) bars.
 
 **Chaotic signal** (Lorenz attractor):
-- Complex attractor with interesting $$H_1$$ (loops around the "wings").
-- Persistence diagram: a few moderate-lived $$H_1$$ bars.
+- Complex attractor with interesting \(H_1\) (loops around the "wings").
+- Persistence diagram: a few moderate-lived \(H_1\) bars.
 
-**White noise**: random point cloud, no persistent features; all $$H_1$$ bars short-lived.
+**White noise**: random point cloud, no persistent features; all \(H_1\) bars short-lived.
 
 ## The Periodicity Score
 
-**Perea & Harer (2015)** define the **periodicity score** using the maximum persistence of $$H_1$$:
+**Perea & Harer (2015)** define the **periodicity score** using the maximum persistence of \(H_1\):
 
-$$\mathrm{PS}(x, d, \tau) = \max_{(b,d) \in H_1 \text{ diagram}} (d - b) / \mathrm{diam}(P)$$
+\(\mathrm{PS}(x, d, \tau) = \max_{(b,d) \in H_1 \text{ diagram}} (d - b) / \mathrm{diam}(P)\)
 
 A high score (close to 1) indicates clear periodicity; a low score indicates noise or aperiodic behaviour.
 
-The optimal parameters $$d, \tau$$ can be estimated from the autocorrelation of $$x$$.
+The optimal parameters \(d, \tau\) can be estimated from the autocorrelation of \(x\).
 
 ## TDA Time Series Pipeline
 

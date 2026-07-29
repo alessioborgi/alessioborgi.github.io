@@ -27,7 +27,7 @@ Write down what a feed-forward network is. Each layer applies a matrix, adds a b
 
 Everything mathematical you need follows from unpacking that:
 
-- **The matrices.** What does $W$ *do* to a vector? Which directions does it stretch, which does it destroy, what information does it throw away? That is linear algebra, and it is the single largest slice of the syllabus.
+- **The matrices.** What does $$W$$ *do* to a vector? Which directions does it stretch, which does it destroy, what information does it throw away? That is linear algebra, and it is the single largest slice of the syllabus.
 - **The descending.** How does a change in one weight, buried eleven layers deep, affect a scalar at the end? That is the chain rule, applied at scale. Backpropagation is nothing else.
 - **The convergence.** How fast does this get anywhere, and what shape of loss surface makes it slow? That is norms, curvature and convexity.
 
@@ -39,7 +39,7 @@ Interview mathematics is overwhelmingly linear algebra and calculus. Rank, eigen
 
 What almost never appears: epsilon-delta arguments, Lebesgue integration, compactness, Banach spaces. If a role genuinely needs those — theory positions, some optimisation research — the interview will say so in advance. Revising analysis instead of practising a Jacobian derivation is a bad trade.
 
-What does appear, and catches people out, is not hard material. It is material people once knew and then stopped using: the difference between eigenvalues and singular values, why the gradient of $x^\top A x$ is $(A + A^\top)x$ and not $Ax$, why $L^1$ produces sparsity and $L^2$ does not.
+What does appear, and catches people out, is not hard material. It is material people once knew and then stopped using: the difference between eigenvalues and singular values, why the gradient of $$x^\top A x$$ is $$(A + A^\top)x$$ and not $$Ax$$, why $$L^1$$ produces sparsity and $$L^2$$ does not.
 
 <div class="warning-box">
   <strong>The three traps this book keeps returning to:</strong> (1) treating eigenvalues and singular values as the same object — they agree only for symmetric positive semi-definite matrices, and the general relationship is that the singular values of \(A\) are the square roots of the eigenvalues of \(A^\top A\); (2) getting matrix-calculus layout wrong, which produces an answer that is right up to a transpose and therefore wrong; (3) claiming a stationary point is a minimum without checking curvature.
@@ -52,7 +52,7 @@ The seven remaining posts, in the order they build on one another.
 **Linear algebra**
 
 1. [Vectors and matrices](/blog/math-basics/vectors-and-matrices/) — span, basis, rank; matrix multiplication read as composition of maps and as a change of basis; column space against null space, and rank–nullity as the conservation law that connects them.
-2. [Eigenvalues, the spectral theorem and SVD](/blog/math-basics/eigen-and-svd/) — invariant directions, when diagonalisation fails, why the SVD always exists, and low-rank approximation with a worked $2\times2$ example carried through exactly.
+2. [Eigenvalues, the spectral theorem and SVD](/blog/math-basics/eigen-and-svd/) — invariant directions, when diagonalisation fails, why the SVD always exists, and low-rank approximation with a worked $$2\times2$$ example carried through exactly.
 
 **Calculus**
 
@@ -62,7 +62,7 @@ The seven remaining posts, in the order they build on one another.
 
 **Analysis and optimisation**
 
-6. [Norms and distances](/blog/math-basics/norms-and-distances/) — $L^1$, $L^2$, $L^\infty$, operator and Frobenius norms; the geometry behind $L^1$ sparsity; cosine similarity against Euclidean distance.
+6. [Norms and distances](/blog/math-basics/norms-and-distances/) — $$L^1$$, $$L^2$$, $$L^\infty$$, operator and Frobenius norms; the geometry behind $$L^1$$ sparsity; cosine similarity against Euclidean distance.
 7. [Convexity and optimisation](/blog/math-basics/convexity-and-optimisation/) — what convexity guarantees, how the condition number sets the convergence rate, KKT conditions, and the honest position on non-convex deep learning.
 
 <div class="insight-box">

@@ -29,7 +29,7 @@ permalink: /blog/persistent-homology/filtrations/
 {% include figure image_path="/images/blog/tdl/carriere2020_perslay.png" alt="Filtration and PersLay" caption="PersLay persistence diagram vectorisation (Carrière et al., 2020)" %}
 
 
-**Intuition First.** Imagine slowly inflating a balloon around each data point simultaneously. At radius $$\varepsilon = 0$$ the balloons are just the points themselves. As $$\varepsilon$$ grows, neighboring balloons touch and merge — their union changes shape. A filtration is the mathematical record of this growing process: at each scale $$\varepsilon$$ you get a snapshot of the combined shape, and topology (holes, loops, components) can appear and disappear across snapshots. Persistent homology reads off which features last long enough to be real.
+**Intuition First.** Imagine slowly inflating a balloon around each data point simultaneously. At radius \(\varepsilon = 0\) the balloons are just the points themselves. As \(\varepsilon\) grows, neighboring balloons touch and merge — their union changes shape. A filtration is the mathematical record of this growing process: at each scale \(\varepsilon\) you get a snapshot of the combined shape, and topology (holes, loops, components) can appear and disappear across snapshots. Persistent homology reads off which features last long enough to be real.
 
 <style>
 @keyframes ball-grow {
@@ -105,10 +105,10 @@ permalink: /blog/persistent-homology/filtrations/
 
 ## What is a Filtration?
 
-A **filtration** of a simplicial complex $$K$$ is a nested sequence of subcomplexes indexed by a parameter $$\varepsilon \in \mathbb{R}$$:
+A **filtration** of a simplicial complex \(K\) is a nested sequence of subcomplexes indexed by a parameter \(\varepsilon \in \mathbb{R}\):
 
 <div class="math-box">
-$$\emptyset = K_{\varepsilon_0} \subseteq K_{\varepsilon_1} \subseteq K_{\varepsilon_2} \subseteq \cdots \subseteq K_{\varepsilon_n} = K$$
+\(\emptyset = K_{\varepsilon_0} \subseteq K_{\varepsilon_1} \subseteq K_{\varepsilon_2} \subseteq \cdots \subseteq K_{\varepsilon_n} = K\)
 </div>
 
 **Monotonicity** is essential: once a simplex enters the filtration, it never leaves. This ensures that the inclusions $$K_{\varepsilon_i} \hookrightarrow K_{\varepsilon_j}$$ (for $$i \leq j$$) are well-defined simplicial maps, and these maps induce linear maps on homology groups that can be tracked algebraically.
@@ -120,7 +120,7 @@ A filtration can equivalently be described by a **filtration function** $$f: K \
 The most natural filtration arises from a scalar function on a topological space. Given a continuous function $$f: X \to \mathbb{R}$$, the **sublevel-set filtration** is:
 
 <div class="math-box">
-$$X_\varepsilon = f^{-1}((-\infty, \varepsilon]) = \{x \in X : f(x) \leq \varepsilon\}$$
+\(X_\varepsilon = f^{-1}((-\infty, \varepsilon]) = \{x \in X : f(x) \leq \varepsilon\}\)
 </div>
 
 As $$\varepsilon$$ increases, $$X_\varepsilon$$ grows monotonically. Topological features of $$X_\varepsilon$$ — components, loops, voids — appear and disappear as $$\varepsilon$$ crosses critical values of $$f$$. For a Morse function, these critical values correspond exactly to the birth and death of homology classes (Morse theory).
@@ -132,8 +132,8 @@ As $$\varepsilon$$ increases, $$X_\varepsilon$$ grows monotonically. Topological
 For a finite point cloud $$P \subset \mathbb{R}^d$$ with pairwise distances, the **Vietoris-Rips filtration** is the canonical choice:
 
 <div class="math-box">
-$$\mathrm{VR}(P, \varepsilon) = \{\sigma \subseteq P : \mathrm{diam}(\sigma) \leq 2\varepsilon\}$$
-$$\text{i.e., add simplex } \sigma \text{ when all pairwise distances between its vertices are} \leq 2\varepsilon$$
+\(\mathrm{VR}(P, \varepsilon) = \{\sigma \subseteq P : \mathrm{diam}(\sigma) \leq 2\varepsilon\}\)
+\(\text{i.e., add simplex } \sigma \text{ when all pairwise distances between its vertices are} \leq 2\varepsilon\)
 </div>
 
 Equivalently: add an edge $$(u, v)$$ when $$d(u,v) \leq 2\varepsilon$$, then fill all cliques. This means VR is the clique complex of the graph with edges at scale $$2\varepsilon$$.

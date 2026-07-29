@@ -23,19 +23,19 @@ toc_label: "Contents"
 
 ## Locally flat, globally not
 
-Take the circle $S^1$. Near any point it looks like an interval; globally it is compact and closes up, so no continuous injective map to $\mathbb{R}$ captures it. That gap between local and global is the entire content of the definition.
+Take the circle $$S^1$$. Near any point it looks like an interval; globally it is compact and closes up, so no continuous injective map to $$\mathbb{R}$$ captures it. That gap between local and global is the entire content of the definition.
 
-A **topological $d$-manifold** is a Hausdorff, second-countable space in which every point has a neighbourhood homeomorphic to an open subset of $\mathbb{R}^d$. Such a homeomorphism $\varphi: U \to \mathbb{R}^d$ is a **chart**, a local coordinate system; a collection of charts covering the space is an **atlas**; and the manifold is **smooth** when every transition map $\varphi_j\circ\varphi_i^{-1}$ is $C^\infty$.
+A **topological $$d$$-manifold** is a Hausdorff, second-countable space in which every point has a neighbourhood homeomorphic to an open subset of $$\mathbb{R}^d$$. Such a homeomorphism $$\varphi: U \to \mathbb{R}^d$$ is a **chart**, a local coordinate system; a collection of charts covering the space is an **atlas**; and the manifold is **smooth** when every transition map $$\varphi_j\circ\varphi_i^{-1}$$ is $$C^\infty$$.
 
-Why not use one chart? For most interesting spaces you cannot: $S^2$ is compact and any nonempty open subset of $\mathbb{R}^2$ is not, so a single homeomorphism onto one is impossible. Two stereographic charts, one omitting each pole, suffice. Longitude/latitude is a chart too, with the familiar defect that it degenerates at the poles and tears at the date line.
+Why not use one chart? For most interesting spaces you cannot: $$S^2$$ is compact and any nonempty open subset of $$\mathbb{R}^2$$ is not, so a single homeomorphism onto one is impossible. Two stereographic charts, one omitting each pole, suffice. Longitude/latitude is a chart too, with the familiar defect that it degenerates at the poles and tears at the date line.
 
-Keep three examples in mind: $S^2$; the torus $T^2 = S^1\times S^1$, also 2-dimensional but *not* homeomorphic to the sphere since it has a hole; and the Swiss roll, a flat rectangle rolled up inside $\mathbb{R}^3$, intrinsically flat despite looking dramatic.
+Keep three examples in mind: $$S^2$$; the torus $$T^2 = S^1\times S^1$$, also 2-dimensional but *not* homeomorphic to the sphere since it has a hole; and the Swiss roll, a flat rectangle rolled up inside $$\mathbb{R}^3$$, intrinsically flat despite looking dramatic.
 
 ## The tangent space
 
-Collect the velocities $\gamma'(0)$ of all smooth curves with $\gamma(0) = p$. The result is a $d$-dimensional real vector space, the **tangent space** $T_pM$, spanned in a chart by the coordinate directions $\partial/\partial x^1,\dots,\partial/\partial x^d$.
+Collect the velocities $$\gamma'(0)$$ of all smooth curves with $$\gamma(0) = p$$. The result is a $$d$$-dimensional real vector space, the **tangent space** $$T_pM$$, spanned in a chart by the coordinate directions $$\partial/\partial x^1,\dots,\partial/\partial x^d$$.
 
-Two things make it useful. It is a genuine vector space, so all the machinery of [Euclidean space](/blog/geometry-basics/euclidean-spaces/) applies locally even though the manifold itself has no notion of addition. And it is where derivatives live: the differential of a smooth $f: M\to N$ at $p$ is a *linear* map $$df_p: T_pM\to T_{f(p)}N$$, so gradients and Jacobians on manifolds are maps between tangent spaces.
+Two things make it useful. It is a genuine vector space, so all the machinery of [Euclidean space](/blog/geometry-basics/euclidean-spaces/) applies locally even though the manifold itself has no notion of addition. And it is where derivatives live: the differential of a smooth $$f: M\to N$$ at $$p$$ is a *linear* map $$df_p: T_pM\to T_{f(p)}N$$, so gradients and Jacobians on manifolds are maps between tangent spaces.
 
 <div class="warning-box">
   <strong>Interview trap:</strong> the tangent space is not part of the manifold, and it differs at every point. So if \(u, v \in T_pM\) then \(u + v\) is a tangent vector, <em>not</em> a point on \(M\) — getting back requires the exponential map (see <a href="/blog/geometry-basics/riemannian-geometry/">Riemannian geometry</a>), and adding two points on a sphere then renormalising is a hack rather than a geometric operation. And \(T_pM\) and \(T_qM\) are distinct spaces with no canonical identification; comparing vectors across points needs a connection and parallel transport, which is where curvature enters.
@@ -43,9 +43,9 @@ Two things make it useful. It is a genuine vector space, so all the machinery of
 
 ## The manifold hypothesis
 
-The claim is empirical, not mathematical: high-dimensional data concentrates near a low-dimensional manifold in the ambient space. A $224\times 224$ RGB image lives in $\mathbb{R}^{150528}$, yet photographs vary along far fewer directions — pose, illumination, identity, background. Three strands of evidence support it, none a proof:
+The claim is empirical, not mathematical: high-dimensional data concentrates near a low-dimensional manifold in the ambient space. A $$224\times 224$$ RGB image lives in $$\mathbb{R}^{150528}$$, yet photographs vary along far fewer directions — pose, illumination, identity, background. Three strands of evidence support it, none a proof:
 
-- **Intrinsic-dimension estimates.** Nearest-neighbour estimators such as Levina and Bickel's maximum-likelihood method return dimensions in the tens for standard image datasets; Pope et al. (2021) report roughly $40$ for ImageNet against $150{,}528$ ambient, and find that lower estimated intrinsic dimension goes with easier learning — fewer samples for the same accuracy.
+- **Intrinsic-dimension estimates.** Nearest-neighbour estimators such as Levina and Bickel's maximum-likelihood method return dimensions in the tens for standard image datasets; Pope et al. (2021) report roughly $$40$$ for ImageNet against $$150{,}528$$ ambient, and find that lower estimated intrinsic dimension goes with easier learning — fewer samples for the same accuracy.
 - **Testability.** Fefferman, Mitter and Narayanan (2016) turned the hypothesis into a decidable statistical question: given samples, test whether they lie near a manifold of bounded dimension, volume and reach. It can fail, so it is a hypothesis rather than a slogan.
 - **What works in practice.** Methods that assume a manifold — Isomap, LLE, their descendants — recover structure PCA cannot.
 
@@ -55,7 +55,7 @@ The claim is empirical, not mathematical: high-dimensional data concentrates nea
 
 ## Where the hypothesis is weaker than it sounds
 
-Data lies *near* a manifold, not on one — noise thickens the support, which is why "reach" appears in the formal statements. The support may also be a *union* of manifolds of different dimensions, making a single latent dimension the wrong model. And topology matters: an autoencoder with latent space $\mathbb{R}^k$ and continuous encoder and decoder is precisely one chart. If the data manifold is a circle of rotations, no such pair can be a homeomorphism, so the model must either tear the circle or fold it — the failure that hyperspherical and other structured-latent VAEs were built to avoid.
+Data lies *near* a manifold, not on one — noise thickens the support, which is why "reach" appears in the formal statements. The support may also be a *union* of manifolds of different dimensions, making a single latent dimension the wrong model. And topology matters: an autoencoder with latent space $$\mathbb{R}^k$$ and continuous encoder and decoder is precisely one chart. If the data manifold is a circle of rotations, no such pair can be a homeomorphism, so the model must either tear the circle or fold it — the failure that hyperspherical and other structured-latent VAEs were built to avoid.
 
 <div class="key-takeaways">
   <h3>Recap</h3>

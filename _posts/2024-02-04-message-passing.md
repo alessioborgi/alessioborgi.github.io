@@ -25,7 +25,7 @@ toc_label: "Contents"
 
 ## The Framework
 
-The MPNN framework (Gilmer et al., 2017, ICML) defines GNN computation through a series of **message passing steps**. At each step $t$:
+The MPNN framework (Gilmer et al., 2017, ICML) defines GNN computation through a series of **message passing steps**. At each step $$t$$:
 
 <div class="formula-box">
 \[
@@ -37,13 +37,13 @@ h_v^{(t+1)} \;=\; \operatorname{UPDATE}\big(h_v^{(t)},\, m_v^{(t+1)}\big)
 </div>
 
 Where:
-- $h_v^{(t)} \in \mathbb{R}^{d_t}$ — the representation of node $v$ after $t$ message passing steps; $h_v^{(0)}$ is the input feature vector.
-- $\mathcal{N}(v)$ — the set of neighbours of $v$ in the graph.
-- $$e_{uv}$$ — the (optional) feature vector of the edge between $u$ and $v$.
-- $m_v^{(t+1)}$ — the aggregated message arriving at $v$ at step $t+1$.
-- $\operatorname{MSG}$ — the message function, computing what a neighbour sends.
-- $\operatorname{AGGREGATE}$ — combines all incoming messages (must be permutation-invariant, since $$\{\cdot\}$$ is a *multiset*, not an ordered list).
-- $\operatorname{UPDATE}$ — computes the new representation from the old one plus the aggregated message.
+- $$h_v^{(t)} \in \mathbb{R}^{d_t}$$ — the representation of node $$v$$ after $$t$$ message passing steps; $$h_v^{(0)}$$ is the input feature vector.
+- $$\mathcal{N}(v)$$ — the set of neighbours of $$v$$ in the graph.
+- $$e_{uv}$$ — the (optional) feature vector of the edge between $$u$$ and $$v$$.
+- $$m_v^{(t+1)}$$ — the aggregated message arriving at $$v$$ at step $$t+1$$.
+- $$\operatorname{MSG}$$ — the message function, computing what a neighbour sends.
+- $$\operatorname{AGGREGATE}$$ — combines all incoming messages (must be permutation-invariant, since $$\{\cdot\}$$ is a *multiset*, not an ordered list).
+- $$\operatorname{UPDATE}$$ — computes the new representation from the old one plus the aggregated message.
 
 <div class="blog-figure">
 <figure>
@@ -109,7 +109,7 @@ Where:
 
 ## Concrete Worked Example: One Full MPNN Step
 
-Let node $B$ have features $h_B = [1, 0]$, with three neighbours $$\mathcal{N}(B) = \{A, C, D\}$$ whose features are $h_A = [0, 1]$, $h_C = [1, 1]$ and $h_D = [0, 0]$.
+Let node $$B$$ have features $$h_B = [1, 0]$$, with three neighbours $$\mathcal{N}(B) = \{A, C, D\}$$ whose features are $$h_A = [0, 1]$$, $$h_C = [1, 1]$$ and $$h_D = [0, 0]$$.
 
 **Step 1 — Compute messages** (using the identity message function, $$\operatorname{MSG}(h_v, h_u, e_{uv}) = h_u$$, i.e. just pass the neighbour's features along):
 
@@ -127,7 +127,7 @@ m_B = [0,1] + [1,1] + [0,0] = [1, 2]
 \]
 </div>
 
-**Step 3 — Update** (concatenate own features with the aggregate, apply a learned linear map $W \in \mathbb{R}^{2 \times 4}$ and a ReLU):
+**Step 3 — Update** (concatenate own features with the aggregate, apply a learned linear map $$W \in \mathbb{R}^{2 \times 4}$$ and a ReLU):
 
 <div class="formula-box">
 \[
@@ -135,7 +135,7 @@ h_B' = \operatorname{ReLU}\big(W \, [\, h_B \,\Vert\, m_B \,]\big) = \operatorna
 \]
 </div>
 
-Here $\Vert$ denotes concatenation, so $[\, h_B \Vert m_B \,] \in \mathbb{R}^4$. After this one layer, $B$'s new 2-dimensional embedding encodes information from all three of its neighbours.
+Here $$\Vert$$ denotes concatenation, so $$[\, h_B \Vert m_B \,] \in \mathbb{R}^4$$. After this one layer, $$B$$'s new 2-dimensional embedding encodes information from all three of its neighbours.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The three steps — MSG, AGGREGATE, UPDATE — are independent design choices. Changing any one of them gives a different GNN family. GCN sends \(W h_u\) and aggregates with a degree-normalised sum. GAT weights that sum by learned attention coefficients. GIN uses a plain sum followed by an MLP. The framework shows that these are all variations on the same theme.</div>
 
@@ -153,7 +153,7 @@ The message function computes what each neighbour sends. The simplest choice: ju
 \]
 </div>
 
-Here $W$ is a learned weight matrix shared by all edges, and $$\alpha_{vu}$$ is the scalar attention weight GAT places on the edge $u \to v$. Including edge features $$e_{uv}$$ allows the model to distinguish bond types in a molecule or relationship types in a knowledge graph.
+Here $$W$$ is a learned weight matrix shared by all edges, and $$\alpha_{vu}$$ is the scalar attention weight GAT places on the edge $$u \to v$$. Including edge features $$e_{uv}$$ allows the model to distinguish bond types in a molecule or relationship types in a knowledge graph.
 
 ## Step 2: Aggregate Function
 
@@ -170,7 +170,7 @@ The aggregation combines all messages. It **must be permutation-invariant** (the
 
 ## Step 3: Update Function
 
-Given the aggregated message $m_v$ and the old representation $h_v$, compute the new one:
+Given the aggregated message $$m_v$$ and the old representation $$h_v$$, compute the new one:
 
 <div class="formula-box">
 \[
@@ -182,16 +182,16 @@ h_v' &= \operatorname{MLP}\big([\, h_v \Vert m_v \,]\big) && \text{(GraphSAGE-st
 \]
 </div>
 
-where $\sigma$ is an elementwise non-linearity (usually ReLU) and $[\,\cdot \Vert \cdot\,]$ is concatenation.
+where $$\sigma$$ is an elementwise non-linearity (usually ReLU) and $$[\,\cdot \Vert \cdot\,]$$ is concatenation.
 
 ## A Running Example: Molecule Property Prediction
 
 Consider predicting if a molecule is toxic:
 - Nodes = atoms (features: atom type, charge, is_aromatic)
 - Edges = bonds (features: bond type: single/double/triple)
-- After $k$ MPNN layers, each atom knows about its $k$-hop neighbourhood.
-- A **readout** $$h_G = R(\{h_v^{(k)} : v \in V\})$$ aggregates all atom embeddings into a single graph embedding; $R$ must itself be permutation-invariant.
-- An MLP predicts toxicity from $h_G$.
+- After $$k$$ MPNN layers, each atom knows about its $$k$$-hop neighbourhood.
+- A **readout** $$h_G = R(\{h_v^{(k)} : v \in V\})$$ aggregates all atom embeddings into a single graph embedding; $$R$$ must itself be permutation-invariant.
+- An MLP predicts toxicity from $$h_G$$.
 
 After 3 layers, an atom "knows" about the atoms 3 bonds away — capturing local chemical environments like functional groups.
 

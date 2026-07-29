@@ -20,7 +20,7 @@ permalink: /blog/persistent-homology/boundary-matrix/
 
 Think of the boundary matrix as a checklist: for each "higher-dimensional piece" (a triangle, tetrahedron, …) of your simplicial complex, it records which "lower-dimensional pieces" (edges, triangles, …) form its boundary.
 
-Reducing this matrix is like performing Gaussian elimination, but over **GF(2)** (arithmetic mod 2, so $1 + 1 = 0$). Each column that cannot be fully eliminated creates a **cycle** that lives forever (a generator of homology). Each column that does get eliminated by an earlier column creates a **persistence pair**: the earlier column "kills" the cycle that the later column "created."
+Reducing this matrix is like performing Gaussian elimination, but over **GF(2)** (arithmetic mod 2, so $$1 + 1 = 0$$). Each column that cannot be fully eliminated creates a **cycle** that lives forever (a generator of homology). Each column that does get eliminated by an earlier column creates a **persistence pair**: the earlier column "kills" the cycle that the later column "created."
 
 Reading off birth–death pairs from the reduced matrix gives you the complete persistence diagram — no geometry needed beyond the order in which simplices enter the filtration.
 
@@ -28,13 +28,13 @@ Reading off birth–death pairs from the reduced matrix gives you the complete p
 
 ## The Boundary Matrix
 
-Let $K$ be a simplicial complex with $m$ simplices, ordered compatibly with the filtration: $\sigma_1 \prec \sigma_2 \prec \cdots \prec \sigma_m$. The **boundary matrix** $$\partial \in \{0,1\}^{m \times m}$$ is defined by
+Let $$K$$ be a simplicial complex with $$m$$ simplices, ordered compatibly with the filtration: $$\sigma_1 \prec \sigma_2 \prec \cdots \prec \sigma_m$$. The **boundary matrix** $$\partial \in \{0,1\}^{m \times m}$$ is defined by
 
 $$\partial[i,j] = \begin{cases} 1 & \text{if } \sigma_i \text{ is a codimension-1 face of } \sigma_j \\ 0 & \text{otherwise.} \end{cases}$$
 
-Because a face of $\sigma_j$ must precede $\sigma_j$ in any filtration ordering, $\partial$ is strictly upper triangular.
+Because a face of $$\sigma_j$$ must precede $$\sigma_j$$ in any filtration ordering, $$\partial$$ is strictly upper triangular.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The boundary matrix is strictly upper-triangular by construction, because every face of a simplex must appear earlier in the filtration. This means column $j$ can only have 1-entries in rows $i < j$. The entire reduction algorithm exploits this structure to run efficiently.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The boundary matrix is strictly upper-triangular by construction, because every face of a simplex must appear earlier in the filtration. This means column \(j\) can only have 1-entries in rows \(i < j\). The entire reduction algorithm exploits this structure to run efficiently.</div>
 
 ---
 
@@ -53,10 +53,10 @@ for j = 1 to m:
 ```
 
 After termination:
-- If column $j$ of $R$ is **zero**, simplex $\sigma_j$ **creates** a homology class (birth at filtration value $f(\sigma_j)$).
-- If column $j$ of $R$ is **nonzero** with pivot row $i$, then $(\sigma_i, \sigma_j)$ is a **persistence pair** (birth at $f(\sigma_i)$, death at $f(\sigma_j)$).
+- If column \(j\) of \(R\) is **zero**, simplex \(\sigma_j\) **creates** a homology class (birth at filtration value \(f(\sigma_j)\)).
+- If column \(j\) of \(R\) is **nonzero** with pivot row \(i\), then \((\sigma_i, \sigma_j)\) is a **persistence pair** (birth at \(f(\sigma_i)\), death at \(f(\sigma_j)\)).
 
-The decomposition $\partial = R V^{-1}$ (equivalently $\partial V = R$) is called the **$R = DV$ decomposition** in the literature.
+The decomposition \(\partial = R V^{-1}\) (equivalently \(\partial V = R\)) is called the **\(R = DV\) decomposition** in the literature.
 
 ---
 
@@ -66,37 +66,37 @@ Consider a filtered simplicial complex built by adding simplices in this order:
 
 | Index | Simplex | Dimension | Filtration value |
 |-------|---------|-----------|-----------------|
-| 1 | $v_0$ | 0 | 0 |
-| 2 | $v_1$ | 0 | 1 |
-| 3 | $v_2$ | 0 | 2 |
-| 4 | $e_{01}$ | 1 | 3 |
-| 5 | $e_{12}$ | 1 | 4 |
-| 6 | $e_{02}$ | 1 | 5 |
-| 7 | $T_{012}$ | 2 | 6 |
+| 1 | \(v_0\) | 0 | 0 |
+| 2 | \(v_1\) | 0 | 1 |
+| 3 | \(v_2\) | 0 | 2 |
+| 4 | \(e_{01}\) | 1 | 3 |
+| 5 | \(e_{12}\) | 1 | 4 |
+| 6 | \(e_{02}\) | 1 | 5 |
+| 7 | \(T_{012}\) | 2 | 6 |
 
-The boundary matrix $\partial$ (rows = simplices 1–7, columns = simplices 1–7):
+The boundary matrix \(\partial\) (rows = simplices 1–7, columns = simplices 1–7):
 
-$$\partial = \begin{pmatrix} 0&0&0&1&0&1&0\\ 0&0&0&1&1&0&0\\ 0&0&0&0&1&1&0\\ 0&0&0&0&0&0&1\\ 0&0&0&0&0&0&1\\ 0&0&0&0&0&0&1\\ 0&0&0&0&0&0&0 \end{pmatrix}$$
+\(\partial = \begin{pmatrix} 0&0&0&1&0&1&0\\ 0&0&0&1&1&0&0\\ 0&0&0&0&1&1&0\\ 0&0&0&0&0&0&1\\ 0&0&0&0&0&0&1\\ 0&0&0&0&0&0&1\\ 0&0&0&0&0&0&0 \end{pmatrix}\)
 
-**Column 4** ($e_{01}$): pivot = row 2. No earlier column has pivot 2. Leave as is.
+**Column 4** (\(e_{01}\)): pivot = row 2. No earlier column has pivot 2. Leave as is.
 
-**Column 5** ($e_{12}$): pivot = row 3. No earlier column has pivot 3. Leave as is.
+**Column 5** (\(e_{12}\)): pivot = row 3. No earlier column has pivot 3. Leave as is.
 
-**Column 6** ($e_{02}$): pivot = row 3. Column 5 also has pivot 3. Add column 5 to column 6:
+**Column 6** (\(e_{02}\)): pivot = row 3. Column 5 also has pivot 3. Add column 5 to column 6:
 
-$$R[6] \leftarrow R[6] + R[5] = (1,0,1,0,0,0,0)^T + (0,1,1,0,0,0,0)^T = (1,1,0,0,0,0,0)^T$$
+\(R[6] \leftarrow R[6] + R[5] = (1,0,1,0,0,0,0)^T + (0,1,1,0,0,0,0)^T = (1,1,0,0,0,0,0)^T\)
 
 New pivot of column 6 = row 2. Column 4 has pivot 2. Add column 4 to column 6:
 
-$$R[6] \leftarrow (1,1,0,\ldots) + (1,1,0,\ldots) = (0,0,0,\ldots)$$
+\(R[6] \leftarrow (1,1,0,\ldots) + (1,1,0,\ldots) = (0,0,0,\ldots)\)
 
-Column 6 becomes zero! So $e_{02}$ **creates** a 1-cycle. But wait — we now check column 7 ($T_{012}$), which has pivot = row 6. No other column has pivot 6, so column 7 stays. The pair $(e_{02}, T_{012})$ gives birth=5, death=6.
+Column 6 becomes zero! So \(e_{02}\) **creates** a 1-cycle. But wait — we now check column 7 (\(T_{012}\)), which has pivot = row 6. No other column has pivot 6, so column 7 stays. The pair \((e_{02}, T_{012})\) gives birth=5, death=6.
 
 **Reading off the diagram:**
-- $(v_0)$: birth=0, never dies → $(0, \infty)$ in $H_0$
-- $(v_1, e_{01})$: birth=1, death=3 → bar $(1,3)$ in $H_0$
-- $(v_2, e_{12})$: birth=2, death=4 → bar $(2,4)$ in $H_0$
-- $(e_{02}, T_{012})$: birth=5, death=6 → bar $(5,6)$ in $H_1$
+- \((v_0)\): birth=0, never dies → \((0, \infty)\) in \(H_0\)
+- \((v_1, e_{01})\): birth=1, death=3 → bar \((1,3)\) in \(H_0\)
+- \((v_2, e_{12})\): birth=2, death=4 → bar \((2,4)\) in \(H_0\)
+- \((e_{02}, T_{012})\): birth=5, death=6 → bar \((5,6)\) in \(H_1\)
 
 ---
 
@@ -197,13 +197,13 @@ Column 6 becomes zero! So $e_{02}$ **creates** a 1-cycle. But wait — we now ch
 
 ## Complexity and Optimisations
 
-The naive algorithm runs in $O(m^3)$ over GF(2). Several improvements exist:
+The naive algorithm runs in $$O(m^3)$$ over GF(2). Several improvements exist:
 
 | Technique | Idea | Speedup |
 |-----------|------|---------|
-| **Clearing lemma** | If $\sigma_j$ pairs with $\sigma_i$, all faces of $\sigma_j$ can be cleared | Major in practice |
+| **Clearing lemma** | If $$\sigma_j$$ pairs with $$\sigma_i$$, all faces of $$\sigma_j$$ can be cleared | Major in practice |
 | **Cohomological** | Transpose the matrix; cohomological pairs are dual | Used in Ripser |
-| **Apparent pairs** | Simplex/coface pairs computable in $O(1)$ — no column ops needed | Dominant in Rips |
+| **Apparent pairs** | Simplex/coface pairs computable in $$O(1)$$ — no column ops needed | Dominant in Rips |
 | **Sparse representation** | Store only nonzero entries | Memory savings |
 
 The clearing lemma alone reduces the number of columns requiring reduction by often more than 90% on real datasets.

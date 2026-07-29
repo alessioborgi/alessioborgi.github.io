@@ -23,21 +23,21 @@ toc_label: "Contents"
 
 ## Groups, actions, orbits
 
-A **group** $(G,\cdot)$ is a set with an associative operation, an identity $e$, and inverses. An **action** of $G$ on a set $X$ is a map $G\times X\to X$ with $e\cdot x = x$ and $(gh)\cdot x = g\cdot(h\cdot x)$ — the group's structure is faithfully reflected in how it moves points.
+A **group** $$(G,\cdot)$$ is a set with an associative operation, an identity $$e$$, and inverses. An **action** of $$G$$ on a set $$X$$ is a map $$G\times X\to X$$ with $$e\cdot x = x$$ and $$(gh)\cdot x = g\cdot(h\cdot x)$$ — the group's structure is faithfully reflected in how it moves points.
 
-The **orbit** of $x$ is $$\mathcal{O}_x = \\{g\cdot x : g\in G\\}$$: everything reachable from $x$ by a symmetry. Orbits partition $X$, which gives the cleanest description of invariance — an invariant function is one that is constant on every orbit, i.e. a function on the quotient $X/G$ rather than on $X$.
+The **orbit** of $$x$$ is $$\mathcal{O}_x = \\{g\cdot x : g\in G\\}$$: everything reachable from $$x$$ by a symmetry. Orbits partition $$X$$, which gives the cleanest description of invariance — an invariant function is one that is constant on every orbit, i.e. a function on the quotient $$X/G$$ rather than on $$X$$.
 
 The three groups worth knowing cold:
 
 | Group | Acts on | Elements |
 |---|---|---|
-| $\mathbb{Z}^2$ (translations) | image grids | integer shifts |
-| $S_n$ (permutations) | node sets, sets | relabellings, $n!$ of them |
-| $SE(3)$ | point clouds in $\mathbb{R}^3$ | rotation $R\in SO(3)$ plus translation $t$ |
+| $$\mathbb{Z}^2$$ (translations) | image grids | integer shifts |
+| $$S_n$$ (permutations) | node sets, sets | relabellings, $$n!$$ of them |
+| $$SE(3)$$ | point clouds in $$\mathbb{R}^3$$ | rotation $$R\in SO(3)$$ plus translation $$t$$ |
 
 ## The two definitions, precisely
 
-Let $G$ act on the input space $X$ and on the output space $Y$. A map $f: X\to Y$ is
+Let $$G$$ act on the input space $$X$$ and on the output space $$Y$$. A map $$f: X\to Y$$ is
 
 <div class="formula-box">
 \[
@@ -48,7 +48,7 @@ Let $G$ act on the input space $X$ and on the output space $Y$. A map $f: X\to Y
 \]
 </div>
 
-where $\rho$ is the action (a representation, when $Y$ is a vector space) of $G$ on $Y$. Equivariance says $f$ commutes with the symmetry: transform-then-predict equals predict-then-transform. Invariance is the special case $\rho(g)=\mathrm{id}$ for all $g$.
+where $$\rho$$ is the action (a representation, when $$Y$$ is a vector space) of $$G$$ on $$Y$$. Equivariance says $$f$$ commutes with the symmetry: transform-then-predict equals predict-then-transform. Invariance is the special case $$\rho(g)=\mathrm{id}$$ for all $$g$$.
 
 <div class="blog-figure">
 <figure>
@@ -85,9 +85,9 @@ where $\rho$ is the action (a representation, when $Y$ is a vector space) of $G$
 
 ## The three cases that come up
 
-**Translation in CNNs.** For a signal $x:\mathbb{Z}^2\to\mathbb{R}$ and shift $(T_v x)(u) = x(u-v)$, cross-correlation with a kernel $\psi$ satisfies $(T_v x)\star\psi = T_v(x\star\psi)$. A convolution layer is translation *equivariant*: shift the input and the feature map shifts identically. Invariance appears only when you collapse the spatial axes — global pooling, or in practice the classifier head. In real networks the equivariance is approximate: striding and pooling alias, so it holds exactly only for shifts that are multiples of the stride, and padding breaks it at the borders.
+**Translation in CNNs.** For a signal $$x:\mathbb{Z}^2\to\mathbb{R}$$ and shift $$(T_v x)(u) = x(u-v)$$, cross-correlation with a kernel $$\psi$$ satisfies $$(T_v x)\star\psi = T_v(x\star\psi)$$. A convolution layer is translation *equivariant*: shift the input and the feature map shifts identically. Invariance appears only when you collapse the spatial axes — global pooling, or in practice the classifier head. In real networks the equivariance is approximate: striding and pooling alias, so it holds exactly only for shifts that are multiples of the stride, and padding breaks it at the borders.
 
-**Permutation in GNNs and set models.** With node features $X\in\mathbb{R}^{n\times d}$, adjacency $A$, and a permutation matrix $P$, a message-passing layer $F$ satisfies
+**Permutation in GNNs and set models.** With node features $$X\in\mathbb{R}^{n\times d}$$, adjacency $$A$$, and a permutation matrix $$P$$, a message-passing layer $$F$$ satisfies
 
 <div class="formula-box">
 \[
@@ -100,7 +100,7 @@ F\!\left(PX,\, PAP^\top\right) = P\,F(X, A)
 
 Node-level predictions must be equivariant — relabel the nodes and the predictions come along. Graph-level predictions must be invariant, which is what the sum/mean/max readout provides. The same split governs Deep Sets and set transformers.
 
-**$SE(3)$ in molecular models.** A potential energy is invariant, $E(Rx+t) = E(x)$, while forces are equivariant, $F(Rx+t) = R\,F(x)$ — a rotated molecule feels rotated forces. There is a neat consistency here: since $F = -\nabla_x E$, the gradient of an $SE(3)$-invariant scalar is automatically equivariant, so getting the energy right gets the forces right by construction. See the GNN book's posts on [equivariance](/blog/gnn/equivariance/), [EGNN](/blog/gnn/egnn/) and [SE(3) transformers](/blog/gnn/se3-transformers/) for the architectures.
+**$$SE(3)$$ in molecular models.** A potential energy is invariant, $$E(Rx+t) = E(x)$$, while forces are equivariant, $$F(Rx+t) = R\,F(x)$$ — a rotated molecule feels rotated forces. There is a neat consistency here: since $$F = -\nabla_x E$$, the gradient of an $$SE(3)$$-invariant scalar is automatically equivariant, so getting the energy right gets the forces right by construction. See the GNN book's posts on [equivariance](/blog/gnn/equivariance/), [EGNN](/blog/gnn/egnn/) and [SE(3) transformers](/blog/gnn/se3-transformers/) for the architectures.
 
 <div class="insight-box">
   <strong>Key Insight — why constraints beat augmentation:</strong> an invariant model does not learn a function on \(X\), it learns one on the quotient \(X/G\). For a finite group acting freely that shrinks the effective input space by a factor of \(\lvert G\rvert\); for \(SE(3)\) it removes a six-dimensional family of variation per example. Augmentation attacks the same problem from the other side — it asks the model to <em>discover</em> the symmetry from samples, so the constraint holds only near the data, costs capacity that is spent memorising the group, and gives nothing on inputs far from the training distribution. Elesedy and Zaidi (2021) make the gap precise for linear models and group-averaged predictors: the equivariant model has strictly lower generalisation error, and the size of the improvement grows with the group.

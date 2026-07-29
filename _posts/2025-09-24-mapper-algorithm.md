@@ -40,29 +40,29 @@ Standard clustering gives a partition: each point is assigned to exactly one clu
 
 ## The Algorithm
 
-**Input**: Point cloud $$X \subseteq \mathbb{R}^n$$, filter function $$f: X \to \mathbb{R}^d$$ (typically $$d=1$$ or $$2$$), cover $$\{U_i\}$$ of the range of $$f$$.
+**Input**: Point cloud \(X \subseteq \mathbb{R}^n\), filter function \(f: X \to \mathbb{R}^d\) (typically \(d=1\) or \(2\)), cover \(\{U_i\}\) of the range of \(f\).
 
 **Algorithm**:
-1. For each cover element $$U_i$$, compute $$X_i = f^{-1}(U_i) = \{x \in X : f(x) \in U_i\}$$.
-2. Cluster each $$X_i$$ using any clustering algorithm (e.g., single-linkage, DBSCAN).
-3. Each cluster $$C_{ij}$$ becomes a **node** in the output graph.
-4. Add an **edge** between $$C_{ij}$$ and $$C_{kl}$$ if $$C_{ij} \cap C_{kl} \neq \emptyset$$ (overlap between clusters in adjacent cover elements).
+1. For each cover element \(U_i\), compute \(X_i = f^{-1}(U_i) = \{x \in X : f(x) \in U_i\}\).
+2. Cluster each \(X_i\) using any clustering algorithm (e.g., single-linkage, DBSCAN).
+3. Each cluster \(C_{ij}\) becomes a **node** in the output graph.
+4. Add an **edge** between \(C_{ij}\) and \(C_{kl}\) if \(C_{ij} \cap C_{kl} \neq \emptyset\) (overlap between clusters in adjacent cover elements).
 
-<div class="math-box">**Output**: A simplicial complex (usually a graph) $$\mathcal{M}(X, f, \mathcal{U}, \text{Clust})$$</div>
+<div class="math-box">**Output**: A simplicial complex (usually a graph) \(\mathcal{M}(X, f, \mathcal{U}, \text{Clust})\)</div>
 
 ## Choice of Filter Function
 
-The filter $$f$$ determines what "shape" Mapper reveals:
+The filter \(f\) determines what "shape" Mapper reveals:
 
-- **Density estimate** $$\hat{\rho}(x)$$: reveals flares (high-density cores connected to low-density tails).
+- **Density estimate** \(\hat{\rho}(x)\): reveals flares (high-density cores connected to low-density tails).
 - **PCA/SVD projection**: finds elongated structure, branching.
-- **Eccentricity** $$e(x) = \max_{y \in X} d(x,y)$$: finds loop structure (points far from everything else).
+- **Eccentricity** \(e(x) = \max_{y \in X} d(x,y)\): finds loop structure (points far from everything else).
 - **Distance to a measure**: robust version of density.
 - **Domain-specific functions**: gene expression levels, neural activation norms, task outputs.
 
 ## Relation to the Reeb Graph
 
-The **Reeb graph** of $$f: M \to \mathbb{R}$$ on a manifold $$M$$ is the quotient space that contracts each connected component of $$f^{-1}(t)$$ to a point. Mapper approximates the Reeb graph from a finite sample.
+The **Reeb graph** of \(f: M \to \mathbb{R}\) on a manifold \(M\) is the quotient space that contracts each connected component of \(f^{-1}(t)\) to a point. Mapper approximates the Reeb graph from a finite sample.
 
 **Theorem**: Under mild conditions (fine enough cover, consistent clustering), Mapper convergences to the Reeb graph as the sample density increases and the cover resolution grows.
 
@@ -76,21 +76,21 @@ The **Reeb graph** of $$f: M \to \mathbb{R}$$ on a manifold $$M$$ is the quotien
 
 ## Worked Example: Mapper on 8 Points
 
-Take 8 points along a horseshoe (U-shape) with a height filter $$f$$ = vertical coordinate:
+Take 8 points along a horseshoe (U-shape) with a height filter \(f\) = vertical coordinate:
 
-$$P = \{A(0,0), B(1,0), C(2,0), D(3,0), E(3,2), F(2,2), G(1,2), H(0,2)\}$$
+\(P = \{A(0,0), B(1,0), C(2,0), D(3,0), E(3,2), F(2,2), G(1,2), H(0,2)\}\)
 
-**Step 1 — Cover**: divide $$f$$-range $$[0, 2]$$ into 3 overlapping intervals:
-- $$U_1 = [0, 0.9]$$, $$U_2 = [0.7, 1.5]$$, $$U_3 = [1.3, 2]$$
+**Step 1 — Cover**: divide \(f\)-range \([0, 2]\) into 3 overlapping intervals:
+- \(U_1 = [0, 0.9]\), \(U_2 = [0.7, 1.5]\), \(U_3 = [1.3, 2]\)
 
 **Step 2 — Preimages**:
-- $$f^{-1}(U_1) = \{A, B, C, D\}$$
-- $$f^{-1}(U_2) = \{\}$$ (no points at height 0.7–1.5 in this dataset)
-- $$f^{-1}(U_3) = \{E, F, G, H\}$$
+- \(f^{-1}(U_1) = \{A, B, C, D\}\)
+- \(f^{-1}(U_2) = \{\}\) (no points at height 0.7–1.5 in this dataset)
+- \(f^{-1}(U_3) = \{E, F, G, H\}\)
 
-**Step 3 — Cluster**: $$\{A,B,C,D\}$$ clusters into two groups by position: $$\{A,B\}$$ (left arm) and $$\{C,D\}$$ (right arm). Same for the top: $$\{E,F\}$$ and $$\{G,H\}$$.
+**Step 3 — Cluster**: \(\{A,B,C,D\}\) clusters into two groups by position: \(\{A,B\}\) (left arm) and \(\{C,D\}\) (right arm). Same for the top: \(\{E,F\}\) and \(\{G,H\}\).
 
-**Step 4 — Connect**: nodes $$\{A,B\} \leftrightarrow \{G,H\}$$ share no points, but after refining the cover with sufficient overlap, the connectivity reflects the U-shape — two branches joined at the top. The resulting Mapper graph is a path, not a loop — correctly capturing the horseshoe topology (no closed cycle).
+**Step 4 — Connect**: nodes \(\{A,B\} \leftrightarrow \{G,H\}\) share no points, but after refining the cover with sufficient overlap, the connectivity reflects the U-shape — two branches joined at the top. The resulting Mapper graph is a path, not a loop — correctly capturing the horseshoe topology (no closed cycle).
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mapper reveals the horseshoe as a connected path (one connected component, zero loops) rather than a single cluster. A standard k-means with k=2 would only tell you "two groups" — missing the fact that the two groups are connected arms of a single U-shaped manifold.</div>
 

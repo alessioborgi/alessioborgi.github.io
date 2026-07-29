@@ -23,11 +23,11 @@ toc_label: "Contents"
 
 ## From outcomes to numbers
 
-A random variable $X$ is a measurable function $X:\Omega\to\mathbb{R}$ — it labels each outcome with a number. Rolling two dice, $\Omega$ has 36 elements, and $X = $ "sum" collapses them onto $$\{2,\dots,12\}$$. Probability then transfers: $$P(X = 7) = P(\{\omega : X(\omega)=7\}) = 6/36$$. This pushforward is why we can stop mentioning $\Omega$ almost immediately; all the information lives in the induced distribution on $\mathbb{R}$.
+A random variable $$X$$ is a measurable function $$X:\Omega\to\mathbb{R}$$ — it labels each outcome with a number. Rolling two dice, $$\Omega$$ has 36 elements, and $$X = $$ "sum" collapses them onto $$\{2,\dots,12\}$$. Probability then transfers: $$P(X = 7) = P(\{\omega : X(\omega)=7\}) = 6/36$$. This pushforward is why we can stop mentioning $$\Omega$$ almost immediately; all the information lives in the induced distribution on $$\mathbb{R}$$.
 
-**Discrete** variables take countably many values and are described by a **PMF** $p(x) = P(X=x)$, with $p(x)\in[0,1]$ and $\sum_x p(x)=1$. Each value is a genuine probability.
+**Discrete** variables take countably many values and are described by a **PMF** $$p(x) = P(X=x)$$, with $$p(x)\in[0,1]$$ and $$\sum_x p(x)=1$$. Each value is a genuine probability.
 
-**Continuous** variables take uncountably many values, and each single value has probability zero. What exists instead is a **PDF** $p(x)\ge 0$ with $\int p(x)\,dx = 1$, defined so that
+**Continuous** variables take uncountably many values, and each single value has probability zero. What exists instead is a **PDF** $$p(x)\ge 0$$ with $$\int p(x)\,dx = 1$$, defined so that
 
 <div class="formula-box">
 \[
@@ -47,11 +47,11 @@ F(x) = P(X \le x),
 \]
 </div>
 
-which is non-decreasing, right-continuous, and runs from 0 to 1. It jumps at atoms of a discrete variable and is continuous with $F'(x) = p(x)$ for a continuous one. Because $F$ always exists, statements phrased through CDFs — convergence in distribution, quantiles, stochastic dominance — apply uniformly to both kinds.
+which is non-decreasing, right-continuous, and runs from 0 to 1. It jumps at atoms of a discrete variable and is continuous with $$F'(x) = p(x)$$ for a continuous one. Because $$F$$ always exists, statements phrased through CDFs — convergence in distribution, quantiles, stochastic dominance — apply uniformly to both kinds.
 
 ## Change of variables
 
-Push $X$ through a differentiable, strictly monotone map $Y = g(X)$. Probability mass is conserved, but it gets stretched or compressed, so the density must be rescaled by how much $g$ stretches the axis:
+Push $$X$$ through a differentiable, strictly monotone map $$Y = g(X)$$. Probability mass is conserved, but it gets stretched or compressed, so the density must be rescaled by how much $$g$$ stretches the axis:
 
 <div class="formula-box">
 \[
@@ -59,9 +59,9 @@ p_Y(y) = p_X\!\left(g^{-1}(y)\right)\left|\frac{d}{dy}g^{-1}(y)\right| .
 \]
 </div>
 
-In $d$ dimensions the derivative becomes the Jacobian matrix and the stretch factor becomes the absolute determinant, $$p_Y(\mathbf{y}) = p_X(g^{-1}(\mathbf{y}))\,\bigl|\det J_{g^{-1}}(\mathbf{y})\bigr|$$, because the determinant is exactly the local volume-scaling factor of a linear map.
+In $$d$$ dimensions the derivative becomes the Jacobian matrix and the stretch factor becomes the absolute determinant, $$p_Y(\mathbf{y}) = p_X(g^{-1}(\mathbf{y}))\,\bigl|\det J_{g^{-1}}(\mathbf{y})\bigr|$$, because the determinant is exactly the local volume-scaling factor of a linear map.
 
-A concrete case: let $X\sim\mathrm{Uniform}(0,1)$ and $Y = -\log X$. Then $g^{-1}(y) = e^{-y}$ with derivative $-e^{-y}$, and $p_X = 1$ on the unit interval, so
+A concrete case: let $$X\sim\mathrm{Uniform}(0,1)$$ and $$Y = -\log X$$. Then $$g^{-1}(y) = e^{-y}$$ with derivative $$-e^{-y}$$, and $$p_X = 1$$ on the unit interval, so
 
 <div class="formula-box">
 \[
@@ -71,15 +71,15 @@ p_Y(y) = 1 \cdot \left| -e^{-y}\right| = e^{-y}, \qquad y > 0,
 
 the standard exponential. Uniform noise became an exponential purely through the Jacobian.
 
-This identity is the whole content of **normalising flows**: compose invertible maps, track $\sum \log|\det J|$, and you have an exact log-likelihood for the transformed density. Architectures like coupling layers exist precisely because a general $\det J$ costs $\mathcal{O}(d^3)$, whereas a triangular Jacobian costs $\mathcal{O}(d)$.
+This identity is the whole content of **normalising flows**: compose invertible maps, track $$\sum \log|\det J|$$, and you have an exact log-likelihood for the transformed density. Architectures like coupling layers exist precisely because a general $$\det J$$ costs $$\mathcal{O}(d^3)$$, whereas a triangular Jacobian costs $$\mathcal{O}(d)$$.
 
 ## Quantiles and inverse-transform sampling
 
-The **quantile function** is the generalised inverse of the CDF, $$F^{-1}(u) = \inf\{x : F(x)\ge u\}$$ for $u\in(0,1)$. The infimum handles flat regions and jumps, so $F^{-1}$ is defined even when $F$ is not strictly increasing. $F^{-1}(0.5)$ is the median.
+The **quantile function** is the generalised inverse of the CDF, $$F^{-1}(u) = \inf\{x : F(x)\ge u\}$$ for $$u\in(0,1)$$. The infimum handles flat regions and jumps, so $$F^{-1}$$ is defined even when $$F$$ is not strictly increasing. $$F^{-1}(0.5)$$ is the median.
 
-Its consequence is one of the most useful facts in simulation: if $U\sim\mathrm{Uniform}(0,1)$ then $F^{-1}(U)$ has CDF $F$. The proof is one line, $P(F^{-1}(U)\le x) = P(U \le F(x)) = F(x)$, using only that $U$ is uniform. Every sampler for a univariate distribution can therefore be built from a uniform random number generator, provided you can invert $F$.
+Its consequence is one of the most useful facts in simulation: if $$U\sim\mathrm{Uniform}(0,1)$$ then $$F^{-1}(U)$$ has CDF $$F$$. The proof is one line, $$P(F^{-1}(U)\le x) = P(U \le F(x)) = F(x)$$, using only that $$U$$ is uniform. Every sampler for a univariate distribution can therefore be built from a uniform random number generator, provided you can invert $$F$$.
 
-For the exponential with rate $\lambda$, $F(x) = 1-e^{-\lambda x}$, so $F^{-1}(u) = -\log(1-u)/\lambda$. With $\lambda = 2$ and a draw $u = 0.7$: $x = -\log(0.3)/2 = 1.20397/2 = 0.60199$. Since $1-U$ is also uniform, implementations usually write $-\log(U)/\lambda$.
+For the exponential with rate $$\lambda$$, $$F(x) = 1-e^{-\lambda x}$$, so $$F^{-1}(u) = -\log(1-u)/\lambda$$. With $$\lambda = 2$$ and a draw $$u = 0.7$$: $$x = -\log(0.3)/2 = 1.20397/2 = 0.60199$$. Since $$1-U$$ is also uniform, implementations usually write $$-\log(U)/\lambda$$.
 
 <div class="blog-figure">
 <figure>

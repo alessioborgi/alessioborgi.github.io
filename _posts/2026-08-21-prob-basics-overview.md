@@ -27,7 +27,7 @@ You can train a classifier without ever writing down a likelihood. You cannot *e
 
 Three threads run through most of contemporary machine learning, and all three are probability.
 
-**Likelihoods.** Fitting a model by maximum likelihood means choosing parameters $\theta$ to make the observed data as probable as possible under $$p_\theta$$. Take the negative logarithm and you have a loss:
+**Likelihoods.** Fitting a model by maximum likelihood means choosing parameters $$\theta$$ to make the observed data as probable as possible under $$p_\theta$$. Take the negative logarithm and you have a loss:
 
 <div class="formula-box">
 \[
@@ -37,7 +37,7 @@ Three threads run through most of contemporary machine learning, and all three a
 
 Here $$p_\theta(y\mid x)$$ is the model's predicted distribution over labels. Instantiate it as a categorical distribution and this *is* softmax cross-entropy; instantiate it as a Gaussian with fixed variance and it *is* mean squared error. The two losses everyone uses are the same principle with two different assumed noise models.
 
-**Generative models.** A generative model is a claim about $p(x)$, and every architecture is a different way of making that claim tractable. Autoregressive models factor it with the chain rule, $$p(x) = \prod_t p(x_t \mid x_{1:t-1})$$. Diffusion models define a Markov chain of conditionals and learn to reverse it. Variational autoencoders bound the intractable $\log p(x)$ using a KL divergence. None of these are readable without conditioning and divergences.
+**Generative models.** A generative model is a claim about $$p(x)$$, and every architecture is a different way of making that claim tractable. Autoregressive models factor it with the chain rule, $$p(x) = \prod_t p(x_t \mid x_{1:t-1})$$. Diffusion models define a Markov chain of conditionals and learn to reverse it. Variational autoencoders bound the intractable $$\log p(x)$$ using a KL divergence. None of these are readable without conditioning and divergences.
 
 **Uncertainty.** A deployed model that says "cat, 0.99" when it is looking at noise is not making a modelling error so much as a probabilistic one. Distinguishing what the model does not know because the data are noisy from what it does not know because it has never seen this input requires the decomposition in the [law of total variance](/blog/prob-basics/expectation-and-variance/).
 
@@ -65,7 +65,7 @@ The other seven chapters go in dependency order. Nothing later assumes anything 
 
 ## How to use this book
 
-Read a chapter, then close it and re-derive the boxed results. The traps in this material are not hard theorems — they are places where an intuitive answer is confidently wrong: base rates get ignored, zero correlation gets read as independence, a density gets read as a probability, and the CLT gets applied to $n = 8$. Each chapter flags its own in a warning box.
+Read a chapter, then close it and re-derive the boxed results. The traps in this material are not hard theorems — they are places where an intuitive answer is confidently wrong: base rates get ignored, zero correlation gets read as independence, a density gets read as a probability, and the CLT gets applied to $$n = 8$$. Each chapter flags its own in a warning box.
 
 For the estimation side of the same story — estimators, bias and variance, confidence intervals, hypothesis testing — see the companion book at [statistics basics](/blog/stats-basics/overview/).
 

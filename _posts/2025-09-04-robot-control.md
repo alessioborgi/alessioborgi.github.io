@@ -35,10 +35,10 @@ toc_label: "Contents"
 
 **Intuition first.** Imagine trying to park a car by feel alone. The proportional term is how hard you steer based on how far off-centre you are. The derivative term is the instinct to ease off as you approach the target (avoiding overshoot). The integral term is the slow correction for a persistent lean caused by, say, a crosswind. PID captures exactly these three instincts in a single formula.
 
-The **PID (Proportional-Integral-Derivative) controller** is the workhorse of industrial robot control. Given a position error $$e(t) = q_{\text{des}}(t) - q(t)$$ between desired and actual joint angle, the control torque is:
+The **PID (Proportional-Integral-Derivative) controller** is the workhorse of industrial robot control. Given a position error \(e(t) = q_{\text{des}}(t) - q(t)\) between desired and actual joint angle, the control torque is:
 
 <div class="math-box">
-$$u(t) = K_p\, e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d\, \dot{e}(t)$$
+\(u(t) = K_p\, e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d\, \dot{e}(t)\)
 </div>
 
 - **Proportional** term: restoring force proportional to error. High $$K_p$$ gives fast response but can cause overshoot and oscillation.
@@ -100,7 +100,7 @@ A practical rule of thumb: tune K_p until you see oscillation, then halve it; ad
 Classic position control is unsuitable for contact-rich tasks: if the robot pushes against a rigid wall, position error accumulates and torques spike. **Impedance control** (Hogan 1985) models the robot end-effector as a **virtual spring-damper system**:
 
 <div class="math-box">
-$$F = K(x_d - x) + D(\dot{x}_d - \dot{x}) + M_d(\ddot{x}_d - \ddot{x})$$
+\(F = K(x_d - x) + D(\dot{x}_d - \dot{x}) + M_d(\ddot{x}_d - \ddot{x})\)
 </div>
 
 where $$K$$ is the stiffness matrix, $$D$$ is the damping matrix, and $$M_d$$ is the desired inertia. In operational space, the controller applies forces $$F$$ to drive the end-effector toward $$x_d$$ while yielding compliantly to external forces.
@@ -114,7 +114,7 @@ Impedance control is essential for assembly tasks (peg-in-hole, screwing), human
 Humanoids and legged robots have many degrees of freedom (28–50 DOF) and must simultaneously satisfy multiple objectives: balance, end-effector task, joint limit avoidance, and contact force constraints. **Whole-body control (WBC)** formulates these as a **hierarchical quadratic program (QP)**:
 
 <div class="math-box">
-$$\min_{\ddot{\mathbf{q}}, \mathbf{f}} \;\|\text{Task}_1\|^2 + \epsilon\|\text{Task}_2\|^2 \quad \text{s.t.} \quad A\mathbf{x} \leq \mathbf{b}$$
+\(\min_{\ddot{\mathbf{q}}, \mathbf{f}} \;\|\text{Task}_1\|^2 + \epsilon\|\text{Task}_2\|^2 \quad \text{s.t.} \quad A\mathbf{x} \leq \mathbf{b}\)
 </div>
 
 Higher-priority tasks (balance) are solved exactly; lower-priority tasks (reaching) are solved in the null space of higher-priority constraints. The QP is solved in real time (1 kHz) using efficient active-set solvers. WBC was instrumental in enabling Atlas (Boston Dynamics) to perform dynamic manipulation and parkour.
@@ -126,7 +126,7 @@ Higher-priority tasks (balance) are solved exactly; lower-priority tasks (reachi
 **Model Predictive Control (MPC)** optimises a sequence of actions over a finite horizon $$H$$:
 
 <div class="math-box">
-$$\min_{u_{0:H-1}} \sum_{t=0}^{H-1} \ell(x_t, u_t) + \ell_f(x_H) \quad \text{s.t.} \quad x_{t+1} = f(x_t, u_t)$$
+\(\min_{u_{0:H-1}} \sum_{t=0}^{H-1} \ell(x_t, u_t) + \ell_f(x_H) \quad \text{s.t.} \quad x_{t+1} = f(x_t, u_t)\)
 </div>
 
 Only the first action is executed; the optimisation repeats at the next timestep (receding horizon). MPC naturally handles constraints (joint limits, contact forces) and provides anticipatory behaviour. **MPPI (Model Predictive Path Integral)** solves this via sampling: thousands of random trajectories are simulated, weighted by their costs, and combined via importance sampling — amenable to GPU parallelisation.
