@@ -380,6 +380,11 @@ author_profile: true
 {% assign ph_stoch     = physb_posts | where: "subsection", "stochastic" %}
 {% assign ph_sym       = physb_posts | where: "subsection", "symmetry" %}
 
+{% assign csb_posts   = site.posts | where: "book", "cs-basics"      | sort: "date" %}
+{% assign pyp_posts   = site.posts | where: "book", "python-primer"  | sort: "date" %}
+{% assign cs_overview = csb_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign py_overview = pyp_posts | where_exp: "p", "p.is_overview" | first %}
+
 {% assign b_overview    = basics_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign b_activations = basics_posts | where: "subsection", "activation-functions" %}
 
@@ -1548,6 +1553,100 @@ author_profile: true
 </div>
 
 
+
+
+<div class="blog-book" data-book="cs-basics">
+  <div class="book-banner">
+    <span class="book-icon">🖥️</span>
+    <div>
+      <h2>A6 — Computer Science Basics</h2>
+      <p>Complexity, data structures and algorithms — the fundamentals technical interviews actually test</p>
+    </div>
+  </div>
+  <div class="book-body">
+    {% if cs_overview %}
+    <a class="blog-overview-card" href="{{ cs_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ cs_overview.title }}</h3>
+      <p>{{ cs_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ cs_overview.read_mins | default: "4" }} min read</span>
+        <span>What you are actually tested on, and what you can skip</span>
+      </div>
+    </a>
+    {% endif %}
+    {% assign csb_groups = "foundations|Complexity Foundations|⏱️,data-structures|Data Structures|🗂️,algorithms|Algorithms|⚙️,systems|Memory &amp; Concurrency|🧵" | split: "," %}
+    {% for grp in csb_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = csb_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="blog-book" data-book="python-primer">
+  <div class="book-banner">
+    <span class="book-icon">🐍</span>
+    <div>
+      <h2>A7 — Python Programming Primer</h2>
+      <p>A detailed, example-first guide to writing Python properly — syntax through to idiom and performance</p>
+    </div>
+  </div>
+  <div class="book-body">
+    {% if py_overview %}
+    <a class="blog-overview-card" href="{{ py_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ py_overview.title }}</h3>
+      <p>{{ py_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ py_overview.read_mins | default: "4" }} min read</span>
+        <span>From running your first script to writing Python that reads like Python</span>
+      </div>
+    </a>
+    {% endif %}
+    {% comment %}
+      Separator is "~": one label contains a comma (so "," would shred it) and
+      the &amp; entities contain semicolons (so ";" would shred those). Liquid
+      variable names also cannot contain hyphens, hence pyp_groups.
+    {% endcomment %}
+    {% assign pyp_groups = "foundations|Language Foundations|🧱~data-structures|Built-in Data Structures|📦~functions|Functions &amp; Generators|🔁~oop|Classes &amp; the Data Model|🏛️~tooling|Modules, Errors &amp; the Standard Library|🧰~practice|Idiomatic &amp; Fast Python|🚀" | split: "~" %}
+    {% for grp in pyp_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = pyp_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

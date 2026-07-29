@@ -712,3 +712,93 @@ physics-basics:
       label: "Symmetry & Conservation"
       posts:
         - { slug: "2026-09-17-symmetry-and-conservation", title: "Noether's Theorem: Symmetry, Conservation, and Equivariant Networks", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# A6: COMPUTER SCIENCE BASICS
+# ──────────────────────────────────────────────────────────────────────────
+cs-basics:
+  label: "A6: Computer Science Basics"
+  icon:  "🖥️"
+  color: "#475569"
+
+  overview:
+    - { slug: "2026-10-01-cs-basics-overview", title: "Computer Science Basics for ML Engineers: What the Interview Actually Tests", published: online }
+
+  sections:
+
+    foundations:
+      label: "Complexity Foundations"
+      posts:
+        - { slug: "2026-10-02-complexity-and-big-o", title: "Big-O Precisely: What O, Ω and Θ Each Claim, and When the Faster Algorithm Loses", published: online }
+
+    data-structures:
+      label: "Data Structures"
+      posts:
+        - { slug: "2026-10-03-arrays-and-hashing", title: "Arrays, Dynamic Arrays and Hash Tables: Where O(1) Comes From and What It Costs", published: online }
+        - { slug: "2026-10-04-stacks-queues-heaps", title: "Stacks, Queues and Heaps: Three Restrictions That Buy You Speed", published: online }
+        - { slug: "2026-10-05-trees-and-bsts", title: "Trees, Traversals and BSTs: Why Balance Is the Only Thing Standing Between You and a Linked List", published: online }
+
+    algorithms:
+      label: "Algorithms"
+      posts:
+        - { slug: "2026-10-06-graphs-and-traversal", title: "Graphs: Representations, BFS vs DFS, and the Assumption Dijkstra Makes Silently", published: online }
+        - { slug: "2026-10-07-sorting-and-searching", title: "Sorting and Searching: The n log n Lower Bound, and How to Beat It Legally", published: online }
+        - { slug: "2026-10-08-recursion-and-dp", title: "Recursion and Dynamic Programming: Two Conditions, One Filled Table", published: online }
+
+    systems:
+      label: "Memory & Concurrency"
+      posts:
+        - { slug: "2026-10-09-memory-and-concurrency", title: "Memory and Concurrency in Python: References, the GIL, and Why Data Loaders Fork", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# A7: PYTHON PROGRAMMING PRIMER
+# ──────────────────────────────────────────────────────────────────────────
+python-primer:
+  label: "A7: Python Programming Primer"
+  icon:  "🐍"
+  color: "#0e7490"
+
+  overview:
+    - { slug: "2026-11-01-python-primer-overview", title: "Python from the Ground Up: What Actually Happens When You Run a Script", published: online }
+
+  sections:
+
+    foundations:
+      label: "Language Foundations"
+      posts:
+        - { slug: "2026-11-02-syntax-and-variables", title: "Names, Not Boxes: Python Syntax, Variables and the Built-in Types", published: online }
+        - { slug: "2026-11-03-operators-and-control-flow", title: "Operators and Control Flow: `is` Is Not `==`, and `for` Has an `else`", published: online }
+
+    data-structures:
+      label: "Built-in Data Structures"
+      posts:
+        - { slug: "2026-11-04-lists-and-tuples", title: "Lists and Tuples: Slicing, Mutation, and the Cost of Every Method", published: online }
+        - { slug: "2026-11-05-dicts-and-sets", title: "Dicts and Sets: Hashing, Defaults, and What Makes a Key Legal", published: online }
+        - { slug: "2026-11-06-strings-and-formatting", title: "Strings and f-strings: Immutability, Formatting, and the Quadratic Loop", published: online }
+
+    functions:
+      label: "Functions & Generators"
+      posts:
+        - { slug: "2026-11-07-functions", title: "Functions: Arguments, Scope, Closures — and the Default That Remembers", published: online }
+        - { slug: "2026-11-08-comprehensions-and-generators", title: "Comprehensions and Generators: Building Sequences Without Building Them", published: online }
+
+    oop:
+      label: "Classes & the Data Model"
+      posts:
+        - { slug: "2026-11-09-classes-and-objects", title: "Classes and Objects: self, Attributes, and When Inheritance Is the Wrong Tool", published: online }
+        - { slug: "2026-11-10-dunder-methods", title: "Dunder Methods: How Python's Protocols Replace Interfaces", published: online }
+
+    tooling:
+      label: "Modules, Errors & the Standard Library"
+      posts:
+        - { slug: "2026-11-11-modules-and-packages", title: "Modules, Packages, and How Python Actually Finds Your Code", published: online }
+        - { slug: "2026-11-12-errors-and-exceptions", title: "Errors and Exceptions: EAFP, the Hierarchy, and Reading a Traceback", published: online }
+        - { slug: "2026-11-13-files-and-context-managers", title: "Files and Context Managers: Why `with` Is Not Optional", published: online }
+        - { slug: "2026-11-14-standard-library-tour", title: "The Standard Library Modules Worth Knowing Before You `pip install`", published: online }
+
+    practice:
+      label: "Idiomatic & Fast Python"
+      posts:
+        - { slug: "2026-11-15-idiomatic-and-performant-python", title: "Idiomatic and Performant Python: Writing It Well, Then Measuring Before You Optimise", published: online }
