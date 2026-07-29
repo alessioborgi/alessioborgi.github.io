@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🚀"
-read_mins: 4
+read_mins: 8
 permalink: /blog/persistent-homology/open-problems-ph/
 ---
 <style>

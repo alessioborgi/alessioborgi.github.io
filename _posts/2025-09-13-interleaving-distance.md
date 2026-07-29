@@ -10,7 +10,7 @@ excerpt: "The interleaving distance measures how similar two persistence modules
 author_profile: true
 read_time: true
 icon: "🔗"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/interleaving-distance/
 toc: true
 toc_label: "Contents"

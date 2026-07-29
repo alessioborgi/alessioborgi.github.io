@@ -10,7 +10,7 @@ excerpt: "Smooth Morse theory relates the critical points of a function f: M →
 author_profile: true
 read_time: true
 icon: "⛰️"
-read_mins: 6
+read_mins: 5
 permalink: /blog/persistent-homology/morse-theory/
 toc: true
 toc_label: "Contents"

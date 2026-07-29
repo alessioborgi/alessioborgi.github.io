@@ -10,7 +10,7 @@ excerpt: "The Mapper algorithm (Singh, Mémoli & Carlsson 2007) converts a point
 author_profile: true
 read_time: true
 icon: "🗺️"
-read_mins: 6
+read_mins: 5
 permalink: /blog/persistent-homology/mapper-algorithm/
 toc: true
 toc_label: "Contents"

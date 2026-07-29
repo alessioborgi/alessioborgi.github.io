@@ -28,7 +28,7 @@ This is the key insight behind all differentiable TDA: the topology (which pairs
 
 ## Gradient of Persistence Diagrams
 
-Let $f : K \to \mathbb{R}$ be a filtration function on a simplicial complex $K$ (e.g., the output of a neural network applied to each vertex). The persistence pairs $\{(b_i, d_i)\} = \{(f(\sigma_i), f(\tau_i))\}$ depend smoothly on $f$ **as long as no topological event (pairing change) occurs**.
+Let $f : K \to \mathbb{R}$ be a filtration function on a simplicial complex $K$ (e.g., the output of a neural network applied to each vertex). The persistence pairs $$\{(b_i, d_i)\} = \{(f(\sigma_i), f(\tau_i))\}$$ depend smoothly on $f$ **as long as no topological event (pairing change) occurs**.
 
 **Theorem (Subgradient of persistence, Poulenard et al., 2018).** Let $\mathcal{L}(\text{Dgm}(f))$ be a loss on the persistence diagram. Then:
 

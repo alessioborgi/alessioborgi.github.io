@@ -10,7 +10,7 @@ excerpt: "Witness complexes reduce the cost of persistent homology on large data
 author_profile: true
 read_time: true
 icon: "👁️"
-read_mins: 4
+read_mins: 3
 permalink: /blog/persistent-homology/witness-complexes/
 toc: true
 toc_label: "Contents"

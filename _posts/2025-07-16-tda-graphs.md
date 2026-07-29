@@ -30,11 +30,11 @@ Combining PH with GNNs therefore gives you **local + global** topology: the GNN 
 
 A graph $G = (V, E)$ has no intrinsic geometry, so we need to assign filtration values to its simplices (vertices and edges) from some meaningful function.
 
-**Option 1 — Degree filtration.** Assign $f(v) = \deg(v)$ to each vertex, $f(e_{uv}) = \max(\deg(u), \deg(v))$ to each edge. Persistence tracks how the graph's connectivity evolves as we include increasingly high-degree nodes.
+**Option 1 — Degree filtration.** Assign $f(v) = \deg(v)$ to each vertex, $$f(e_{uv}) = \max(\deg(u), \deg(v))$$ to each edge. Persistence tracks how the graph's connectivity evolves as we include increasingly high-degree nodes.
 
 **Option 2 — WL (Weisfeiler-Lehman) filtration** (Rieck et al., 2019). Run $k$ rounds of WL colour refinement on the graph. Assign to each vertex the first round at which its colour stabilises (or changes). This encodes the graph's local structure at multiple scales simultaneously.
 
-**Option 3 — Learned filtration** (Carriere et al., 2020; Zhao et al., 2020). Let a GNN assign a scalar $f_\theta(v)$ to each vertex and $f_\theta(e)$ to each edge. The filtration — and hence the persistence diagram — is then differentiable with respect to the GNN weights.
+**Option 3 — Learned filtration** (Carriere et al., 2020; Zhao et al., 2020). Let a GNN assign a scalar $$f_\theta(v)$$ to each vertex and $$f_\theta(e)$$ to each edge. The filtration — and hence the persistence diagram — is then differentiable with respect to the GNN weights.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The choice of filtration determines what topology you are measuring. A degree filtration reveals hub-and-spoke structure. A WL filtration reveals structural equivalence classes. A learned filtration lets the network discover which topological features are most predictive for the downstream task. There is no single "right" filtration — it is a design choice analogous to choosing a kernel in kernel methods.</div>
 
@@ -174,8 +174,8 @@ Both have 6 vertices of degree 2. A GNN using only local message passing for 2 r
 
 **PH with edge-weight filtration (edge added at filtration value 1):**
 
-- $G_1$ (hexagon): $H_0 = \{(0, \infty)\}$, $H_1 = \{(1, \infty)\}$ — one connected component, one 6-cycle loop.
-- $G_2$ (two triangles): $H_0 = \{(0, 1), (0, \infty)\}$, $H_1 = \{(1, \infty), (1, \infty)\}$ — two components at filtration 0, then merging; two triangle loops.
+- $G_1$ (hexagon): $$H_0 = \{(0, \infty)\}$$, $$H_1 = \{(1, \infty)\}$$ — one connected component, one 6-cycle loop.
+- $G_2$ (two triangles): $$H_0 = \{(0, 1), (0, \infty)\}$$, $$H_1 = \{(1, \infty), (1, \infty)\}$$ — two components at filtration 0, then merging; two triangle loops.
 
 The persistence diagrams are **different**: $G_1$ has one $H_1$ bar and one $H_0$ bar; $G_2$ has two $H_1$ bars and two $H_0$ bars. Persistent homology successfully distinguishes the two graphs.
 

@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧬"
-read_mins: 5
+read_mins: 6
 permalink: /blog/persistent-homology/tda-biology/
 ---
 {% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="TDA in biology" caption="Topological data analysis applications in biology (Hensel et al., 2021)" %}
@@ -33,7 +33,7 @@ The two most impactful TDA tools in biology are:
 Mapper (Singh, Memoli, Carlsson, 2007) builds a graph-level summary of a high-dimensional dataset:
 
 1. **Filter function** $f : X \to \mathbb{R}$ — assign a scalar to each data point (e.g., first PCA component, pseudotime estimate, density).
-2. **Cover** the range of $f$ with overlapping intervals $\{U_i\}$.
+2. **Cover** the range of $f$ with overlapping intervals $$\{U_i\}$$.
 3. **Cluster** the preimage $f^{-1}(U_i)$ in the original space — each cluster becomes a node in the Mapper graph.
 4. **Connect** nodes whose corresponding clusters share data points (from overlapping intervals).
 

@@ -10,7 +10,7 @@ excerpt: "Topological regularisation adds topology-based penalty terms to neural
 author_profile: true
 read_time: true
 icon: "⚖️"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/topological-regularization/
 toc: true
 toc_label: "Contents"

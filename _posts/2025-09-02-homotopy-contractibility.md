@@ -10,7 +10,7 @@ excerpt: "Homotopy formalises 'continuous deformation' between maps and spaces. 
 author_profile: true
 read_time: true
 icon: "🔀"
-read_mins: 4
+read_mins: 3
 permalink: /blog/persistent-homology/homotopy-contractibility/
 toc: true
 toc_label: "Contents"

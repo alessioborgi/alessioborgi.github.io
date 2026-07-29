@@ -337,6 +337,48 @@ author_profile: true
 {% assign rl_posts          = site.posts | where: "book", "rl"                    | sort: "date" %}
 {% assign robotics_posts    = site.posts | where: "book", "robotics"              | sort: "date" %}
 {% assign genai_posts       = site.posts | where: "book", "generative-ai"         | sort: "date" %}
+{% assign diffusion_posts   = site.posts | where: "book", "diffusion"             | sort: "date" %}
+{% assign mathb_posts       = site.posts | where: "book", "math-basics"           | sort: "date" %}
+{% assign statsb_posts      = site.posts | where: "book", "stats-basics"          | sort: "date" %}
+{% assign probb_posts       = site.posts | where: "book", "prob-basics"           | sort: "date" %}
+{% assign geob_posts        = site.posts | where: "book", "geometry-basics"       | sort: "date" %}
+{% assign physb_posts       = site.posts | where: "book", "physics-basics"        | sort: "date" %}
+
+{% assign df_overview     = diffusion_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign df_foundations  = diffusion_posts | where: "subsection", "foundations" %}
+{% assign df_formulations = diffusion_posts | where: "subsection", "formulations" %}
+{% assign df_control      = diffusion_posts | where: "subsection", "control" %}
+{% assign df_efficiency   = diffusion_posts | where: "subsection", "efficiency" %}
+{% assign df_flow         = diffusion_posts | where: "subsection", "flow-matching" %}
+{% assign df_applications = diffusion_posts | where: "subsection", "applications" %}
+
+{% assign m_overview   = mathb_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign m_linalg     = mathb_posts | where: "subsection", "linear-algebra" %}
+{% assign m_calculus   = mathb_posts | where: "subsection", "calculus" %}
+{% assign m_analysis   = mathb_posts | where: "subsection", "analysis" %}
+{% assign m_optim      = mathb_posts | where: "subsection", "optimisation" %}
+
+{% assign st_overview  = statsb_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign st_found     = statsb_posts | where: "subsection", "foundations" %}
+{% assign st_estim     = statsb_posts | where: "subsection", "estimation" %}
+{% assign st_infer     = statsb_posts | where: "subsection", "inference" %}
+
+{% assign pb_overview  = probb_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign pb_found     = probb_posts | where: "subsection", "foundations" %}
+{% assign pb_dist      = probb_posts | where: "subsection", "distributions" %}
+{% assign pb_asym      = probb_posts | where: "subsection", "asymptotics" %}
+{% assign pb_info      = probb_posts | where: "subsection", "information" %}
+
+{% assign ge_overview  = geob_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign ge_found     = geob_posts | where: "subsection", "foundations" %}
+{% assign ge_diff      = geob_posts | where: "subsection", "differential" %}
+{% assign ge_sym       = geob_posts | where: "subsection", "symmetry" %}
+
+{% assign ph_overview2 = physb_posts | where_exp: "p", "p.is_overview" | first %}
+{% assign ph_mech      = physb_posts | where: "subsection", "mechanics" %}
+{% assign ph_thermo    = physb_posts | where: "subsection", "thermodynamics" %}
+{% assign ph_stoch     = physb_posts | where: "subsection", "stochastic" %}
+{% assign ph_sym       = physb_posts | where: "subsection", "symmetry" %}
 
 {% assign b_overview    = basics_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign b_activations = basics_posts | where: "subsection", "activation-functions" %}
@@ -389,6 +431,231 @@ author_profile: true
 
 {% assign genai_overview       = genai_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign genai_style_transfer = genai_posts | where: "subsection", "style-transfer" %}
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  APPENDIX BOOKS A1–A5 · FOUNDATIONS FOR REVISION          -->
+<!-- ════════════════════════════════════════════════════════ -->
+
+<div class="blog-book" data-book="math-basics">
+  <div class="book-banner">
+    <span class="book-icon">📐</span>
+    <div>
+      <h2>A1 — Mathematical Basics</h2>
+      <p>Linear algebra and calculus for machine learning — built for a fast recap before interviews</p>
+    </div>
+  </div>
+  <div class="book-body">
+    {% if m_overview %}
+    <a class="blog-overview-card" href="{{ m_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ m_overview.title }}</h3>
+      <p>{{ m_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ m_overview.read_mins | default: "4" }} min read</span>
+        <span>What you actually need, and what you can safely forget</span>
+      </div>
+    </a>
+    {% endif %}
+    {% assign m_groups = "linear-algebra|Linear Algebra|🧮,calculus|Calculus &amp; Differentiation|📈,analysis|Norms &amp; Distances|📏,optimisation|Convexity &amp; Optimisation|🎯" | split: "," %}
+    {% for grp in m_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = mathb_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="blog-book" data-book="stats-basics">
+  <div class="book-banner">
+    <span class="book-icon">📊</span>
+    <div>
+      <h2>A2 — Statistics Basics</h2>
+      <p>Estimation, inference and the interpretations people get wrong under pressure</p>
+    </div>
+  </div>
+  <div class="book-body">
+    {% if st_overview %}
+    <a class="blog-overview-card" href="{{ st_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ st_overview.title }}</h3>
+      <p>{{ st_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ st_overview.read_mins | default: "4" }} min read</span>
+        <span>From data back to the model that produced it</span>
+      </div>
+    </a>
+    {% endif %}
+    {% assign st_groups = "foundations|Descriptive Foundations|📋,estimation|Estimation|🎯,inference|Inference &amp; Testing|🔬" | split: "," %}
+    {% for grp in st_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = statsb_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="blog-book" data-book="prob-basics">
+  <div class="book-banner">
+    <span class="book-icon">🎲</span>
+    <div>
+      <h2>A3 — Probability Basics</h2>
+      <p>The language every likelihood, generative model and loss function is written in</p>
+    </div>
+  </div>
+  <div class="book-body">
+    {% if pb_overview %}
+    <a class="blog-overview-card" href="{{ pb_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ pb_overview.title }}</h3>
+      <p>{{ pb_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ pb_overview.read_mins | default: "4" }} min read</span>
+        <span>Axioms through to entropy</span>
+      </div>
+    </a>
+    {% endif %}
+    {% assign pb_groups = "foundations|Foundations &amp; Bayes|🧩,distributions|Random Variables &amp; Distributions|📉,asymptotics|Limit Theorems|📐,information|Information Theory|💡" | split: "," %}
+    {% for grp in pb_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = probb_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="blog-book" data-book="geometry-basics">
+  <div class="book-banner">
+    <span class="book-icon">🔺</span>
+    <div>
+      <h2>A4 — Geometry Basics</h2>
+      <p>Metric spaces, manifolds and symmetry — the geometry behind embeddings and equivariant models</p>
+    </div>
+  </div>
+  <div class="book-body">
+    {% if ge_overview %}
+    <a class="blog-overview-card" href="{{ ge_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ ge_overview.title }}</h3>
+      <p>{{ ge_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ ge_overview.read_mins | default: "4" }} min read</span>
+        <span>Why geometry keeps reappearing in machine learning</span>
+      </div>
+    </a>
+    {% endif %}
+    {% assign ge_groups = "foundations|Euclidean Foundations|📍,differential|Curvature &amp; Manifolds|🌐,symmetry|Symmetry &amp; Groups|♻️" | split: "," %}
+    {% for grp in ge_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = geob_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="blog-book" data-book="physics-basics">
+  <div class="book-banner">
+    <span class="book-icon">⚛️</span>
+    <div>
+      <h2>A5 — Physics Basics</h2>
+      <p>Mechanics, statistical physics and stochastic processes — where diffusion models and energy-based models come from</p>
+    </div>
+  </div>
+  <div class="book-body">
+    {% if ph_overview2 %}
+    <a class="blog-overview-card" href="{{ ph_overview2.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ ph_overview2.title }}</h3>
+      <p>{{ ph_overview2.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ ph_overview2.read_mins | default: "4" }} min read</span>
+        <span>The physics that keeps surfacing in machine learning</span>
+      </div>
+    </a>
+    {% endif %}
+    {% assign ph2_groups = "mechanics|Classical Mechanics|🪐,thermodynamics|Statistical Mechanics &amp; Entropy|🔥,stochastic|Stochastic Processes|🌫️,symmetry|Symmetry &amp; Conservation|♻️" | split: "," %}
+    {% for grp in ph2_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = physb_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
 
 
 <!-- ════════════════════════════════════════════════════════ -->
@@ -1227,6 +1494,57 @@ author_profile: true
       {% endfor %}
     </div>
     {% endif %}
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  BOOK VII · DIFFUSION MODELS                             -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book" data-book="diffusion">
+  <div class="book-banner">
+    <span class="book-icon">🌫️</span>
+    <div>
+      <h2>Book VII — Diffusion Models</h2>
+      <p>From denoising a fixed corruption to score-based SDEs, guidance, fast samplers and flow matching</p>
+    </div>
+  </div>
+  <div class="book-body">
+
+    {% if df_overview %}
+    <a class="blog-overview-card" href="{{ df_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ df_overview.title }}</h3>
+      <p>{{ df_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ df_overview.read_mins | default: "4" }} min read</span>
+        <span>Why undoing noise is easier than building an image</span>
+      </div>
+    </a>
+    {% endif %}
+
+    {% assign df_groups = "foundations|Foundations|🧱,formulations|Score-Based &amp; Deterministic Views|🧮,control|Conditioning &amp; Guidance|🎛️,efficiency|Fast Sampling &amp; Efficiency|⚡,flow-matching|Flow Matching|➡️,applications|Applications|🚀" | split: "," %}
+    {% for grp in df_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = diffusion_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "4" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+
   </div>
 </div>
 

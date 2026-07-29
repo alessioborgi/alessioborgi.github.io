@@ -10,7 +10,7 @@ excerpt: "Standard persistence misses features that never die within a finite fi
 author_profile: true
 read_time: true
 icon: "↔️"
-read_mins: 5
+read_mins: 3
 permalink: /blog/persistent-homology/extended-persistence/
 toc: true
 toc_label: "Contents"

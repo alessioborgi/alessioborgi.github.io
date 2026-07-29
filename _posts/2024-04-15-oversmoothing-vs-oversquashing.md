@@ -11,22 +11,14 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "⚖️"
-read_mins: 6
+read_mins: 7
 permalink: /blog/gnn/oversmoothing-vs-oversquashing/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Oversmoothing = forward-pass feature collapse from too much averaging (nearby nodes become identical). Oversquashing = gradient/information collapse at bottleneck edges for long-range communication. Both increase with depth but in different ways, on different nodes, and need different fixes.
+<strong>TL;DR:</strong> Oversmoothing = forward-pass feature collapse from too much averaging: \(\hat{A}^{K} \to u_1u_1^{\top}\), so nearby nodes become indistinguishable. Oversquashing = information and gradient collapse at bottleneck edges: \(\lVert \partial h_v^{(K)}/\partial x_u \rVert\) is throttled by \((\hat{A}^{K})_{vu}\) for distant \(u\). Both worsen with depth, but in different ways, on different nodes, and they need different fixes.
 </div>
 {% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Oversmoothing vs oversquashing" caption="Over-smoothing vs over-squashing — two distinct failure modes in deep GNNs (Topping et al., 2022)" %}
 
@@ -116,13 +108,15 @@ They are often mentioned together or confused. But they are fundamentally differ
 
 | Property | Oversmoothing | Oversquashing |
 |----------|---------------|---------------|
-| **Root cause** | Iterated averaging → all embeddings converge | Exponential neighbourhood growth → info bottleneck |
+| **Root cause** | Iterated averaging → all embeddings become collinear | Receptive-field growth + bottleneck topology → info bottleneck |
+| **Formal statement** | $\hat{A}^{K} \to u_1u_1^{\top}$, with $u_1 \propto \tilde{D}^{1/2}\mathbf{1}$ | $\lVert \partial h_v^{(K)}/\partial x_u \rVert \le (cw)^{K}(\hat{A}^{K})_{vu}$ |
+| **Governed by** | Spectral gap $1 - \mu$, $\mu = \max_{i\ge2}\lvert\lambda_i\rvert$ | Entries of $\hat{A}^{K}$; effective resistance $R(u,v)$ |
 | **Direction** | Forward pass (computation) | Both forward (dilution) and backward (gradient) |
 | **Which nodes affected** | All nodes, especially nearby ones | Nodes that are far apart (long paths) |
 | **Graph structure** | Worse on dense, well-connected graphs | Worse on tree-like, sparse graphs with bridge edges |
-| **With more layers** | Provably gets worse (converges to constant) | Could get better (reach distant nodes) but squashing increases |
-| **Measure** | Dirichlet energy → 0; MAD → 0 | Jacobian ||∂h_v/∂x_u|| → 0 |
-| **Spectral view** | Low-pass filter removes high frequencies | Not spectral: it's about topology/curvature |
+| **With more layers** | Provably gets worse (converges to a rank-one limit) | Could get better (reach distant nodes) but squashing increases |
+| **Measure** | Dirichlet energy $\to 0$; MAD $\to 0$ | Jacobian norm $\to 0$ |
+| **Spectral view** | Low-pass filter removes high frequencies | Mostly topological (curvature, resistance), though $\hat{A}^{K}$ ties the two together |
 | **Fix** | Residual connections, jump knowledge, APPNP | Graph rewiring, global attention, virtual nodes |
 
 ## When You Have Oversmoothing
@@ -143,18 +137,16 @@ You have a task requiring long-range reasoning (e.g., predicting whether two dis
 
 ## Worked Diagnostic Example
 
-Consider a 4-layer GCN on a path graph: A — B — C — D — E — F — G — H — I — J (10 nodes).
+Consider a 4-layer GCN on a path graph: A — B — C — D — E — F — G — H — I — J (10 nodes, so the distance from A to J is 9).
 
-**Oversmoothing check:** Compute Mean Average Distance (MAD) between node embeddings at each layer.
-- Layer 1: MAD = 0.82 (distinct features)
-- Layer 2: MAD = 0.51
-- Layer 4: MAD = 0.09 (nearly uniform)
+**Oversmoothing check:** track the Mean Average Distance (MAD) between node embeddings at each layer. As depth grows, MAD falls monotonically toward zero — the embeddings collapse onto $\mathrm{span}(u_1)$ and all nodes start to look alike. If you need to classify node A differently from node J, the model progressively loses the ability to do so.
 
-The embeddings have collapsed — all nodes look alike. If you need to classify node A differently from node J, the model cannot.
+**Oversquashing check:** look at the Jacobian $\partial h_A^{(K)} / \partial x_J$ — how much does node J's input affect node A's output?
 
-**Oversquashing check:** Compute the Jacobian ∂h_A / ∂x_J (how much does node J's input affect node A's output?).
-- With 4 layers, A has a 4-hop receptive field, which includes J (distance 9). So ∂h_A / ∂x_J = 0 — A literally cannot see J.
-- Even with 9 layers (reaching J), the path A→...→J has exponentially many competing paths that dilute the signal to near-zero.
+- With $K = 4$, node A's receptive field reaches only 4 hops, and $\mathrm{dist}(A,J) = 9 > 4$. So $(\hat{A}^{4})_{AJ} = 0$ and hence $\partial h_A^{(4)}/\partial x_J = 0$ exactly — A literally cannot see J. No training fixes this; it is a statement about the computation graph.
+- With $K = 9$ the receptive field does reach J, but $$(\hat{A}^{9})_{AJ}$$ is minuscule, so the bound $$\lVert \partial h_A^{(9)}/\partial x_J \rVert \le (cw)^{9}(\hat{A}^{9})_{AJ}$$ is near zero anyway.
+
+A caveat on the second point, because it is a common overstatement: on a *path* the receptive field grows only linearly, not exponentially, and there is exactly one path from A to J. The decay here is not "exponentially many competing paths" — it comes from the random-walk mass spreading out over the whole 9-hop neighbourhood at every step, so that the share arriving from J alone is exponentially small in the distance. The exponential-fan-in story applies to tree-like or expander graphs; the effective-resistance story covers the path case too, and both are instances of the same $(\hat{A}^{K})_{vu}$ bound.
 
 Both problems can coexist: you need 9 layers to reach J (depth demand), but 9 layers cause oversmoothing. The fix is not "just add more layers."
 
@@ -162,7 +154,7 @@ Both problems can coexist: you need 9 layers to reach J (depth demand), but 9 la
 
 ## A Unified View
 
-Li et al. and Alon & Yahak propose viewing both as failures of information flow, but in different regimes:
+Both Li et al. (oversmoothing) and Alon & Yahav (oversquashing) can be read as diagnosing failures of information flow, in different regimes:
 
 ```
 Short range:  Oversmoothing dominates (too many hops → convergence)

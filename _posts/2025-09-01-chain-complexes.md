@@ -10,7 +10,7 @@ excerpt: "Chain complexes formalise how pieces of a space fit together. The boun
 author_profile: true
 read_time: true
 icon: "⛓️"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/chain-complexes/
 toc: true
 toc_label: "Contents"

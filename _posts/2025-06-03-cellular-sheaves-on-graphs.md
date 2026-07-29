@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧱"
-read_mins: 7
+read_mins: 9
 permalink: /blog/sheaf/cellular-sheaves-on-graphs/
 toc: true
 toc_label: "Contents"

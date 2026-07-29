@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: true
 icon: "🔁"
-read_mins: 5
+read_mins: 7
 permalink: /blog/persistent-homology/overview/
 ---
 <style>

@@ -10,7 +10,7 @@ excerpt: "Alpha complexes are the geometrically natural filtration for point clo
 author_profile: true
 read_time: true
 icon: "🔺"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/alpha-complexes/
 toc: true
 toc_label: "Contents"

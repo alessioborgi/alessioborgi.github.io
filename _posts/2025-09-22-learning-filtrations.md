@@ -10,7 +10,7 @@ excerpt: "Standard TDA uses pre-defined filtrations (Rips, sublevel sets). Learn
 author_profile: true
 read_time: true
 icon: "🎓"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/learning-filtrations/
 toc: true
 toc_label: "Contents"

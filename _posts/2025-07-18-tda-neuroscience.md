@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧠"
-read_mins: 5
+read_mins: 6
 permalink: /blog/persistent-homology/tda-neuroscience/
 ---
 {% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="TDA in neuroscience" caption="Topological methods applied to neural data (Hensel et al., 2021)" %}

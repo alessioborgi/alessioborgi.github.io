@@ -10,7 +10,7 @@ excerpt: "Relative homology H_n(X, A) measures topology in X modulo the subspace
 author_profile: true
 read_time: true
 icon: "📐"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/relative-homology/
 toc: true
 toc_label: "Contents"

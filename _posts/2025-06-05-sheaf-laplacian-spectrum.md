@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "📊"
-read_mins: 7
+read_mins: 11
 permalink: /blog/sheaf/sheaf-laplacian-spectrum/
 toc: true
 toc_label: "Contents"

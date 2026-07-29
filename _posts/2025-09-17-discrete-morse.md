@@ -10,7 +10,7 @@ excerpt: "Discrete Morse theory (Forman) assigns gradient vector fields to simpl
 author_profile: true
 read_time: true
 icon: "🏔️"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/discrete-morse-theory/
 toc: true
 toc_label: "Contents"

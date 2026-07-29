@@ -11,7 +11,7 @@ read_time: true
 is_overview: false
 subsection: variants
 icon: "🪟"
-read_mins: 4
+read_mins: 3
 permalink: /blog/transformers/swin-transformer/
 toc: true
 toc_label: "Contents"

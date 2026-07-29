@@ -10,7 +10,7 @@ excerpt: "Topological autoencoders (Moor et al. 2020) add a topology-preserving 
 author_profile: true
 read_time: true
 icon: "🌀"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/topological-autoencoders/
 toc: true
 toc_label: "Contents"

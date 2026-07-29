@@ -486,3 +486,229 @@ generative-ai:
       label: "Style Transfer & Latent Manipulation"
       posts:
         - { slug: "2025-06-17-zsaslm-paper",  title: "Z-SASLM: Zero-Shot Style Blending via Spherical Interpolation (CVPR 2025)",  published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# BOOK VII: DIFFUSION MODELS
+# ──────────────────────────────────────────────────────────────────────────
+diffusion:
+  label: "Book VII: Diffusion Models"
+  icon:  "🌫️"
+  color: "#0e7490"
+
+  overview:
+    - { slug: "2026-07-01-diffusion-overview", title: "Diffusion Models: Learning to Undo Noise", published: online }
+
+  sections:
+
+    foundations:
+      label: "Foundations"
+      posts:
+        - { slug: "2026-07-02-forward-process", title: "The Forward Process: A Corruption Engineered to Be Jumped Into", published: online }
+        - { slug: "2026-07-03-reverse-process", title: "The Reverse Process: Why a Gaussian Is Enough, and What the Network Should Predict", published: online }
+        - { slug: "2026-07-04-ddpm-training", title: "DDPM Training: From a Variational Bound to Four Lines of PyTorch", published: online }
+
+    formulations:
+      label: "Score-Based & Deterministic Views"
+      posts:
+        - { slug: "2026-07-05-score-based-sde", title: "Score Matching and the SDE View: DDPM as One Discretisation Among Many", published: online }
+        - { slug: "2026-07-06-ddim", title: "DDIM: Same Marginals, Fewer Steps, and a Latent Space Worth Having", published: online }
+
+    control:
+      label: "Conditioning & Guidance"
+      posts:
+        - { slug: "2026-07-07-classifier-free-guidance", title: "Classifier-Free Guidance: Buying Prompt Adherence with a Second Forward Pass", published: online }
+
+    efficiency:
+      label: "Fast Sampling & Efficiency"
+      posts:
+        - { slug: "2026-07-08-latent-diffusion", title: "Latent Diffusion: Denoise Where the Information Is", published: online }
+        - { slug: "2026-07-09-samplers-schedulers", title: "Samplers and Schedulers: Diffusion Sampling Is Numerical Integration", published: online }
+        - { slug: "2026-07-10-distillation-consistency", title: "Distillation and Consistency Models: Getting to Four Steps", published: online }
+
+    flow-matching:
+      label: "Flow Matching"
+      posts:
+        - { slug: "2026-07-11-flow-matching", title: "Flow Matching: Training a Velocity Field Without Ever Solving an ODE", published: online }
+        - { slug: "2026-07-12-rectified-flow", title: "Rectified Flow: Straightening Trajectories to Buy Few-Step Sampling", published: online }
+        - { slug: "2026-07-13-diffusion-vs-flow-matching", title: "Diffusion vs Flow Matching: Two Names for One Family", published: online }
+
+    applications:
+      label: "Applications"
+      posts:
+        - { slug: "2026-07-14-diffusion-applications", title: "Diffusion Beyond Images: Inpainting, Audio, Video, Molecules, Robots", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# A1: MATHEMATICAL BASICS
+# ──────────────────────────────────────────────────────────────────────────
+math-basics:
+  label: "A1: Mathematical Basics"
+  icon:  "📐"
+  color: "#2563eb"
+
+  overview:
+    - { slug: "2026-08-01-math-basics-overview", title: "What Mathematics an ML Engineer Actually Needs", published: online }
+
+  sections:
+
+    linear-algebra:
+      label: "Linear Algebra"
+      posts:
+        - { slug: "2026-08-02-vectors-and-matrices", title: "Matrices as Linear Maps: Span, Rank, and the Subspaces They Create", published: online }
+        - { slug: "2026-08-03-eigen-and-svd", title: "Eigenvectors, the Spectral Theorem, and Why the SVD Always Exists", published: online }
+
+    calculus:
+      label: "Calculus & Differentiation"
+      posts:
+        - { slug: "2026-08-04-derivatives-and-gradients", title: "The Derivative Is a Linear Approximation, and the Gradient Is a Covector", published: online }
+        - { slug: "2026-08-05-jacobian-and-hessian", title: "Jacobians, Hessians, and Why Newton's Method Loses at Scale", published: online }
+        - { slug: "2026-08-06-matrix-calculus", title: "Matrix Calculus Without Sign Errors: The Identities and the Layout Trap", published: online }
+
+    analysis:
+      label: "Norms & Distances"
+      posts:
+        - { slug: "2026-08-07-norms-and-distances", title: "Norms, Inner Products, and the Geometry Behind L1 Sparsity", published: online }
+
+    optimisation:
+      label: "Convexity & Optimisation"
+      posts:
+        - { slug: "2026-08-08-convexity-and-optimisation", title: "Convexity: What It Guarantees, and Why Deep Learning Works Without It", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# A2: STATISTICS BASICS
+# ──────────────────────────────────────────────────────────────────────────
+stats-basics:
+  label: "A2: Statistics Basics"
+  icon:  "📊"
+  color: "#7c3aed"
+
+  overview:
+    - { slug: "2026-08-11-stats-basics-overview", title: "Statistics Basics: Reasoning Backwards From Data to Model", published: online }
+
+  sections:
+
+    foundations:
+      label: "Descriptive Foundations"
+      posts:
+        - { slug: "2026-08-12-descriptive-statistics", title: "Descriptive Statistics: What a Summary Keeps and What It Discards", published: online }
+
+    estimation:
+      label: "Estimation"
+      posts:
+        - { slug: "2026-08-13-estimators-bias-variance", title: "Estimators, Bias and Variance: Why Unbiased Is Not the Same as Good", published: online }
+        - { slug: "2026-08-14-maximum-likelihood", title: "Maximum Likelihood: The Default Recipe for Turning Data Into Parameters", published: online }
+
+    inference:
+      label: "Inference & Testing"
+      posts:
+        - { slug: "2026-08-15-confidence-intervals", title: "Confidence Intervals: The Interval Is Random, the Parameter Is Not", published: online }
+        - { slug: "2026-08-16-hypothesis-testing", title: "Hypothesis Testing: What a p-Value Actually Measures", published: online }
+        - { slug: "2026-08-17-bootstrap-and-resampling", title: "The Bootstrap: Uncertainty When the Algebra Runs Out", published: online }
+        - { slug: "2026-08-18-bayesian-vs-frequentist", title: "Bayesian vs Frequentist: Two Meanings of the Word Probability", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# A3: PROBABILITY BASICS
+# ──────────────────────────────────────────────────────────────────────────
+prob-basics:
+  label: "A3: Probability Basics"
+  icon:  "🎲"
+  color: "#0891b2"
+
+  overview:
+    - { slug: "2026-08-21-prob-basics-overview", title: "Probability for ML Interviews: The Eight Ideas Worth Re-deriving", published: online }
+
+  sections:
+
+    foundations:
+      label: "Foundations & Bayes"
+      posts:
+        - { slug: "2026-08-22-sample-spaces-and-axioms", title: "Sample Spaces and the Kolmogorov Axioms: What a Probability Actually Is", published: online }
+        - { slug: "2026-08-23-conditional-probability-and-bayes", title: "Conditional Probability and Bayes: Why a 99% Accurate Test Means Almost Nothing", published: online }
+
+    distributions:
+      label: "Random Variables & Distributions"
+      posts:
+        - { slug: "2026-08-24-random-variables", title: "Random Variables: A Density Is Not a Probability", published: online }
+        - { slug: "2026-08-25-expectation-and-variance", title: "Expectation and Variance: Linearity Is Free, Additivity Is Not", published: online }
+        - { slug: "2026-08-26-common-distributions", title: "The Ten Distributions You Need, and the Geometry of the Multivariate Gaussian", published: online }
+
+    asymptotics:
+      label: "Limit Theorems"
+      posts:
+        - { slug: "2026-08-27-limit-theorems", title: "Limit Theorems: What the CLT Promises and What It Refuses to Promise", published: online }
+
+    information:
+      label: "Information Theory"
+      posts:
+        - { slug: "2026-08-28-information-theory", title: "Entropy, Cross-Entropy and KL: Why Your Classification Loss Is a Divergence", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# A4: GEOMETRY BASICS
+# ──────────────────────────────────────────────────────────────────────────
+geometry-basics:
+  label: "A4: Geometry Basics"
+  icon:  "🔺"
+  color: "#c2410c"
+
+  overview:
+    - { slug: "2026-09-01-geometry-basics-overview", title: "Geometry for Machine Learning: Why Shape Keeps Coming Back", published: online }
+
+  sections:
+
+    foundations:
+      label: "Euclidean Foundations"
+      posts:
+        - { slug: "2026-09-02-euclidean-spaces", title: "Euclidean Space: Inner Products, Projections and the Margin", published: online }
+        - { slug: "2026-09-03-linear-transformations", title: "Linear Maps as Geometry: Rotate, Scale, Rotate", published: online }
+
+    differential:
+      label: "Curvature & Manifolds"
+      posts:
+        - { slug: "2026-09-04-curvature", title: "Curvature: Why a Flat Map of the Earth Must Lie", published: online }
+        - { slug: "2026-09-05-manifolds-and-tangent-spaces", title: "Manifolds and Tangent Spaces: What 'The Data Lies on a Manifold' Actually Claims", published: online }
+        - { slug: "2026-09-06-riemannian-geometry", title: "Riemannian Geometry: Geodesics, Exponential Maps and Why Trees Prefer Hyperbolic Space", published: online }
+
+    symmetry:
+      label: "Symmetry & Groups"
+      posts:
+        - { slug: "2026-09-07-symmetry-and-groups", title: "Symmetry and Groups: Invariance, Equivariance, and Why You Build It In", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# A5: PHYSICS BASICS
+# ──────────────────────────────────────────────────────────────────────────
+physics-basics:
+  label: "A5: Physics Basics"
+  icon:  "⚛️"
+  color: "#16a34a"
+
+  overview:
+    - { slug: "2026-09-11-physics-basics-overview", title: "Physics for Machine Learning: Why the Same Equations Keep Coming Back", published: online }
+
+  sections:
+
+    mechanics:
+      label: "Classical Mechanics"
+      posts:
+        - { slug: "2026-09-12-lagrangian-mechanics", title: "Lagrangian Mechanics: Why Nature Optimises a Functional", published: online }
+        - { slug: "2026-09-13-hamiltonian-dynamics", title: "Hamiltonian Dynamics: Phase Space, Liouville, and Why HMC Works", published: online }
+
+    thermodynamics:
+      label: "Statistical Mechanics & Entropy"
+      posts:
+        - { slug: "2026-09-14-statistical-mechanics", title: "Statistical Mechanics: The Boltzmann Distribution and the Cost of Z", published: online }
+        - { slug: "2026-09-15-entropy-and-thermodynamics", title: "Entropy and Free Energy: From the Second Law to the ELBO", published: online }
+
+    stochastic:
+      label: "Stochastic Processes"
+      posts:
+        - { slug: "2026-09-16-diffusion-and-brownian-motion", title: "Brownian Motion, Langevin and Fokker–Planck: The Physics of a Sampler", published: online }
+
+    symmetry:
+      label: "Symmetry & Conservation"
+      posts:
+        - { slug: "2026-09-17-symmetry-and-conservation", title: "Noether's Theorem: Symmetry, Conservation, and Equivariant Networks", published: online }

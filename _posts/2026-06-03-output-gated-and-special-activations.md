@@ -257,7 +257,7 @@ Inside the network the activation is a free choice, and sometimes the task dicta
 \]
 </div>
 
-The \\(\omega_0\\) factor is not cosmetic, and neither is its initialisation: hidden-layer weights are drawn from \\(\mathcal{U}\\!\left(-\sqrt{6/n}/\omega_0,\ +\sqrt{6/n}/\omega_0\right)\\) for fan-in \\(n\\) (the first layer uses \\(\mathcal{U}(-1/n,\ 1/n)\\) instead). That keeps the pre-activation distribution stable with depth. Sine activations predate SIREN; this initialisation is what made deep ones trainable — implement \\(\sin(\omega x)\\) without it and the network will not converge.
+The \\(\omega_0\\) factor is not cosmetic, and neither is its initialisation: hidden-layer weights are drawn from $$\mathcal{U}\\!\left(-\sqrt{6/n}/\omega_0,\ +\sqrt{6/n}/\omega_0\right)$$ for fan-in \\(n\\) (the first layer uses \\(\mathcal{U}(-1/n,\ 1/n)\\) instead). That keeps the pre-activation distribution stable with depth. Sine activations predate SIREN; this initialisation is what made deep ones trainable — implement \\(\sin(\omega x)\\) without it and the network will not converge.
 
 ## Common mistakes
 

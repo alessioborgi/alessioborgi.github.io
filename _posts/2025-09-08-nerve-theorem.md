@@ -10,7 +10,7 @@ excerpt: "The nerve theorem is the topological backbone of TDA: it justifies why
 author_profile: true
 read_time: true
 icon: "🧠"
-read_mins: 4
+read_mins: 3
 permalink: /blog/persistent-homology/nerve-theorem/
 toc: true
 toc_label: "Contents"

@@ -10,7 +10,7 @@ excerpt: "Persistent homology applied to time series via sliding window embeddin
 author_profile: true
 read_time: true
 icon: "📈"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/tda-time-series/
 toc: true
 toc_label: "Contents"

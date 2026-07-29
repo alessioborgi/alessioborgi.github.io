@@ -10,7 +10,7 @@ excerpt: "Cubical complexes tile space with hypercubes instead of simplices — 
 author_profile: true
 read_time: true
 icon: "🟦"
-read_mins: 4
+read_mins: 3
 permalink: /blog/persistent-homology/cubical-complexes/
 toc: true
 toc_label: "Contents"

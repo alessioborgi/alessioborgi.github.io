@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "👁️"
-read_mins: 6
+read_mins: 9
 permalink: /blog/sheaf/sheaf-attention-networks/
 toc: true
 toc_label: "Contents"

@@ -11,22 +11,11 @@ read_time: true
 is_overview: false
 subsection: architectures
 icon: "📨"
-read_mins: 4
+read_mins: 6
 permalink: /blog/gnn/message-passing/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
-.tldr-box strong { color: #0f2a36; }
-.key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
-.key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
-.key-takeaways ul { margin: 0; padding-left: 1.2rem; }
-.key-takeaways li { margin-bottom: .3rem; font-size: .95rem; }
-.formula-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: .8rem 1.1rem; font-family: 'Georgia', serif; font-size: .98rem; margin: 1rem 0; text-align: center; color: #1e3a5f; }
-</style>
 
 <div class="tldr-box">
   <strong>TL;DR:</strong> Message Passing Neural Networks (Gilmer et al., 2017) provide a unified framework for all GNNs. Each layer runs three steps: <strong>MESSAGE</strong> (what each neighbour sends), <strong>AGGREGATE</strong> (collect all messages), <strong>UPDATE</strong> (compute new node representation). Choosing different functions for each step gives you different GNN architectures.
@@ -36,20 +25,25 @@ toc_label: "Contents"
 
 ## The Framework
 
-The MPNN framework (Gilmer et al., 2017, NeurIPS) defines GNN computation through a series of **message passing steps**. At each step t:
+The MPNN framework (Gilmer et al., 2017, ICML) defines GNN computation through a series of **message passing steps**. At each step $t$:
 
 <div class="formula-box">
-m<sup>t+1</sup><sub>v</sub> = AGGREGATE({ MSG(h<sup>t</sup><sub>v</sub>, h<sup>t</sup><sub>u</sub>, e<sub>uv</sub>) : u ∈ N(v) })<br><br>
-h<sup>t+1</sup><sub>v</sub> = UPDATE(h<sup>t</sup><sub>v</sub>, m<sup>t+1</sup><sub>v</sub>)
+\[
+m_v^{(t+1)} \;=\; \operatorname{AGGREGATE}\Big(\big\{\, \operatorname{MSG}\big(h_v^{(t)},\, h_u^{(t)},\, e_{uv}\big) \;:\; u \in \mathcal{N}(v) \,\big\}\Big)
+\]
+\[
+h_v^{(t+1)} \;=\; \operatorname{UPDATE}\big(h_v^{(t)},\, m_v^{(t+1)}\big)
+\]
 </div>
 
 Where:
-- `h^t_v` — representation of node v at step t.
-- `N(v)` — neighbours of v.
-- `e_{uv}` — optional edge feature between u and v.
-- `MSG` — the message function.
-- `AGGREGATE` — combines all messages (must be permutation-invariant).
-- `UPDATE` — computes new representation from old + aggregated message.
+- $h_v^{(t)} \in \mathbb{R}^{d_t}$ — the representation of node $v$ after $t$ message passing steps; $h_v^{(0)}$ is the input feature vector.
+- $\mathcal{N}(v)$ — the set of neighbours of $v$ in the graph.
+- $$e_{uv}$$ — the (optional) feature vector of the edge between $u$ and $v$.
+- $m_v^{(t+1)}$ — the aggregated message arriving at $v$ at step $t+1$.
+- $\operatorname{MSG}$ — the message function, computing what a neighbour sends.
+- $\operatorname{AGGREGATE}$ — combines all incoming messages (must be permutation-invariant, since $$\{\cdot\}$$ is a *multiset*, not an ordered list).
+- $\operatorname{UPDATE}$ — computes the new representation from the old one plus the aggregated message.
 
 <div class="blog-figure">
 <figure>
@@ -109,50 +103,57 @@ Where:
   <text x="44" y="135" font-size="9" fill="#374151" font-weight="700">① Compute</text>
   <text x="44" y="147" font-size="9" fill="#374151" font-weight="700">messages</text>
 </svg>
-<figcaption>Figure 1: Node B receives messages from its three neighbours A, C, D. The messages are aggregated (e.g., summed or averaged), then combined with B's own representation in an UPDATE function to produce a new h_B.</figcaption>
+<figcaption>Figure 1: Node B receives messages from its three neighbours A, C, D. The messages are aggregated (e.g., summed or averaged), then combined with B's own representation in an UPDATE function to produce a new \(h_B\).</figcaption>
 </figure>
 </div>
 
 ## Concrete Worked Example: One Full MPNN Step
 
-Let node B have features h_B = [1, 0], with three neighbours:
-- A: h_A = [0, 1]
-- C: h_C = [1, 1]
-- D: h_D = [0, 0]
+Let node $B$ have features $h_B = [1, 0]$, with three neighbours $$\mathcal{N}(B) = \{A, C, D\}$$ whose features are $h_A = [0, 1]$, $h_C = [1, 1]$ and $h_D = [0, 0]$.
 
-**Step 1 — Compute messages** (using identity MSG, i.e. just pass neighbour features):
-```
-msg(A→B) = [0, 1]
-msg(C→B) = [1, 1]
-msg(D→B) = [0, 0]
-```
+**Step 1 — Compute messages** (using the identity message function, $$\operatorname{MSG}(h_v, h_u, e_{uv}) = h_u$$, i.e. just pass the neighbour's features along):
+
+<div class="formula-box">
+\[
+m_{A \to B} = [0, 1], \qquad m_{C \to B} = [1, 1], \qquad m_{D \to B} = [0, 0]
+\]
+</div>
 
 **Step 2 — Aggregate** (sum):
-```
-agg_B = [0,1] + [1,1] + [0,0] = [1, 2]
-```
 
-**Step 3 — Update** (concatenate own features + aggregated, apply linear W):
-```
-input = concat(h_B, agg_B) = [1, 0, 1, 2]
-h_B_new = ReLU( W · [1, 0, 1, 2] )   # W is 2×4 learned weight matrix
-```
+<div class="formula-box">
+\[
+m_B = [0,1] + [1,1] + [0,0] = [1, 2]
+\]
+</div>
 
-After this one layer, B's new 2-d embedding encodes information from all three of its neighbours.
+**Step 3 — Update** (concatenate own features with the aggregate, apply a learned linear map $W \in \mathbb{R}^{2 \times 4}$ and a ReLU):
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The three steps — MSG, AGGREGATE, UPDATE — are independent design choices. Changing any one of them gives a different GNN family. GCN uses W·h_u as message and sum as aggregation. GAT weights the sum by learned attention. GIN uses sum + MLP. The framework shows that these are all variations on the same theme.</div>
+<div class="formula-box">
+\[
+h_B' = \operatorname{ReLU}\big(W \, [\, h_B \,\Vert\, m_B \,]\big) = \operatorname{ReLU}\big(W \, [1, 0, 1, 2]^{\top}\big)
+\]
+</div>
+
+Here $\Vert$ denotes concatenation, so $[\, h_B \Vert m_B \,] \in \mathbb{R}^4$. After this one layer, $B$'s new 2-dimensional embedding encodes information from all three of its neighbours.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The three steps — MSG, AGGREGATE, UPDATE — are independent design choices. Changing any one of them gives a different GNN family. GCN sends \(W h_u\) and aggregates with a degree-normalised sum. GAT weights that sum by learned attention coefficients. GIN uses a plain sum followed by an MLP. The framework shows that these are all variations on the same theme.</div>
 
 ## Step 1: Message Function
 
 The message function computes what each neighbour sends. The simplest choice: just send the neighbour's features.
 
-```python
-MSG(h_v, h_u, e_uv) = h_u         # GCN: just pass neighbour features
-MSG(h_v, h_u, e_uv) = W · h_u     # Linear transform first
-MSG(h_v, h_u, e_uv) = α · W · h_u # GAT: scale by attention weight
-```
+<div class="formula-box">
+\[
+\begin{aligned}
+\operatorname{MSG}(h_v, h_u, e_{uv}) &= h_u && \text{(pass the raw neighbour features)}\\
+\operatorname{MSG}(h_v, h_u, e_{uv}) &= W h_u && \text{(GCN: linear transform first)}\\
+\operatorname{MSG}(h_v, h_u, e_{uv}) &= \alpha_{vu} \, W h_u && \text{(GAT: scale by an attention weight)}
+\end{aligned}
+\]
+</div>
 
-Including edge features allows the model to distinguish bond types in a molecule or relationship types in a knowledge graph.
+Here $W$ is a learned weight matrix shared by all edges, and $$\alpha_{vu}$$ is the scalar attention weight GAT places on the edge $u \to v$. Including edge features $$e_{uv}$$ allows the model to distinguish bond types in a molecule or relationship types in a knowledge graph.
 
 ## Step 2: Aggregate Function
 
@@ -160,40 +161,46 @@ The aggregation combines all messages. It **must be permutation-invariant** (the
 
 | Aggregator | Formula | Properties |
 |---|---|---|
-| Sum | Σ m_u | Captures size of neighbourhood |
-| Mean | (1/\|N\|) Σ m_u | Normalised, size-invariant |
-| Max | max_u m_u | Captures the most extreme feature |
-| Attention-weighted | Σ α_u m_u | Adaptive, like GAT |
+| Sum | $$\sum_{u \in \mathcal{N}(v)} m_{u \to v}$$ | Keeps the size of the neighbourhood |
+| Mean | $$\frac{1}{\lvert \mathcal{N}(v) \rvert} \sum_{u \in \mathcal{N}(v)} m_{u \to v}$$ | Normalised, size-invariant |
+| Max | $$\max_{u \in \mathcal{N}(v)} m_{u \to v}$$ (elementwise) | Captures the most extreme feature |
+| Attention-weighted | $$\sum_{u \in \mathcal{N}(v)} \alpha_{vu} \, m_{u \to v}$$ | Adaptive, like GAT |
 
-**GIN** (see separate post) proves that **sum** is the most powerful aggregator for distinguishing graph structures. Mean and max lose information.
+**GIN** (see [the GIN post](/blog/gnn/gin/)) shows that **sum** is the most expressive of these: it is an *injective* function of the multiset of messages when the message space is countable, so it distinguishes every neighbourhood that the 1-WL test distinguishes. Mean and max are not injective — mean discards the neighbourhood size, max discards multiplicities — so both lose structural information.
 
 ## Step 3: Update Function
 
-Given the aggregated message and the old representation, compute the new one:
+Given the aggregated message $m_v$ and the old representation $h_v$, compute the new one:
 
-```python
-h_v^new = σ(W · concat(h_v, agg_message))  # GCN-style
-h_v^new = GRU(h_v, agg_message)            # Recurrent update
-h_v^new = MLP(concat(h_v, agg_message))    # GraphSAGE-style
-```
+<div class="formula-box">
+\[
+\begin{aligned}
+h_v' &= \sigma\big(W \, [\, h_v \Vert m_v \,]\big) && \text{(single linear layer + non-linearity)}\\
+h_v' &= \operatorname{GRU}\big(h_v,\, m_v\big) && \text{(recurrent update, as in the original MPNN)}\\
+h_v' &= \operatorname{MLP}\big([\, h_v \Vert m_v \,]\big) && \text{(GraphSAGE-style)}
+\end{aligned}
+\]
+</div>
+
+where $\sigma$ is an elementwise non-linearity (usually ReLU) and $[\,\cdot \Vert \cdot\,]$ is concatenation.
 
 ## A Running Example: Molecule Property Prediction
 
 Consider predicting if a molecule is toxic:
 - Nodes = atoms (features: atom type, charge, is_aromatic)
 - Edges = bonds (features: bond type: single/double/triple)
-- After k MPNN layers, each atom knows about its k-hop neighbourhood.
-- A **readout** aggregates all atom embeddings into a graph embedding.
-- An MLP predicts toxicity from the graph embedding.
+- After $k$ MPNN layers, each atom knows about its $k$-hop neighbourhood.
+- A **readout** $$h_G = R(\{h_v^{(k)} : v \in V\})$$ aggregates all atom embeddings into a single graph embedding; $R$ must itself be permutation-invariant.
+- An MLP predicts toxicity from $h_G$.
 
 After 3 layers, an atom "knows" about the atoms 3 bonds away — capturing local chemical environments like functional groups.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>All GNNs are instances of MPNN: choose MSG, AGGREGATE, and UPDATE functions.</li>
-  <li>AGGREGATE must be <strong>permutation-invariant</strong>. Sum is the most expressive choice (GIN).</li>
-  <li>After k layers, each node's embedding captures its <strong>k-hop neighbourhood</strong>.</li>
+  <li>All GNNs are instances of MPNN: choose the \(\operatorname{MSG}\), \(\operatorname{AGGREGATE}\), and \(\operatorname{UPDATE}\) functions.</li>
+  <li>\(\operatorname{AGGREGATE}\) must be <strong>permutation-invariant</strong>. Sum is the most expressive choice, because it is injective over multisets (GIN).</li>
+  <li>After \(k\) layers, each node's embedding captures its <strong>\(k\)-hop neighbourhood</strong>.</li>
   <li>Graph-level predictions require a <strong>readout function</strong> that pools node embeddings into a single vector.</li>
 </ul>
 </div>

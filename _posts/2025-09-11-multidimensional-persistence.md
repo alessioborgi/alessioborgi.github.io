@@ -10,7 +10,7 @@ excerpt: "When data has multiple meaningful scale parameters (e.g., scale and de
 author_profile: true
 read_time: true
 icon: "🧊"
-read_mins: 5
+read_mins: 3
 permalink: /blog/persistent-homology/multidimensional-persistence/
 toc: true
 toc_label: "Contents"

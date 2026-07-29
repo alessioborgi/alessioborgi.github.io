@@ -10,7 +10,7 @@ excerpt: "Cohomology is the dual of homology: instead of chains going down in di
 author_profile: true
 read_time: true
 icon: "🪞"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/cohomology-dual-theory/
 toc: true
 toc_label: "Contents"

@@ -203,7 +203,7 @@ $$g_i = \operatorname{Softplus}(\mathbf{w}_g^\top \mathbf{q}_i + b_g)$$
 
 $$\Gamma_h = \operatorname{Softplus}(\gamma_h)$$
 
-This is the key decoupling: $g_i$ controls how strongly query $i$ suppresses unprotected distant context, while $l_j$ marks key $j$ as a landmark that should be protected from that suppression. RoPE’s rotary geometry remains untouched because the structural intervention enters additively through $M_{i,j}$ rather than by changing the rotations themselves.
+This is the key decoupling: $g_i$ controls how strongly query $i$ suppresses unprotected distant context, while $l_j$ marks key $j$ as a landmark that should be protected from that suppression. RoPE’s rotary geometry remains untouched because the structural intervention enters additively through $$M_{i,j}$$ rather than by changing the rotations themselves.
 
 ## Why the Factorisation Matters
 

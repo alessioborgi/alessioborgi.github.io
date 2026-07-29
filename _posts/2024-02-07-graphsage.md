@@ -11,21 +11,11 @@ read_time: true
 is_overview: false
 subsection: architectures
 icon: "🌐"
-read_mins: 3
+read_mins: 5
 permalink: /blog/gnn/graphsage/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
-.tldr-box strong { color: #0f2a36; }
-.key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
-.key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
-.key-takeaways ul { margin: 0; padding-left: 1.2rem; }
-.key-takeaways li { margin-bottom: .3rem; font-size: .95rem; }
-</style>
 
 <div class="tldr-box">
   <strong>TL;DR:</strong> GraphSAGE (SAmple and aggreGatE) learns to aggregate features from a <em>sampled</em> subset of neighbours. Because it learns the aggregation function (not per-node embeddings), it generalises to new nodes never seen during training — making it <em>inductive</em>.
@@ -35,7 +25,7 @@ toc_label: "Contents"
 
 ## The Inductive vs. Transductive Distinction
 
-**Transductive GNNs (GCN, GAT):** learn embeddings for the specific nodes in the training graph. If you add a new node tomorrow, you have to re-train — or at least run another forward pass with the full adjacency matrix.
+**Transductive GNNs (GCN, GAT):** as originally formulated, these operate on one fixed graph: the layer is a product with a normalised adjacency $\hat{A}$ built from the whole training graph. Add a new node tomorrow and $\hat{A}$ changes, so at minimum you must rebuild it and re-run a full-graph forward pass.
 
 **Inductive GNNs (GraphSAGE):** learn a *function* that maps a node's local neighbourhood to an embedding. Apply this function to any neighbourhood — seen or unseen — to get an embedding.
 
@@ -45,16 +35,26 @@ This matters enormously in practice:
 
 ## The Algorithm
 
-For each node v at each layer k:
+For each node $v$ at each layer $k = 1, \dots, K$:
 
-```
-1. SAMPLE: S_v = random sample of min(K, |N(v)|) neighbours
-2. AGG:    agg_v = AGGREGATE({ h_u^(k-1) : u ∈ S_v })
-3. UPDATE: h_v^k = σ( W^k · concat(h_v^(k-1), agg_v) )
-4. NORM:   h_v^k = h_v^k / ||h_v^k||₂
-```
+<div class="formula-box">
+\[
+\begin{aligned}
+\textbf{1. Sample:}\quad & \mathcal{S}_v \sim \operatorname{Uniform}\big(\mathcal{N}(v)\big), \quad \lvert \mathcal{S}_v \rvert = S \\[2pt]
+\textbf{2. Aggregate:}\quad & a_v^{(k)} = \operatorname{AGGREGATE}_k\big(\{\, h_u^{(k-1)} : u \in \mathcal{S}_v \,\}\big) \\[2pt]
+\textbf{3. Update:}\quad & h_v^{(k)} = \sigma\Big( W^{(k)} \big[\, h_v^{(k-1)} \,\Vert\, a_v^{(k)} \,\big] \Big) \\[2pt]
+\textbf{4. Normalise:}\quad & h_v^{(k)} \leftarrow \frac{h_v^{(k)}}{\lVert h_v^{(k)} \rVert_2}
+\end{aligned}
+\]
+</div>
 
-The key novelty: concatenate the node's **own** previous representation with the aggregated neighbourhood representation, then apply a shared learned W. This ensures the node retains its own identity while incorporating neighbour information.
+Where:
+- $K$ — the number of layers, equivalently the number of hops each node sees.
+- $S$ — the **fixed** neighbourhood sample size, a hyperparameter. Note that $$\mathcal{S}_v$$ always has exactly $S$ elements: when $\lvert \mathcal{N}(v) \rvert < S$ the sample is drawn with replacement, which is what keeps the per-node cost constant.
+- $\Vert$ — concatenation, so $W^{(k)}$ has twice as many input columns as $h$ has dimensions.
+- $\lVert \cdot \rVert_2$ — the Euclidean norm; step 4 projects every embedding onto the unit sphere.
+
+The key novelty is step 3: concatenate the node's **own** previous representation with the aggregated neighbourhood representation, then apply a shared learned $W^{(k)}$. This ensures the node retains its own identity while incorporating neighbour information — and because $W^{(k)}$ does not depend on which node it is applied to, the same layer works for a node that was never seen during training.
 
 <div class="blog-figure">
 <figure>
@@ -91,10 +91,10 @@ The key novelty: concatenate the node's **own** previous representation with the
 
   <!-- Arrow -->
   <line x1="195" y1="110" x2="225" y2="110" stroke="#6b7280" stroke-width="1.5" marker-end="url(#ags)"/>
-  <text x="210" y="102" text-anchor="middle" font-size="8" fill="#0d9488" font-weight="600">sample K=2</text>
+  <text x="210" y="102" text-anchor="middle" font-size="8" fill="#0d9488" font-weight="600">sample S=2</text>
 
   <!-- Sampled neighbourhood (right) -->
-  <text x="370" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Sampled neighbourhood (K=2)</text>
+  <text x="370" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Sampled neighbourhood (S=2)</text>
   <!-- Central node -->
   <circle cx="370" cy="110" r="22" fill="#ccfbf1" stroke="#0d9488" stroke-width="3"/>
   <text x="370" y="115" text-anchor="middle" font-size="13" fill="#134e4a" font-weight="700">v</text>
@@ -119,7 +119,7 @@ The key novelty: concatenate the node's **own** previous representation with the
   <rect x="235" y="165" width="270" height="24" rx="5" fill="#fef3c7" stroke="#d97706"/>
   <text x="370" y="181" text-anchor="middle" font-size="9" fill="#78350f" font-weight="600">AGGREGATE({h_n2, h_n5}) → concat with h_v → W → new h_v</text>
 </svg>
-<figcaption>Figure 1: GraphSAGE samples K=2 neighbours instead of using all 6. The sampled neighbours' features are aggregated, concatenated with v's own features, then transformed via W. Same W works for any node.</figcaption>
+<figcaption>Figure 1: GraphSAGE samples \(S = 2\) neighbours instead of using all 6. The sampled neighbours' features are aggregated, concatenated with v's own features, then transformed via \(W^{(k)}\) — the same \(W^{(k)}\) for every node, which is what makes the model inductive.</figcaption>
 </figure>
 </div>
 
@@ -127,44 +127,53 @@ The key novelty: concatenate the node's **own** previous representation with the
 
 ## Concrete Example: Embedding a New Node at Inference Time
 
-Suppose we trained GraphSAGE on a product graph. A new product P is uploaded tonight with features h_P = [0.8, 0.3, 0.1] and two existing similar products as neighbours: n₁ = [0.7, 0.4, 0.2], n₂ = [0.6, 0.5, 0.1].
+Suppose we trained GraphSAGE on a product graph. A new product $P$ is uploaded tonight with features $h_P = [0.8,\, 0.3,\, 0.1]$ and two existing, similar products as neighbours: $h_{n_1} = [0.7,\, 0.4,\, 0.2]$ and $h_{n_2} = [0.6,\, 0.5,\, 0.1]$.
 
-**Without retraining:**
-1. Sample: S_P = {n₁, n₂} (both neighbours, K=2)
-2. Aggregate (mean): agg_P = ([0.7,0.4,0.2] + [0.6,0.5,0.1]) / 2 = [0.65, 0.45, 0.15]
-3. Concatenate + transform: h_P_new = σ(W · [0.8, 0.3, 0.1, 0.65, 0.45, 0.15])
-4. Normalise to unit sphere.
+**Without retraining**, with one layer and sample size $S = 2$:
 
-The resulting embedding places P in the correct region of the embedding space relative to existing products — ready for recommendation — all without touching the training set.
+<div class="formula-box">
+\[
+\begin{aligned}
+\textbf{1. Sample:}\quad & \mathcal{S}_P = \{n_1, n_2\} \\[2pt]
+\textbf{2. Aggregate (mean):}\quad & a_P = \tfrac{1}{2}\big([0.7, 0.4, 0.2] + [0.6, 0.5, 0.1]\big) = [0.65,\, 0.45,\, 0.15] \\[2pt]
+\textbf{3. Concatenate + transform:}\quad & h_P' = \sigma\big(W \, [0.8,\, 0.3,\, 0.1,\, 0.65,\, 0.45,\, 0.15]^{\top}\big) \\[2pt]
+\textbf{4. Normalise:}\quad & h_P' \leftarrow h_P' / \lVert h_P' \rVert_2
+\end{aligned}
+\]
+</div>
+
+The resulting embedding places $P$ in the correct region of the embedding space relative to existing products — ready for recommendation — all without touching the training set.
 
 ## Aggregator Choices
 
-GraphSAGE offers three built-in aggregators:
+GraphSAGE proposes three aggregators (all operating on the sampled set $$\mathcal{S}_v$$):
 
 | Aggregator | Formula | Properties |
 |---|---|---|
-| **Mean** | mean({h_u : u ∈ S}) | Fast, size-invariant, similar to GCN |
-| **Max-pooling** | max(σ(W·h_u)) per dim | Captures extreme features |
-| **LSTM** | LSTM on random order of S | Highest capacity, non-symmetric |
+| **Mean** | $$\frac{1}{\lvert \mathcal{S}_v \rvert}\sum_{u \in \mathcal{S}_v} h_u$$ | Fast, size-invariant, closest to GCN |
+| **Max-pooling** | $$\max_{u \in \mathcal{S}_v} \sigma(W_{\text{pool}} h_u + b)$$, elementwise | Captures extreme features |
+| **LSTM** | LSTM applied to a random ordering of $$\mathcal{S}_v$$ | Highest capacity, not permutation-invariant |
 
-The LSTM aggregator technically violates permutation invariance (LSTMs care about input order) — GraphSAGE handles this by randomly permuting neighbour order each training step, which empirically works well.
+The LSTM aggregator violates permutation invariance (an LSTM cares about input order) — GraphSAGE handles this by applying it to a *random* permutation of the neighbours, which empirically works well but gives no invariance guarantee.
+
+Because mean and max are not injective over multisets, none of these aggregators reaches the 1-WL expressiveness bound; the [GIN post](/blog/gnn/gin/) explains why sum is required for that.
 
 ## Mini-Batch Training
 
 Because GraphSAGE uses neighbourhood sampling, it supports **mini-batch training** on arbitrarily large graphs:
 1. Sample a batch of target nodes.
-2. Sample their K-hop neighbourhoods (expanding the computation graph).
-3. Compute embeddings bottom-up: 0-hop → 1-hop → ... → target nodes.
-4. Update W via backprop.
+2. Sample their $K$-hop neighbourhoods, expanding the computation graph outwards — with a fixed sample size $S$ per hop, this costs $O(S^K)$ nodes per target instead of the whole graph.
+3. Compute embeddings bottom-up: 0-hop → 1-hop → … → target nodes.
+4. Update the $W^{(k)}$ via backprop.
 
-This is how Pinterest's PinSage scales to graphs with billions of nodes and edges.
+Pinterest's PinSage builds on exactly this idea to scale to a graph with billions of nodes and edges.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>GraphSAGE is <strong>inductive</strong>: learns an aggregation function, not per-node embeddings — generalises to new nodes.</li>
-  <li><strong>Neighbourhood sampling</strong> (K neighbours per node) enables mini-batch training on billion-scale graphs.</li>
-  <li>Concatenates own representation + aggregated neighbourhood before the linear transform — preserving node identity.</li>
-  <li>Used in production at Pinterest, LinkedIn, and other platforms for real-time item/user embedding.</li>
+  <li>GraphSAGE is <strong>inductive</strong>: it learns an aggregation function \(\operatorname{AGGREGATE}_k\) and shared weights \(W^{(k)}\), not per-node embeddings — so it generalises to nodes never seen in training.</li>
+  <li><strong>Neighbourhood sampling</strong> of a fixed \(S\) neighbours per node bounds the cost of a \(K\)-layer forward pass at \(O(S^K)\) nodes, which is what enables mini-batch training on billion-scale graphs.</li>
+  <li>Concatenates own representation with the aggregated neighbourhood before the linear transform — preserving node identity — then L2-normalises.</li>
+  <li>The same idea underpins production systems such as Pinterest's PinSage for real-time item embedding.</li>
 </ul>
 </div>

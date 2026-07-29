@@ -28,7 +28,7 @@ Persistence landscapes solve this by converting each diagram into a **sequence o
 
 ## Construction
 
-Given a persistence diagram $\text{Dgm} = \{(b_i, d_i)\}$, define for each point a **tent function**:
+Given a persistence diagram $$\text{Dgm} = \{(b_i, d_i)\}$$, define for each point a **tent function**:
 
 $$f_i(t) = \begin{cases}
 t - b_i & b_i \leq t \leq \tfrac{b_i + d_i}{2} \\
@@ -156,12 +156,12 @@ The **persistence landscape** is the sequence $\lambda = (\lambda_1, \lambda_2, 
 
 ## Worked Numerical Example
 
-**Diagram:** $\{(1, 9),\, (2, 6),\, (3, 5)\}$
+**Diagram:** $$\{(1, 9),\, (2, 6),\, (3, 5)\}$$
 
 **Tent function values at $t = 4$:**
-- $f_{[1,9]}(4) = 4 - 1 = 3$ (ascending side, peak at $t=5$)
-- $f_{[2,6]}(4) = 4 - 2 = 2$ (ascending side, peak at $t=4$)
-- $f_{[3,5]}(4) = 4 - 3 = 1$ (ascending side, peak at $t=4$)
+- $$f_{[1,9]}(4) = 4 - 1 = 3$$ (ascending side, peak at $t=5$)
+- $$f_{[2,6]}(4) = 4 - 2 = 2$$ (ascending side, peak at $t=4$)
+- $$f_{[3,5]}(4) = 4 - 3 = 1$$ (ascending side, peak at $t=4$)
 
 **Landscape values at $t = 4$:**
 - $\lambda_1(4) = \max(3, 2, 1) = 3$
@@ -169,9 +169,9 @@ The **persistence landscape** is the sequence $\lambda = (\lambda_1, \lambda_2, 
 - $\lambda_3(4) = \text{3rd max}(3, 2, 1) = 1$
 
 **Tent function values at $t = 7$:**
-- $f_{[1,9]}(7) = 9 - 7 = 2$ (descending side)
-- $f_{[2,6]}(7) = 0$ (outside support $[2,6]$)
-- $f_{[3,5]}(7) = 0$ (outside support $[3,5]$)
+- $$f_{[1,9]}(7) = 9 - 7 = 2$$ (descending side)
+- $$f_{[2,6]}(7) = 0$$ (outside support $[2,6]$)
+- $$f_{[3,5]}(7) = 0$$ (outside support $[3,5]$)
 
 **Landscape values at $t = 7$:**
 - $\lambda_1(7) = 2$, $\lambda_2(7) = 0$, $\lambda_3(7) = 0$
@@ -182,7 +182,7 @@ The **persistence landscape** is the sequence $\lambda = (\lambda_1, \lambda_2, 
 
 Because landscapes live in $L^p(\mathbb{R})$, standard statistical tools apply directly:
 
-**Mean landscape** of a sample $\{\text{Dgm}^{(j)}\}_{j=1}^n$:
+**Mean landscape** of a sample $$\{\text{Dgm}^{(j)}\}_{j=1}^n$$:
 $$\bar{\lambda}_k(t) = \frac{1}{n} \sum_{j=1}^n \lambda_k^{(j)}(t)$$
 
 **Variance:**
@@ -190,13 +190,13 @@ $$\text{Var}_k(t) = \frac{1}{n} \sum_{j=1}^n \left(\lambda_k^{(j)}(t) - \bar{\la
 
 **Central Limit Theorem (Bubenik & Dlotko, 2017):** Under mild conditions, $\sqrt{n}(\bar{\lambda} - \mathbb{E}[\lambda])$ converges in distribution to a Gaussian process in $L^2(\mathbb{R})$. This enables exact confidence bands and hypothesis tests.
 
-**Permutation test** for two-sample comparison: compute the test statistic $\|\bar{\lambda}_A - \bar{\lambda}_B\|_{L^2}$ and compare to the permutation distribution.
+**Permutation test** for two-sample comparison: compute the test statistic $$\|\bar{\lambda}_A - \bar{\lambda}_B\|_{L^2}$$ and compare to the permutation distribution.
 
 ---
 
 ## Stability
 
-**Theorem.** $\|\lambda(T_1) - \lambda(T_2)\|_{L^p} \leq W_p(T_1, T_2)$
+**Theorem.** $$\|\lambda(T_1) - \lambda(T_2)\|_{L^p} \leq W_p(T_1, T_2)$$
 
 Persistence landscapes are stable: small changes in the diagram produce small changes in the landscape in the $L^p$ norm. Combined with the CLT, this makes them the gold standard for statistical hypothesis testing in TDA.
 

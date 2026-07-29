@@ -11,34 +11,29 @@ read_time: true
 is_overview: false
 subsection: fundamentals
 icon: "📋"
-read_mins: 4
+read_mins: 5
 permalink: /blog/gnn/adjacency-matrix/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
-.tldr-box strong { color: #0f2a36; }
-.key-takeaways { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.2rem; margin-top: 1.5rem; }
-.key-takeaways h3 { margin-top: 0; color: #166534; font-size: 1rem; }
-.key-takeaways ul { margin: 0; padding-left: 1.2rem; }
-.key-takeaways li { margin-bottom: .3rem; font-size: .95rem; }
-</style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The adjacency matrix A of a graph with N nodes is an N×N matrix where A[i][j] = 1 if nodes i and j are connected, and 0 otherwise. It's the primary mathematical representation used inside GNNs.
+  <strong>TL;DR:</strong> The adjacency matrix \(A\) of a graph with \(N\) nodes is an \(N \times N\) matrix where \(A_{ij} = 1\) if nodes \(i\) and \(j\) are connected, and \(0\) otherwise. It's the primary mathematical representation used inside GNNs.
 </div>
 
 ## What Is the Adjacency Matrix?
 
-Take a graph with N nodes. The adjacency matrix A is an N×N grid where:
+Take a graph $G = (V, E)$ with $N = \lvert V \rvert$ nodes. The adjacency matrix $$A \in \{0,1\}^{N\times N}$$ is defined by
 
-```
-A[i][j] = 1    if there is an edge between node i and node j
-A[i][j] = 0    otherwise
-```
+<div class="formula-box">
+\[
+A_{ij} =
+\begin{cases}
+1 & \text{if } (i,j) \in E,\\[2pt]
+0 & \text{otherwise.}
+\end{cases}
+\]
+</div>
 
 <div class="blog-figure">
 <figure>
@@ -122,35 +117,59 @@ A[i][j] = 0    otherwise
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Think of the adjacency matrix as a truth table for "are these two nodes friends?" Row i, column j answers: did node i and node j shake hands? For undirected graphs the handshake is mutual, so the table is mirrored across the diagonal.</div>
 
-**Symmetry:** For undirected graphs, A[i][j] = A[j][i] always — the matrix is symmetric. Directed graphs have asymmetric adjacency matrices.
+**Symmetry:** For undirected graphs, $A_{ij} = A_{ji}$ always — that is, $A = A^{\top}$. Directed graphs have asymmetric adjacency matrices.
 
-**Degree:** The **degree** of node i is the number of edges it has. It equals the sum of row i in A: `deg(i) = Σⱼ A[i][j]`. The degree matrix D is a diagonal matrix where `D[i][i] = deg(i)`.
+**Degree:** The **degree** $d_i$ of node $i$ is the number of edges incident to it. It equals the sum of row $i$ of $A$:
 
-**Sparsity:** Real-world graphs are sparse — most node pairs have no edge. A social network with 1M users has O(10M) edges, not O(10¹²). Sparse matrix representations (edge lists, COO format) are crucial for efficiency.
+<div class="formula-box">
+\[
+d_i = \sum_{j=1}^{N} A_{ij} = \lvert \mathcal{N}(i) \rvert,
+\]
+</div>
 
-**Powers of A:** `A²[i][j]` counts the number of paths of length 2 from i to j. More generally, `Aᵏ[i][j]` counts paths of length k. This is the mathematical basis for why GNN layers with k layers capture k-hop neighbourhoods.
+where $\mathcal{N}(i)$ denotes the neighbourhood of node $i$. The degree matrix $D = \mathrm{diag}(d_1,\ldots,d_N)$ carries these degrees on its diagonal and zeros elsewhere.
+
+**Sparsity:** Real-world graphs are sparse — most node pairs have no edge. A social network with $10^6$ users typically has on the order of $10^7$ edges, not the $10^{12}$ entries of the dense matrix. Sparse representations (edge lists, COO format) are crucial for efficiency.
+
+**Powers of $A$:** the entry $$(A^2)_{ij}$$ counts the number of **walks** of length 2 from $i$ to $j$, and more generally $$(A^k)_{ij}$$ counts walks of length $k$. (A walk may repeat nodes and edges; a *path* may not, and there is no simple matrix formula for counting paths.) This is the mathematical basis for why a $k$-layer GNN captures the $k$-hop neighbourhood: $$(A^k)_{ij} > 0$$ exactly when $j$ is reachable from $i$ in $k$ steps.
 
 ## Weighted Graphs
 
-In a weighted graph, `A[i][j] = w_{ij}` — the weight of the edge between i and j (0 if no edge). For molecules, this could be bond strength; for road networks, road capacity; for social networks, interaction frequency.
+In a weighted graph, $$A_{ij} = w_{ij}$$ — the weight of the edge between $i$ and $j$, and $0$ if there is no edge. For molecules this could be bond strength; for road networks, road capacity; for social networks, interaction frequency. The degree generalises to the *weighted degree* $$d_i = \sum_j w_{ij}$$.
 
 ## Self-Loops
 
-Some GNN formulations add self-loops by modifying the adjacency matrix: `Ã = A + I` (where I is the identity matrix). This ensures each node "sees itself" during aggregation — without this, a node's own features might be ignored.
+Some GNN formulations add self-loops by modifying the adjacency matrix:
 
-This is exactly what GCN does (see the GCN post).
+<div class="formula-box">
+\[
+\tilde{A} = A + I,
+\]
+</div>
+
+where $I$ is the $N \times N$ identity matrix. This ensures each node "sees itself" during aggregation — without it, a node's own features would be dropped from the sum. The corresponding degree matrix is $\tilde{D} = D + I$.
+
+This is exactly what GCN does, which then symmetrically normalises to form the propagation matrix $\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$ (see the GCN post).
 
 ## In GNNs: Matrix Multiplication = Neighbourhood Aggregation
 
-The most important use of A in GNNs: multiplying A by the feature matrix H performs one round of neighbourhood aggregation:
+The most important use of $A$ in GNNs: multiplying $A$ by the feature matrix $H \in \mathbb{R}^{N \times d}$ (row $v$ holds node $v$'s feature vector $h_v$) performs one round of neighbourhood aggregation:
 
-```
-H_new = A · H
-```
+<div class="formula-box">
+\[
+H_{\text{new}} = A H, \qquad \text{so} \qquad (H_{\text{new}})_v = \sum_{u \in \mathcal{N}(v)} h_u .
+\]
+</div>
 
-Row i of `A·H` is a sum of feature vectors of all neighbours of node i. This is precisely message passing: aggregate all neighbour features.
+Row $v$ of $AH$ is the sum of the feature vectors of all neighbours of node $v$. This is precisely message passing: aggregate all neighbour features.
 
-Normalising by degree: `D⁻¹ · A · H` gives the **mean** of neighbour features — the basis for many GNN designs.
+Normalising by degree gives the **mean** of neighbour features — the basis for many GNN designs:
+
+<div class="formula-box">
+\[
+D^{-1} A H, \qquad \text{row } v = \frac{1}{d_v}\sum_{u \in \mathcal{N}(v)} h_u .
+\]
+</div>
 
 **Step-by-step worked example.** Consider a 3-node path graph: 1—2—3.
 
@@ -167,17 +186,18 @@ A · H:
   row 3 = 0·[2] + 1·[4] + 0·[6] = [4]   ← node 3 collects from node 2
 ```
 
-With Ã = A + I (self-loops added), node 2 would collect [2+4+6] = [12] — including its own feature.
+With $\tilde{A} = A + I$ (self-loops added), node 2 would collect $2+4+6 = 12$ — including its own feature.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Matrix multiplication with A is <em>simultaneously</em> performing neighbourhood aggregation for every node in one shot. This is why GNNs can be implemented so efficiently — the entire graph is processed with a single sparse matrix multiply.</div>
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>The adjacency matrix A encodes the graph's connectivity: A[i][j] = 1 if (i,j) is an edge.</li>
-  <li>For undirected graphs, A is <strong>symmetric</strong>. The degree matrix D has degrees on the diagonal.</li>
-  <li>Matrix-vector multiplication <strong>A·H aggregates neighbour features</strong> — the mathematical core of GNNs.</li>
-  <li>Adding the identity (Ã = A+I) creates self-loops so each node includes its own features during aggregation.</li>
+  <li>The adjacency matrix \(A\) encodes the graph's connectivity: \(A_{ij} = 1\) if \((i,j)\) is an edge.</li>
+  <li>For undirected graphs \(A\) is <strong>symmetric</strong>, \(A = A^{\top}\). The degree matrix \(D = \mathrm{diag}(d_1,\ldots,d_N)\) has the degrees on its diagonal.</li>
+  <li>Matrix multiplication <strong>\(AH\) aggregates neighbour features</strong> — the mathematical core of GNNs — and \(D^{-1}AH\) averages them.</li>
+  <li>\((A^k)_{ij}\) counts <em>walks</em> (not paths) of length \(k\) from \(i\) to \(j\).</li>
+  <li>Adding the identity, \(\tilde{A} = A + I\), creates self-loops so each node includes its own features during aggregation.</li>
 </ul>
 </div>
 

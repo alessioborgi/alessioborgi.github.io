@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "💬"
-read_mins: 5
+read_mins: 8
 permalink: /blog/robotics/language-conditioned-robots/
 toc: true
 toc_label: "Contents"

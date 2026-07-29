@@ -10,7 +10,7 @@ excerpt: "When persistent H¹ detects a long-lived loop in data, cohomology lets
 author_profile: true
 read_time: true
 icon: "🔄"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/circular-coordinates/
 toc: true
 toc_label: "Contents"

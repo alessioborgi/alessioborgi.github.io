@@ -10,7 +10,7 @@ excerpt: "The standard persistence algorithm runs in O(n³) in the worst case. T
 author_profile: true
 read_time: true
 icon: "⚙️"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/twist-algorithm/
 toc: true
 toc_label: "Contents"

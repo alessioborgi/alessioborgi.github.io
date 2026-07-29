@@ -11,23 +11,14 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🚱"
-read_mins: 7
+read_mins: 10
 permalink: /blog/gnn/oversquashing/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> In K-layer message passing, node v's embedding must summarise information from its K-hop neighbourhood — which grows exponentially with K. If the path to a distant important node passes through a single bottleneck edge, the information from that distant node is diluted by exponentially many competing signals. This is oversquashing — distinct from oversmoothing.
+<strong>TL;DR:</strong> In \(K\)-layer message passing, node \(v\)'s embedding must summarise information from its \(K\)-hop neighbourhood \(\mathcal{N}_K(v)\), which on a tree-like graph grows exponentially with \(K\). If the route to a distant important node passes through a single bottleneck edge, that node's contribution is diluted by exponentially many competing signals. This is oversquashing — distinct from oversmoothing.
 </div>
 {% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Over-squashing bottleneck" caption="Over-squashing and graph curvature as an information bottleneck (Topping et al., 2022)" %}
 
@@ -110,39 +101,52 @@ Oversmoothing (too many layers → embeddings converge) and oversquashing (long-
 
 | | Oversmoothing | Oversquashing |
 |--|------------|----------------|
-| Cause | Iterated averaging → feature collapse | Exponential neighbourhood growth → info compression |
+| Cause | Iterated averaging → feature collapse | Neighbourhood growth + bottlenecks → info compression |
 | Affects | Nearby nodes most | Distant nodes most |
 | More layers | Makes it worse | Would help (more hops) but also squashes more |
 | Root mechanism | Low-pass filtering | Information bottleneck |
+| Formal object | Spectrum of $\hat{A}$: $\hat{A}^K \to u_1u_1^{\top}$ | Jacobian: $\lVert \partial h_v^{(K)}/\partial x_u \rVert \to 0$ |
 | Graph structure involved | Dense, connected graphs | Narrow bottleneck edges |
 
 ## The Exponential Growth Problem
 
-In a K-layer MPNN, node v's embedding h^{(K)}_v depends on all nodes within K hops. The K-hop neighbourhood of v can be exponentially large — for a tree-like graph with degree d, it has ~d^K nodes.
+In a $K$-layer MPNN, node $v$'s embedding $h_v^{(K)}$ depends on every node within $K$ hops — its receptive field $\mathcal{N}_K(v)$. On a graph that is locally tree-like with branching factor $d$, that set grows exponentially:
 
-All information from these d^K nodes must be compressed into a single vector h^{(K)}_v of fixed dimension d_hidden. As K grows:
-
-<div class="math-box">
-|N^K(v)| ~ d^K nodes → compressed into h^{(K)}_v ∈ ℝ^{d_hidden}
+<div class="formula-box">
+\[
+\lvert \mathcal{N}_K(v) \rvert \;\sim\; d^{K} \quad\text{nodes, all compressed into}\quad h_v^{(K)} \in \mathbb{R}^{p},
+\]
 </div>
 
-The information from any single distant node u contributes a vanishingly small fraction: ~1/d^K of the total. Even if u's feature is critical for predicting v's label, it is drowned out.
+where $p$ is the fixed hidden width. The width $p$ does not grow with $K$, so the information any single distant node $u$ can claim shrinks roughly like $1/d^{K}$. Even if $u$'s feature is critical for predicting $v$'s label, it is drowned out.
+
+Note the condition: this exponential argument needs the neighbourhood to actually expand. On a path or a cycle, $$\lvert\mathcal{N}_K(v)\rvert$$ grows only linearly, and oversquashing there arises from a different mechanism — the decay of the propagation operator over distance, quantified next.
 
 ## The Jacobian Analysis
 
-Alon & Yahav (2021) formalised oversquashing via the Jacobian:
+Alon & Yahav (2021) identified and named oversquashing; Topping et al. (2022) made it quantitative by bounding the Jacobian
 
-<div class="math-box">
-∂h^{(K)}_v / ∂x_u
+<div class="formula-box">
+\[
+\frac{\partial h_v^{(K)}}{\partial x_u} \in \mathbb{R}^{p \times p},
+\]
 </div>
 
-This matrix measures how sensitive v's K-layer embedding is to u's input feature. If u is K hops from v, this involves K matrix multiplications:
+which measures how sensitive $v$'s $K$-layer embedding is to $u$'s input feature $x_u$. Unrolling $K$ layers of message passing gives a bound of the form
 
-<div class="math-box">
-||∂h^{(K)}_v / ∂x_u|| ≤ C · (1/d)^K · [product of weight norms]
+<div class="formula-box">
+\[
+\left\lVert \frac{\partial h_v^{(K)}}{\partial x_u} \right\rVert \;\le\; (c\,w)^{K}\,\bigl(\hat{A}^{K}\bigr)_{vu},
+\]
 </div>
 
-For nodes far apart (large K, bottleneck edges with large fan-in degree d), this norm becomes exponentially small. Gradients of the loss with respect to x_u also vanish — the model cannot learn that u matters for v's prediction.
+where $w$ bounds the norms of the weight matrices, $c$ bounds the Lipschitz constant of the non-linearity, and $\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$ is the same propagation matrix as in the oversmoothing post. The topology enters through the single factor $$(\hat{A}^{K})_{vu}$$.
+
+Two consequences follow. First, if $u$ is more than $K$ hops from $v$ then $$(\hat{A}^{K})_{vu} = 0$$ exactly — no amount of training can create sensitivity that the receptive field does not contain. Second, when $u$ is reachable but only through a bottleneck, $$(\hat{A}^{K})_{vu}$$ is tiny, so the forward signal *and* the gradient $\partial \mathcal{L}/\partial x_u$ are both suppressed: the model cannot learn that $u$ matters for $v$.
+
+<div class="insight-box">
+<strong>What the bound does and does not say:</strong> it is an <em>upper</em> bound. A small \((\hat{A}^{K})_{vu}\) proves that sensitivity <em>must</em> be small; a large one does not guarantee the model actually uses the connection. That asymmetry is exactly what makes it useful as a diagnosis of failure rather than a guarantee of success.
+</div>
 
 <div class="insight-box">
 <strong>The bottleneck analogy:</strong> Imagine a wide river (large neighbourhood) flowing through a narrow gorge (a single bottleneck edge connecting two parts of the graph). Most water (information) cannot pass through efficiently. The node on the other side of the gorge receives only a tiny, heavily compressed signal from the vast neighbourhood upstream.
@@ -163,33 +167,33 @@ Real examples where this matters:
 
 ## Concrete Worked Example: Jacobian Decay on a Path
 
-Consider a path graph with 6 nodes: 1–2–3–4–5–6. Node 1 wants to influence node 6 via 5 hops. Suppose each message passing step multiplies by weight W with ||W|| = 0.9, and each node averages over degree d=2 neighbours.
+Take the path graph on 6 nodes, 1–2–3–4–5–6, and ask how much node 1 can influence node 6, which is 5 hops away. Suppose each message-passing step multiplies by a weight matrix with $\lVert W \rVert = 0.9$ and the non-linearity is 1-Lipschitz, so the bound above reads $$0.9^{K}\,(\hat{A}^{K})_{6,1}$$.
 
-The Jacobian bound after 5 hops:
+The degrees on this path are $(1,2,2,2,2,1)$, so with self-loops $\tilde{d} = (2,3,3,3,3,2)$. Computing the relevant entries of $\hat{A}^{K}$ directly:
 
-```
-||∂h_6^(5)/∂x_1|| ≤ (0.9)^5 × (1/2)^5 = 0.59 × 0.031 ≈ 0.018
-```
+| Pair | Hops | $$(\hat{A}^{K})_{vu}$$ | Bound $$0.9^{K}(\hat{A}^{K})_{vu}$$ |
+|---|---|---|---|
+| $1 \to 2$ | 1 | $1/\sqrt{6} \approx 0.408$ | $0.9 \times 0.408 \approx 0.367$ |
+| $1 \to 6$ | 5 | $\approx 0.00617$ | $0.9^{5} \times 0.00617 \approx 0.00365$ |
 
-Now compare node 1 influencing node 2 (1 hop):
+Node 6's embedding is roughly **100× less sensitive** to node 1's feature than node 2's is, and the gap widens geometrically with distance. If node 1's feature is the critical signal for a prediction at node 6, it is effectively invisible to the model.
 
-```
-||∂h_2^(1)/∂x_1|| ≤ 0.9 × (1/2) = 0.45
-```
-
-Node 6's embedding is **25× less sensitive** to node 1's feature than node 2's is. If node 1's feature is the critical signal for a prediction at node 6, it is effectively invisible to the model.
+Notice that most of the decay here comes from $$(\hat{A}^{K})_{vu}$$, not from the weight norms: even with $\lVert W\rVert = 1$ the ratio would be $0.408 / 0.00617 \approx 66$. The topology is doing the damage.
 
 ## Measuring Oversquashing
 
-The **sensitivity score** ||∂h_v^{(K)}/∂x_u|| measures how much node u influences node v after K layers. Plotting this for all pairs (u,v) reveals which edges are bottlenecks.
+The **sensitivity score** $\lVert \partial h_v^{(K)} / \partial x_u \rVert$ measures how much node $u$ influences node $v$ after $K$ layers. Plotting it for all pairs $(u,v)$ reveals which edges are bottlenecks.
 
-Alternatively: the **commute time** between nodes (expected random walk length) — high commute time between u and v means information struggles to flow between them.
+Two topology-only proxies avoid training a model at all:
+
+- **Commute time** $\tau(u,v)$ — the expected number of steps for a random walk to go from $u$ to $v$ and back. High commute time means information struggles to flow between them.
+- **Effective resistance** $R(u,v)$, the resistance between $u$ and $v$ when each edge is a unit resistor. The two are proportional, $\tau(u,v) = 2\lvert E\rvert\, R(u,v)$, and effective resistance is the quantity that later work (Di Giovanni et al., 2023) ties directly to oversquashing: pairs separated by high effective resistance are exactly the pairs whose Jacobian is provably small.
 
 ## Solutions: Graph Rewiring
 
 **Graph rewiring** adds or removes edges to reduce bottlenecks:
 
-- **SDRF (Stochastic Discrete Ricci Flow):** adds edges based on Ollivier-Ricci curvature — edges with negative curvature are bottlenecks
+- **SDRF (Stochastic Discrete Ricci Flow):** adds edges around the most negatively curved edges — edges with negative curvature are bottlenecks
 - **DIGL:** adds edges between nodes with high personalized PageRank similarity
 - **CurvDrop:** removes edges with high negative curvature (bottlenecks) and adds long-range connections
 
@@ -200,16 +204,17 @@ Alternatively: the **commute time** between nodes (expected random walk length) 
 
 ## Curvature and Oversquashing
 
-Topping et al. (2022) connected oversquashing to **Ricci curvature**. An edge (u,v) has negative Ollivier-Ricci curvature when its endpoints have few common neighbours — the edge is a bottleneck between two otherwise disconnected regions.
+Topping et al. (2022) connected oversquashing to a notion of **discrete Ricci curvature**. They introduce the *balanced Forman curvature* $\mathrm{Ric}(u,v)$ of an edge — a combinatorial quantity built from the degrees $d_u, d_v$, the number of triangles containing $(u,v)$, and the 4-cycles through it. An edge is negatively curved when its endpoints share few common neighbours and few short cycles: locally, the edge is the only route between two otherwise separate regions.
 
-Adding edges at negative-curvature bottlenecks (SDRF) provably reduces oversquashing. This connects graph geometry (curvature) to information flow (oversquashing) — a beautiful theoretical result.
+The link to oversquashing runs through the Jacobian bound above. Their result is a *conditional* one, not a blanket guarantee: for a graph containing a sufficiently negatively curved edge, they prove an upper bound on $\lVert \partial h_v^{(K)}/\partial x_u \rVert$ for pairs $u,v$ on opposite sides of it, and show that a curvature-guided rewiring (SDRF) increases the curvature of the worst edges. That improves the bound; it does not prove that a trained model's downstream accuracy must improve. What it does establish is the direction of the connection — from graph geometry (curvature) to information flow (oversquashing).
 
 ## Summary
 
 | Property | Value |
 |----------|-------|
-| Root cause | Exponential neighbourhood growth + fixed embedding dimension |
-| Formal measure | Jacobian ||∂h_v^{(K)}/∂x_u|| → 0 exponentially |
+| Root cause | Receptive-field growth and bottleneck topology vs. fixed embedding width |
+| Formal measure | $$\lVert \partial h_v^{(K)}/\partial x_u \rVert \le (cw)^{K}(\hat{A}^{K})_{vu}$$, decaying geometrically |
+| Topological proxies | Effective resistance $R(u,v)$, commute time $\tau(u,v)$, negative edge curvature |
 | Worst cases | Long paths, tree-like graphs, single bottleneck bridges |
 | Effect | Distant relevant information lost; gradient vanishes |
 | Solution 1 | Graph rewiring (add/remove edges) |

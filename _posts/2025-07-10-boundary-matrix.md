@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🧮"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/boundary-matrix/
 ---
 {% include figure image_path="/images/blog/tdl/gabrielsson2020_gfl.png" alt="Boundary matrix computation" caption="Simplicial complex structure for boundary computation (Gabrielsson et al., 2020)" %}
@@ -28,7 +28,7 @@ Reading off birth–death pairs from the reduced matrix gives you the complete p
 
 ## The Boundary Matrix
 
-Let $K$ be a simplicial complex with $m$ simplices, ordered compatibly with the filtration: $\sigma_1 \prec \sigma_2 \prec \cdots \prec \sigma_m$. The **boundary matrix** $\partial \in \{0,1\}^{m \times m}$ is defined by
+Let $K$ be a simplicial complex with $m$ simplices, ordered compatibly with the filtration: $\sigma_1 \prec \sigma_2 \prec \cdots \prec \sigma_m$. The **boundary matrix** $$\partial \in \{0,1\}^{m \times m}$$ is defined by
 
 $$\partial[i,j] = \begin{cases} 1 & \text{if } \sigma_i \text{ is a codimension-1 face of } \sigma_j \\ 0 & \text{otherwise.} \end{cases}$$
 

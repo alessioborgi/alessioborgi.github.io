@@ -10,7 +10,7 @@ excerpt: "For image data, cubical complexes — built from pixels, edges, and fa
 author_profile: true
 read_time: true
 icon: "🖼️"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/cubical-homology-computation/
 toc: true
 toc_label: "Contents"

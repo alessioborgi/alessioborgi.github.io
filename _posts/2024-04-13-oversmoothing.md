@@ -11,23 +11,14 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "🌫️"
-read_mins: 6
+read_mins: 10
 permalink: /blog/gnn/oversmoothing/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Oversmoothing occurs when repeated graph convolution (averaging over neighbours) causes all node embeddings to converge to the same values, erasing the distinction between nodes. It is mathematically equivalent to low-pass filtering: infinite iterations → DC component only → constant signal over the graph.
+<strong>TL;DR:</strong> Oversmoothing occurs when repeated graph convolution (averaging over neighbours) drives all node embeddings onto a single one-dimensional subspace, erasing the distinction between nodes. It is low-pass filtering taken to the limit: as depth grows, only the DC component of the graph signal survives, and every node's embedding becomes a fixed multiple of one shared vector.
 </div>
 {% include figure image_path="/images/blog/gnn/li2018_oversmoothing.png" alt="Over-smoothing in deep GNNs" caption="Over-smoothing: node representations converge with depth (Li et al., 2018)" %}
 
@@ -36,7 +27,7 @@ toc_label: "Contents"
 
 Think of oversmoothing as a rumour spreading through a network. Each round, every person replaces their belief with the average of their friends' beliefs. After a few rounds everyone in a tightly connected community converges to the same average opinion — individual information is destroyed. The more rounds, the more uniform the beliefs. A GNN doing neighbourhood averaging suffers exactly the same fate.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing is not a training bug. It is a <em>mathematical inevitability</em>: the smoothing matrix S̃ has spectral radius 1, so repeated application kills all eigenvectors except the constant one. No amount of regularisation or learning rate tuning will fix it — the architecture must change.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing is not a training bug. It is a <em>mathematical inevitability</em>: the propagation matrix \(\hat{A}\) has spectral radius exactly 1, attained by a single eigenvector, so repeated application shrinks every other eigen-direction to zero. No amount of regularisation or learning-rate tuning will fix it — the architecture must change.</div>
 
 <style>
 @keyframes smooth-fade {
@@ -103,69 +94,135 @@ Think of oversmoothing as a rumour spreading through a network. Each round, ever
 
 ## The Problem: Deep GNNs Fail
 
-Empirically: GCN with 2 layers works. With 8 layers, accuracy drops dramatically. With 64 layers, performance collapses to near-random. This is not overfitting — validation loss also degrades. It is oversmoothing.
+Empirically, a plain GCN with 2 layers works well; accuracy drops sharply as layers are added, and at very large depth performance degrades towards chance. This is not overfitting — validation loss degrades too. It is oversmoothing.
 
 Why do deeper networks hurt in GNNs when they help in CNNs and Transformers? Because graph convolution is fundamentally a **smoothing operation**: it mixes each node's features with its neighbours'. Repeat this enough times, and all features converge.
 
 ## The Mathematics of Oversmoothing
 
-Consider GCN's propagation step (ignoring learnable weights for clarity):
+Consider GCN's propagation step (ignoring learnable weights and non-linearities for clarity). Write $A$ for the adjacency matrix, $\tilde{A} = A + I$ for the self-looped adjacency, $\tilde{D}$ for its degree matrix, and
 
-<div class="math-box">
-H^{(k+1)} = S̃ H^{(k)}   where S̃ = D̃^{-1/2} Ã D̃^{-1/2}
+<div class="formula-box">
+\[
+H^{(k+1)} = \hat{A} H^{(k)}, \qquad \hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2},
+\]
 </div>
 
-After K iterations: H^{(K)} = S̃ᴷ H^{(0)}.
+where $H^{(k)} \in \mathbb{R}^{N\times d}$ stacks the node features $h_v^{(k)}$ as rows. After $K$ layers, $H^{(K)} = \hat{A}^K H^{(0)}$.
 
-S̃ is a symmetric positive semi-definite matrix with eigenvalues in [0, 2] (for normalised Laplacian). Its eigendecomposition is S̃ = U Λ Uᵀ, so:
+$\hat{A}$ is symmetric, so it has an orthogonal eigendecomposition $\hat{A} = U\Lambda U^{\top}$ with real eigenvalues $\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_N$ and orthonormal eigenvectors $u_i$, and
 
-<div class="math-box">
-S̃ᴷ = U Λᴷ Uᵀ
+<div class="formula-box">
+\[
+\hat{A}^{K} = U \Lambda^{K} U^{\top}.
+\]
 </div>
 
-As K → ∞:
-- Eigenvalue λ = 1 → Λᴷ[i,i] = 1ᴷ = 1 (unchanged)
-- Eigenvalue λ < 1 → Λᴷ[i,i] → 0 (suppressed)
-- Eigenvalue λ > 1 → impossible for normalised Laplacian
+**Where the spectrum of $\hat{A}$ actually lies.** Since $$\hat{A} = I - \tilde{L}_{\mathrm{sym}}$$, where $$\tilde{L}_{\mathrm{sym}}$$ is the symmetric normalised Laplacian of the self-looped graph and has spectrum in $[0,2]$, the spectrum of $\hat{A}$ lies in $[-1, 1]$. Two refinements matter:
 
-All eigenvalues except λ = 1 (the constant eigenvector u₁ = [1,...,1]/√N) shrink to zero. The limit is:
+- $\lambda_1 = 1$ exactly, with eigenvector $u_1 \propto \tilde{D}^{1/2}\mathbf{1}$, since $\hat{A}\tilde{D}^{1/2}\mathbf{1} = \tilde{D}^{-1/2}\tilde{A}\mathbf{1} = \tilde{D}^{-1/2}\tilde{D}\mathbf{1} = \tilde{D}^{1/2}\mathbf{1}$. On a connected graph this eigenvalue is simple.
+- $\lambda_N > -1$ strictly. Reaching $-1$ requires a bipartite component, and every self-loop is a closed walk of odd length 1, so the self-looped graph has no bipartite component at all. This is one reason GCN adds self-loops rather than using $D^{-1/2}AD^{-1/2}$ directly: without them a bipartite graph would have an eigenvalue of exactly $-1$ and the iteration would oscillate forever instead of converging.
 
-<div class="math-box">
-S̃ᴷ X → u₁ u₁ᵀ X  (as K → ∞)
+So $\lvert\lambda_i\rvert < 1$ for all $i \ge 2$, and as $K \to \infty$:
+
+- $\lambda_1 = 1 \Rightarrow \lambda_1^{K} = 1$ (unchanged)
+- $\lvert\lambda_i\rvert < 1 \Rightarrow \lambda_i^{K} \to 0$ (suppressed, geometrically)
+- $\lvert\lambda_i\rvert > 1$ is impossible
+
+Every eigen-direction except $u_1$ is annihilated, and the limit is the rank-one orthogonal projector onto $\mathrm{span}(u_1)$:
+
+<div class="formula-box">
+\[
+\hat{A}^{K} \;\xrightarrow[K\to\infty]{}\; u_1 u_1^{\top}, \qquad u_1 = \frac{\tilde{D}^{1/2}\mathbf{1}}{\lVert \tilde{D}^{1/2}\mathbf{1}\rVert}.
+\]
 </div>
 
-This is a rank-1 matrix: every row is the same (a weighted global mean of features). **All node embeddings converge to the same vector.**
+<div class="insight-box">
+<strong>A correction worth stating precisely:</strong> the limiting embeddings are <em>not</em> all equal. Row \(v\) of \(u_1u_1^{\top}H^{(0)}\) equals \(u_1[v]\cdot(u_1^{\top}H^{(0)})\), and \(u_1[v] \propto \sqrt{\tilde{d}_v}\). So every node's embedding becomes the <em>same vector scaled by the square root of its degree</em> — all embeddings lie on one line through the origin. They coincide only on a regular graph, where all \(\tilde{d}_v\) are equal. Either way the representation carries one number per node (its degree) plus a global summary, so all discriminative structure is gone.
+</div>
 
 ## Spectral Interpretation
 
-Oversmoothing is exactly **low-pass filtering taken to the limit**. GCN applies the filter h(λ) = 1 - λ/2 (roughly) — amplifying low frequencies (λ ≈ 0) and suppressing high frequencies (λ ≈ 2). After many layers, only the λ = 0 component survives — the global mean.
+Oversmoothing is exactly **low-pass filtering taken to the limit**. In terms of $$\tilde{L}_{\mathrm{sym}} = I - \hat{A}$$, one GCN propagation step applies the spectral filter
 
-The graph signal becomes perfectly smooth: adjacent nodes are identical. For node classification, where you need to distinguish adjacent nodes (which often have different classes in heterophilic graphs), this is catastrophic.
+<div class="formula-box">
+\[
+h(\tilde\lambda) = 1 - \tilde\lambda, \qquad \tilde\lambda \in [0, 2),
+\]
+</div>
+
+so $K$ steps apply $h(\tilde\lambda)^K = (1-\tilde\lambda)^K$. This equals $1$ at $\tilde\lambda = 0$ and decays geometrically everywhere else. After many layers only the $\tilde\lambda = 0$ component survives — the degree-weighted global mean.
+
+The graph signal becomes as smooth as the operator allows: $$h_u^{(K)}/\sqrt{\tilde{d}_u} \approx h_v^{(K)}/\sqrt{\tilde{d}_v}$$ for adjacent $u, v$. For node classification, where you need to distinguish adjacent nodes (which often have different classes in heterophilic graphs), this is catastrophic.
 
 ## How Fast Does Oversmoothing Happen?
 
-The convergence rate depends on the second eigenvalue λ₂ of S̃. The **spectral gap** Δ = 1 - λ₂ determines how fast:
+The convergence rate is governed by the **second-largest eigenvalue in magnitude**,
 
-- Large spectral gap (dense, well-connected graph): fast oversmoothing (few layers needed to destroy information)
-- Small spectral gap (sparse, weakly connected graph): slower oversmoothing
+<div class="formula-box">
+\[
+\mu = \max_{i \ge 2} \lvert \lambda_i \rvert < 1,
+\]
+</div>
 
-For Cora (a sparse citation network), oversmoothing is slow — models can use 4-8 layers before degrading. For a complete graph (everyone connected), oversmoothing happens in 1-2 steps.
+because the component of $H^{(0)}$ orthogonal to $u_1$ decays like $\mu^{K}$. The **spectral gap** $1 - \mu$ therefore determines the speed:
+
+- Large spectral gap ($\mu$ small — dense, well-connected, expander-like graph): fast oversmoothing, few layers needed to destroy information
+- Small spectral gap ($\mu$ close to 1 — sparse, weakly connected, high-diameter graph): slower oversmoothing
+
+At the extreme, on a complete graph with self-loops $\hat{A} = \tfrac{1}{N}\mathbf{1}\mathbf{1}^{\top}$ is *already* rank one, so oversmoothing is complete after a single step ($\mu = 0$). On a long path graph $\mu$ is close to 1 and the collapse takes many steps. Sparse citation graphs sit closer to the slow end, which is one reason the accuracy cliff there appears at a handful of layers rather than immediately.
 
 <div class="insight-box">
-<strong>The diameter paradox:</strong> You might think: "I need K layers to reach nodes K hops away, so add more layers for better coverage." But adding more layers also accelerates oversmoothing for nearby nodes. The optimal depth is a trade-off between coverage (more layers = larger receptive field) and smoothing (more layers = less discrimination). For most graphs, this optimum is 2-3 layers.
+<strong>The diameter paradox:</strong> You might think: "I need \(K\) layers to reach nodes \(K\) hops away, so add more layers for better coverage." But adding more layers also accelerates oversmoothing for nearby nodes. The optimal depth trades coverage (more layers = larger receptive field) against smoothing (more layers = less discrimination). On the standard homophilic node-classification benchmarks that optimum is typically a small number of layers, often 2 or 3.
 </div>
 
 ## Concrete Worked Example: Dirichlet Energy Collapse
 
-Consider a path graph with 4 nodes: 1–2–3–4, with initial features h = [1, 0, 1, 0] (alternating). The symmetric normalised adjacency is S̃ ≈ [[0, 0.5, 0, 0], [0.5, 0, 0.5, 0], [0, 0.5, 0, 0.5], [0, 0, 0.5, 0]].
+Consider the path graph on 4 nodes, 1–2–3–4, with initial features $h^{(0)} = (1, 0, 1, 0)^{\top}$ (alternating — a maximally rough signal). The degrees are $(1,2,2,1)$, so with self-loops $\tilde{d} = (2,3,3,2)$ and
 
-**Dirichlet energy E = Σ_{edges} ||h_u - h_v||²:**
-- Layer 0: E = |1-0|² + |0-1|² + |1-0|² = 3.0 (nodes clearly distinct)
-- Layer 1 (apply S̃): h ≈ [0, 1, 0, 0.5] — energy decreases
-- Layer 2: h converges further toward uniform — energy → ~0.3
-- Layer 8: h ≈ [0.42, 0.42, 0.42, 0.42] — energy ≈ 0.0
+<div class="formula-box">
+\[
+\hat{A} =
+\begin{pmatrix}
+1/2 & 1/\sqrt{6} & 0 & 0\\
+1/\sqrt{6} & 1/3 & 1/3 & 0\\
+0 & 1/3 & 1/3 & 1/\sqrt{6}\\
+0 & 0 & 1/\sqrt{6} & 1/2
+\end{pmatrix}
+\approx
+\begin{pmatrix}
+0.500 & 0.408 & 0 & 0\\
+0.408 & 0.333 & 0.333 & 0\\
+0 & 0.333 & 0.333 & 0.408\\
+0 & 0 & 0.408 & 0.500
+\end{pmatrix}.
+\]
+</div>
 
-The Dirichlet energy tracks collapse precisely. Monitoring it during training tells you exactly how many layers you can stack before representations become useless.
+Its spectrum is $$\{1,\ 0.729,\ 0.167,\ -0.229\}$$: the largest eigenvalue is exactly 1, the rest are strictly inside $(-1,1)$, and $\mu = 0.729$.
+
+The right quantity to track is the **normalised Dirichlet energy**, the quadratic form of the operator actually being iterated:
+
+<div class="formula-box">
+\[
+\mathcal{E}(h) \;=\; h^{\top}\tilde{L}_{\mathrm{sym}}\, h \;=\; \sum_{(u,v)\in \tilde{E}} \left(\frac{h_u}{\sqrt{\tilde{d}_u}} - \frac{h_v}{\sqrt{\tilde{d}_v}}\right)^{2} \;\ge\; 0,
+\]
+</div>
+
+which is zero exactly on $\mathrm{span}(u_1)$. Iterating $h^{(k+1)} = \hat{A}h^{(k)}$ gives:
+
+| Layer $k$ | $h^{(k)}$ | $\mathcal{E}(h^{(k)})$ |
+|---|---|---|
+| 0 | $(1,\ 0,\ 1,\ 0)$ | 1.167 |
+| 1 | $(0.500,\ 0.742,\ 0.333,\ 0.408)$ | 0.070 |
+| 2 | $(0.553,\ 0.562,\ 0.525,\ 0.340)$ | 0.0088 |
+| 4 | $(0.493,\ 0.570,\ 0.520,\ 0.397)$ | 0.0016 |
+| 8 | $(0.458,\ 0.552,\ 0.538,\ 0.432)$ | 0.00013 |
+| $\infty$ | $(0.445,\ 0.545,\ 0.545,\ 0.445)$ | 0 |
+
+The limit is $\propto(\sqrt{2},\sqrt{3},\sqrt{3},\sqrt{2})$ — proportional to $$\sqrt{\tilde{d}_v}$$, exactly as the theory predicts, and *not* a constant vector. The energy falls by roughly the factor $\mu^2 \approx 0.53$ per layer once the transient has passed.
+
+The Dirichlet energy tracks the collapse precisely. Monitoring it across layers during training tells you how many layers you can stack before representations become useless.
 
 ## Oversmoothing vs Vanishing Gradients
 
@@ -180,15 +237,21 @@ These are different phenomena:
 
 ## Measuring Oversmoothing
 
-**Mean Average Distance (MAD):** average pairwise L2 distance between all node embeddings. MAD → 0 as oversmoothing intensifies.
+**Mean Average Distance (MAD):** the average pairwise distance between node embeddings, usually computed with cosine distance so that it is invariant to the overall scaling of the features. MAD $\to 0$ as oversmoothing intensifies.
 
-**Dirichlet Energy:** E(H) = Σ_{(u,v)∈E} ||h_u - h_v||². E → 0 means adjacent nodes are identical — perfect smoothing.
+**Dirichlet energy:** for the combinatorial Laplacian $L = D - A$,
 
-<div class="math-box">
-E(H) = tr( Hᵀ L H )   where L is the graph Laplacian
+<div class="formula-box">
+\[
+E(H) \;=\; \sum_{(u,v)\in E} \bigl\lVert h_u - h_v \bigr\rVert^{2} \;=\; \operatorname{tr}\!\left(H^{\top} L H\right),
+\]
 </div>
 
-Monitoring Dirichlet energy across layers reveals exactly when and how fast oversmoothing occurs.
+each undirected edge counted once. $E(H) \to 0$ means adjacent nodes have become identical.
+
+One caveat that is easy to miss: under $\hat{A}$-propagation it is the *normalised* energy $$\operatorname{tr}(H^{\top}\tilde{L}_{\mathrm{sym}}H)$$ that converges to zero, not this unnormalised one. The limit $u_1u_1^{\top}H^{(0)}$ has rows proportional to $$\sqrt{\tilde{d}_v}$$, so on an irregular graph $E(H)$ plateaus at a small non-zero value rather than reaching 0. Use $$\tilde{L}_{\mathrm{sym}}$$ if you want a quantity that genuinely vanishes; the two agree up to a constant on regular graphs.
+
+Monitoring the energy across layers reveals exactly when and how fast oversmoothing occurs.
 
 ## Solutions to Oversmoothing
 
@@ -206,10 +269,11 @@ Monitoring Dirichlet energy across layers reveals exactly when and how fast over
 
 Oversmoothing is not a bug in implementation — it is a mathematical property of iterated graph averaging:
 
-1. **Spectral view:** low-pass filtering → only DC component survives → constant signal
-2. **Power iteration view:** S̃ᴷ → rank-1 projection → all nodes get the same representation
-3. **Practical consequence:** GNNs with more than ~3-4 layers fail on standard benchmarks
-4. **Fix:** prevent repeated averaging (residuals, separate propagation) or use global attention (Graph Transformers)
+1. **Spectral view:** repeated low-pass filtering, $h(\tilde\lambda)^K = (1-\tilde\lambda)^K$ → only the $\tilde\lambda = 0$ component survives
+2. **Power-iteration view:** $\hat{A}^K \to u_1u_1^{\top}$, a rank-one projection → all node embeddings become collinear, each scaled by $$\sqrt{\tilde{d}_v}$$ (identical only on regular graphs)
+3. **Rate:** governed by the spectral gap $1 - \mu$, where $$\mu = \max_{i\ge2}\lvert\lambda_i\rvert$$; the collapse is geometric, not gradual
+4. **Practical consequence:** plain GCN/GAT stacks past a few layers typically lose accuracy on standard node-classification benchmarks
+5. **Fix:** prevent repeated pure averaging (residuals, separate propagation) or use global attention (Graph Transformers)
 
 Understanding oversmoothing is the first step to understanding why GNN depth scaling is fundamentally different from Transformer depth scaling — and why simply adding more layers is not the solution.
 

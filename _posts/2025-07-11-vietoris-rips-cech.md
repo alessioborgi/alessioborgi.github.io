@@ -50,7 +50,7 @@ $$\text{Cech}(X, \varepsilon) = \{\sigma \subseteq X \mid \bigcap_{x \in \sigma}
 A simplex is included if all the $\varepsilon$-balls around its vertices have a **common intersection**.
 
 **Properties:**
-- Homotopy-equivalent to $\bigcup_{x \in X} B(x, \varepsilon)$ by the nerve theorem.
+- Homotopy-equivalent to $$\bigcup_{x \in X} B(x, \varepsilon)$$ by the nerve theorem.
 - Faithfully captures the topology of the union of balls.
 - Expensive to compute in high dimensions (requires checking ball intersections, i.e., smallest enclosing ball problems).
 - In $\mathbb{R}^1$: Cech = Rips. In $\mathbb{R}^2$: checking triple intersections is straightforward.
@@ -166,7 +166,7 @@ A simplex is included if all the $\varepsilon$-balls around its vertices have a 
 
 ## Numerical Example: 4-Point Cloud
 
-Let $X = \{A=(0,0),\, B=(1,0),\, C=(0,1),\, D=(2,2)\}$.
+Let $$X = \{A=(0,0),\, B=(1,0),\, C=(0,1),\, D=(2,2)\}$$.
 
 Pairwise distances:
 
@@ -182,7 +182,7 @@ Pairwise distances:
 **Vietoris-Rips filtration events:**
 
 - $\varepsilon = 0$: 4 isolated vertices. $H_0$: 4 components.
-- $\varepsilon = 1.00$: edges AB and AC appear. Two components merge: $\{A,B,C\}$ and $\{D\}$. $H_0$: 2 components.
+- $\varepsilon = 1.00$: edges AB and AC appear. Two components merge: $$\{A,B,C\}$$ and $$\{D\}$$. $H_0$: 2 components.
 - $\varepsilon = 1.41$: edge BC appears. Triangle ABC is filled (all 3 pairwise distances $\leq 1.41$). The 1-cycle $A$-$B$-$C$-$A$ is born and immediately killed. $H_1$: 0.
 - $\varepsilon = 2.24$: edges BD and CD appear. D joins the main component. $H_0$: 1 component.
 - $\varepsilon = 2.83$: edge AD appears. No new topology.
@@ -208,9 +208,9 @@ Pairwise distances:
 
 ## The Nerve Theorem (Why Cech Works)
 
-**Theorem (Nerve lemma).** If $\mathcal{U} = \{U_\alpha\}$ is a cover of a space $X$ where every nonempty finite intersection $U_{\alpha_1} \cap \cdots \cap U_{\alpha_k}$ is contractible, then $X$ is homotopy equivalent to the nerve of $\mathcal{U}$.
+**Theorem (Nerve lemma).** If $$\mathcal{U} = \{U_\alpha\}$$ is a cover of a space $X$ where every nonempty finite intersection $$U_{\alpha_1} \cap \cdots \cap U_{\alpha_k}$$ is contractible, then $X$ is homotopy equivalent to the nerve of $\mathcal{U}$.
 
-For the Cech complex: $U_x = B(x, \varepsilon)$ are convex (hence contractible), and all finite intersections of convex sets are convex (hence contractible). So $\text{Cech}(X, \varepsilon) \simeq \bigcup_{x \in X} B(x, \varepsilon)$.
+For the Cech complex: $U_x = B(x, \varepsilon)$ are convex (hence contractible), and all finite intersections of convex sets are convex (hence contractible). So $$\text{Cech}(X, \varepsilon) \simeq \bigcup_{x \in X} B(x, \varepsilon)$$.
 
 This is the rigorous foundation for the claim that PH on the Cech filtration recovers the topology of the underlying sampled manifold.
 

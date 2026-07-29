@@ -10,7 +10,7 @@ excerpt: "Persistent homology provides multi-scale topological fingerprints of m
 author_profile: true
 read_time: true
 icon: "💊"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/tda-drug-discovery/
 toc: true
 toc_label: "Contents"

@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "📏"
-read_mins: 4
+read_mins: 5
 permalink: /blog/persistent-homology/distances-ph/
 ---
 {% include figure image_path="/images/blog/tdl/hofer2020_topological_layers.png" alt="Distances between persistence diagrams" caption="Topological distance representations (Hofer et al., 2020)" %}
@@ -30,13 +30,13 @@ The **bottleneck distance** then asks: what is the minimum, over all such matchi
 
 Let $\text{Dgm}(X)$ denote the persistence diagram of a filtered space $X$, viewed as a multiset of points $(b_i, d_i)$ above the diagonal in $\mathbb{R}^2$, together with all diagonal points (with infinite multiplicity, representing the "free" option of sending any point to $\Delta$).
 
-A **partial matching** between diagrams $\text{Dgm}_1$ and $\text{Dgm}_2$ is a bijection
+A **partial matching** between diagrams $$\text{Dgm}_1$$ and $$\text{Dgm}_2$$ is a bijection
 
 $$\mu : \text{Dgm}_1 \cup \Delta \;\longrightarrow\; \text{Dgm}_2 \cup \Delta$$
 
 where diagonal points can be matched to diagonal points at zero cost.
 
-The **cost** of matching point $p = (b, d)$ to point $q = (b', d')$ is $\|p - q\|_\infty = \max(|b - b'|, |d - d'|)$. The cost of sending $p$ to the diagonal is $\|p - \Delta\|_\infty = \frac{d - b}{2}$.
+The **cost** of matching point $p = (b, d)$ to point $q = (b', d')$ is $$\|p - q\|_\infty = \max(|b - b'|, |d - d'|)$$. The cost of sending $p$ to the diagonal is $$\|p - \Delta\|_\infty = \frac{d - b}{2}$$.
 
 ---
 
@@ -150,13 +150,13 @@ The animation below shows the optimal bottleneck matching between two small pers
 
 ## Worked Numerical Example
 
-**Setup.** Let $\text{Dgm}_1 = \{(0, 3),\,(1, 4)\}$ and $\text{Dgm}_2 = \{(0.2, 3.1)\}$.
+**Setup.** Let $$\text{Dgm}_1 = \{(0, 3),\,(1, 4)\}$$ and $$\text{Dgm}_2 = \{(0.2, 3.1)\}$$.
 
-We must find a bijection between $\text{Dgm}_1 \cup \Delta$ and $\text{Dgm}_2 \cup \Delta$.
+We must find a bijection between $$\text{Dgm}_1 \cup \Delta$$ and $$\text{Dgm}_2 \cup \Delta$$.
 
 **Option 1 — Match $(0,3) \leftrightarrow (0.2, 3.1)$, send $(1,4)$ to diagonal.**
 
-- Cost of $(0,3) \leftrightarrow (0.2, 3.1)$: $\|(0,3)-(0.2,3.1)\|_\infty = \max(0.2, 0.1) = 0.2$
+- Cost of $(0,3) \leftrightarrow (0.2, 3.1)$: $$\|(0,3)-(0.2,3.1)\|_\infty = \max(0.2, 0.1) = 0.2$$
 - Cost of $(1,4) \to \Delta$: persistence $= 4 - 1 = 3$, diagonal cost $= 3/2 = 1.5$
 - **Bottleneck cost: $\max(0.2, 1.5) = 1.5$**
 

@@ -11,17 +11,11 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "〰️"
-read_mins: 6
+read_mins: 9
 permalink: /blog/gnn/graph-fourier-transform/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-</style>
 
 <div class="tldr-box">
 <strong>TL;DR:</strong> The classical Fourier transform decomposes a 1D signal into sinusoids. The Graph Fourier Transform (GFT) decomposes a graph signal into the eigenvectors of the graph Laplacian — the graph's natural "frequency basis". Low-frequency eigenvectors are smooth over the graph; high-frequency ones are rough. Spectral graph convolution filters signals in this basis.
@@ -29,47 +23,70 @@ toc_label: "Contents"
 
 ## From Classical to Graph Fourier
 
-In classical signal processing, the Fourier transform decomposes a signal f(t) into complex exponentials:
+In classical signal processing, the Fourier transform decomposes a signal $f(t)$ into complex exponentials:
 
-<div class="math-box">
-F̂(ω) = ∫ f(t) e^{−iωt} dt
+<div class="formula-box">
+\[
+\hat{f}(\omega) = \int f(t)\, e^{-i\omega t}\, dt .
+\]
 </div>
 
-The complex exponentials e^{iωt} are the eigenfunctions of the derivative operator (d/dt): they satisfy de^{iωt}/dt = iω e^{iωt}.
+Here $\omega$ is the angular frequency and $\hat{f}(\omega)$ the amplitude the signal carries at that frequency. The complex exponentials $e^{i\omega t}$ are the eigenfunctions of the derivative operator $d/dt$: they satisfy $\tfrac{d}{dt}e^{i\omega t} = i\omega\, e^{i\omega t}$.
 
-On a graph, the natural differential operator is the **graph Laplacian** L = D − A (see the Graph Laplacian post). Its eigenvectors play the role of complex exponentials.
+On a graph with adjacency matrix $A$ and degree matrix $D = \mathrm{diag}(d_1,\dots,d_N)$, the natural differential operator is the **graph Laplacian** $L = D - A$ (see the Graph Laplacian post). Its eigenvectors play the role of complex exponentials.
 
 ## The Graph Laplacian Eigenvectors
 
-The symmetric normalised Laplacian L_sym = D^{-1/2} L D^{-1/2} has eigendecomposition:
+The symmetric normalised Laplacian, defined for a graph with no isolated vertices as
 
-<div class="math-box">
-L_sym = U Λ Uᵀ
+<div class="formula-box">
+\[
+L_{\mathrm{sym}} = D^{-1/2} L D^{-1/2} = I - D^{-1/2} A D^{-1/2},
+\]
+</div>
+
+is real symmetric, so it has an orthogonal eigendecomposition:
+
+<div class="formula-box">
+\[
+L_{\mathrm{sym}} = U \Lambda U^{\top}.
+\]
 </div>
 
 Where:
-- **U = [u₁, u₂, ..., uₙ]** — matrix of orthonormal eigenvectors
-- **Λ = diag(λ₁ ≤ λ₂ ≤ ... ≤ λₙ)** — diagonal matrix of eigenvalues (real, non-negative)
-- λ₁ = 0 always (the constant vector u₁ = 1/√N is the eigenvector for λ=0)
+- $U = [u_1, u_2, \ldots, u_N]$ — matrix whose columns $u_i \in \mathbb{R}^N$ are orthonormal eigenvectors
+- $\Lambda = \mathrm{diag}(\lambda_1 \le \lambda_2 \le \cdots \le \lambda_N)$ — the eigenvalues, all real and non-negative
+- $\lambda_1 = 0$ always, because $$L_{\mathrm{sym}} D^{1/2}\mathbf{1} = D^{-1/2} L \mathbf{1} = 0$$. The eigenvector is therefore $u_1 \propto D^{1/2}\mathbf{1}$, i.e. $u_1[v] \propto \sqrt{d_v}$ — **not** the constant vector. (The constant vector $\mathbf{1}/\sqrt{N}$ is the $\lambda = 0$ eigenvector of the *combinatorial* Laplacian $L$, not of $$L_{\mathrm{sym}}$$. The two coincide only on regular graphs.)
+- The multiplicity of $\lambda = 0$ equals the number of connected components of the graph.
 
-Eigenvalues range from 0 to 2 for the normalised Laplacian.
+**The spectrum of $$L_{\mathrm{sym}}$$ lies in $[0, 2]$.** The lower bound is positive semi-definiteness. For the upper bound, note that $$L_{\mathrm{sym}} = I - D^{-1/2}AD^{-1/2}$$ and $$2I - L_{\mathrm{sym}} = I + D^{-1/2}AD^{-1/2}$$ is the normalised Laplacian of the *signed* graph, which is also PSD; hence $\lambda_N \le 2$, with equality **if and only if** at least one connected component is bipartite.
 
 ## Graph Signals and Frequencies
 
-A **graph signal** is a function f: V → ℝ, assigning a scalar value to each node. Stack these into a vector **f ∈ ℝᴺ**: f[v] = signal value at node v.
+A **graph signal** is a function $f : V \to \mathbb{R}$, assigning a scalar value to each node. Stack these into a vector $f \in \mathbb{R}^N$, where $f[v]$ is the signal value at node $v$.
 
-The **smoothness** of a signal is measured by the Laplacian quadratic form:
+The **smoothness** of a signal is measured by the Laplacian quadratic form. For the combinatorial Laplacian $L = D - A$:
 
-<div class="math-box">
-fᵀ L f = Σ_{(u,v)∈E} (f[u] − f[v])²
+<div class="formula-box">
+\[
+f^{\top} L f \;=\; \sum_{(u,v)\in E} \bigl(f[u] - f[v]\bigr)^{2},
+\]
 </div>
 
-A smooth signal (nearby nodes have similar values) gives small fᵀ L f. A rough signal (wildly varying between neighbours) gives large fᵀ L f.
+each undirected edge counted once. The normalised version weights each node by its degree:
+
+<div class="formula-box">
+\[
+f^{\top} L_{\mathrm{sym}} f \;=\; \sum_{(u,v)\in E} \left(\frac{f[u]}{\sqrt{d_u}} - \frac{f[v]}{\sqrt{d_v}}\right)^{2}.
+\]
+</div>
+
+A smooth signal (nearby nodes have similar values) gives a small quadratic form; a rough signal (wildly varying between neighbours) gives a large one. Since $$u_i^{\top} L_{\mathrm{sym}} u_i = \lambda_i$$ for a unit eigenvector, the eigenvalue $\lambda_i$ *is* the roughness of its own eigenvector — which is exactly why it deserves the name "frequency".
 
 **Eigenvectors as frequency components:**
-- **u₁** (λ₁ = 0): perfectly constant over the graph — the DC component, lowest frequency
-- **u₂, u₃, ...** (increasing λ): progressively rougher signals — higher frequencies
-- **uₙ** (λₙ = largest): alternates sign between connected nodes — highest frequency, like a checkerboard
+- $u_1$ ($\lambda_1 = 0$): the smoothest possible signal — $u_1[v] \propto \sqrt{d_v}$, so $u_1[v]/\sqrt{d_v}$ is constant across the graph. This is the DC component, lowest frequency.
+- $u_2, u_3, \ldots$ (increasing $\lambda_i$): progressively rougher signals — higher frequencies
+- $u_N$ ($\lambda_N$ largest): alternates sign between connected nodes — highest frequency, like a checkerboard. When $\lambda_N = 2$ exactly, the graph has a bipartite component and $u_N$ flips sign across *every* edge of it.
 
 <div class="insight-box">
 <strong>The intuition:</strong> Just as a high-frequency sinusoid oscillates rapidly in time, a high-frequency graph eigenvector oscillates rapidly across edges — adjacent nodes have very different values. Low-frequency eigenvectors vary slowly and smoothly across the graph.
@@ -77,64 +94,85 @@ A smooth signal (nearby nodes have similar values) gives small fᵀ L f. A rough
 
 ## The Graph Fourier Transform
 
-The **Graph Fourier Transform (GFT)** of signal f is its projection onto the eigenvectors:
+The **Graph Fourier Transform (GFT)** of a signal $f$ is its projection onto the eigenvectors:
 
-<div class="math-box">
-f̂ = Uᵀ f     (GFT: time domain → frequency domain)
-f = U f̂       (Inverse GFT: frequency → time)
+<div class="formula-box">
+\[
+\hat{f} = U^{\top} f \quad \text{(GFT: node domain} \to \text{frequency domain)},
+\]
+\[
+f = U \hat{f} \quad \text{(inverse GFT: frequency} \to \text{node domain)}.
+\]
 </div>
 
-f̂[k] = uₖᵀ f is the "amplitude" of the k-th frequency component in the signal.
+The second line follows from the first because $U$ is orthogonal, $U U^{\top} = U^{\top} U = I$. The coefficient $\hat{f}[k] = u_k^{\top} f$ is the amplitude of the $k$-th frequency component in the signal.
 
 This is a change of basis: from node space (what value is at each node) to frequency space (how much of each eigenvector pattern is present in the signal).
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First — What Is a "Frequency" on a Graph?</strong> On a line (1D), a low-frequency sinusoid wiggles slowly — neighbouring points have similar values. A high-frequency sinusoid wiggles rapidly — neighbours differ a lot. On a graph, "frequency" measures the same thing: how much adjacent nodes disagree. A graph signal where every node has nearly the same value as its neighbours is low-frequency (smooth). A signal where every node has the opposite sign to its neighbours is high-frequency (rough). The Laplacian eigenvectors are the graph's natural frequency basis — they are the "sinusoids" of graph space.</div>
 
-**Concrete 4-node example.** On a path graph 1–2–3–4, the Laplacian eigenvectors are (approximately):
+**Concrete 4-node example.** On the path graph 1–2–3–4 the degrees are $(1,2,2,1)$, and $L_{\mathrm{sym}}$ has the exact spectrum $\{0,\ 0.5,\ 1.5,\ 2\}$:
 
-| Mode | Eigenvector | Behaviour |
+| Mode | Eigenvector (up to normalisation) | Behaviour |
 |------|-------------|-----------|
-| u₁ (λ=0) | [+, +, +, +] | Constant — DC component |
-| u₂ (λ≈0.6) | [+, +, −, −] | Slow variation — low frequency |
-| u₃ (λ≈1.4) | [+, −, −, +] | Medium variation |
-| u₄ (λ≈2) | [+, −, +, −] | Alternates sign at every hop — highest frequency |
+| $u_1$ ($\lambda_1 = 0$) | $(1,\ \sqrt{2},\ \sqrt{2},\ 1)$ | Proportional to $\sqrt{d_v}$ — the DC component |
+| $u_2$ ($\lambda_2 = 0.5$) | signs $(-,-,+,+)$ | One sign change — low frequency |
+| $u_3$ ($\lambda_3 = 1.5$) | signs $(+,-,-,+)$ | Two sign changes — medium frequency |
+| $u_4$ ($\lambda_4 = 2$) | signs $(+,-,+,-)$ | Alternates at every hop — highest frequency |
 
-A GCN layer applies a low-pass filter: it amplifies u₁ and u₂ while suppressing u₃ and u₄.
+Note that $\lambda_4 = 2$ exactly: a path is bipartite, so it attains the upper end of the $[0,2]$ range. Note also that $u_1$ is *not* constant — its entries are $\sqrt{d_v}$, larger at the two interior nodes of degree 2 than at the two endpoints of degree 1.
+
+A GCN layer applies a low-pass filter: it amplifies $u_1$ and $u_2$ while suppressing $u_3$ and $u_4$.
 
 ## Graph Convolution via the GFT
 
 In classical signal processing, convolution in time equals pointwise multiplication in frequency:
 
-<div class="math-box">
-(f * g)(t) = ℱ⁻¹{ ℱ{f}(ω) · ℱ{g}(ω) }
+<div class="formula-box">
+\[
+(f * g)(t) = \mathcal{F}^{-1}\bigl\{\, \mathcal{F}\{f\}(\omega)\cdot \mathcal{F}\{g\}(\omega) \,\bigr\}.
+\]
 </div>
 
-Analogously, **spectral graph convolution** is defined as:
+Graphs have no shift operator, so convolution cannot be defined by sliding a kernel. Instead this frequency-domain identity is *taken as the definition*. **Spectral graph convolution** is
 
-<div class="math-box">
-(f *_G g) = U (Uᵀf ⊙ Uᵀg) = U (f̂ ⊙ ĝ)
+<div class="formula-box">
+\[
+f *_G g \;=\; U\bigl(U^{\top} f \odot U^{\top} g\bigr) \;=\; U\bigl(\hat{f} \odot \hat{g}\bigr),
+\]
 </div>
 
-where ⊙ is elementwise multiplication. A **spectral filter** h_θ(Λ) is a diagonal matrix of learnable weights in the frequency domain:
+where $\odot$ is elementwise multiplication. Because a pointwise product in the frequency domain is the same as applying a diagonal matrix, a **spectral filter** can be written as a function $$h_\theta$$ applied to the eigenvalues, $$h_\theta(\Lambda) = \mathrm{diag}\bigl(h_\theta(\lambda_1),\ldots,h_\theta(\lambda_N)\bigr)$$:
 
-<div class="math-box">
-h_θ *_G f = U · h_θ(Λ) · Uᵀ f
+<div class="formula-box">
+\[
+h_\theta *_G f \;=\; U\, h_\theta(\Lambda)\, U^{\top} f .
+\]
 </div>
 
-Learning h_θ learns which frequencies to amplify and which to suppress — exactly like an equaliser on a music player.
+Learning $$h_\theta$$ means learning which frequencies to amplify and which to suppress — exactly like an equaliser on a music player.
 
 ## The Problem: Computation Cost
 
-Computing the full eigendecomposition of L costs O(N³) — prohibitive for large graphs. Storing U costs O(N²).
+Computing the full eigendecomposition of $$L_{\mathrm{sym}}$$ costs $O(N^3)$ — prohibitive for large graphs. Storing $U$ costs $O(N^2)$, and $U$ is dense even when the graph is sparse.
 
-Solutions:
-- **ChebNet** approximates h_θ(Λ) with Chebyshev polynomials — O(|E|) cost, no eigendecomposition
-- **GCN** further simplifies by using the first-order Chebyshev approximation — a single message-passing step
+The escape route is that any *polynomial* filter $$h_\theta(\Lambda)$$ of degree $K$ satisfies $$U\, h_\theta(\Lambda)\, U^{\top} = h_\theta(L_{\mathrm{sym}})$$, which can be evaluated by $K$ sparse matrix–vector products without ever forming $U$:
+
+- **ChebNet** approximates $$h_\theta(\Lambda)$$ with a degree-$K$ Chebyshev polynomial — $O(K|E|)$ cost, no eigendecomposition
+- **GCN** further simplifies by truncating to $K = 1$ and renormalising — a single message-passing step with the propagation matrix $\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$, where $\tilde{A} = A + I$ and $\tilde{D}$ is its degree matrix
 - **Graph Transformers** abandon the spectral view and use attention directly in node space
 
 ## Low-Pass Filtering and GCN
 
-Standard GCN acts as a **low-pass filter** — it amplifies smooth (low-frequency) signals and suppresses rough (high-frequency) ones. Averaging neighbour features is a local smoothing operation.
+Standard GCN acts as a **low-pass filter**. Writing $$\tilde{L}_{\mathrm{sym}} = I - \hat{A}$$ for the normalised Laplacian of the self-looped graph, GCN's propagation is $$\hat{A} = I - \tilde{L}_{\mathrm{sym}}$$, i.e. the spectral filter
+
+<div class="formula-box">
+\[
+h(\tilde\lambda) = 1 - \tilde\lambda, \qquad \tilde\lambda \in [0, 2),
+\]
+</div>
+
+which is $1$ at $\tilde\lambda = 0$ and decays toward $-1$ at the high-frequency end (the self-loops make the graph non-bipartite, so $\tilde\lambda = 2$ is never attained): low frequencies pass, high frequencies are attenuated and sign-flipped. Averaging neighbour features is a local smoothing operation.
 
 This is why GCN works well for homophilic graphs (smooth label signals) and poorly for heterophilic graphs (rough, high-frequency label signals). A heterophilic graph needs a **high-pass filter** — accentuating differences between neighbours rather than averaging them away.
 
@@ -142,13 +180,14 @@ This is why GCN works well for homophilic graphs (smooth label signals) and poor
 
 | Concept | Classical (time) | Graph (node space) |
 |---------|---------------|-------------------|
-| Signal | f(t) ∈ ℝ | f ∈ ℝᴺ (one value per node) |
-| Frequency basis | Complex exponentials e^{iωt} | Laplacian eigenvectors U |
-| Forward transform | F̂(ω) = ∫ f e^{-iωt} dt | f̂ = Uᵀf |
-| Inverse | f = ∫ F̂ e^{iωt} dω | f = Uf̂ |
-| Convolution | Pointwise product in freq. domain | U (f̂ ⊙ ĝ) |
-| Low-pass filter | Removes high ω | Smooths across edges |
-| High-pass filter | Removes low ω | Accentuates edge differences |
+| Signal | $f(t) \in \mathbb{R}$ | $f \in \mathbb{R}^N$ (one value per node) |
+| Frequency basis | Complex exponentials $e^{i\omega t}$ | Eigenvectors $U$ of $$L_{\mathrm{sym}}$$ |
+| Frequency | $\omega$ | $\lambda_i \in [0,2]$ |
+| Forward transform | $\hat{f}(\omega) = \int f e^{-i\omega t}\,dt$ | $\hat{f} = U^{\top} f$ |
+| Inverse | $f = \tfrac{1}{2\pi}\int \hat{f} e^{i\omega t}\,d\omega$ | $f = U\hat{f}$ |
+| Convolution | Pointwise product in freq. domain | $U(\hat{f} \odot \hat{g})$ |
+| Low-pass filter | Removes high $\omega$ | Smooths across edges |
+| High-pass filter | Removes low $\omega$ | Accentuates edge differences |
 
 The Graph Fourier Transform is the mathematical foundation of spectral GNNs. Even if you use spatial GNNs (which avoid eigendecomposition), understanding this spectral view helps diagnose why GNNs succeed or fail on specific graph types.
 

@@ -10,7 +10,7 @@ excerpt: "Persistent homology is the natural tool for analysing point clouds sam
 author_profile: true
 read_time: true
 icon: "☁️"
-read_mins: 5
+read_mins: 4
 permalink: /blog/persistent-homology/tda-point-clouds/
 toc: true
 toc_label: "Contents"

@@ -28,7 +28,7 @@ Persistence images solve this by treating each diagram point as a **blob of ink*
 
 **Step 1 — Change coordinates.** Map each point $(b, d)$ in the diagram to $(b, p)$ where $p = d - b$ is the **persistence**. Now all points have $p \geq 0$, and near-diagonal noise has $p \approx 0$.
 
-**Step 2 — Weight by persistence.** Define a weighting function $w : \mathbb{R}^2 \to \mathbb{R}_{\geq 0}$ that is 0 on the diagonal ($p=0$) and increases with persistence. A common choice:
+**Step 2 — Weight by persistence.** Define a weighting function $$w : \mathbb{R}^2 \to \mathbb{R}_{\geq 0}$$ that is 0 on the diagonal ($p=0$) and increases with persistence. A common choice:
 
 $$w(b, p) = \begin{cases} 0 & p \leq 0 \\ p / p_{\max} & 0 < p \leq p_{\max} \\ 1 & p > p_{\max} \end{cases}$$
 
@@ -36,9 +36,9 @@ $$w(b, p) = \begin{cases} 0 & p \leq 0 \\ p / p_{\max} & 0 < p \leq p_{\max} \\ 
 
 $$\rho_T(z) = \sum_{(b,p) \in T} w(b,p) \cdot \phi_{(b,p)}(z)$$
 
-where $\phi_{(b,p)}$ is a 2D Gaussian with bandwidth $\sigma$ centred at $(b, p)$, and $T$ is the set of points in the persistence diagram (in the new coordinates).
+where $$\phi_{(b,p)}$$ is a 2D Gaussian with bandwidth $\sigma$ centred at $(b, p)$, and $T$ is the set of points in the persistence diagram (in the new coordinates).
 
-**Step 4 — Rasterise.** Discretise the surface $\rho_T$ on a fixed grid of pixels $\{I_{ij}\}$, integrating $\rho_T$ over each pixel cell:
+**Step 4 — Rasterise.** Discretise the surface $\rho_T$ on a fixed grid of pixels $$\{I_{ij}\}$$, integrating $\rho_T$ over each pixel cell:
 
 $$I_{ij} = \iint_{\text{pixel}_{ij}} \rho_T(z)\, dz$$
 
@@ -153,14 +153,14 @@ The result is a vector $\mathbf{v}(T) \in \mathbb{R}^{n \times n}$ — the **per
 
 ## Worked Numerical Example
 
-**Diagram:** $T = \{(0.5, 2.0),\, (1.0, 1.2),\, (0.1, 0.15)\}$ (birth, death pairs).
+**Diagram:** $$T = \{(0.5, 2.0),\, (1.0, 1.2),\, (0.1, 0.15)\}$$ (birth, death pairs).
 
 **Step 1 — Convert to (b, p):**
 - $(0.5,\, 1.5)$ — persistence 1.5 (significant)
 - $(1.0,\, 0.2)$ — persistence 0.2 (moderate)
 - $(0.1,\, 0.05)$ — persistence 0.05 (near-diagonal noise)
 
-**Step 2 — Linear weights** with $p_{\max} = 1.5$:
+**Step 2 — Linear weights** with $$p_{\max} = 1.5$$:
 - $w(0.5, 1.5) = 1.0$
 - $w(1.0, 0.2) = 0.2/1.5 \approx 0.133$
 - $w(0.1, 0.05) = 0.05/1.5 \approx 0.033$

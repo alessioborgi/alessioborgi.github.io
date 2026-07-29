@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "📄"
-read_mins: 6
+read_mins: 8
 permalink: /blog/sheaf/hansen-gebhart-2020/
 toc: true
 toc_label: "Contents"

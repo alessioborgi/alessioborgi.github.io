@@ -10,7 +10,7 @@ excerpt: "Standard persistence tracks topology as we grow a complex monotonicall
 author_profile: true
 read_time: true
 icon: "⚡"
-read_mins: 5
+read_mins: 3
 permalink: /blog/persistent-homology/zigzag-persistence/
 toc: true
 toc_label: "Contents"

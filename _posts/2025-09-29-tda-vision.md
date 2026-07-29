@@ -10,7 +10,7 @@ excerpt: "Topological methods in computer vision extract features that are invar
 author_profile: true
 read_time: true
 icon: "👁️"
-read_mins: 5
+read_mins: 3
 permalink: /blog/persistent-homology/tda-vision/
 toc: true
 toc_label: "Contents"
