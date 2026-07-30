@@ -25,7 +25,7 @@ toc_label: "Contents"
 
 A **group** $$(G,\cdot)$$ is a set with an associative operation, an identity $$e$$, and inverses. An **action** of $$G$$ on a set $$X$$ is a map $$G\times X\to X$$ with $$e\cdot x = x$$ and $$(gh)\cdot x = g\cdot(h\cdot x)$$ — the group's structure is faithfully reflected in how it moves points.
 
-The **orbit** of $$x$$ is $$\mathcal{O}_x = \\{g\cdot x : g\in G\\}$$: everything reachable from $$x$$ by a symmetry. Orbits partition $$X$$, which gives the cleanest description of invariance — an invariant function is one that is constant on every orbit, i.e. a function on the quotient $$X/G$$ rather than on $$X$$.
+The **orbit** of $$x$$ is $$\mathcal{O}_x = \{g\cdot x : g\in G\}$$: everything reachable from $$x$$ by a symmetry. Orbits partition $$X$$, which gives the cleanest description of invariance — an invariant function is one that is constant on every orbit, i.e. a function on the quotient $$X/G$$ rather than on $$X$$.
 
 The three groups worth knowing cold:
 

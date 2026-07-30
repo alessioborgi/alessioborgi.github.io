@@ -64,7 +64,13 @@ Think of it like a library search system:
 - Every book has a *Key* (its index entry).
 - The relevance between your query and each key determines how much of each book's *Value* (its content) you receive.
 
-Each of Q, K, V is produced by multiplying the token's embedding by a learned weight matrix: `Q = X·W_Q`, `K = X·W_K`, `V = X·W_V`.
+Each of $$Q$$, $$K$$, $$V$$ is produced by multiplying the token's embedding by a learned weight matrix:
+
+<div class="formula-box">
+\[
+Q = X W_Q, \qquad K = X W_K, \qquad V = X W_V
+\]
+</div>
 
 ## The Four-Step Computation
 
@@ -144,11 +150,15 @@ Each of Q, K, V is produced by multiplying the token's embedding by a learned we
 </figure>
 </div>
 
-**Step 1 — Project:** Multiply the input matrix X by three weight matrices to get Q, K, V.
+**Step 1 — Project:** Multiply the input matrix $$X$$ by three weight matrices to get $$Q$$, $$K$$, $$V$$.
 
-**Step 2 — Score:** Compute the dot product of every query with every key: `Q · Kᵀ`. Divide by √dₖ to prevent large values from pushing the softmax into saturation.
+**Step 2 — Score:** Compute the dot product of every query with every key: $$Q K^{\top}$$. Divide by $$\sqrt{d_k}$$ to prevent large values from pushing the softmax into saturation.
 
-<div class="formula-box">Attention(Q, K, V) = softmax( Q · Kᵀ / √d<sub>k</sub> ) · V</div>
+<div class="formula-box">
+\[
+\mathrm{Attention}(Q, K, V) = \operatorname{softmax}\!\left( \frac{Q K^{\top}}{\sqrt{d_k}} \right) V
+\]
+</div>
 
 **Step 3 — Normalise:** Apply softmax row-wise. Each row now sums to 1, giving a probability distribution: *"how much should token i attend to token j?"*
 
@@ -158,9 +168,9 @@ Each of Q, K, V is produced by multiplying the token's embedding by a learned we
 {% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention equation and computation flow" caption="Scaled dot-product attention: queries score keys, softmax turns scores into weights, and values are mixed accordingly (Vaswani et al., 2017)." %}
 </div>
 
-## Why Divide by √dₖ?
+## Why Divide by $$\sqrt{d_k}$$?
 
-Without scaling, the dot products grow large as dimensionality dₖ increases (because they're sums of dₖ products). Large values push softmax into regions where gradients are tiny, slowing training. Dividing by √dₖ keeps the variance stable regardless of model size.
+Without scaling, the dot products grow large as dimensionality $$d_k$$ increases (because they're sums of $$d_k$$ products). Large values push softmax into regions where gradients are tiny, slowing training. Dividing by $$\sqrt{d_k}$$ keeps the variance stable regardless of model size.
 
 ## What the Scores Represent
 
@@ -168,18 +178,18 @@ The attention matrix has a score for every (query-token, key-token) pair. High s
 
 Critically, this computation is **fully differentiable** — the model learns which token pairs should have high attention purely from training signal, with no hand-crafted rules.
 
-## Concrete Worked Example (2-token sequence, d_k = 2)
+## Concrete Worked Example (2-token sequence, $$d_k = 2$$)
 
 Let's trace the full computation with tiny numbers so you can verify it by hand.
 
-**Setup:** two tokens "cat" (x₁) and "sat" (x₂), d_k = 2.
+**Setup:** two tokens "cat" ($$x_1$$) and "sat" ($$x_2$$), $$d_k = 2$$.
 
 Suppose after projection we have:
-- Q = [[1, 0], [0, 1]]  — q₁ = [1,0], q₂ = [0,1]
-- K = [[1, 0], [0, 1]]  — k₁ = [1,0], k₂ = [0,1]
-- V = [[2, 3], [5, 1]]  — v₁ = [2,3], v₂ = [5,1]
+- $$Q = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$ — $$q_1 = [1,0]$$, $$q_2 = [0,1]$$
+- $$K = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$ — $$k_1 = [1,0]$$, $$k_2 = [0,1]$$
+- $$V = \begin{bmatrix} 2 & 3 \\ 5 & 1 \end{bmatrix}$$ — $$v_1 = [2,3]$$, $$v_2 = [5,1]$$
 
-**Step 1 — Raw scores** (Q · Kᵀ):
+**Step 1 — Raw scores** ($$Q K^{\top}$$):
 
 ```
           k₁=[1,0]  k₂=[0,1]
@@ -187,23 +197,42 @@ q₁=[1,0]    1·1+0·0=1   1·0+0·1=0
 q₂=[0,1]    0·1+1·0=0   0·0+1·1=1
 ```
 
-Score matrix = [[1, 0], [0, 1]]
+<div class="formula-box">
+\[
+\text{Score matrix} = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}
+\]
+</div>
 
-**Step 2 — Scale by √d_k = √2 ≈ 1.41:**
+**Step 2 — Scale by $$\sqrt{d_k} = \sqrt{2} \approx 1.41$$:**
 
-Scaled = [[0.71, 0], [0, 0.71]]
+<div class="formula-box">
+\[
+\text{Scaled} = \begin{bmatrix} 0.71 & 0 \\ 0 & 0.71 \end{bmatrix}
+\]
+</div>
 
 **Step 3 — Softmax row-wise:**
 
-Row 1: softmax([0.71, 0]) = [e^0.71 / (e^0.71+1), 1/(e^0.71+1)] ≈ [0.67, 0.33]
+<div class="formula-box">
+\[
+\begin{aligned}
+\text{Row 1:} \quad \operatorname{softmax}([0.71,\, 0])
+  &= \left[ \frac{e^{0.71}}{e^{0.71}+1},\; \frac{1}{e^{0.71}+1} \right] \approx [0.67,\, 0.33] \\[4pt]
+\text{Row 2:} \quad \operatorname{softmax}([0,\, 0.71]) &\approx [0.33,\, 0.67]
+\end{aligned}
+\]
+</div>
 
-Row 2: softmax([0, 0.71]) ≈ [0.33, 0.67]
+**Step 4 — Weighted sum of $$V$$:**
 
-**Step 4 — Weighted sum of V:**
-
-Output₁ = 0.67·[2,3] + 0.33·[5,1] = [1.34+1.65, 2.01+0.33] = **[2.99, 2.34]**
-
-Output₂ = 0.33·[2,3] + 0.67·[5,1] = [0.66+3.35, 0.99+0.67] = **[4.01, 1.66]**
+<div class="formula-box">
+\[
+\begin{aligned}
+\text{Output}_1 &= 0.67 \cdot [2,3] + 0.33 \cdot [5,1] = [1.34 + 1.65,\; 2.01 + 0.33] = \mathbf{[2.99,\, 2.34]} \\[4pt]
+\text{Output}_2 &= 0.33 \cdot [2,3] + 0.67 \cdot [5,1] = [0.66 + 3.35,\; 0.99 + 0.67] = \mathbf{[4.01,\, 1.66]}
+\end{aligned}
+\]
+</div>
 
 <div class="insight-box">
 <strong>What just happened:</strong> "cat" (token 1) attends mostly to itself (0.67) and a little to "sat" (0.33). Its output is a blend of both value vectors — it has absorbed context from the full sequence. Neither token's representation is isolated.
@@ -226,7 +255,7 @@ Output₂ = 0.33·[2,3] + 0.67·[5,1] = [0.66+3.35, 0.99+0.67] = **[4.01, 1.66]*
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li>Self-attention projects each token into <strong>Q, K, V</strong> vectors via learned weight matrices.</li>
-  <li>Relevance scores are <strong>dot products of Q and K</strong>, scaled by √d_k and normalised with softmax.</li>
+  <li>Relevance scores are <strong>dot products of \(Q\) and \(K\)</strong>, scaled by \(\sqrt{d_k}\) and normalised with softmax.</li>
   <li>The output of each token is a <strong>weighted sum of all Value vectors</strong>.</li>
   <li>The whole computation runs in parallel across all token pairs — no sequential dependency.</li>
 </ul>

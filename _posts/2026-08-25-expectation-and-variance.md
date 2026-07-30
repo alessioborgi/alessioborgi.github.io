@@ -72,7 +72,7 @@ The cross term is why averaging $$n$$ model predictions reduces variance by a fa
 \]
 </div>
 
-The bound is Cauchy–Schwarz, and $$|\rho|=1$$ exactly when $$Y$$ is an affine function of $$X$$. Correlation is a measure of *linear* association, nothing more.
+The bound is Cauchy–Schwarz, and $$\lvert \rho\rvert=1$$ exactly when $$Y$$ is an affine function of $$X$$. Correlation is a measure of *linear* association, nothing more.
 
 ## Uncorrelated does not mean independent
 

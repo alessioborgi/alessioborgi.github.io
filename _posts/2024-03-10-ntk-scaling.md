@@ -57,7 +57,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> RoPE encodes position through rotation frequencies θᵢ. When you extend context beyond training length, high-frequency dimensions fail (they have seen all their cycles). NTK-Aware Scaling replaces the base (10000) with a larger value, spreading frequencies out so all dimensions remain useful at longer contexts — often with no additional training.
+<strong>TL;DR:</strong> RoPE encodes position through rotation frequencies \(\theta_i\). When you extend context beyond training length, high-frequency dimensions fail (they have seen all their cycles). NTK-Aware Scaling replaces the base (10000) with a larger value, spreading frequencies out so all dimensions remain useful at longer contexts — often with no additional training.
 </div>
 
 <div class="paper-meta">
@@ -73,19 +73,21 @@ toc_label: "Contents"
 
 ## The Context Extension Problem
 
-RoPE (Rotary Position Embedding) encodes the position of each token by rotating query and key vectors at dimension-specific frequencies. A model trained with RoPE on sequences up to length L learns to use those frequencies — but when you try to run it on sequences longer than L, the model sees rotation angles it has never encountered.
+RoPE (Rotary Position Embedding) encodes the position of each token by rotating query and key vectors at dimension-specific frequencies. A model trained with RoPE on sequences up to length $$L$$ learns to use those frequencies — but when you try to run it on sequences longer than $$L$$, the model sees rotation angles it has never encountered.
 
-**Naïve position interpolation** (scaling positions linearly: pos → pos × L/L') works but degrades high-frequency dimensions catastrophically — they change too fast across the rescaled positions, destroying local structure.
+**Naïve position interpolation** (scaling positions linearly: $$\mathrm{pos} \to \mathrm{pos} \times L/L'$$) works but degrades high-frequency dimensions catastrophically — they change too fast across the rescaled positions, destroying local structure.
 
 ## RoPE Frequencies: A Quick Recap
 
-In RoPE, dimension pair i of a d_k-dimensional key or query is rotated by:
+In RoPE, dimension pair $$i$$ of a $$d_k$$-dimensional key or query is rotated by:
 
-<div class="math-box">
-θᵢ = 1 / base^(2i/d)   for i = 0, 1, ..., d/2 − 1
+<div class="formula-box">
+\[
+\theta_i = \frac{1}{\mathrm{base}^{2i/d}}, \qquad i = 0, 1, \dots, d/2 - 1
+\]
 </div>
 
-With base = 10000 (the original RoPE default), frequencies range from 1 (low-frequency, long-range position signal) to 1/10000^(d/d) ≈ 0.0001 (high-frequency, fine-grained local signal).
+With $$\mathrm{base} = 10000$$ (the original RoPE default), frequencies range from $$1$$ (low-frequency, long-range position signal) to $$1/10000^{d/d} \approx 0.0001$$ (high-frequency, fine-grained local signal).
 
 High-frequency dimensions complete many rotation cycles within a short context window. Low-frequency dimensions rotate slowly across the full context.
 
@@ -153,24 +155,28 @@ When context length exceeds training length, two problems arise:
 
 ## The NTK-Aware Scaling Insight
 
-Proposed independently by /u/bloc97 on Reddit (2023) and connected to Neural Tangent Kernel theory, NTK-Aware Scaling replaces the base θ with a larger value:
+Proposed independently by /u/bloc97 on Reddit (2023) and connected to Neural Tangent Kernel theory, NTK-Aware Scaling replaces the base $$\theta$$ with a larger value:
 
-<div class="math-box">
-base_new = base · (L' / L)^(d / (d−2))
+<div class="formula-box">
+\[
+\mathrm{base}_{\mathrm{new}} = \mathrm{base} \cdot \left( \frac{L'}{L} \right)^{d / (d-2)}
+\]
 </div>
 
 Where:
-- L = original training context length
-- L' = desired new context length
-- d = head dimension
+- $$L$$ = original training context length
+- $$L'$$ = desired new context length
+- $$d$$ = head dimension
 
-For example, extending LLaMA (trained at L=2048) to L'=8192:
+For example, extending LLaMA (trained at $$L = 2048$$) to $$L' = 8192$$:
 
-<div class="math-box">
-base_new = 10000 · (8192/2048)^(128/126) ≈ 10000 · 4^1.016 ≈ 41400
+<div class="formula-box">
+\[
+\mathrm{base}_{\mathrm{new}} = 10000 \cdot \left( \frac{8192}{2048} \right)^{128/126} \approx 10000 \cdot 4^{1.016} \approx 41400
+\]
 </div>
 
-This larger base stretches all frequencies proportionally. High-frequency dimensions that previously completed a full cycle within L tokens now complete their cycle within L' tokens — no dimension becomes "saturated" at the new length.
+This larger base stretches all frequencies proportionally. High-frequency dimensions that previously completed a full cycle within $$L$$ tokens now complete their cycle within $$L'$$ tokens — no dimension becomes "saturated" at the new length.
 
 <div class="insight-box">
 <strong>Why NTK?</strong> The NTK connection comes from viewing the Transformer as a kernel machine in function space. When you change context length, you are effectively changing the kernel's support. The frequency scaling ensures the kernel remains well-conditioned — similar in spirit to how NTK theory analyzes function space behaviour under parameter changes.
@@ -189,25 +195,31 @@ Linear interpolation scales positions but keeps frequencies fixed — the high-f
 
 ## Worked Example: Computing the NTK Base
 
-Model: LLaMA-2 7B, trained at L = 4096, head dimension d = 128, original base = 10,000.
+Model: LLaMA-2 7B, trained at $$L = 4096$$, head dimension $$d = 128$$, original $$\mathrm{base} = 10{,}000$$.
 
-**Target: extend to L' = 32,768 (8× extension)**
+**Target: extend to $$L' = 32{,}768$$ (8× extension)**
 
-base_new = 10,000 × (32768 / 4096)^(128 / (128−2))  
-= 10,000 × 8^(128/126)  
-= 10,000 × 8^1.016  
-= 10,000 × 8.36  
-≈ **83,600**
+<div class="formula-box">
+\[
+\begin{aligned}
+\mathrm{base}_{\mathrm{new}} &= 10{,}000 \times \left( \frac{32768}{4096} \right)^{128 / (128-2)} \\
+&= 10{,}000 \times 8^{128/126} \\
+&= 10{,}000 \times 8^{1.016} \\
+&= 10{,}000 \times 8.36 \\
+&\approx \mathbf{83{,}600}
+\end{aligned}
+\]
+</div>
 
-The new base of ~83,600 means every RoPE frequency θᵢ = 1/base^(2i/d) is reduced by a factor of ~8×, spreading cycles proportionally over 8× more tokens.
+The new base of ~83,600 means every RoPE frequency $$\theta_i = 1/\mathrm{base}^{2i/d}$$ is reduced by a factor of ~8×, spreading cycles proportionally over 8× more tokens.
 
-**For dimension i = 0** (lowest frequency):
-- Original: θ₀ = 1/10,000⁰ = 1.0 (full rotation per token — highest freq)
-- After NTK: θ₀ = 1/83,600⁰ = 1.0 (unchanged — already handles short range fine)
+**For dimension $$i = 0$$** (lowest frequency):
+- Original: $$\theta_0 = 1/10{,}000^{0} = 1.0$$ (full rotation per token — highest freq)
+- After NTK: $$\theta_0 = 1/83{,}600^{0} = 1.0$$ (unchanged — already handles short range fine)
 
-**For dimension i = 63** (highest frequency of the pair, near d/2):
-- Original: θ₆₃ = 1/10,000^(126/128) ≈ 1/7,244 ≈ 0.000138
-- After NTK: θ₆₃ = 1/83,600^(126/128) ≈ 1/60,600 ≈ 0.0000165
+**For dimension $$i = 63$$** (highest frequency of the pair, near $$d/2$$):
+- Original: $$\theta_{63} = 1/10{,}000^{126/128} \approx 1/7{,}244 \approx 0.000138$$
+- After NTK: $$\theta_{63} = 1/83{,}600^{126/128} \approx 1/60{,}600 \approx 0.0000165$$
 
 The highest-frequency dimension now completes its cycle every ~60,600 tokens instead of ~7,244 — scaled with the 8× target extension.
 
@@ -227,7 +239,7 @@ This is zero-cost for short sequences and automatically extends context for long
 
 ## Limitations
 
-- NTK scaling degrades gradually as L' / L increases. At 8× extension (e.g., 2k → 16k), quality noticeably drops without at least a small amount of fine-tuning.
+- NTK scaling degrades gradually as $$L'/L$$ increases. At 8× extension (e.g., 2k → 16k), quality noticeably drops without at least a small amount of fine-tuning.
 - It is a post-hoc fix, not a principled training strategy. For best long-context performance, fine-tuning with the new scale (or using YaRN) is recommended.
 - It does not address the **attention sink** problem — very long sequences still have attention pattern degradation.
 
@@ -247,4 +259,4 @@ NTK-Aware Scaling is the simplest way to extend the context of an existing RoPE 
 
 - Su, J., Lu, Y., Pan, S., Murtadha, A., Wen, B., & Liu, Y. (2021). [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864). *arXiv 2021* (RoPE: rotary position embeddings that encode relative positions; the basis for NTK-Aware Scaling).
 - Bloc97 (2023). [NTK-Aware Scaled RoPE allows LLaMA models to have extended (8k+) context size without any fine-tuning and minimal perplexity degradation](https://www.reddit.com/r/LocalLLaMA/comments/14lz7j5/ntkaware_scaled_rope_allows_llama_models_to_have/). *Reddit r/LocalLLaMA 2023* (original NTK-Aware Scaling proposal: rescales RoPE base to preserve high-frequency information during context extension).
-- Chen, S., Wong, S., Chen, L., & Tian, Y. (2023). [Extending Context Window of Large Language Models via Positional Interpolation](https://arxiv.org/abs/2306.15595). *arXiv 2023* (Position Interpolation: the alternative to NTK scaling that linearly rescales positions — requires fine-tuning but more stable).
+- Chen, S., Wong, S., Luo, L., & Tian, Y. (2023). [Extending Context Window of Large Language Models via Positional Interpolation](https://arxiv.org/abs/2306.15595). *arXiv 2023* (Position Interpolation: the alternative to NTK scaling that linearly rescales positions — requires fine-tuning but more stable).

@@ -19,8 +19,6 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> A GNN with \(K\) discrete layers applies \(K\) rounds of message passing. A Graph Neural ODE replaces this with a differential equation \(\frac{dH(t)}{dt} = f(H(t), A, t)\). The solution \(H(T)\) after integration from \(t=0\) to \(T\) is the output. This allows irregular timesteps, a solver-chosen number of function evaluations, and principled modelling of continuous graph dynamics.
 </div>
-{% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="Graph neural ODE dynamics" caption="Continuous-depth GNN dynamics — EGNN equivariant evolution (Satorras et al., 2021)" %}
-
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A discrete GNN with K layers is like a staircase — you take exactly K steps regardless of the terrain. A Graph Neural ODE is like a smooth ramp — the solver takes small steps where the dynamics are steep and large steps where they are flat, and you can evaluate the state at any point on the ramp rather than only at the treads. What is adaptive is the solver's effort, not the model's capacity: how far you walk is set by the integration horizon \(T\), and that is the real analogue of depth.</div>
 

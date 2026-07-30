@@ -43,9 +43,9 @@ X_n \xrightarrow{\text{a.s.}} X \quad\Longrightarrow\quad X_n \xrightarrow{\;p\;
 \]
 </div>
 
-**Almost surely**: the sequence of values converges, for every outcome outside a null set. **In probability**: $$P(|X_n - X|>\varepsilon)\to0$$ for each $$\varepsilon$$ — the values may keep jumping, but jumps become rare. **In distribution**: $$F_n(x)\to F(x)$$ at every continuity point of $$F$$ — only the *laws* converge, and $$X_n$$ need not live on the same probability space as $$X$$ at all.
+**Almost surely**: the sequence of values converges, for every outcome outside a null set. **In probability**: $$P(\lvert X_n - X\rvert>\varepsilon)\to0$$ for each $$\varepsilon$$ — the values may keep jumping, but jumps become rare. **In distribution**: $$F_n(x)\to F(x)$$ at every continuity point of $$F$$ — only the *laws* converge, and $$X_n$$ need not live on the same probability space as $$X$$ at all.
 
-The implications run one way only. The classic separating example: let $$X_n$$ be 1 on a window of width $$1/n$$ that marches repeatedly across $$[0,1]$$, and 0 elsewhere. Then $$X_n\to0$$ in probability, since the window shrinks, but for any fixed point the window returns infinitely often, so the sequence of values never settles — no almost-sure convergence. Convergence in distribution is weakest of all: if $$X\sim\mathcal{N}(0,1)$$ then the constant sequence $$X_n = -X$$ converges in distribution to $$X$$, while $$|X_n - X| = 2|X|$$ never shrinks.
+The implications run one way only. The classic separating example: let $$X_n$$ be 1 on a window of width $$1/n$$ that marches repeatedly across $$[0,1]$$, and 0 elsewhere. Then $$X_n\to0$$ in probability, since the window shrinks, but for any fixed point the window returns infinitely often, so the sequence of values never settles — no almost-sure convergence. Convergence in distribution is weakest of all: if $$X\sim\mathcal{N}(0,1)$$ then the constant sequence $$X_n = -X$$ converges in distribution to $$X$$, while $$\lvert X_n - X\rvert = 2\lvert X\rvert$$ never shrinks.
 
 ## The central limit theorem
 

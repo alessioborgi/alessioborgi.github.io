@@ -20,7 +20,7 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> NSD's propagation is the fixed degree-1 filter \(h(\lambda) = 1 - \lambda\) applied to the normalised sheaf Laplacian. Polynomial Neural Sheaf Diffusion (PolyNSD) replaces it with a learnable degree-\(K\) polynomial \(p_\theta(\Delta_{\mathcal{F}})\), evaluated by a three-term Chebyshev recurrence on a spectrally rescaled operator. One layer then has an explicit \(K\)-hop receptive field, and the frequency response is learned rather than assumed.
 </div>
-{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Polynomial sheaf diffusion" caption="Polynomial spectral filters on the Sheaf Laplacian (Bodnar et al., 2022)" %}
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Neural Sheaf Diffusion, from Bodnar et al. (2022)" caption="Background: Neural Sheaf Diffusion (Bodnar et al., 2022) — the sheaf structure and fixed diffusion step that PolyNSD builds on. The polynomial spectral filters discussed in this post are not part of this work; they are the later contribution described below." %}
 
 
 ## From Fixed Diffusion to Polynomial Filters

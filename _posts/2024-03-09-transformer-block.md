@@ -53,6 +53,7 @@ toc_label: "Contents"
   font-family: monospace;
   font-size: 0.88rem;
   line-height: 1.7;
+  white-space: pre;
   overflow-x: auto;
 }
 .diagram .label { color: #38bdf8; font-weight: bold; }
@@ -83,7 +84,7 @@ Before the first block, each input token is converted to a vector via an **embed
 "sat"  → embedding[sat]  + pos_enc[2]  → x₂ ∈ ℝ^d_model
 ```
 
-These vectors form a matrix **X ∈ ℝ^{seq_len × d_model}**. This matrix flows through the stack of blocks.
+These vectors form a matrix $$\mathbf{X} \in \mathbb{R}^{\text{seq\_len} \times d_{\text{model}}}$$. This matrix flows through the stack of blocks.
 
 ## The Pre-LN Transformer Block (Modern Standard)
 
@@ -106,10 +107,13 @@ These vectors form a matrix **X ∈ ℝ^{seq_len × d_model}**. This matrix flow
 
 In equations:
 
-<div class="math-box">
-x' = x + MHA( LayerNorm(x) )
-<br>
-x'' = x' + FFN( LayerNorm(x') )
+<div class="formula-box">
+\[
+\begin{aligned}
+x'  &= x + \mathrm{MHA}\big( \mathrm{LayerNorm}(x) \big) \\[4pt]
+x'' &= x' + \mathrm{FFN}\big( \mathrm{LayerNorm}(x') \big)
+\end{aligned}
+\]
 </div>
 
 Two additions. Two layer norms. One attention operation. One FFN. That is the entire block.
@@ -118,7 +122,7 @@ Two additions. Two layer norms. One attention operation. One FFN. That is the en
 
 ### Step 1: Layer Norm (before attention)
 
-The input x is normalised across its feature dimension. Each token's d_model-dimensional vector is scaled to zero mean and unit variance, then re-scaled by learned γ and β.
+The input $$x$$ is normalised across its feature dimension. Each token's $$d_{\text{model}}$$-dimensional vector is scaled to zero mean and unit variance, then re-scaled by learned $$\gamma$$ and $$\beta$$.
 
 This stabilises the distribution entering attention, preventing runaway growth of attention logits.
 
@@ -128,13 +132,13 @@ The normalised input is projected into Q, K, V for each head:
 - **Q, K** used to compute attention weights (which tokens attend to which)
 - **V** used to compute the attended output (what information is retrieved)
 
-Heads run in parallel; their outputs are concatenated and projected back to d_model.
+Heads run in parallel; their outputs are concatenated and projected back to $$d_{\text{model}}$$.
 
-*Output shape: [seq_len, d_model] — same as input.*
+*Output shape: $$[\text{seq\_len},\, d_{\text{model}}]$$ — same as input.*
 
 ### Step 3: First Residual Addition
 
-The attention output is added back to the **original** x (before normalisation). This is the residual connection:
+The attention output is added back to the **original** $$x$$ (before normalisation). This is the residual connection:
 
 ```
 x' = x + attention_output
@@ -144,14 +148,14 @@ The original signal is preserved. The attention result is a small correction to 
 
 ### Step 4: Layer Norm (before FFN)
 
-The post-attention representation x' is normalised again, feeding into the FFN with a well-conditioned distribution.
+The post-attention representation $$x'$$ is normalised again, feeding into the FFN with a well-conditioned distribution.
 
 ### Step 5: Feed-Forward Network
 
 The FFN processes each token position independently:
-- **Project up:** d_model → 4 × d_model
+- **Project up:** $$d_{\text{model}}$$ → $$4 \times d_{\text{model}}$$
 - **Nonlinearity:** GELU or SwiGLU
-- **Project down:** 4 × d_model → d_model
+- **Project down:** $$4 \times d_{\text{model}}$$ → $$d_{\text{model}}$$
 
 The FFN does not mix positions — it refines each token's representation in place.
 
@@ -161,27 +165,27 @@ The FFN does not mix positions — it refines each token's representation in pla
 x'' = x' + ffn_output
 ```
 
-The FFN's contribution is added to x'. Again, the skip connection preserves the signal.
+The FFN's contribution is added to $$x'$$. Again, the skip connection preserves the signal.
 
-**x'' is the output of the block** and becomes the input to the next block.
+**$$x''$$ is the output of the block** and becomes the input to the next block.
 
 ## Shapes Throughout One Block
 
 | Stage | Tensor shape |
 |-------|-------------|
-| Input x | [L, d_model] |
-| After LN (pre-attention) | [L, d_model] |
-| Q, K per head | [L, d_k] each |
-| V per head | [L, d_v] each |
-| Attention output (per head) | [L, d_v] |
-| After concat + project | [L, d_model] |
-| After residual | [L, d_model] |
-| After LN (pre-FFN) | [L, d_model] |
-| After W₁ (FFN expand) | [L, 4·d_model] |
-| After W₂ (FFN contract) | [L, d_model] |
-| After residual (output) | [L, d_model] |
+| Input $$x$$ | $$[L,\, d_{\text{model}}]$$ |
+| After LN (pre-attention) | $$[L,\, d_{\text{model}}]$$ |
+| $$Q$$, $$K$$ per head | $$[L,\, d_k]$$ each |
+| $$V$$ per head | $$[L,\, d_v]$$ each |
+| Attention output (per head) | $$[L,\, d_v]$$ |
+| After concat + project | $$[L,\, d_{\text{model}}]$$ |
+| After residual | $$[L,\, d_{\text{model}}]$$ |
+| After LN (pre-FFN) | $$[L,\, d_{\text{model}}]$$ |
+| After $$W_1$$ (FFN expand) | $$[L,\, 4 \cdot d_{\text{model}}]$$ |
+| After $$W_2$$ (FFN contract) | $$[L,\, d_{\text{model}}]$$ |
+| After residual (output) | $$[L,\, d_{\text{model}}]$$ |
 
-The shape is **always [L, d_model]** entering and leaving the block. Stacking blocks does not change the shape — only the content.
+The shape is **always $$[L,\, d_{\text{model}}]$$** entering and leaving the block. Stacking blocks does not change the shape — only the content.
 
 ## What Each Component Contributes
 
@@ -219,7 +223,7 @@ Token + Positional Embeddings
    Logits → softmax → token probabilities
 ```
 
-GPT-3 at 175B parameters is 96 of these blocks, each with d_model=12288, 96 attention heads, and d_ff=49152. The architecture is the same as described here. The only differences are scale and a few engineering choices (RoPE, SwiGLU, grouped-query attention in modern models).
+GPT-3 at 175B parameters is 96 of these blocks, each with $$d_{\text{model}} = 12288$$, 96 attention heads, and $$d_{\text{ff}} = 49152$$. The architecture is the same as described here. The only differences are scale and a few engineering choices (RoPE, SwiGLU, grouped-query attention in modern models).
 
 {% include figure image_path="/images/blog/transformers/slides/slide-37-full-model.png" alt="Slide showing the full Transformer built from stacked blocks" caption="The block only matters because it repeats: the full Transformer is embeddings, position information, and a stack of this same unit." %}
 

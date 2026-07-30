@@ -128,7 +128,7 @@ Cross-attention allows visual tokens to query language tokens and vice versa —
 
 Translating *"The cat sat"* (3 English tokens) → *"Le chat s'est assis"* (4 French tokens).
 
-**Encoder** processes [The, cat, sat] → produces key-value pairs K_enc, V_enc (shape 3×d_model).
+**Encoder** processes [The, cat, sat] → produces key-value pairs $$K_{\mathrm{enc}}, V_{\mathrm{enc}}$$ (shape $$3 \times d_{\mathrm{model}}$$).
 
 **Decoder** generates each French token one at a time. When generating "chat" (token 2):
 
@@ -151,11 +151,11 @@ output = 0.10·v_The + 0.85·v_cat + 0.05·v_sat
 
 ## The Attention Map Has a New Shape
 
-In self-attention on a sequence of length N, the attention matrix is N×N.
+In self-attention on a sequence of length $$N$$, the attention matrix is $$N \times N$$.
 
-In cross-attention, if the query sequence has length M (decoder) and the key-value sequence has length N (encoder), the attention matrix is **M×N**.
+In cross-attention, if the query sequence has length $$M$$ (decoder) and the key-value sequence has length $$N$$ (encoder), the attention matrix is $$M \times N$$.
 
-Each of the M output positions independently attends over all N input positions. The output tensor is M×d_v — same length as the query sequence, same value dimension.
+Each of the $$M$$ output positions independently attends over all $$N$$ input positions. The output tensor is $$M \times d_v$$ — same length as the query sequence, same value dimension.
 
 ## Cross-Attention Visualised
 
@@ -178,7 +178,7 @@ The attention pattern learned by a well-trained translation model tends to align
 | Q source | Same sequence | Different sequence (decoder) |
 | K, V source | Same sequence | Different sequence (encoder) |
 | Output length | Same as input | Same as Q sequence |
-| Attention shape | N × N | M × N |
+| Attention shape | $$N \times N$$ | $$M \times N$$ |
 | Role | Contextualise within sequence | Bridge two sequences |
 
 Cross-attention is the fundamental building block for any model that needs to condition generation on a separate encoded representation — translation, captioning, diffusion, and multimodal understanding all rely on it.

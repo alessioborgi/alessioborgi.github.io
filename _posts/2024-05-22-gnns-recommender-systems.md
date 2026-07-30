@@ -124,19 +124,22 @@ The Hadamard product $$h_i \odot h_u$$ is meant to capture user-item feature int
   <!-- Edges Alice–items -->
   <line x1="78"  y1="64"  x2="184" y2="58"  stroke="#93c5fd" stroke-width="1.5"/>
   <line x1="78"  y1="74"  x2="184" y2="108" stroke="#93c5fd" stroke-width="1.5"/>
-  <!-- Edges Bob–items -->
+  <!-- Edges Bob–items (both observed) -->
   <line x1="78"  y1="136" x2="184" y2="112" stroke="#6ee7b7" stroke-width="1.5"/>
-  <line x1="78"  y1="146" x2="184" y2="162" stroke="#6ee7b7" stroke-width="1.5" stroke-dasharray="5 3"><animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/></line>
-  <!-- 2-hop: Alice → Item2 → Bob → Item3 (target) -->
-  <rect x="335" y="148" width="60" height="32" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
-  <text x="365" y="162" text-anchor="middle" font-size="9" fill="#92400e">Item3</text>
-  <text x="365" y="174" text-anchor="middle" font-size="9" fill="#92400e">? for Alice</text>
-  <line x1="216" y1="165" x2="333" y2="164" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 3"><animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/></line>
-  <!-- Labels -->
-  <text x="60"  y="188" text-anchor="middle" font-size="9" fill="#6b7280">1-hop: items Alice liked</text>
-  <text x="365" y="196" text-anchor="middle" font-size="9" fill="#f59e0b">2-hop recommendation</text>
+  <line x1="78"  y1="146" x2="184" y2="162" stroke="#6ee7b7" stroke-width="1.5"/>
+  <!-- Predicted edge Alice–Item3, reached via Alice → Item2 → Bob → Item3 -->
+  <circle cx="200" cy="165" r="22" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3"/>
+  <line x1="76" y1="87" x2="184" y2="152" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 3"><animate attributeName="stroke-opacity" values="0.35;1;0.35" dur="1.8s" repeatCount="indefinite"/></line>
+  <!-- Brace marking Alice's 1-hop items -->
+  <path d="M 222 55 L 227 55 L 227 110 L 222 110" fill="none" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="233" y="86" text-anchor="start" font-size="9" fill="#6b7280">1-hop: items Alice liked</text>
+  <!-- Annotation for the recommendation -->
+  <rect x="245" y="120" width="165" height="48" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="327" y="136" text-anchor="middle" font-size="9" font-weight="bold" fill="#92400e">Recommend Item3 to Alice</text>
+  <text x="327" y="149" text-anchor="middle" font-size="8" fill="#b45309">2-hop path: Alice – Item2 – Bob – Item3</text>
+  <text x="327" y="161" text-anchor="middle" font-size="8" fill="#b45309">(dashed amber = predicted link)</text>
 </svg>
-<figcaption>GNN propagation on the bipartite graph: Alice and Bob both liked Item2 (1-hop). Bob also liked Item3 (2-hop). LightGCN propagates this signal to suggest Item3 for Alice.</figcaption>
+<figcaption>GNN propagation on the bipartite graph: Alice and Bob both liked Item2 (1-hop, solid edges). Bob also liked Item3, so Item3 is two hops from Alice. LightGCN propagates the signal along that path and scores the missing Alice–Item3 edge (dashed amber) highly.</figcaption>
 </figure>
 </div>
 

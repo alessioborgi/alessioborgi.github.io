@@ -71,15 +71,15 @@ GNNs are designed to respect all three of these properties.
   <text x="200"  y="170" text-anchor="middle" font-size="8"  fill="#4c1d95">O: atom</text>
   <circle cx="80"  cy="180" r="22" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
   <text x="80"   y="176" text-anchor="middle" font-size="11" fill="#78350f" font-weight="700">D</text>
-  <text x="80"   y="190" text-anchor="middle" font-size="8"  fill="#78350f">H: atom</text>
+  <text x="80"   y="190" text-anchor="middle" font-size="8"  fill="#78350f">S: atom</text>
   <!-- Edges -->
   <line x1="99"  y1="91"  x2="179" y2="74"  stroke="#94a3b8" stroke-width="2"/>
   <line x1="179" y1="74"  x2="179" y2="141" stroke="#94a3b8" stroke-width="2"/>
   <line x1="99"  y1="168" x2="178" y2="148" stroke="#94a3b8" stroke-width="2"/>
   <line x1="80"  y1="102" x2="80"  y2="158" stroke="#94a3b8" stroke-width="2"/>
   <!-- Edge labels -->
-  <text x="138" y="76" text-anchor="middle" font-size="9" fill="#6b7280">single</text>
-  <text x="188" y="110" text-anchor="middle" font-size="9" fill="#6b7280">double</text>
+  <text x="138" y="76" text-anchor="middle" font-size="9" fill="#6b7280">double</text>
+  <text x="188" y="110" text-anchor="middle" font-size="9" fill="#6b7280">single</text>
 
   <!-- Arrow -->
   <line x1="250" y1="120" x2="280" y2="120" stroke="#6b7280" stroke-width="1.5" marker-end="url(#ag1)"/>
@@ -87,22 +87,25 @@ GNNs are designed to respect all three of these properties.
 
   <!-- Output: node embeddings -->
   <text x="390" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Node Embeddings</text>
-  <circle cx="310" cy="80"  r="22" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
-  <text x="310"  y="77"  text-anchor="middle" font-size="11" fill="#134e4a" font-weight="700">A</text>
-  <text x="350"  y="84"  text-anchor="start"  font-size="8"  fill="#374151">[0.2, 0.8, ...]</text>
-  <circle cx="310" cy="130" r="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
-  <text x="310"  y="127" text-anchor="middle" font-size="11" fill="#1e3a5f" font-weight="700">B</text>
-  <text x="350"  y="134" text-anchor="start"  font-size="8"  fill="#374151">[0.5, 0.3, ...]</text>
-  <circle cx="310" cy="180" r="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
-  <text x="310"  y="177" text-anchor="middle" font-size="11" fill="#4c1d95" font-weight="700">C</text>
-  <text x="350"  y="184" text-anchor="start"  font-size="8"  fill="#374151">[0.1, 0.9, ...]</text>
+  <circle cx="310" cy="55"  r="20" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="310"  y="59"  text-anchor="middle" font-size="11" fill="#134e4a" font-weight="700">A</text>
+  <text x="348"  y="59"  text-anchor="start"  font-size="8"  fill="#374151">[0.2, 0.8, ...]</text>
+  <circle cx="310" cy="99" r="20" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="310"  y="103" text-anchor="middle" font-size="11" fill="#1e3a5f" font-weight="700">B</text>
+  <text x="348"  y="103" text-anchor="start"  font-size="8"  fill="#374151">[0.5, 0.3, ...]</text>
+  <circle cx="310" cy="143" r="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="310"  y="147" text-anchor="middle" font-size="11" fill="#4c1d95" font-weight="700">C</text>
+  <text x="348"  y="147" text-anchor="start"  font-size="8"  fill="#374151">[0.1, 0.9, ...]</text>
+  <circle cx="310" cy="187" r="20" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="310"  y="191" text-anchor="middle" font-size="11" fill="#78350f" font-weight="700">D</text>
+  <text x="348"  y="191" text-anchor="start"  font-size="8"  fill="#374151">[0.7, 0.4, ...]</text>
 
   <!-- Task labels -->
   <rect x="290" y="218" width="215" height="36" rx="6" fill="#fef3c7" stroke="#d97706"/>
   <text x="398" y="233" text-anchor="middle" font-size="9" font-weight="700" fill="#78350f">Downstream tasks:</text>
-  <text x="398" y="247" text-anchor="middle" font-size="9" fill="#374151">Node classification · Link prediction · Graph classification</text>
+  <text x="398" y="247" text-anchor="middle" font-size="8" fill="#374151">Node classification · Link prediction · Graph classification</text>
 </svg>
-<figcaption>Figure 1: A GNN takes a graph with node features (atom types) and produces rich node embeddings that capture local and global structure. These embeddings support downstream tasks.</figcaption>
+<figcaption>Figure 1: A GNN takes a graph with node features (atom types) and produces one embedding per node — four nodes in, four embeddings out — each capturing local and global structure. These embeddings support downstream tasks.</figcaption>
 </figure>
 </div>
 

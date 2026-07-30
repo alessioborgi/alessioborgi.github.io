@@ -59,7 +59,7 @@ p_Y(y) = p_X\!\left(g^{-1}(y)\right)\left|\frac{d}{dy}g^{-1}(y)\right| .
 \]
 </div>
 
-In $$d$$ dimensions the derivative becomes the Jacobian matrix and the stretch factor becomes the absolute determinant, $$p_Y(\mathbf{y}) = p_X(g^{-1}(\mathbf{y}))\,\bigl|\det J_{g^{-1}}(\mathbf{y})\bigr|$$, because the determinant is exactly the local volume-scaling factor of a linear map.
+In $$d$$ dimensions the derivative becomes the Jacobian matrix and the stretch factor becomes the absolute determinant, $$p_Y(\mathbf{y}) = p_X(g^{-1}(\mathbf{y}))\,\bigl\lvert \det J_{g^{-1}}(\mathbf{y})\bigr\rvert$$, because the determinant is exactly the local volume-scaling factor of a linear map.
 
 A concrete case: let $$X\sim\mathrm{Uniform}(0,1)$$ and $$Y = -\log X$$. Then $$g^{-1}(y) = e^{-y}$$ with derivative $$-e^{-y}$$, and $$p_X = 1$$ on the unit interval, so
 
@@ -71,7 +71,7 @@ p_Y(y) = 1 \cdot \left| -e^{-y}\right| = e^{-y}, \qquad y > 0,
 
 the standard exponential. Uniform noise became an exponential purely through the Jacobian.
 
-This identity is the whole content of **normalising flows**: compose invertible maps, track $$\sum \log|\det J|$$, and you have an exact log-likelihood for the transformed density. Architectures like coupling layers exist precisely because a general $$\det J$$ costs $$\mathcal{O}(d^3)$$, whereas a triangular Jacobian costs $$\mathcal{O}(d)$$.
+This identity is the whole content of **normalising flows**: compose invertible maps, track $$\sum \log\lvert \det J\rvert$$, and you have an exact log-likelihood for the transformed density. Architectures like coupling layers exist precisely because a general $$\det J$$ costs $$\mathcal{O}(d^3)$$, whereas a triangular Jacobian costs $$\mathcal{O}(d)$$.
 
 ## Quantiles and inverse-transform sampling
 

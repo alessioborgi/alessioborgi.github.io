@@ -93,7 +93,7 @@ applies the same message function to every neighbour in $$\mathcal{N}(v)$$, rega
 }
 </style>
 <div class="blog-figure"><figure>
-<svg viewBox="0 0 460 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;">
+<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;display:block;margin:0 auto;">
   <!-- User nodes (left) -->
   <rect x="18" y="55" width="60" height="24" rx="12" fill="#6366f1" style="animation:node-glow 2.4s ease-in-out infinite;"/>
   <text x="48" y="71" font-size="10" fill="white" text-anchor="middle">User A</text>

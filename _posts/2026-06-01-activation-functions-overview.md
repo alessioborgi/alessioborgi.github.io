@@ -330,11 +330,11 @@ The first major family maps inputs into a bounded range:
 
 They are attractive because they are smooth and easy to differentiate. Their main weakness is saturation: for large positive or negative inputs, the derivative becomes tiny.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The sigmoid derivative peaks at exactly 0.25 when x=0. That means even at its best, it cuts the gradient in half compared to passing it unchanged. Stack 10 sigmoid layers and the best-case gradient shrinks to 0.25¹⁰ ≈ 0.000001. That is the vanishing gradient problem in one number.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The sigmoid derivative peaks at exactly 0.25 when \(x=0\). That means even at its best, it cuts the gradient in half compared to passing it unchanged. Stack 10 sigmoid layers and the best-case gradient shrinks to \(0.25^{10} \approx 0.000001\). That is the vanishing gradient problem in one number.</div>
 
 **Concrete numerical example — sigmoid saturation:**
 
-| Input x | σ(x) | σ′(x) = σ(x)(1−σ(x)) |
+| Input $$x$$ | $$\sigma(x)$$ | $$\sigma'(x) = \sigma(x)(1-\sigma(x))$$ |
 |---|---|---|
 | 0 | 0.500 | **0.250** (maximum) |
 | 2 | 0.880 | 0.105 |
@@ -384,13 +384,13 @@ These functions made optimization much easier because their positive branch keep
 
 **Concrete step-by-step: how ReLU saves the gradient**
 
-Imagine a single neuron receives pre-activation `z = 1.5` and the upstream gradient (from the loss) is `δ = 0.8`.
+Imagine a single neuron receives pre-activation $$z = 1.5$$ and the upstream gradient (from the loss) is $$\delta = 0.8$$.
 
 | Activation | Output | Local derivative | Gradient passed back |
 |---|---|---|---|
-| Sigmoid | σ(1.5) = 0.818 | σ′(1.5) = 0.149 | 0.8 × 0.149 = **0.119** |
-| Tanh | tanh(1.5) = 0.905 | 1−0.905² = 0.181 | 0.8 × 0.181 = **0.145** |
-| ReLU | max(0,1.5) = 1.5 | 1 | 0.8 × 1.0 = **0.800** |
+| Sigmoid | $$\sigma(1.5) = 0.818$$ | $$\sigma'(1.5) = 0.149$$ | $$0.8 \times 0.149 =$$ **0.119** |
+| Tanh | $$\tanh(1.5) = 0.905$$ | $$1 - 0.905^2 = 0.181$$ | $$0.8 \times 0.181 =$$ **0.145** |
+| ReLU | $$\max(0,1.5) = 1.5$$ | 1 | $$0.8 \times 1.0 =$$ **0.800** |
 
 ReLU passes the gradient through unchanged on the positive side. Stacked over many layers, that difference becomes enormous.
 
@@ -523,7 +523,7 @@ So activation functions are not just output transformations. They are also **gra
   <text x="467" y="150" text-anchor="middle" class="wlabel">output = 0, gradient = 0</text>
   <text x="467" y="163" text-anchor="middle" class="wlabel">weights never update again</text>
 </svg>
-<figcaption>A neuron that receives a large negative weight update flips to z &lt; 0. ReLU clips its output to zero, so no gradient flows back (∂ReLU/∂z = 0), and the weights are frozen permanently — the neuron is dead.</figcaption>
+<figcaption>A neuron that receives a large negative weight update flips to \(z \lt 0\). ReLU clips its output to zero, so no gradient flows back (\(\partial \operatorname{ReLU} / \partial z = 0\)), and the weights are frozen permanently — the neuron is dead.</figcaption>
 </figure>
 </div>
 

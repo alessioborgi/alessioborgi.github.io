@@ -56,7 +56,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Layer norm rescales each token's feature vector to have zero mean and unit variance, then applies learned scale (γ) and shift (β). Post-LN (original Transformer) is less stable; Pre-LN (used by GPT-2, LLaMA) allows training without warmup and scales more reliably.
+<strong>TL;DR:</strong> Layer norm rescales each token's feature vector to have zero mean and unit variance, then applies learned scale \(\gamma\) and shift \(\beta\). Post-LN (original Transformer) is less stable; Pre-LN (used by GPT-2, LLaMA) allows training without warmup and scales more reliably.
 </div>
 {% include figure image_path="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Layer normalisation in Transformer" caption="Layer normalisation position in the Transformer block (Vaswani et al., 2017)" %}
 
@@ -69,7 +69,7 @@ toc_label: "Contents"
 
 Imagine you are a neuron receiving thousands of inputs from the previous layer. If those inputs have wildly different scales — some near 0, some near 1000 — your weights need to be tiny for large inputs and large for small inputs simultaneously. That is a frustrating optimisation landscape.
 
-Normalisation is simply: "before passing information to the next layer, rescale it so every token's feature vector looks roughly the same." You lose no information (learned γ and β can undo the normalisation) but you gain a predictable, well-conditioned signal at every layer.
+Normalisation is simply: "before passing information to the next layer, rescale it so every token's feature vector looks roughly the same." You lose no information (learned $$\gamma$$ and $$\beta$$ can undo the normalisation) but you gain a predictable, well-conditioned signal at every layer.
 
 <div class="blog-figure">
 <figure>
@@ -108,7 +108,7 @@ Normalisation is simply: "before passing information to the next layer, rescale 
   <line x1="390" y1="170" x2="660" y2="170" stroke="#94a3b8" stroke-width="2"/>
   <text x="525" y="195" text-anchor="middle" font-size="11" fill="#64748b">features re-centered to mean 0, std 1</text>
 </svg>
-<figcaption>Animated: before LayerNorm (left) the d_model feature values of one token vary wildly in scale. After LayerNorm (right) all features are rescaled to near-unit variance — the network downstream sees a predictable signal regardless of which token or layer it is in.</figcaption>
+<figcaption>Animated: before LayerNorm (left) the \(d_{\text{model}}\) feature values of one token vary wildly in scale. After LayerNorm (right) all features are rescaled to near-unit variance — the network downstream sees a predictable signal regardless of which token or layer it is in.</figcaption>
 </figure>
 </div>
 
@@ -126,7 +126,7 @@ Normalisation layers stabilise these distributions. For Transformers, layer norm
 - Requires large batch sizes to estimate statistics reliably
 - Behaviour differs between training and inference (running mean/var at test time)
 
-**Layer Normalisation** normalises across the feature dimension: for each token, compute mean and variance across all d_model features.
+**Layer Normalisation** normalises across the feature dimension: for each token, compute mean and variance across all $$d_{\text{model}}$$ features.
 
 - Independent of batch size and sequence length
 - Identical behaviour at training and inference time
@@ -134,41 +134,68 @@ Normalisation layers stabilise these distributions. For Transformers, layer norm
 
 ## The Layer Norm Formula
 
-Given a token representation **x** ∈ ℝ^d:
+Given a token representation $$\mathbf{x} \in \mathbb{R}^d$$:
 
-<div class="math-box">
-μ = (1/d) Σᵢ xᵢ &nbsp;&nbsp;&nbsp; σ² = (1/d) Σᵢ (xᵢ − μ)²
-<br><br>
-LayerNorm(x) = γ · (x − μ) / √(σ² + ε) + β
+<div class="formula-box">
+\[
+\mu = \frac{1}{d} \sum_i x_i,
+\qquad
+\sigma^2 = \frac{1}{d} \sum_i (x_i - \mu)^2
+\]
+\[
+\mathrm{LayerNorm}(x) = \gamma \odot \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}} + \beta
+\]
 </div>
 
-- **μ, σ²** are computed per-token (across features)
-- **γ** (scale) and **β** (shift) are learned parameters, initialised to 1 and 0 respectively
-- **ε** (typically 1e-5) prevents division by zero
+- **$$\mu$$, $$\sigma^2$$** are computed per-token (across features)
+- **$$\gamma$$** (scale) and **$$\beta$$** (shift) are learned parameters, initialised to 1 and 0 respectively
+- **$$\epsilon$$** (typically $$10^{-5}$$) prevents division by zero
 
-After normalisation, the output has approximately zero mean and unit variance. γ and β then allow the network to re-scale and re-shift to whatever distribution is optimal — without collapsing the normalisation.
+After normalisation, the output has approximately zero mean and unit variance. $$\gamma$$ and $$\beta$$ then allow the network to re-scale and re-shift to whatever distribution is optimal — without collapsing the normalisation.
 
 ## Worked Example: LayerNorm on a 4-Dimensional Token
 
-Suppose a token's representation is **x = [2, 4, −2, 0]** (d = 4, simplified).
+Suppose a token's representation is $$\mathbf{x} = [2, 4, -2, 0]$$ ($$d = 4$$, simplified).
 
-**Step 1 — Compute mean:**  
-μ = (2 + 4 + (−2) + 0) / 4 = **1.0**
+**Step 1 — Compute mean:**
 
-**Step 2 — Compute variance:**  
-σ² = [(2−1)² + (4−1)² + (−2−1)² + (0−1)²] / 4  
-= [1 + 9 + 9 + 1] / 4 = **5.0**
+<div class="formula-box">
+\[
+\mu = \frac{2 + 4 + (-2) + 0}{4} = \mathbf{1.0}
+\]
+</div>
 
-**Step 3 — Normalise:**  
-x̂ = (x − μ) / √(σ² + ε) ≈ [1/√5, 3/√5, −3/√5, −1/√5] ≈ **[0.45, 1.34, −1.34, −0.45]**
+**Step 2 — Compute variance:**
 
-**Step 4 — Apply γ and β** (assume γ = [1,1,1,1], β = [0,0,0,0] at initialisation):  
-Output = γ · x̂ + β = **[0.45, 1.34, −1.34, −0.45]**
+<div class="formula-box">
+\[
+\sigma^2 = \frac{(2-1)^2 + (4-1)^2 + (-2-1)^2 + (0-1)^2}{4}
+= \frac{1 + 9 + 9 + 1}{4} = \mathbf{5.0}
+\]
+</div>
 
-After training, γ and β may have become [2, 1, 1, 0.5] and [0.1, −0.2, 0.1, 0] — allowing the network to recover any useful scale it needs while keeping the normalisation benefit.
+**Step 3 — Normalise:**
+
+<div class="formula-box">
+\[
+\hat{x} = \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}}
+\approx \left[ \tfrac{1}{\sqrt{5}},\, \tfrac{3}{\sqrt{5}},\, -\tfrac{3}{\sqrt{5}},\, -\tfrac{1}{\sqrt{5}} \right]
+\approx \mathbf{[0.45,\, 1.34,\, -1.34,\, -0.45]}
+\]
+</div>
+
+**Step 4 — Apply $$\gamma$$ and $$\beta$$** (assume $$\gamma = [1,1,1,1]$$, $$\beta = [0,0,0,0]$$ at initialisation):
+
+<div class="formula-box">
+\[
+\text{Output} = \gamma \odot \hat{x} + \beta = \mathbf{[0.45,\, 1.34,\, -1.34,\, -0.45]}
+\]
+</div>
+
+After training, $$\gamma$$ and $$\beta$$ may have become $$[2, 1, 1, 0.5]$$ and $$[0.1, -0.2, 0.1, 0]$$ — allowing the network to recover any useful scale it needs while keeping the normalisation benefit.
 
 <div class="insight-box">
-<strong>Why ε matters:</strong> if σ² = 0 (all features identical), the denominator would be zero. ε = 1e-5 prevents this. In practice it almost never matters numerically but is essential for correctness.
+<strong>Why \(\epsilon\) matters:</strong> if \(\sigma^2 = 0\) (all features identical), the denominator would be zero. \(\epsilon = 10^{-5}\) prevents this. In practice it almost never matters numerically but is essential for correctness.
 </div>
 
 ## Post-LN: The Original Placement
@@ -203,7 +230,7 @@ In full notation:
 y = x + Sublayer(LayerNorm(x))
 ```
 
-The residual path remains a clean identity: **y = x + f(x)**. Gradients can bypass the sub-layer entirely by flowing through the residual skip connection. This dramatically stabilises training.
+The residual path remains a clean identity: $$y = x + f(x)$$. Gradients can bypass the sub-layer entirely by flowing through the residual skip connection. This dramatically stabilises training.
 
 <div class="insight-box">
 <strong>Practical consequence:</strong> Pre-LN models can be trained without learning rate warmup, at higher learning rates, and to greater depth. GPT-2, GPT-3, LLaMA, PaLM, and most modern LLMs use Pre-LN. Post-LN is still used in BERT and some encoder models with careful tuning.
@@ -213,16 +240,20 @@ The residual path remains a clean identity: **y = x + f(x)**. Gradients can bypa
 
 Many recent models (LLaMA, Mistral, Gemma) use **RMSNorm** instead of full layer norm:
 
-<div class="math-box">
-RMSNorm(x) = γ · x / RMS(x) &nbsp;&nbsp;&nbsp; where RMS(x) = √( (1/d) Σᵢ xᵢ² )
+<div class="formula-box">
+\[
+\mathrm{RMSNorm}(x) = \gamma \odot \frac{x}{\mathrm{RMS}(x)},
+\qquad \text{where} \quad
+\mathrm{RMS}(x) = \sqrt{\frac{1}{d} \sum_i x_i^2}
+\]
 </div>
 
-RMSNorm removes the mean-centering step (no μ subtraction). This is:
+RMSNorm removes the mean-centering step (no $$\mu$$ subtraction). This is:
 - **Faster:** ~15-20% less computation
 - **Equally effective** empirically
 - **Motivated** by the observation that re-centring contributes little to training stability
 
-The scale γ is still learned; the shift β is dropped.
+The scale $$\gamma$$ is still learned; the shift $$\beta$$ is dropped.
 
 ## Where LayerNorm Appears in a Transformer Block
 

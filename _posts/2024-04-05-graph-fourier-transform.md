@@ -166,7 +166,7 @@ Computing the full eigendecomposition of $$L_{\mathrm{sym}}$$ costs $$O(N^3)$$ �
 
 The escape route is that any *polynomial* filter $$h_\theta(\Lambda)$$ of degree $$K$$ satisfies $$U\, h_\theta(\Lambda)\, U^{\top} = h_\theta(L_{\mathrm{sym}})$$, which can be evaluated by $$K$$ sparse matrix–vector products without ever forming $$U$$:
 
-- **ChebNet** approximates $$h_\theta(\Lambda)$$ with a degree-$$K$$ Chebyshev polynomial — $$O(K|E|)$$ cost, no eigendecomposition
+- **ChebNet** approximates $$h_\theta(\Lambda)$$ with a degree-$$K$$ Chebyshev polynomial — $$O(K\lvert E\rvert)$$ cost, no eigendecomposition
 - **GCN** further simplifies by truncating to $$K = 1$$ and renormalising — a single message-passing step with the propagation matrix $$\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$$, where $$\tilde{A} = A + I$$ and $$\tilde{D}$$ is its degree matrix
 - **Graph Transformers** abandon the spectral view and use attention directly in node space
 

@@ -29,10 +29,10 @@ The four motions worth having memorised in $$\mathbb{R}^2$$:
 
 | Map | Matrix | $$\det$$ | Effect |
 |---|---|---|---|
-| Rotation by $$\theta$$ | $$\begin{pmatrix}\cos\theta & -\sin\theta\\\\ \sin\theta & \cos\theta\end{pmatrix}$$ | $$+1$$ | lengths, angles, orientation preserved |
-| Reflection in the line at angle $$\theta$$ | $$\begin{pmatrix}\cos 2\theta & \sin 2\theta\\\\ \sin 2\theta & -\cos 2\theta\end{pmatrix}$$ | $$-1$$ | lengths preserved, orientation flipped |
+| Rotation by $$\theta$$ | $$\begin{pmatrix}\cos\theta & -\sin\theta\\ \sin\theta & \cos\theta\end{pmatrix}$$ | $$+1$$ | lengths, angles, orientation preserved |
+| Reflection in the line at angle $$\theta$$ | $$\begin{pmatrix}\cos 2\theta & \sin 2\theta\\ \sin 2\theta & -\cos 2\theta\end{pmatrix}$$ | $$-1$$ | lengths preserved, orientation flipped |
 | Scaling | $$\mathrm{diag}(s_1, s_2)$$ | $$s_1 s_2$$ | axis-aligned stretch |
-| Shear | $$\begin{pmatrix}1 & k\\\\ 0 & 1\end{pmatrix}$$ | $$1$$ | area preserved, angles destroyed |
+| Shear | $$\begin{pmatrix}1 & k\\ 0 & 1\end{pmatrix}$$ | $$1$$ | area preserved, angles destroyed |
 
 The shear is the instructive one. It has determinant $$1$$, so it preserves area, yet it distorts every angle in the plane and turns the unit circle into a tilted ellipse. Volume preservation and shape preservation are unrelated properties.
 
@@ -78,7 +78,7 @@ A = U\Sigma V^\top,\qquad \sigma_1 \ge \sigma_2 \ge \dots \ge 0.
 
 Geometrically: $$V^\top$$ rotates (or reflects) the input so that the special directions line up with the axes, $$\Sigma$$ stretches each axis by its singular value, and $$U$$ rotates the result into place. The picture to keep is that $$A$$ maps the unit sphere to an ellipsoid whose semi-axes have lengths $$\sigma_i$$ and point along the columns of $$U$$. For a square matrix, $$\lvert\det A\rvert = \prod_i \sigma_i$$, since the two orthogonal factors contribute $$\pm 1$$ each.
 
-Work it out for the shear $$A = \begin{pmatrix}1&1\\\\0&1\end{pmatrix}$$. Then $$A^\top A = \begin{pmatrix}1&1\\\\1&2\end{pmatrix}$$, whose characteristic polynomial is $$\lambda^2 - 3\lambda + 1$$, so $$\lambda = (3\pm\sqrt 5)/2 = 2.6180$$ and $$0.3820$$. The singular values are their square roots:
+Work it out for the shear $$A = \begin{pmatrix}1&1\\0&1\end{pmatrix}$$. Then $$A^\top A = \begin{pmatrix}1&1\\1&2\end{pmatrix}$$, whose characteristic polynomial is $$\lambda^2 - 3\lambda + 1$$, so $$\lambda = (3\pm\sqrt 5)/2 = 2.6180$$ and $$0.3820$$. The singular values are their square roots:
 
 | Quantity | Value |
 |---|---|
@@ -96,7 +96,7 @@ A map that "preserves area" stretches one direction by $$62\%$$ and squeezes ano
 
 ## Affine versus linear
 
-The layer you actually write is $$x \mapsto Wx + b$$, which is *affine*, not linear: it fails $$T(0) = 0$$ whenever $$b \neq 0$$. Affine maps preserve straight lines, parallelism, and ratios of lengths along a line, but not lengths, angles or the origin. Composing affine maps gives affine maps, which is why a network of affine layers with no nonlinearity collapses to a single affine map. The standard trick for handling them uniformly is homogeneous coordinates: append a $$1$$ to $$x$$ and use the $$(n{+}1)\times(n{+}1)$$ block matrix $$\begin{pmatrix}W & b\\\\ 0 & 1\end{pmatrix}$$, so translation becomes linear one dimension up. Graphics pipelines and $$SE(3)$$ pose representations both run on exactly this.
+The layer you actually write is $$x \mapsto Wx + b$$, which is *affine*, not linear: it fails $$T(0) = 0$$ whenever $$b \neq 0$$. Affine maps preserve straight lines, parallelism, and ratios of lengths along a line, but not lengths, angles or the origin. Composing affine maps gives affine maps, which is why a network of affine layers with no nonlinearity collapses to a single affine map. The standard trick for handling them uniformly is homogeneous coordinates: append a $$1$$ to $$x$$ and use the $$(n{+}1)\times(n{+}1)$$ block matrix $$\begin{pmatrix}W & b\\ 0 & 1\end{pmatrix}$$, so translation becomes linear one dimension up. Graphics pipelines and $$SE(3)$$ pose representations both run on exactly this.
 
 <div class="key-takeaways">
   <h3>Recap</h3>

@@ -69,10 +69,18 @@ Raw scaled dot-product attention lets every token attend to every other token. S
 - **Batching:** sentences padded to equal length should not attend to the padding
 - **Encoder-decoder:** the decoder needs restricted attention but the encoder does not
 
-Masks solve all of these. They are applied to the raw attention scores *before* softmax — typically by adding −∞ to masked positions, which softmax converts to 0 weight.
+Masks solve all of these. They are applied to the raw attention scores *before* softmax — typically by adding $$-\infty$$ to masked positions, which softmax converts to 0 weight.
 
-<div class="math-box">
-masked_scores = scores + mask &nbsp;&nbsp; where mask[i,j] = 0 (attend) or −∞ (block)
+<div class="formula-box">
+\[
+\text{masked\_scores} = \text{scores} + \text{mask},
+\qquad
+\text{mask}[i,j] =
+\begin{cases}
+0 & \text{(attend)} \\
+-\infty & \text{(block)}
+\end{cases}
+\]
 </div>
 
 <div class="insight-box">
@@ -101,7 +109,7 @@ Every cell is open. Each token's representation is built from the entire sequenc
 
 ## 2. Causal Mask (GPT-style)
 
-A causal (autoregressive) mask enforces that token i can only attend to tokens ≤ i. The future is blocked.
+A causal (autoregressive) mask enforces that token $$i$$ can only attend to tokens $$\le i$$. The future is blocked.
 
 ```
       The  cat  sat  on   the  mat
@@ -113,7 +121,7 @@ the  [ ✓   ✓    ✓    ✓    ✓    ✗ ]
 mat  [ ✓   ✓    ✓    ✓    ✓    ✓ ]
 ```
 
-The attention matrix is lower-triangular. The diagonal is always visible (self-attention). Everything above the diagonal is −∞.
+The attention matrix is lower-triangular. The diagonal is always visible (self-attention). Everything above the diagonal is $$-\infty$$.
 
 **Used by:** GPT, GPT-2, GPT-3, GPT-4, LLaMA, Mistral, all decoder-only models.  
 **Good for:** language generation — at each step, the model predicts the next token from all previous tokens.  
@@ -160,14 +168,14 @@ In practice, masks are combined additively. A decoder in an encoder-decoder mode
 | T5 encoder | Bidirectional | — |
 | T5 decoder | Causal | Full (to encoder) |
 
-## Why −∞ Rather Than 0?
+## Why $$-\infty$$ Rather Than 0?
 
-A natural question: why set masked positions to −∞ instead of 0?
+A natural question: why set masked positions to $$-\infty$$ instead of $$0$$?
 
-After softmax, a score of 0 becomes `e⁰/(e⁰ + others) > 0` — the token still gets *some* attention weight. Setting to −∞ gives `e^(−∞) = 0` exactly, so masked positions contribute precisely zero to the weighted value sum. This is essential for causal masking — even a tiny weight on a future token would leak information.
+After softmax, a score of $$0$$ becomes $$e^{0}/(e^{0} + \text{others}) > 0$$ — the token still gets *some* attention weight. Setting to $$-\infty$$ gives $$e^{-\infty} = 0$$ exactly, so masked positions contribute precisely zero to the weighted value sum. This is essential for causal masking — even a tiny weight on a future token would leak information.
 
 <div class="insight-box">
-<strong>In practice:</strong> modern implementations use <code>float('-inf')</code> rather than a very large negative number like −1e9, because on some hardware −1e9 divided by a large d_k can produce NaN gradients. True −∞ is numerically safe.
+<strong>In practice:</strong> modern implementations use <code>float('-inf')</code> rather than a very large negative number like \(-1\mathrm{e}9\), because on some hardware \(-1\mathrm{e}9\) divided by a large \(d_k\) can produce NaN gradients. True \(-\infty\) is numerically safe.
 </div>
 
 ## Implementation Detail
@@ -181,7 +189,7 @@ scores = scores.masked_fill(mask, float('-inf'))
 attn_weights = torch.softmax(scores, dim=-1)
 ```
 
-The `masked_fill` replaces masked positions with −∞. After softmax, those positions become exactly 0 — contributing nothing to the weighted value sum.
+The `masked_fill` replaces masked positions with $$-\infty$$. After softmax, those positions become exactly $$0$$ — contributing nothing to the weighted value sum.
 
 ## Summary
 

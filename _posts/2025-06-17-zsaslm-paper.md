@@ -78,7 +78,7 @@ toc_label: "Contents"
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Imagine you are standing at the North Pole and want to navigate to a point halfway between London and Tokyo. The "average" of their GPS coordinates on a flat map gives you a point somewhere in Russia — correct-ish on a flat projection, but geometrically wrong on a sphere. The true midpoint on the Earth's surface follows the great circle arc between them. Diffusion latent spaces are spherical in the same sense: the meaningful paths between style representations are arcs, not straight lines. LERP takes the shortcut through the interior; SLERP follows the surface.</div>
 
-Latent diffusion models (like Stable Diffusion) encode styles as vectors in a high-dimensional latent space. When you want a generated image that combines *two or more reference styles*, the intuitive approach is to take a weighted average: **blend = α·style₁ + β·style₂ + …**
+Latent diffusion models (like Stable Diffusion) encode styles as vectors in a high-dimensional latent space. When you want a generated image that combines *two or more reference styles*, the intuitive approach is to take a weighted average: $$\text{blend} = \alpha \cdot \text{style}_1 + \beta \cdot \text{style}_2 + \dots$$
 
 This is **linear interpolation (LERP)**, and it has a fundamental flaw: it assumes the latent space is Euclidean — that style representations live on a flat plane and midpoints are simply averages. But latent spaces of diffusion models are curved; style representations live on (or near) a hypersphere.
 
@@ -180,27 +180,27 @@ When style blending fails, the output usually does not fail in an obvious binary
 
 $$\text{SLERP}(\mathbf{u}, \mathbf{v}; t) = \frac{\sin((1-t)\Omega)}{\sin\Omega}\,\mathbf{u} + \frac{\sin(t\Omega)}{\sin\Omega}\,\mathbf{v}$$
 
-where Ω is the angle between **u** and **v**. The result stays on the sphere, preserving the norm and intrinsic geometry of the latent space.
+where $$\Omega$$ is the angle between $$\mathbf{u}$$ and $$\mathbf{v}$$. The result stays on the sphere, preserving the norm and intrinsic geometry of the latent space.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why sines instead of weights:</strong> In LERP, the interpolation weights α and (1−α) add to 1. In SLERP, the weights are sin((1−t)Ω)/sinΩ and sin(tΩ)/sinΩ — also summing to 1, but curved along the arc. When t=0.5 and Ω is large (the vectors are very different styles), the SLERP weights diverge significantly from 0.5/0.5, compensating for the sphere's curvature. For small angles (similar styles), SLERP degenerates gracefully to LERP. This graceful degradation means SLERP is always at least as good as LERP, and strictly better when the styles are geometrically distant.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why sines instead of weights:</strong> In LERP, the interpolation weights \(\alpha\) and \((1-\alpha)\) add to 1. In SLERP, the weights are \(\sin((1-t)\Omega)/\sin\Omega\) and \(\sin(t\Omega)/\sin\Omega\) — also summing to 1, but curved along the arc. When \(t=0.5\) and \(\Omega\) is large (the vectors are very different styles), the SLERP weights diverge significantly from 0.5/0.5, compensating for the sphere's curvature. For small angles (similar styles), SLERP degenerates gracefully to LERP. This graceful degradation means SLERP is always at least as good as LERP, and strictly better when the styles are geometrically distant.</div>
 
-**Step-by-step: SLERP for two style vectors at t = 0.5**
+**Step-by-step: SLERP for two style vectors at** $$t = 0.5$$
 
-Suppose style₁ and style₂ are unit vectors with angle Ω = 60° between them.
+Suppose $$\text{style}_1$$ and $$\text{style}_2$$ are unit vectors with angle $$\Omega = 60^\circ$$ between them.
 
 | Quantity | Value |
 |---|---|
-| Ω | 60° = π/3 rad |
-| sin(Ω) | sin(60°) = 0.866 |
-| sin((1−t)Ω) = sin(0.5 × 60°) | sin(30°) = 0.500 |
-| sin(tΩ) = sin(0.5 × 60°) | sin(30°) = 0.500 |
-| Weight for **u** | 0.500 / 0.866 = **0.577** |
-| Weight for **v** | 0.500 / 0.866 = **0.577** |
-| LERP weights at t=0.5 | 0.500 / 0.500 (flat) |
+| $$\Omega$$ | $$60^\circ = \pi/3$$ rad |
+| $$\sin(\Omega)$$ | $$\sin(60^\circ) = 0.866$$ |
+| $$\sin((1-t)\Omega) = \sin(0.5 \times 60^\circ)$$ | $$\sin(30^\circ) = 0.500$$ |
+| $$\sin(t\Omega) = \sin(0.5 \times 60^\circ)$$ | $$\sin(30^\circ) = 0.500$$ |
+| Weight for $$\mathbf{u}$$ | 0.500 / 0.866 = **0.577** |
+| Weight for $$\mathbf{v}$$ | 0.500 / 0.866 = **0.577** |
+| LERP weights at $$t=0.5$$ | 0.500 / 0.500 (flat) |
 
-Both SLERP weights are 0.577, and the result vector has norm ≈ 1 (stays on the sphere). LERP would give weights 0.5/0.5 but the resulting vector has norm cos(30°) ≈ **0.866** — 13% shorter than it should be, pushed inside the sphere.
+Both SLERP weights are 0.577, and the result vector has norm $$\approx 1$$ (stays on the sphere). LERP would give weights 0.5/0.5 but the resulting vector has norm $$\cos(30^\circ) \approx$$ **0.866** — 13% shorter than it should be, pushed inside the sphere.
 
-For **multiple styles**, Z-SASLM extends SLERP iteratively: blend style₁ and style₂ to get an intermediate representation, then blend that with style₃, and so on. Weights are applied at each step to control the contribution of each style.
+For **multiple styles**, Z-SASLM extends SLERP iteratively: blend $$\text{style}_1$$ and $$\text{style}_2$$ to get an intermediate representation, then blend that with $$\text{style}_3$$, and so on. Weights are applied at each step to control the contribution of each style.
 
 <!-- Animated: iterative multi-style SLERP chain -->
 <style>
@@ -293,7 +293,7 @@ For **multiple styles**, Z-SASLM extends SLERP iteratively: blend style₁ and s
     <text x="496" y="114" text-anchor="middle" class="sf-lbl" fill="#92400e">style ₁₂₃</text>
   </g>
 </svg>
-<figcaption>Iterative SLERP chaining for 3 styles. Style₁ and Style₂ are first blended geodesically (with weights 0.4 and 0.35). The intermediate result blend₁₂ is then SLERP'd with Style₃ (weight 0.25) to produce the final fused style vector. At each step the result stays on the hypersphere — no norm shrinkage accumulates across the chain.</figcaption>
+<figcaption>Iterative SLERP chaining for 3 styles. \(\text{Style}_1\) and \(\text{Style}_2\) are first blended geodesically (with weights 0.4 and 0.35). The intermediate result \(\text{blend}_{12}\) is then SLERP'd with \(\text{Style}_3\) (weight 0.25) to produce the final fused style vector. At each step the result stays on the hypersphere — no norm shrinkage accumulates across the chain.</figcaption>
 </figure>
 </div>
 
@@ -358,14 +358,14 @@ Z-SASLM introduces **Weighted Multi-Style DINO VIT-B/8 (WMS-DINO)**: a weighted 
 
 **Worked example — WMS-DINO calculation for 3 styles:**
 
-Blend weights: w₁=0.4, w₂=0.35, w₃=0.25. DINO similarities of the generated image to each reference:
+Blend weights: $$w_1 = 0.4$$, $$w_2 = 0.35$$, $$w_3 = 0.25$$. DINO similarities of the generated image to each reference:
 
-| | DINO sim to Style₁ | DINO sim to Style₂ | DINO sim to Style₃ | WMS-DINO |
+| | DINO sim to $$\text{Style}_1$$ | DINO sim to $$\text{Style}_2$$ | DINO sim to $$\text{Style}_3$$ | WMS-DINO |
 |---|---|---|---|---|
-| LERP result | 0.72 | 0.45 | 0.31 | 0.4×0.72 + 0.35×0.45 + 0.25×0.31 = **0.523** |
-| SLERP result | 0.68 | 0.63 | 0.58 | 0.4×0.68 + 0.35×0.63 + 0.25×0.58 = **0.639** |
+| LERP result | 0.72 | 0.45 | 0.31 | $$0.4 \times 0.72 + 0.35 \times 0.45 + 0.25 \times 0.31 =$$ **0.523** |
+| SLERP result | 0.68 | 0.63 | 0.58 | $$0.4 \times 0.68 + 0.35 \times 0.63 + 0.25 \times 0.58 =$$ **0.639** |
 
-The LERP result scores higher on Style₁ alone (0.72 vs 0.68) — it dominated. But the balanced WMS-DINO score is lower because Styles 2 and 3 were suppressed. The SLERP result trades a fraction of Style₁ fidelity for substantially better balance across all three.
+The LERP result scores higher on $$\text{Style}_1$$ alone (0.72 vs 0.68) — it dominated. But the balanced WMS-DINO score is lower because Styles 2 and 3 were suppressed. The SLERP result trades a fraction of $$\text{Style}_1$$ fidelity for substantially better balance across all three.
 
 ## The Core Takeaway
 

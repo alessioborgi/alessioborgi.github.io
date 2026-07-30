@@ -24,7 +24,7 @@ toc_label: "Contents"
 
 ## The Spatio-Temporal Setting
 
-**Intuition First:** Imagine a city-wide network of traffic sensors. At any moment, sensor A reports 30 mph while sensor B (one mile downstream) still reports 60 mph — but in 5 minutes, B will slow down too. A purely temporal model sees each sensor in isolation and misses this propagation. A purely spatial model has no sense of time. ST-GNNs handle both at once: they let each sensor "talk" to its road-network neighbours at every timestep.
+**Intuition First:** Imagine a city-wide network of traffic sensors. At any moment, sensor A reports 30 mph because a queue has formed there, while sensor B (one mile upstream, where traffic is still flowing into A) reports 60 mph — but in 5 minutes, as the queue backs up, B will slow down too. A purely temporal model sees each sensor in isolation and misses this propagation. A purely spatial model has no sense of time. ST-GNNs handle both at once: they let each sensor "talk" to its road-network neighbours at every timestep.
 
 Given:
 - Fixed graph $$G = (V, E)$$ — the spatial structure (road network, weather stations)
@@ -39,13 +39,18 @@ Given:
 
 The model $$\Phi$$ is a function of the past window only. As with any temporal graph model, train/test splits must be chronological — shuffling timesteps leaks the future into the past.
 
-**The key insight:** sensors at nearby nodes are correlated. A traffic jam upstream affects downstream sensors. A temperature reading in Paris is informative for predicting Frankfurt. The graph structure encodes *which nodes influence each other*.
+**The key insight:** sensors at nearby nodes are correlated. A traffic jam propagates backwards along the road, slowing the sensors upstream of it. A temperature reading in Paris is informative for predicting Frankfurt. The graph structure encodes *which nodes influence each other*.
 
 <style>
 @keyframes wave-pulse {
   0%   { fill: #93c5fd; }
-  50%  { fill: #1d4ed8; }
+  50%  { fill: #60a5fa; }
   100% { fill: #93c5fd; }
+}
+@keyframes jam-pulse {
+  0%   { fill: #1d4ed8; }
+  50%  { fill: #1e3a8a; }
+  100% { fill: #1d4ed8; }
 }
 @keyframes edge-flow {
   0%   { stroke-dashoffset: 20; }
@@ -57,10 +62,10 @@ The model $$\Phi$$ is a function of the past window only. As with any temporal g
 <svg viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto;">
   <style>
     .sensor { animation: wave-pulse 2s ease-in-out infinite; }
-    .sensor:nth-child(2) { animation-delay: 0.4s; }
-    .sensor:nth-child(3) { animation-delay: 0.8s; }
-    .sensor:nth-child(4) { animation-delay: 1.2s; }
-    .sensor:nth-child(5) { animation-delay: 1.6s; }
+    .sensor-a { animation-delay: 1.2s; }
+    .sensor-b { animation-delay: 0.6s; }
+    .sensor-d { animation-delay: 1.8s; }
+    .sensor-jam { animation: jam-pulse 2s ease-in-out infinite; }
     .edge-animated { stroke-dasharray: 6 4; animation: edge-flow 1.2s linear infinite; }
   </style>
   <!-- Road edges -->
@@ -68,13 +73,14 @@ The model $$\Phi$$ is a function of the past window only. As with any temporal g
   <line x1="160" y1="80" x2="230" y2="80" stroke="#94a3b8" stroke-width="2" class="edge-animated"/>
   <line x1="250" y1="80" x2="320" y2="80" stroke="#94a3b8" stroke-width="2" class="edge-animated"/>
   <line x1="340" y1="80" x2="390" y2="80" stroke="#94a3b8" stroke-width="2" class="edge-animated"/>
-  <!-- Direction arrow -->
+  <!-- Direction of traffic flow -->
   <polygon points="388,75 398,80 388,85" fill="#64748b"/>
+  <text x="360" y="66" text-anchor="middle" font-size="9" fill="#94a3b8">traffic flow →</text>
   <!-- Sensor nodes -->
-  <circle cx="50"  cy="80" r="18" class="sensor" fill="#93c5fd"/>
-  <circle cx="150" cy="80" r="18" class="sensor" fill="#93c5fd"/>
-  <circle cx="240" cy="80" r="18" class="sensor" fill="#1d4ed8"/>
-  <circle cx="330" cy="80" r="18" class="sensor" fill="#93c5fd"/>
+  <circle cx="50"  cy="80" r="18" class="sensor sensor-a" fill="#93c5fd"/>
+  <circle cx="150" cy="80" r="18" class="sensor sensor-b" fill="#93c5fd"/>
+  <circle cx="240" cy="80" r="18" class="sensor-jam" fill="#1d4ed8"/>
+  <circle cx="330" cy="80" r="18" class="sensor sensor-d" fill="#93c5fd"/>
   <text x="50"  y="85" text-anchor="middle" font-size="11" fill="white" font-weight="bold">A</text>
   <text x="150" y="85" text-anchor="middle" font-size="11" fill="white" font-weight="bold">B</text>
   <text x="240" y="85" text-anchor="middle" font-size="11" fill="white" font-weight="bold">C</text>
@@ -84,9 +90,10 @@ The model $$\Phi$$ is a function of the past window only. As with any temporal g
   <text x="150" y="115" text-anchor="middle" font-size="10" fill="#64748b">55 mph</text>
   <text x="240" y="115" text-anchor="middle" font-size="10" fill="#1d4ed8" font-weight="bold">JAM</text>
   <text x="330" y="115" text-anchor="middle" font-size="10" fill="#64748b">60 mph</text>
-  <text x="210" y="20" text-anchor="middle" font-size="12" fill="#374151" font-weight="bold">Congestion propagates downstream →</text>
-  <text x="210" y="145" text-anchor="middle" font-size="10" fill="#9ca3af">Sensor C is congested; spatial GNN warns B and A before their speed drops</text>
+  <text x="210" y="20" text-anchor="middle" font-size="12" fill="#374151" font-weight="bold">← Congestion propagates upstream, against the flow</text>
+  <text x="210" y="145" text-anchor="middle" font-size="10" fill="#9ca3af">C is congested; the queue backs up to B, then A</text>
 </svg>
+<figcaption>A queue at sensor C propagates <em>upstream</em>, against the direction of travel: B slows next, then A, while D (already past the bottleneck) stays free-flowing. A per-sensor time-series model cannot see this coming; a spatio-temporal GNN can, because C's state reaches B and A along the road graph.</figcaption>
 </figure>
 </div>
 

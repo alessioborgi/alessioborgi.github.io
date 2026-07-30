@@ -20,7 +20,7 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Standard message passing computes \(h_v \leftarrow \mathrm{UPDATE}\big(h_v, \mathrm{AGG}\{h_u : u \in \mathcal{N}(v)\}\big)\). This assumes neighbours' features are directly comparable — the same "type" of information. On heterophilic graphs, this assumption fails: neighbours have different labels, different semantics, different feature spaces. Sheaves replace this flat comparison with per-edge linear maps that transform features before comparison.
 </div>
-{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="MPNN limitations" caption="Graph structures that standard MPNNs cannot distinguish (Xu et al., 2019)" %}
+{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Non-isomorphic graphs that message passing maps to identical representations (Xu et al., 2019)" caption="A <em>different</em> limitation, shown for contrast: the <em>expressivity</em> bound of Xu et al. (2019) — non-isomorphic graph structures that standard MPNNs provably cannot tell apart. This post is about a separate failure mode: even on graphs message passing can distinguish, averaging neighbours whose features live in incompatible frames destroys the signal." %}
 
 
 ## The Fundamental Assumption of Message Passing

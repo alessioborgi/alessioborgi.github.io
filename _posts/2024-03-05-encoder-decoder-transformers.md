@@ -43,6 +43,8 @@ toc_label: "Contents"
   margin: 1.25rem 0;
   font-family: monospace;
   font-size: 0.9rem;
+  white-space: pre;
+  overflow-x: auto;
 }
 </style>
 

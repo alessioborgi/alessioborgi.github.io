@@ -33,7 +33,7 @@ L(\gamma) = \int_0^1 \sqrt{g_{\gamma(t)}\!\left(\dot\gamma(t), \dot\gamma(t)\rig
 \]
 </div>
 
-and the distance between two points is $$d(p,q) = \inf\\{L(\gamma) : \gamma(0)=p,\ \gamma(1)=q\\}$$. Angles come from $$g$$ the same way they do in flat space, and the volume element is $$\sqrt{\det g_{ij}}\,dx$$.
+and the distance between two points is $$d(p,q) = \inf\{L(\gamma) : \gamma(0)=p,\ \gamma(1)=q\}$$. Angles come from $$g$$ the same way they do in flat space, and the volume element is $$\sqrt{\det g_{ij}}\,dx$$.
 
 ## Geodesics
 
@@ -93,7 +93,7 @@ On the unit sphere $$S^{n-1}$$ the maps are explicit: $$\exp_p(v) = \cos(\lVert 
 \]
 </div>
 
-SLERP is not a heuristic for interpolating unit vectors, it is $$\exp_p\\!\big(t\log_p(q)\big)$$ written out. It matters because linear interpolation shrinks: the midpoint of two unit vectors has norm $$\cos(\Omega/2)$$, so at $$\Omega = 60^\circ$$ the lerped midpoint has norm $$0.866$$ and at $$\Omega = 120^\circ$$ only $$0.5$$ — halfway between two latents, at half the radius, in a region the model never saw during training.
+SLERP is not a heuristic for interpolating unit vectors, it is $$\exp_p\!\big(t\log_p(q)\big)$$ written out. It matters because linear interpolation shrinks: the midpoint of two unit vectors has norm $$\cos(\Omega/2)$$, so at $$\Omega = 60^\circ$$ the lerped midpoint has norm $$0.866$$ and at $$\Omega = 120^\circ$$ only $$0.5$$ — halfway between two latents, at half the radius, in a region the model never saw during training.
 
 ## Hyperbolic space and the volume argument
 

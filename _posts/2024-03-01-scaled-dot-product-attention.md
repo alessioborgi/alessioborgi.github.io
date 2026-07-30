@@ -50,7 +50,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Without the √d_k scaling factor, dot products grow large in high dimensions → softmax outputs near 0 or 1 everywhere → gradients vanish and training stalls. Dividing by √d_k keeps dot products well-conditioned regardless of model size.
+<strong>TL;DR:</strong> Without the \(\sqrt{d_k}\) scaling factor, dot products grow large in high dimensions → softmax outputs near 0 or 1 everywhere → gradients vanish and training stalls. Dividing by \(\sqrt{d_k}\) keeps dot products well-conditioned regardless of model size.
 </div>
 <div class="blog-figure--compact">
 {% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled Dot-Product Attention" caption="Scaled Dot-Product Attention (Vaswani et al., 2017)" %}
@@ -69,19 +69,19 @@ Scaled dot-product attention is the engine inside every Transformer. Given queri
 \]
 </div>
 
-The term **d_k** is the dimension of the key vectors. The division by **√d_k** is the "scaling" in the name. It looks minor. It is not.
+The term $$d_k$$ is the dimension of the key vectors. The division by $$\sqrt{d_k}$$ is the "scaling" in the name. It looks minor. It is not.
 
 ## Why Dot Products Grow in High Dimensions
 
-Imagine two vectors **q** and **k**, each of dimension d_k, with components independently drawn from a standard normal distribution (mean 0, variance 1).
+Imagine two vectors $$q$$ and $$k$$, each of dimension $$d_k$$, with components independently drawn from a standard normal distribution (mean 0, variance 1).
 
-Their dot product **q · k** = Σᵢ qᵢkᵢ has:
-- **Mean = 0** (products of zero-mean variables)
-- **Variance = d_k** (sum of d_k independent unit-variance terms)
+Their dot product $$q \cdot k = \sum_i q_i k_i$$ has:
+- **Mean** $$= 0$$ (products of zero-mean variables)
+- **Variance** $$= d_k$$ (sum of $$d_k$$ independent unit-variance terms)
 
-So the **standard deviation** of the dot product grows as **√d_k**.
+So the **standard deviation** of the dot product grows as $$\sqrt{d_k}$$.
 
-When d_k = 64 (a typical value), individual dot products have std ≈ 8. When d_k = 512, std ≈ 22. As dimensions scale up, raw dot products naturally take on large absolute values.
+When $$d_k = 64$$ (a typical value), individual dot products have std $$\approx 8$$. When $$d_k = 512$$, std $$\approx 22$$. As dimensions scale up, raw dot products naturally take on large absolute values.
 
 ## What Happens to Softmax with Large Inputs
 
@@ -95,7 +95,7 @@ Softmax is defined as:
 \]
 </div>
 
-When inputs are large — say the vector **[35, 2, -10, 1]** — the exponential function amplifies differences exponentially. The largest value dominates completely. The output becomes something like **[≈1.0, ≈0.0, ≈0.0, ≈0.0]**.
+When inputs are large — say the vector $$[35, 2, -10, 1]$$ — the exponential function amplifies differences exponentially. The largest value dominates completely. The output becomes something like $$[\approx 1.0,\ \approx 0.0,\ \approx 0.0,\ \approx 0.0]$$.
 
 This is called **softmax saturation**. The "soft" maximum collapses into a hard argmax.
 
@@ -116,9 +116,9 @@ When \(\mathrm{softmax}(x_i) \approx 0\), the leading \(\mathrm{softmax}(x_i)\) 
 
 In both cases: no gradient flows. No learning happens. The attention weights are stuck.
 
-## The Fix: Divide by √d_k
+## The Fix: Divide by $$\sqrt{d_k}$$
 
-Dividing each dot product by √d_k scales the variance back to 1:
+Dividing each dot product by $$\sqrt{d_k}$$ scales the variance back to 1:
 
 <div class="math-box">
 \[
@@ -132,10 +132,10 @@ Dividing each dot product by √d_k scales the variance back to 1:
 \]
 </div>
 
-Now the inputs to softmax live in a reasonable range regardless of d_k. Softmax operates in its smooth, differentiable regime. Gradients flow. Learning works.
+Now the inputs to softmax live in a reasonable range regardless of $$d_k$$. Softmax operates in its smooth, differentiable regime. Gradients flow. Learning works.
 
 <div class="insight-box">
-<strong>Key insight:</strong> The √d_k term is not a hyperparameter to tune. It is a mathematical consequence of how dot product variance scales with dimension. It keeps the model trainable as d_k grows.
+<strong>Key insight:</strong> The \(\sqrt{d_k}\) term is not a hyperparameter to tune. It is a mathematical consequence of how dot product variance scales with dimension. It keeps the model trainable as \(d_k\) grows.
 </div>
 
 ## Why This Is So Easy to Miss
@@ -144,22 +144,22 @@ If you only read the attention formula once, the scaling term looks cosmetic. In
 
 ## Concrete Numerical Example
 
-Suppose d_k = 64 and two vectors q = k = [1/8, 1/8, …, 1/8] (all 64 entries equal 1/8).
+Suppose $$d_k = 64$$ and two vectors $$q = k = [1/8, 1/8, \dots, 1/8]$$ (all 64 entries equal 1/8).
 
 **Unscaled dot product:**
 ```
 q · k = 64 × (1/8 × 1/8) = 64 × 1/64 = 1.0
 ```
 
-Now try q with entries drawn from N(0,1): typical magnitude ≈ √64 = 8.
+Now try $$q$$ with entries drawn from $$N(0,1)$$: typical magnitude $$\approx \sqrt{64} = 8$$.
 
 A score of 8 vs. −8 in a 4-token sequence:
 ```
 softmax([8, -8, 2, -1]) ≈ [0.9997, 0.000, 0.003, 0.0001]
 ```
-Nearly all weight on one token — a hard argmax. Gradient ≈ 0.
+Nearly all weight on one token — a hard argmax. Gradient $$\approx 0$$.
 
-**After scaling by √64 = 8:**
+**After scaling by** $$\sqrt{64} = 8$$:
 ```
 softmax([1.0, -1.0, 0.25, -0.125]) ≈ [0.47, 0.06, 0.30, 0.17]
 ```
@@ -167,7 +167,7 @@ Smooth distribution. Gradient flows to all four tokens.
 
 ## Visualising the Effect
 
-| d_k | Raw std(q·k) | Scaled std | Softmax regime |
+| $$d_k$$ | Raw std($$q \cdot k$$) | Scaled std | Softmax regime |
 |-----|-------------|-----------|----------------|
 | 4   | 2           | 1         | Smooth         |
 | 64  | 8           | 1         | Smooth         |
@@ -178,24 +178,24 @@ Without scaling, increasing model width makes attention increasingly broken.
 
 ## What About Other Scaling Choices?
 
-Why √d_k specifically, and not d_k or some learned parameter?
+Why $$\sqrt{d_k}$$ specifically, and not $$d_k$$ or some learned parameter?
 
-- **÷ d_k**: over-shrinks; dot products become too small, softmax becomes too uniform (near-equal weights, no sharp attention)
-- **÷ √d_k**: correct normalization that restores unit variance
+- $$\div\, d_k$$: over-shrinks; dot products become too small, softmax becomes too uniform (near-equal weights, no sharp attention)
+- $$\div\, \sqrt{d_k}$$: correct normalization that restores unit variance
 - **Learned scale**: works in practice (some models do this), but adds parameters and can be poorly initialised
 
-The √d_k formula hits the theoretical optimum for variance normalisation with minimal complexity.
+The $$\sqrt{d_k}$$ formula hits the theoretical optimum for variance normalisation with minimal complexity.
 
 ## Summary
 
 | Without scaling | With scaling |
 |----------------|-------------|
-| Dot products grow as √d_k | Dot products stay ~O(1) |
+| Dot products grow as $$\sqrt{d_k}$$ | Dot products stay $$\sim O(1)$$ |
 | Softmax saturates | Softmax is smooth |
 | Gradients vanish | Gradients flow cleanly |
 | Larger models train worse | Larger models train fine |
 
-The √d_k is a single division that makes Transformers scalable. It is easy to overlook, but foundational to why the architecture works at all.
+The $$\sqrt{d_k}$$ is a single division that makes Transformers scalable. It is easy to overlook, but foundational to why the architecture works at all.
 
 ## References
 

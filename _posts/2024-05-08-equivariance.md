@@ -102,45 +102,43 @@ After rotation: $$x_1' = (0, 1)$$, $$x_2' = (-1, 0)$$.
 
 This is the pair to keep in mind: the same input transformation, two different correct-looking equations, and only one of them is the right specification for a vector-valued target.
 
-<style>
-@keyframes spin-mol {
-  0%   { transform: rotate(0deg);   transform-origin: 200px 90px; }
-  50%  { transform: rotate(90deg);  transform-origin: 200px 90px; }
-  100% { transform: rotate(0deg);   transform-origin: 200px 90px; }
-}
-</style>
 <div class="blog-figure">
 <figure>
-<svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;display:block;margin:0 auto;">
-  <!-- Before -->
+<svg viewBox="0 0 400 175" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;display:block;margin:0 auto;">
+  <defs>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f59e0b"/></marker>
+    <marker id="arrow2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#10b981"/></marker>
+    <marker id="arrowR" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#8b5cf6"/></marker>
+  </defs>
+  <!-- Before: r1=(85,60), r2=(55,120). r2-r1 = (-30,+60), |r2-r1| = 67.1 -->
   <text x="85" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">Before rotation</text>
   <line x1="85" y1="60" x2="55" y2="120" stroke="#6b7280" stroke-width="2"/>
+  <text x="79" y="96" text-anchor="start" font-size="9" fill="#6b7280">d</text>
   <circle cx="85" cy="60"  r="14" fill="#3b82f6"/>
   <circle cx="55" cy="120" r="14" fill="#ef4444"/>
   <text x="85"  y="64"  text-anchor="middle" font-size="10" fill="white">r₁</text>
   <text x="55"  y="124" text-anchor="middle" font-size="10" fill="white">r₂</text>
-  <!-- Force arrow before -->
+  <!-- Force before: F = (+30,-30) applied at r1 -->
   <line x1="85" y1="60" x2="115" y2="30" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow)"/>
   <text x="122" y="27" font-size="9" fill="#f59e0b">F</text>
-  <!-- Arrow -->
-  <defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f59e0b"/></marker><marker id="arrow2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#10b981"/></marker></defs>
-  <!-- After -->
-  <text x="315" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">After 90° rotation</text>
-  <line x1="315" y1="90" x2="255" y2="90" stroke="#6b7280" stroke-width="2"/>
-  <circle cx="315" cy="90" r="14" fill="#3b82f6"/>
-  <circle cx="255" cy="90" r="14" fill="#ef4444"/>
-  <text x="315" y="94" text-anchor="middle" font-size="10" fill="white">r₁'</text>
-  <text x="255" y="94" text-anchor="middle" font-size="10" fill="white">r₂'</text>
-  <!-- Force arrow after (rotated) -->
-  <line x1="315" y1="90" x2="345" y2="60" stroke="#10b981" stroke-width="2" marker-end="url(#arrow2)"/>
-  <text x="352" y="57" font-size="9" fill="#10b981">F'=R·F</text>
-  <!-- Rotation arrow in middle -->
+  <!-- Rotation arrow in middle: clockwise 90° -->
   <path d="M 175,80 A 30,30 0 0,1 225,80" stroke="#8b5cf6" stroke-width="2" fill="none" marker-end="url(#arrowR)"/>
-  <defs><marker id="arrowR" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#8b5cf6"/></marker></defs>
-  <text x="200" y="58" text-anchor="middle" font-size="10" fill="#8b5cf6">R(90°)</text>
-  <text x="200" y="148" text-anchor="middle" font-size="10" fill="#9ca3af">Distance ‖r₁−r₂‖=√2 is invariant; force vector F rotates with the molecule</text>
+  <text x="200" y="52" text-anchor="middle" font-size="10" fill="#8b5cf6">R(90°)</text>
+  <!-- After: same R applied to every vector. R(dx,dy) = (-dy,+dx), a 90° clockwise turn on screen.
+       r1'=(320,100); r2'-r1' = R(-30,60) = (-60,-30) so r2'=(260,70); |r2'-r1'| = 67.1, unchanged. -->
+  <text x="300" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">After 90° rotation</text>
+  <line x1="320" y1="100" x2="260" y2="70" stroke="#6b7280" stroke-width="2"/>
+  <text x="288" y="76" text-anchor="middle" font-size="9" fill="#6b7280">d</text>
+  <circle cx="320" cy="100" r="14" fill="#3b82f6"/>
+  <circle cx="260" cy="70"  r="14" fill="#ef4444"/>
+  <text x="320" y="104" text-anchor="middle" font-size="10" fill="white">r₁'</text>
+  <text x="260" y="74"  text-anchor="middle" font-size="10" fill="white">r₂'</text>
+  <!-- Force after: F' = R(30,-30) = (+30,+30), a genuinely different direction -->
+  <line x1="320" y1="100" x2="350" y2="130" stroke="#10b981" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="356" y="136" font-size="9" fill="#10b981">F'=R·F</text>
+  <text x="200" y="163" text-anchor="middle" font-size="9" fill="#9ca3af">d is unchanged (invariant) · F turns by the same R (equivariant)</text>
 </svg>
-<figcaption>Invariance (distance unchanged) vs equivariance (force rotates with the input).</figcaption>
+<figcaption>The same rotation R is applied to the whole configuration. The separation <em>d</em> between the two atoms is drawn at identical length in both panels — that scalar is <strong>invariant</strong>. The force arrow, by contrast, turns through the same 90° as the molecule: F points up-and-right before, down-and-right after. That is <strong>equivariance</strong>, F′ = R·F.</figcaption>
 </figure>
 </div>
 

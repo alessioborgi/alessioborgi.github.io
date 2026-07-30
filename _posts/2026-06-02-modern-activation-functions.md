@@ -136,7 +136,7 @@ These functions keep the positive linear branch, but replace the dead negative s
 
 They acknowledge that "all negatives become zero" is sometimes too crude.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why a negative floor helps:</strong> ReLU neurons that receive consistently negative input produce zero output and zero gradient — they are effectively dead. ELU solves this by letting negative inputs produce a small but non-zero output (approaching −α ≈ −1). This creates a negative mean activation that pushes subsequent layers to self-correct, reducing the need for careful initialization. SELU takes this further by choosing α and the scale λ analytically (λ≈1.0507, α≈1.6733) so that the activations' mean and variance automatically stay near (0, 1) across layers — a built-in batch-norm effect at no extra computation cost.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why a negative floor helps:</strong> ReLU neurons that receive consistently negative input produce zero output and zero gradient — they are effectively dead. ELU solves this by letting negative inputs produce a small but non-zero output (approaching \(-\alpha \approx -1\)). This creates a negative mean activation that pushes subsequent layers to self-correct, reducing the need for careful initialization. SELU takes this further by choosing \(\alpha\) and the scale \(\lambda\) analytically (\(\lambda \approx 1.0507\), \(\alpha \approx 1.6733\)) so that the activations' mean and variance automatically stay near (0, 1) across layers — a built-in batch-norm effect at no extra computation cost.</div>
 
 ### GELU
 
@@ -148,13 +148,13 @@ GELU is the activation you now see everywhere in Transformers.
 \]
 </div>
 
-where `Φ(x)` is the Gaussian cumulative distribution function: instead of passing all positive signals and rejecting all negative ones, GELU keeps a value in proportion to how likely it is to be useful under a Gaussian view of the input.
+where $$\Phi(x)$$ is the Gaussian cumulative distribution function: instead of passing all positive signals and rejecting all negative ones, GELU keeps a value in proportion to how likely it is to be useful under a Gaussian view of the input.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> GELU can be read as "stochastic ReLU." If neuron inputs are roughly Gaussian, then Φ(x) is the probability that a standard normal sample is less than x. So GELU(x) = x · P(keep this value) — it applies a data-driven soft gate. At x=0, exactly half the signal is gated through. At x=2, roughly 97% passes. At x=−2, only 3% passes. Unlike ReLU, even mildly negative values contribute a small residual signal.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> GELU can be read as "stochastic ReLU." If neuron inputs are roughly Gaussian, then \(\Phi(x)\) is the probability that a standard normal sample is less than \(x\). So \(\operatorname{GELU}(x) = x \cdot P(\text{keep this value})\) — it applies a data-driven soft gate. At \(x=0\), exactly half the signal is gated through. At \(x=2\), roughly 97% passes. At \(x=-2\), only 3% passes. Unlike ReLU, even mildly negative values contribute a small residual signal.</div>
 
 **Step-by-step numerical comparison — GELU vs. ReLU vs. ELU at key input values:**
 
-| x | ReLU | ELU (α=1) | GELU | GELU′ |
+| $$x$$ | ReLU | ELU ($$\alpha=1$$) | GELU | $$\operatorname{GELU}'$$ |
 |---|---|---|---|---|
 | −3 | 0 | −0.950 | −0.004 | 0.020 |
 | −1 | 0 | −0.632 | −0.159 | 0.083 |
@@ -163,7 +163,7 @@ where `Φ(x)` is the Gaussian cumulative distribution function: instead of passi
 | 2 | 2 | 2 | **1.955** | 1.086 |
 | 3 | 3 | 3 | **2.996** | 1.010 |
 
-Notice how GELU preserves a small negative output near x=−1 (−0.159), giving gradients a foothold even in the mildly negative region — something ReLU completely discards.
+Notice how GELU preserves a small negative output near $$x=-1$$ (−0.159), giving gradients a foothold even in the mildly negative region — something ReLU completely discards.
 
 ### Swish and SiLU
 
@@ -175,7 +175,7 @@ Notice how GELU preserves a small negative output near x=−1 (−0.159), giving
 
 Swish is the same family idea; SiLU is the common fixed version — smooth, slightly non-monotonic, and behaving like a gated linear response.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> SiLU = x · σ(x) has a beautiful interpretation: the sigmoid term acts as a learned data-driven gate on the identity term. When x is large and positive, σ(x)→1 so SiLU behaves like identity. When x is large and negative, σ(x)→0 so SiLU suppresses — but smoothly. The slight dip below zero near x≈−1.28 (SiLU minimum ≈ −0.278) gives the network a small negative anchor, which empirically helps optimization.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> \(\operatorname{SiLU} = x \cdot \sigma(x)\) has a beautiful interpretation: the sigmoid term acts as a learned data-driven gate on the identity term. When \(x\) is large and positive, \(\sigma(x) \to 1\) so SiLU behaves like identity. When \(x\) is large and negative, \(\sigma(x) \to 0\) so SiLU suppresses — but smoothly. The slight dip below zero near \(x \approx -1.28\) (SiLU minimum \(\approx -0.278\)) gives the network a small negative anchor, which empirically helps optimization.</div>
 
 ### Mish
 
@@ -189,18 +189,18 @@ Mish pushes the same logic further:
 
 It is smooth, non-monotonic, and often visually looks like "a softer Swish with a richer negative-side bend."
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mish wraps SiLU's gating idea inside a tanh, which compresses the gate values into (−1, 1) before scaling by x. The result is unbounded above (like ReLU/SiLU), bounded-below (minimum ≈ −0.31), and has continuous higher-order derivatives. The richer curvature near zero gives optimizers more informative local slope information to work with.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mish wraps SiLU's gating idea inside a tanh, which compresses the gate values into \((-1, 1)\) before scaling by \(x\). The result is unbounded above (like ReLU/SiLU), bounded-below (minimum \(\approx -0.31\)), and has continuous higher-order derivatives. The richer curvature near zero gives optimizers more informative local slope information to work with.</div>
 
 **Worked example — tracing a value through SiLU vs GELU vs Mish:**
 
-Let x = −0.5 (a mildly negative pre-activation):
+Let $$x = -0.5$$ (a mildly negative pre-activation):
 
-| Function | Computation | Output | Gradient at x=−0.5 |
+| Function | Computation | Output | Gradient at $$x = -0.5$$ |
 |---|---|---|---|
-| ReLU | max(0, −0.5) | **0** | 0 (dead!) |
-| GELU | −0.5 · Φ(−0.5) ≈ −0.5 · 0.309 | **−0.154** | ≈ 0.154 |
-| SiLU | −0.5 · σ(−0.5) ≈ −0.5 · 0.378 | **−0.189** | ≈ 0.072 |
-| Mish | −0.5 · tanh(softplus(−0.5)) ≈ −0.5 · 0.393 | **−0.196** | ≈ 0.065 |
+| ReLU | $$\max(0, -0.5)$$ | **0** | 0 (dead!) |
+| GELU | $$-0.5 \cdot \Phi(-0.5) \approx -0.5 \cdot 0.309$$ | **−0.154** | $$\approx 0.154$$ |
+| SiLU | $$-0.5 \cdot \sigma(-0.5) \approx -0.5 \cdot 0.378$$ | **−0.189** | $$\approx 0.072$$ |
+| Mish | $$-0.5 \cdot \tanh(\operatorname{softplus}(-0.5)) \approx -0.5 \cdot 0.393$$ | **−0.196** | $$\approx 0.065$$ |
 
 All three modern activations preserve a small but non-zero gradient where ReLU goes completely silent.
 
@@ -317,7 +317,7 @@ All three modern activations preserve a small but non-zero gradient where ReLU g
   <circle cx="305" cy="240" r="5" fill="#16a34a"/>
   <text x="315" y="244" class="leg-lbl" fill="#16a34a">Mish</text>
 </svg>
-<figcaption>ReLU, ELU, GELU, SiLU, and Mish on the same axes. Watch x ∈ [−2, 0]: ReLU is flat at zero (dead zone), ELU saturates to a fixed floor, and GELU/SiLU/Mish preserve a smooth negative dip that carries gradient information back through the network.</figcaption>
+<figcaption>ReLU, ELU, GELU, SiLU, and Mish on the same axes. Watch \(x \in [-2, 0]\): ReLU is flat at zero (dead zone), ELU saturates to a fixed floor, and GELU/SiLU/Mish preserve a smooth negative dip that carries gradient information back through the network.</figcaption>
 </figure>
 </div>
 

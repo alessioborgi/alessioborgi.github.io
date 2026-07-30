@@ -37,22 +37,31 @@ Now imagine two different train stations in the *same* city — say, "North Stat
     .sp-title { font-size:11px; font-family:sans-serif; font-weight:bold; text-anchor:middle; fill:#1e293b; }
     .sp-badge { font-size:8px; font-family:sans-serif; font-weight:bold; }
   </style>
-  <!-- Left graph -->
-  <text x="115" y="13" class="sp-title">Same position, different structure</text>
-  <circle cx="115" cy="65" r="13" class="sp-node" fill="#6366f1"/>
-  <circle cx="65"  cy="90" r="10" class="sp-node" fill="#818cf8"/>
-  <circle cx="85"  cy="40" r="10" class="sp-node" fill="#818cf8"/>
-  <circle cx="145" cy="40" r="10" class="sp-node" fill="#818cf8"/>
-  <circle cx="165" cy="90" r="10" class="sp-node" fill="#818cf8"/>
-  <line x1="115" y1="65" x2="65"  y2="90" class="sp-edge"/>
-  <line x1="115" y1="65" x2="85"  y2="40" class="sp-edge"/>
-  <line x1="115" y1="65" x2="145" y2="40" class="sp-edge"/>
-  <line x1="115" y1="65" x2="165" y2="90" class="sp-edge"/>
-  <text x="115" y="120" class="sp-label">Central node, degree 4 (sp3 carbon)</text>
-  <!-- Right of left -->
-  <circle cx="115" cy="65" r="13" fill="none" stroke="#f97316" stroke-width="2" stroke-dasharray="3" cx2="200"/>
-  <!-- second graph same position different structure -->
-  <circle cx="115" cy="65" r="13" class="sp-node" fill="#f97316" opacity="0"/>
+  <!-- Left panel: two molecules, same central role, different degree -->
+  <text x="122" y="13" class="sp-title">Same position, different structure</text>
+  <!-- molecule A: degree 4 -->
+  <line x1="68" y1="66" x2="36"  y2="90" class="sp-edge"/>
+  <line x1="68" y1="66" x2="46"  y2="43" class="sp-edge"/>
+  <line x1="68" y1="66" x2="90"  y2="43" class="sp-edge"/>
+  <line x1="68" y1="66" x2="100" y2="90" class="sp-edge"/>
+  <circle cx="36"  cy="90" r="8" class="sp-node" fill="#818cf8"/>
+  <circle cx="46"  cy="43" r="8" class="sp-node" fill="#818cf8"/>
+  <circle cx="90"  cy="43" r="8" class="sp-node" fill="#818cf8"/>
+  <circle cx="100" cy="90" r="8" class="sp-node" fill="#818cf8"/>
+  <circle cx="68"  cy="66" r="12" class="sp-node" fill="#6366f1"/>
+  <circle cx="68"  cy="66" r="17" fill="none" stroke="#f97316" stroke-width="2" stroke-dasharray="3"/>
+  <text x="68" y="118" class="sp-label">degree 4 (sp3)</text>
+  <!-- molecule B: degree 3 -->
+  <line x1="180" y1="66" x2="152" y2="45" class="sp-edge"/>
+  <line x1="180" y1="66" x2="208" y2="45" class="sp-edge"/>
+  <line x1="180" y1="66" x2="180" y2="96" class="sp-edge"/>
+  <circle cx="152" cy="45" r="8" class="sp-node" fill="#818cf8"/>
+  <circle cx="208" cy="45" r="8" class="sp-node" fill="#818cf8"/>
+  <circle cx="180" cy="96" r="8" class="sp-node" fill="#818cf8"/>
+  <circle cx="180" cy="66" r="12" class="sp-node" fill="#6366f1"/>
+  <circle cx="180" cy="66" r="17" fill="none" stroke="#f97316" stroke-width="2" stroke-dasharray="3"/>
+  <text x="180" y="118" class="sp-label">degree 3 (sp2)</text>
+  <text x="122" y="132" class="sp-label">Both are the central atom — same PE, different SE</text>
   <!-- divider -->
   <line x1="245" y1="10" x2="245" y2="130" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3"/>
   <!-- Right graph -->

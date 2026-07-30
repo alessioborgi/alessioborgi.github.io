@@ -169,7 +169,7 @@ With residual connections, y_l = x_l + f(x_l), so:
 \]
 </div>
 
-The gradient always includes the **1** term — a direct, unattenuated path from output to input. Even if ∂f/∂x_l ≈ 0 (a saturated or poorly-conditioned sub-layer), the gradient still flows back as 1.
+The gradient always includes the **1** term — a direct, unattenuated path from output to input. Even if $$\partial f / \partial x_l \approx 0$$ (a saturated or poorly-conditioned sub-layer), the gradient still flows back as 1.
 
 Summing over all paths: gradients reach early layers directly via the skip connections. Deep networks become trainable.
 
@@ -179,9 +179,9 @@ Summing over all paths: gradients reach early layers directly via the skip conne
 
 ## Residuals as Incremental Refinements
 
-The residual formulation y = x + f(x) has another interpretation: **each layer proposes a small correction to the current representation**.
+The residual formulation $$y = x + f(x)$$ has another interpretation: **each layer proposes a small correction to the current representation**.
 
-If f is initialised near zero (which happens naturally with small random weights), then at the start of training y ≈ x. The network begins as a near-identity function — a useful initialisation since the untrained network does not corrupt the signal.
+If $$f$$ is initialised near zero (which happens naturally with small random weights), then at the start of training $$y \approx x$$. The network begins as a near-identity function — a useful initialisation since the untrained network does not corrupt the signal.
 
 As training progresses, each layer learns to add increasingly meaningful corrections. This is why Transformers initialise stably even at 96 layers — no single layer needs to do anything dramatic from the start.
 
@@ -217,17 +217,17 @@ This view, popularised by mechanistic interpretability research (Elhage et al., 
 Consider a toy 3-layer network, each layer applying a transformation with Jacobian magnitude 0.5:
 
 **Without residuals:**  
-Gradient reaching layer 1 = 1 × 0.5 × 0.5 × 0.5 = **0.125**  
-After 10 layers: 1 × 0.5^10 ≈ **0.001** — essentially vanished.
+Gradient reaching layer 1 $$= 1 \times 0.5 \times 0.5 \times 0.5 = \mathbf{0.125}$$  
+After 10 layers: $$1 \times 0.5^{10} \approx \mathbf{0.001}$$ — essentially vanished.
 
-**With residuals** (each Jacobian is now 1 + 0.5 = 1.5 at best, but more importantly the identity term always contributes 1):  
-Even if ∂f/∂x ≈ 0 at every layer, gradient at layer 1 = **1.0** (via the skip path).  
+**With residuals** (each Jacobian is now $$1 + 0.5 = 1.5$$ at best, but more importantly the identity term always contributes 1):  
+Even if $$\partial f / \partial x \approx 0$$ at every layer, gradient at layer 1 $$= \mathbf{1.0}$$ (via the skip path).  
 In practice the Jacobian is (1 + small correction), so even 96 layers multiply out to a value near 1 rather than near zero.
 
-This is the key: the "1" in (1 + ∂f/∂x) acts as a floor that prevents gradient collapse.
+This is the key: the "1" in $$(1 + \partial f / \partial x)$$ acts as a floor that prevents gradient collapse.
 
 <div class="insight-box">
-<strong>Near-zero initialisation is intentional:</strong> At the start of training, f(x) ≈ 0 (small random weights), so y ≈ x. The 96-layer GPT-3 starts as a near-identity function. This is not an accident — it means no single layer corrupts the signal from the start, and learning proceeds incrementally.
+<strong>Near-zero initialisation is intentional:</strong> At the start of training, \(f(x) \approx 0\) (small random weights), so \(y \approx x\). The 96-layer GPT-3 starts as a near-identity function. This is not an accident — it means no single layer corrupts the signal from the start, and learning proceeds incrementally.
 </div>
 
 ## What Happens Without Residuals?

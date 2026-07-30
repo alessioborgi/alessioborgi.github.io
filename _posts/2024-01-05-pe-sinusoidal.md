@@ -33,7 +33,6 @@ toc_label: "Contents"
 <div class="tldr-box">
   <strong>TL;DR:</strong> Sinusoidal PE assigns each position a unique vector made of alternating sin/cos values at geometrically spaced frequencies. It requires no training, generalises gracefully, and was the default for early Transformers.
 </div>
-{% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Sinusoidal PE diagram" caption="Sinusoidal positional encodings (Vaswani et al., 2017)" %}
 
 <div class="insight-box">
 <strong>Why this design feels elegant:</strong> no learned parameters, smooth frequency spectrum, and every position gets a unique code the model can extrapolate beyond training.
@@ -48,22 +47,26 @@ That's exactly what sinusoidal PE does: each dimension of the encoding vector is
 
 ## The Formula
 
-For a token at position `pos`, dimension `i` of its PE vector is:
+For a token at position $$\mathrm{pos}$$, dimension $$i$$ of its PE vector is:
 
 <div class="formula-box">
-PE(pos, 2i)   = sin( pos / 10000<sup>2i/d</sup> )<br>
-PE(pos, 2i+1) = cos( pos / 10000<sup>2i/d</sup> )
+\[
+\begin{aligned}
+\mathrm{PE}(\mathrm{pos},\, 2i)   &= \sin\!\left( \frac{\mathrm{pos}}{10000^{2i/d}} \right) \\[4pt]
+\mathrm{PE}(\mathrm{pos},\, 2i+1) &= \cos\!\left( \frac{\mathrm{pos}}{10000^{2i/d}} \right)
+\end{aligned}
+\]
 </div>
 
-That's it. Even dimensions get a sine, odd dimensions get a cosine. The frequency shrinks geometrically as `i` increases.
+That's it. Even dimensions get a sine, odd dimensions get a cosine. The frequency shrinks geometrically as $$i$$ increases.
 
 ## The Intuition: A Continuous Binary Counter
 
 Think of binary numbers: 0001, 0010, 0011, 0100, … The rightmost bit flips every step (high frequency); the leftmost bit flips rarely (low frequency). Together they uniquely identify each integer.
 
 Sinusoidal PE does the same in a continuous, smooth way:
-- **High dimensions (i small → high frequency):** the sin/cos oscillates rapidly, capturing fine-grained position differences.
-- **Low dimensions (i large → low frequency):** the sin/cos changes slowly, encoding coarse position.
+- **High dimensions ($$i$$ small → high frequency):** the sin/cos oscillates rapidly, capturing fine-grained position differences.
+- **Low dimensions ($$i$$ large → low frequency):** the sin/cos changes slowly, encoding coarse position.
 
 Each position gets a unique fingerprint — a mix of fast and slow oscillations — that the model can read.
 
@@ -197,9 +200,9 @@ Each position gets a unique fingerprint — a mix of fast and slow oscillations 
 </figure>
 </div>
 
-## Concrete Worked Example (d = 4)
+## Concrete Worked Example ($$d = 4$$)
 
-Let's compute the PE vector for position pos = 1 with d = 4 dimensions (i = 0 and i = 1):
+Let's compute the PE vector for position $$\mathrm{pos} = 1$$ with $$d = 4$$ dimensions ($$i = 0$$ and $$i = 1$$):
 
 ```
 PE(1, dim=0) = sin(1 / 10000^(0/4)) = sin(1 / 1)       = sin(1.0)  ≈  0.841
@@ -208,9 +211,15 @@ PE(1, dim=2) = sin(1 / 10000^(2/4)) = sin(1 / 100)     = sin(0.01) ≈  0.010
 PE(1, dim=3) = cos(1 / 10000^(2/4)) = cos(1 / 100)     = cos(0.01) ≈  1.000
 ```
 
-So PE(pos=1) ≈ [0.841, 0.540, 0.010, 1.000].
+So
 
-Now compare pos = 2:
+<div class="formula-box">
+\[
+\mathrm{PE}(\mathrm{pos}=1) \approx [0.841,\, 0.540,\, 0.010,\, 1.000].
+\]
+</div>
+
+Now compare $$\mathrm{pos} = 2$$:
 ```
 PE(2, dim=0) = sin(2.0) ≈  0.909    (changed a lot — high frequency)
 PE(2, dim=2) = sin(0.02) ≈ 0.020    (barely changed — low frequency)
@@ -219,7 +228,7 @@ PE(2, dim=2) = sin(0.02) ≈ 0.020    (barely changed — low frequency)
 The high-frequency dims (left) distinguish nearby positions; the low-frequency dims (right) distinguish distant ones. Together they uniquely encode every position.
 
 <div class="insight-box">
-<strong>Why this is clever:</strong> at d_model = 512, the 256 pairs of (sin, cos) cover frequencies from a period of ~6 tokens up to ~62,832 tokens. Every position gets a unique fingerprint, and the model can learn to read it.
+<strong>Why this is clever:</strong> at \(d_{\text{model}} = 512\), the 256 pairs of (sin, cos) cover frequencies from a period of ~6 tokens up to ~62,832 tokens. Every position gets a unique fingerprint, and the model can learn to read it.
 </div>
 
 ## Three Key Properties
@@ -228,11 +237,11 @@ The high-frequency dims (left) distinguish nearby positions; the low-frequency d
 
 **2. Smooth transitions.** Adjacent positions have similar PE vectors. The model can learn that nearby positions are related without any explicit guidance.
 
-**3. Relative encoding via dot products.** The dot product `PE(pos₁) · PE(pos₂)` depends only on the *distance* `pos₁ − pos₂`. This means the model can implicitly reason about relative distances from absolute positions — a crucial and non-obvious property.
+**3. Relative encoding via dot products.** The dot product $$\mathrm{PE}(\mathrm{pos}_1) \cdot \mathrm{PE}(\mathrm{pos}_2)$$ depends only on the *distance* $$\mathrm{pos}_1 - \mathrm{pos}_2$$. This means the model can implicitly reason about relative distances from absolute positions — a crucial and non-obvious property.
 
 ## Why Use 10000?
 
-The base 10000 is chosen so that the wavelengths span from 2π (highest frequency, dim 0) to 10000·2π (lowest frequency, last dim). This gives the model coverage over positions from 1 to roughly 10,000 tokens — sufficient for most early use cases.
+The base 10000 is chosen so that the wavelengths span from $$2\pi$$ (highest frequency, dim 0) to $$10000 \cdot 2\pi$$ (lowest frequency, last dim). This gives the model coverage over positions from 1 to roughly 10,000 tokens — sufficient for most early use cases.
 
 ## Limitations
 

@@ -91,23 +91,23 @@ toc_label: "Contents"
 
 ## Worked Example: Interpolating from 4k to 16k
 
-Model: LLaMA-2 7B, trained at L_train = 4096, target L_target = 16384 (4× extension).
+Model: LLaMA-2 7B, trained at $$L_{\mathrm{train}} = 4096$$, target $$L_{\mathrm{target}} = 16384$$ (4× extension).
 
 **Without Position Interpolation — naive extrapolation:**
-- Token at position 5000: RoPE angle for dim i=0 = 5000 × θ₀ = 5000 × 1.0 = **5000 radians**
+- Token at position 5000: RoPE angle for dim $$i=0$$ = $$5000 \times \theta_0 = 5000 \times 1.0 =$$ **5000 radians**
 - The model during training never saw an angle beyond 4096 radians for this dimension
 - The attention pattern for this token is completely out-of-distribution → garbage output
 
 **With Position Interpolation:**
-- Rescale: pos_new = 5000 × (4096 / 16384) = 5000 × 0.25 = **1250**
-- RoPE angle for dim i=0 = 1250 × 1.0 = **1250 radians**
+- Rescale: $$\mathrm{pos}_{\mathrm{new}} = 5000 \times (4096 / 16384) = 5000 \times 0.25 =$$ **1250**
+- RoPE angle for dim $$i=0$$ = $$1250 \times 1.0 =$$ **1250 radians**
 - The model saw angles up to 4096 during training — 1250 is well within this range ✓
-- Token at position 16383 maps to: 16383 × 0.25 = 4095.75 ≈ still within training range ✓
+- Token at position 16383 maps to: $$16383 \times 0.25 = 4095.75$$ ≈ still within training range ✓
 
-**The cost:** positions that were 1 apart (relative angle = θ) now look like they are 0.25 apart (relative angle = 0.25 × θ). The model's learned sense of "adjacent" vs "nearby" is compressed. A short fine-tuning run (1000 steps) lets it readapt its attention patterns to the new compressed geometry.
+**The cost:** positions that were 1 apart (relative angle $$= \theta$$) now look like they are 0.25 apart (relative angle $$= 0.25 \times \theta$$). The model's learned sense of "adjacent" vs "nearby" is compressed. A short fine-tuning run (1000 steps) lets it readapt its attention patterns to the new compressed geometry.
 
 <div class="insight-box">
-<strong>High-frequency degradation:</strong> For the highest-frequency dimension (i=63, θ₆₃ ≈ 1/7244), adjacent tokens produce a relative angle of 0.25/7244 ≈ 0.0000345 radians after interpolation — very small, and the model may struggle to distinguish adjacent from nearby tokens. This is precisely what NTK-Aware Scaling and YaRN later improved upon.
+<strong>High-frequency degradation:</strong> For the highest-frequency dimension (\(i=63\), \(\theta_{63} \approx 1/7244\)), adjacent tokens produce a relative angle of \(0.25/7244 \approx 0.0000345\) radians after interpolation — very small, and the model may struggle to distinguish adjacent from nearby tokens. This is precisely what NTK-Aware Scaling and YaRN later improved upon.
 </div>
 
 ## Why It Was Such a Big Deal

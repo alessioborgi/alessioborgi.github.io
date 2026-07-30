@@ -19,8 +19,6 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> For Graph Transformers, the shortest-path distance \(\mathrm{dist}(i,j)\) between every node pair can be added to the attention logits as a learned scalar bias. This injects the graph's metric structure directly into attention without any message passing — at the price of computing and storing all-pairs distances, which is \(O(N(N+\lvert E\rvert))\) time and \(O(N^2)\) memory.
 </div>
-{% include figure image_path="/images/blog/gnn/ying2021_graphormer.png" alt="Shortest path distance bias" caption="Spatial encoding via shortest path distances in Graphormer (Ying et al., 2021)" %}
-
 
 ## Intuition First
 

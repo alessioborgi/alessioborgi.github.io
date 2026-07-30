@@ -63,7 +63,7 @@ Convexity guarantees you arrive; $$\kappa = L/\mu$$ decides when. For $$L$$-smoo
 
 Without strong convexity the rate degrades to $$O(1/k)$$, and Nesterov's accelerated method improves the strongly convex count to $$O(\sqrt{\kappa}\log(1/\varepsilon))$$ — which is optimal for first-order methods on this class.
 
-Take $$f(x,y) = \tfrac12(x^2 + 10y^2)$$, so $$\mu = 1$$, $$L = 10$$, $$\kappa = 10$$. The optimal step is $$2/11$$, and the per-iteration factor is $$9/11 \approx 0.818$$: roughly 28 iterations to gain one digit of accuracy, for a problem in two variables. Starting from $$(10, 3)$$, the iterates are $$(8.18, -2.45)$$, $$(6.69, 2.01)$$, $$(5.48, -1.64)$$ — the second coordinate flips sign every step while the first crawls. The level sets are ellipses with axis ratio $$\sqrt{\kappa} \approx 3.16$$, and the gradient points across the valley rather than along it.
+Take $$f(x,y) = \tfrac12(x^2 + 10y^2)$$, so $$\mu = 1$$, $$L = 10$$, $$\kappa = 10$$. The optimal step is $$2/11$$, and the per-iteration factor is $$9/11 \approx 0.818$$: roughly 12 iterations to gain one digit of accuracy, for a problem in two variables. Starting from $$(10, 3)$$, the iterates are $$(8.18, -2.45)$$, $$(6.69, 2.01)$$, $$(5.48, -1.64)$$ — the second coordinate flips sign every step while the first crawls. The level sets are ellipses with axis ratio $$\sqrt{\kappa} \approx 3.16$$, and the gradient points across the valley rather than along it.
 
 <div class="blog-figure">
 <figure>

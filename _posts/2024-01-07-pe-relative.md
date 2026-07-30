@@ -70,13 +70,15 @@ Relative PE captures exactly this intuition.
 
 ## Shaw et al. (2018): Relative Attention
 
-Shaw, Uszkoreit, and Vaswani modify the attention score between token i and token j to include a learned relative position embedding `a_{ij}`:
+Shaw, Uszkoreit, and Vaswani modify the attention score between token $$i$$ and token $$j$$ to include a learned relative position embedding $$a_{ij}$$:
 
 <div class="formula-box">
-score(i, j) = (q_i · k_j + q_i · a_{ij}) / √d_k
+\[
+\mathrm{score}(i, j) = \frac{q_i \cdot k_j + q_i \cdot a_{ij}}{\sqrt{d_k}}
+\]
 </div>
 
-Here `a_{ij}` is the embedding for the *clipped relative distance* `clip(i − j, −k, k)`. A maximum distance k (e.g., 16) is used — beyond that, all distances share the same embedding.
+Here $$a_{ij}$$ is the embedding for the *clipped relative distance* $$\mathrm{clip}(i - j,\, -k,\, k)$$. A maximum distance $$k$$ (e.g., 16) is used — beyond that, all distances share the same embedding.
 
 <div class="blog-figure">
 <figure>
@@ -125,7 +127,7 @@ Here `a_{ij}` is the embedding for the *clipped relative distance* `clip(i − j
   <text x="365" y="198" text-anchor="middle" font-size="9" fill="#374151">Learned scalar bias b_{ij} added to attention logits</text>
   <text x="365" y="210" text-anchor="middle" font-size="9" fill="#374151">Simpler, buckets for distance, shared across layers</text>
 </svg>
-<figcaption>Figure 1: "dogs" attending to tokens at relative distances −2, −1, +1, +2. The same distance embeddings apply regardless of absolute position.</figcaption>
+<figcaption>Figure 1: "dogs" attending to tokens at relative distances \(-2\), \(-1\), \(+1\), \(+2\). The same distance embeddings apply regardless of absolute position.</figcaption>
 </figure>
 </div>
 
@@ -134,10 +136,12 @@ Here `a_{ij}` is the embedding for the *clipped relative distance* `clip(i − j
 Raffel et al. (T5, 2020) simplify further. Instead of a full vector per relative position, they add a **learned scalar bias** to the attention score:
 
 <div class="formula-box">
-score(i, j) = q_i · k_j / √d_k + b(i − j)
+\[
+\mathrm{score}(i, j) = \frac{q_i \cdot k_j}{\sqrt{d_k}} + b(i - j)
+\]
 </div>
 
-`b(·)` is a small lookup table of scalars, indexed by bucketed distances. Nearby distances (−1, 0, +1) each get their own bucket; farther distances share buckets. The biases are shared across all layers but learned separately per attention head.
+$$b(\cdot)$$ is a small lookup table of scalars, indexed by bucketed distances. Nearby distances ($$-1$$, $$0$$, $$+1$$) each get their own bucket; farther distances share buckets. The biases are shared across all layers but learned separately per attention head.
 
 This is extremely memory-efficient and generalises gracefully to longer sequences.
 
@@ -145,20 +149,20 @@ This is extremely memory-efficient and generalises gracefully to longer sequence
 
 Suppose we have the sentence: *"I love dogs and cats"* (5 tokens).
 
-With T5-style relative bias and `m` (head slope) = 0.5, the attention score from token 2 ("love") to each other token gets a bias added:
+With T5-style relative bias and $$m$$ (head slope) $$= 0.5$$, the attention score from token 2 ("love") to each other token gets a bias added:
 
-| Attending from "love" (pos 1) | target pos | distance | bias b(dist) |
+| Attending from "love" (pos 1) | target pos | distance | bias $$b(\mathrm{dist})$$ |
 |-------------------------------|-----------|----------|-------------|
-| "I"                           | 0         | −1       | b(−1)        |
-| "love"                        | 1         | 0        | b(0) = 0     |
-| "dogs"                        | 2         | +1       | b(+1)        |
-| "and"                         | 3         | +2       | b(+2)        |
-| "cats"                        | 4         | +3       | b(+3)        |
+| "I"                           | 0         | $$-1$$   | $$b(-1)$$        |
+| "love"                        | 1         | $$0$$    | $$b(0) = 0$$     |
+| "dogs"                        | 2         | $$+1$$   | $$b(+1)$$        |
+| "and"                         | 3         | $$+2$$   | $$b(+2)$$        |
+| "cats"                        | 4         | $$+3$$   | $$b(+3)$$        |
 
-The biases b(−1), b(0), b(+1), … are small learned scalars. Crucially, if this same sentence fragment appeared at positions 50–54 in a longer document, the *exact same bias values* apply — because only the relative distances matter, not the absolute indices.
+The biases $$b(-1)$$, $$b(0)$$, $$b(+1)$$, … are small learned scalars. Crucially, if this same sentence fragment appeared at positions 50–54 in a longer document, the *exact same bias values* apply — because only the relative distances matter, not the absolute indices.
 
 <div class="insight-box">
-<strong>Why this matters at scale:</strong> a model trained on sequences of 512 tokens using relative PE can still correctly apply the bias b(+1) at positions 1000 and 1001 — it has seen "distance 1" millions of times. An absolute-PE model at position 1000 has seen that index far less often.
+<strong>Why this matters at scale:</strong> a model trained on sequences of 512 tokens using relative PE can still correctly apply the bias \(b(+1)\) at positions 1000 and 1001 — it has seen "distance 1" millions of times. An absolute-PE model at position 1000 has seen that index far less often.
 </div>
 
 ## Why Relative PE Generalises Better

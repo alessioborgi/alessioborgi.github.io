@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## The three objects
 
-Start with the **sample space** $$\Omega$$: the set of every outcome the experiment could produce, with exactly one occurring. Two dice give $$\Omega = \{1,\dots,6\}^2$$, so $$|\Omega| = 36$$. A real-valued measurement gives $$\Omega = \mathbb{R}$$.
+Start with the **sample space** $$\Omega$$: the set of every outcome the experiment could produce, with exactly one occurring. Two dice give $$\Omega = \{1,\dots,6\}^2$$, so $$\lvert \Omega\rvert = 36$$. A real-valued measurement gives $$\Omega = \mathbb{R}$$.
 
 An **event** is a subset of $$\Omega$$ — "the sum is 7" is the six-element set $$\{(1,6),(2,5),\dots,(6,1)\}$$. Events are sets, which is why probability inherits the algebra of sets: "and" is intersection, "or" is union, "not" is complement. The collection of admissible events is $$\mathcal{F}$$, closed under complement and countable union.
 
@@ -78,7 +78,7 @@ Truncating after the first term gives the **union bound** $$P(\bigcup_i A_i) \le
 
 Draw an integer uniformly from $$\{1,\dots,100\}$$. What is the probability it is divisible by 2, 3 or 5?
 
-Let $$A_d$$ be "divisible by $$d$$", so $$|A_d| = \lfloor 100/d \rfloor$$. Intersections are divisibility by the products, since 2, 3 and 5 are coprime.
+Let $$A_d$$ be "divisible by $$d$$", so $$\lvert A_d\rvert = \lfloor 100/d \rfloor$$. Intersections are divisibility by the products, since 2, 3 and 5 are coprime.
 
 | Term | Set | Count |
 |---|---|---|

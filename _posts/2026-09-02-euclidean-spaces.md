@@ -91,7 +91,7 @@ With $$x = (3,4)$$ and $$u = (1,1)$$: $$\langle x,u\rangle = 7$$, $$\lVert u\rVe
 
 ## Orthonormal bases and Gram–Schmidt
 
-A basis $$\\{q_1,\dots,q_n\\}$$ is orthonormal when $$\langle q_i,q_j\rangle = \delta_{ij}$$. It is the convenient case: coordinates are just inner products, $$x = \sum_i \langle x, q_i\rangle q_i$$, and lengths are preserved by Parseval, $$\lVert x\rVert^2 = \sum_i \langle x,q_i\rangle^2$$. Gram–Schmidt manufactures one from any basis $$\\{a_1,\dots,a_n\\}$$ by repeatedly subtracting off what is already explained:
+A basis $$\{q_1,\dots,q_n\}$$ is orthonormal when $$\langle q_i,q_j\rangle = \delta_{ij}$$. It is the convenient case: coordinates are just inner products, $$x = \sum_i \langle x, q_i\rangle q_i$$, and lengths are preserved by Parseval, $$\lVert x\rVert^2 = \sum_i \langle x,q_i\rangle^2$$. Gram–Schmidt manufactures one from any basis $$\{a_1,\dots,a_n\}$$ by repeatedly subtracting off what is already explained:
 
 <div class="formula-box">
 \[
@@ -104,7 +104,7 @@ Each step is the projection formula applied and subtracted. In floating point, c
 
 ## Hyperplanes and the margin
 
-A hyperplane is the set $$H = \\{x : \mathbf{w}^\top x + b = 0\\}$$ with $$\mathbf{w} \neq 0$$. It is an $$(n{-}1)$$-dimensional affine subspace, and $$\mathbf{w}$$ is normal to it: for any $$x_1, x_2 \in H$$, $$\mathbf{w}^\top(x_1 - x_2) = 0$$. To find the distance from an arbitrary $$x_0$$, step from $$x_0$$ along $$\mathbf{w}$$ until you hit $$H$$. Write the foot as $$x_0 - t\mathbf{w}$$ and solve $$\mathbf{w}^\top(x_0 - t\mathbf{w}) + b = 0$$, giving $$t = (\mathbf{w}^\top x_0 + b)/\lVert \mathbf{w}\rVert^2$$. The distance is $$\lVert t\mathbf{w}\rVert$$:
+A hyperplane is the set $$H = \{x : \mathbf{w}^\top x + b = 0\}$$ with $$\mathbf{w} \neq 0$$. It is an $$(n{-}1)$$-dimensional affine subspace, and $$\mathbf{w}$$ is normal to it: for any $$x_1, x_2 \in H$$, $$\mathbf{w}^\top(x_1 - x_2) = 0$$. To find the distance from an arbitrary $$x_0$$, step from $$x_0$$ along $$\mathbf{w}$$ until you hit $$H$$. Write the foot as $$x_0 - t\mathbf{w}$$ and solve $$\mathbf{w}^\top(x_0 - t\mathbf{w}) + b = 0$$, giving $$t = (\mathbf{w}^\top x_0 + b)/\lVert \mathbf{w}\rVert^2$$. The distance is $$\lVert t\mathbf{w}\rVert$$:
 
 <div class="formula-box">
 \[

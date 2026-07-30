@@ -46,7 +46,7 @@ Three relationships tie the table together. Binomial is a sum of independent Ber
 
 **Beta and Dirichlet.** These are the conjugate priors for Bernoulli and Categorical: start with Beta$$(\alpha,\beta)$$, observe $$s$$ successes and $$f$$ failures, and the posterior is Beta$$(\alpha+s,\beta+f)$$. The parameters act as pseudo-counts, which is the cleanest way to read Laplace smoothing — adding 1 to every count is a Dirichlet$$(\mathbf{1})$$ prior. Dirichlet is also what latent Dirichlet allocation puts over topic proportions.
 
-**Laplace.** Its log-density is $$-|x-\mu|/b$$ up to a constant, so a Laplace prior on weights gives an $$\ell_1$$ penalty and a Gaussian prior gives $$\ell_2$$. Lasso versus ridge is a choice of noise model, not just a choice of penalty.
+**Laplace.** Its log-density is $$-\lvert x-\mu\rvert/b$$ up to a constant, so a Laplace prior on weights gives an $$\ell_1$$ penalty and a Gaussian prior gives $$\ell_2$$. Lasso versus ridge is a choice of noise model, not just a choice of penalty.
 
 ## The multivariate Gaussian
 

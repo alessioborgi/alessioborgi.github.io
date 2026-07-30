@@ -19,8 +19,6 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> TFN (Thomas et al., 2018) gives each node a set of features indexed by degree \(\ell\), each transforming under the Wigner-D matrix \(D^{\ell}(R)\). Messages combine node features with spherical harmonics of the edge direction through Clebsch–Gordan tensor products, weighted by learned functions of distance alone. This is the algebraic foundation on which SE(3)-Transformers, NequIP and MACE are built; EGNN is best read as a lightweight alternative to it rather than a special case of it.
 </div>
-{% include figure image_path="/images/blog/gnn/thomas2018_tfn.png" alt="Tensor Field Network" caption="Tensor Field Networks: SE(3)-equivariant graph neural networks (Thomas et al., 2018)" %}
-
 
 ## The TFN Framework
 

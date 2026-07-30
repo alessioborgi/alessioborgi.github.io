@@ -38,11 +38,11 @@ Graphs face the same problem, but harder: there is no canonical position 1, 2, 3
     .pe-title { font-size:11px; fill:#1e293b; font-family:sans-serif; font-weight:bold; text-anchor:middle; }
   </style>
   <text x="115" y="14" class="pe-title">Without PE: B = D (same embedding)</text>
-  <circle cx="40"  cy="70" r="12" class="pe-node"/><text x="40"  cy="70" dy="4" class="pe-label" fill="white">A</text>
-  <circle cx="90"  cy="70" r="12" class="pe-node-hi"/><text x="90"  cy="70" dy="4" class="pe-label" fill="white">B</text>
-  <circle cx="140" cy="70" r="12" class="pe-node"/><text x="140" cy="70" dy="4" class="pe-label" fill="white">C</text>
-  <circle cx="190" cy="70" r="12" class="pe-node-hi"/><text x="190" cy="70" dy="4" class="pe-label" fill="white">D</text>
-  <circle cx="240" cy="70" r="12" class="pe-node"/><text x="240" cy="70" dy="4" class="pe-label" fill="white">E</text>
+  <circle cx="40"  cy="70" r="12" class="pe-node"/><text x="40"  y="70" dy="4" class="pe-label" fill="white">A</text>
+  <circle cx="90"  cy="70" r="12" class="pe-node-hi"/><text x="90"  y="70" dy="4" class="pe-label" fill="white">B</text>
+  <circle cx="140" cy="70" r="12" class="pe-node"/><text x="140" y="70" dy="4" class="pe-label" fill="white">C</text>
+  <circle cx="190" cy="70" r="12" class="pe-node-hi"/><text x="190" y="70" dy="4" class="pe-label" fill="white">D</text>
+  <circle cx="240" cy="70" r="12" class="pe-node"/><text x="240" y="70" dy="4" class="pe-label" fill="white">E</text>
   <line x1="52" y1="70" x2="78" y2="70" class="pe-edge"/>
   <line x1="102" y1="70" x2="128" y2="70" class="pe-edge"/>
   <line x1="152" y1="70" x2="178" y2="70" class="pe-edge"/>
@@ -52,10 +52,10 @@ Graphs face the same problem, but harder: there is no canonical position 1, 2, 3
   <!-- divider -->
   <line x1="270" y1="10" x2="270" y2="125" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4"/>
   <text x="370" y="14" class="pe-title">With PE: B ≠ D (unique identity)</text>
-  <circle cx="290" cy="70" r="12" class="pe-node"/><text x="290" cy="70" dy="4" class="pe-label" fill="white">A</text>
-  <circle cx="335" cy="70" r="12" class="pe-node-hi"/><text x="335" cy="70" dy="4" class="pe-label" fill="white">B</text>
-  <circle cx="380" cy="70" r="12" class="pe-node"/><text x="380" cy="70" dy="4" class="pe-label" fill="white">C</text>
-  <circle cx="425" cy="70" r="12" class="pe-node-hi" style="opacity:0.5"/><text x="425" cy="70" dy="4" class="pe-label" fill="white">D</text>
+  <circle cx="290" cy="70" r="12" class="pe-node"/><text x="290" y="70" dy="4" class="pe-label" fill="white">A</text>
+  <circle cx="335" cy="70" r="12" class="pe-node-hi"/><text x="335" y="70" dy="4" class="pe-label" fill="white">B</text>
+  <circle cx="380" cy="70" r="12" class="pe-node"/><text x="380" y="70" dy="4" class="pe-label" fill="white">C</text>
+  <circle cx="425" cy="70" r="12" class="pe-node-hi" style="opacity:0.5"/><text x="425" y="70" dy="4" class="pe-label" fill="white">D</text>
   <line x1="302" y1="70" x2="323" y2="70" class="pe-edge"/>
   <line x1="347" y1="70" x2="368" y2="70" class="pe-edge"/>
   <line x1="392" y1="70" x2="413" y2="70" class="pe-edge"/>

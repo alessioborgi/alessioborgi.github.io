@@ -152,8 +152,8 @@ A lot of people think V is just "K later in the pipeline." It is not. K is optim
 
 Given a single query token and a sequence of key-value pairs:
 
-1. **Match:** compute q · kᵢ for every token i → raw similarity scores
-2. **Scale:** divide by √d_k → prevent softmax saturation
+1. **Match:** compute $$q \cdot k_i$$ for every token $$i$$ → raw similarity scores
+2. **Scale:** divide by $$\sqrt{d_k}$$ → prevent softmax saturation
 3. **Normalise:** softmax → convert scores to a probability distribution (attention weights)
 4. **Retrieve:** weighted sum of values → the output for this query token
 
@@ -173,9 +173,9 @@ The result is a blend of all value vectors, weighted by how much each token's ke
 
 | Database concept | Attention equivalent |
 |-----------------|---------------------|
-| Search query | Query vector **q** |
-| Index keys | Key vectors **k₁…kₙ** |
-| Retrieved records | Value vectors **v₁…vₙ** |
+| Search query | Query vector $$q$$ |
+| Index keys | Key vectors $$k_1 \dots k_n$$ |
+| Retrieved records | Value vectors $$v_1 \dots v_n$$ |
 | Exact match (hard) | Argmax over scores |
 | Fuzzy match (soft) | Softmax-weighted blend |
 
@@ -188,7 +188,7 @@ Classic databases return one result (hard lookup). Attention returns a different
 | **Q** | Query | What this token is looking for |
 | **K** | Key | What each token advertises it contains |
 | **V** | Value | What each token contributes when selected |
-| **QKᵀ** | Similarity | How well query matches each key |
+| $$QK^\top$$ | Similarity | How well query matches each key |
 | **Softmax** | Normalisation | Converts similarities to weights |
 | **Weighted V** | Output | Blend of values, weighted by attention |
 

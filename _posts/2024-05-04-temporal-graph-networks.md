@@ -172,7 +172,7 @@ The GRU's forget gate suppresses the old memory dimension 3 (0.8 → 0.3) becaus
   <polygon points="363,65 373,70 363,75" fill="#6366f1"/>
 
   <!-- Node u memory after -->
-  <rect x="375" y="50" width="70" height="40" rx="6" style="animation:mem-update 3s ease-in-out infinite;"/>
+  <rect x="375" y="50" width="70" height="40" rx="6" fill="#f97316" style="animation:mem-update 3s ease-in-out infinite;"/>
   <text x="410" y="68" font-size="10" fill="white" text-anchor="middle" font-weight="bold">s_u(t)</text>
   <text x="410" y="82" font-size="9" fill="#e0e7ff" text-anchor="middle">[0.45,0.6,0.3]</text>
   <text x="410" y="105" font-size="9" fill="#64748b" text-anchor="middle">Memory after</text>

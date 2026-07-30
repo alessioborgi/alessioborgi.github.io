@@ -188,28 +188,38 @@ HetSheaf makes two changes:
 
 ### Mini-Example: 3-Node Heterogeneous Graph
 
-Consider a small graph with nodes A (person), B (org), C (concept), two edges e_AB and e_BC.
+Consider a small graph with nodes A (person), B (org), C (concept), two edges $$e_{AB}$$ and $$e_{BC}$$.
 
-**Standard SNN** (type-blind): both edges use the same learned matrix W ∈ ℝ^{2×2}.
+**Standard SNN** (type-blind): both edges use the same learned matrix $$W \in \mathbb{R}^{2 \times 2}$$.
 
-<div class="math-box" style="background:linear-gradient(145deg,#f8fafc,#f0f4f8);border:1px solid #e2e8f0;border-radius:8px;padding:1rem 1.4rem;margin:1.25rem 0;font-family:monospace;text-align:left;">
-F_{A→e_AB} = W,   F_{B→e_AB} = W<br>
-F_{B→e_BC} = W,   F_{C→e_BC} = W
+<div class="formula-box">
+\[
+\begin{aligned}
+\mathcal{F}_{A \trianglelefteq e_{AB}} &= W, &\qquad \mathcal{F}_{B \trianglelefteq e_{AB}} &= W \\
+\mathcal{F}_{B \trianglelefteq e_{BC}} &= W, &\qquad \mathcal{F}_{C \trianglelefteq e_{BC}} &= W
+\end{aligned}
+\]
 </div>
 
-**HetSheaf** (type-conditioned): each edge type gets its own restriction map, conditioned on the node's type embedding τ and features h_v.
+**HetSheaf** (type-conditioned): each edge type gets its own restriction map, conditioned on the node's type embedding $$\tau$$ and features $$h_v$$.
 
-<div class="math-box" style="background:linear-gradient(145deg,#f8fafc,#f0f4f8);border:1px solid #e2e8f0;border-radius:8px;padding:1rem 1.4rem;margin:1.25rem 0;font-family:monospace;text-align:left;">
-F_{A→e_AB} = MLP(h_A, τ_person, τ_{P→O})  ∈ ℝ^{2×2}<br>
-F_{B→e_AB} = MLP(h_B, τ_org,    τ_{P→O})  ∈ ℝ^{2×2}<br>
-F_{B→e_BC} = MLP(h_B, τ_org,    τ_{O→C})  ∈ ℝ^{2×2}<br>
-F_{C→e_BC} = MLP(h_C, τ_concept, τ_{O→C}) ∈ ℝ^{2×2}
+<div class="formula-box">
+\[
+\begin{aligned}
+\mathcal{F}_{A \trianglelefteq e_{AB}} &= \operatorname{MLP}\big(h_A,\; \tau_{\text{person}},\; \tau_{P \to O}\big)  &&\in \mathbb{R}^{2 \times 2} \\
+\mathcal{F}_{B \trianglelefteq e_{AB}} &= \operatorname{MLP}\big(h_B,\; \tau_{\text{org}},\; \tau_{P \to O}\big)     &&\in \mathbb{R}^{2 \times 2} \\
+\mathcal{F}_{B \trianglelefteq e_{BC}} &= \operatorname{MLP}\big(h_B,\; \tau_{\text{org}},\; \tau_{O \to C}\big)     &&\in \mathbb{R}^{2 \times 2} \\
+\mathcal{F}_{C \trianglelefteq e_{BC}} &= \operatorname{MLP}\big(h_C,\; \tau_{\text{concept}},\; \tau_{O \to C}\big) &&\in \mathbb{R}^{2 \times 2}
+\end{aligned}
+\]
 </div>
 
-The disagreement at e_AB that the Sheaf Laplacian penalises is then:
+The disagreement at $$e_{AB}$$ that the Sheaf Laplacian penalises is then:
 
-<div class="math-box" style="background:linear-gradient(145deg,#f8fafc,#f0f4f8);border:1px solid #e2e8f0;border-radius:8px;padding:1rem 1.4rem;margin:1.25rem 0;font-family:monospace;text-align:center;">
-(δ₀ x)_{e_AB} = F_{A→e_AB} x_A − F_{B→e_AB} x_B
+<div class="formula-box">
+\[
+(\delta_0 x)_{e_{AB}} = \mathcal{F}_{A \trianglelefteq e_{AB}}\, x_A - \mathcal{F}_{B \trianglelefteq e_{AB}}\, x_B
+\]
 </div>
 
 With type-conditioned maps, this disagreement is measured **in the coordinate frame appropriate to the A–B relation**, not in a generic frame shared by all edge types. A person-to-org relationship and an org-to-concept relationship are penalised on their own terms.
@@ -261,7 +271,7 @@ On the **Heterogeneous Graph Benchmark (HGB)** — covering node classification,
 - **10× parameter reduction** vs. type-specialised baselines while maintaining competitive performance.
 - SheafPool delivers **+42pp** over mean pooling on graph classification tasks.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Type-specific neural modules scale as O(T²) in the number of relation types T — every pair of node types may need its own transformation. Type-aware restriction maps in HetSheaf scale as O(T): each type gets a conditioning signal, but the propagation rule stays the same. Encoding heterogeneity in geometry rather than architecture is the key to parameter-efficient relational learning.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Type-specific neural modules scale as \(O(T^2)\) in the number of relation types \(T\) — every pair of node types may need its own transformation. Type-aware restriction maps in HetSheaf scale as \(O(T)\): each type gets a conditioning signal, but the propagation rule stays the same. Encoding heterogeneity in geometry rather than architecture is the key to parameter-efficient relational learning.</div>
 
 ## Why This Matters
 

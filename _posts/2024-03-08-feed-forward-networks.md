@@ -59,9 +59,9 @@ toc_label: "Contents"
 
 ## Intuition First: The FFN as a Pattern-Response Memory
 
-Think of the FFN as a giant associative memory. The first matrix W₁ acts as a bank of **pattern detectors** — each row is a template asking "does this token look like X?" The nonlinearity fires neurons that match. The second matrix W₂ then says "when pattern X fires, add feature vector Y to the output."
+Think of the FFN as a giant associative memory. The first matrix $$W_1$$ acts as a bank of **pattern detectors** — each row is a template asking "does this token look like X?" The nonlinearity fires neurons that match. The second matrix $$W_2$$ then says "when pattern X fires, add feature vector Y to the output."
 
-So for a token representing "Paris" in context "capital of France", a neuron in the expanded layer might activate for the pattern "capital-of-Europe-city" and the corresponding W₂ column adds a "France-related" feature vector to the output. This is factual retrieval — not via attention, but via the FFN's stored patterns.
+So for a token representing "Paris" in context "capital of France", a neuron in the expanded layer might activate for the pattern "capital-of-Europe-city" and the corresponding $$W_2$$ column adds a "France-related" feature vector to the output. This is factual retrieval — not via attention, but via the FFN's stored patterns.
 
 <div class="blog-figure">
 <figure>
@@ -153,7 +153,7 @@ So for a token representing "Paris" in context "capital of France", a neuron in 
   <rect x="660" y="78" width="52" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
   <text x="686" y="103" text-anchor="middle" font-size="10" font-weight="700" fill="#5b21b6">output</text>
 </svg>
-<figcaption>Animated FFN forward pass. Amber neurons = fired (active after nonlinearity); dark neurons = suppressed (ReLU/GELU set them near zero). The sparse firing pattern is the FFN "reading" which patterns match the current token and assembling the response via W₂.</figcaption>
+<figcaption>Animated FFN forward pass. Amber neurons = fired (active after nonlinearity); dark neurons = suppressed (ReLU/GELU set them near zero). The sparse firing pattern is the FFN "reading" which patterns match the current token and assembling the response via \(W_2\).</figcaption>
 </figure>
 </div>
 
@@ -179,21 +179,21 @@ W_2\,\mathrm{activation}(W_1x + b_1) + b_2
 \]
 </div>
 
-- **W₁ ∈ ℝ^{d_model × d_ff}**: projects up from d_model to d_ff
+- $$W_1 \in \mathbb{R}^{d_{\mathrm{model}} \times d_{\mathrm{ff}}}$$: projects up from $$d_{\mathrm{model}}$$ to $$d_{\mathrm{ff}}$$
 - **activation**: nonlinearity (ReLU, GELU, or SwiGLU)
-- **W₂ ∈ ℝ^{d_ff × d_model}**: projects back down
-- **d_ff = 4 × d_model** in most models (e.g., 512 → 2048, or 4096 → 16384)
+- $$W_2 \in \mathbb{R}^{d_{\mathrm{ff}} \times d_{\mathrm{model}}}$$: projects back down
+- $$d_{\mathrm{ff}} = 4 \times d_{\mathrm{model}}$$ in most models (e.g., $$512 \to 2048$$, or $$4096 \to 16384$$)
 
 The 4× expansion and contraction is standard but not derived from first principles — it was established empirically in the original paper and has remained the default.
 
 ## Parameter Count: FFN Dominates
 
-For a model with d_model = 1024 and d_ff = 4096, in each block:
+For a model with $$d_{\mathrm{model}} = 1024$$ and $$d_{\mathrm{ff}} = 4096$$, in each block:
 
 | Sub-layer | Parameters |
 |-----------|-----------|
-| Multi-head attention (4 matrices) | 4 × 1024² = 4.2M |
-| FFN (2 matrices) | 2 × 1024 × 4096 = 8.4M |
+| Multi-head attention (4 matrices) | $$4 \times 1024^2 = 4.2\mathrm{M}$$ |
+| FFN (2 matrices) | $$2 \times 1024 \times 4096 = 8.4\mathrm{M}$$ |
 
 The FFN holds **twice as many parameters** as the attention sub-layer. In a 96-layer model, FFNs collectively account for roughly **2/3 of all parameters**.
 
@@ -216,8 +216,8 @@ This is why you can have a model that "knows" Paris is the capital of France eve
 
 A 2020 paper (Geva et al., "Transformer Feed-Forward Layers Are Key-Value Memories") showed that the FFN can be interpreted as:
 
-- **W₁ rows (the "keys")**: pattern detectors — each neuron in the expanded dimension activates for specific input patterns
-- **W₂ columns (the "values")**: for each activated key, the corresponding value vector is added to the output
+- $$W_1$$ **rows (the "keys")**: pattern detectors — each neuron in the expanded dimension activates for specific input patterns
+- $$W_2$$ **columns (the "values")**: for each activated key, the corresponding value vector is added to the output
 
 When a token activates a key neuron (because it matches a learned pattern), the associated value is retrieved and added to the representation. This is analogous to a soft content-addressable memory — the FFN stores and retrieves (token, fact) associations.
 
@@ -253,11 +253,11 @@ Smooth approximation of ReLU with non-zero gradient for negative inputs. Empiric
 \]
 </div>
 
-A gated variant: two parallel linear projections, one gating the other element-wise. SwiGLU-based FFNs use d_ff = (8/3) × d_model (not 4×) to keep parameter count comparable. Consistently outperforms ReLU and GELU at large scale.
+A gated variant: two parallel linear projections, one gating the other element-wise. SwiGLU-based FFNs use $$d_{\mathrm{ff}} = (8/3) \times d_{\mathrm{model}}$$ (not 4×) to keep parameter count comparable. Consistently outperforms ReLU and GELU at large scale.
 
 ## Position-Wise Independence: A Key Property
 
-The FFN processes each token **independently** — it does not look at neighbouring tokens. There is no attention-like mechanism: the computation for position i uses only the vector at position i.
+The FFN processes each token **independently** — it does not look at neighbouring tokens. There is no attention-like mechanism: the computation for position $$i$$ uses only the vector at position $$i$$.
 
 This means:
 - **Parallelisable across positions** (all tokens in a sequence processed simultaneously)
@@ -266,25 +266,25 @@ This means:
 
 ## Worked Example: Parameter Count in GPT-3
 
-GPT-3: d_model = 12,288 · d_ff = 49,152 (4×) · 96 layers
+GPT-3: $$d_{\mathrm{model}} = 12{,}288$$ · $$d_{\mathrm{ff}} = 49{,}152$$ (4×) · 96 layers
 
 Per layer FFN parameters:
-- W₁: 12,288 × 49,152 = **603.9M**
-- W₂: 49,152 × 12,288 = **603.9M**
-- Total FFN per layer: **≈1.21B**
+- $$W_1$$: $$12{,}288 \times 49{,}152 = \mathbf{603.9M}$$
+- $$W_2$$: $$49{,}152 \times 12{,}288 = \mathbf{603.9M}$$
+- Total FFN per layer: $$\approx \mathbf{1.21B}$$
 
-Per layer MHA parameters (96 heads, d_k = d_v = 128):
-- Q, K, V, O projections: 4 × 12,288² = **603.9M**
+Per layer MHA parameters (96 heads, $$d_k = d_v = 128$$):
+- Q, K, V, O projections: $$4 \times 12{,}288^2 = \mathbf{603.9M}$$
 
 Across 96 layers:
-- All FFNs: 96 × 1.21B ≈ **116B parameters**
-- All MHA: 96 × 603.9M ≈ **58B parameters**
-- FFN share: **≈ 67% of the 175B total**
+- All FFNs: $$96 \times 1.21\mathrm{B} \approx \mathbf{116B}$$ parameters
+- All MHA: $$96 \times 603.9\mathrm{M} \approx \mathbf{58B}$$ parameters
+- FFN share: $$\approx \mathbf{67\%}$$ of the 175B total
 
 This confirms the rule: in any standard Transformer, the FFN holds roughly two-thirds of all parameters. Scaling the model mostly means scaling the FFN.
 
 <div class="insight-box">
-<strong>Inference bottleneck:</strong> During autoregressive generation, attention uses a KV-cache so only the newest token's query hits the full key-value store — cheap at long context. But the FFN still executes a full 12,288 → 49,152 → 12,288 projection for every single generated token, on every layer, every step. The FFN, not attention, is typically the memory and compute bottleneck in LLM inference.
+<strong>Inference bottleneck:</strong> During autoregressive generation, attention uses a KV-cache so only the newest token's query hits the full key-value store — cheap at long context. But the FFN still executes a full \(12{,}288 \to 49{,}152 \to 12{,}288\) projection for every single generated token, on every layer, every step. The FFN, not attention, is typically the memory and compute bottleneck in LLM inference.
 </div>
 
 ## Sparse FFNs: MoE

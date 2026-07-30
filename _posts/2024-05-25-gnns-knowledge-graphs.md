@@ -20,8 +20,6 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Knowledge graphs (Freebase, Wikidata, ConceptNet) are large multi-relational graphs: edges are typed triples \((s, r, o)\). GNNs power three key tasks — link prediction (fill in missing triples), entity alignment (match entities across KGs), and multi-hop reasoning. The advantage over shallow embedding methods is that a GNN encoder conditions an entity's representation on its <em>neighbourhood</em> rather than storing an independent vector per entity, which is what lets sparse entities borrow strength from well-connected ones.
 </div>
-{% include figure image_path="/images/blog/gnn/schlichtkrull2018_rgcn.png" alt="R-GCN for knowledge graph completion" caption="Relational GCN for knowledge graph link prediction (Schlichtkrull et al., 2018)" %}
-
 
 ## Knowledge Graphs in Production
 
@@ -68,7 +66,7 @@ Two KGs in different languages or from different sources often refer to the same
 
 **GNN approach:**
 1. Run GNN on each KG independently → entity embeddings
-2. Align: find pairs (e_1, e_2) with high embedding similarity
+2. Align: find pairs $$(e_1, e_2)$$ with high embedding similarity
 3. Seed alignment: a few known pairs used as anchors to align the embedding spaces
 
 **KECG / RDGCN:** use relational GNNs with attention to produce relation-aware embeddings, then align across KGs using known anchor pairs. GNNs propagate alignment information from anchors to nearby entities.
@@ -82,9 +80,9 @@ Two KGs in different languages or from different sources often refer to the same
 **Complex query answering:** "Who is the CEO of the company headquartered in the city where the 2020 Olympics were held?"
 
 This requires a chain of reasoning:
-- 2020 Olympics → host city → Tokyo
-- Tokyo → headquartered companies → various
-- Company → CEO → answer
+- $$\text{2020 Olympics} \to \text{host city} \to \text{Tokyo}$$
+- $$\text{Tokyo} \to \text{headquartered companies} \to \text{various}$$
+- $$\text{Company} \to \text{CEO} \to \text{answer}$$
 
 **Neural LP / DRUM:** learn rules (soft logical implications) as differentiable programs. The GNN computes path scores for all entity paths of a given type.
 

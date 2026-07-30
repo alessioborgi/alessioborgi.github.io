@@ -81,17 +81,17 @@ What distinguishes the sheaf framework is not that it is the only method with th
 
 ## Empirical Results
 
-Accuracies on the two most-used heterophilic benchmarks, as reported in Bodnar et al. (2022), Table 1, on the ten fixed Geom-GCN splits (mean ± std over splits; both datasets have five classes, so chance is 20%):
+Accuracies on the two most-used heterophilic benchmarks, as reported in Bodnar et al. (2022), Table 1, on the ten fixed Geom-GCN splits (mean $$\pm$$ std over splits; both datasets have five classes, so chance is 20%):
 
 | Model | Chameleon ($$h = 0.23$$) | Squirrel ($$h = 0.22$$) |
 |-------|-----------|---------|
-| GCN | 64.82 ± 2.24 | 53.43 ± 2.01 |
-| GAT | 60.26 ± 2.50 | 40.72 ± 1.55 |
-| H2GCN | 60.11 ± 2.15 | 36.48 ± 1.86 |
-| GPRGNN | 46.58 ± 1.71 | 31.61 ± 1.24 |
-| Diag-NSD | 68.68 ± 1.73 | 54.78 ± 1.81 |
-| $$O(d)$$-NSD | 68.04 ± 1.58 | 56.34 ± 1.32 |
-| Gen-NSD | 67.93 ± 1.58 | 53.17 ± 1.31 |
+| GCN | $$64.82 \pm 2.24$$ | $$53.43 \pm 2.01$$ |
+| GAT | $$60.26 \pm 2.50$$ | $$40.72 \pm 1.55$$ |
+| H2GCN | $$60.11 \pm 2.15$$ | $$36.48 \pm 1.86$$ |
+| GPRGNN | $$46.58 \pm 1.71$$ | $$31.61 \pm 1.24$$ |
+| Diag-NSD | $$68.68 \pm 1.73$$ | $$54.78 \pm 1.81$$ |
+| $$O(d)$$-NSD | $$68.04 \pm 1.58$$ | $$56.34 \pm 1.32$$ |
+| Gen-NSD | $$67.93 \pm 1.58$$ | $$53.17 \pm 1.31$$ |
 
 Two things worth reading off this table. First, plain GCN is a *strong* baseline on these two datasets — the failure of standard message passing under heterophily is a matter of a few points, not a collapse to chance. Second, the **general** maps are not the winners: the diagonal and $$O(d)$$ variants match or beat them, which is the empirical counterpart of the point made in the post on map types. More expressive is not automatically better.
 
