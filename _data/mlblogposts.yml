@@ -241,8 +241,9 @@ sheaf:
         - { slug: "2025-06-07-hansen-gebhart-2020",       title: "Sheaf Neural Networks (Hansen & Gebhart, 2020): The First Sheaf GNN",                            published: offline }
         - { slug: "2025-06-08-neural-sheaf-diffusion",    title: "Neural Sheaf Diffusion (Bodnar et al., NeurIPS 2022): Learning the Relational Geometry",         published: offline }
         - { slug: "2025-06-10-sheaf-attention-networks",  title: "Sheaf Attention Networks (Barbero et al., 2022)",                                                 published: offline }
-        - { slug: "2025-06-09-polynomial-sheaf-diffusion", title: "Polynomial Neural Sheaf Diffusion (Zaghen et al., ICLR 2024): Learnable Spectral Filters",      published: offline }
-        - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi & Liò)",                                       published: online }
+        - { slug: "2025-06-09-polynomial-sheaf-diffusion", title: "Nonlinear Sheaf Diffusion (Zaghen et al., 2024): Adaptive Sheaf Laplacians",                     published: offline }
+        - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi, Silvestri & Liò)",                            published: online }
+        - { slug: "2026-07-28-deep-neural-sheaf-diffusion", title: "DNSD: Making Sheaf Diffusion Work at Depth (Bourgerie et al., 2026)",                           published: online }
         - { slug: "2025-06-11-sheaf-map-parameterisation", title: "Learning Sheaf Maps: Parameterisation Strategies Compared",                                      published: offline }
         - { slug: "2025-06-12-spectral-sheaf-convolution", title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves",                                       published: offline }
 
@@ -267,7 +268,7 @@ sheaf:
         - { slug: "2025-06-20-multi-relational-sheaves", title: "Multi-Relational Sheaves for Heterogeneous and Knowledge Graphs",         published: offline }
         - { slug: "2025-06-21-temporal-sheaves",       title: "Temporal Sheaves: Extending Sheaf GNNs to Dynamic Graphs",                 published: offline }
         - { slug: "2025-06-22-sheaf-transformers",     title: "Sheaves Meet Attention: Transformer-Inspired Sheaf Models",                published: offline }
-        - { slug: "2024-09-12-hetsheaf-paper",         title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves (Borgi et al.)",      published: online }
+        - { slug: "2024-09-12-hetsheaf-paper",         title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves (Braithwaite et al.)", published: online }
         - { slug: "2025-06-26-sheafpool",              title: "SheafPool: Basis-Invariant Graph Readout for Sheaf Neural Networks",        published: online }
 
     applications:
@@ -276,6 +277,7 @@ sheaf:
         - { slug: "2025-06-23-sheaf-heterophily-benchmarks", title: "Sheaf GNNs for Heterophilic Node Classification: Benchmarks and Results", published: offline }
         - { slug: "2025-06-24-sheaf-molecular",              title: "Sheaf GNNs for Molecular Property Prediction",                           published: offline }
         - { slug: "2025-06-25-open-problems-sheaf",          title: "Open Problems and Future Directions in Sheaf Neural Networks",            published: offline }
+        - { slug: "2026-07-29-braindyn-sheaf-neural-ode",    title: "BrainDyn: Sheaves Meet Neural ODEs for Brain Dynamics (Viswanath et al., 2026)", published: online }
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -347,6 +349,9 @@ tdl:
         - { slug: "2025-09-24-mapper-algorithm",        title: "The Mapper Algorithm: Topological Summaries of High-Dimensional Data", published: offline }
         - { slug: "2025-09-25-reeb-graphs",             title: "Reeb Graphs: Topological Skeletons of Functions",                      published: offline }
         - { slug: "2025-09-26-morse-theory",            title: "Smooth Morse Theory: Critical Points and Topology",                    published: offline }
+        - { slug: "2026-07-25-tdl-is-not-tda",          title: "Topological Deep Learning Is Not Topological Data Analysis",           published: online }
+        - { slug: "2026-07-26-simplicial-message-passing", title: "Message Passing on Simplicial Complexes",                           published: online }
+        - { slug: "2026-07-27-cell-and-combinatorial-complexes", title: "Beyond Simplices: Cell and Combinatorial Complexes",          published: online }
 
     applications:
       label: "Applications"

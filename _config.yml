@@ -159,9 +159,25 @@ social:
 
 # Analytics
 analytics:
-  provider               :  "false" # false (default), "google", "google-universal", "google-analytics-4", "custom"
+  provider               :  "google-analytics-4" # false (default), "google", "google-universal", "google-analytics-4", "custom"
   google:
-    tracking_id          :
+    # GA4 Measurement ID. While this is blank nothing is injected, so clearing it
+    # switches analytics off site-wide without touching any other file.
+    tracking_id          : "G-2ZPXJ3T3YP"
+    anonymize_ip         : true
+
+
+# Ads (Google AdSense). Nothing renders until publisher_id is filled in, so this
+# is safe to leave as-is until your AdSense account is approved.
+ads:
+  provider               : "adsense"
+  publisher_id           :          # e.g. "ca-pub-0000000000000000"
+  end_of_post_slot       :          # ad-unit slot ID for the unit shown after each post
+  label                  : "Advertisement"
+  # Which collections carry ads. Deliberately blog posts only: publications,
+  # projects, talks and the CV read as academic record, and ads there cheapen
+  # them. Add collection names here to widen the surface.
+  collections            : ["posts"]
 
 
 # Reading Files

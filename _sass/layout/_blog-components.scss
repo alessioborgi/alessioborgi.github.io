@@ -302,3 +302,64 @@ html[data-theme="dark"] {
     transform: none !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Ad slots
+
+   Rendered by _includes/ads/unit.html, which emits nothing until an AdSense
+   publisher ID is configured — so these rules are inert on a site without ads.
+
+   The label is not decoration: disclosing paid placement is required by
+   AdSense policy and keeps the unit from reading as editorial content. Height
+   is reserved up front so a late-loading ad cannot shift the article text.
+   -------------------------------------------------------------------------- */
+
+.ad-slot {
+  display: block;
+  margin: 2.5rem auto;
+  padding: 0.85rem 1rem 1rem;
+  max-width: 728px;
+  min-height: 120px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 14px;
+  background: linear-gradient(160deg, #f8fafc 0%, #f1f5f9 100%);
+  text-align: center;
+  overflow: hidden;
+}
+
+.ad-slot__label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.ad-slot .adsbygoogle {
+  width: 100%;
+}
+
+/* The end-of-post unit sits between the article body and the chapter
+   navigation, so it needs to read as a separate band rather than as the
+   article's last paragraph. */
+.ad-slot--end {
+  margin-top: 3rem;
+}
+
+html[data-theme="dark"] .ad-slot {
+  border-color: rgba(148, 163, 184, 0.22);
+  background: linear-gradient(160deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.6) 100%);
+}
+
+html[data-theme="dark"] .ad-slot__label {
+  color: #64748b;
+}
+
+@media (max-width: 720px) {
+  .ad-slot {
+    margin: 2rem auto;
+    padding: 0.7rem 0.6rem 0.8rem;
+  }
+}

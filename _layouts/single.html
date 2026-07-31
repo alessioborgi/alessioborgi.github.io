@@ -242,6 +242,8 @@ layout: default
         {{ content }}
 
         {% if page.id %}
+          {% include ads/unit.html slot=site.ads.end_of_post_slot class="ad-slot--end" %}
+
           {% assign _page_file = page.path | split: '/' | last | remove: '.md' %}
           <div id="ml-blog-next-cta" class="ml-blog-next-cta" hidden></div>
           <script>

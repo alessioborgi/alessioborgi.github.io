@@ -1,0 +1,11 @@
+{% comment %}
+  AdSense loader. Google wants this in <head>, once per page. Renders nothing
+  until site.ads.publisher_id is set in _config.yml, and can be suppressed on a
+  single page with "ads: false" in its front matter.
+
+  This tag is also what serves Google's Privacy & messaging consent banner
+  (the CMP), which is required for EEA/UK traffic and covers GA4 as well.
+{% endcomment %}
+{% if site.ads.provider == "adsense" and site.ads.publisher_id and site.ads.collections contains page.collection and page.ads != false %}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ site.ads.publisher_id }}" crossorigin="anonymous"></script>
+{% endif %}

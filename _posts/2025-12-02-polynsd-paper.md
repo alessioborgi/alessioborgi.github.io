@@ -75,13 +75,13 @@ toc_label: "Contents"
 
 <div class="paper-meta">
   <strong>Paper:</strong> "Polynomial Neural Sheaf Diffusion" &nbsp;·&nbsp; arXiv:2512.00242<br>
-  <strong>Authors:</strong> <em>A. Borgi</em>, P. Liò<br>
+  <strong>Authors:</strong> <em>A. Borgi</em>, F. Silvestri, P. Liò<br>
   <strong>Venue:</strong> arXiv preprint, 2025 &nbsp;·&nbsp;
   <a href="https://arxiv.org/abs/2512.00242" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/polynsd-paper.png" alt="First page of the Polynomial Neural Sheaf Diffusion paper" caption="Paper preview — Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves (Borgi, 2025)." %}
+{% include figure image_path="/images/blog/papers/polynsd-paper.png" alt="First page of the Polynomial Neural Sheaf Diffusion paper" caption="Paper preview — Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves (Borgi et al., 2025)." %}
 </div>
 
 ## Why This Paper Exists

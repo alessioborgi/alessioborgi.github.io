@@ -1,8 +1,15 @@
-<script async src="https://www.googletagmanager.com/gtag/js?id={{site.analytics.google.tracking_id}}"></script>
+{% comment %}
+  Guarded so that an empty tracking_id injects nothing at all. This lets
+  _config.yml keep provider: "google-analytics-4" set permanently while the
+  site stays tracker-free until a Measurement ID is filled in.
+{% endcomment %}
+{% if site.analytics.google.tracking_id %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics.google.tracking_id }}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '{{site.analytics.google.tracking_id}}');
+  gtag('config', '{{ site.analytics.google.tracking_id }}'{% if site.analytics.google.anonymize_ip %}, { 'anonymize_ip': true }{% endif %});
 </script>
+{% endif %}
