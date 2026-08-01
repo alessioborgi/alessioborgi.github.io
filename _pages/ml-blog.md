@@ -338,6 +338,7 @@ author_profile: true
 {% assign robotics_posts    = site.posts | where: "book", "robotics"              | sort: "date" %}
 {% assign genai_posts       = site.posts | where: "book", "generative-ai"         | sort: "date" %}
 {% assign diffusion_posts   = site.posts | where: "book", "diffusion"             | sort: "date" %}
+{% assign gdl_posts         = site.posts | where: "book", "gdl"                   | sort: "date" %}
 {% assign mathb_posts       = site.posts | where: "book", "math-basics"           | sort: "date" %}
 {% assign statsb_posts      = site.posts | where: "book", "stats-basics"          | sort: "date" %}
 {% assign probb_posts       = site.posts | where: "book", "prob-basics"           | sort: "date" %}
@@ -1340,7 +1341,58 @@ author_profile: true
 </div>
 
 <!-- ════════════════════════════════════════════════════════ -->
-<!--  APPENDIX BOOKS A1–A5 · FOUNDATIONS &amp; REVISION         -->
+<!--  BOOK VIII · GEOMETRIC DEEP LEARNING                     -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book" data-book="gdl">
+  <div class="book-banner">
+    <span class="book-icon">🧊</span>
+    <div>
+      <h2>Book VIII — Geometric Deep Learning</h2>
+      <p>Why convolutions, attention, message passing and sheaves are one blueprint applied to different symmetries</p>
+    </div>
+  </div>
+  <div class="book-body">
+
+    {% assign gdl_overview = gdl_posts | where_exp: "p", "p.is_overview" | first %}
+    {% if gdl_overview %}
+    <a class="blog-overview-card" href="{{ gdl_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ gdl_overview.title }}</h3>
+      <p>{{ gdl_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ gdl_overview.read_mins | default: "5" }} min read</span>
+        <span>The recipe behind every other book on this page</span>
+      </div>
+    </a>
+    {% endif %}
+
+    {% assign gdl_groups = "foundations|Symmetry &amp; the Blueprint|🧱,domains|The Five Domains|🌐,unification|Architectures Unified|🔗,systems|Hardware &amp; Scaling|🎰" | split: "," %}
+    {% for grp in gdl_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = gdl_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "5" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  APPENDIX BOOKS A1–A7 · FOUNDATIONS &amp; REVISION         -->
 <!-- ════════════════════════════════════════════════════════ -->
 
 <div class="blog-book" data-book="math-basics">

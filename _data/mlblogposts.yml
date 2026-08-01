@@ -574,6 +574,43 @@ diffusion:
 
 
 # ──────────────────────────────────────────────────────────────────────────
+# BOOK VIII — GEOMETRIC DEEP LEARNING
+# ──────────────────────────────────────────────────────────────────────────
+gdl:
+  label: "Book VIII: Geometric Deep Learning"
+  icon:  "🧊"
+  color: "#6366f1"
+
+  overview:
+    - { slug: "2026-08-01-gdl-overview", title: "Geometric Deep Learning: One Blueprint Behind Every Architecture", published: online }
+
+  sections:
+
+    foundations:
+      label: "Symmetry & the Blueprint"
+      posts:
+        - { slug: "2026-08-02-permutation-symmetry-and-message-passing", title: "Permutation Symmetry and the Message-Passing Blueprint", published: online }
+
+    domains:
+      label: "The Five Domains"
+      posts:
+        - { slug: "2026-08-05-grids-and-translation-equivariance", title: "Grids: Why Translation Equivariance Forces Convolution", published: online }
+        - { slug: "2026-08-06-groups-and-equivariance",            title: "Groups: Equivariance Beyond Translation",              published: online }
+        - { slug: "2026-08-07-geodesics-and-manifolds",            title: "Geodesics: Learning on Curved Domains",                published: online }
+        - { slug: "2026-08-08-gauges-and-local-frames",            title: "Gauges: When There Is No Shared Frame",                published: online }
+
+    unification:
+      label: "Architectures Unified"
+      posts:
+        - { slug: "2026-08-03-transformers-are-gnns", title: "Transformers Are GNNs on Fully Connected Graphs (Joshi, 2025)", published: online }
+
+    systems:
+      label: "Hardware & Scaling"
+      posts:
+        - { slug: "2026-08-04-the-hardware-lottery", title: "The Hardware Lottery: Why the Dense Version Won", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
 # A1: MATHEMATICAL BASICS
 # ──────────────────────────────────────────────────────────────────────────
 math-basics:

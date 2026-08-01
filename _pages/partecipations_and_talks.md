@@ -222,6 +222,42 @@ author_profile: true
   <div class="pt-section__body">
     <div class="pt-timeline">
 
+      <!-- EEML 2026 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--purple"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--purple">July – August 2026</div>
+          <div class="pt-title"><a href="https://www.eeml.eu/" target="_blank" rel="noopener">EEML 2026 — Eastern European Machine Learning Summer School</a></div>
+          <div class="pt-org">🇲🇪 Cetinje, Montenegro &nbsp;·&nbsp; EEML / MAIA</div>
+          <div class="pt-body">
+            <p>Participated in EEML 2026, held from <strong>July 27 to August 1, 2026</strong> in Cetinje, Montenegro, joining lectures and tutorials on contemporary machine learning research.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--purple pt-badge">EEML 2026</span>
+            <span class="pt-badge">Machine Learning</span>
+            <span class="pt-badge--blue pt-badge">Summer School</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cambridge ELLIS Unit Summer School 2026 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--blue"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--blue">July 2026</div>
+          <div class="pt-title"><a href="https://www.ellis.eng.cam.ac.uk/summer-school/" target="_blank" rel="noopener">Cambridge ELLIS Unit Summer School 2026 — Probabilistic Machine Learning</a></div>
+          <div class="pt-org">🇬🇧 Cambridge, United Kingdom &nbsp;·&nbsp; Cambridge ELLIS Unit, University of Cambridge</div>
+          <div class="pt-body">
+            <p>Participated in the Cambridge ELLIS Unit Summer School on <strong>Probabilistic Machine Learning</strong>, held from <strong>July 13–17, 2026</strong>, covering probabilistic modelling, uncertainty quantification, generative models, decision-making under uncertainty, and probabilistic methods in the sciences.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--blue pt-badge">ELLIS 2026</span>
+            <span class="pt-badge">Probabilistic ML</span>
+            <span class="pt-badge--purple pt-badge">Summer School</span>
+          </div>
+        </div>
+      </div>
+
       <!-- LoG Italian Meetup 2026 -->
       <div class="pt-item">
         <div class="pt-dot pt-dot--purple"><span></span></div>
