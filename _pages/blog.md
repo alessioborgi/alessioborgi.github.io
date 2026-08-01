@@ -261,14 +261,14 @@ author_profile: true
 /* ── Embed section ── */
 .pb-embed-wrap {
   border-top: 1px solid var(--pb-border);
-  margin: 0 1.4rem 0 0;
-  padding-top: 0;
+  margin: 0;
+  padding: 0;
 }
 .pb-embed {
   width: 100%;
   border: none;
   display: block;
-  background: #f9fafb;
+  background: transparent;
 }
 
 /* ── Empty state ── */
