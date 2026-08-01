@@ -17,7 +17,36 @@ basics:
   icon:  "🧠"
   color: "#2563eb"
 
+  overview:
+    - { slug: "2026-05-01-basics-overview", title: "Machine Learning Before Transformers: A Working Foundation", published: online }
+
   sections:
+
+    foundations:
+      label: "Learning Foundations"
+      posts:
+        - { slug: "2026-05-02-bias-variance-and-regularisation", title: "Bias, Variance, and Regularisation: Why Models Fail to Generalise", published: online }
+        - { slug: "2026-05-03-gradient-descent-and-backprop",    title: "Gradient Descent and Backpropagation: How a Model Learns",        published: online }
+
+    supervised:
+      label: "Supervised Learning"
+      posts:
+        - { slug: "2026-05-05-linear-regression",       title: "Linear Regression: Least Squares as Projection",   published: online }
+        - { slug: "2026-05-06-logistic-regression",     title: "Logistic Regression: Linear in the Log-Odds",      published: online }
+        - { slug: "2026-05-07-trees-forests-boosting",  title: "Trees, Forests, and Boosting: Axis-Aligned Everything", published: online }
+        - { slug: "2026-05-08-svm-and-kernels",         title: "Support Vector Machines: Margins and the Kernel Trick", published: online }
+
+    unsupervised:
+      label: "Unsupervised Learning"
+      posts:
+        - { slug: "2026-05-10-clustering", title: "Clustering: What Each Algorithm Assumes a Cluster Is", published: online }
+        - { slug: "2026-05-11-pca-and-dimensionality-reduction", title: "PCA: Maximum Variance and Minimum Reconstruction Error", published: online }
+
+    deep-learning:
+      label: "Neural Networks"
+      posts:
+        - { slug: "2026-05-13-convolutions-and-cnns", title: "Convolutions and CNNs: Weight Sharing as a Prior", published: online }
+        - { slug: "2026-05-14-rnns-lstms-grus",       title: "RNNs, LSTMs, and GRUs: Sequence Models Before Attention", published: online }
 
     activation-functions:
       label: "Activation Functions"
@@ -222,7 +251,7 @@ sheaf:
   color: "#7c3aed"
 
   overview:
-    - { slug: "2025-06-01-sheaf-book-overview", title: "Sheaf Neural Networks: A Complete Research Guide", published: offline }
+    - { slug: "2025-06-01-sheaf-book-overview", title: "Sheaf Neural Networks: A Complete Research Guide", published: online }
 
   sections:
 
@@ -289,7 +318,7 @@ tdl:
   color: "#e11d48"
 
   overview:
-    - { slug: "2025-07-01-ph-overview", title: "Persistent Homology: A Complete Guide to Topological Data Analysis", published: offline }
+    - { slug: "2025-07-01-ph-overview", title: "Topological Deep Learning: From Persistent Homology to Higher-Order Message Passing", published: online }
 
   sections:
 

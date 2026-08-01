@@ -9,7 +9,7 @@ tags: [activation-functions, relu, sigmoid, tanh, neural-networks]
 excerpt: "Activation functions are the reason neural networks can model curved decision boundaries instead of collapsing into one giant linear map. This chapter builds the intuition first, then walks through the classical functions that shaped deep learning."
 author_profile: true
 read_time: true
-is_overview: true
+is_overview: false
 icon: "⚡"
 read_mins: 7
 permalink: /blog/basics/activation-functions/

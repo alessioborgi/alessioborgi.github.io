@@ -328,5 +328,5 @@ That question is usually more informative than the raw architecture diagram, bec
 ## References
 
 - Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (proves the spectral gap argument and null-space characterisation of oversmoothing for sheaf diffusion).
-- Zaghen, O., Quak, M., & Bronstein, M. M. (2024). [Polynomial Neural Sheaf Diffusion](https://openreview.net/forum?id=KGPmqVFEW4). *ICLR 2024* (uses the spectral interpretation to motivate learnable polynomial filters over Δ_F).
+- Borgi, A., Silvestri, F., & Liò, P. (2025). [Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves](https://arxiv.org/abs/2512.00242). *arXiv:2512.00242* (uses the spectral interpretation to motivate learnable polynomial filters over Δ_F).
 - Horak, D., & Jost, J. (2013). [Spectra of Combinatorial Laplace Operators on Simplicial Complexes](https://arxiv.org/abs/1105.2712). *Advances in Mathematics 2013* (Cheeger inequality for higher-order Laplacians, foundational for sheaf Cheeger theory).

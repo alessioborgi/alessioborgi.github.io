@@ -240,6 +240,6 @@ The spectral view of sheaf GNNs is useful for:
 
 ## References
 
-- Zaghen, O., Quak, M., & Bronstein, M. M. (2024). [Polynomial Neural Sheaf Diffusion](https://openreview.net/forum?id=KGPmqVFEW4). *ICLR 2024* (PNSD: polynomial spectral filters on the Sheaf Laplacian).
+- Borgi, A., Silvestri, F., & Liò, P. (2025). [Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves](https://arxiv.org/abs/2512.00242). *arXiv:2512.00242* (PolyNSD: polynomial spectral filters on the Sheaf Laplacian).
 - Shuman, D. I., Narang, S. K., Frossard, P., Ortega, A., & Vandergheynst, P. (2013). [The Emerging Field of Signal Processing on Graphs](https://arxiv.org/abs/1211.0053). *IEEE Signal Processing Magazine* (classical GSP framework that sheaf convolutions extend).
 - Defferrard, M., Bresson, X., & Vandergheynst, P. (2016). [Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](https://arxiv.org/abs/1606.09375). *NeurIPS 2016* (ChebNet — the Chebyshev filter approach that generalises to sheaves via Δ_F).

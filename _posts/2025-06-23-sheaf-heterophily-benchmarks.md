@@ -53,7 +53,7 @@ Homophily ratio h = |{(u,v): y_u=y_v}| / |E| — lower means more heterophilic.
 
 ## Comprehensive Results: All Methods on All Datasets
 
-Results from NSD (Bodnar et al., 2022) and PNSD (Zaghen et al., 2024):
+Results from NSD (Bodnar et al., 2022) and PolyNSD (Borgi et al., 2025):
 
 **Cornell (h=0.11):**
 | Model | Accuracy |

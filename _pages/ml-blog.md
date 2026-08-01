@@ -385,8 +385,10 @@ author_profile: true
 {% assign cs_overview = csb_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign py_overview = pyp_posts | where_exp: "p", "p.is_overview" | first %}
 
-{% assign b_overview    = basics_posts | where_exp: "p", "p.is_overview" | first %}
-{% assign b_activations = basics_posts | where: "subsection", "activation-functions" %}
+{% comment %} Book 0 renders its sections from the b_groups list further down,
+   which re-derives each group from basics_posts — so only the overview is
+   assigned here. {% endcomment %}
+{% assign b_overview = basics_posts | where_exp: "p", "p.is_overview" | first %}
 
 {% assign t_overview  = transformer_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
@@ -463,22 +465,29 @@ author_profile: true
     </a>
     {% endif %}
 
-    {% if b_activations.size > 0 %}
-    <div class="subsection-label" data-section="activation-functions">⚡ Activation Functions</div>
-    <div class="chapters-grid">
-      {% for post in b_activations %}
-        <a class="chapter-card" href="{{ post.url | relative_url }}">
-          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
-          <h4>{{ post.title }}</h4>
-          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
-          <div class="ch-meta">
-            <span class="ch-time">⏱ {{ post.read_mins | default: "5" }} min</span>
-            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
-          </div>
-        </a>
-      {% endfor %}
-    </div>
-    {% endif %}
+    {% assign b_groups = "foundations|🧭 Learning Foundations,supervised|📈 Supervised Learning,unsupervised|🔍 Unsupervised Learning,deep-learning|🧠 Neural Networks,activation-functions|⚡ Activation Functions" | split: "," %}
+    {% for grp in b_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign key   = parts[0] %}
+      {% assign label = parts[1] %}
+      {% assign items = basics_posts | where: "subsection", key %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ key }}">{{ label }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "5" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
 
   </div>
 </div>
@@ -791,6 +800,7 @@ author_profile: true
     <div class="subsection-label" data-section="foundations">🧱 Mathematical Foundations</div>
     <div class="chapters-grid">
       {% for post in s_foundations %}
+        {% unless post.is_overview %}
         <a class="chapter-card" href="{{ post.url | relative_url }}">
           <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
           <h4>{{ post.title }}</h4>
@@ -800,6 +810,7 @@ author_profile: true
             {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
           </div>
         </a>
+        {% endunless %}
       {% endfor %}
     </div>
     {% endif %}

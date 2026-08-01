@@ -321,7 +321,7 @@ That is why later papers such as PNSD, SheafAN, HetSheaf, and PolyNSD all feel l
 
 1. **Stalk dimension d:** The optimal d is task-dependent and requires tuning.
 2. **Sheaf predictor expressiveness:** The MLP maps only pairs (h_u, h_v) — it cannot use higher-order neighbourhood information to predict edge maps.
-3. **Fixed diffusion filter:** The filter (I − Δ_F^{norm}) is a fixed low-pass filter. PNSD (Zaghen et al., 2024) addresses this by making the filter polynomial and learnable.
+3. **Fixed diffusion filter:** The filter (I − Δ_F^{norm}) is a fixed low-pass filter. PolyNSD (Borgi et al., 2025) addresses this by making the filter polynomial and learnable.
 4. **Scalability:** Map prediction scales with number of edges; for dense graphs, this is expensive.
 
 ## References
