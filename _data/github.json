@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 80,
+  "total_stars": 81,
   "total_forks": 17,
   "public_repos": 31,
   "followers": 21,
@@ -64,20 +64,20 @@
       "language": "C++"
     },
     {
+      "name": "RealTime-VLM",
+      "html_url": "https://github.com/alessioborgi/RealTime-VLM",
+      "description": "RealTime-VLM brings real-time VLM inference to the browser. It continuously captures webcam frames, sends image+text to an OpenAI-compatible API, and displays responses with sub-second latency. Works with local or hosted VLMs.",
+      "stars": 7,
+      "forks": 0,
+      "language": "JavaScript"
+    },
+    {
       "name": "BioHeat-PINNs",
       "html_url": "https://github.com/alessioborgi/BioHeat-PINNs",
       "description": " Improving hyperthermia treatment by controlling temperature distribution in both 1D and 2D domains and thermal energy applied to cutaneous and subcutaneous tissues, through Bio-Heat equation with Physics-Informed Neural Networks (PINNs).",
       "stars": 7,
       "forks": 1,
       "language": "Mathematica"
-    },
-    {
-      "name": "RealTime-VLM",
-      "html_url": "https://github.com/alessioborgi/RealTime-VLM",
-      "description": "RealTime-VLM brings real-time VLM inference to the browser. It continuously captures webcam frames, sends image+text to an OpenAI-compatible API, and displays responses with sub-second latency. Works with local or hosted VLMs.",
-      "stars": 6,
-      "forks": 0,
-      "language": "JavaScript"
     },
     {
       "name": "MoonBot-Navigation",
