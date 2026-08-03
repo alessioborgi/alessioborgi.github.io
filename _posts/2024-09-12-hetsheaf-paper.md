@@ -264,14 +264,40 @@ The key idea is: **align first, pool later**. That is what makes graph-level pre
 
 ## Results
 
-On the **Heterogeneous Graph Benchmark (HGB)** — covering node classification, link prediction, and graph classification across multiple heterogeneous datasets — HetSheaf achieves:
+Evaluation uses the **Heterogeneous Graph Benchmark (HGB)**: node classification on ACM, DBLP and IMDB, and link prediction on LastFM and MovieLens. Baselines are GAT, GCN, HAN, R-GCN and HGT, plus **HetSheaf-NSD** — the same pipeline with an ordinary type-blind sheaf predictor, which is the ablation that isolates what the type conditioning actually contributes.
 
-- Up to **+2 percentage points** higher Macro F1 on node classification vs. both homogeneous (GCN, GAT, GIN, GraphSAGE) and heterogeneous (R-GCN, HAT, HGT) baselines.
-- Up to **99.62% F1** on link prediction benchmarks.
-- **10× parameter reduction** vs. type-specialised baselines while maintaining competitive performance.
-- SheafPool delivers **+42pp** over mean pooling on graph classification tasks.
+**Node classification** (Macro F1 / Micro F1, 10 runs):
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Type-specific neural modules scale as \(O(T^2)\) in the number of relation types \(T\) — every pair of node types may need its own transformation. Type-aware restriction maps in HetSheaf scale as \(O(T)\): each type gets a conditioning signal, but the propagation rule stays the same. Encoding heterogeneity in geometry rather than architecture is the key to parameter-efficient relational learning.</div>
+| Model | ACM | DBLP | IMDB |
+|---|---|---|---|
+| **HetSheaf** | **96.39** / **96.35** | **97.93** / **98.08** | 87.12 / 87.88 |
+| HetSheaf-NSD | 94.97 / 94.94 | 96.69 / 96.89 | 86.70 / 87.50 |
+| R-GCN | 95.81 / 95.75 | 96.79 / 97.01 | **88.16** / **89.08** |
+| HGT | 93.24 / 93.30 | 93.91 / 94.26 | 87.74 / 88.45 |
+| GCN | 89.09 / 89.14 | 96.31 / 96.57 | 82.41 / 83.99 |
+
+**Link prediction** (AUPR / AUROC, 10 runs):
+
+| Model | LastFM | MovieLens |
+|---|---|---|
+| **HetSheaf** | **98.24** / **97.80** | **99.68** / **99.59** |
+| HetSheaf-NSD | 97.16 / 96.58 | 99.66 / 99.57 |
+| R-GCN | 96.86 / 96.97 | 99.06 / 99.13 |
+| GCN | 96.84 / 96.42 | 99.57 / 99.51 |
+| HGT | OOM | OOM |
+
+Reading these carefully:
+
+- **State of the art on ACM and DBLP**, and by a smaller margin than headline summaries of this work tend to suggest: +0.58 Macro F1 over R-GCN on ACM and +1.14 on DBLP.
+- **On IMDB, R-GCN wins** — 88.16 against 87.12 Macro F1 — and HGT also edges ahead. HetSheaf is competitive there, not best, and it reaches that with a far smaller parameter budget.
+- **Link prediction is a clean sweep** on both datasets and both metrics. The +1.22 AUROC over HetSheaf-NSD on LastFM is the single clearest demonstration that the type conditioning, and not merely the sheaf, is doing work. HGT runs out of GPU memory on both.
+- **Parameter efficiency is the strongest claim.** Averaged across datasets, the largest sheaf variant is roughly **111× smaller than R-GCN** and **17× smaller than HGT**. On ACM concretely: 155K parameters against R-GCN's 43M and HGT's 7.2M.
+
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Architectures like R-GCN allocate <em>separate learnable parameters per relation type</em>, so the model grows with the number of types. A sheaf predictor instead <em>computes</em> the restriction map for each incident pair from features and type embeddings, so the parameter count is decoupled from the number of relations entirely. That is where the two-orders-of-magnitude gap comes from — not from a better-tuned architecture, but from a different place to put the heterogeneity.</div>
+
+<div class="insight-box">
+<strong>Which restriction maps, and a reversal worth noting.</strong> The ablation finds <strong>general</strong> \(d \times d\) maps best for node classification and <strong>orthogonal</strong> maps worst — the opposite of <a href="/blog/sheaf/neural-sheaf-diffusion/">Neural Sheaf Diffusion</a>, where \(O(d)\) maps performed best. The proposed explanation is that orthogonal transformations are not expressive enough to encode interactions between genuinely incomparable typed feature spaces. For link prediction the effect largely vanishes, and diagonal maps do well — matching the pattern in the rest of the sheaf literature. The lesson is that the best restriction-map family is task-dependent, and the field's default assumptions come from homogeneous node classification.
+</div>
 
 ## Why This Matters
 
@@ -283,6 +309,8 @@ The important shift is conceptual. Most heterogeneous GNNs ask: "what new neural
   <li>HetSheaf moves heterogeneity from the architecture into the data structure via type-aware sheaves.</li>
   <li>Restriction maps conditioned on node/edge types encode relational structure without type-specific modules.</li>
   <li>SheafPool provides a basis-change-invariant graph-level readout — essential for correct graph classification with sheaves.</li>
-  <li>State-of-the-art on HGB with up to 10× fewer parameters than specialised baselines.</li>
+  <li>State of the art on ACM and DBLP node classification and on both link-prediction benchmarks; R-GCN still wins IMDB.</li>
+  <li>Roughly 111× fewer parameters than R-GCN and 17× fewer than HGT, because the sheaf predictor computes relation-specific maps instead of storing per-relation weights.</li>
+  <li>General restriction maps beat orthogonal ones here — the reverse of the homogeneous case, and a sign that the best map family depends on the task.</li>
 </ul>
 </div>

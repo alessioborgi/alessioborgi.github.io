@@ -1,331 +1,218 @@
 ---
 layout: single
-title: "Neural Sheaf Diffusion (Bodnar et al., NeurIPS 2022): Learning the Relational Geometry"
+title: "Neural Sheaf Diffusion: Heterophily and Oversmoothing Are the Same Problem"
 categories: [sheaf]
 book: sheaf
 subsection: core-papers
 tags: [NSD, neural-sheaf-diffusion, Bodnar, NeurIPS2022, learned-maps, heterophily, oversmoothing]
-published: false
-excerpt: "Neural Sheaf Diffusion (NSD) learns the sheaf restriction maps from data via MLP predictors, making the Sheaf Laplacian itself trainable. This enables principled handling of both homophily and heterophily, with theoretical guarantees on oversmoothing avoidance and an empirical state-of-the-art on heterophilic benchmarks."
+published: true
+excerpt: "GNNs fail on heterophilic graphs and they oversmooth with depth. Bodnar et al. show these are one failure with one cause — the graph is implicitly equipped with a trivial sheaf — and prove a hierarchy of exactly what richer sheaves buy you."
 author_profile: true
 read_time: true
 is_overview: false
 icon: "🧠"
-read_mins: 11
+read_mins: 13
 permalink: /blog/sheaf/neural-sheaf-diffusion/
 toc: true
 toc_label: "Contents"
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.paper-box strong { color: #7c3aed; }
-.nsd-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: .8rem;
-  margin: 1.2rem 0 1.5rem;
-}
-.nsd-card {
-  background: linear-gradient(160deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid #dbe7f5;
-  border-radius: 12px;
-  padding: .95rem 1rem;
-}
-.nsd-card h3 { margin: 0 0 .35rem; font-size: .98rem; color: #0f2a36; }
-.nsd-card p { margin: 0; font-size: .9rem; color: #4b5563; line-height: 1.5; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure img { width: min(100%, 760px); display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,62,116,0.14); }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
+
+<div class="tldr-box">
+<strong>TL;DR:</strong> A GNN assumes every node's features live in one shared vector space with identity maps between them — in sheaf language, a <em>trivial</em> sheaf. Bodnar et al. show that this single assumption produces both oversmoothing and heterophilic failure, then work out a hierarchy of increasingly general sheaves and prove, at each level, exactly which classification problems the resulting diffusion can solve in the infinite-time limit. The punchline is a staircase: symmetric scalar maps <em>cannot</em> separate a balanced bipartite graph at all; signed scalar maps separate two classes; \(d\)-dimensional diagonal maps handle \(C \le d\) classes; orthogonal maps handle \(C \le 2d\). Then they learn the sheaf from data.
+</div>
 
 <div class="paper-box">
-<strong>Paper:</strong> Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). <a href="https://arxiv.org/abs/2202.04579">Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs</a>. <em>NeurIPS 2022.</em><br>
-<strong>Contribution:</strong> Learns sheaf restriction maps end-to-end via MLP predictors. Proves that learned sheaf diffusion avoids oversmoothing (non-trivial H⁰) and handles heterophily (maps can encode anti-alignment). Achieves state-of-the-art on heterophilic benchmarks at the time of publication.
-</div>
-{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="NSD learned restriction maps" caption="Neural Sheaf Diffusion: per-edge MLP predicts restriction maps (Bodnar et al., 2022)" %}
-
-<div class="nsd-grid">
-  <div class="nsd-card">
-    <h3>What changed from 2020</h3>
-    <p>Hansen and Gebhart gave the framework. NSD made the restriction maps trainable, which is what turned the idea into a competitive model.</p>
-  </div>
-  <div class="nsd-card">
-    <h3>What is learned</h3>
-    <p>The model does not only learn node embeddings. It also learns the relational geometry edge by edge through the restriction maps.</p>
-  </div>
-  <div class="nsd-card">
-    <h3>Why people still cite it</h3>
-    <p>It is the reference paper that connects sheaves, heterophily, oversmoothing, and trainable diffusion in one coherent story.</p>
-  </div>
+<strong>Paper:</strong> Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs<br>
+<strong>Authors:</strong> Cristian Bodnar, Francesco Di Giovanni, Benjamin P. Chamberlain, Pietro Liò, Michael Bronstein<br>
+<strong>Venue:</strong> NeurIPS 2022 · <a href="https://arxiv.org/abs/2202.04579">arXiv:2202.04579</a> · <a href="https://github.com/twitter-research/neural-sheaf-diffusion">code</a>
 </div>
 
+## Two complaints, one cause
 
-## NSD Architecture at a Glance
+The two standard complaints about GNNs are usually filed separately. **Oversmoothing**: stack enough layers and every node's representation converges to the same thing. **Heterophily**: models built on the assumption that neighbours are similar do badly when neighbours are systematically *dis*similar.
 
-<style>
-@keyframes flow-pulse {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 1; }
-}
-@keyframes flow-pulse2 {
-  0%, 20%, 100% { opacity: 0.2; }
-  60%, 80% { opacity: 1; }
-}
-@keyframes flow-pulse3 {
-  0%, 40%, 100% { opacity: 0.2; }
-  70%, 90% { opacity: 1; }
-}
-</style>
-<div class="blog-figure"><figure>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 110" style="width:100%;max-width:660px;display:block;margin:0 auto;">
-  <!-- boxes -->
-  <rect x="10"  y="30" width="80" height="44" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
-  <rect x="115" y="30" width="90" height="44" rx="7" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
-  <rect x="230" y="30" width="80" height="44" rx="7" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
-  <rect x="335" y="30" width="70" height="44" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
-  <rect x="430" y="30" width="80" height="44" rx="7" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
-  <rect x="535" y="30" width="70" height="44" rx="7" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
-  <!-- labels -->
-  <text x="50"  y="48" text-anchor="middle" font-size="9.5" fill="#1e40af" font-weight="bold">Input</text>
-  <text x="50"  y="61" text-anchor="middle" font-size="9.5" fill="#1e40af">Graph G, X₀</text>
-  <text x="160" y="46" text-anchor="middle" font-size="9.5" fill="#5b21b6" font-weight="bold">MLP predicts</text>
-  <text x="160" y="58" text-anchor="middle" font-size="9.5" fill="#5b21b6">F_{u▷e}, F_{v▷e}</text>
-  <text x="270" y="48" text-anchor="middle" font-size="9.5" fill="#92400e" font-weight="bold">Build Δ_F</text>
-  <text x="270" y="61" text-anchor="middle" font-size="9.5" fill="#92400e">(block matrix)</text>
-  <text x="370" y="48" text-anchor="middle" font-size="9.5" fill="#166534" font-weight="bold">Diffuse</text>
-  <text x="370" y="61" text-anchor="middle" font-size="9.5" fill="#166534">(I−Δ_F)HW</text>
-  <text x="470" y="48" text-anchor="middle" font-size="9.5" fill="#9d174d" font-weight="bold">Nonlinearity</text>
-  <text x="470" y="61" text-anchor="middle" font-size="9.5" fill="#9d174d">σ(·)</text>
-  <text x="570" y="48" text-anchor="middle" font-size="9.5" fill="#14532d" font-weight="bold">Output</text>
-  <text x="570" y="61" text-anchor="middle" font-size="9.5" fill="#14532d">H^(K)</text>
-  <!-- animated arrows (dots travelling along path) -->
-  <circle r="4" fill="#3b82f6">
-    <animateMotion dur="2.4s" repeatCount="indefinite" path="M90,52 L115,52"/>
-    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" repeatCount="indefinite"/>
-  </circle>
-  <circle r="4" fill="#7c3aed">
-    <animateMotion dur="2.4s" begin="0.4s" repeatCount="indefinite" path="M205,52 L230,52"/>
-    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" begin="0.4s" repeatCount="indefinite"/>
-  </circle>
-  <circle r="4" fill="#d97706">
-    <animateMotion dur="2.4s" begin="0.8s" repeatCount="indefinite" path="M310,52 L335,52"/>
-    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
-  </circle>
-  <circle r="4" fill="#16a34a">
-    <animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M405,52 L430,52"/>
-    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
-  </circle>
-  <circle r="4" fill="#db2777">
-    <animateMotion dur="2.4s" begin="1.6s" repeatCount="indefinite" path="M510,52 L535,52"/>
-    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
-  </circle>
-  <!-- static arrow lines -->
-  <line x1="90"  y1="52" x2="114" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <line x1="205" y1="52" x2="229" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <line x1="310" y1="52" x2="334" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <line x1="405" y1="52" x2="429" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <line x1="510" y1="52" x2="534" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <text x="310" y="100" text-anchor="middle" font-size="9" fill="#64748b" font-style="italic">repeated K times per layer</text>
-</svg>
-<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">NSD forward pass: the MLP predicts edge-specific restriction maps, from which Δ_F is assembled, then diffusion and a nonlinearity are applied.</figcaption>
-</figure></div>
+The paper's claim is that both follow from the geometry the graph is implicitly given — and that nobody chose that geometry deliberately.
 
-## The Central Idea
+Start from heat diffusion with the normalised Laplacian $$\Delta_0 = I - D^{-1/2}AD^{-1/2}$$:
 
-Hansen & Gebhart (2020) showed that fixed sheaf maps generalise GCN. The key limitation was: who specifies the maps?
-
-NSD's answer: **learn them from data**. For each edge (u, v), a small MLP predicts the restriction maps F_{u▷e} and F_{v▷e} from the features of u and v:
-
-<div class="math-box">
-[F_{u▷e} | F_{v▷e}] = MLP(h_u, h_v)  ∈ ℝ^{d × 2d}
+<div class="formula-box">
+\[
+\dot{X}(t) = -\Delta_0 X(t)
+\qquad\leadsto\qquad
+X(t+1) = (I - \Delta_0)X(t),
+\]
 </div>
 
-The MLP output is reshaped into two d×d matrices. The maps are edge-specific and node-feature-dependent — they adapt to the relational geometry of each edge as observed in the data.
+and compare with GCN, which is that Euler step plus a weight matrix and a nonlinearity:
 
-From these learned maps, the Sheaf Laplacian Δ_F is constructed, and sheaf diffusion is applied:
-
-<div class="math-box">
-H^{(k+1)} = (I − Δ_F^{norm}) H^{(k)} W^{(k)}
+<div class="formula-box">
+\[
+\mathrm{GCN}(X, A) := \sigma\big(D^{-1/2}AD^{-1/2}XW\big) = \sigma\big((I - \Delta_0)XW\big).
+\]
 </div>
 
-The maps are re-predicted at each layer (or shared across layers as a hyperparameter choice).
+Read that way, GCN is an augmented heat equation. Heat flow makes neighbouring values agree. Of course it oversmooths; of course it struggles when agreement is the wrong objective.
 
-## The Mechanistic Picture
-
-It helps to think of NSD as learning a tiny local coordinate system on every edge. When node <em>u</em> talks to node <em>v</em>, the model first learns how <em>u</em>'s features should be transformed before they are considered compatible with <em>v</em>. Only after that does diffusion happen.
-
-That is exactly why the model helps on heterophily. It does not force neighbours to match in raw feature space. It learns the transformation under which they should match.
-
-## The Full NSD Architecture
-
-```
-Input: Graph G, node features X₀ ∈ ℝ^{N×d}
-
-For each layer k = 1, ..., K:
-  1. Sheaf predictor: for each edge (u,v),
-        [F_{u▷e} | F_{v▷e}] = MLP_k(h_u^{(k-1)}, h_v^{(k-1)})
-
-  2. Build Δ_F^{(k)} from predicted maps (block matrix assembly)
-
-  3. Normalise: Δ_F^{norm} = D_F^{-1/2} Δ_F D_F^{-1/2}
-
-  4. Diffuse: H^{(k)} = (I − Δ_F^{norm}) H^{(k-1)} W^{(k)}
-
-  5. Apply nonlinearity: H^{(k)} ← σ(H^{(k)})
-
-Output: H^{(K)} for node classification / other downstream tasks
-```
-
-The weight matrix W^{(k)} ∈ ℝ^{d×d} is applied after diffusion — it allows the model to rotate/scale features in each stalk before the next layer's map prediction.
-
-## Map Parameterisation Options
-
-The paper studies four choices for the MLP output:
-
-**1. General maps** (F_{v▷e} ∈ ℝ^{d×d}): most expressive, d² parameters per map.
-
-**2. Symmetric maps** (F_{v▷e} = F_{v▷e}ᵀ): the Sheaf Laplacian blocks are symmetric matrices; used when the relational geometry is undirected.
-
-**3. Diagonal maps** (F_{v▷e} = diag(f₁,...,f_d)): d parameters per map, feature-wise scaling. The Sheaf Laplacian is block-diagonal with diagonal blocks.
-
-**4. Orthogonal maps** (F_{v▷e} ∈ O(d)): d(d−1)/2 parameters per map (Cayley parameterisation). Gauge-equivariant; the Connection Laplacian special case.
+## The sheaf
 
 <div class="insight-box">
-<strong>Design recommendation from the paper:</strong> Diagonal maps are the sweet spot — they add relational structure beyond identity maps, reduce parameter count, and remain interpretable (each feature dimension gets its own signed scaling). General maps achieve highest expressiveness but can overfit on small graphs.
+<strong>Definition.</strong> A <em>cellular sheaf</em> \((G,\mathcal{F})\) on an undirected graph assigns a vector space \(\mathcal{F}(v)\) to each node, a vector space \(\mathcal{F}(e)\) to each edge, and for every incident node–edge pair \(v \trianglelefteq e\) a linear map \(\mathcal{F}_{v \trianglelefteq e} : \mathcal{F}(v) \to \mathcal{F}(e)\). The spaces are <strong>stalks</strong>; the maps are <strong>restriction maps</strong>.
 </div>
 
-## Theoretical Analysis: Oversmoothing
+Hansen and Ghrist's opinion-dynamics reading makes this concrete, and the whole paper runs on it. A node's feature $$x_v \in \mathcal{F}(v)$$ is its **private opinion**. The edge stalk $$\mathcal{F}(e)$$ is a **discourse space** — what gets said publicly on that edge — and $$\mathcal{F}_{v \trianglelefteq e}x_v$$ is how $$v$$'s private opinion manifests there.
 
-**Theorem (NSD, Sec. 4.1):** For any non-degenerate sheaf F (i.e., not all restriction maps are the same), the null space ker(Δ_F) is not the space of constant functions. In particular:
+Two nodes *agree on an edge* when their public expressions coincide. Collect the assignments where everyone agrees everywhere and you get the **global sections**
 
-<div class="math-box">
-dim ker(Δ_F) ≥ d    and    ker(Δ_F) ⊉ {constant functions}
+<div class="formula-box">
+\[
+H^0(G;\mathcal{F}) := \{ x \in C^0(G;\mathcal{F}) : \mathcal{F}_{v \trianglelefteq e}x_v = \mathcal{F}_{u \trianglelefteq e}x_u \},
+\]
 </div>
 
-Proof sketch: The global sections ker(δ₀) = ker(Δ_F) satisfy F_{u▷e}x_u = F_{v▷e}x_v for all (u,v,e). When the maps are not all identity, this system has solutions that are not constant — the maps encode "consistent" non-constant assignments.
+where $$C^0(G;\mathcal{F}) = \bigoplus_{v \in V} \mathcal{F}(v)$$ is the space of 0-cochains. The **sheaf Laplacian** measures aggregated disagreement at each node:
 
-**Consequence:** Sheaf diffusion converges to a richer subspace than constant functions. The long-time attractor of the diffusion carries task-relevant structure (when maps are learned appropriately), so "oversmoothing" converges to useful features rather than destroying them.
-
-## Theoretical Analysis: Heterophily
-
-**Theorem (NSD, Sec. 4.2):** There exist restriction maps F such that the minimum Sheaf Dirichlet energy configuration is one where adjacent nodes have *different* features.
-
-Proof sketch: Consider edge (u, v) where u and v have different labels. Choose F_{u▷e} and F_{v▷e} such that F_{u▷e}x_u = F_{v▷e}x_v implies x_u ≠ x_v (e.g., F_{u▷e} = I, F_{v▷e} = −I forces x_u = −x_v for consistency). The model can learn to represent heterophilic structure by learning such maps.
-
-**Informal summary:** Standard GCN minimises Σ_{(u,v)∈E} ||h_u − h_v||². This penalises heterophilic pairs — neighbours with different features pay a high energy cost. Sheaf diffusion minimises Σ_{(u,v)∈E} ||F_{u▷e}h_u − F_{v▷e}h_v||². With learned maps, this can reward heterophilic pairs (F_{u▷e}x_u = F_{v▷e}x_v with x_u ≠ x_v) — the model learns that "consistent" means "different in this structured way".
-
-## Why This Paper Felt New
-
-A lot of heterophily work before NSD still lived in the mindset of "fix message passing with a better architecture." NSD changes the object being learned. The graph is no longer just a support over which messages move. It becomes a space equipped with trainable local linear relations. That is a deeper change than swapping one aggregator for another.
-
-## Worked Example: 2-Node Diffusion Step
-
-To make the mechanics concrete, consider two nodes u and v with stalk dimension d = 2.
-
-**Setup:**
-- Features: h_u = (1, 0)ᵀ, h_v = (0, 1)ᵀ (orthogonal — maximally "different")
-- Restriction maps (diagonal): F_{u▷e} = diag(1, −1), F_{v▷e} = diag(1, 1)
-
-**Step 1 — Coboundary block for edge e = (u, v).** The coboundary maps each node's signal into the edge space:
-
-<div class="math-box">
-δ₀ = [F_{v▷e} | −F_{u▷e}] = [diag(1,1) | −diag(1,−1)]
-   = [[1, 0, −1,  0],
-      [0, 1,  0,  1]]    ∈ ℝ^{2×4}
+<div class="formula-box">
+\[
+L_{\mathcal{F}}(x)_v := \sum_{v,u \trianglelefteq e} \mathcal{F}_{v \trianglelefteq e}^{\top}\big(\mathcal{F}_{v \trianglelefteq e}x_v - \mathcal{F}_{u \trianglelefteq e}x_u\big),
+\]
 </div>
 
-**Step 2 — Sheaf Laplacian Δ_F = δ₀ᵀδ₀ ∈ ℝ^{4×4}.** Stacking the stalk signals as x = (h_u, h_v) = (1, 0, 0, 1)ᵀ:
+a positive semi-definite $$nd \times nd$$ block matrix with diagonal blocks $$\sum_{v \trianglelefteq e}\mathcal{F}_{v\trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e}$$ and off-diagonal blocks $$-\mathcal{F}_{v\trianglelefteq e}^{\top}\mathcal{F}_{u\trianglelefteq e}$$. Normalising by its block diagonal $$D$$ gives $$\Delta_{\mathcal{F}} := D^{-1/2}L_{\mathcal{F}}D^{-1/2}$$, preferred in practice for its bounded spectrum.
 
-<div class="math-box">
-Δ_F = δ₀ᵀδ₀ = [[ 1,  0,  −1,   0],
-                [ 0,  1,   0,   1],
-                [−1,  0,   1,   0],
-                [ 0,  1,   0,   1]]
+**Set $$d = 1$$ and every restriction map to the identity and you recover the ordinary graph Laplacian.** That is the trivial sheaf, and it is what every standard GNN silently assumes. The paper's programme is to ask what happens when you stop assuming it.
+
+Sheaf diffusion $$\dot{X}(t) = -\Delta_{\mathcal{F}}X(t)$$ projects each feature channel into $$\ker(\Delta_{\mathcal{F}})$$, which is isomorphic to $$H^0(G;\mathcal{F})$$. So diffusion is a **synchronisation** process: private opinions move until every public expression agrees. Whether the classes end up separated depends entirely on how rich that space of agreements is.
+
+## Transport, holonomy, and the size of the kernel
+
+When the restriction maps are orthogonal, $$\mathcal{F}_{v \trianglelefteq e} \in O(d)$$, the sheaf is a **discrete $$O(d)$$-bundle** and $$L_{\mathcal{F}}$$ is the connection Laplacian. Composing maps along a path $$\gamma_{v \to u}$$ gives a transport operator
+
+<div class="formula-box">
+\[
+\mathbf{P}^{\gamma}_{v \to u} := \big(\mathcal{F}_{u \trianglelefteq e}^{\top}\mathcal{F}_{v_{\ell} \trianglelefteq e}\big)\cdots\big(\mathcal{F}_{v_1 \trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e}\big) : \mathcal{F}(v) \to \mathcal{F}(u),
+\]
 </div>
 
-(The (1,2) block comes from F_{u▷e}ᵀF_{v▷e} = diag(1,−1)·diag(1,1) = diag(1,−1).)
+and in general transport is **path dependent** — send a vector round a loop and it comes back changed. Three results pin down what that costs:
 
-**Step 3 — Normalised Laplacian.** The degree block for each node is D_u = F_{u▷e}ᵀF_{u▷e} = diag(1,1) = I₂. So D_F = I₄ and Δ_F^{norm} = Δ_F.
+- **Proposition 3.** With $$r := \max_{\gamma, \gamma'}\lVert \mathbf{P}^{\gamma}_{v\to u} - \mathbf{P}^{\gamma'}_{v\to u}\rVert$$, the spectral gap satisfies $$\lambda^{\mathcal{F}}_0 \le r^2/2$$. Path-independent transport ($$r = 0$$) therefore *forces* a non-trivial harmonic space.
+- **Proposition 5** (Cheeger-type, other direction). If $$\lVert(\mathbf{P}^{\gamma}_{v\to v} - I)x_v\rVert \ge \epsilon\lVert x_v\rVert$$ for every cycle at $$v$$, then $$\lambda^{\mathcal{F}}_0 \ge \epsilon^2(2\,\mathrm{diam}(G)\,n\,d_{\max})^{-1}$$.
+- **Lemma 6.** $$\dim(H^0) \le d$$, with equality **iff** transport is path-independent.
 
-**Step 4 — One diffusion step** (I − Δ_F^{norm}) x₀:
+Lemma 6 is the load-bearing one: the dimension of the space diffusion converges into is capped by the stalk dimension. That single inequality drives everything below.
 
-<div class="math-box">
-Δ_F x₀ = Δ_F (1, 0, 0, 1)ᵀ
-
-row 1: 1·1 + 0·0 + (−1)·0 + 0·1 =  1
-row 2: 0·1 + 1·0 + 0·0   + 1·1 =  1
-row 3: −1·1 + 0·0 + 1·0  + 0·1 = −1
-row 4: 0·1 + 1·0 + 0·0   + 1·1 =  1
-
-Δ_F x₀ = (1, 1, −1, 1)ᵀ
-
-x₁ = x₀ − Δ_F x₀ = (1,0,0,1)ᵀ − (1,1,−1,1)ᵀ = (0, −1, 1, 0)ᵀ
+<div class="insight-box">
+<strong>The gauge-theory connection is not an analogy.</strong> Restriction maps are transports between local frames, path-dependence is holonomy, and non-trivial holonomy is curvature. This is exactly the <a href="/blog/gdl/gauges-and-local-frames/">gauge row of the geometric deep learning blueprint</a>, discretised onto a graph. Proposition 4 makes it explicit: for \(x \in H^0\) and any cycle \(\gamma\) at \(v\), we need \(x_v \in \ker(\mathbf{P}^{\gamma}_{v\to v} - I)\) — global sections must be fixed points of every holonomy.
 </div>
 
-So after one step: h_u^(1) = (0, −1)ᵀ, h_v^(1) = (1, 0)ᵀ.
+## The hierarchy
 
-**What happened?** Check consistency: F_{u▷e} h_u^(1) = diag(1,−1)(0,−1)ᵀ = (0, 1)ᵀ. F_{v▷e} h_v^(1) = diag(1,1)(1, 0)ᵀ = (1, 0)ᵀ. Still not equal — one more step is needed. But notice h_u has moved from (1,0) toward the direction that would satisfy F_{u▷e}h_u = F_{v▷e}h_v: the diffusion is driving the system toward the global section of this sheaf.
+Now the payoff. A class of sheaves has **linear separation power** over a family of graphs if, for any labelled graph in the family, some sheaf in the class linearly separates the classes as $$t \to \infty$$, for almost all initial conditions. (The "almost all" is needed because diffusion acts as a projection, and degenerate starts — the zero matrix, say — project to zero.) Then climb:
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The specific choice F_{u▷e} = diag(1,−1) means "consistency" requires h_u's second component to be opposite in sign to h_v's. This is how NSD encodes heterophily: the map itself defines what "compatible" means, and the diffusion enforces that compatibility — not by pushing features to match, but by pushing them to satisfy the map-defined relation.</div>
+| Class | Restriction maps | What it can separate |
+|---|---|---|
+| $$\mathcal{H}^1_{\text{sym}}$$ | symmetric, scalar | 2 classes under a homophily condition (Prop. 8); **nothing** on balanced bipartite graphs (Prop. 9) |
+| $$\mathcal{H}^1$$ | any invertible scalar | 2 classes on any connected graph (Prop. 10); **never** $$C \ge 3$$ (Prop. 11) |
+| $$\mathcal{H}^d_{\text{diag}}$$ | invertible diagonal | $$C$$ classes whenever $$d \ge C$$ (Prop. 12) |
+| $$\mathcal{H}^d_{\text{orth}}$$ | orthogonal, $$O(d)$$ | $$C \le 2d$$ classes, for $$d \in \{2,4\}$$ (Prop. 13) |
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Conceptual Hierarchy:</strong> FAGCN uses scalar restriction maps (a single signed weight a_{uv} ∈ [−1,+1] per edge — 1D maps). NSD uses d×d matrix maps, letting each feature dimension interact with all others across an edge. This makes NSD a strict generalization: scalar maps are the d=1 special case, diagonal maps add per-dimension signs, and full d×d maps encode arbitrary linear relations. The richer the map, the richer the notion of "consistency" the model can represent — and the richer the null space H⁰ it constructs as its diffusion target.</div>
+Three things deserve emphasis.
 
-## Connection to FAGCN and Signed Attention
+**Proposition 9 is an impossibility result about GCN.** For $$d=1$$, symmetric invertible maps give exactly the weighted graph Laplacians with strictly positive weights — the class GCN and ChebNet live in. So "no sheaf in $$\mathcal{H}^1_{\text{sym}}$$ separates the two sides of a balanced connected bipartite graph, for *any* initial conditions" is a statement about that entire family of models. Not "does it badly". Cannot.
 
-FAGCN (Bo et al., 2021) uses signed attention: edge weights a_{uv} ∈ [−1, +1]. This is equivalent to a sheaf with scalar restriction maps: F_{u▷e} = 1, F_{v▷e} = a_{uv} (a scalar ±1 per edge).
+**Proposition 10 explains signed edges.** Take $$\mathcal{F}_{v\trianglelefteq e} = -\alpha_e$$ for $$v \in A$$ and $$+\alpha_e$$ for $$u \in B$$, with $$\alpha_e > 0$$. Then $$\mathcal{F}_{v\trianglelefteq e}^{\top}\mathcal{F}_{u\trianglelefteq e} = \pm\alpha_e^2$$: transport is $$-1$$ across class boundaries and $$+1$$ within classes. That transport is path-independent, so by Proposition 3 the harmonic space is non-trivial, and the limit polarises the two classes to opposite signs. Negatively-weighted edges had been a heterophily heuristic for years; here they fall out of the geometry.
 
-NSD generalises this from scalar (1D) to matrix (d×d) restriction maps — enabling richer relational representations than simple sign-flipping.
+**Stalk width is not feature width.** Proposition 11 says $$C \ge 3$$ classes are unreachable at $$d=1$$ no matter how many feature channels $$f$$ you use, because $$\dim\ker(\Delta_{\mathcal{F}}) \le 1$$ by Lemma 6. Channels do not help; stalk dimensions do. Confusing the two is the easiest way to misread the paper.
 
-## Empirical Results
+Note how the last two rows trade off. Diagonal maps behave like $$d$$ independent copies of the $$d=1$$ case stacked on the diagonal, so they need $$d \ge C$$. Orthogonal maps *mix* the stalk dimensions, and that mixing is what lets them reach $$2d$$ classes at the same width.
 
-Heterophilic node classification benchmarks (Cornell, Texas, Wisconsin, Actor, Chameleon, Squirrel):
+## Escaping the kernel
 
-| Model | Cornell | Texas | Wisconsin | Actor | Chameleon | Squirrel |
-|---|---|---|---|---|---|---|
-| GCN | 57.0 | 59.5 | 51.8 | 27.3 | 59.8 | 36.9 |
-| GAT | 54.3 | 58.4 | 49.4 | 26.3 | 60.5 | 40.7 |
-| GPRGNN | 80.3 | 78.4 | 82.4 | 34.6 | 67.5 | 50.4 |
-| FAGCN | 79.2 | 82.4 | 82.6 | 34.9 | 64.3 | 43.8 |
-| **NSD-diag** | **83.6** | **87.6** | **85.3** | **36.8** | **69.4** | **56.5** |
-| **NSD-orth** | **85.0** | **88.4** | **86.0** | **36.2** | **70.2** | **57.1** |
+Section 4 asks a different question. The sheaf will be *learned*, so it will often be the wrong sheaf. Can the network compensate?
 
-NSD consistently outperforms all prior methods on heterophilic benchmarks, with orthogonal maps generally performing best.
+Define the sheaf Dirichlet energy $$E_{\mathcal{F}}(x) := x^{\top}\Delta_{\mathcal{F}}x$$, which vanishes exactly on $$\ker(\Delta_{\mathcal{F}})$$, and set $$\lambda_* := \max_{i>0}(\lambda^{\mathcal{F}}_i - 1)^2 \le 1$$.
 
-## Implementation Details
+- **Theorems 15 and 16.** For sheaves with positive scalar transport, and for orthogonal-symmetric sheaves, with $$\sigma$$ a (Leaky)ReLU, one layer satisfies $$E_{\mathcal{F}}(Y) \le \lambda_*\lVert W_1\rVert_2^2\lVert W_2^{\top}\rVert_2^2 E_{\mathcal{F}}(X)$$. With small enough weights the energy contracts exponentially and the representation is trapped in the kernel — and if it starts there it can never leave.
+- **Proposition 17.** Outside $$\mathcal{H}^d_{\text{sym}}$$, for **any** $$\varepsilon > 0$$ there exist a sheaf and a $$W_1$$ with $$\lVert W_1\rVert_2 < \varepsilon$$ that *increase* the energy.
 
-**Stalk dimension d:** Typically d=2 or d=3. The paper shows diminishing returns for d>5, with d=2 often optimal.
+The asymmetry is the point. A GCN-like model cannot help but smooth when its weights are small; a sheaf convolution with non-symmetric maps can raise energy using an arbitrarily small transformation. It is not obliged to converge into the kernel — so a wrong learned sheaf is recoverable.
 
-**Sheaf predictor:** Small MLP (2 layers, hidden dim 64). Shared or per-layer.
+## Learning the sheaf
 
-**Map normalization:** After predicting maps, optionally apply a softmax or normalisation to control the magnitude of restriction maps.
+The model discretises to
 
-**Computational cost:** O(E·d²) for map prediction + O(N·d²) for Sheaf Laplacian application. For large d, this becomes expensive. In practice d=2 or d=3 keeps cost manageable.
+<div class="formula-box">
+\[
+X_{t+1} = X_t - \sigma\!\left(\Delta_{\mathcal{F}(t)}\big(I_n \otimes W^t_1\big)X_t W^t_2\right),
+\]
+</div>
 
-**Regularisation:** L2 regularisation on restriction map magnitudes prevents the maps from becoming degenerate (all-zero or all-identity).
+with the sheaf itself **time-varying and learned**: $$\mathcal{F}_{v \trianglelefteq e:=(v,u)} = \Phi(x_v, x_u)$$, implemented as $$\sigma(V[x_v \Vert x_u])$$ reshaped into a $$d \times d$$ block. $$\Phi$$ must be non-symmetric in its arguments, or the model cannot express the asymmetric transports Proposition 10 needs. Setting $$W_1, W_2$$ to identity and $$\sigma = \mathrm{id}$$ recovers plain sheaf diffusion, so the model inherits every guarantee above.
 
-## Practical Reading of the Results
+**Proposition 18**: if all edge feature-pairs are distinct and $$\Phi$$ has enough capacity, it can learn *any* sheaf on the graph. That is the stated justification for re-learning the sheaf at every layer — aggregation makes more nodes distinguishable, so later layers can express sheaves earlier ones could not.
 
-The benchmark wins matter, but the more durable contribution is the explanatory framework:
+Three parameterisations, with real trade-offs:
 
-- oversmoothing becomes a statement about convergence to <em>H⁰</em>,
-- heterophily becomes a statement about what restrictions define compatibility,
-- map parameterisation becomes a first-class modelling decision.
+| Parameterisation | Complexity | Character |
+|---|---|---|
+| **Diagonal** | $$O(nc^2 + mdc)$$ | fewest parameters, sparse blocks; stalk dimensions interact only through the left multiplication by $$W_1$$ |
+| **Orthogonal** | $$O(n(c^2+d^3) + m(cd^2+d^3))$$ | built from **Householder reflections**; mixes stalk dimensions, constrains overfitting, and the diagonal blocks are just node degrees so normalisation is numerically easy |
+| **General** | same as orthogonal | maximally flexible; $$D^{-1/2}$$ needs an SVD whose gradients can be infinite when $$D$$ has repeated eigenvalues, so it is the hardest to train |
 
-That is why later papers such as PNSD, SheafAN, HetSheaf, and PolyNSD all feel like variations on NSD's core thesis rather than isolated architectures.
+Here $$c = d \times f$$ is the total representation size, against GCN's $$O(nc^2 + mc)$$. With $$1 \le d \le 5$$ in practice the overhead is effectively a constant factor.
 
-## Limitations
+## Results
 
-1. **Stalk dimension d:** The optimal d is task-dependent and requires tuning.
-2. **Sheaf predictor expressiveness:** The MLP maps only pairs (h_u, h_v) — it cannot use higher-order neighbourhood information to predict edge maps.
-3. **Fixed diffusion filter:** The filter (I − Δ_F^{norm}) is a fixed low-pass filter. PolyNSD (Borgi et al., 2025) addresses this by making the filter polynomial and learnable.
-4. **Scalability:** Map prediction scales with number of edges; for dense graphs, this is expensive.
+The synthetic experiment is the cleanest evidence in the paper. On a connected bipartite graph with features from two overlapping isotropic Gaussians — deliberately not separable at $$t = 0$$ — two $$d=1$$ diffusions are compared: one with general maps, one constrained to $$\mathcal{F}_{v\trianglelefteq e} = \mathcal{F}_{u \trianglelefteq e}$$ (i.e. a weighted graph Laplacian). The symmetric one cannot fit the data, exactly as Proposition 9 requires. The general one separates the classes as diffusion time grows, and a histogram of the learned transports $$\mathcal{F}_{v\trianglelefteq e}^{\top}\mathcal{F}_{u\trianglelefteq e}$$ shows them **negative on every edge**. The model rediscovers the construction of Proposition 10 on its own.
+
+On the nine real datasets (homophily 0.11 to 0.81, Pei et al.'s 10 fixed 48/32/20 splits):
+
+| Dataset | $$h$$ | Diag-NSD | O($$d$$)-NSD | Gen-NSD | Best baseline |
+|---|---|---|---|---|---|
+| Texas | 0.11 | 85.67 | **85.95** | 82.97 | GGCN 84.86 |
+| Wisconsin | 0.21 | 88.63 | **89.41** | 89.21 | GGCN 86.86 |
+| Film | 0.22 | 37.79 | **37.81** | 37.80 | GGCN 37.54 |
+| Squirrel | 0.22 | 54.78 | **56.34** | 53.17 | GGCN 55.17 |
+| Chameleon | 0.23 | 68.68 | 68.04 | 67.93 | **GGCN 71.14** |
+| Cornell | 0.30 | **86.49** | 84.86 | 85.68 | GGCN 85.68 |
+| Citeseer | 0.74 | 77.14 | 76.70 | 76.32 | **Geom-GCN 78.02** |
+| Pubmed | 0.80 | 89.42 | 89.49 | 89.33 | **GCNII 90.15** |
+| Cora | 0.81 | 87.14 | 86.90 | 87.30 | **GCNII 88.37** |
+
+First on five of the six datasets with $$h \le 0.30$$, second on Chameleon, and among the top three on eight of nine overall — the exception being Cora, where it lands sixth. The size of the heterophilic gap is worth staring at: on Texas and Wisconsin, GCN and GAT score in the low 50s while an MLP that ignores the graph entirely gets 80.8 and 85.3. The graph is *actively harmful* to models that assume homophily. NSD is the model that uses it and still wins.
+
+$$O(d)$$-NSD is best overall, consistent with the theory: orthogonal maps get the wider class capacity at fixed $$d$$, and the constraint doubles as regularisation. But Diag-NSD is close everywhere and wins outright on Cornell and Citeseer — an early sighting of a pattern [later papers keep re-encountering](/blog/sheaf/dnsd-paper/).
+
+<div class="warning-box">
+<strong>What the theory does and does not cover.</strong> Every separation result above concerns the <em>infinite-time limit of the linear diffusion</em>, for <em>almost all initial conditions</em>. The trained model has finite depth, learned weights, nonlinearities, and a sheaf that changes each layer. Diffusion converges exponentially, so the finite-depth reading is defensible — but a theorem about \(\Delta_{\mathcal{F}}\) is not automatically a statement about the network. The paper is careful here; secondary accounts often are not. The authors also name the real gap themselves: none of this addresses <em>generalisation</em>.
+</div>
+
+## Where it sits
+
+Two framings from the related work are worth keeping. The layer is a form of **GNN-FiLM**: each node learns a linear message function conditioned on its neighbour's features. And relative to **GAT** the difference is exactly one of type — for a pair $$(v,u)$$, GAT learns a scalar attention coefficient $$a_{vu}$$, while NSD learns the matrix block $$(v,u)$$ of $$\Delta_{\mathcal{F}}$$.
+
+Scalar reweighting versus matrix transformation. Nearly every subsequent sheaf paper is a variation on that one substitution.
+
+<div class="key-takeaways">
+<h3>✅ Key Takeaways</h3>
+<ul>
+  <li>A standard GNN is heat diffusion under a <em>trivial</em> sheaf — \(d=1\), identity restriction maps. Oversmoothing and heterophilic failure are two symptoms of that one unexamined choice.</li>
+  <li>Sheaf diffusion converges into \(\ker(\Delta_{\mathcal{F}}) \cong H^0(G;\mathcal{F})\), and \(\dim H^0 \le d\) (Lemma 6). Stalk width, not feature width, caps what the limit can express.</li>
+  <li>The hierarchy is sharp: symmetric scalar maps <em>provably cannot</em> separate a balanced bipartite graph; signed scalar maps handle 2 classes; diagonal maps handle \(C \le d\); orthogonal maps handle \(C \le 2d\).</li>
+  <li>Negatively-weighted edges for heterophily, previously a heuristic, are derived: transport \(-1\) across class boundaries is path-independent and polarises the classes.</li>
+  <li>Non-symmetric sheaves can <em>increase</em> Dirichlet energy using arbitrarily small weights (Prop. 17), so the model can escape a badly learned kernel — something GCN-like models cannot do.</li>
+  <li>Empirically \(O(d)\)-NSD is strongest, first on 5 of the 6 benchmarks with \(h \le 0.30\); diagonal maps are close behind at a fraction of the parameters.</li>
+  <li>Against GAT the difference is one substitution: a scalar attention weight becomes a matrix-valued transport.</li>
+</ul>
+</div>
 
 ## References
 
-- Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022*.
-- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (the predecessor with fixed maps that NSD extends to learned maps).
-- Bo, D., Wang, X., Shi, C., & Shen, H. (2021). [Beyond Low-Frequency Information in Graph Convolutional Networks](https://arxiv.org/abs/2101.00797). *AAAI 2021* (FAGCN: signed attention — the scalar special case of NSD's matrix maps).
+- Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *Advances in Neural Information Processing Systems 35*.
+- Hansen, J., & Ghrist, R. (2019). [Toward a Spectral Theory of Cellular Sheaves](https://arxiv.org/abs/1808.01513). *Journal of Applied and Computational Topology*, 3(4), 315–358.
+- Hansen, J., & Ghrist, R. (2021). Opinion Dynamics on Discourse Sheaves. *SIAM Journal on Applied Mathematics*, 81(5), 2033–2060.
+- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 Workshop on Topological Data Analysis and Beyond*.
+- Kipf, T. N., & Welling, M. (2017). [Semi-Supervised Classification with Graph Convolutional Networks](https://arxiv.org/abs/1609.02907). *ICLR 2017*.
+- Bandeira, A. S., Singer, A., & Spielman, D. A. (2013). A Cheeger Inequality for the Graph Connection Laplacian. *SIAM Journal on Matrix Analysis and Applications*, 34(4), 1611–1630.
+- Yan, Y., Hashemi, M., Swersky, K., Yang, Y., & Koutra, D. (2021). [Two Sides of the Same Coin: Heterophily and Oversmoothing in Graph Convolutional Neural Networks](https://arxiv.org/abs/2102.06462). *arXiv:2102.06462*.
+- Mhammedi, Z., Hellicar, A., Rahman, A., & Bailey, J. (2017). [Efficient Orthogonal Parametrisation of Recurrent Neural Networks Using Householder Reflections](https://arxiv.org/abs/1612.00188). *ICML 2017*.

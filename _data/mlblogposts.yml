@@ -268,8 +268,10 @@ sheaf:
       label: "Core Papers"
       posts:
         - { slug: "2025-06-07-hansen-gebhart-2020",       title: "Sheaf Neural Networks (Hansen & Gebhart, 2020): The First Sheaf GNN",                            published: offline }
-        - { slug: "2025-06-08-neural-sheaf-diffusion",    title: "Neural Sheaf Diffusion (Bodnar et al., NeurIPS 2022): Learning the Relational Geometry",         published: offline }
-        - { slug: "2025-06-10-sheaf-attention-networks",  title: "Sheaf Attention Networks (Barbero et al., 2022)",                                                 published: offline }
+        - { slug: "2025-06-08-neural-sheaf-diffusion",    title: "Neural Sheaf Diffusion: Heterophily and Oversmoothing Are the Same Problem (Bodnar et al., 2022)", published: online }
+        - { slug: "2026-08-09-connection-laplacian-sheaf-networks", title: "Conn-NSD: Computing the Sheaf Instead of Learning It (Barbero et al., 2022)",           published: online }
+        - { slug: "2025-06-10-sheaf-attention-networks",  title: "Sheaf Attention Networks: GAT with Matrices Instead of Scalars (Barbero et al., 2022)",           published: online }
+        - { slug: "2026-08-10-neural-sheaf-propagation",  title: "Surfing on the Neural Sheaf: The Wave Equation on Sheaves (Suk et al., 2022)",                    published: online }
         - { slug: "2025-06-09-polynomial-sheaf-diffusion", title: "Nonlinear Sheaf Diffusion (Zaghen et al., 2024): Adaptive Sheaf Laplacians",                     published: offline }
         - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi, Silvestri & Liò)",                            published: online }
         - { slug: "2026-07-28-deep-neural-sheaf-diffusion", title: "DNSD: Making Sheaf Diffusion Work at Depth (Bourgerie et al., 2026)",                           published: online }
@@ -298,6 +300,10 @@ sheaf:
         - { slug: "2025-06-21-temporal-sheaves",       title: "Temporal Sheaves: Extending Sheaf GNNs to Dynamic Graphs",                 published: offline }
         - { slug: "2025-06-22-sheaf-transformers",     title: "Sheaves Meet Attention: Transformer-Inspired Sheaf Models",                published: offline }
         - { slug: "2024-09-12-hetsheaf-paper",         title: "HetSheaf: Heterogeneous Graphs Meet Cellular Sheaves (Braithwaite et al.)", published: online }
+        - { slug: "2026-08-14-sheaf-hypergraph-networks", title: "Sheaf Hypergraph Networks: Higher-Order Relations (Duta et al., NeurIPS 2023)",                published: online }
+        - { slug: "2026-08-11-sheaf-positional-encodings", title: "Sheaf-Based Positional Encodings for GNNs (He, Bodnar & Liò, 2023)",                          published: online }
+        - { slug: "2026-08-12-joint-diffusion-sheaf-networks", title: "Joint Diffusion and Rotation Invariance: Sheaves That Learn to Lie (Hernandez Caralt et al., 2024)", published: online }
+        - { slug: "2026-08-13-bayesian-sheaf-neural-networks", title: "Bayesian Sheaf Neural Networks: A Distribution on the Geometry (Gillespie et al., 2024)",   published: online }
         - { slug: "2025-06-26-sheafpool",              title: "SheafPool: Basis-Invariant Graph Readout for Sheaf Neural Networks",        published: online }
 
     applications:
