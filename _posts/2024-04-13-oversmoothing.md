@@ -100,7 +100,7 @@ Why do deeper networks hurt in GNNs when they help in CNNs and Transformers? Bec
 
 ## The Mathematics of Oversmoothing
 
-Consider GCN's propagation step (ignoring learnable weights and non-linearities for clarity). Write \(A\) for the adjacency matrix, \(\tilde{A} = A + I\) for the self-looped adjacency, \(\tilde{D}\) for its degree matrix, and
+Consider GCN's propagation step (ignoring learnable weights and non-linearities for clarity). Write $$A$$ for the adjacency matrix, $$\tilde{A} = A + I$$ for the self-looped adjacency, $$\tilde{D}$$ for its degree matrix, and
 
 <div class="formula-box">
 \[

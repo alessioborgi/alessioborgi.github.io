@@ -28,7 +28,7 @@ toc_label: "Contents"
 <strong>Preprint:</strong> <a href="https://arxiv.org/abs/2410.09590">arXiv:2410.09590</a>, October 2024 · <a href="https://github.com/patrick-gillespie/bsnn">code</a>
 </div>
 
-## What "learning the sheaf" leaves exposed
+## The problem with a point estimate of the geometry
 
 [NSD](/blog/sheaf/neural-sheaf-diffusion/)'s central move is to make the restriction maps a learned function of node features. That is what turned sheaf models from a synthetic-data curiosity into something you can run on a real graph.
 
@@ -54,7 +54,7 @@ For **diagonal** and **general** maps this is routine: multivariate normals with
 
 For **orthogonal** maps it is not, and that gap is the paper.
 
-## The obstruction on SO(n)
+## Why distributions on SO(n) are the hard part
 
 Orthogonal restriction maps matter — they give the connection-Laplacian geometry, the diagonal blocks reduce to degrees so normalisation is easy, and NSD found them strongest empirically. So you want to put a distribution on them. Two requirements pull in opposite directions:
 
@@ -122,7 +122,7 @@ Both vanish at $$\kappa = 0$$, as they must — $$\kappa = 0$$ leaves the unifor
 <strong>Not the same as the existing "Cayley distributions".</strong> León, Massé and Rivest (2006) defined a family under the same name with density proportional to \(\det(PM^{\top} + I)^{\kappa}\). The difference is structural rather than cosmetic: there \(\kappa\) sits in the <em>exponent</em>; here it <em>scales the identity inside the determinant</em>. Two different families, one name. Worth knowing before you cite either.
 </div>
 
-## The separation bound, sharpened
+## A sharper separation bound for orthogonal sheaves
 
 Before any of the Bayesian machinery, the paper improves a result from NSD. Bodnar et al.'s Proposition 13 gives orthogonal sheaves linear separation power over graphs with $$C \le 2d$$ classes, but only for $$d \in \{2, 4\}$$ — so as a general statement about $$SO(d)$$ sheaves it tops out at 8 classes.
 
@@ -136,7 +136,7 @@ The seven-rather-than-eight is exactly the cost of spending one of the eight lab
 <strong>It is not uniformly stronger, and the difference is instructive.</strong> At \(d = 4\) Bodnar's bound gives 8 classes and this one gives 7. The contribution is not a tighter constant — it is that the bound holds for <em>every</em> \(d\), so \(C\) is no longer capped. A corollary the authors point out for free: since \(\mathcal{H}^d_{so} \subseteq \mathcal{H}^d_{gen}\), the same bound applies to general linear restriction maps.
 </div>
 
-## Results, and how to read the split
+## Results, and how to read the two tables
 
 Three WebKB datasets — Texas, Wisconsin, Cornell — with a deliberately reduced training split of **32% / 20% / 48%** for train / validation / test. That is the reverse of NSD's 48/32/20, and it is the point: the hypothesis is that Bayesian treatment helps when data is scarce. Best hyperparameter configuration, 30 random seeds:
 
@@ -166,7 +166,7 @@ The stronger claim is in the second table, which averages over **all** hyperpara
 
 Every cell favours BSNN, every difference significant under a Wilcoxon signed-rank test at $$p = 0.05$$. That is the honest headline: **not "more accurate" but "less sensitive"**. BSNN maintains performance across a much wider range of hyperparameters, and the standard deviations across random seeds are lower in all but one case, so it is less sensitive to initialisation too. For a family of models where diagonal-versus-orthogonal-versus-general and $$d \in \{2,3,4,5\}$$ all have to be swept, that robustness is worth more in practice than a tenth of a point at the optimum.
 
-## What is missing
+## What the evaluation leaves out
 
 The evaluation covers three graphs of 183–251 nodes. Nothing here speaks to scale, to homophilic graphs, or to the heterophily spectrum that the rest of this literature is benchmarked on. Since the mechanism is a regulariser against overfitting, larger graphs are precisely where it should matter least — which makes the omission understandable and also means the WebKB results are close to a best case.
 

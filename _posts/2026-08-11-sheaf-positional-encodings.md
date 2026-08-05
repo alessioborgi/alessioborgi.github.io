@@ -28,7 +28,7 @@ toc_label: "Contents"
 <strong>Venue:</strong> NeurIPS 2023 Workshop on Symmetry and Geometry in Neural Representations · <em>PMLR</em> 228
 </div>
 
-## What a positional encoding is for
+## What positional encodings are for
 
 Message passing is local. A node's representation is a function of its immediate neighbourhood, so two nodes with isomorphic neighbourhoods get identical embeddings — which is the 1-WL ceiling, and the reason GNNs fail on regular graphs and miss simple substructures.
 
@@ -42,7 +42,7 @@ Graph Transformers need this even more acutely. Attending over a fully connected
 
 The sheaf Laplacian does not have this problem, because the restriction maps are functions of the node features. Its spectrum therefore encodes **structure and semantics together**.
 
-## Two ways to get the sheaf
+## Two ways to build the sheaf
 
 **ConnLap — precomputed.** Constrain the restriction maps to be orthogonal and the sheaf Laplacian becomes the connection Laplacian, a discrete vector bundle whose transports approximate parallel transport on a manifold. For an edge $$(v,u)$$ the transport collapses to a single step,
 
@@ -78,17 +78,15 @@ GCN base model — chosen precisely because it is known to fail on heterophilic 
 | Pubmed | 0.80 | 86.43 | 86.43 | **86.49** | 85.84 |
 | Cora | 0.81 | 84.71 | 85.05 | 85.13 | **85.88** |
 
-Three clean readings.
+The central claim survives the table. ConnLap beats GraphLap on all nine datasets, never by much, with the largest margin 2.16 on Wisconsin and the smallest 0.06 on Pubmed, but the direction is unanimous.
 
-**ConnLap beats GraphLap on all nine.** Never by much — the largest margin is 2.16 on Wisconsin, and Pubmed moves by 0.06 — but the direction is unanimous. That is the paper's central claim and the table supports it.
+The learned variant behaves quite differently. SheafLap takes the single largest gain in the study, 3.55 points over GraphLap on Squirrel, and also wins Texas, Citeseer and Cora. Yet on Film it scores 23.80, which is below the 25.20 that comes from adding no encoding at all, and on Cornell it lands three points under GraphLap. A learned positional encoding can make the model worse than no encoding, which is the sort of result that is easy to leave out of a summary table.
 
-**SheafLap is higher-variance in both directions.** It takes the largest single gain in the study, +3.55 on Squirrel over Squirrel's GraphLap, and wins Texas, Citeseer and Cora too. But on Film it scores 23.80, *below* the no-PE baseline of 25.20, and on Cornell it lands 3 points under GraphLap. Adding a learned positional encoding can make the model worse than adding none.
-
-**Every PE helps on heterophilic data, which is the real signal.** Cornell moves from 45.95 to 52.97 and Wisconsin from 49.80 to 57.65. These are exactly the datasets where a GCN is worst, and where the positional information has the most to add.
+Underneath both, the strongest signal is that every encoding helps on heterophilic data. Cornell moves from 45.95 to 52.97, Wisconsin from 49.80 to 57.65. These are precisely the datasets on which a GCN performs worst, and where global positional information has the most to contribute.
 
 The paper's explanation for ConnLap's greater stability is worth recording, because it is three concrete mechanisms rather than a hand-wave: the datasets have high feature dimension, so the manifold assumption ConnLap depends on is plausible; precomputation avoids the numerical trouble SheafLap occasionally hits in backpropagation; and the datasets are small enough that there may simply not be enough data to fit a sheaf.
 
-## Graph-level results, and the honest failure
+## Graph-level results, including a clear failure
 
 On molecules the story changes, and the paper does not hide it.
 
@@ -118,7 +116,7 @@ ConnLap's preprocessing runs several times to an order of magnitude longer than 
 
 SheafLap has no preprocessing and pays for it every epoch, at roughly **three orders of magnitude** over the alternatives: 3,139 seconds per epoch on Citeseer against 4.47. Since training runs hundreds of epochs, the learned variant is not practical at any of these scales, whatever its accuracy. That is the paper's own conclusion, and it explains why graph-level experiments use ConnLap only — batching complicates the learned route further, and "unbatching graphs during training" is left as future work.
 
-## Two smaller findings
+## Two ablations worth keeping
 
 **Unnormalised beats normalised.** Ablating the normalisation of the learned sheaf Laplacian, the *unnormalised* version wins in every case but one. Normalisation reduces the number of possible sign configurations, which should help with the ambiguity problem — but apparently not enough to pay for the expressiveness it costs.
 

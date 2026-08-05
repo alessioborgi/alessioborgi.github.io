@@ -183,5 +183,5 @@ NSD provides a principled connection between algebraic topology (cellular sheave
 ## References
 
 - Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: the full framework for learning sheaf restriction maps from data and applying sheaf diffusion for node classification, with the linear-separation and Dirichlet-energy analysis quoted above).
-- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (the sheaf convolutional layer with a hand-crafted \(d = 1\) sheaf, which NSD extends with learned maps and \(d \ge 1\)).
+- Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (the sheaf convolutional layer with a hand-crafted $$d = 1$$ sheaf, which NSD extends with learned maps and $$d \ge 1$$).
 - Chamberlain, B. P., Rowbottom, J., Gorinova, M., Webb, S., Rossi, E., & Bronstein, M. M. (2021). [GRAND: Graph Neural Diffusion](https://arxiv.org/abs/2106.10934). *ICML 2021* (continuous graph diffusion framing of GNNs, which NSD extends to the sheaf setting).

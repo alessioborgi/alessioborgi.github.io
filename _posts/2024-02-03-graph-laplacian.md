@@ -117,7 +117,7 @@ This zero row-sum is crucial: it means the all-ones vector $$\mathbf{1} = [1,1,1
 
 ## The Eigendecomposition: Graph Fourier Transform
 
-The Laplacian \(L\) is symmetric — hence orthogonally diagonalisable — and positive semi-definite, since \(f^{\top} L f = \sum_{(u,v)\in E}(f[u]-f[v])^2 \ge 0\) for every \(f\). It can therefore be decomposed as:
+The Laplacian $$L$$ is symmetric — hence orthogonally diagonalisable — and positive semi-definite, since $$f^{\top} L f = \sum_{(u,v)\in E}(f[u]-f[v])^2 \ge 0$$ for every $$f$$. It can therefore be decomposed as:
 
 <div class="formula-box">
 \[

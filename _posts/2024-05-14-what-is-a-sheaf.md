@@ -191,6 +191,6 @@ The sheaf framework generalises the standard graph to a richer structure that ca
 ## References
 
 - Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (first use of cellular sheaves for graph learning, with a hand-crafted sheaf Laplacian).
-- Hansen, J., & Ghrist, R. (2019). [Toward a Spectral Theory of Cellular Sheaves](https://arxiv.org/abs/1808.01513). *Journal of Applied and Computational Topology* (defines the sheaf Laplacian, its harmonic space, and the isomorphism \(\ker L_{\mathcal{F}} \cong H^0(G;\mathcal{F})\)).
+- Hansen, J., & Ghrist, R. (2019). [Toward a Spectral Theory of Cellular Sheaves](https://arxiv.org/abs/1808.01513). *Journal of Applied and Computational Topology* (defines the sheaf Laplacian, its harmonic space, and the isomorphism $$\ker L_{\mathcal{F}} \cong H^0(G;\mathcal{F})$$).
 - Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (NSD: learns sheaf restriction maps from node features, building on the cellular sheaf theory above).
 - Curry, J. (2014). [Sheaves, Cosheaves and Applications](https://arxiv.org/abs/1303.3255). *PhD Thesis, University of Pennsylvania* (mathematical foundation of cellular sheaf theory underlying sheaf neural networks).

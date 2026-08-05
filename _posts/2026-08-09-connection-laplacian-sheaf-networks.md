@@ -28,7 +28,7 @@ toc_label: "Contents"
 <strong>Venue:</strong> ICML 2022 Workshop on Topology, Algebra, and Geometry in Machine Learning · <a href="https://arxiv.org/abs/2206.08702">arXiv:2206.08702</a>
 </div>
 
-## The dilemma this paper is stuck between
+## Two ways to get a sheaf, both unsatisfying
 
 The sheaf literature had, at this point, exactly two ways of getting a sheaf.
 
@@ -38,7 +38,7 @@ The sheaf literature had, at this point, exactly two ways of getting a sheaf.
 
 The two options are described as "diametrically opposed", which is fair. Conn-NSD proposes a middle: compute the maps deterministically at preprocessing time, using geometry rather than gradients.
 
-## The manifold assumption, and what it buys
+## The manifold assumption and the two-step construction
 
 The construction rests on the **manifold assumption**: although the data lives in a high-dimensional ambient space $$\mathbb{R}^p$$, correlations between dimensions mean it actually lies on a $$d$$-dimensional Riemannian manifold $$\mathcal{M}^d$$ with $$d \ll p$$.
 
@@ -87,7 +87,7 @@ Two practical wrinkles. Estimating $$d$$ is non-trivial: the construction is ill
 
 Assuming unit cost per SVD, runtime grows linearly in the number of data points. Crucially, all of it happens **once, before training** — so the sheaf Laplacian is a fixed input, and no gradient ever flows through $$\Phi$$.
 
-## What the baselines are for
+## Two random baselines, and why they matter
 
 The evaluation includes two constructions that exist purely to answer a sceptic: does the *geometry* matter, or would any orthogonal sheaf do?
 
@@ -112,13 +112,13 @@ Same nine datasets, same 10 fixed 48/32/20 splits as NSD.
 | Pubmed | 0.80 | 89.28 ± 0.38 | 87.74 | 89.13 | **89.49** |
 | Cora | 0.81 | 83.74 ± 2.19 | 74.00 | 80.90 | **87.30** |
 
-Three readings.
+The table supports three conclusions, and they pull in different directions.
 
-**The controls are convincingly beaten.** Conn-NSD outperforms both random baselines on every dataset, decisively so where it matters: Chameleon 65.21 against 47.72 and 50.68, Squirrel 45.19 against ~34, Cora 83.74 against 74.00. The learned NSD variants beat them too. Whatever a sheaf is contributing, it is not just the extra parameters — the specific geometry is doing work.
+The first is that the controls are convincingly beaten. Conn-NSD outperforms both random baselines on every dataset, and decisively where it matters: Chameleon 65.21 against 47.72 and 50.68, Squirrel 45.19 against roughly 34, Cora 83.74 against 74.00. The learned NSD variants beat them too. Whatever the sheaf is contributing, it is not merely the extra parameters, since the specific geometry is doing the work.
 
-**It wins where the graph is small.** Conn-NSD takes Texas (86.16, above every learned variant) and Film (37.91, likewise), with fewer learnable parameters. The authors attribute this to regularisation: removing $$\Phi$$ removes capacity that small datasets cannot support.
+The second is that the method wins where the graph is small. Conn-NSD takes Texas at 86.16 and Film at 37.91, in both cases above every learned variant and with fewer learnable parameters. The authors attribute this to regularisation, on the grounds that removing $$\Phi$$ removes capacity that small datasets cannot support.
 
-**It loses badly where the graph is large.** Squirrel is the clearest failure — 45.19 against $$O(d)$$-NSD's 56.34, an 11-point gap — with Chameleon behind by 3.5 and Cora by 3.6. Squirrel has 5,201 nodes and 198,493 edges, by far the densest dataset here, and its underlying MLP scores poorly (28.77). The paper's proposed explanation is that learned sheaves help most exactly when the features alone are uninformative, which is a testable hypothesis rather than a result — but it is the honest framing, and the paper offers it rather than burying the losses.
+The third is that it loses badly where the graph is large. Squirrel is the clearest failure — 45.19 against $$O(d)$$-NSD's 56.34, an 11-point gap — with Chameleon behind by 3.5 and Cora by 3.6. Squirrel has 5,201 nodes and 198,493 edges, by far the densest dataset here, and its underlying MLP scores poorly (28.77). The paper's proposed explanation is that learned sheaves help most exactly when the features alone are uninformative, which is a testable hypothesis rather than a result — but it is the honest framing, and the paper offers it rather than burying the losses.
 
 ## The speed argument
 
@@ -140,7 +140,7 @@ The per-epoch figures are also only part of the cost. The preprocessing itself i
 <strong>A transcription slip worth knowing about.</strong> In the paper's Table 1, the MLP baseline is listed as 75.69 on Pubmed and 87.16 on Cora. Those two values are swapped relative to the source table in Bodnar et al. — a feature-only MLP gets about 87 on Pubmed and about 76 on Cora, not the reverse. It affects no conclusion, since MLP is not a competitor here, but if you are assembling a comparison table across the sheaf literature, take those two numbers from the NSD paper instead.
 </div>
 
-## What it establishes
+## What the paper establishes
 
 The headline claim is modest and well supported: *sometimes you do not need to learn the sheaf*. Where node features are rich enough for the manifold assumption to hold and the graph is small enough that extra parameters hurt, a deterministic geometric construction is competitive — and it is a genuine regulariser, not merely a shortcut, since it removes parameters rather than constraining them.
 

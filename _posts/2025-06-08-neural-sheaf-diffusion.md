@@ -116,13 +116,13 @@ Now the payoff. A class of sheaves has **linear separation power** over a family
 | $$\mathcal{H}^d_{\text{diag}}$$ | invertible diagonal | $$C$$ classes whenever $$d \ge C$$ (Prop. 12) |
 | $$\mathcal{H}^d_{\text{orth}}$$ | orthogonal, $$O(d)$$ | $$C \le 2d$$ classes, for $$d \in \{2,4\}$$ (Prop. 13) |
 
-Three things deserve emphasis.
+Three consequences deserve emphasis, and the first is stronger than it looks.
 
-**Proposition 9 is an impossibility result about GCN.** For $$d=1$$, symmetric invertible maps give exactly the weighted graph Laplacians with strictly positive weights — the class GCN and ChebNet live in. So "no sheaf in $$\mathcal{H}^1_{\text{sym}}$$ separates the two sides of a balanced connected bipartite graph, for *any* initial conditions" is a statement about that entire family of models. Not "does it badly". Cannot.
+Proposition 9 is an impossibility result about GCN. For $$d=1$$, symmetric invertible maps give exactly the weighted graph Laplacians with strictly positive weights — the class GCN and ChebNet live in. So "no sheaf in $$\mathcal{H}^1_{\text{sym}}$$ separates the two sides of a balanced connected bipartite graph, for *any* initial conditions" is a statement about that entire family of models. The claim is not that such models do it badly, but that they cannot do it at all.
 
-**Proposition 10 explains signed edges.** Take $$\mathcal{F}_{v\trianglelefteq e} = -\alpha_e$$ for $$v \in A$$ and $$+\alpha_e$$ for $$u \in B$$, with $$\alpha_e > 0$$. Then $$\mathcal{F}_{v\trianglelefteq e}^{\top}\mathcal{F}_{u\trianglelefteq e} = \pm\alpha_e^2$$: transport is $$-1$$ across class boundaries and $$+1$$ within classes. That transport is path-independent, so by Proposition 3 the harmonic space is non-trivial, and the limit polarises the two classes to opposite signs. Negatively-weighted edges had been a heterophily heuristic for years; here they fall out of the geometry.
+Proposition 10, meanwhile, explains signed edges. Take $$\mathcal{F}_{v\trianglelefteq e} = -\alpha_e$$ for $$v \in A$$ and $$+\alpha_e$$ for $$u \in B$$, with $$\alpha_e > 0$$. Then $$\mathcal{F}_{v\trianglelefteq e}^{\top}\mathcal{F}_{u\trianglelefteq e} = \pm\alpha_e^2$$: transport is $$-1$$ across class boundaries and $$+1$$ within classes. That transport is path-independent, so by Proposition 3 the harmonic space is non-trivial, and the limit polarises the two classes to opposite signs. Negatively-weighted edges had been a heterophily heuristic for years; here they fall out of the geometry.
 
-**Stalk width is not feature width.** Proposition 11 says $$C \ge 3$$ classes are unreachable at $$d=1$$ no matter how many feature channels $$f$$ you use, because $$\dim\ker(\Delta_{\mathcal{F}}) \le 1$$ by Lemma 6. Channels do not help; stalk dimensions do. Confusing the two is the easiest way to misread the paper.
+The third point is that stalk width is not feature width. Proposition 11 says $$C \ge 3$$ classes are unreachable at $$d=1$$ no matter how many feature channels $$f$$ you use, because $$\dim\ker(\Delta_{\mathcal{F}}) \le 1$$ by Lemma 6. Channels do not help; stalk dimensions do. Confusing the two is the easiest way to misread the paper.
 
 Note how the last two rows trade off. Diagonal maps behave like $$d$$ independent copies of the $$d=1$$ case stacked on the diagonal, so they need $$d \ge C$$. Orthogonal maps *mix* the stalk dimensions, and that mixing is what lets them reach $$2d$$ classes at the same width.
 

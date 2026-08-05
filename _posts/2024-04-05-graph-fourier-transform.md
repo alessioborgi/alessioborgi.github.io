@@ -119,18 +119,18 @@ This is a change of basis: from node space (what value is at each node) to frequ
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First — What Is a "Frequency" on a Graph?</strong> On a line (1D), a low-frequency sinusoid wiggles slowly — neighbouring points have similar values. A high-frequency sinusoid wiggles rapidly — neighbours differ a lot. On a graph, "frequency" measures the same thing: how much adjacent nodes disagree. A graph signal where every node has nearly the same value as its neighbours is low-frequency (smooth). A signal where every node has the opposite sign to its neighbours is high-frequency (rough). The Laplacian eigenvectors are the graph's natural frequency basis — they are the "sinusoids" of graph space.</div>
 
-**Concrete 4-node example.** On the path graph 1–2–3–4 the degrees are \((1,2,2,1)\), and \(L_{\mathrm{sym}}\) has the exact spectrum \(\{0,\ 0.5,\ 1.5,\ 2\}\):
+**Concrete 4-node example.** On the path graph 1–2–3–4 the degrees are $$(1,2,2,1)$$, and $$L_{\mathrm{sym}}$$ has the exact spectrum $$\{0,\ 0.5,\ 1.5,\ 2\}$$:
 
 | Mode | Eigenvector (up to normalisation) | Behaviour |
 |------|-------------|-----------|
-| \(u_1\) (\(\lambda_1 = 0\)) | \((1,\ \sqrt{2},\ \sqrt{2},\ 1)\) | Proportional to \(\sqrt{d_v}\) — the DC component |
-| \(u_2\) (\(\lambda_2 = 0.5\)) | signs \((-,-,+,+)\) | One sign change — low frequency |
-| \(u_3\) (\(\lambda_3 = 1.5\)) | signs \((+,-,-,+)\) | Two sign changes — medium frequency |
-| \(u_4\) (\(\lambda_4 = 2\)) | signs \((+,-,+,-)\) | Alternates at every hop — highest frequency |
+| $$u_1$$ ($$\lambda_1 = 0$$) | $$(1,\ \sqrt{2},\ \sqrt{2},\ 1)$$ | Proportional to $$\sqrt{d_v}$$ — the DC component |
+| $$u_2$$ ($$\lambda_2 = 0.5$$) | signs $$(-,-,+,+)$$ | One sign change — low frequency |
+| $$u_3$$ ($$\lambda_3 = 1.5$$) | signs $$(+,-,-,+)$$ | Two sign changes — medium frequency |
+| $$u_4$$ ($$\lambda_4 = 2$$) | signs $$(+,-,+,-)$$ | Alternates at every hop — highest frequency |
 
-Note that \(\lambda_4 = 2\) exactly: a path is bipartite, so it attains the upper end of the \([0,2]\) range. Note also that \(u_1\) is *not* constant — its entries are \(\sqrt{d_v}\), larger at the two interior nodes of degree 2 than at the two endpoints of degree 1.
+Note that $$\lambda_4 = 2$$ exactly: a path is bipartite, so it attains the upper end of the $$[0,2]$$ range. Note also that $$u_1$$ is *not* constant — its entries are $$\sqrt{d_v}$$, larger at the two interior nodes of degree 2 than at the two endpoints of degree 1.
 
-A GCN layer applies a low-pass filter: it amplifies \(u_1\) and \(u_2\) while suppressing \(u_3\) and \(u_4\).
+A GCN layer applies a low-pass filter: it amplifies $$u_1$$ and $$u_2$$ while suppressing $$u_3$$ and $$u_4$$.
 
 ## Graph Convolution via the GFT
 

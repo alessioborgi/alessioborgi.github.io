@@ -232,7 +232,7 @@ The sheaf Laplacian is the central object for sheaf-based graph learning. It gen
 
 ## References
 
-- Hansen, J., & Ghrist, R. (2019). [Toward a Spectral Theory of Cellular Sheaves](https://arxiv.org/abs/1808.01513). *Journal of Applied and Computational Topology* (defines \(L_{\mathcal{F}} = \delta^{\top}\delta\), its harmonic space, and the spectral bounds used above).
+- Hansen, J., & Ghrist, R. (2019). [Toward a Spectral Theory of Cellular Sheaves](https://arxiv.org/abs/1808.01513). *Journal of Applied and Computational Topology* (defines $$L_{\mathcal{F}} = \delta^{\top}\delta$$, its harmonic space, and the spectral bounds used above).
 - Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (first sheaf convolutional layer built on the sheaf Laplacian; shows the trivial sheaf recovers GCN).
-- Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (analyses the harmonic space of \(\Delta_{\mathcal{F}}\), including the bound \(\dim H^0 \le d\) for \(O(d)\)-bundles and its link to path-independent transport).
+- Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (analyses the harmonic space of $$\Delta_{\mathcal{F}}$$, including the bound $$\dim H^0 \le d$$ for $$O(d)$$-bundles and its link to path-independent transport).
 - Ebli, S., Defferrard, M., & Spreemann, G. (2020). [Simplicial Neural Networks](https://arxiv.org/abs/2010.03633). *NeurIPS 2020 TDA & Beyond Workshop* (related Hodge Laplacian approach on simplicial complexes, providing topological context).

@@ -368,7 +368,7 @@ The last point is why this model remains the baseline everything is measured aga
 
 ## References
 
-- Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning*, 2nd ed. Springer. (Chapter 3 covers least squares, ridge, lasso, and the geometry of the \(\ell_1\) constraint.)
+- Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning*, 2nd ed. Springer. (Chapter 3 covers least squares, ridge, lasso, and the geometry of the $$\ell_1$$ constraint.)
 - Tibshirani, R. (1996). Regression Shrinkage and Selection via the Lasso. *Journal of the Royal Statistical Society, Series B*, 58(1), 267–288.
 - Hoerl, A. E., & Kennard, R. W. (1970). Ridge Regression: Biased Estimation for Nonorthogonal Problems. *Technometrics*, 12(1), 55–67.
 - Golub, G. H., & Van Loan, C. F. (2013). *Matrix Computations*, 4th ed. Johns Hopkins University Press. (The standard reference for QR, SVD, and the conditioning argument against the normal equations.)

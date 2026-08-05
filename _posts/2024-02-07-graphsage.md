@@ -125,9 +125,9 @@ The key novelty is step 3: concatenate the node's **own** previous representatio
 
 ## Concrete Example: Embedding a New Node at Inference Time
 
-Suppose we trained GraphSAGE on a product graph. A new product \(P\) is uploaded tonight with features \(h_P = [0.8,\, 0.3,\, 0.1]\) and two existing, similar products as neighbours: \(h_{n_1} = [0.7,\, 0.4,\, 0.2]\) and \(h_{n_2} = [0.6,\, 0.5,\, 0.1]\).
+Suppose we trained GraphSAGE on a product graph. A new product $$P$$ is uploaded tonight with features $$h_P = [0.8,\, 0.3,\, 0.1]$$ and two existing, similar products as neighbours: $$h_{n_1} = [0.7,\, 0.4,\, 0.2]$$ and $$h_{n_2} = [0.6,\, 0.5,\, 0.1]$$.
 
-**Without retraining**, with one layer and sample size \(S = 2\):
+**Without retraining**, with one layer and sample size $$S = 2$$:
 
 <div class="formula-box">
 \[

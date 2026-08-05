@@ -28,7 +28,7 @@ toc_label: "Contents"
 <strong>Venue:</strong> ICML 2024 Workshop on Geometry-grounded Representation Learning and Generative Modeling · <a href="https://arxiv.org/abs/2407.20597">arXiv:2407.20597</a>
 </div>
 
-## Universal approximation is the problem, not the solution
+## Why universal approximation is the wrong goal here
 
 [NSD](/blog/sheaf/neural-sheaf-diffusion/) proves that with enough capacity and diverse enough features, $$\Phi = \mathrm{MLP}(x_u \Vert x_v)$$ can learn any sheaf on the graph. That is presented as a strength, and in one sense it is.
 
@@ -36,7 +36,7 @@ But this paper's Remark 2.9 turns it around: *"this choice does not introduce an
 
 There is a second, harder problem. Convergence of sheaf diffusion to a *non-trivial* point is only guaranteed for orthogonal restriction maps — otherwise $$H^0(G;\mathcal{F})$$ may be $$\{0\}$$, and diffusion oversmooths just as thoroughly as a GCN, only with more parameters.
 
-## Learning to lie
+## Evolving the maps instead of the features
 
 The opinion-dynamics reading gives the fix. Recall the framing: $$x_u$$ is node $$u$$'s **private opinion**, and $$\mathcal{F}_{u \trianglelefteq e}x_u$$ is the **public opinion** it expresses on edge $$e$$.
 
@@ -54,7 +54,7 @@ Hansen and Ghrist's *Learning to Lie* dynamic evolves the maps instead of the fe
 
 This is the *dual* of sheaf diffusion — the features now act as the maps. Writing $$\mathcal{F}^*$$ for the matrix of transposed restriction maps, it becomes $$\frac{d}{dt}\mathcal{F}^* = -\Delta_X \mathcal{F}^*$$, structurally identical to $$\dot{X} = -\Delta_{\mathcal{F}}X$$ with the roles swapped. It reaches agreement by adjusting expression rather than belief — but now nobody's private opinion can change at all, which is equally unrealistic.
 
-## Doing both at once
+## Diffusing features and maps together
 
 **Joint opinion-expression diffusion** runs the two together as a coupled nonlinear system:
 
@@ -96,7 +96,7 @@ Set $$\beta > \alpha$$ when the data is heterophilic, prioritising movement in t
 
 What is given up is stated plainly: orthogonal and diagonal constraints — both known to help — cannot be imposed on maps that are themselves diffusing, and NSD's universal sheaf approximation is lost. The trade is inductive bias for generality.
 
-## RiSNN: the same bias, simpler dynamics
+## RiSNN: the same bias with simpler dynamics
 
 The second model keeps the standard SNN update and changes only the map predictor. Let $$x_e(t) = \mathcal{F}_{u\trianglelefteq e}(t)x_u(t) - \mathcal{F}_{v \trianglelefteq e}(t)x_v(t)$$ — the disagreement in the edge stalk, i.e. "the conversation". Then
 
@@ -172,7 +172,7 @@ The limitations appendix is unusually candid. Backpropagation is harder: using t
 - Hansen, J., & Ghrist, R. (2021). [Opinion Dynamics on Discourse Sheaves](https://arxiv.org/abs/2005.12798). *SIAM Journal on Applied Mathematics*, 81(5), 2033–2060.
 - Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. (2022). [Neural Sheaf Diffusion](https://arxiv.org/abs/2202.04579). *NeurIPS 2022*.
 - Barbero, F., Bodnar, C., Sáez de Ocáriz Borde, H., Bronstein, M., Veličković, P., & Liò, P. (2022). [Sheaf Neural Networks with Connection Laplacians](https://arxiv.org/abs/2206.08702). *ICML 2022 TAG-ML Workshop*.
-- Duta, I., Cassarà, G., Silvestri, F., & Liò, P. (2023). Sheaf Hypergraph Networks. *Advances in Neural Information Processing Systems 36*.
+- Duta, I., Cassarà, G., Silvestri, F., & Liò, P. (2023). [Sheaf Hypergraph Networks](https://arxiv.org/abs/2309.17116). *Advances in Neural Information Processing Systems 36*.
 - Zaghen, O. (2024). [Nonlinear Sheaf Diffusion in Graph Neural Networks](https://arxiv.org/abs/2403.00337). *arXiv:2403.00337*.
 - Watts, D. J., & Strogatz, S. H. (1998). Collective Dynamics of 'Small-World' Networks. *Nature*, 393(6684), 440–442.
 - Platonov, O., Kuznedelev, D., Babenko, A., & Prokhorenkova, L. (2023). [Characterizing Graph Datasets for Node Classification: Homophily-Heterophily Dichotomy and Beyond](https://arxiv.org/abs/2209.06177). *NeurIPS 2023*.

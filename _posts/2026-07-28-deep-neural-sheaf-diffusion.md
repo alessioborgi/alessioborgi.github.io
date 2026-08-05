@@ -30,7 +30,7 @@ toc_label: "Contents"
 
 ## The guarantee that eats itself
 
-[Neural Sheaf Diffusion](/blog/sheaf/) came with a genuinely strong theoretical result. Given an appropriate sheaf, linear sheaf diffusion converges to $$\ker(\Delta_{\mathcal{F}})$$ — the space of global sections — and that limit is rich enough to separate almost any label assignment. Where a GCN collapses every node onto a single degree-scaled vector, sheaf diffusion collapses onto a space that can still tell classes apart. That is the whole argument for sheaves as a cure for oversmoothing.
+[Neural Sheaf Diffusion](/blog/sheaf/neural-sheaf-diffusion/) came with a genuinely strong theoretical result. Given an appropriate sheaf, linear sheaf diffusion converges to $$\ker(\Delta_{\mathcal{F}})$$ — the space of global sections — and that limit is rich enough to separate almost any label assignment. Where a GCN collapses every node onto a single degree-scaled vector, sheaf diffusion collapses onto a space that can still tell classes apart. That is the whole argument for sheaves as a cure for oversmoothing.
 
 The trouble is what "converges" means for a network built by stacking diffusion steps as layers.
 

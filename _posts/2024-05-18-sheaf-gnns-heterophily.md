@@ -153,5 +153,5 @@ Sheaf GNNs address heterophily by replacing the implicit assumption of standard 
 
 - Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (the linear-separation results and the benchmark table quoted above).
 - Zhu, J., Yan, Y., Zhao, L., Heimann, M., Akoglu, L., & Koutra, D. (2020). [Beyond Homophily in Graph Neural Networks: Current Limitations and Effective Designs](https://arxiv.org/abs/2006.11468). *NeurIPS 2020* (H2GCN; establishes the heterophily benchmark setting used above).
-- Bo, D., Wang, X., Shi, C., & Shen, H. (2021). [Beyond Low-frequency Information in Graph Convolutional Networks](https://arxiv.org/abs/2101.00797). *AAAI 2021* (FAGCN: signed low/high-frequency attention — the \(d = 1\) sheaf in disguise).
+- Bo, D., Wang, X., Shi, C., & Shen, H. (2021). [Beyond Low-frequency Information in Graph Convolutional Networks](https://arxiv.org/abs/2101.00797). *AAAI 2021* (FAGCN: signed low/high-frequency attention — the $$d = 1$$ sheaf in disguise).
 - Lim, D., Li, X., Hohne, F., & Lim, S.-N. (2021). [New Benchmarks for Learning on Non-Homophilous Graphs](https://arxiv.org/abs/2104.01404). *arXiv 2021* (larger heterophily benchmark suite).

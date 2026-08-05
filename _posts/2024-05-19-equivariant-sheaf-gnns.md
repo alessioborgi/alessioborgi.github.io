@@ -161,7 +161,7 @@ Equivariant sheaf GNNs sit at the intersection of algebraic topology, differenti
 
 ## References
 
-- Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (discrete \(O(d)\)-bundles, path-dependent transport, and the bound \(\dim H^0 \le d\) quoted above).
+- Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (discrete $$O(d)$$-bundles, path-dependent transport, and the bound $$\dim H^0 \le d$$ quoted above).
 - Barbero, F., Bodnar, C., Sáez de Ocáriz Borde, H., Bronstein, M., Veličković, P., & Liò, P. (2022). [Sheaf Neural Networks with Connection Laplacians](https://arxiv.org/abs/2206.08702). *ICML 2022 Workshop on Topology, Algebra, and Geometry in Machine Learning* (builds orthogonal maps from a manifold assumption by aligning neighbouring tangent spaces, instead of learning them end-to-end).
 - Hansen, J., & Ghrist, R. (2019). [Toward a Spectral Theory of Cellular Sheaves](https://arxiv.org/abs/1808.01513). *Journal of Applied and Computational Topology* (spectral theory of sheaf Laplacians, including the orthogonal/connection case).
 - Singer, A. (2011). [Angular Synchronization by Eigenvectors and Semidefinite Programming](https://arxiv.org/abs/0911.3448). *Applied and Computational Harmonic Analysis* (recovering node frames from noisy relative rotations — the synchronisation problem that motivates connection Laplacians on graphs).

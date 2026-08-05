@@ -75,7 +75,7 @@ Adding weights and a nonlinearity gives the layer:
 
 with $$\mathbf{W}^1_t \in \mathbb{R}^{d \times d}$$ acting within stalks and $$\mathbf{W}^2_t \in \mathbb{R}^{f_t \times f_{t+1}}$$ across channels.
 
-**Set $$d = 1$$ and all restriction maps to $$1$$ and you get GAT back exactly.** Not approximately — the sheaf adjacency becomes the ordinary adjacency and the layer reduces term for term.
+**Set $$d = 1$$ and all restriction maps to $$1$$ and you get GAT back exactly.** Not approximately: the sheaf adjacency becomes the ordinary adjacency and the layer reduces term for term.
 
 <div class="insight-box">
 <strong>Why orthogonal maps make the decomposition clean.</strong> With \(\mathcal{F}_{v\trianglelefteq e} \in O(d)\), transports are norm-preserving. So \(\mathbf{P}_{ij}\) can only <em>rotate</em> a neighbour's stalk vector, never rescale it, and the attention coefficient is left as the sole controller of message magnitude. The two mechanisms are orthogonal in the design sense as well as the linear-algebra sense: direction from the sheaf, strength from attention. Cheaper too — \(O(d)\) has \(d(d-1)/2\) free parameters against \(d^2\) for a general linear map, which the paper reads as a form of regularisation.

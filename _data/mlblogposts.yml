@@ -258,6 +258,7 @@ sheaf:
     foundations:
       label: "Mathematical Foundations"
       posts:
+        - { slug: "2026-08-15-spectral-sheaf-theory-hansen-ghrist", title: "Toward a Spectral Theory of Cellular Sheaves (Hansen & Ghrist, 2019)",   published: online }
         - { slug: "2025-06-02-what-is-a-sheaf",                    title: "What Is a Sheaf? From Topology to Graph Learning",                  published: offline }
         - { slug: "2025-06-03-cellular-sheaves-on-graphs",          title: "Cellular Sheaves on Graphs: A Rigorous Construction",               published: offline }
         - { slug: "2025-06-04-sheaf-cohomology",                    title: "Sheaf Cohomology: Sections, Cochains, and What H⁰ and H¹ Mean",    published: offline }
@@ -275,6 +276,7 @@ sheaf:
         - { slug: "2025-06-09-polynomial-sheaf-diffusion", title: "Nonlinear Sheaf Diffusion (Zaghen et al., 2024): Adaptive Sheaf Laplacians",                     published: offline }
         - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi, Silvestri & Liò)",                            published: online }
         - { slug: "2026-07-28-deep-neural-sheaf-diffusion", title: "DNSD: Making Sheaf Diffusion Work at Depth (Bourgerie et al., 2026)",                           published: online }
+        - { slug: "2026-08-16-cooperative-sheaf-neural-networks", title: "CSNN: Cooperative Sheaf Neural Networks (Ribeiro et al., 2025)",                          published: online }
         - { slug: "2025-06-11-sheaf-map-parameterisation", title: "Learning Sheaf Maps: Parameterisation Strategies Compared",                                      published: offline }
         - { slug: "2025-06-12-spectral-sheaf-convolution", title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves",                                       published: offline }
 
@@ -313,6 +315,7 @@ sheaf:
         - { slug: "2025-06-24-sheaf-molecular",              title: "Sheaf GNNs for Molecular Property Prediction",                           published: offline }
         - { slug: "2025-06-25-open-problems-sheaf",          title: "Open Problems and Future Directions in Sheaf Neural Networks",            published: offline }
         - { slug: "2026-07-29-braindyn-sheaf-neural-ode",    title: "BrainDyn: Sheaves Meet Neural ODEs for Brain Dynamics (Viswanath et al., 2026)", published: online }
+        - { slug: "2026-08-17-sheaf4rec-recommender-systems", title: "Sheaf4Rec: Sheaf Neural Networks for Recommender Systems (Purificato et al., 2024)", published: online }
 
 
 # ────────────────────────────────────────────────────────────────────────────

@@ -25,10 +25,10 @@ toc_label: "Contents"
 <div class="paper-box">
 <strong>Paper:</strong> Sheaf Hypergraph Networks<br>
 <strong>Authors:</strong> Iulia Duta (Cambridge), Giulia Cassarà, Fabrizio Silvestri (Sapienza), Pietro Liò (Cambridge)<br>
-<strong>Venue:</strong> NeurIPS 2023
+<strong>Venue:</strong> NeurIPS 2023 · <a href="https://arxiv.org/abs/2309.17116">arXiv:2309.17116</a>
 </div>
 
-## Why hyperedges need this more than edges do
+## What a hyperedge loses under uniform aggregation
 
 A graph edge can only say *these two things interact*. Real interactions are frequently not pairwise — higher-order relations show up in neuroscience, chemical reaction networks, ecology and social dynamics — and hypergraphs are the standard answer, with each hyperedge $$e$$ a subset of nodes of any size $$\delta_e = \lvert e \rvert$$.
 
@@ -129,13 +129,11 @@ Eight benchmarks, 50/25/25 random splits, 10 runs.
 | House | **73.84** ± 2.30 | 61.39 | 72.66 | 69.29 | 72.45 |
 | Congress | 91.81 ± 1.60 | 91.26 | 90.37 | 89.67 | **95.00** |
 
-Three things stand out.
+The most informative comparison is the narrowest one. SheafHyperGNN beats HyperGNN on all eight datasets, and SheafHyperGCN beats HyperGCN on all eight. Each pair differs only in swapping a trivial sheaf for a learned one, so this functions as a clean ablation, and the margins are not marginal: 20.1 points on Senate and 12.4 on House.
 
-**The sheaf-versus-no-sheaf comparison is unanimous.** SheafHyperGNN beats HyperGNN on all eight and SheafHyperGCN beats HyperGCN on all eight. Since each pair differs *only* in swapping a trivial sheaf for a learned one, this is a clean ablation, and the sizes are not marginal: **Senate +20.1** and **House +12.4** over HyperGNN.
+Against the wider field the record is more mixed, at five wins and three losses. ED-HNN takes Pubmed by 1.35, DBLP_CA by 0.31 and Congress by 3.19. Congress is the largest single deficit in the table and the paper does not dwell on it, though its closing suggestion that ED-HNN could itself be "sheafified" is the right response.
 
-**Against the wider field it wins five of eight and loses three.** ED-HNN takes Pubmed by 1.35, DBLP_CA by 0.31 and Congress by **3.19**. Congress is the largest single deficit in the table, and the paper does not dwell on it — though its closing suggestion, that ED-HNN could itself be "sheafified", is the right response.
-
-**Senate and House are where the mechanism shows.** These are legislative co-sponsorship hypergraphs, and every method not built for heterophily collapses on them: HyperGNN 48.59 on Senate, HCHA 48.62, AllDeepSets 48.17, UniGCNII 49.30 — near coin-flip. Sheaf versions reach 68.73 and 66.33. On the homophilic citation datasets everything is within a few points of everything else. The higher-order structure only pays where the relations are not homophilic.
+Senate and House are where the mechanism becomes visible. These are legislative co-sponsorship hypergraphs, and every method not built for heterophily collapses on them, with HyperGNN at 48.59 on Senate, HCHA at 48.62, AllDeepSets at 48.17 and UniGCNII at 49.30, all close to a coin flip. The sheaf versions reach 68.73 and 66.33. On the homophilic citation datasets, by contrast, everything sits within a few points of everything else. Higher-order structure pays only where the relations are not homophilic.
 
 <div class="warning-box">
 <strong>Two caveats on reading the headline table.</strong>
@@ -146,7 +144,7 @@ Three things stand out.
 </ul>
 </div>
 
-## Diagonal wins again, and by a lot
+## Diagonal restriction maps win again
 
 The restriction-map ablation lands where this literature keeps landing, but harder than usual:
 
@@ -160,17 +158,17 @@ That is a **4.5-point** gap on Cora and a **17-point** gap on Congress in favour
 
 Set alongside [DNSD](/blog/sheaf/dnsd-paper/), [PolyNSD](/blog/sheaf/polynsd-paper/) and NSD's own tables, that is now several independent findings in the same direction. Whatever full $$d \times d$$ maps can express in principle, gradient descent does not reliably find it.
 
-## Depth, width, and the energy measurement
+## Depth, stalk dimension, and measured energy
 
 Three ablations on the most heterophilic synthetic setting, and they are the most direct evidence in the paper.
 
 The synthetic generator is worth noting: a contextual hypergraph stochastic block model with 5,000 nodes in two equal classes and 1,000 hyperedges of cardinality 15, each containing exactly $$\beta$$ nodes from class 0, with heterophily $$\alpha = \min(\beta, 15-\beta)$$. Sweeping $$\alpha$$ from 1 to 7 gives a controlled dial. SheafHyperGNN leads at every level, and the gap widens as heterophily rises: at $$\alpha = 1$$ it scores 100 against HyperGNN's 98.4; at $$\alpha = 7$$ it scores 77.3 against 63.8.
 
-**Depth.** HyperGNN degrades beyond 3 layers; SheafHyperGNN is essentially flat from 1 to 8.
+Depth comes first. HyperGNN degrades beyond three layers, whereas SheafHyperGNN stays essentially flat from one to eight.
 
-**Stalk dimension.** Performance improves substantially once $$d > 1$$, for both linear and non-linear variants. The paper makes the sharp point that $$d = 1$$ with dynamically predicted maps is essentially an **attention mechanism** — and attention routes information through a scalar probability, which is exactly why HCHA inherits HyperGNN's oversmoothing. It is the same scalar-versus-matrix distinction that separates GAT from a sheaf on ordinary graphs.
+Stalk dimension matters more. Performance improves substantially once $$d > 1$$, for both the linear and the non-linear variant, and the paper draws a sharp conclusion from this. Setting $$d = 1$$ while still predicting the maps dynamically is essentially an attention mechanism, and attention routes information through a scalar probability, which is exactly why HCHA inherits HyperGNN's oversmoothing. This is the same scalar-versus-matrix distinction that separates GAT from a sheaf on ordinary graphs.
 
-**The energy is measured, not just proven.** Dirichlet energy is tracked as depth increases: HyperGNN's collapses towards uniform features, SheafHyperGNN's does not. That closes the loop between Proposition 1 and the architecture — an experiment several papers in this area assert the equivalent of without running.
+The third ablation is the one other papers tend to skip. Dirichlet energy is tracked directly as depth increases: HyperGNN's collapses towards uniform features while SheafHyperGNN's does not. That closes the loop between Proposition 1 and the architecture, rather than leaving the theoretical claim to stand on its own.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
@@ -188,7 +186,7 @@ The synthetic generator is worth noting: a contextual hypergraph stochastic bloc
 
 ## References
 
-- Duta, I., Cassarà, G., Silvestri, F., & Liò, P. (2023). Sheaf Hypergraph Networks. *Advances in Neural Information Processing Systems 36* (NeurIPS 2023).
+- Duta, I., Cassarà, G., Silvestri, F., & Liò, P. (2023). [Sheaf Hypergraph Networks](https://arxiv.org/abs/2309.17116). *Advances in Neural Information Processing Systems 36* (NeurIPS 2023).
 - Bodnar, C., Di Giovanni, F., Chamberlain, B. P., Liò, P., & Bronstein, M. (2022). [Neural Sheaf Diffusion](https://arxiv.org/abs/2202.04579). *NeurIPS 2022*.
 - Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 Workshop on Topological Data Analysis and Beyond*.
 - Hansen, J., & Ghrist, R. (2021). Opinion Dynamics on Discourse Sheaves. *SIAM Journal on Applied Mathematics*, 81(5), 2033–2060.

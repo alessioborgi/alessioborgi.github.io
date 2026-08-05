@@ -91,9 +91,9 @@ Throughout this section assume **uniform initial node features**. Informative fe
 
 ## Case 1: Regular Graphs
 
-A **\(k\)-regular graph** is one in which every node has degree \(k\). With uniform initial features, all nodes start with the same colour; after one iteration every node sees the multiset of \(k\) identical colours, so every node again receives the same colour. By induction the colouring never refines.
+A **$$k$$-regular graph** is one in which every node has degree $$k$$. With uniform initial features, all nodes start with the same colour; after one iteration every node sees the multiset of $$k$$ identical colours, so every node again receives the same colour. By induction the colouring never refines.
 
-**Consequence:** any two \(k\)-regular graphs on the same number of nodes \(N\) (which forces the same edge count \(Nk/2\)) produce identical 1-WL histograms — and hence identical graph-level embeddings in any MPNN.
+**Consequence:** any two $$k$$-regular graphs on the same number of nodes $$N$$ (which forces the same edge count $$Nk/2$$) produce identical 1-WL histograms — and hence identical graph-level embeddings in any MPNN.
 
 ```
 Graph A: Triangle (3 nodes, 3 edges, 2-regular)
@@ -145,7 +145,7 @@ Take the carbon skeletons of two structures, each with 6 carbons and each carbon
 
 A GNN given only this connectivity will assign the two the same graph-level embedding — and therefore the same prediction — even though only benzene is aromatic. This is not a data issue; it is an architectural limit. (In practice, real molecular GNNs also receive atom and bond features, which is precisely why they are not this helpless; the point is that the *topology alone* is not enough.)
 
-The fix: add ring-membership or structural features, or use subgraph GNNs that explicitly detect cycles. Random-walk positional encodings (RWPE) are the standard cheap option. With \(P = D^{-1}A\) the random-walk transition matrix, give each node its vector of return probabilities:
+The fix: add ring-membership or structural features, or use subgraph GNNs that explicitly detect cycles. Random-walk positional encodings (RWPE) are the standard cheap option. With $$P = D^{-1}A$$ the random-walk transition matrix, give each node its vector of return probabilities:
 
 <div class="formula-box">
 \[

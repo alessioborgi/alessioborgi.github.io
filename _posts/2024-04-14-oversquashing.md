@@ -105,12 +105,12 @@ Oversmoothing (too many layers → embeddings converge) and oversquashing (long-
 | Affects | Nearby nodes most | Distant nodes most |
 | More layers | Makes it worse | Would help (more hops) but also squashes more |
 | Root mechanism | Low-pass filtering | Information bottleneck |
-| Formal object | Spectrum of \(\hat{A}\): \(\hat{A}^K \to u_1u_1^{\top}\) | Jacobian: \(\lVert \partial h_v^{(K)}/\partial x_u \rVert \to 0\) |
+| Formal object | Spectrum of $$\hat{A}$$: $$\hat{A}^K \to u_1u_1^{\top}$$ | Jacobian: $$\lVert \partial h_v^{(K)}/\partial x_u \rVert \to 0$$ |
 | Graph structure involved | Dense, connected graphs | Narrow bottleneck edges |
 
 ## The Exponential Growth Problem
 
-In a \(K\)-layer MPNN, node \(v\)'s embedding \(h_v^{(K)}\) depends on every node within \(K\) hops — its receptive field \(\mathcal{N}_K(v)\). On a graph that is locally tree-like with branching factor \(d\), that set grows exponentially:
+In a $$K$$-layer MPNN, node $$v$$'s embedding $$h_v^{(K)}$$ depends on every node within $$K$$ hops — its receptive field $$\mathcal{N}_K(v)$$. On a graph that is locally tree-like with branching factor $$d$$, that set grows exponentially:
 
 <div class="formula-box">
 \[

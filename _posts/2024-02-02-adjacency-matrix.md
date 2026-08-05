@@ -117,9 +117,9 @@ A_{ij} =
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Think of the adjacency matrix as a truth table for "are these two nodes friends?" Row i, column j answers: did node i and node j shake hands? For undirected graphs the handshake is mutual, so the table is mirrored across the diagonal.</div>
 
-**Symmetry:** For undirected graphs, \(A_{ij} = A_{ji}\) always — that is, \(A = A^{\top}\). Directed graphs have asymmetric adjacency matrices.
+**Symmetry:** For undirected graphs, $$A_{ij} = A_{ji}$$ always — that is, $$A = A^{\top}$$. Directed graphs have asymmetric adjacency matrices.
 
-**Degree:** The **degree** \(d_i\) of node \(i\) is the number of edges incident to it. It equals the sum of row \(i\) of \(A\):
+**Degree:** The **degree** $$d_i$$ of node $$i$$ is the number of edges incident to it. It equals the sum of row $$i$$ of $$A$$:
 
 <div class="formula-box">
 \[

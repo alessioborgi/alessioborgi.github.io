@@ -28,7 +28,7 @@ toc_label: "Contents"
 <strong>Venue:</strong> NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations
 </div>
 
-## Changing the PDE, not the geometry
+## Changing the equation instead of the operator
 
 The PDE-based view of GNNs had by 2022 produced a small family of architectures — GRAND, Beltrami flow, PDE-GCN — all built on the observation that message passing looks like a discretised diffusion. Their common criticism, which this paper opens with, is that the *dynamics* are too simple for hard node classification even when the analysis tools are good.
 
@@ -48,7 +48,7 @@ One extra dot, and the qualitative behaviour inverts. Heat flow monotonically de
 <strong>Why "conserves energy" is the right pitch for heterophily.</strong> Oversmoothing is dissipation seen from the outside — the diffusion succeeds at destroying disagreement, and there is nothing left to classify. On a heterophilic graph, neighbouring nodes <em>ought</em> to disagree, so a dynamic that never destroys disagreement is the natural inductive bias. This is the same intuition that makes second-order ODE models such as graph-coupled oscillator networks resist oversmoothing.
 </div>
 
-## The conservation result
+## Energy conservation, and what it is a property of
 
 Define the energy of the wave process as
 
@@ -79,7 +79,7 @@ the last equality being the wave equation itself. Compare this against the sheaf
 This is the same gap that separates NSD's separation theorems from trained NSD, so it is a shared feature of the literature rather than a failing peculiar to this paper. It is worth naming because "wave models conserve energy" reads, in a summary, like a property of the architecture. It is a property of the continuous linear PDE the architecture is inspired by.
 </div>
 
-## Leapfrog, and why the layer has two terms
+## Leapfrog discretisation and the two-step layer
 
 A second-order equation needs a second-order integrator. The **leapfrog** scheme gives layers of the form
 
@@ -109,21 +109,21 @@ Same nine datasets, same 10 fixed 48/32/20 splits.
 
 The picture is genuinely mixed, and the paper says so — "the presented results are preliminary".
 
-**The win is real and it is where the theory predicts.** On Texas ($$h = 0.11$$, the most heterophilic dataset in the suite), $$O(d)$$-NSP reaches 87.03, above NSD's 85.95, GGCN's 84.86 and every other baseline. If energy conservation helps anywhere, this is where it should, and it does.
+The win is real, and it falls where the theory predicts. On Texas ($$h = 0.11$$, the most heterophilic dataset in the suite), $$O(d)$$-NSP reaches 87.03, above NSD's 85.95, GGCN's 84.86 and every other baseline. If energy conservation helps anywhere, this is where it should, and it does.
 
-**The losses are large and they are also on heterophilic data.** Cornell, at $$h = 0.30$$, is a **10-point** deficit: 76.49 against NSD's 86.49. NSP does not merely lose to NSD there — it loses to GraphSAGE (75.95 is close), and to MLP (81.89), and to H2GCN (82.70). Chameleon is 5.8 behind and Squirrel 6.2 behind. So "conserving energy helps under heterophily" is not what the table shows; what it shows is that it helps on *one* heterophilic dataset and hurts on three.
+The losses, though, are also on heterophilic data, and they are large. Cornell, at $$h = 0.30$$, is a **10-point** deficit: 76.49 against NSD's 86.49. NSP does not merely lose to NSD there — it loses to GraphSAGE (75.95 is close), and to MLP (81.89), and to H2GCN (82.70). Chameleon is 5.8 behind and Squirrel 6.2 behind. So "conserving energy helps under heterophily" is not what the table shows; what it shows is that it helps on *one* heterophilic dataset and hurts on three.
 
-**On homophilic data it is a wash.** Gen-NSP takes Cora by 0.08 and loses Pubmed by 0.07 — differences well inside the standard deviations of roughly 1.1 and 0.3.
+On homophilic data the comparison is a wash. Gen-NSP takes Cora by 0.08 and loses Pubmed by 0.07 — differences well inside the standard deviations of roughly 1.1 and 0.3.
 
 <div class="insight-box">
 <strong>What would make the result interpretable.</strong> Texas and Cornell are near-twins — 183 nodes each, 295 and 280 edges, 5 classes, both WebKB — and NSP is best-in-class on one and 10 points down on the other. A dataset-level property cannot easily explain a split that fine; run-to-run variance can (Texas \(\pm 5.51\), Cornell \(\pm 5.28\)) and so can hyperparameter search. The paper does not have the space to distinguish these, which is exactly why "preliminary" is the correct label.
 </div>
 
-## What the hyperparameter table gives away
+## What the hyperparameter ranges reveal
 
 The appendix ranges are more informative than usual. Stalk dimension is searched over $$[2,5]$$ and layers over $$\{2,\dots,8\}$$ — so unlike SheafAN, depth is not being pushed, and the natural question of whether a conservative dynamic survives 64 layers better than a dissipative one is not asked. Three binary flags — `Use Second Linear Transform`, `Use Higher P`, `Use Lower P` — are swept per dataset, and there is a `New △ each step` flag for WebKB deciding whether the Laplacian is rebuilt each layer. That last one is the very question the conservation proof depends on, tuned as a hyperparameter and not reported.
 
-## Where it leaves the idea
+## Where this leaves the idea
 
 The concept is sound and the framing is clean: sheaf models had been exploring the space of *operators*, and this opens the space of *dynamics*. Diffusion and waves are the two canonical linear choices, and having both mapped is worth more than the accuracy table suggests. The paper is explicit that the systematic study — the interplay between energy conservation and accuracy on heterophilic graphs — is future work.
 
