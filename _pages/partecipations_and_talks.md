@@ -222,6 +222,26 @@ author_profile: true
   <div class="pt-section__body">
     <div class="pt-timeline">
 
+      <!-- Bath ML Summer School 2026 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--blue"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--blue">August 2026</div>
+          <div class="pt-title"><a href="https://www.bathmlsummerschool.org/" target="_blank" rel="noopener">Bath ML Summer School 2026</a></div>
+          <div class="pt-org">🇬🇧 Bath, United Kingdom &nbsp;·&nbsp; University of Bath</div>
+          <div class="pt-body">
+            <p>Participated in the Bath Machine Learning Summer School, held from <strong>August 5–7, 2026</strong> at the University of Bath, covering <strong>ODEs &amp; SDEs in machine learning</strong>, probabilistic and Bayesian methods, self-supervised learning, and world models.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--blue pt-badge">Bath ML 2026</span>
+            <span class="pt-badge">ODEs &amp; SDEs</span>
+            <span class="pt-badge--purple pt-badge">Probabilistic &amp; Bayesian</span>
+            <span class="pt-badge">Self-Supervised Learning</span>
+            <span class="pt-badge--blue pt-badge">World Models</span>
+          </div>
+        </div>
+      </div>
+
       <!-- EEML 2026 -->
       <div class="pt-item">
         <div class="pt-dot pt-dot--purple"><span></span></div>
@@ -233,9 +253,29 @@ author_profile: true
             <p>Participated in EEML 2026, held from <strong>July 27 to August 1, 2026</strong> in Cetinje, Montenegro, joining lectures and tutorials on contemporary machine learning research.</p>
           </div>
           <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/MMLW_2025/PolySD_ESNN_EEML_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--purple pt-badge">EEML 2026</span>
             <span class="pt-badge">Machine Learning</span>
             <span class="pt-badge--blue pt-badge">Summer School</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACM Europe Summer School on HPC 2026 -->
+      <div class="pt-item">
+        <div class="pt-dot"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period">July 2026</div>
+          <div class="pt-title"><a href="https://europe.acm.org/seasonal-schools/hpc/2026/" target="_blank" rel="noopener">ACM Europe Summer School on HPC 2026</a></div>
+          <div class="pt-org">🇪🇸 Barcelona, Spain &nbsp;·&nbsp; ACM Europe</div>
+          <div class="pt-body">
+            <p>Participated in the ACM Europe Summer School on High Performance Computing, held from <strong>July 20–24, 2026</strong> in Barcelona, focused on <strong>HPC and Artificial Intelligence</strong> while also exploring emerging research areas such as <strong>quantum computing</strong>.</p>
+          </div>
+          <div class="pt-badges">
+            <span class="pt-badge--purple pt-badge">ACM Europe 2026</span>
+            <span class="pt-badge">High Performance Computing</span>
+            <span class="pt-badge--blue pt-badge">HPC × AI</span>
+            <span class="pt-badge">Quantum Computing</span>
           </div>
         </div>
       </div>
@@ -251,6 +291,7 @@ author_profile: true
             <p>Participated in the Cambridge ELLIS Unit Summer School on <strong>Probabilistic Machine Learning</strong>, held from <strong>July 13–17, 2026</strong>, covering probabilistic modelling, uncertainty quantification, generative models, decision-making under uncertainty, and probabilistic methods in the sciences.</p>
           </div>
           <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/NEUREASON_2026/PolyNSD_Poster_Cambridge.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--blue pt-badge">ELLIS 2026</span>
             <span class="pt-badge">Probabilistic ML</span>
             <span class="pt-badge--purple pt-badge">Summer School</span>
@@ -418,6 +459,7 @@ author_profile: true
             <p>Selected for IT:U’s two-week Summer School 2024 and contributed to <strong>Care Connect</strong>, an AI-powered assistant platform for hospital staff that monitors environmental variables such as air quality, temperature, and humidity through a database-informed LLM and an interactive robotic component.</p>
           </div>
           <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/ITU_2024/CareConnect_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--purple pt-badge">Care Connect</span>
             <span class="pt-badge">LLM Application</span>
             <span class="pt-badge--blue pt-badge">Human-Centered AI</span>
@@ -475,59 +517,6 @@ author_profile: true
             <span class="pt-badge--purple pt-badge">CVPR 2025</span>
             <span class="pt-badge--blue pt-badge">CVEU Workshop</span>
             <span class="pt-badge">Paper Presentation</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     VISITING RESEARCH
-     ═══════════════════════════════════════════════════════ -->
-<div class="pt-section">
-  <div class="pt-section__hd">
-    <span class="pt-bar"></span>
-    Visiting Research
-  </div>
-  <div class="pt-section__body">
-    <div class="pt-timeline">
-
-      <!-- Tohoku University -->
-      <div class="pt-item">
-        <div class="pt-dot"><span></span></div>
-        <div class="pt-content">
-          <div class="pt-period">June – July 2025</div>
-          <div class="pt-title">Visiting Researcher — Tohoku University</div>
-          <div class="pt-org">🇯🇵 Sendai, Japan &nbsp;·&nbsp; Prof. Masayuki Numao &amp; Prof. Ken-ichi Fukui</div>
-          <div class="pt-body">
-            <p>Conducted research on <strong>Sheaf Neural Networks</strong> and their application to neuroscience data, collaborating with the AI Lab at Tohoku University.</p>
-            <p>Selected winner of the <strong>TESP 2025 (Tohoku Engineering Summer Program)</strong>.</p>
-          </div>
-          <div class="pt-badges">
-            <span class="pt-badge--gold pt-badge">TESP 2025 Winner</span>
-            <span class="pt-badge">Sheaf Neural Networks</span>
-            <span class="pt-badge--blue pt-badge">Neuroscience × AI</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- JKU Linz -->
-      <div class="pt-item">
-        <div class="pt-dot pt-dot--blue"><span></span></div>
-        <div class="pt-content">
-          <div class="pt-period pt-period--blue">August – September 2024</div>
-          <div class="pt-title">Visiting Researcher — Johannes Kepler University Linz</div>
-          <div class="pt-org">🇦🇹 Linz, Austria &nbsp;·&nbsp; Prof. Sepp Hochreiter</div>
-          <div class="pt-body">
-            <p>Research stay focused on <strong>xLSTM architectures</strong> and modern sequence modelling under the supervision of Prof. Sepp Hochreiter (inventor of LSTM).</p>
-            <p>Awarded <strong>Best Poster Award</strong> at the JKU AI Research Symposium.</p>
-          </div>
-          <div class="pt-badges">
-            <span class="pt-badge--gold pt-badge">Best Poster Award</span>
-            <span class="pt-badge--blue pt-badge">xLSTM</span>
-            <span class="pt-badge--blue pt-badge">Sequence Modelling</span>
           </div>
         </div>
       </div>
