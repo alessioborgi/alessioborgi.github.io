@@ -250,13 +250,13 @@ author_profile: true
           <div class="pt-title"><a href="https://www.eeml.eu/" target="_blank" rel="noopener">EEML 2026 — Eastern European Machine Learning Summer School</a></div>
           <div class="pt-org">🇲🇪 Cetinje, Montenegro &nbsp;·&nbsp; EEML / MAIA</div>
           <div class="pt-body">
-            <p>Participated in EEML 2026, held from <strong>July 27 to August 1, 2026</strong> in Cetinje, Montenegro, joining lectures and tutorials on contemporary machine learning research.</p>
+            <p>Participated in EEML 2026, held from <strong>July 27 to August 1, 2026</strong> in Cetinje, Montenegro, joining lectures and tutorials on contemporary machine learning research and presenting a poster on <strong>Equivariant Sheaf Neural Networks</strong>, a unifying framework combining the anisotropic transport of sheaf neural networks with the \(E(n)\)-equivariance of geometric GNNs.</p>
           </div>
           <div class="pt-badges">
-            <a class="pt-link-btn" href="/files/MMLW_2025/PolySD_ESNN_EEML_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
+            <a class="pt-link-btn" href="/files/EEML_2026/ESNN_Poster_EEML_Montenegro.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--purple pt-badge">EEML 2026</span>
-            <span class="pt-badge">Machine Learning</span>
-            <span class="pt-badge--blue pt-badge">Summer School</span>
+            <span class="pt-badge">Poster Presentation</span>
+            <span class="pt-badge--blue pt-badge">Equivariant Sheaf NNs</span>
           </div>
         </div>
       </div>
@@ -288,13 +288,14 @@ author_profile: true
           <div class="pt-title"><a href="https://www.ellis.eng.cam.ac.uk/summer-school/" target="_blank" rel="noopener">Cambridge ELLIS Unit Summer School 2026 — Probabilistic Machine Learning</a></div>
           <div class="pt-org">🇬🇧 Cambridge, United Kingdom &nbsp;·&nbsp; Cambridge ELLIS Unit, University of Cambridge</div>
           <div class="pt-body">
-            <p>Participated in the Cambridge ELLIS Unit Summer School on <strong>Probabilistic Machine Learning</strong>, held from <strong>July 13–17, 2026</strong>, covering probabilistic modelling, uncertainty quantification, generative models, decision-making under uncertainty, and probabilistic methods in the sciences.</p>
+            <p>Participated in the Cambridge ELLIS Unit Summer School on <strong>Probabilistic Machine Learning</strong>, held from <strong>July 13–17, 2026</strong>, covering probabilistic modelling, uncertainty quantification, generative models, decision-making under uncertainty, and probabilistic methods in the sciences, and presenting a poster on <strong>Equivariant Sheaf Neural Networks</strong>.</p>
           </div>
           <div class="pt-badges">
-            <a class="pt-link-btn" href="/files/NEUREASON_2026/PolyNSD_Poster_Cambridge.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
+            <a class="pt-link-btn" href="/files/ELLIS_2026/ESNN_Poster_PML_Cambridge.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
             <span class="pt-badge--blue pt-badge">ELLIS 2026</span>
             <span class="pt-badge">Probabilistic ML</span>
-            <span class="pt-badge--purple pt-badge">Summer School</span>
+            <span class="pt-badge--purple pt-badge">Poster Presentation</span>
+            <span class="pt-badge">Equivariant Sheaf NNs</span>
           </div>
         </div>
       </div>
