@@ -1,173 +1,680 @@
-- title: "Bath Machine Learning Summer School 2026"
-  subtitle: "SDEs, ODEs, Diffusion Models, Flow Matching and Physics-Informed Neural Networks"
-  date: "2026-08-09"
-  height: "1350px"
-  place: "University of Bath, Bath, United Kingdom 🇬🇧"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7492151771168010242/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7492151771168010242/"
-
-- title: "EEML 2026 — Eastern European Machine Learning Summer School"
-  subtitle: "Diffusion Models, Representational Alignment and Geometric Deep Learning"
-  date: "2026-08-01"
-  height: "1350px"
-  place: "Cetinje, Montenegro 🇲🇪"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7489409429432451072/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7489409429432451072/"
-
-- title: "ACM Europe Summer School 2026 — HPC Computer Architectures for AI and Dedicated Applications"
-  date: "2026-07-24"
-  height: "1200px"
-  place: "Barcelona, Spain 🇪🇸"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7486518984977244160/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7486518984977244160/"
-
-- title: "Cambridge ELLIS Unit Summer School 2026 — Probabilistic Machine Learning"
-  subtitle: "Equivariant Sheaf Neural Networks"
-  date: "2026-07-19"
-  height: "1250px"
-  place: "University of Cambridge, United Kingdom 🇬🇧"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7484507862090772480/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7484507862090772480/"
-
-- title: "LoG Italian Meetup 2026 — Learning on Graphs, Pisa"
-  date: "2026-06-11"
-  height: "1100px"
-  place: "University of Pisa, Pisa, Italy 🇮🇹"
-  url: "https://www.linkedin.com/posts/alessio-borgi_log-learningongraphs-graphmachinelearning-ugcPost-7470813349153345536-LFfm/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7470813352139853824/"
-
-- title: "Sheaf Neural Networks as Message Passing — New Repository Release"
-  subtitle: "sheaf-mpnn"
-  date: "2026-05-27"
-  height: "1150px"
-  place: ""
-  url: "https://www.linkedin.com/posts/alessio-borgi_sheafneuralnetworks-graphneuralnetworks-geometricdeeplearning-ugcPost-7465295694443048960-k0A9/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7465295694443048960/"
-
-- title: "Remember to Forget: Gated Adaptive Positional Encoding - New Preprint Release"
-  date: "2026-05-12"
-  height: "1050px"
-  place: ""
-  url: "https://www.linkedin.com/posts/alessio-borgi_machinelearning-deeplearning-transformers-share-7459985689619865600-N-nn/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:share:7459985689619865600/"
-
-- title: "HetSheaf — New Preprint Version"
-  subtitle: "Heterogeneous Sheaf Neural Networks"
-  date: "2026-04-20"
-  height: "1200px"
-  place: ""
-  url: "https://www.linkedin.com/posts/alessio-borgi_graphneuralnetworks-geometricdeeplearning-activity-7452038422040502272-rNYR"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7452038422040502272/"
-
-- title: "Neural Reasoning for Scientific and Mathematical Discovery Workshop"
-  date: "2026-03-25"
-  height: "1100px"
-  place: "University of Cambridge, UK 🇬🇧"
-  url: "https://www.linkedin.com/posts/alessio-borgi_cambridge-universityofcambridge-research-activity-7442651549312569344-0Ryg"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7442651549312569344/"
-
-- title: "G-Research Early Career Research Funding Grant Awarded!"
-  date: "2025-12-24"
-  height: "1450px"
-  place: ""
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7409327291941457921/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7409327291941457921/"
-
-- title: "SEIO Workshop & PhD Schhol: Precise Methods for Optimizing Vehicle Routing and Logistics"
-  date: "2025-12-05"
-  height: "950px"
-  place: "University Pompeu Fabra, Barcelona, Spain 🇪🇸"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7402602674845548544/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7402602674845548544/"
-
-- title: "New Paper Out! Polynomial Neural Sheaf Diffusion - PrePrint"
-  subtitle: "A Spectral Filtering Approach on Cellular Sheaves"
-  date: "2025-12-03"
-  height: "1950px"
-  place: ""
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7401578982523076611/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7401578982523076611/"
-
-- title: "EEML 2025 Workshop"
-  date: "2025-11-07"
-  height: "1050px"
-  place: "University of Montenegro, Podgorica, Montenegro 🇲🇪"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7396960625123463169/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7396960625123463169/"
-
-- title: "PhD Started: Graph Neural Networks and Generative AI"
-  date: "2025-11-01"
-  height: "1000px"
-  place: "Sapienza University of Rome, Italy 🇮🇹, University of Cambridge, UK 🇬🇧"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7400297093593993216/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7400297093593993216/"
-
-- title: "Master's Degree Graduation! Artificial Intelligence and Robotics"
-  date: "2025-10-27"
-  height: "1050px"
-  place: "Sapienza University of Rome, Italy 🇮🇹"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7388639893910077440/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7388639893910077440/"
-
-- title: "OxML 2025 - Oxford Machine Learning Summer School"
-  date: "2025-08-13"
-  height: "1100px"
-  place: "London School of Economics, UK 🇬🇧 and University of Oxford, UK 🇬🇧"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7360407456448921600/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7360407456448921600/"
-
-- title: "Visiting Research - TESP Robotics "
-  date: "2025-07-27"
-  height: "1200px"
-  place: "Sendai, Japan 🇯🇵"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7357088980607057920/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7357088980607057920/"
-
-- title: "CVPR 2025 - Z-SASLM: Zero-Shot Style-Aligned Spherical Linear Interpolation Blending Latent Manipulation"
-  date: "2025-06-16"
-  height: "1000px"
-  place: "Nasville, TN, USA 🇺🇸"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7340097363702603777/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7340097363702603777/"
-
-- title: "M2L 2024 - Mediterranean Machine Learning Summer School"
-  date: "2024-09-18"
-  height: "1100px"
-  place: "Milan, Italy 🇮🇹"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7240434532183687168/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7240434532183687168/"
-
-- title: "Visiting Research - Johannes Kepler University"
-  date: "2024-09-03"
-  height: "1150px"
-  place: "Linz, Austria 🇦🇹"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7238445265127436288/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7238445265127436288/"
-
-- title: "AWS AI & ML Scholarship Program Nano Degree Completed!"
-  date: "2023-11-27"
-  height: "600px"
-  place: ""
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7106907636758962176/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7106907636758962176/"
-
-- title: "Bachelor's Degree Graduation! Applied Computer Science and Artificial Intelligence"
-  date: "2023-10-30"
-  height: "950px"
-  place: "Sapienza University of Rome, Italy 🇮🇹"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7124824213978243072/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7124824213978243072/"
-
-- title: "BUCA 2024 - Challenges in Building User Cloud Applications Summer School"
-  date: "2023-09-21"
-  height: "480px"
-  place: "Varenna, Italy 🇮🇹"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7106021858604441600/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7106021858604441600/"
-
-- title: "Hewlett Packard Enterprise - AI & ML Research Internship"
-  date: "2025-09-01"
-  height: "650px"
-  place: "Rome, Italy 🇮🇹"
-  url: "https://www.linkedin.com/feed/update/urn:li:activity:7103005864269127680/"
-  embed_url: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7103005864269127680/"
+---
+- title: Bath Machine Learning Summer School 2026
+  subtitle: SDEs, ODEs, Diffusion Models, Flow Matching and Physics-Informed Neural
+    Networks
+  date: '2026-08-09'
+  place: "University of Bath, Bath, United Kingdom \U0001F1EC\U0001F1E7"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7492151771168010242/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7492151771168010242/
+  body: "\U0001F680 \U0001F3DB️ This week, I had the pleasure of attending the **Bath
+    Machine Learning Summer School** in the amazing Roman city of Bath \U0001F1EC\U0001F1E7.\n\nThe
+    quality of the lectures was outstanding, covering topics I am most interested
+    in at the moment, including **SDEs**, **ODEs**, **diffusion models**, **Flow Matching**,
+    **and Physics**-**Informed Neural Networks** (**PINNs**). It was especially valuable
+    to see these topics presented from different perspectives, connecting the theory
+    with the ideas driving current research.\n\nOne of the highlights for me was finally
+    meeting Simon Prince, author of the famous **Understanding Deep Learning** book.
+    I actually started learning deep learning through his book, so meeting him in
+    person felt a little surreal. Of course, I couldn’t miss the opportunity to ask
+    for an autograph \U0001F604. And yes, in one of the photos you can see Simon holding
+    a copy of Understanding Deep Learning. That book is mine \U0001F602\n\nI also
+    really enjoyed the lectures by **Gabriel Brostow**, who walked us through the
+    development of Tracking Any Point, from the original ideas to the latest work
+    presented at CVPR. It was fascinating to see how the research evolved and how
+    each step addressed limitations of the previous approaches.\n\nAnother standout
+    was the amazing lecture by Deblina Bhattacharjee, Ph.D., FHEA, on **World Models**.
+    She managed to explain a broad and rapidly evolving area in an incredibly clear
+    and intuitive way, while also giving a great picture of where the field is heading.
+    \n\nA very inspiring few days, and definitely a lot of new ideas to take back
+    into my own research! \U0001F680\n\n#MachineLearning #DeepLearning #ArtificialIntelligence
+    #DiffusionModels #FlowMatching #WorldModels #ComputerVision #PINNs #Research #BathMLSummerSchool"
+  images:
+  - "/images/linkedin/bath-machine-learning-summer-school-2026/01.jpg"
+  - "/images/linkedin/bath-machine-learning-summer-school-2026/02.jpg"
+  - "/images/linkedin/bath-machine-learning-summer-school-2026/03.jpg"
+  - "/images/linkedin/bath-machine-learning-summer-school-2026/04.jpg"
+  - "/images/linkedin/bath-machine-learning-summer-school-2026/05.jpg"
+- title: EEML 2026 — Eastern European Machine Learning Summer School
+  subtitle: Diffusion Models, Representational Alignment and Geometric Deep Learning
+  date: '2026-08-01'
+  place: "Cetinje, Montenegro \U0001F1F2\U0001F1EA"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7489409429432451072/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7489409429432451072/
+  body: "I’m very grateful to have participated in the EEML **Summer School** in **Cetinje**,
+    **Montenegro** \U0001F1F2\U0001F1EA !\n\nIt was an amazing experience filled with
+    inspiring lectures, insightful discussions, and the opportunity to meet researchers
+    and students who share a passion for machine learning and artificial intelligence.
+    Beyond the academic programme, I particularly appreciated the exchange of ideas,
+    the new perspectives, and the connections built throughout the week. Experiences
+    like this are a great reminder of how valuable learning and collaboration are
+    within the research community. I also had the opportunity to see some old friends!\n\nAmong
+    the many excellent lectures, three particularly stood out to me: Sander Dieleman’s
+    lecture on **diffusion models** actually offered a very intuitive perspective
+    on generative modelling, flow matching, iterative refinement, guidance, and the
+    spectral interpretation of diffusion. I especially appreciated how complex ideas
+    were presented in such a clear and insightful way. Phillip Isola’s lecture on
+    **representational geometry and alignment**, was also particularly inspiring.
+    It offered fascinating insights into how neural representations can be compared,
+    understood geometrically, and encouraged to align across different models, topics
+    that strongly connected with some of the research questions I have recently been
+    exploring. The last one may be a slightly biased choice, since much of my research
+    is centred on this field: Petar Veličković’s crash course on **Geometric Deep
+    Learning**. It was incredible to see how, in just an hour and a half, he managed
+    to build a complete journey from groups and symmetries to equivariance, graph-based
+    perspectives on LLMs, and higher-order equivariant architectures. Condensing so
+    many of the ideas behind the Geometric Deep Learning blueprint into such a short,
+    engaging, and accessible lecture was really impressive.\n\nA huge thank you to
+    Montenegrin AI Association, organisers, speakers, and fellow participants who
+    made the summer school such a memorable experience! It really offered the possibility
+    to learn from the best of the best.\n\n#EEML #EEML2026 #MachineLearning #ArtificialIntelligence
+    #DeepLearning #Research #SummerSchool #Cetinje"
+  images:
+  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/01.jpg"
+  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/02.jpg"
+  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/03.jpg"
+  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/04.jpg"
+  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/05.jpg"
+- title: ACM Europe Summer School 2026 — HPC Computer Architectures for AI and Dedicated
+    Applications
+  date: '2026-07-24'
+  place: "Barcelona, Spain \U0001F1EA\U0001F1F8"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7486518984977244160/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7486518984977244160/
+  body: "What an incredible week in Barcelona! \U0001F1EA\U0001F1F8\n\nI had the opportunity
+    to participate in the 2026**ACM Europe Summer School on HPC Computer Architectures
+    for AI and Dedicated Applications**, exploring cutting-edge developments in high-performance
+    computing, artificial intelligence, and quantum computing, organised by ACM, Association
+    for Computing Machinery.\n\nIt was especially exciting to return to Barcelona
+    and visit the Barcelona Supercomputing Center. Seeing its supercomputing and quantum
+    computing infrastructure up close was already impressive, but discovering that
+    these technologies are housed inside a former church made the experience truly
+    unique! ⛪\U0001F4BB\n\nBeyond the fascinating lectures and visits, the summer
+    school was a great opportunity to meet brilliant researchers and students, exchange
+    ideas, and learn more about the technologies shaping the future of computing.\n\nA
+    huge thank you to ACM, Association for Computing Machinery, the Barcelona Supercomputing
+    Center, Universitat Politècnica de Catalunya (UPC), and all the organisers and
+    speakers who made this experience possible!\n\n#ACMSummerSchool #HPC #HighPerformanceComputing
+    #ArtificialIntelligence #QuantumComputing #Supercomputing #Barcelona #BSC #Research"
+  images:
+  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/01.jpg"
+  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/02.jpg"
+  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/03.jpg"
+  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/04.jpg"
+  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/05.jpg"
+- title: Cambridge ELLIS Unit Summer School 2026 — Probabilistic Machine Learning
+  subtitle: Equivariant Sheaf Neural Networks
+  date: '2026-07-19'
+  place: "University of Cambridge, United Kingdom \U0001F1EC\U0001F1E7"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7484507862090772480/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7484507862090772480/
+  body: "\U0001F680 It was a pleasure to participate in the **ELLIS Cambridge Summer
+    School on Probabilistic Machine Learning** at University of Cambridge \U0001F1EC\U0001F1E7
+    !\n\nThe week was filled with inspiring lectures, stimulating discussions, and
+    many opportunities to engage with cutting-edge ideas in the field. It was especially
+    rewarding to connect with researchers and students from around the world, exchange
+    perspectives, and build new collaborations in such a vibrant and intellectually
+    stimulating environment.\n\nI was also delighted to present our work, **Equivariant
+    Sheaf Neural Networks**, together with Mario Severino, where we briefly introduced
+    our approach and discussed its potential applications. The preprint is currently
+    in preparation, and we look forward to sharing more details soon.\n\nMany thanks
+    to the organizers, speakers, and everyone who made this such a valuable experience!\n#MachineLearning
+    #ProbabilisticMachineLearning #ELLIS #Cambridge #AI #Research"
+  images:
+  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/01.jpg"
+  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/02.jpg"
+  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/03.jpg"
+  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/04.jpg"
+  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/05.jpg"
+- title: LoG Italian Meetup 2026 — Learning on Graphs, Pisa
+  date: '2026-06-11'
+  place: "University of Pisa, Pisa, Italy \U0001F1EE\U0001F1F9"
+  url: https://www.linkedin.com/posts/alessio-borgi_log-learningongraphs-graphmachinelearning-ugcPost-7470813349153345536-LFfm/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7470813352139853824/
+  body: "\U0001F4C8\U0001F1EE\U0001F1F9 This week I had the pleasure of attending
+    the **LoG Italian Meetup** 2026 **in Pisa** and presenting my work, **Polynomial
+    Neural Sheaf Diffusion**, during the poster session.\n\nIt was a fantastic opportunity
+    to meet researchers across graph machine learning, discuss exciting advances in
+    long-range propagation and graph diffusion, and exchange ideas on the future of
+    the field.\n\nThe conversations, feedback, and discussions were incredibly inspiring.
+    I am leaving Pisa with many new ideas, fresh motivation, and several exciting
+    research directions to explore in Sheaf Neural Networks, graph diffusion, and
+    geometric deep learning.\n\nA big thank you to the organizers and everyone who
+    stopped by the poster. Looking forward to seeing you again at future conferences
+    and workshops!\n\n#LoG #LearningOnGraphs #GraphMachineLearning #GraphNeuralNetworks
+    #GraphDiffusion #GeometricDeepLearning #SheafNeuralNetworks #Research #AI"
+  images:
+  - "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/01.jpg"
+  - "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/02.jpg"
+  - "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/03.jpg"
+  - "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/04.jpg"
+- title: Sheaf Neural Networks as Message Passing — New Repository Release
+  subtitle: sheaf-mpnn
+  date: '2026-05-27'
+  place: ''
+  url: https://www.linkedin.com/posts/alessio-borgi_sheafneuralnetworks-graphneuralnetworks-geometricdeeplearning-ugcPost-7465295694443048960-k0A9/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7465295694443048960/
+  body: "\U0001F680 Excited to share that we are **releasing** the **new repository
+    sheaf**-**mpnn** for **Sheaf Neural Networks as Message Passing** today.\n\nOver
+    the past years, **Sheaf Neural Networks** have shown great potential for graph
+    learning, especially in settings where relational structure is complex and standard
+    message passing can be limiting. However, working with these models has often
+    required navigating research code that was not always easy to extend, reuse, or
+    adapt to new experiments.\n\nWith this repository, our goal is to **make Sheaf
+    Neural Networks more accessible to the community**: a clean PyTorch / PyG implementation
+    where, in just a few lines of code, you can instantiate and run a Sheaf Neural
+    Network\n\nIn this first release, we provide the core Neural Sheaf Diffusion implementation,
+    together with experiment presets, automatic dataset handling, hyperparameter sweeps,
+    and a benchmark suite covering both homophilic and heterophilic graph datasets.
+    This is only the beginning: future releases will progressively extend the library
+    with additional Sheaf Neural Network variants, making the framework even more
+    flexible and complete.\n\nWe hope this repository can serve as a useful starting
+    point for researchers and practitioners interested in exploring Sheaf Neural Networks,
+    geometric deep learning, and more expressive forms of graph message passing.\n\n**You
+    can find the GitHub Repository Link in the Comments** \n\nSo grateful for my teammates'
+    massive efforts and ongoing dedication to this project: Luke Braithwaite, Mario
+    Severino, Emanuele Mule, Fabrizio Silvestri, and Pietro Lio'.\n\nLooking forward
+    to sharing more soon. Stay tuned for the upcoming paper release: “**Sheaf Neural
+    Networks as a Message Passing Framework**” .\n\n#SheafNeuralNetworks #GraphNeuralNetworks
+    #GeometricDeepLearning #PyTorch #PyTorchGeometric #MachineLearning #AIResearch
+    #OpenSource #MessagePassing"
+  images:
+  - "/images/linkedin/sheaf-neural-networks-as-message-passing-new-repository-rele/01.jpg"
+  - "/images/linkedin/sheaf-neural-networks-as-message-passing-new-repository-rele/02.jpg"
+- title: 'Remember to Forget: Gated Adaptive Positional Encoding - New Preprint Release'
+  date: '2026-05-12'
+  place: ''
+  url: https://www.linkedin.com/posts/alessio-borgi_machinelearning-deeplearning-transformers-share-7459985689619865600-N-nn/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:share:7459985689619865600/
+  body: "\U0001F680 Excited to share our new work: “**Remember to Forget**: **Gated
+    Adaptive Positional Encoding**”.\n\nThis work was done with my co-authors Riccardo
+    Ali, Christopher Irwin, Mario Severino, and Pietro Lio' at the University of Cambridge.
+    I am so grateful for this great collaboration with such amazing friends!\n\n\U0001F9ED
+    **Why positional encodings matter**?\nTransformers process tokens through attention,
+    but attention alone does not know the order of a sequence. **Positional encodings**
+    (**PEs**) inject this notion of order, helping models understand where each token
+    appears in the context. This becomes essential as modern LLMs move toward longer
+    context windows. But long-context modeling is not only about remembering more.
+    Sometimes, the **real challenge is knowing what to forget**.\n\n⚠️ **The problem**:
+    **RoPE and Long**-**Context Hallucination**\nA widely used PE is **RoPE** which
+    provides strong local positional geometry, but beyond the training context it
+    can enter **unstable OOD regimes**, causing irrelevant distant tokens to appear
+    spuriously related to the query. We call this **positional hallucination**: a
+    critical issue for **retrieval**, where models must suppress background noise
+    while preserving the few distant tokens that matter.\n\n\U0001F4A1 **Our idea**\nWe
+    introduce **GAPE** — **G**ated **A**daptive **P**ositional **E**ncoding, a drop-in
+    augmentation for positional encodings that improves long-context robustness in
+    Transformers.\nThe core idea is simple:\n\U0001F539 RoPE preserves local geometry,
+    but can suffer from long-range phase hallucinations beyond the training context.\n\U0001F539
+    Fixed distance biases such as ALiBi suppress distant tokens, but may erase useful
+    evidence for retrieval.\n\U0001F539 GAPE separates these roles: it learns when
+    to suppress irrelevant context and when to preserve important distant tokens.\n\n\U0001F527
+    **How GAPE works**\nGAPE introduces two adaptive signals:\n✅ A **query gate**,
+    controlling how strongly irrelevant context is contracted;\n✅ A **key landmark
+    gate**, protecting salient distant tokens from being forgotten.\nIn other words,
+    GAPE forgets irrelevant background while keeping meaningful long-range information
+    accessible.\n\n\U0001F4CA **Results**\nAcross our experiments, GAPE:\n✅ Improves
+    length extrapolation;\n✅ Reduces attention entropy, leading to sharper attention;\n✅
+    Strengthens retrieval on Needle-in-a-Haystack and long-context benchmarks;\n✅
+    Works within standard scaled dot-product attention, making it compatible with
+    FlashAttention-style kernels.\n\n\U0001F511 **Key Takeaways**\nLong-context modeling
+    should not only extend memory. It should learn selective memory: forgetting irrelevant
+    context while preserving the tokens that matter for retrieval. \n\n#MachineLearning
+    #DeepLearning #Transformers #LongContext #Attention #PositionalEncoding #RoPE
+    #PE #ArtificialIntelligence"
+  images:
+  - "/images/linkedin/remember-to-forget-gated-adaptive-positional-encoding-new-pr/01.jpg"
+- title: HetSheaf — New Preprint Version
+  subtitle: Heterogeneous Sheaf Neural Networks
+  date: '2026-04-20'
+  place: ''
+  url: https://www.linkedin.com/posts/alessio-borgi_graphneuralnetworks-geometricdeeplearning-activity-7452038422040502272-rNYR
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7452038422040502272/
+  body: "\U0001F680 We are excited to share the **new preprint** version of **HetSheaf**:
+    **Heterogeneous Sheaf Neural Networks**. \n\nIn this new version, we significantly
+    extend the paper by showing how **heterogeneous sheaf neural networks** provide
+    a principled and parameter-efficient way to learn on heterogeneous graphs, where
+    nodes and edges belong to different types and feature spaces. Compared to the
+    previous version, we expand the experimental evaluation across node classification,
+    graph classification, and link prediction, adding broader comparisons, stronger
+    ablations, and deeper analysis of heterogeneous sheaf predictors.\n \nA key new
+    addition is **SheafPool**, our new **graph**-**level readout for sheaf networks**.
+    Since node embeddings in sheaf models live in local stalk spaces, standard pooling
+    is not enough. SheafPool addresses this with a **gauge**-**aware**, **permutation**-**invariant
+    stalk**-**space pooling mechanism**, making graph classification in sheaf neural
+    networks well defined and effective for the first time. \n\nMore broadly, **HetSheaf**
+    shows that heterogeneity can be encoded directly in the data representation through
+    cellular sheaves, rather than only through increasingly specialized architectures.
+    \n\nReally excited about the directions this opens for heterogeneous geometric
+    deep learning. A huge thanks to all my wonderful collaborators: Luke Braithwaite,
+    Gabriele Onorato, Kristjan Tarantelli, Iulia Duta, Francesco Restuccia, Fabrizio
+    Silvestri and Pietro Lio'.\n\n\U0001F4C4 \U0001F449  **Paper**: https://lnkd.in/dAFenq7W
+    \n\n#GraphNeuralNetworks #GeometricDeepLearning #MachineLearning #AIResearch #HeterogeneousGraphs
+    #SheafNN"
+  images:
+  - "/images/linkedin/hetsheaf-new-preprint-version/01.jpg"
+- title: Neural Reasoning for Scientific and Mathematical Discovery Workshop
+  date: '2026-03-25'
+  place: "University of Cambridge, UK \U0001F1EC\U0001F1E7"
+  url: https://www.linkedin.com/posts/alessio-borgi_cambridge-universityofcambridge-research-activity-7442651549312569344-0Ryg
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7442651549312569344/
+  body: "I’m grateful to have participated in **Neural Reasoning for Scientific and
+    Mathematical Discovery Workshop** here at the **Department of Computer Science
+    and Technology** at the University of Cambridge, organised by Tiansi Dong, Pietro
+    Lio' and Challenger Mishra. It was a fantastic experience: I had the chance to
+    meet many inspiring researchers, engage in insightful discussions, and exchange
+    ideas on exciting directions in AI, reasoning, and graph-based learning.\n\nI
+    was also very happy to present my paper **Polynomial Neural Sheaf Diffusion**:
+    **a Spectral Filtering Approach on Cellular Sheaves** during the poster sessions.
+    Sharing this work in such a stimulating environment and receiving thoughtful feedback
+    made the experience even more valuable. \n\nPaper Link: \U0001F449 https://lnkd.in/eZf9Nhch
+    \ \n\nA big thank you to the organizers and to everyone I had the pleasure of
+    speaking with over these days. Events like this are a great reminder of how much
+    we can learn from open conversations and from being part of a vibrant research
+    community.\n#Cambridge #UniversityOfCambridge #Research #AI #MachineLearning #GraphNeuralNetworks
+    #ScientificDiscovery #NeuralReasoning #AcademicCommunity"
+  images:
+  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/01.jpg"
+  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/02.jpg"
+  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/03.jpg"
+  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/04.jpg"
+  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/05.jpg"
+- title: G-Research Early Career Research Funding Grant Awarded!
+  date: '2025-12-24'
+  place: ''
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7409327291941457921/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7409327291941457921/
+  body: I am incredibly grateful to G-Research, and to Charles Martinez PhD for supporting
+    my research with this Early Career Student Grant. Thank you so much really for
+    your trust that means so much for me!
+- title: 'SEIO Workshop & PhD Schhol: Precise Methods for Optimizing Vehicle Routing
+    and Logistics'
+  date: '2025-12-05'
+  place: "University Pompeu Fabra, Barcelona, Spain \U0001F1EA\U0001F1F8"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7402602674845548544/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7402602674845548544/
+  body: "Back from an inspiring few days in **Barcelona** \U0001F1EA\U0001F1F8 for
+    the **SEIO Workshop** & **PhD School** “**Precise Methods for Optimizing Vehicle
+    Routing and Logistics**” at Universitat Pompeu Fabra. \n\nI had the pleasure of
+    presenting my work I am currently working on, “**From Graphs to Sheaves**: **Modeling
+    Spatial Heterophily in Transportation Networks**”, where I discussed how sheaf-based
+    graph models can better capture complex, heterogeneous interactions in urban mobility,
+    railway systems, and power grids. \n\nIt was a fantastic opportunity to connect
+    with researchers in transportation, operations research, and optimization, get
+    feedback on applying sheaf neural networks to real-world transport infrastructures,
+    and see how advanced modelling is shaping the next generation of routing and logistics
+    tools.\n\nHuge thanks to Alberto Santini and Roberto Roberti for putting together
+    such a high-level event, with a fantastic PhD School and to everyone who shared
+    ideas and questions during and after the talk."
+  images:
+  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/01.jpg"
+  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/02.jpg"
+  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/03.jpg"
+  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/04.jpg"
+  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/05.jpg"
+- title: New Paper Out! Polynomial Neural Sheaf Diffusion - PrePrint
+  subtitle: A Spectral Filtering Approach on Cellular Sheaves
+  date: '2025-12-03'
+  place: ''
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7401578982523076611/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7401578982523076611/
+  body: "\U0001F680\U0001F4C3 **New paper out**!\n\nI’m excited to share my new preprint
+    coming from the master's thesis work, “**Polynomial Neural Sheaf Diffusion**:
+    **A Spectral Filtering Approach on Cellular Sheaves**”, co-authored with Pietro
+    Lio' and Fabrizio Silvestri, is now online.\n\n\U0001F50D **What**’**s the core
+    idea**?\n**Sheaf Neural Networks** are a specific typology of graph neural networks,
+    powerful on heterophilic graphs because they learn how information should be transported
+    between nodes via local linear maps. Existing Neural Sheaf Diffusion (NSD) models,
+    however, are limited to one-step diffusion per layer, often need large stalk dimensions
+    and heavy dense transports, and can struggle with depth and efficiency.\n\nWe
+    propose **Polynomial Neural Sheaf Diffusion** (**PolyNSD**), which replaces one-step
+    diffusion with a degree-K polynomial filter of the (rescaled) sheaf Laplacian,
+    evaluated via a Chebyshev-style recurrence. In practice, a single PolyNSD layer
+    has an explicit K-hop receptive field, a trainable spectral response, and relies
+    only on sparse mat-vec operations (no eigen-decomposition).\n\n\U0001F9E0 **Key
+    Contributions in a Nutshell**\n- **Polynomial Sheaf Diffusion Layer**:  A general
+    framework that applies orthogonal-polynomial spectral filters to the sheaf Laplacian,
+    enabling long-range mixing and fine-grained control over low-, band- and high-pass
+    behaviour in one layer. \n- **Parameter**-**Efficient and Scalable**: The propagation
+    is governed by just K+1 scalar coefficients per layer, reusing the same transports.
+    We show that simple diagonal transports are already enough to reach state-of-the-art
+    performance, challenging the need for very high-dimensional stalks and dense maps.\n-
+    **Unified Treatment of Homophily** & **Heterophily**: With a single architecture,
+    PolyNSD achieves competitive or state-of-the-art results on both homophilic citation
+    graphs and challenging heterophilic benchmarks, while being more robust to depth
+    and oversmoothing.\n- **Extensive Empirical Analysis**: We systematically study
+    depth, polynomial degree, spectral scaling and efficiency. PolyNSD consistently
+    outperforms or matches NSD at fixed depth, often with fewer parameters and lower
+    memory footprint.\n\nIf you’re working on GNNs, heterophily, spectral methods,
+    or topological deep learning, I’d love to hear your thoughts and ideas about it!\n\n\U0001F449
+    Link to the paper in the comments!\n\n#GNN #SheafNeuralNetworks #GraphNeuralNetworks
+    #TopologicalDeepLearning #SpectralGNNs #MachineLearning #DeepLearning #Heterophily"
+  images:
+  - "/images/linkedin/new-paper-out-polynomial-neural-sheaf-diffusion-preprint/01.jpg"
+- title: EEML 2025 Workshop
+  date: '2025-11-07'
+  place: "University of Montenegro, Podgorica, Montenegro \U0001F1F2\U0001F1EA"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7396960625123463169/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7396960625123463169/
+  body: "\U0001F4DD\U0001F4BB Last week I had an incredible weekend in **Podgorica**
+    \U0001F1F2\U0001F1EA at the EEML **Montenegrin Machine Learning Workshop** (**MMLW**
+    2025), part of the EEML Workshops series, co-organised by Montenegrin AI Association!
+    The event took place on 8 November 2025 at the Science and Technology Park and
+    the Faculty of Electrical Engineering, University of Montenegro, bringing a true
+    top-tier AI conference experience to Eastern Europe. \n\nI was really grateful
+    for the chance to learn, connect, and get inspired by a lineup of amazing speakers,
+    from DeepMind, Mila - Quebec Artificial Intelligence Institute, and Nokia Bell
+    Labs. Starting with Razvan Pascanu on the foundations of deep learning and inductive
+    bias, we then explored with\nPetar Veličković on thinking and geometry in AI through
+    Graph Neural Networks, Sanja Šćepanović-Stojanović, PhD, on using AI for remote
+    sensing and understanding our planet, Natasha Latysheva on AI for biology and
+    genomics, Anna Varbella on AI for power grids and networked systems, along with
+    other excellent talks on mechanistic interpretability and real-world ML applications.
+    \n\n\U0001F4DA \U0001F5E3 I also had the pleasure of presenting my **poster**
+    “**Polynomial Sheaf Diffusion and Equivariant Sheaf Neural Networks**”, my master
+    thesis research developed with Professors Pietro Lio' and Fabrizio Silvestri,
+    sharing some of my latest research on sheaf-based geometric deep learning and
+    its applications. \n\n\U0001F680 Huge thanks to the EEML team and the Montenegrin
+    AI Association for organising such a smooth and inspiring event and for their
+    broader mission of supporting and growing the ML community in the region. \n#EEML
+    #MMLW2025 #MachineLearning #AI #Podgorica #EasternEuropeAI #MAIA #Montenegro #Podgorica
+    #SheafNeuralNetworks"
+  images:
+  - "/images/linkedin/eeml-2025-workshop/01.jpg"
+  - "/images/linkedin/eeml-2025-workshop/02.jpg"
+  - "/images/linkedin/eeml-2025-workshop/03.jpg"
+  - "/images/linkedin/eeml-2025-workshop/04.jpg"
+  - "/images/linkedin/eeml-2025-workshop/05.jpg"
+- title: 'PhD Started: Graph Neural Networks and Generative AI'
+  date: '2025-11-01'
+  place: "Sapienza University of Rome, Italy \U0001F1EE\U0001F1F9, University of Cambridge,
+    UK \U0001F1EC\U0001F1E7"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7400297093593993216/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7400297093593993216/
+  body: "About a month ago, after concluding my master's degree path, I officially
+    started my **PhD** in **Graph Neural Networks and Generative AI** \U0001F393\U0001F916\n\nFrom
+    the very beginning, I’ll dive into topics that I’m genuinely excited about: **Sheaf
+    Neural Networks**, **Geometric Deep Learning** and their connections with **Generative
+    AI**. This feels like exactly where I want to be right now. \n\nFor me, this isn’t
+    just a “next academic step”. Since I was young, I’ve always had two superheroes:
+    my **Dad**, who has always worked in IT \U0001F4BB, and **Leonardo da Vinci** \U0001F3A8\U0001F527.
+    Growing up, seeing my dad in the IT world made technology feel natural, almost
+    like a second language. Entering the same IT and AI environment wasn’t random:
+    it was my way of walking along a path that started at home, in the stories he
+    told me and in the passion he passed on. Leonardo da Vinci, on the other hand,
+    has always represented for me what a true scientist is: **curious**, **multidisciplinary**, **unafraid
+    to cross boundaries and explore the unknown**. Today, I see research scientists
+    and experts as the “Leonardos” of our time, and this PhD is my way of trying to
+    become one of them, in my own small way. \n\nI am incredibly grateful for this
+    opportunity, excited for the challenges ahead, and ready to give my best. I am
+    extremely thankful to my professors for believing in me since the very first moment
+    when my master's thesis started and for giving me the chance to grow as a researcher
+    alongside them \U0001F64F✨\n \n**I will put all myself**, **doing what I love
+    and living the dream**...\U0001F680✨"
+  images:
+  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/01.jpg"
+  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/02.jpg"
+  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/03.jpg"
+  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/04.jpg"
+  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/05.jpg"
+- title: Master's Degree Graduation! Artificial Intelligence and Robotics
+  date: '2025-10-27'
+  place: "Sapienza University of Rome, Italy \U0001F1EE\U0001F1F9"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7388639893910077440/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7388639893910077440/
+  body: "\U0001F393 I am proud to share that I have officially **graduated** with
+    a **Master**’**s Degree** in **Artificial Intelligence and Robotics** with a final
+    grade of 110/110, at Sapienza Università di Roma and in collaboration with the
+    University of Cambridge.\n\nMy thesis, “**Polynomial Sheaf Diffusion** & **Equivariant
+    Sheaf Neural Networks**” focused on advancing the capabilities of Graph Neural
+    Networks. In particular, I worked on:\n• **Polynomial Sheaf Diffusion** (**PolySD**):
+    a more efficient way to diffuse information across a graph, improving speed and
+    stability in complex systems.\n • **Equivariant Sheaf Neural Networks** (**EquiSheafNNs**):
+    models that are aware of geometry and symmetries (rotations, translations, local
+    reference frames), enabling AI to reason about physically structured systems such
+    as multi-particle dynamics and molecular interactions.\n\nPossible applications
+    of that range from physical simulation and robotics control to molecular and structural
+    modeling, with state-of-the-art results across several benchmarks. \n\nThis milestone
+    is the result of a journey, not just a final exam. I would like to thank my supervisors,
+    for their guidance, scientific rigor, and trust. As always, nothing could have
+    been achieved without the unwavering support of **my family**, **my parents**,
+    **my sister**, **my girlfriend**, **my grandparents**, **my uncles** who have
+    put into this path lots of sacrifices, and belief in me.\n\nOn to the next challenge.
+    \U0001F680\n#ArtificialIntelligence #Robotics #DeepLearning #GraphNeuralNetworks
+    #Research #MachineLearning #Graduation"
+  images:
+  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/01.jpg"
+  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/02.jpg"
+  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/03.jpg"
+  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/04.jpg"
+  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/05.jpg"
+- title: OxML 2025 - Oxford Machine Learning Summer School
+  date: '2025-08-13'
+  place: "London School of Economics, UK \U0001F1EC\U0001F1E7 and University of Oxford,
+    UK \U0001F1EC\U0001F1E7"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7360407456448921600/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7360407456448921600/
+  body: "\U0001F680 Two unforgettable weeks at the University of Oxford! \U0001F393\U0001F1EC\U0001F1E7\n
+    This month I joined the OxML **Oxford Machine Learning Summer School** for **MLx
+    Health** & **Bio** and **MLx Representation Learning** & **Generative AI** at
+    the **Mathematical Institute**, **University of Oxford**. The depth, community,
+    and real-world focus were outstanding. \n\nA few standout highlights (very brief
+    \U0001F447):\n- Michael Bronstein (University of Oxford; AITHYRA Research Institute
+    for Biomedical Artificial Intelligence): Symmetry/equivariance as the engine of
+    generalisation in GDL. \n- **Brian Hie** (Stanford University): Genome/protein
+    foundation models and sequence. \n- **Vivek Natarajan** (Google): The AI co-scientist,
+    an agentic systems accelerating hypothesis generation in biomedicine. \n- Moritz
+    Kraemer, PhD (University of Oxford): ML for pandemic preparedness: surveillance,
+    geospatial modelling, forecasting. \n- Emma Robinson (King's College London):
+    Robust, clinically grounded AI for medical imaging. \n- Zeyu Gao (University of
+    Cambridge): Multimodal + multi-omics fusion pipelines in oncology. \n- **Edward
+    Johns** (Imperial College London): Representation learning + GenAI in robotics.
+    \n- Arthur Gretton (UCL; DeepMind): Causal effect estimation with context & confounders.
+    \n- Abdul Fatir Ansari (AWS AI Labs): Time-series Foundation Models. \n\nHuge
+    thanks to the organizers AI for Global Goals and CIFAR, the speakers, DeepMind
+    and G-Research, and everyone I met for the discussions and inspiration. Now back
+    to work, full of ideas. \U0001F52C\U0001F4A1\n\n#OxML #OxfordUniversity #MachineLearning
+    #GenerativeAI #RepresentationLearning #HealthTech #Bioinformatics #DeepLearning
+    #OnDeviceAI #Causality #MedicalImaging #MultiOmics #AIforGood"
+  images:
+  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/01.jpg"
+  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/02.jpg"
+  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/03.jpg"
+  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/04.jpg"
+  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/05.jpg"
+- title: 'Visiting Research - TESP Robotics '
+  date: '2025-07-27'
+  place: "Sendai, Japan \U0001F1EF\U0001F1F5"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7357088980607057920/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7357088980607057920/
+  body: "\U0001F315\U0001F3C6 Back from **Japan** \U0001F1EF\U0001F1F5 – **TESP Robotics
+    Summer School** 2025!\n\nI had the incredible opportunity to take part in the
+    **TESP Robotics Summer School** held at Tohoku University in  **Japan**, working
+    in the Space Robotics Laboratory of Professor Kazuya Yoshida on a challenging
+    and exciting project: **MoonBot**‑**Navigation** \U0001F680\U0001F916\n\nThe goal
+    of our project was to design and build from scratch an autonomous mobile robot
+    capable of operating in a simulated lunar environment, navigating over sandy terrain,
+    avoiding obstacles, and interacting with target objects.\nWe equipped the robot
+    with:\n✅ Custom mechanical and electronic design\n✅ SLAM-based localization\n✅
+    A planning system based on a Retraction algorithm + Dijkstra\n✅ Visual support
+    via a camera and YOLO-based detection of “turtle” targets\n✅ A linear gripper
+    for physical interaction with the environment\n\n\U0001F3C5 I’m proud to share
+    that **our team won** 1**st place** in the **final TESP** 2025 **competition**,
+    which included teams from various domains (robotics, mechanics, materials…), and
+    we were honored to receive a **Certificate of Excellence** in Research.\n\nA heartfelt
+    thank you to my Sapienza professor in Robotics Alessandro De Luca for having selected
+    me to partecipate to this straordinary experience and to the Space Robotics professor
+    Kazuya Yoshida at Tohoku for providing such an inspiring and unforgettable experience.
+    \ A special thanks also to my teammates Kristjan Tarantelli  Rasmus Börjesson
+    Dahlstedt  and Andre Khoo. A final big thanks to Matteo Brugnera  and Keita Nagaoka
+    for the special environment and help they offered during the lab time. \n\n\U0001F517
+    **Check out our project on GitHub**:\n\U0001F449 https://lnkd.in/dHHkNa_r\n\n#Robotics
+    #TESP2025 #SLAM #PathPlanning #YOLO #MoonExploration #ResearchExcellence #Grateful
+    #GitHubProject #AutonomousRobots #MoonBot"
+  images:
+  - "/images/linkedin/visiting-research-tesp-robotics/01.jpg"
+  - "/images/linkedin/visiting-research-tesp-robotics/02.jpg"
+  - "/images/linkedin/visiting-research-tesp-robotics/03.jpg"
+  - "/images/linkedin/visiting-research-tesp-robotics/04.jpg"
+  - "/images/linkedin/visiting-research-tesp-robotics/05.jpg"
+- title: 'CVPR 2025 - Z-SASLM: Zero-Shot Style-Aligned Spherical Linear Interpolation
+    Blending Latent Manipulation'
+  date: '2025-06-16'
+  place: "Nasville, TN, USA \U0001F1FA\U0001F1F8"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7340097363702603777/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7340097363702603777/
+  body: "\U0001F31F **CVPR** 2025 in Nashville has officially come to an end, and
+    it's been an unforgettable journey! \U0001F929 \n\nPresenting my paper \"**Z**-**SASLM**:
+    **Zero**-**Shot Style**-**Aligned SLI Blending Latent Manipulation**\" at CVPR,
+    the premiere computer vision conference, was genuinely a dream come true. As a
+    master's student attending my very first academic conference ever, I was truly
+    amazed by the sheer scale, energy, and brilliance that filled every session and
+    conversation.\nI've learned so much, connected with other inspiring researchers,
+    and felt deeply motivated by the incredible work showcased. This experience has
+    left me eager to contribute more and participate again in the future!\n\n\U0001F50D
+    You can find more details about the paper here:\n\U0001F4C4 **arXiv**: https://lnkd.in/dUctFmMD\n\U0001F310
+    **Project page**: https://lnkd.in/dMfWfmp6\nFeel free to take a look and reach
+    out if you're curious or have any thoughts! \U0001F4AC\U0001F60A\n\nHeartfelt
+    thanks to everyone who made CVPR 2025 an extraordinary milestone in my academic
+    journey! A special thanks to my amazing family, whose constant support means the
+    world to me. Thanks to professor Irene Amerini and the ALCOR Lab Sapienza.  \U0001F680\U0001F4DA\n#CVPR2025
+    #FirstConference #DreamComeTrue #ComputerVision #DeepLearning #Research #Inspired"
+  images:
+  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/01.jpg"
+  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/02.jpg"
+  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/03.jpg"
+  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/04.jpg"
+  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/05.jpg"
+- title: M2L 2024 - Mediterranean Machine Learning Summer School
+  date: '2024-09-18'
+  place: "Milan, Italy \U0001F1EE\U0001F1F9"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7240434532183687168/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7240434532183687168/
+  body: "\U0001F680I’m thrilled to share that I won the **Best Poster Award** at the
+    M2L Summer School (organised by Google DeepMind) that this year was based on Università
+    degli Studi di Milano-Bicocca, for my work titled “**Multi**-**Reference Style
+    and Multi**-**Modal Context**-**Awareness Zero Shot Style Alignment in Image Generation**”!
+    \U0001F389 \n\nThe week was packed with advanced lectures on Reinforcement Learning,
+    Robotics, Diffusion Models, and LLMs, delivered by brilliant research scientists
+    from Google DeepMind, AI at Meta, Mistral AI, Bloomberg.\n\nGrateful for the enriching
+    experience, and huge thanks to the brilliant speakers and organizers for a week
+    filled with cutting-edge research and inspiration. Thank you to my professor Irene
+    Amerini and Luca Maiano from ALCOR Lab Sapienza for the great support. Looking
+    forward to applying these insights in the future! #AI #ML #Research #M2L #Innovation"
+  images:
+  - "/images/linkedin/m2l-2024-mediterranean-machine-learning-summer-school/01.jpg"
+- title: Visiting Research - Johannes Kepler University
+  date: '2024-09-03'
+  place: "Linz, Austria \U0001F1E6\U0001F1F9"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7238445265127436288/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7238445265127436288/
+  body: "\U0001F31F Incredible Experience at IT:U- Interdisciplinary Transformation
+    University Austria in Linz, Upper Austria and Introduction of **CareConnect**
+    ! \U0001F31F\n\nI’m thrilled to share the amazing journey I had at the International
+    Technology University (ITU) in Linz, Upper Austria, at the Johannes Kepler Universität
+    Linz Science Park. Over the last two weeks, I had the privilege of working on
+    **CareConnect**, an AI-driven project aimed at improving patient care and hospital
+    efficiency. By integrating the power of **LangChain**, we enabled natural language
+    queries that interact with real-time environmental data in hospital rooms. This
+    allows healthcare staff to monitor and control hospital conditions effortlessly
+    through a user-friendly interface—just by asking questions! \n\nThe system also
+    **generates real**-**time generated graphs**, that provide insights from the data
+    and can even **self**-**explain** by suggesting actions based on the visualizations.
+    One of the most exciting features is the ability to trigger the movement of a
+    **robot arm**, which can automatically perform tasks like opening or closing windows
+    based on environmental conditions.\n\nIndeed, one of the most exciting aspects
+    of the project was the **integration of robotics**. Using a robot arm, the system
+    can trigger physical actions—like automatically opening or closing windows based
+    on environmental data. \n\nI’m incredibly grateful to my talented teammates Oliver
+    Guy Simone Redl, Amina Tucaković and Hamed Kshiem. A huge thanks to Alexander
+    Steinmaurer and Gala Dojcinovic for the opportunity. A big thanks also to the
+    best mentor Thorsten Ruprechter, for his guidance and support.\n\nThis experience
+    has been an unforgettable chapter, and I can’t wait to see where we go from here!
+    \U0001F680\n\n\U0001F517\U0001F449Discover **CareConnect**: https://lnkd.in/dUbE76-b\n\n#AI
+    #LangChain #Robotics #HealthcareInnovation #TechForGood #Teamwork #JohannesKeplerUniversity
+    #CareConnect #Linz #Grateful #TechnologyInHealthcare #ITU #Linz"
+  images:
+  - "/images/linkedin/visiting-research-johannes-kepler-university/01.jpg"
+  - "/images/linkedin/visiting-research-johannes-kepler-university/02.jpg"
+  - "/images/linkedin/visiting-research-johannes-kepler-university/03.jpg"
+- title: AWS AI & ML Scholarship Program Nano Degree Completed!
+  date: '2023-11-27'
+  place: ''
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7106907636758962176/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7106907636758962176/
+  body: "\U0001F393 Exciting News: Graduated to the AWS AI & ML Scholarship Program!
+    \U0001F680\n\nI am absolutely thrilled to share some exciting news with you all.
+    I am officially a graduate of the AWS AI & ML Scholarship Program(NanoDegree),
+    thanks to a scholarship generously awarded by Amazon Web Services (AWS)! \U0001F929\n\nThis
+    journey has been an incredible learning experience, and I couldn't be more grateful
+    for the opportunity to be a part of this prestigious program. Over the course
+    of this scholarship, I've delved deep into the fascinating world of Artificial
+    Intelligence and Machine Learning, exploring cutting-edge technologies and gaining
+    invaluable insights from experts in the field. \U0001F31F\n\nI want to extend
+    my heartfelt gratitude to Amazon Web Services (AWS) for making this program possible
+    and for believing in the potential of aspiring AI & and ML enthusiasts like me.
+    Thanks also to my mentor during the entire Scholarship, Attila Herbert: your guidance,
+    encouragement, and shared passion for AI & ML have been instrumental in my success.\n\nThe
+    possibilities in the field of AI & ML are endless, and I'm eager to contribute
+    to its ever-evolving landscape. Here's to continuous learning, growth, and the
+    pursuit of innovation! \U0001F680\U0001F4DA \n\n#AWSAIandML #Scholarship #AI #MachineLearning
+    #Graduation #AWS #AWSMLEScholarship #Udacity"
+- title: Bachelor's Degree Graduation! Applied Computer Science and Artificial Intelligence
+  date: '2023-10-30'
+  place: "Sapienza University of Rome, Italy \U0001F1EE\U0001F1F9"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7124824213978243072/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7124824213978243072/
+  body: "\U0001F393 Exciting Milestone Achieved: Graduated with Honors in Applied
+    Computer Science and Artificial Intelligence! \U0001F680\n\nI'm thrilled to share
+    that I've graduated with a Bachelor's Degree in \"Applied Computer Science and
+    Artificial Intelligence\" with the highest distinction - 110 with Honours. \U0001F3C6\n\nMy
+    thesis, \"Building Real Time Multivariate Anomaly Detection Systems in Industry’s
+    5G,\" was a remarkable journey guided by my incredible academic advisor, Professor
+    Iacopo Masi  and my industry mentor, Paolo Ceccherini from HPE. A great thanks
+    to both of them that have always helped me and supported me during this experience.\n\nI'm
+    excited to embark on the next chapter of my career that will continue with the
+    Artificial Intelligence and Robotics Master’s Degree, armed with the knowledge
+    and skills acquired during my academic journey. Thank you to everyone who supported
+    me along the way. \U0001F64C\n\n#Graduation #AI #ComputerScience #HPE #AnomalyDetection"
+  images:
+  - "/images/linkedin/bachelor-s-degree-graduation-applied-computer-science-and-ar/01.jpg"
+- title: BUCA 2024 - Challenges in Building User Cloud Applications Summer School
+  date: '2023-09-21'
+  place: "Varenna, Italy \U0001F1EE\U0001F1F9"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7106021858604441600/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7106021858604441600/
+  body: "\U0001F3AFExciting Update! Just wrapped up an incredible one-week journey
+    at the Google  Summer School in the breathtaking Villa Monastero, Varenna. \n\n\U0001F4DA
+    The program, aptly named \"Challenges in Building User Cloud Applications,\" was
+    an intellectual whirlwind. We dove deep into cutting-edge concepts and solutions,
+    starting with the intricacies of Data Replication, delving into the sheer scale
+    of how Google Applications handle billions of users, demystifying the Paxos algorithm,
+    and concluding with the fascinating world of Transformers. \n\n\U0001F680 It was
+    an amazing experience and I am very grateful to be selected to be part of this
+    one-week journey. Thank you to Google for organizing this fantastic summer school,
+    and thank you to the amazing lecturer Dan Ardelean Amer Diwan JJ Furman. Here's
+    to the pursuit of knowledge and innovation! \U0001F310\U0001F4A1\n\n#GoogleSummerSchool
+    #VillaMonastero #Google #Innovation #LearningJourney"
+- title: Hewlett Packard Enterprise - AI & ML Research Internship
+  date: '2025-09-01'
+  place: "Rome, Italy \U0001F1EE\U0001F1F9"
+  url: https://www.linkedin.com/feed/update/urn:li:activity:7103005864269127680/
+  embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7103005864269127680/
+  body: "Achievement\U0001F3AF: Completing My 6-Month Internship Journey at Hewlett
+    Packard Enterprise’sPath Finder Research Group! \U0001F680\n\nI am thrilled to
+    share that I have successfully concluded my enriching 6-month internship as an
+    AI and ML Research Software Engineer at Hewlett Packard Enterprise (HPE), working
+    closely with the esteemed Path Finder Research Group. \U0001F31F\n\nThis experience
+    has been nothing short of incredible, allowing me to dive headfirst into the world
+    of Artificial Intelligence and Machine Learning. Over the past six months, I've
+    had the privilege of collaborating with a group of exceptional professionals in
+    the Path Finder Group. Thank you Biswadeb Dutta Akanksha Jain Zishan Kamal Perrine
+    BARALE @Raul de Diego.\n\nDuring my time at HPE, I've had the chance to work on
+    a diverse range of projects, applying advanced AI and ML techniques to real-world
+    challenges, resulting in the development of the Multivariate Anomaly Detection
+    Tool and Workflow that has been awarded with the Honorable Mention worldwide during
+    the HPE AI Hackathon. \n\nThank you also to the atonishing people met in the office
+    Paolo Ceccherini Edoardo Ciniglia Federico Bartsch  Paola D'Arco.\n\nI am excited
+    to continue my pursuit of excellence in the field of AI and ML, armed with the
+    skills and perspectives gained during my time at HPE.\U0001F310\U0001F916\n\nThank
+    you, HPE, for an unforgettable internship journey! \U0001F64F\n\n#AI #ML #MachineLearning
+    #Internship #HPE #PathFinderResearchGroup #HewlettPackardEnterprise #Research"

@@ -258,18 +258,98 @@ author_profile: true
   box-shadow: 0 7px 18px rgba(10,102,194,0.38);
 }
 
-/* ── Embed section ── */
-.pb-embed-wrap {
+/* ── Post body ── */
+.pb-body {
   border-top: 1px solid var(--pb-border);
-  margin: 0;
+  padding: 1.1rem 1.4rem 0.4rem;
+  font-size: 0.93rem;
+  line-height: 1.65;
+  color: #374151;
+}
+.pb-body p { margin: 0 0 0.85rem; }
+.pb-body strong { color: var(--pb-navy); font-weight: 700; }
+.pb-body.is-clamped .pb-body__inner {
+  max-height: 13.5em;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(#000 68%, transparent 100%);
+          mask-image: linear-gradient(#000 68%, transparent 100%);
+}
+.pb-more {
+  display: inline-block;
+  margin: 0 0 0.9rem;
   padding: 0;
-}
-.pb-embed {
-  width: 100%;
+  background: none;
   border: none;
-  display: block;
-  background: transparent;
+  color: var(--pb-blue);
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
 }
+.pb-more:hover { text-decoration: underline; }
+
+/* ── Photo gallery ── */
+.pb-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 4px;
+  border-top: 1px solid var(--pb-border);
+  background: var(--pb-border);
+}
+.pb-gallery--1 { grid-template-columns: 1fr; }
+.pb-gallery__item {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  background: #eef2f6;
+  aspect-ratio: 4 / 3;
+}
+.pb-gallery--1 .pb-gallery__item { aspect-ratio: auto; }
+.pb-gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+.pb-gallery--1 .pb-gallery__item img {
+  height: auto;
+  object-fit: contain;
+  max-height: 620px;
+}
+.pb-gallery__item:hover img { transform: scale(1.03); }
+
+/* ── Lightbox ── */
+.pb-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(3,14,26,0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.pb-lightbox.is-open { display: flex; }
+.pb-lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+}
+.pb-lightbox__close {
+  position: absolute;
+  top: 1rem; right: 1.4rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.2rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.pb-lightbox__close:hover { opacity: 1; }
 
 /* ── Empty state ── */
 .pb-empty {
@@ -284,6 +364,14 @@ author_profile: true
   .pb-hero__stats { gap: 1rem; }
   .pb-hero__stat-num { font-size: 1.6rem; }
   .pb-card__body { padding: 1rem 1.1rem; }
+  .pb-body { padding: 1rem 1.1rem 0.3rem; }
+  .pb-gallery { grid-template-columns: repeat(2, 1fr); }
+  .pb-lightbox { padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pb-gallery__item img { transition: none; }
+  .pb-gallery__item:hover img { transform: none; }
 }
 </style>
 
@@ -376,17 +464,25 @@ author_profile: true
         </div>
       </div>
     </div>
-    {% if post.embed_url %}
-      <div class="pb-embed-wrap">
-        {% assign embed_h = post.height | default: "1200px" %}
-        <iframe class="pb-embed"
-          src="{{ post.embed_url }}"
-          height="{{ embed_h }}"
-          style="height:{{ embed_h }};"
-          frameborder="0"
-          allowfullscreen
-          title="{{ post.title | default: 'LinkedIn post' }}">
-        </iframe>
+    {% if post.body and post.body != "" %}
+      {%- assign body_len = post.body | size -%}
+      <div class="pb-body{% if body_len > 520 %} is-clamped{% endif %}">
+        <div class="pb-body__inner">{{ post.body | markdownify }}</div>
+        {% if body_len > 520 %}
+          <button type="button" class="pb-more" aria-expanded="false">Read more ↓</button>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if post.images and post.images.size > 0 %}
+      <div class="pb-gallery pb-gallery--{{ post.images.size }}">
+        {% for img in post.images %}
+          <a class="pb-gallery__item" href="{{ img | relative_url }}" data-pb-zoom>
+            <img src="{{ img | relative_url }}"
+                 alt="Photo {{ forloop.index }} from: {{ post.title | escape }}"
+                 loading="lazy" decoding="async">
+          </a>
+        {% endfor %}
       </div>
     {% endif %}
   </div>
@@ -395,3 +491,49 @@ author_profile: true
   <div class="pb-empty">No posts yet — check back soon.</div>
 {% endfor %}
 </div>
+
+<div class="pb-lightbox" id="pb-lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button type="button" class="pb-lightbox__close" aria-label="Close">&times;</button>
+  <img src="" alt="">
+</div>
+
+<script>
+(function () {
+  document.querySelectorAll('.pb-more').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var wrap = btn.closest('.pb-body');
+      var open = wrap.classList.toggle('is-clamped') === false;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? 'Show less ↑' : 'Read more ↓';
+      if (!open) wrap.scrollIntoView({ block: 'nearest' });
+    });
+  });
+
+  var box = document.getElementById('pb-lightbox');
+  if (!box) return;
+  var img = box.querySelector('img');
+
+  function close() {
+    box.classList.remove('is-open');
+    img.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-pb-zoom]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      img.src = link.getAttribute('href');
+      img.alt = link.querySelector('img').alt;
+      box.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  box.addEventListener('click', function (e) {
+    if (e.target === box || e.target.classList.contains('pb-lightbox__close')) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && box.classList.contains('is-open')) close();
+  });
+})();
+</script>
