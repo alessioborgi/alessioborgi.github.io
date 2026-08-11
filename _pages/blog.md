@@ -474,17 +474,26 @@ author_profile: true
       </div>
     {% endif %}
 
-    {% if post.images and post.images.size > 0 %}
-      <div class="pb-gallery pb-gallery--{{ post.images.size }}">
-        {% for img in post.images %}
-          <a class="pb-gallery__item" href="{{ img | relative_url }}" data-pb-zoom>
-            <img src="{{ img | relative_url }}"
+    {%- comment -%}
+      The gallery is read straight from the post's folder, so dropping extra
+      photos into /images/linkedin/<slug>/ publishes them with no edit here.
+      LinkedIn's public embed only ever exposes the first 5, hence the manual top-up.
+    {%- endcomment -%}
+    {%- assign gdir = post.gallery -%}
+    {%- if gdir and gdir != "" -%}
+      {%- assign photos = site.static_files | where_exp: "f", "f.path contains gdir" | sort: "path" -%}
+      {%- if photos.size > 0 %}
+      <div class="pb-gallery pb-gallery--{{ photos.size }}">
+        {% for photo in photos %}
+          <a class="pb-gallery__item" href="{{ photo.path | relative_url }}" data-pb-zoom>
+            <img src="{{ photo.path | relative_url }}"
                  alt="Photo {{ forloop.index }} from: {{ post.title | escape }}"
                  loading="lazy" decoding="async">
           </a>
         {% endfor %}
       </div>
-    {% endif %}
+      {%- endif -%}
+    {%- endif -%}
   </div>
 
 {% else %}

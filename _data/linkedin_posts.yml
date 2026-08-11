@@ -28,12 +28,7 @@
     \n\nA very inspiring few days, and definitely a lot of new ideas to take back
     into my own research! \U0001F680\n\n#MachineLearning #DeepLearning #ArtificialIntelligence
     #DiffusionModels #FlowMatching #WorldModels #ComputerVision #PINNs #Research #BathMLSummerSchool"
-  images:
-  - "/images/linkedin/bath-machine-learning-summer-school-2026/01.jpg"
-  - "/images/linkedin/bath-machine-learning-summer-school-2026/02.jpg"
-  - "/images/linkedin/bath-machine-learning-summer-school-2026/03.jpg"
-  - "/images/linkedin/bath-machine-learning-summer-school-2026/04.jpg"
-  - "/images/linkedin/bath-machine-learning-summer-school-2026/05.jpg"
+  gallery: "/images/linkedin/bath-machine-learning-summer-school-2026/"
 - title: EEML 2026 — Eastern European Machine Learning Summer School
   subtitle: Diffusion Models, Representational Alignment and Geometric Deep Learning
   date: '2026-08-01'
@@ -68,12 +63,7 @@
     made the summer school such a memorable experience! It really offered the possibility
     to learn from the best of the best.\n\n#EEML #EEML2026 #MachineLearning #ArtificialIntelligence
     #DeepLearning #Research #SummerSchool #Cetinje"
-  images:
-  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/01.jpg"
-  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/02.jpg"
-  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/03.jpg"
-  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/04.jpg"
-  - "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/05.jpg"
+  gallery: "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/"
 - title: ACM Europe Summer School 2026 — HPC Computer Architectures for AI and Dedicated
     Applications
   date: '2026-07-24'
@@ -95,12 +85,7 @@
     Center, Universitat Politècnica de Catalunya (UPC), and all the organisers and
     speakers who made this experience possible!\n\n#ACMSummerSchool #HPC #HighPerformanceComputing
     #ArtificialIntelligence #QuantumComputing #Supercomputing #Barcelona #BSC #Research"
-  images:
-  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/01.jpg"
-  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/02.jpg"
-  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/03.jpg"
-  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/04.jpg"
-  - "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/05.jpg"
+  gallery: "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/"
 - title: Cambridge ELLIS Unit Summer School 2026 — Probabilistic Machine Learning
   subtitle: Equivariant Sheaf Neural Networks
   date: '2026-07-19'
@@ -119,12 +104,7 @@
     in preparation, and we look forward to sharing more details soon.\n\nMany thanks
     to the organizers, speakers, and everyone who made this such a valuable experience!\n#MachineLearning
     #ProbabilisticMachineLearning #ELLIS #Cambridge #AI #Research"
-  images:
-  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/01.jpg"
-  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/02.jpg"
-  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/03.jpg"
-  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/04.jpg"
-  - "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/05.jpg"
+  gallery: "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/"
 - title: LoG Italian Meetup 2026 — Learning on Graphs, Pisa
   date: '2026-06-11'
   place: "University of Pisa, Pisa, Italy \U0001F1EE\U0001F1F9"
@@ -142,11 +122,7 @@
     stopped by the poster. Looking forward to seeing you again at future conferences
     and workshops!\n\n#LoG #LearningOnGraphs #GraphMachineLearning #GraphNeuralNetworks
     #GraphDiffusion #GeometricDeepLearning #SheafNeuralNetworks #Research #AI"
-  images:
-  - "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/01.jpg"
-  - "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/02.jpg"
-  - "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/03.jpg"
-  - "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/04.jpg"
+  gallery: "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/"
 - title: Sheaf Neural Networks as Message Passing — New Repository Release
   subtitle: sheaf-mpnn
   date: '2026-05-27'
@@ -177,9 +153,7 @@
     Networks as a Message Passing Framework**” .\n\n#SheafNeuralNetworks #GraphNeuralNetworks
     #GeometricDeepLearning #PyTorch #PyTorchGeometric #MachineLearning #AIResearch
     #OpenSource #MessagePassing"
-  images:
-  - "/images/linkedin/sheaf-neural-networks-as-message-passing-new-repository-rele/01.jpg"
-  - "/images/linkedin/sheaf-neural-networks-as-message-passing-new-repository-rele/02.jpg"
+  gallery: "/images/linkedin/sheaf-neural-networks-as-message-passing-new-repository-rele/"
 - title: 'Remember to Forget: Gated Adaptive Positional Encoding - New Preprint Release'
   date: '2026-05-12'
   place: ''
@@ -221,8 +195,7 @@
     context while preserving the tokens that matter for retrieval. \n\n#MachineLearning
     #DeepLearning #Transformers #LongContext #Attention #PositionalEncoding #RoPE
     #PE #ArtificialIntelligence"
-  images:
-  - "/images/linkedin/remember-to-forget-gated-adaptive-positional-encoding-new-pr/01.jpg"
+  gallery: "/images/linkedin/remember-to-forget-gated-adaptive-positional-encoding-new-pr/"
 - title: HetSheaf — New Preprint Version
   subtitle: Heterogeneous Sheaf Neural Networks
   date: '2026-04-20'
@@ -250,8 +223,7 @@
     Silvestri and Pietro Lio'.\n\n\U0001F4C4 \U0001F449  **Paper**: https://lnkd.in/dAFenq7W
     \n\n#GraphNeuralNetworks #GeometricDeepLearning #MachineLearning #AIResearch #HeterogeneousGraphs
     #SheafNN"
-  images:
-  - "/images/linkedin/hetsheaf-new-preprint-version/01.jpg"
+  gallery: "/images/linkedin/hetsheaf-new-preprint-version/"
 - title: Neural Reasoning for Scientific and Mathematical Discovery Workshop
   date: '2026-03-25'
   place: "University of Cambridge, UK \U0001F1EC\U0001F1E7"
@@ -272,12 +244,7 @@
     we can learn from open conversations and from being part of a vibrant research
     community.\n#Cambridge #UniversityOfCambridge #Research #AI #MachineLearning #GraphNeuralNetworks
     #ScientificDiscovery #NeuralReasoning #AcademicCommunity"
-  images:
-  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/01.jpg"
-  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/02.jpg"
-  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/03.jpg"
-  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/04.jpg"
-  - "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/05.jpg"
+  gallery: "/images/linkedin/neural-reasoning-for-scientific-and-mathematical-discovery-w/"
 - title: G-Research Early Career Research Funding Grant Awarded!
   date: '2025-12-24'
   place: ''
@@ -286,6 +253,7 @@
   body: I am incredibly grateful to G-Research, and to Charles Martinez PhD for supporting
     my research with this Early Career Student Grant. Thank you so much really for
     your trust that means so much for me!
+  gallery: "/images/linkedin/g-research-early-career-research-funding-grant-awarded/"
 - title: 'SEIO Workshop & PhD Schhol: Precise Methods for Optimizing Vehicle Routing
     and Logistics'
   date: '2025-12-05'
@@ -305,12 +273,7 @@
     tools.\n\nHuge thanks to Alberto Santini and Roberto Roberti for putting together
     such a high-level event, with a fantastic PhD School and to everyone who shared
     ideas and questions during and after the talk."
-  images:
-  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/01.jpg"
-  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/02.jpg"
-  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/03.jpg"
-  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/04.jpg"
-  - "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/05.jpg"
+  gallery: "/images/linkedin/seio-workshop-phd-schhol-precise-methods-for-optimizing-vehi/"
 - title: New Paper Out! Polynomial Neural Sheaf Diffusion - PrePrint
   subtitle: A Spectral Filtering Approach on Cellular Sheaves
   date: '2025-12-03'
@@ -348,8 +311,7 @@
     or topological deep learning, I’d love to hear your thoughts and ideas about it!\n\n\U0001F449
     Link to the paper in the comments!\n\n#GNN #SheafNeuralNetworks #GraphNeuralNetworks
     #TopologicalDeepLearning #SpectralGNNs #MachineLearning #DeepLearning #Heterophily"
-  images:
-  - "/images/linkedin/new-paper-out-polynomial-neural-sheaf-diffusion-preprint/01.jpg"
+  gallery: "/images/linkedin/new-paper-out-polynomial-neural-sheaf-diffusion-preprint/"
 - title: EEML 2025 Workshop
   date: '2025-11-07'
   place: "University of Montenegro, Podgorica, Montenegro \U0001F1F2\U0001F1EA"
@@ -378,12 +340,7 @@
     broader mission of supporting and growing the ML community in the region. \n#EEML
     #MMLW2025 #MachineLearning #AI #Podgorica #EasternEuropeAI #MAIA #Montenegro #Podgorica
     #SheafNeuralNetworks"
-  images:
-  - "/images/linkedin/eeml-2025-workshop/01.jpg"
-  - "/images/linkedin/eeml-2025-workshop/02.jpg"
-  - "/images/linkedin/eeml-2025-workshop/03.jpg"
-  - "/images/linkedin/eeml-2025-workshop/04.jpg"
-  - "/images/linkedin/eeml-2025-workshop/05.jpg"
+  gallery: "/images/linkedin/eeml-2025-workshop/"
 - title: 'PhD Started: Graph Neural Networks and Generative AI'
   date: '2025-11-01'
   place: "Sapienza University of Rome, Italy \U0001F1EE\U0001F1F9, University of Cambridge,
@@ -410,12 +367,7 @@
     when my master's thesis started and for giving me the chance to grow as a researcher
     alongside them \U0001F64F✨\n \n**I will put all myself**, **doing what I love
     and living the dream**...\U0001F680✨"
-  images:
-  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/01.jpg"
-  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/02.jpg"
-  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/03.jpg"
-  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/04.jpg"
-  - "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/05.jpg"
+  gallery: "/images/linkedin/phd-started-graph-neural-networks-and-generative-ai/"
 - title: Master's Degree Graduation! Artificial Intelligence and Robotics
   date: '2025-10-27'
   place: "Sapienza University of Rome, Italy \U0001F1EE\U0001F1F9"
@@ -441,12 +393,7 @@
     put into this path lots of sacrifices, and belief in me.\n\nOn to the next challenge.
     \U0001F680\n#ArtificialIntelligence #Robotics #DeepLearning #GraphNeuralNetworks
     #Research #MachineLearning #Graduation"
-  images:
-  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/01.jpg"
-  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/02.jpg"
-  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/03.jpg"
-  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/04.jpg"
-  - "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/05.jpg"
+  gallery: "/images/linkedin/master-s-degree-graduation-artificial-intelligence-and-robot/"
 - title: OxML 2025 - Oxford Machine Learning Summer School
   date: '2025-08-13'
   place: "London School of Economics, UK \U0001F1EC\U0001F1E7 and University of Oxford,
@@ -475,12 +422,7 @@
     to work, full of ideas. \U0001F52C\U0001F4A1\n\n#OxML #OxfordUniversity #MachineLearning
     #GenerativeAI #RepresentationLearning #HealthTech #Bioinformatics #DeepLearning
     #OnDeviceAI #Causality #MedicalImaging #MultiOmics #AIforGood"
-  images:
-  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/01.jpg"
-  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/02.jpg"
-  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/03.jpg"
-  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/04.jpg"
-  - "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/05.jpg"
+  gallery: "/images/linkedin/oxml-2025-oxford-machine-learning-summer-school/"
 - title: 'Visiting Research - TESP Robotics '
   date: '2025-07-27'
   place: "Sendai, Japan \U0001F1EF\U0001F1F5"
@@ -510,12 +452,7 @@
     **Check out our project on GitHub**:\n\U0001F449 https://lnkd.in/dHHkNa_r\n\n#Robotics
     #TESP2025 #SLAM #PathPlanning #YOLO #MoonExploration #ResearchExcellence #Grateful
     #GitHubProject #AutonomousRobots #MoonBot"
-  images:
-  - "/images/linkedin/visiting-research-tesp-robotics/01.jpg"
-  - "/images/linkedin/visiting-research-tesp-robotics/02.jpg"
-  - "/images/linkedin/visiting-research-tesp-robotics/03.jpg"
-  - "/images/linkedin/visiting-research-tesp-robotics/04.jpg"
-  - "/images/linkedin/visiting-research-tesp-robotics/05.jpg"
+  gallery: "/images/linkedin/visiting-research-tesp-robotics/"
 - title: 'CVPR 2025 - Z-SASLM: Zero-Shot Style-Aligned Spherical Linear Interpolation
     Blending Latent Manipulation'
   date: '2025-06-16'
@@ -538,12 +475,7 @@
     journey! A special thanks to my amazing family, whose constant support means the
     world to me. Thanks to professor Irene Amerini and the ALCOR Lab Sapienza.  \U0001F680\U0001F4DA\n#CVPR2025
     #FirstConference #DreamComeTrue #ComputerVision #DeepLearning #Research #Inspired"
-  images:
-  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/01.jpg"
-  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/02.jpg"
-  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/03.jpg"
-  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/04.jpg"
-  - "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/05.jpg"
+  gallery: "/images/linkedin/cvpr-2025-z-saslm-zero-shot-style-aligned-spherical-linear-i/"
 - title: M2L 2024 - Mediterranean Machine Learning Summer School
   date: '2024-09-18'
   place: "Milan, Italy \U0001F1EE\U0001F1F9"
@@ -560,8 +492,7 @@
     filled with cutting-edge research and inspiration. Thank you to my professor Irene
     Amerini and Luca Maiano from ALCOR Lab Sapienza for the great support. Looking
     forward to applying these insights in the future! #AI #ML #Research #M2L #Innovation"
-  images:
-  - "/images/linkedin/m2l-2024-mediterranean-machine-learning-summer-school/01.jpg"
+  gallery: "/images/linkedin/m2l-2024-mediterranean-machine-learning-summer-school/"
 - title: Visiting Research - Johannes Kepler University
   date: '2024-09-03'
   place: "Linz, Austria \U0001F1E6\U0001F1F9"
@@ -592,10 +523,7 @@
     \U0001F680\n\n\U0001F517\U0001F449Discover **CareConnect**: https://lnkd.in/dUbE76-b\n\n#AI
     #LangChain #Robotics #HealthcareInnovation #TechForGood #Teamwork #JohannesKeplerUniversity
     #CareConnect #Linz #Grateful #TechnologyInHealthcare #ITU #Linz"
-  images:
-  - "/images/linkedin/visiting-research-johannes-kepler-university/01.jpg"
-  - "/images/linkedin/visiting-research-johannes-kepler-university/02.jpg"
-  - "/images/linkedin/visiting-research-johannes-kepler-university/03.jpg"
+  gallery: "/images/linkedin/visiting-research-johannes-kepler-university/"
 - title: AWS AI & ML Scholarship Program Nano Degree Completed!
   date: '2023-11-27'
   place: ''
@@ -618,6 +546,7 @@
     to its ever-evolving landscape. Here's to continuous learning, growth, and the
     pursuit of innovation! \U0001F680\U0001F4DA \n\n#AWSAIandML #Scholarship #AI #MachineLearning
     #Graduation #AWS #AWSMLEScholarship #Udacity"
+  gallery: "/images/linkedin/aws-ai-ml-scholarship-program-nano-degree-completed/"
 - title: Bachelor's Degree Graduation! Applied Computer Science and Artificial Intelligence
   date: '2023-10-30'
   place: "Sapienza University of Rome, Italy \U0001F1EE\U0001F1F9"
@@ -635,8 +564,7 @@
     Artificial Intelligence and Robotics Master’s Degree, armed with the knowledge
     and skills acquired during my academic journey. Thank you to everyone who supported
     me along the way. \U0001F64C\n\n#Graduation #AI #ComputerScience #HPE #AnomalyDetection"
-  images:
-  - "/images/linkedin/bachelor-s-degree-graduation-applied-computer-science-and-ar/01.jpg"
+  gallery: "/images/linkedin/bachelor-s-degree-graduation-applied-computer-science-and-ar/"
 - title: BUCA 2024 - Challenges in Building User Cloud Applications Summer School
   date: '2023-09-21'
   place: "Varenna, Italy \U0001F1EE\U0001F1F9"
@@ -654,6 +582,7 @@
     and thank you to the amazing lecturer Dan Ardelean Amer Diwan JJ Furman. Here's
     to the pursuit of knowledge and innovation! \U0001F310\U0001F4A1\n\n#GoogleSummerSchool
     #VillaMonastero #Google #Innovation #LearningJourney"
+  gallery: "/images/linkedin/buca-2024-challenges-in-building-user-cloud-applications-sum/"
 - title: Hewlett Packard Enterprise - AI & ML Research Internship
   date: '2025-09-01'
   place: "Rome, Italy \U0001F1EE\U0001F1F9"
@@ -678,3 +607,4 @@
     skills and perspectives gained during my time at HPE.\U0001F310\U0001F916\n\nThank
     you, HPE, for an unforgettable internship journey! \U0001F64F\n\n#AI #ML #MachineLearning
     #Internship #HPE #PathFinderResearchGroup #HewlettPackardEnterprise #Research"
+  gallery: "/images/linkedin/hewlett-packard-enterprise-ai-ml-research-internship/"
