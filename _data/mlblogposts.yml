@@ -4,6 +4,9 @@
 # One entry per post. Set published to "online" to show the post,
 # or "offline" to hide it from all listings (add `published: offline` in the
 # post's own frontmatter too for Jekyll to skip building it entirely).
+# The site automatically opens each chapter with a recap of the preceding
+# published chapter. Add plain-text `recap: "..."` to a post's frontmatter
+# only when an author needs to provide a more specific transition.
 #
 # Structure:  book → section → posts (one line each)
 # ════════════════════════════════════════════════════════════════════════════
@@ -170,7 +173,7 @@ gnn:
         - { slug: "2024-04-14-oversquashing",                    title: "Oversquashing: When Too Much Information Passes Through Bottlenecks",        published: online }
         - { slug: "2024-04-15-oversmoothing-vs-oversquashing",   title: "Over-smoothing vs Over-squashing: The Difference",                           published: online }
         - { slug: "2024-04-16-gnn-depth",                        title: "Depth in GNNs: Why Deeper Is Not Always Better",                             published: online }
-        - { slug: "2024-04-16b-why-graphs-fool-gnns",            title: "Why Some Graphs Fool GNNs: The Structural Indistinguishability Problem",     published: online }
+        - { slug: "2024-04-16-why-graphs-fool-gnns",             title: "Why Some Graphs Fool GNNs: The Structural Indistinguishability Problem",     published: online }
 
     graph-pe:
       label: "Graph Positional Encodings"

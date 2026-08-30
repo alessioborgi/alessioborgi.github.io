@@ -458,7 +458,6 @@
 - name: "Njegoš Mausoleum"
   subtitle: "Holiday"
   type: "holiday"
-  url: "https://www.getyourguide.com/en-gb/njegos-mausoleum-montenegro-l189350/"
   lat: 42.3993
   lng: 18.8370
   date: "2026"
@@ -467,7 +466,6 @@
 - name: "Rijeka Crnojevića"
   subtitle: "Holiday"
   type: "holiday"
-  url: "https://it.wikipedia.org/wiki/Rijeka_Crnojevi%C4%87a"
   lat: 42.3647
   lng: 19.0269
   date: "2026"
@@ -493,35 +491,25 @@
   zoom_min: 6
   note: "A lovely Ligurian coastal village."
 
-- name: "Castel Savoia"
+- name: "Gressoney-Saint-Jean"
   subtitle: "Holiday"
   type: "holiday"
-  lat: 45.8233
-  lng: 7.8230
+  lat: 45.7801
+  lng: 7.8236
   date: "2026"
   radius: 5
   zoom_min: 6
-  note: "The Savoy castle in Gressoney-Saint-Jean, Aosta Valley."
+  note: "Parco Gover is beautiful, and the view of the mountains from Castel Savoia is breathtaking."
 
-- name: "Parco Gover"
+- name: "Bard"
   subtitle: "Holiday"
   type: "holiday"
-  lat: 45.8259
-  lng: 7.8249
+  lat: 45.6085
+  lng: 7.7446
   date: "2026"
   radius: 5
   zoom_min: 6
-  note: "A beautiful park in Gressoney-Saint-Jean, Aosta Valley."
-
-- name: "Forte di Bard"
-  subtitle: "Holiday"
-  type: "holiday"
-  lat: 45.6080
-  lng: 7.7442
-  date: "2026"
-  radius: 5
-  zoom_min: 6
-  note: "An impressive fortress overlooking the Aosta Valley."
+  note: "Forte di Bard is an impressive fortress overlooking the Aosta Valley."
 
 - name: "Aosta"
   subtitle: "Holiday"
@@ -563,15 +551,15 @@
   zoom_min: 6
   note: "A charming spa town in the Aosta Valley."
 
-- name: "Castello di Fénis"
+- name: "Fénis"
   subtitle: "Holiday"
   type: "holiday"
-  lat: 45.7356
-  lng: 7.4956
+  lat: 45.7342
+  lng: 7.4948
   date: "2026"
   radius: 5
   zoom_min: 6
-  note: "A superbly preserved medieval castle in the Aosta Valley."
+  note: "Castello di Fénis is a superbly preserved medieval castle in the Aosta Valley."
 
 - name: "San Teodoro"
   subtitle: "Holiday"
