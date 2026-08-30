@@ -105,6 +105,34 @@
   date: "2024"
   note: "Challenges in Building User Cloud Applications summer school on Lake Como."
 
+- name: "Bath"
+  subtitle: "Bath Machine Learning Summer School 2026"
+  type: "study"
+  url: "https://www.bathmlsummerschool.org/"
+  lat: 51.3758
+  lng: -2.3599
+  date: "August 5–7, 2026"
+  note: "University of Bath, Bath, United Kingdom 🇬🇧 — ODEs & SDEs in machine learning, probabilistic and Bayesian methods, self-supervised learning, and world models."
+
+- name: "Cetinje"
+  subtitle: "EEML 2026 — Eastern European Machine Learning Summer School"
+  type: "study"
+  url: "https://www.eeml.eu/"
+  poster_url: "https://alessioborgi.github.io/files/EEML_2026/ESNN_Poster_EEML_Montenegro.pdf"
+  lat: 42.3906
+  lng: 18.9142
+  date: "July 27–August 1, 2026"
+  note: "EEML / MAIA, Cetinje, Montenegro 🇲🇪 — Presented a poster on Equivariant Sheaf Neural Networks."
+
+- name: "Barcelona"
+  subtitle: "ACM Europe Summer School on HPC 2026"
+  type: "study"
+  url: "https://europe.acm.org/seasonal-schools/hpc/2026/"
+  lat: 41.3874
+  lng: 2.1686
+  date: "July 20–24, 2026"
+  note: "ACM Europe, Barcelona, Spain 🇪🇸 — High Performance Computing and Artificial Intelligence, with emerging research in quantum computing."
+
 
 ################################ LEISURE ################################
 - name: "London"
@@ -220,10 +248,10 @@
   type: "holiday"
   lat: 45.0703
   lng: 7.6869
-  date: "2018, 2020"
+  date: "2018, 2020, 2026"
   radius: 5
   zoom_min: 6
-  note: "The best Egyptian Museum outside Egypt!"
+  note: "Palazzo Reale and the Egyptian Museum are highlights — the best Egyptian Museum outside Egypt!"
 
 - name: "Como"
   subtitle: "Holiday"
@@ -418,6 +446,132 @@
   radius: 5
   zoom_min: 6
   note: "Amazing beaches and crystal clear water!"
+
+- name: "Bratislava"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 48.1486
+  lng: 17.1077
+  date: "2026"
+  note: "Bratislava Castle is fantastic!"
+
+- name: "Njegoš Mausoleum"
+  subtitle: "Holiday"
+  type: "holiday"
+  url: "https://www.getyourguide.com/en-gb/njegos-mausoleum-montenegro-l189350/"
+  lat: 42.3993
+  lng: 18.8370
+  date: "2026"
+  note: "A remarkable monument on Mount Lovćen, Montenegro 🇲🇪."
+
+- name: "Rijeka Crnojevića"
+  subtitle: "Holiday"
+  type: "holiday"
+  url: "https://it.wikipedia.org/wiki/Rijeka_Crnojevi%C4%87a"
+  lat: 42.3647
+  lng: 19.0269
+  date: "2026"
+  note: "A beautiful riverside village in Montenegro 🇲🇪."
+
+- name: "Levanto"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.1700
+  lng: 9.6124
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "An amazing place on the Ligurian coast!"
+
+- name: "Bonassola"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 44.1835
+  lng: 9.5835
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "A lovely Ligurian coastal village."
+
+- name: "Castel Savoia"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.8233
+  lng: 7.8230
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "The Savoy castle in Gressoney-Saint-Jean, Aosta Valley."
+
+- name: "Parco Gover"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.8259
+  lng: 7.8249
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "A beautiful park in Gressoney-Saint-Jean, Aosta Valley."
+
+- name: "Forte di Bard"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.6080
+  lng: 7.7442
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "An impressive fortress overlooking the Aosta Valley."
+
+- name: "Aosta"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.7370
+  lng: 7.3201
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "A beautiful Alpine city with remarkable Roman heritage."
+
+- name: "Skyway Monte Bianco"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.8286
+  lng: 6.9314
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "Spectacular cable-car views of Mont Blanc from Courmayeur."
+
+- name: "Courmayeur"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.7910
+  lng: 6.9701
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "A wonderful mountain town at the foot of Mont Blanc."
+
+- name: "Saint-Vincent"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.7501
+  lng: 7.6486
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "A charming spa town in the Aosta Valley."
+
+- name: "Castello di Fénis"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 45.7356
+  lng: 7.4956
+  date: "2026"
+  radius: 5
+  zoom_min: 6
+  note: "A superbly preserved medieval castle in the Aosta Valley."
 
 - name: "San Teodoro"
   subtitle: "Holiday"

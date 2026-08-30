@@ -666,6 +666,8 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
         lng: {{ p.lng | default: 0 }},
         note: {{ p.note | default: "" | jsonify }},
         date: {{ p.date | default: "" | jsonify }},
+        url: {{ p.url | default: "" | jsonify }},
+        poster_url: {{ p.poster_url | default: "" | jsonify }},
         radius: {{ p.radius | default: "null" | jsonify }},
         zoom_min: {{ p.zoom_min | default: "null" | jsonify }}
       }{% unless forloop.last %},{% endunless %}
@@ -683,6 +685,19 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
     function num(val, fallback) {
       var n = Number(val);
       return isNaN(n) ? fallback : n;
+    }
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>'"]/g, function(character) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character];
+      });
+    }
+    function safeUrl(value) {
+      try {
+        var url = new URL(value, window.location.origin);
+        return /^https?:$/.test(url.protocol) ? url.href : '';
+      } catch (error) {
+        return '';
+      }
     }
     places.forEach(function(p) {
       if (!p.lat || !p.lng) return;
@@ -702,10 +717,14 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
         minZoom: minZoom
       };
       var lines = [];
-      if (p.name) lines.push('<strong>' + p.name + '</strong>');
-      if (p.subtitle) lines.push(p.subtitle);
-      if (p.note) lines.push(p.note);
-      if (p.date) lines.push('Years: ' + p.date);
+      if (p.name) lines.push('<strong>' + escapeHtml(p.name) + '</strong>');
+      if (p.subtitle) lines.push(escapeHtml(p.subtitle));
+      if (p.note) lines.push(escapeHtml(p.note));
+      if (p.date) lines.push('Years: ' + escapeHtml(p.date));
+      var url = safeUrl(p.url);
+      var posterUrl = safeUrl(p.poster_url);
+      if (url) lines.push('<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">Learn more</a>');
+      if (posterUrl) lines.push('<a href="' + escapeHtml(posterUrl) + '" target="_blank" rel="noopener noreferrer">🪧 View Poster</a>');
       marker.bindTooltip(lines.join('<br>'), { direction: 'top', sticky: true, className: 'map-tooltip' });
       markers.push(marker);
     });
