@@ -501,6 +501,27 @@ author_profile: true
   <div class="pt-section__body">
     <div class="pt-timeline">
 
+      <!-- Erlangen Hub Conference 2026 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--purple"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--purple">September 2026</div>
+          <div class="pt-title"><a href="https://erlangenhub.ox.ac.uk/event/the-erlangen-hub-conference-2026/" target="_blank" rel="noopener">Mathematical Foundations of AI: The Erlangen Hub Conference 2026</a></div>
+          <div class="pt-org">🇬🇧 Oxford, United Kingdom &nbsp;·&nbsp; Erlangen AI Hub, University of Oxford</div>
+          <div class="pt-body">
+            <p>Participated in the Erlangen Hub Conference, held from <strong>September 1–3, 2026</strong> at the Mathematical Institute, University of Oxford, bringing together researchers in the mathematical foundations of artificial intelligence.</p>
+            <p>Presented the posters <strong>Equivariant Sheaf Neural Networks: Learning Geometric Transport on Graphs</strong> and <strong>TOPological Attention: Edge-conditioned Cross-Head Routing on Graphs</strong>.</p>
+          </div>
+          <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/Erlangen_Hub_2026/ESNN_Poster_Oxford.pdf" target="_blank" rel="noopener">🪧 View ESNN Poster</a>
+            <a class="pt-link-btn" href="/files/Erlangen_Hub_2026/TOPA_Poster_Oxford.pdf" target="_blank" rel="noopener">🪧 View TOPA Poster</a>
+            <span class="pt-badge--purple pt-badge">Erlangen Hub 2026</span>
+            <span class="pt-badge">Poster Presentations</span>
+            <span class="pt-badge--blue pt-badge">Mathematical Foundations of AI</span>
+          </div>
+        </div>
+      </div>
+
       <!-- CVPR 2025 -->
       <div class="pt-item">
         <div class="pt-dot pt-dot--purple"><span></span></div>

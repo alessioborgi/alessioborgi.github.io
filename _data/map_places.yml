@@ -108,7 +108,6 @@
 - name: "Bath"
   subtitle: "Bath Machine Learning Summer School 2026"
   type: "study"
-  url: "https://www.bathmlsummerschool.org/"
   lat: 51.3758
   lng: -2.3599
   date: "August 5–7, 2026"
@@ -117,8 +116,6 @@
 - name: "Cetinje"
   subtitle: "EEML 2026 — Eastern European Machine Learning Summer School"
   type: "study"
-  url: "https://www.eeml.eu/"
-  poster_url: "https://alessioborgi.github.io/files/EEML_2026/ESNN_Poster_EEML_Montenegro.pdf"
   lat: 42.3906
   lng: 18.9142
   date: "July 27–August 1, 2026"
@@ -127,7 +124,6 @@
 - name: "Barcelona"
   subtitle: "ACM Europe Summer School on HPC 2026"
   type: "study"
-  url: "https://europe.acm.org/seasonal-schools/hpc/2026/"
   lat: 41.3874
   lng: 2.1686
   date: "July 20–24, 2026"

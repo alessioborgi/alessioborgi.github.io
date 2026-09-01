@@ -666,8 +666,6 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
         lng: {{ p.lng | default: 0 }},
         note: {{ p.note | default: "" | jsonify }},
         date: {{ p.date | default: "" | jsonify }},
-        url: {{ p.url | default: "" | jsonify }},
-        poster_url: {{ p.poster_url | default: "" | jsonify }},
         radius: {{ p.radius | default: "null" | jsonify }},
         zoom_min: {{ p.zoom_min | default: "null" | jsonify }}
       }{% unless forloop.last %},{% endunless %}
@@ -691,14 +689,6 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character];
       });
     }
-    function safeUrl(value) {
-      try {
-        var url = new URL(value, window.location.origin);
-        return /^https?:$/.test(url.protocol) ? url.href : '';
-      } catch (error) {
-        return '';
-      }
-    }
     places.forEach(function(p) {
       if (!p.lat || !p.lng) return;
       var color = typeColors[p.type] || typeColors.study;
@@ -721,10 +711,6 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
       if (p.subtitle) lines.push(escapeHtml(p.subtitle));
       if (p.note) lines.push(escapeHtml(p.note));
       if (p.date) lines.push('Years: ' + escapeHtml(p.date));
-      var url = safeUrl(p.url);
-      var posterUrl = safeUrl(p.poster_url);
-      if (url) lines.push('<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">Learn more</a>');
-      if (posterUrl) lines.push('<a href="' + escapeHtml(posterUrl) + '" target="_blank" rel="noopener noreferrer">🪧 View Poster</a>');
       marker.bindTooltip(lines.join('<br>'), { direction: 'top', sticky: true, className: 'map-tooltip' });
       markers.push(marker);
     });
