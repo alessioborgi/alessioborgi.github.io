@@ -280,6 +280,7 @@ sheaf:
         - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi, Silvestri & Liò)",                            published: online }
         - { slug: "2026-07-28-deep-neural-sheaf-diffusion", title: "DNSD: Making Sheaf Diffusion Work at Depth (Bourgerie et al., 2026)",                           published: online }
         - { slug: "2026-08-16-cooperative-sheaf-neural-networks", title: "CSNN: Cooperative Sheaf Neural Networks (Ribeiro et al., 2025)",                          published: online }
+        - { slug: "2026-09-01-equivariant-sheaf-neural-networks", title: "ESNN: Equivariant Sheaf Neural Networks — Learning Geometric Transport on Graphs (Borgi, Severino, Silvestri & Liò, 2026)", published: online }
         - { slug: "2025-06-11-sheaf-map-parameterisation", title: "Learning Sheaf Maps: Parameterisation Strategies Compared",                                      published: offline }
         - { slug: "2025-06-12-spectral-sheaf-convolution", title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves",                                       published: offline }
 

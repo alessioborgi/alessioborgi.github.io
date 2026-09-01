@@ -1719,7 +1719,8 @@ document.addEventListener('DOMContentLoaded', function () {
     '2025-06-17-zsaslm-paper',
     '2025-12-02-polynsd-paper',
     '2024-09-12-hetsheaf-paper',
-    '2025-06-26-sheafpool'
+    '2025-06-26-sheafpool',
+    '2026-09-01-equivariant-sheaf-neural-networks'
   ];
   var mlBlogPosts = [
     {% for p in site.posts %}
