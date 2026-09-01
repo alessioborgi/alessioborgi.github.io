@@ -1,12 +1,10 @@
 ---
-- title: "Mathematical Foundations of AI: The Erlangen Hub Conference 2026"
-  subtitle: "Equivariant Sheaf Neural Networks and TOPological Attention"
+- title: "Equivariant Sheaf Neural Networks Preprint is Available!"
+  subtitle: "Look at the new preprint on arXiv!"
   date: '2026-09-01'
-  place: "Mathematical Institute, University of Oxford, United Kingdom 🇬🇧"
   url: https://www.linkedin.com/feed/update/urn:li:activity:7500467186021601281/
   embed_url: https://www.linkedin.com/embed/feed/update/urn:li:activity:7500467186021601281/
   height: "1300px"
-  body: "Presented **Equivariant Sheaf Neural Networks: Learning Geometric Transport on Graphs** and **TOPological Attention: Edge-conditioned Cross-Head Routing on Graphs** at the Erlangen Hub Conference 2026."
 
 - title: Bath Machine Learning Summer School 2026
   subtitle: SDEs, ODEs, Diffusion Models, Flow Matching and Physics-Informed Neural
