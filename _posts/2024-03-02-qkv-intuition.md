@@ -6,7 +6,7 @@ categories: [transformers]
 book: transformers
 subsection: core
 tags: [attention, QKV, intuition, beginner]
-excerpt: "Q, K, and V are not arbitrary labels. They map precisely onto search queries, database labels, and retrieved content — a framework you already understand."
+excerpt: "Q, K, and V are not arbitrary labels. They map precisely onto search queries, database labels, and retrieved content, a framework you already understand."
 author_profile: true
 read_time: true
 is_overview: false
@@ -67,13 +67,13 @@ toc_label: "Contents"
 
 Imagine walking into a library with a question: *"I want something about neural networks."*
 
-- **Query (Q):** your question — what you're searching for
-- **Key (K):** the labels on every book's spine — what each book is *about*
-- **Value (V):** the actual content of each book — what you retrieve when you pick one up
+- **Query (Q):** your question, what you're searching for
+- **Key (K):** the labels on every book's spine, what each book is *about*
+- **Value (V):** the actual content of each book, what you retrieve when you pick one up
 
 You compare your question (Q) against every spine label (K). The closer the match, the more of that book's content (V) you retrieve. If three books are slightly relevant and one is very relevant, you blend them proportionally.
 
-This is exactly what attention does — but over tokens in a sequence, and with vectors instead of text labels.
+This is exactly what attention does, but over tokens in a sequence, and with vectors instead of text labels.
 
 ## In Transformer Notation
 
@@ -89,7 +89,7 @@ V = XW_V
 \]
 </div>
 
-Where X is the token representation and W_Q, W_K, W_V are learned weight matrices. The model learns what to advertise (K), what to ask for (Q), and what to share (V) — and these can be different projections of the same token.
+Where X is the token representation and W_Q, W_K, W_V are learned weight matrices. The model learns what to advertise (K), what to ask for (Q), and what to share (V), and these can be different projections of the same token.
 
 ## A Token's Three Faces
 
@@ -104,7 +104,7 @@ When **"bank"** is asking questions (as a **query**):
 When **"bank"** contributes information (as a **value**):
 - It provides: *its full contextual representation*, to be mixed into other tokens' outputs
 
-A single token plays all three roles simultaneously — as a key for others querying it, as a query seeking information from others, and as a value supplying its content when called.
+A single token plays all three roles simultaneously, as a key for others querying it, as a query seeking information from others, and as a value supplying its content when called.
 
 ## Why Not Just Use One Matrix?
 
@@ -112,7 +112,7 @@ A natural question: why not compute similarity directly between token representa
 
 Two reasons:
 
-**1. Asymmetry.** The question you ask (Q) and the label you advertise (K) can be different things. The word "bank" might advertise its financial meaning but query for loan-related terms. A single representation forces them to be the same — which is too restrictive.
+**1. Asymmetry.** The question you ask (Q) and the label you advertise (K) can be different things. The word "bank" might advertise its financial meaning but query for loan-related terms. A single representation forces them to be the same, which is too restrictive.
 
 **2. Information compression.** The value (V) can be a different, richer projection than the key (K). Keys are optimised for matching; values are optimised for being informative. Separating them lets the model decouple *finding* information from *extracting* it.
 
@@ -136,12 +136,12 @@ During a forward pass, "bank" generates three vectors:
 | **q** (Query) | Ask: *what financial terms are nearby?* | high score against "loan", "approved" keys |
 | **v** (Value) | Contribute: *rich contextual embedding* | full d_model representation with context |
 
-Now "loan" (another token) has a Query asking *"who approved me?"*. Its q scores highly against "bank"'s k. So "loan"'s output mixes in a lot of "bank"'s **v** — gaining knowledge that its approver is a financial institution.
+Now "loan" (another token) has a Query asking *"who approved me?"*. Its q scores highly against "bank"'s k. So "loan"'s output mixes in a lot of "bank"'s **v**, gaining knowledge that its approver is a financial institution.
 
 Notice: "bank"'s k just needs to be good at *being found*. Its v can carry far more information. Separating them lets the model optimise these two functions independently.
 
 <div class="insight-box">
-<strong>Why V can differ from K:</strong> the key is like a business card — short, specific, designed to be matched. The value is like a full report — rich, contextual, designed to be informative once you've already found the right source. Forcing them to be the same vector is unnecessarily restrictive.
+<strong>Why V can differ from K:</strong> the key is like a business card, short, specific, designed to be matched. The value is like a full report, rich, contextual, designed to be informative once you've already found the right source. Forcing them to be the same vector is unnecessarily restrictive.
 </div>
 
 ## The Most Common Beginner Confusion
@@ -179,7 +179,7 @@ The result is a blend of all value vectors, weighted by how much each token's ke
 | Exact match (hard) | Argmax over scores |
 | Fuzzy match (soft) | Softmax-weighted blend |
 
-Classic databases return one result (hard lookup). Attention returns a differentiable weighted blend — which means gradients can flow through it and the whole system can be trained end-to-end.
+Classic databases return one result (hard lookup). Attention returns a differentiable weighted blend, which means gradients can flow through it and the whole system can be trained end-to-end.
 
 ## Summary
 

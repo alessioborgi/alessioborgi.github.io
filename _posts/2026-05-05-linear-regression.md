@@ -8,7 +8,7 @@ subsection: supervised
 tags: [linear-regression, least-squares, regularisation, ridge, lasso]
 published: true
 is_overview: false
-excerpt: "Fitting a line by least squares is not an optimisation trick — it is the orthogonal projection of the observation vector onto the column space of the design matrix, and once you see that, the normal equations, the failure modes, and the reason we solve by QR instead of inverting all follow from one picture."
+excerpt: "Fitting a line by least squares is not an optimisation trick, it is the orthogonal projection of the observation vector onto the column space of the design matrix, and once you see that, the normal equations, the failure modes, and the reason we solve by QR instead of inverting all follow from one picture."
 author_profile: true
 read_time: true
 icon: "📈"
@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Least squares does not "find the best line" by searching. It projects the observation vector \(y \in \mathbb{R}^{n}\) orthogonally onto \(\operatorname{col}(X)\), the subspace spanned by the columns of the design matrix. The defining property is that the residual \(r = y - X\beta\) is orthogonal to every column of \(X\); writing that down as \(X^{\top} r = 0\) <em>is</em> the normal equations. Everything else — why \(X^{\top}X\) can be singular, why you factorise instead of invert, what the Gaussian noise assumption buys, why lasso zeroes coefficients and ridge does not — is a consequence of that one picture.
+<strong>TL;DR:</strong> Least squares does not "find the best line" by searching. It projects the observation vector \(y \in \mathbb{R}^{n}\) orthogonally onto \(\operatorname{col}(X)\), the subspace spanned by the columns of the design matrix. The defining property is that the residual \(r = y - X\beta\) is orthogonal to every column of \(X\); writing that down as \(X^{\top} r = 0\) <em>is</em> the normal equations. Everything else, why \(X^{\top}X\) can be singular, why you factorise instead of invert, what the Gaussian noise assumption buys, why lasso zeroes coefficients and ridge does not, is a consequence of that one picture.
 </div>
 
 ## The model, and a concrete example first
@@ -42,7 +42,7 @@ y = \begin{pmatrix} 1 \\ 3 \\ 4 \\ 6 \end{pmatrix},
 \]
 </div>
 
-This is the whole model class. In general $$X$$ is $$n \times p$$: $$n$$ observations down the rows, $$p$$ features across the columns, and $$\beta \in \mathbb{R}^{p}$$. "Linear" refers to linearity in $$\beta$$, not in the inputs — a column containing $$x^{2}$$ or $$\log x$$ or $$\sin x$$ is entirely allowed, and the model is still linear regression. What is *not* allowed is a parameter inside a nonlinearity, such as $$\beta_0 e^{\beta_1 x}$$.
+This is the whole model class. In general $$X$$ is $$n \times p$$: $$n$$ observations down the rows, $$p$$ features across the columns, and $$\beta \in \mathbb{R}^{p}$$. "Linear" refers to linearity in $$\beta$$, not in the inputs, a column containing $$x^{2}$$ or $$\log x$$ or $$\sin x$$ is entirely allowed, and the model is still linear regression. What is *not* allowed is a parameter inside a nonlinearity, such as $$\beta_0 e^{\beta_1 x}$$.
 
 There is no $$\beta$$ that satisfies all four equations exactly. Four equations, two unknowns. The system $$X\beta = y$$ is *overdetermined* and, for this data, inconsistent. So we ask for the next best thing.
 
@@ -58,7 +58,7 @@ X\beta \;=\; \beta_0 \begin{pmatrix} 1 \\ 1 \\ 1 \\ 1 \end{pmatrix} \;+\; \beta_
 \]
 </div>
 
-As $$\beta$$ ranges over all of $$\mathbb{R}^{2}$$, the vector $$X\beta$$ sweeps out exactly the set of linear combinations of those two columns — a two-dimensional plane through the origin inside $$\mathbb{R}^{4}$$. That plane is the **column space** $$\operatorname{col}(X)$$. It is the set of all outputs the model is capable of producing, and it does not depend on the data $$y$$ at all; it is a property of the features alone.
+As $$\beta$$ ranges over all of $$\mathbb{R}^{2}$$, the vector $$X\beta$$ sweeps out exactly the set of linear combinations of those two columns, a two-dimensional plane through the origin inside $$\mathbb{R}^{4}$$. That plane is the **column space** $$\operatorname{col}(X)$$. It is the set of all outputs the model is capable of producing, and it does not depend on the data $$y$$ at all; it is a property of the features alone.
 
 Our observation vector $$y$$ lives in $$\mathbb{R}^{4}$$ and is not in that plane. Least squares asks: *which point of the plane is closest to $$y$$?*
 
@@ -111,14 +111,14 @@ Our observation vector $$y$$ lives in $$\mathbb{R}^{4}$$ and is not in that plan
   <text x="40" y="60" font-size="14" fill="#334155">The closest such point is the foot of the perpendicular from y.</text>
   <text x="40" y="352" font-size="13" fill="#4b5563" font-style="italic">Any other point of the plane is further from y, by Pythagoras on the right triangle.</text>
 </svg>
-<figcaption>Least squares in \(\mathbb{R}^{n}\). The plane is \(\operatorname{col}(X)\), spanned by the columns of the design matrix. The fitted vector \(X\beta\) is the orthogonal projection of \(y\) onto it, and the residual \(r\) is perpendicular to the whole plane — not merely short, but at right angles to every direction the model can move in.</figcaption>
+<figcaption>Least squares in \(\mathbb{R}^{n}\). The plane is \(\operatorname{col}(X)\), spanned by the columns of the design matrix. The fitted vector \(X\beta\) is the orthogonal projection of \(y\) onto it, and the residual \(r\) is perpendicular to the whole plane, not merely short, but at right angles to every direction the model can move in.</figcaption>
 </div>
 
 The closest point of a plane to an external point is the **foot of the perpendicular**. That is not a fact about statistics; it is a fact about Euclidean geometry, and it is the entire content of least squares. So:
 
 > The least-squares fit $$X\beta$$ is the orthogonal projection of $$y$$ onto $$\operatorname{col}(X)$$, and the residual $$r = y - X\beta$$ is orthogonal to that subspace.
 
-Why "closest" means "perpendicular": take any other point $$X\gamma$$ in the plane. Then $$y - X\gamma = r + (X\beta - X\gamma)$$, and those two pieces are orthogonal — $$r$$ is perpendicular to the plane and $$X\beta - X\gamma$$ lies in it. Pythagoras gives
+Why "closest" means "perpendicular": take any other point $$X\gamma$$ in the plane. Then $$y - X\gamma = r + (X\beta - X\gamma)$$, and those two pieces are orthogonal, $$r$$ is perpendicular to the plane and $$X\beta - X\gamma$$ lies in it. Pythagoras gives
 
 <div class="formula-box">
 \[
@@ -130,7 +130,7 @@ with equality only when $$X\gamma = X\beta$$. The minimiser is unique *as a fitt
 
 ## The normal equations are just "the residual is orthogonal"
 
-"Orthogonal to the plane" means orthogonal to each spanning vector — that is, to each column of $$X$$. Stacking those $$p$$ inner products into one vector:
+"Orthogonal to the plane" means orthogonal to each spanning vector, that is, to each column of $$X$$. Stacking those $$p$$ inner products into one vector:
 
 <div class="formula-box">
 \[
@@ -142,7 +142,7 @@ X^{\top}X\,\beta = X^{\top}y .
 \]
 </div>
 
-Those are the **normal equations**, and now their shape is not mysterious. The $$X^{\top}$$ out front is not algebraic decoration — it is the operator that measures a vector against each column of $$X$$, and setting the result to zero is the orthogonality condition. The word *normal* here means *perpendicular*, which is exactly what the picture shows.
+Those are the **normal equations**, and now their shape is not mysterious. The $$X^{\top}$$ out front is not algebraic decoration, it is the operator that measures a vector against each column of $$X$$, and setting the result to zero is the orthogonality condition. The word *normal* here means *perpendicular*, which is exactly what the picture shows.
 
 If $$X^{\top}X$$ is invertible we may write
 
@@ -154,7 +154,7 @@ If $$X^{\top}X$$ is invertible we may write
 \]
 </div>
 
-The matrix $$H$$ is the projection matrix onto $$\operatorname{col}(X)$$, usually called the **hat matrix** because it puts the hat on $$y$$. It satisfies $$H^{2} = H$$ (projecting twice is projecting once) and $$H^{\top} = H$$, which are the algebraic signatures of an orthogonal projection. Its trace equals $$p$$, the dimension of the subspace, and its diagonal entries $$h_{ii}$$ are the **leverages** — how much observation $$i$$ can pull its own fitted value.
+The matrix $$H$$ is the projection matrix onto $$\operatorname{col}(X)$$, usually called the **hat matrix** because it puts the hat on $$y$$. It satisfies $$H^{2} = H$$ (projecting twice is projecting once) and $$H^{\top} = H$$, which are the algebraic signatures of an orthogonal projection. Its trace equals $$p$$, the dimension of the subspace, and its diagonal entries $$h_{ii}$$ are the **leverages**, how much observation $$i$$ can pull its own fitted value.
 
 You can also arrive at the same equations by calculus: minimise $$S(\beta) = \lVert y - X\beta \rVert^{2}$$, differentiate, set $$\nabla S = -2X^{\top}(y - X\beta) = 0$$. It gives the identical answer with none of the insight.
 
@@ -217,23 +217,23 @@ The leverages illustrate a related point: they sum to $$0.7 + 0.3 + 0.3 + 0.7 = 
 
 ## When $$X^{\top}X$$ is singular
 
-The formula $$\beta = (X^{\top}X)^{-1}X^{\top}y$$ requires $$X^{\top}X$$ to be invertible, and it is invertible exactly when $$X$$ has **full column rank** — when the columns are linearly independent. Two common ways that fails:
+The formula $$\beta = (X^{\top}X)^{-1}X^{\top}y$$ requires $$X^{\top}X$$ to be invertible, and it is invertible exactly when $$X$$ has **full column rank**, when the columns are linearly independent. Two common ways that fails:
 
-**Exact collinearity.** Suppose someone adds a third feature that is twice the first, giving columns $$\mathbf{1}$$, $$x$$, $$2x$$. The rank is still 2, $$\det(X^{\top}X) = 0$$, and the inverse does not exist. Note carefully *what* fails: the projection $$\hat{y}$$ is still perfectly well defined — the column space is unchanged, so the closest point in it is unchanged, and the fitted values are still $$(1.1, 2.7, 4.3, 5.9)$$. What is lost is the *uniqueness of the coefficients*. Any $$(\beta_1, \beta_2)$$ with $$\beta_1 + 2\beta_2 = 1.6$$ gives the identical fit. The minimum-norm choice, which is what the pseudoinverse returns, is $$\beta = (1.1,\ 0.32,\ 0.64)$$; the choice $$(1.1,\ 1.6,\ 0)$$ fits exactly as well.
+**Exact collinearity.** Suppose someone adds a third feature that is twice the first, giving columns $$\mathbf{1}$$, $$x$$, $$2x$$. The rank is still 2, $$\det(X^{\top}X) = 0$$, and the inverse does not exist. Note carefully *what* fails: the projection $$\hat{y}$$ is still perfectly well defined, the column space is unchanged, so the closest point in it is unchanged, and the fitted values are still $$(1.1, 2.7, 4.3, 5.9)$$. What is lost is the *uniqueness of the coefficients*. Any $$(\beta_1, \beta_2)$$ with $$\beta_1 + 2\beta_2 = 1.6$$ gives the identical fit. The minimum-norm choice, which is what the pseudoinverse returns, is $$\beta = (1.1,\ 0.32,\ 0.64)$$; the choice $$(1.1,\ 1.6,\ 0)$$ fits exactly as well.
 
 **More features than observations.** If $$p > n$$ the columns cannot be independent, so $$X^{\top}X$$ is singular for structural reasons. There are then infinitely many coefficient vectors achieving zero training error, and least squares alone has no opinion about which to pick.
 
 <div class="warning-box">
-<strong>Near-singular is the practical danger, not exactly singular.</strong> An exactly singular \(X^{\top}X\) makes the inverse fail outright, which is a gift — you notice. Two features that are 0.999 correlated give a matrix that is technically invertible, so nothing complains, and you get enormous coefficients of opposite sign that cancel, standard errors that explode, and a fit that swings wildly if you add one observation. The projection \(\hat{y}\) is stable; the coefficients are not. If you care about the coefficients rather than the predictions, this is the failure mode to watch for.
+<strong>Near-singular is the practical danger, not exactly singular.</strong> An exactly singular \(X^{\top}X\) makes the inverse fail outright, which is a gift, you notice. Two features that are 0.999 correlated give a matrix that is technically invertible, so nothing complains, and you get enormous coefficients of opposite sign that cancel, standard errors that explode, and a fit that swings wildly if you add one observation. The projection \(\hat{y}\) is stable; the coefficients are not. If you care about the coefficients rather than the predictions, this is the failure mode to watch for.
 </div>
 
 ## Why nobody solves it by inverting
 
 You will see $$(X^{\top}X)^{-1}X^{\top}y$$ written in every textbook and implemented that way in almost no serious library. Two reasons.
 
-**Forming $$X^{\top}X$$ squares the conditioning.** The condition number $$\kappa(X)$$ measures how much a relative perturbation of the input can be amplified in the output. Because the singular values of $$X^{\top}X$$ are the squares of those of $$X$$, we get $$\kappa(X^{\top}X) = \kappa(X)^{2}$$. In our toy example the singular values of $$X$$ are $$\sqrt{9 + \sqrt{61}} \approx 4.100$$ and $$\sqrt{9 - \sqrt{61}} \approx 1.091$$, so $$\kappa(X) \approx 3.76$$ and $$\kappa(X^{\top}X) \approx 14.1$$ — harmless here. But squaring a condition number of $$10^{7}$$ gives $$10^{14}$$, and double precision carries roughly $$10^{16}$$. Forming the normal equations can throw away half your significant digits before the solve even starts.
+**Forming $$X^{\top}X$$ squares the conditioning.** The condition number $$\kappa(X)$$ measures how much a relative perturbation of the input can be amplified in the output. Because the singular values of $$X^{\top}X$$ are the squares of those of $$X$$, we get $$\kappa(X^{\top}X) = \kappa(X)^{2}$$. In our toy example the singular values of $$X$$ are $$\sqrt{9 + \sqrt{61}} \approx 4.100$$ and $$\sqrt{9 - \sqrt{61}} \approx 1.091$$, so $$\kappa(X) \approx 3.76$$ and $$\kappa(X^{\top}X) \approx 14.1$$, harmless here. But squaring a condition number of $$10^{7}$$ gives $$10^{14}$$, and double precision carries roughly $$10^{16}$$. Forming the normal equations can throw away half your significant digits before the solve even starts.
 
-Concretely: take a design whose condition number is about $$1.7 \times 10^{7}$$, so that $$\kappa(X^{\top}X) \approx 3 \times 10^{14}$$, and a $$y$$ constructed so that the exact answer is $$\beta = (1, 2, 3)$$. Solving the normal equations in double precision returns roughly $$(0.933,\ 2.044,\ 3.022)$$ — a 2% relative error. A QR-based solve on the same data returns $$(1, 2, 3)$$ to machine precision. Same problem, same arithmetic, different route.
+Concretely: take a design whose condition number is about $$1.7 \times 10^{7}$$, so that $$\kappa(X^{\top}X) \approx 3 \times 10^{14}$$, and a $$y$$ constructed so that the exact answer is $$\beta = (1, 2, 3)$$. Solving the normal equations in double precision returns roughly $$(0.933,\ 2.044,\ 3.022)$$, a 2% relative error. A QR-based solve on the same data returns $$(1, 2, 3)$$ to machine precision. Same problem, same arithmetic, different route.
 
 **QR: factorise, don't invert.** Write $$X = QR$$ with $$Q$$ having orthonormal columns and $$R$$ upper triangular. Then $$X^{\top}X = R^{\top}Q^{\top}QR = R^{\top}R$$, the normal equations collapse to $$R\beta = Q^{\top}y$$, and that is solved by back-substitution. $$X^{\top}X$$ is never formed. For our example, Gram–Schmidt on the two columns gives (up to sign)
 
@@ -251,7 +251,7 @@ Back-substitution: $$\sqrt{5}\,\beta_1 = 8/\sqrt{5}$$ gives $$\beta_1 = 8/5 = 1.
 
 ## The probabilistic reading
 
-So far there has been no probability at all — just geometry. The statistical interpretation is a second story laid on top, and it is worth being precise about what it adds.
+So far there has been no probability at all, just geometry. The statistical interpretation is a second story laid on top, and it is worth being precise about what it adds.
 
 Assume the data were generated as $$y_i = x_i^{\top}\beta + \varepsilon_i$$ with $$\varepsilon_i$$ independent and $$\varepsilon_i \sim \mathcal{N}(0, \sigma^{2})$$. Then the log-likelihood is
 
@@ -266,7 +266,7 @@ Only the last term involves $$\beta$$, and it is $$-\lVert y - X\beta \rVert^{2}
 What this buys you:
 
 - **Standard errors and intervals.** Under the assumptions, $$\operatorname{Var}(\beta) = \sigma^{2}(X^{\top}X)^{-1}$$, which is where confidence intervals and $$t$$-tests come from. Without a noise model you have a fit and no notion of its uncertainty.
-- **An optimality claim.** The Gauss–Markov theorem says that if the errors have zero mean, constant variance, and are uncorrelated, least squares has the smallest variance among all *linear unbiased* estimators. Note it needs neither normality nor independence, only uncorrelatedness — normality is required for the exact distributional results, not for this.
+- **An optimality claim.** The Gauss–Markov theorem says that if the errors have zero mean, constant variance, and are uncorrelated, least squares has the smallest variance among all *linear unbiased* estimators. Note it needs neither normality nor independence, only uncorrelatedness, normality is required for the exact distributional results, not for this.
 
 What it costs you:
 
@@ -275,12 +275,12 @@ What it costs you:
 - **"Linear unbiased" is a narrow class.** Gauss–Markov does not say least squares is the best estimator. Ridge regression is biased, and is frequently better in mean squared error. Optimality within a restricted class is a weaker statement than it sounds.
 
 <div class="insight-box">
-<strong>The geometry does not need the probability.</strong> The projection argument is true whatever generated the data — no noise model, no independence, no distribution. The Gaussian story is what licenses the <em>inferential</em> statements (this coefficient is significant, that interval covers the truth 95% of the time). Keeping the two separate saves confusion: a violated assumption invalidates the inference, not the fit.
+<strong>The geometry does not need the probability.</strong> The projection argument is true whatever generated the data, no noise model, no independence, no distribution. The Gaussian story is what licenses the <em>inferential</em> statements (this coefficient is significant, that interval covers the truth 95% of the time). Keeping the two separate saves confusion: a violated assumption invalidates the inference, not the fit.
 </div>
 
 ## Ridge and lasso
 
-Both failure modes above — near-collinearity, and $$p > n$$ — have the same shape: the least-squares criterion does not pin down $$\beta$$ tightly enough. The fix is to add a term that expresses a preference among the candidates.
+Both failure modes above, near-collinearity, and $$p > n$$, have the same shape: the least-squares criterion does not pin down $$\beta$$ tightly enough. The fix is to add a term that expresses a preference among the candidates.
 
 <div class="formula-box">
 \[
@@ -298,9 +298,9 @@ Ridge has a closed form, and it is instructive:
 \]
 </div>
 
-Adding $$\lambda I$$ lifts every eigenvalue of $$X^{\top}X$$ by $$\lambda$$, so for any $$\lambda > 0$$ the matrix is invertible — even when $$X^{\top}X$$ is not, even when $$p > n$$. Ridge does not merely improve conditioning; it *restores existence and uniqueness*.
+Adding $$\lambda I$$ lifts every eigenvalue of $$X^{\top}X$$ by $$\lambda$$, so for any $$\lambda > 0$$ the matrix is invertible, even when $$X^{\top}X$$ is not, even when $$p > n$$. Ridge does not merely improve conditioning; it *restores existence and uniqueness*.
 
-On our four points (centring first, so the intercept is not penalised — the usual convention, since shrinking an intercept means shrinking towards an arbitrary origin), we have $$S_{xx} = 5$$ and $$S_{xy} = 8$$, so the ridge slope is $$8/(5 + \lambda)$$:
+On our four points (centring first, so the intercept is not penalised, the usual convention, since shrinking an intercept means shrinking towards an arbitrary origin), we have $$S_{xx} = 5$$ and $$S_{xy} = 8$$, so the ridge slope is $$8/(5 + \lambda)$$:
 
 | $$\lambda$$ | 0 | 1 | 5 |
 |---|---|---|---|
@@ -319,7 +319,7 @@ Lasso does. With a single centred predictor the lasso solution is a **soft thres
 
 (The $$\lambda/2$$ rather than $$\lambda$$ is because the objective above has no $$\tfrac{1}{2}$$ in front of the squared-error term; differentiating $$S_{xx}\beta^{2} - 2S_{xy}\beta + \lambda\lvert \beta \rvert$$ for $$\beta > 0$$ gives $$2S_{xx}\beta - 2S_{xy} + \lambda = 0$$. Conventions differ, and the constant follows whichever you pick.)
 
-With $$S_{xy} = 8$$ and $$S_{xx} = 5$$: at $$\lambda = 0$$ the slope is $$1.6$$; at $$\lambda = 6$$ it is exactly $$1.0$$; at $$\lambda = 16$$ it is exactly $$0$$, and stays zero for every larger $$\lambda$$. Not small — zero.
+With $$S_{xy} = 8$$ and $$S_{xx} = 5$$: at $$\lambda = 0$$ the slope is $$1.6$$; at $$\lambda = 6$$ it is exactly $$1.0$$; at $$\lambda = 16$$ it is exactly $$0$$, and stays zero for every larger $$\lambda$$. Not small, zero.
 
 **The geometric reason for sparsity.** Both penalties can be read as constrained problems: minimise $$\lVert y - X\beta \rVert^{2}$$ subject to $$\beta$$ lying inside a ball. For ridge that ball is round ($$\ell_2$$); for lasso it is a diamond ($$\ell_1$$), with corners on the axes. The contours of the squared-error objective are ellipses centred on the unconstrained least-squares solution, and the constrained optimum is where the growing ellipse first touches the ball.
 
@@ -335,16 +335,16 @@ A round ball has no distinguished points, so the touch happens at a generic boun
 
 Neither is universally better. Ridge is the right default when you believe many features contribute a little; lasso when you believe few contribute at all. Elastic net, which sums both penalties, exists because the "pick one arbitrarily" behaviour of lasso on correlated groups is often unwanted.
 
-Note also that $$\lambda$$ is not estimated by the fitting procedure — it is chosen from outside, typically by cross-validation. That is a real cost: regularisation converts a closed-form problem into one with a hyperparameter to tune.
+Note also that $$\lambda$$ is not estimated by the fitting procedure, it is chosen from outside, typically by cross-validation. That is a real cost: regularisation converts a closed-form problem into one with a hyperparameter to tune.
 
 ## What linear regression genuinely cannot do
 
 <div class="warning-box">
 <ul>
-<li><strong>It cannot discover a nonlinear relationship.</strong> It can <em>fit</em> one, if you hand it the right columns — \(x^{2}\), \(\log x\), an interaction \(x_1 x_2\). But it will not find them for you. The feature engineering is the modelling, and least squares is only the last step.</li>
+<li><strong>It cannot discover a nonlinear relationship.</strong> It can <em>fit</em> one, if you hand it the right columns, \(x^{2}\), \(\log x\), an interaction \(x_1 x_2\). But it will not find them for you. The feature engineering is the modelling, and least squares is only the last step.</li>
 <li><strong>It cannot establish causation.</strong> A coefficient is a conditional association given the other columns in the model. Add or remove a column and it changes, sometimes in sign (Simpson's paradox). Nothing in the projection has any notion of intervention.</li>
 <li><strong>It cannot extrapolate safely.</strong> The fit is a projection onto the space spanned by the features <em>as observed</em>. Outside that range the linearity assumption is untested, and the model will still return a confident number.</li>
-<li><strong>It cannot resist outliers.</strong> Squared loss is unbounded, so a single extreme point — especially a high-leverage one, which in our example means one at the ends of the \(x\) range — can dominate the fit.</li>
+<li><strong>It cannot resist outliers.</strong> Squared loss is unbounded, so a single extreme point, especially a high-leverage one, which in our example means one at the ends of the \(x\) range, can dominate the fit.</li>
 <li><strong>It cannot identify coefficients under collinearity.</strong> As shown above, the prediction survives; the interpretation does not. Reading individual coefficients off a collinear design is the most common way this model is misused.</li>
 <li><strong>It cannot represent interactions or thresholds implicitly.</strong> Any structure not present as a column is invisible to it. This is precisely the gap that trees and neural networks close, at the cost of the transparency that makes linear regression worth teaching first.</li>
 </ul>
@@ -356,7 +356,7 @@ The last point is why this model remains the baseline everything is measured aga
 <h3>✅ Key Takeaways</h3>
 <ul>
 <li>\(X\beta\) is a linear combination of the columns of \(X\); the reachable set is the plane \(\operatorname{col}(X)\), and least squares is the orthogonal projection of \(y\) onto it.</li>
-<li>The normal equations \(X^{\top}X\beta = X^{\top}y\) are the statement \(X^{\top}(y - X\beta) = 0\) — the residual is perpendicular to every column. That is where their form comes from.</li>
+<li>The normal equations \(X^{\top}X\beta = X^{\top}y\) are the statement \(X^{\top}(y - X\beta) = 0\), the residual is perpendicular to every column. That is where their form comes from.</li>
 <li>In the worked example \(\beta = (1.1,\ 1.6)\), the residuals are \((-0.1,\ 0.3,\ -0.3,\ 0.1)\), and both \(\mathbf{1}^{\top}r\) and \(x^{\top}r\) are exactly zero.</li>
 <li>The fitted vector \(\hat{y}\) is always unique; the coefficients \(\beta\) are unique only when \(X\) has full column rank. Collinearity destroys the coefficients, not the prediction.</li>
 <li>Never form \((X^{\top}X)^{-1}\). \(\kappa(X^{\top}X) = \kappa(X)^{2}\), so the normal equations can cost half your precision. Use QR by default and SVD when the rank is in doubt.</li>

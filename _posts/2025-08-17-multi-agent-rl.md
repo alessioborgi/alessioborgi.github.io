@@ -33,14 +33,14 @@ toc_label: "Contents"
 
 ## Intuition First: Why Single-Agent RL Breaks in Multi-Agent Settings
 
-In single-agent RL, the environment is stationary: the same action in the same state always produces the same distribution of outcomes. In a multi-agent game, Agent A's "environment" includes Agent B — but Agent B is also learning and changing. From A's perspective, the world is non-stationary: what worked yesterday against B's old policy may fail today against B's improved policy. This violates the fundamental Markov assumption. The field's solutions — centralised critics, factored value functions, self-play leagues — are all attempts to manage this non-stationarity.
+In single-agent RL, the environment is stationary: the same action in the same state always produces the same distribution of outcomes. In a multi-agent game, Agent A's "environment" includes Agent B, but Agent B is also learning and changing. From A's perspective, the world is non-stationary: what worked yesterday against B's old policy may fail today against B's improved policy. This violates the fundamental Markov assumption. The field's solutions, centralised critics, factored value functions, self-play leagues, are all attempts to manage this non-stationarity.
 
 ## The Multi-Agent Setting
 
 In a multi-agent environment, $$N$$ agents simultaneously take actions $$a^1, \ldots, a^N$$ in a shared state $$s$$, receiving rewards $$r^1, \ldots, r^N$$. Depending on the reward structure:
 
-- **Cooperative**: all agents share a common reward — maximise team performance.
-- **Competitive (zero-sum)**: one agent's gain is another's loss — find a Nash equilibrium.
+- **Cooperative**: all agents share a common reward, maximise team performance.
+- **Competitive (zero-sum)**: one agent's gain is another's loss, find a Nash equilibrium.
 - **Mixed**: agents cooperate partially and compete partially (e.g., team sports).
 
 The Markov Game framework (Littman 1994) generalises MDPs to multiple agents:
@@ -53,7 +53,7 @@ where $$T(s' \mid s, a^1, \ldots, a^N)$$ is the joint transition and each $$R^i$
 
 The central challenge in MARL is **non-stationarity**: from agent $$i$$'s perspective, the environment is non-Markovian because other agents' policies are changing during training. Standard convergence guarantees for single-agent RL do not apply.
 
-<div class="insight-box"><strong>Key Insight:</strong> Non-stationarity is unavoidable in MARL — each agent is simultaneously trying to learn while the environment (other agents) keeps changing. This invalidates the stationary MDP assumption and requires either joint learning (centralised) or robust decentralised methods that are aware of the non-stationarity.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Non-stationarity is unavoidable in MARL, each agent is simultaneously trying to learn while the environment (other agents) keeps changing. This invalidates the stationary MDP assumption and requires either joint learning (centralised) or robust decentralised methods that are aware of the non-stationarity.</div>
 
 ## Centralised Training with Decentralised Execution (CTDE)
 
@@ -68,8 +68,8 @@ CTDE methods train a centralised critic that uses global information, while each
 
 MADDPG (Lowe et al. 2017) extends DDPG to the multi-agent setting under CTDE. Each agent $$i$$ has:
 
-- A decentralised actor $$\pi_i(a^i \mid o^i)$$ — conditioned only on agent $$i$$'s local observation.
-- A centralised critic $$Q_i(o^1,...,o^N, a^1,...,a^N)$$ — takes all observations and actions.
+- A decentralised actor $$\pi_i(a^i \mid o^i)$$, conditioned only on agent $$i$$'s local observation.
+- A centralised critic $$Q_i(o^1,...,o^N, a^1,...,a^N)$$, takes all observations and actions.
 
 <div class="math-box">L(φ_i) = E [ (Q_i(o,a) - (r^i + γ Q_i'(o',a'_1,...,a'_N)))² ]</div>
 
@@ -85,7 +85,7 @@ The mixing network has positive weights (enforced by absolute value activations)
 
 <div class="math-box">argmax_{a} Q_tot = (argmax_{a^1} Q_1, ..., argmax_{a^N} Q_N)</div>
 
-This factorisation means each agent can greedily maximise its individual utility and the result is globally optimal — dramatically simplifying decentralised execution.
+This factorisation means each agent can greedily maximise its individual utility and the result is globally optimal, dramatically simplifying decentralised execution.
 
 ## CTDE Visualised
 
@@ -126,7 +126,7 @@ This factorisation means each agent can greedily maximise its individual utility
   <text x="330" y="65" text-anchor="middle" font-size="9" fill="#ca8a04">No centralised critic</text>
   <text x="330" y="80" text-anchor="middle" font-size="9" fill="#ca8a04">local obs only ✓</text>
 </svg>
-<figcaption>CTDE: during training, a centralised critic has access to all agents' observations and actions. During execution, each agent acts using only its own local observation — enabling deployment in real distributed systems.</figcaption>
+<figcaption>CTDE: during training, a centralised critic has access to all agents' observations and actions. During execution, each agent acts using only its own local observation, enabling deployment in real distributed systems.</figcaption>
 </figure></div>
 
 ## Nash Equilibria in Competitive Settings

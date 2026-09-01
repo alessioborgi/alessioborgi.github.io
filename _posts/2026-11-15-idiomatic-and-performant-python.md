@@ -6,7 +6,7 @@ categories: [python-primer]
 book: python-primer
 subsection: practice
 tags: [idiomatic, performance, profiling, numpy]
-excerpt: "Pythonic code and fast code are usually the same code — iterating over objects instead of indices is both clearer and quicker — but the two goals diverge exactly at the point where people start guessing instead of profiling."
+excerpt: "Pythonic code and fast code are usually the same code, iterating over objects instead of indices is both clearer and quicker, but the two goals diverge exactly at the point where people start guessing instead of profiling."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> "Pythonic" means working with the language's iteration protocol directly — <code>for item in seq</code>, <code>enumerate</code>, <code>zip</code>, unpacking — rather than simulating C-style index loops. It usually happens to be the fast version too, because it avoids repeated indexing overhead. Beyond that, the real performance model is: every interpreted operation carries overhead a compiled one does not, string concatenation in a loop is quadratic, local variable lookup beats global, and vectorised NumPy replaces a Python-level loop with a C-level one. None of this is worth guessing about — profile with <code>timeit</code> or <code>cProfile</code> first, and only then change the code.
+  <strong>TL;DR:</strong> "Pythonic" means working with the language's iteration protocol directly, <code>for item in seq</code>, <code>enumerate</code>, <code>zip</code>, unpacking, rather than simulating C-style index loops. It usually happens to be the fast version too, because it avoids repeated indexing overhead. Beyond that, the real performance model is: every interpreted operation carries overhead a compiled one does not, string concatenation in a loop is quadratic, local variable lookup beats global, and vectorised NumPy replaces a Python-level loop with a C-level one. None of this is worth guessing about, profile with <code>timeit</code> or <code>cProfile</code> first, and only then change the code.
 </div>
 
 ## Iterate over the thing, not its indices
@@ -26,11 +26,11 @@ toc_label: "Contents"
 ```python
 names = ["ada", "grace", "alan"]
 
-# not idiomatic — simulates a C loop
+# not idiomatic, simulates a C loop
 for i in range(len(names)):
     print(i, names[i].title())
 
-# idiomatic — the loop variable is the useful thing itself
+# idiomatic, the loop variable is the useful thing itself
 for i, name in enumerate(names):
     print(i, name.title())
 ```
@@ -70,7 +70,7 @@ items = []
 if len(items) == 0:      # works, but says more than necessary
     print("empty")
 
-if not items:             # idiomatic — an empty container is already falsy
+if not items:             # idiomatic, an empty container is already falsy
     print("empty")
 ```
 
@@ -78,7 +78,7 @@ if not items:             # idiomatic — an empty container is already falsy
 
 ## The performance model: why loops are slow
 
-A CPython `for` loop executes bytecode one instruction at a time, and each `BINARY_OP` re-checks the runtime types of its operands before deciding what `+` even means for them — there is no compile-time specialisation the way there is in C. That per-iteration overhead is fixed regardless of what the loop body computes, which is why the fix for a slow loop is usually to run fewer, larger operations rather than to hand-optimise the loop body.
+A CPython `for` loop executes bytecode one instruction at a time, and each `BINARY_OP` re-checks the runtime types of its operands before deciding what `+` even means for them, there is no compile-time specialisation the way there is in C. That per-iteration overhead is fixed regardless of what the loop body computes, which is why the fix for a slow loop is usually to run fewer, larger operations rather than to hand-optimise the loop body.
 
 ```python
 # quadratic: each += allocates a new, longer string and copies the old one in
@@ -90,7 +90,7 @@ for word in ["a"] * 10_000:
 result = " ".join(["a"] * 10_000)
 ```
 
-`str` is immutable, so `result += word` does not extend the existing string — it builds an entirely new one and copies everything before it, every single time. Over $$n$$ iterations that is $$O(n^2)$$ total copying. `str.join` computes the final length once and allocates once.
+`str` is immutable, so `result += word` does not extend the existing string, it builds an entirely new one and copies everything before it, every single time. Over $$n$$ iterations that is $$O(n^2)$$ total copying. `str.join` computes the final length once and allocates once.
 
 ```python
 import time
@@ -111,7 +111,7 @@ def global_lookup():
     return total
 ```
 
-`local_lookup` is reliably faster than `global_lookup` on CPython — a local variable is a slot in an array indexed by position, resolved at compile time; a global is a dictionary lookup by name, resolved every time the line runs. This is also why a tight loop inside a function is faster than the same loop at module level, and why `def f(x, n=len)` binding a global as a default argument is a real, if minor, optimisation you will see in hot code.
+`local_lookup` is reliably faster than `global_lookup` on CPython, a local variable is a slot in an array indexed by position, resolved at compile time; a global is a dictionary lookup by name, resolved every time the line runs. This is also why a tight loop inside a function is faster than the same loop at module level, and why `def f(x, n=len)` binding a global as a default argument is a real, if minor, optimisation you will see in hot code.
 
 ## When NumPy replaces the loop entirely
 
@@ -125,7 +125,7 @@ arr = np.arange(1_000_000)
 arr2 = arr * 2 + 1                  # one C-level loop over contiguous memory, no per-element bytecode
 ```
 
-The list comprehension is still a Python loop — faster than the explicit `for` form because the append is implicit and the loop body is one bytecode-level construct, but it still pays per-element interpreter overhead. `arr * 2 + 1` does the entire operation inside NumPy's C implementation over a contiguous block of memory, with no per-element Python bytecode at all. The rule of thumb: once you are doing uniform numeric work over more than a few thousand elements, express it as array operations rather than a Python loop, and let NumPy own the loop.
+The list comprehension is still a Python loop, faster than the explicit `for` form because the append is implicit and the loop body is one bytecode-level construct, but it still pays per-element interpreter overhead. `arr * 2 + 1` does the entire operation inside NumPy's C implementation over a contiguous block of memory, with no per-element Python bytecode at all. The rule of thumb: once you are doing uniform numeric work over more than a few thousand elements, express it as array operations rather than a Python loop, and let NumPy own the loop.
 
 ## Profile before you optimise
 
@@ -143,14 +143,14 @@ print(t1, t2)   # -> two float seconds; compare them, don't guess which is faste
 $ python -m cProfile -s cumulative slow_script.py
 ```
 
-That prints every function called, how many times, and how much time it and its callees consumed — usually pointing at one function responsible for most of the runtime, which is where effort belongs. Optimising a function that consumes 2% of total runtime, however cleverly, cannot move the total by more than 2%.
+That prints every function called, how many times, and how much time it and its callees consumed, usually pointing at one function responsible for most of the runtime, which is where effort belongs. Optimising a function that consumes 2% of total runtime, however cleverly, cannot move the total by more than 2%.
 
 <div class="warning-box">
-  <strong>Classic trap — optimising without profiling.</strong> Intuition about which line is "the slow part" is wrong more often than it is right, because interpreter overhead, memory allocation patterns, and cache behaviour do not match how the code reads. A rewritten "optimisation" that turns out to change nothing, or makes things worse, is the single most common outcome of skipping <code>cProfile</code>. Measure first; the 20 minutes it costs is cheaper than debugging a "faster" version that is not.
+  <strong>Classic trap, optimising without profiling.</strong> Intuition about which line is "the slow part" is wrong more often than it is right, because interpreter overhead, memory allocation patterns, and cache behaviour do not match how the code reads. A rewritten "optimisation" that turns out to change nothing, or makes things worse, is the single most common outcome of skipping <code>cProfile</code>. Measure first; the 20 minutes it costs is cheaper than debugging a "faster" version that is not.
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — idiomatic and fast converge because both avoid fighting the interpreter.</strong> <code>enumerate</code>, <code>zip</code>, and unpacking are fast for the same reason they are readable: they use C-implemented iteration machinery instead of a Python-level index-and-lookup on every pass. The two goals only pull apart at the point where correctness-preserving idiom (a comprehension, a generator) is not enough and the real fix is to leave Python's per-element loop entirely, which is what NumPy is for.
+  <strong>Key Insight, idiomatic and fast converge because both avoid fighting the interpreter.</strong> <code>enumerate</code>, <code>zip</code>, and unpacking are fast for the same reason they are readable: they use C-implemented iteration machinery instead of a Python-level index-and-lookup on every pass. The two goals only pull apart at the point where correctness-preserving idiom (a comprehension, a generator) is not enough and the real fix is to leave Python's per-element loop entirely, which is what NumPy is for.
 </div>
 
 ## Common mistakes and their fixes
@@ -172,18 +172,18 @@ def add_item(item, basket=[]):   # the list literal runs once, not per call
     return basket
 
 print(add_item("apple"))   # -> ['apple']
-print(add_item("bread"))   # -> ['apple', 'bread']   — the SAME list, carried over
+print(add_item("bread"))   # -> ['apple', 'bread'], the SAME list, carried over
 ```
 
-The second call did not start from an empty basket — it kept appending to the list created when `add_item` was defined. The fix in the table (`None` as the sentinel, a fresh list built inside the function) is the standard idiom, and it applies to any mutable default: lists, dicts, sets, and custom mutable objects alike.
+The second call did not start from an empty basket, it kept appending to the list created when `add_item` was defined. The fix in the table (`None` as the sentinel, a fresh list built inside the function) is the standard idiom, and it applies to any mutable default: lists, dicts, sets, and custom mutable objects alike.
 
 <div class="key-takeaways">
   <h3>Recap</h3>
   <ul>
     <li>Iterate over objects, not indices: <code>for x in xs</code>, <code>enumerate</code>, <code>zip</code>, and unpacking replace manual index bookkeeping and are faster for the same reason they read better.</li>
-    <li>Empty containers, <code>0</code>, and <code>None</code> are falsy — write <code>if not xs:</code> rather than <code>if len(xs) == 0:</code>.</li>
+    <li>Empty containers, <code>0</code>, and <code>None</code> are falsy, write <code>if not xs:</code> rather than <code>if len(xs) == 0:</code>.</li>
     <li><code>str.join</code> is linear; <code>+=</code> on a string in a loop is quadratic, because strings are immutable and each <code>+=</code> copies everything before it.</li>
-    <li>Local variable lookup is an array-slot access; global lookup is a dictionary lookup by name — locals win in hot loops.</li>
+    <li>Local variable lookup is an array-slot access; global lookup is a dictionary lookup by name, locals win in hot loops.</li>
     <li>Vectorise uniform numeric work with NumPy once the Python-level loop overhead dominates; always profile with <code>timeit</code>/<code>cProfile</code> before changing anything, and never use a mutable literal as a default argument.</li>
   </ul>
 </div>
@@ -192,9 +192,9 @@ This closes the book. Start from the [overview](/blog/python-primer/overview/) i
 
 ## References
 
-1. Python documentation. [Performance Tips — Python Wiki](https://wiki.python.org/moin/PythonSpeed/PerformanceTips).
-2. Python documentation. [`timeit` — Measure execution time of small code snippets](https://docs.python.org/3/library/timeit.html).
-3. Python documentation. [`profile` and `cProfile` — Python profilers](https://docs.python.org/3/library/profile.html).
-4. Python documentation. [`numpy.ndarray` operations](https://numpy.org/doc/stable/reference/arrays.ndarray.html) — NumPy project documentation.
+1. Python documentation. [Performance Tips, Python Wiki](https://wiki.python.org/moin/PythonSpeed/PerformanceTips).
+2. Python documentation. [`timeit`, Measure execution time of small code snippets](https://docs.python.org/3/library/timeit.html).
+3. Python documentation. [`profile` and `cProfile`, Python profilers](https://docs.python.org/3/library/profile.html).
+4. Python documentation. [`numpy.ndarray` operations](https://numpy.org/doc/stable/reference/arrays.ndarray.html), NumPy project documentation.
 5. Python documentation. [Truth Value Testing](https://docs.python.org/3/library/stdtypes.html#truth-value-testing) and [`zip`](https://docs.python.org/3/library/functions.html#zip), [`enumerate`](https://docs.python.org/3/library/functions.html#enumerate) built-ins.
-6. van Rossum, G., Warsaw, B., & Coghlan, N. [PEP 8 — Style Guide for Python Code](https://peps.python.org/pep-0008/), 2001.
+6. van Rossum, G., Warsaw, B., & Coghlan, N. [PEP 8, Style Guide for Python Code](https://peps.python.org/pep-0008/), 2001.

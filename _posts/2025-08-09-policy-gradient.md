@@ -6,7 +6,7 @@ book: rl
 subsection: policy-gradient
 tags: [policy-gradient, REINFORCE, score-function, baseline, variance-reduction]
 published: false
-excerpt: "The policy gradient theorem and REINFORCE algorithm let us directly optimise a stochastic policy by following the gradient of expected return — no value function required."
+excerpt: "The policy gradient theorem and REINFORCE algorithm let us directly optimise a stochastic policy by following the gradient of expected return, no value function required."
 author_profile: true
 read_time: true
 is_overview: false
@@ -31,7 +31,7 @@ toc_label: "Contents"
 
 ## Intuition First: Teaching Without a Grade Book
 
-In supervised learning you have a teacher who tells you "that was wrong, adjust your weights this way." In policy gradient methods there is no teacher — only an episode return. The trick is: after every episode, actions that led to higher-than-average returns get nudged to be *more* probable; actions that led to lower returns get nudged to be *less* probable. The score function $$\nabla_\theta \log \pi_\theta(a|s)$$ is the direction that makes a specific action more likely, and we weight it by how good the outcome was. Simple, unbiased — and very noisy.
+In supervised learning you have a teacher who tells you "that was wrong, adjust your weights this way." In policy gradient methods there is no teacher, only an episode return. The trick is: after every episode, actions that led to higher-than-average returns get nudged to be *more* probable; actions that led to lower returns get nudged to be *less* probable. The score function $$\nabla_\theta \log \pi_\theta(a|s)$$ is the direction that makes a specific action more likely, and we weight it by how good the outcome was. Simple, unbiased, and very noisy.
 
 ## Why Direct Policy Optimisation?
 
@@ -51,7 +51,7 @@ The policy gradient theorem (Sutton et al. 1999) provides a clean expression for
 
 The term $$\nabla_\theta \log \pi_\theta(a \mid s)$$ is called the **score function** or **likelihood-ratio gradient**. It tells us: for each action taken, push the policy parameters in the direction that makes that action more probable, scaled by how good that action was.
 
-<div class="insight-box"><strong>Key Insight:</strong> The log-derivative trick converts a gradient through an expectation into an expectation of a product. This is crucial because we cannot differentiate through the unknown environment dynamics — but we can differentiate through our own policy.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The log-derivative trick converts a gradient through an expectation into an expectation of a product. This is crucial because we cannot differentiate through the unknown environment dynamics, but we can differentiate through our own policy.</div>
 
 ## REINFORCE: Monte Carlo Policy Gradient
 
@@ -59,7 +59,7 @@ Williams (1992) proposed REINFORCE, which substitutes the full return $$G_t = \s
 
 <div class="math-box">∇_θ J(θ) ≈ (1/N) Σ_{i=1}^{N} Σ_t ∇_θ log π_θ(a_t^i|s_t^i) · G_t^i</div>
 
-The algorithm is straightforward: roll out complete episodes, compute returns, and perform a gradient step. The estimator is **unbiased** — in expectation it recovers the true gradient — but the variance can be very large because $$G_t$$ fluctuates enormously across trajectories.
+The algorithm is straightforward: roll out complete episodes, compute returns, and perform a gradient step. The estimator is **unbiased**, in expectation it recovers the true gradient, but the variance can be very large because $$G_t$$ fluctuates enormously across trajectories.
 
 ## Baselines and Variance Reduction
 
@@ -84,7 +84,7 @@ The agent rolled out one episode, took RIGHT, and received return $$G_t = +2.0$$
 
 **Update**: logit for RIGHT increases by $$\alpha \times 0.30 = +0.003$$, pushing the policy slightly more toward RIGHT.
 
-If instead $$G_t = 0.5$$ (below baseline), the gradient would be $$-0.15$$, pushing *away* from RIGHT — even though it got a positive reward, it was below average, so we penalise it.
+If instead $$G_t = 0.5$$ (below baseline), the gradient would be $$-0.15$$, pushing *away* from RIGHT, even though it got a positive reward, it was below average, so we penalise it.
 
 ## Practical Considerations
 

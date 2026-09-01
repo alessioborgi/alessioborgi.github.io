@@ -27,15 +27,15 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Diffusion Policy (Chi et al. 2023) frames robot action generation as a denoising diffusion process over action sequences, conditioned on visual observations. This naturally captures multi-modal action distributions — a major failure mode of MSE-based behaviour cloning — and achieves state-of-the-art performance across a range of dexterous manipulation tasks.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Diffusion Policy (Chi et al. 2023) frames robot action generation as a denoising diffusion process over action sequences, conditioned on visual observations. This naturally captures multi-modal action distributions, a major failure mode of MSE-based behaviour cloning, and achieves state-of-the-art performance across a range of dexterous manipulation tasks.</div>
 {% include figure image_path="/images/blog/robotics/chi2023_diffusion_policy.png" alt="Diffusion Policy architecture" caption="Diffusion Policy for visuomotor robot control (Chi et al., 2023)" %}
 
 
 ## The Multi-Modal Action Problem
 
-**Intuition first.** Imagine asking 10 different people to demonstrate how to pick up a symmetric block. Five people reach from the left, five from the right — both are correct. A policy trained with MSE loss will average these demonstrations and try to reach from the *centre* — which grasps nothing. Diffusion Policy sidesteps this by modelling the *full distribution* of valid actions, letting it choose one mode confidently at inference time rather than averaging across them.
+**Intuition first.** Imagine asking 10 different people to demonstrate how to pick up a symmetric block. Five people reach from the left, five from the right, both are correct. A policy trained with MSE loss will average these demonstrations and try to reach from the *centre*, which grasps nothing. Diffusion Policy sidesteps this by modelling the *full distribution* of valid actions, letting it choose one mode confidently at inference time rather than averaging across them.
 
-Standard behaviour cloning with an MSE loss trains the policy to predict the mean of the expert's action distribution at each state. This works well when the expert consistently takes similar actions in similar states. But many manipulation tasks are inherently multi-modal: faced with a symmetric object, the expert might grasp from the left or the right with equal frequency. A mean-predicting policy produces an average action that is neither — typically placing the gripper in the middle, where no valid grasp exists.
+Standard behaviour cloning with an MSE loss trains the policy to predict the mean of the expert's action distribution at each state. This works well when the expert consistently takes similar actions in similar states. But many manipulation tasks are inherently multi-modal: faced with a symmetric object, the expert might grasp from the left or the right with equal frequency. A mean-predicting policy produces an average action that is neither, typically placing the gripper in the middle, where no valid grasp exists.
 
 This is not a pathological edge case; it is the norm in real demonstrations collected by multiple operators or via teleoperation with natural variation. Any policy parameterisation that produces a unimodal action distribution will fail on multi-modal tasks.
 
@@ -155,13 +155,13 @@ DDPM generates samples by starting from Gaussian noise and iteratively applying 
 - **Observation conditioning**: visual observations (from one or more cameras) are encoded and used to condition the denoising network at each diffusion step.
 - **Two backbone options**: (1) a 1D temporal convolutional network (CNN) for fast inference; (2) a Transformer-based diffusion model for higher capacity.
 
-<div class="insight-box"><strong>Key Insight:</strong> By modelling the full action distribution rather than its mean, Diffusion Policy can represent and sample from multi-modal action distributions. When faced with a symmetric grasp decision, it picks one mode consistently rather than averaging between them — the behaviour a physical robot actually needs.</div>
+<div class="insight-box"><strong>Key Insight:</strong> By modelling the full action distribution rather than its mean, Diffusion Policy can represent and sample from multi-modal action distributions. When faced with a symmetric grasp decision, it picks one mode consistently rather than averaging between them, the behaviour a physical robot actually needs.</div>
 
 ## Worked Example: Diffusion vs BC on a Bimodal Task
 
 Consider a T-push task where the robot must push a T-shaped block, which can be pushed from the left or right with equal expert frequency.
 
-**BC with MSE:** trains on 50 demos — 25 push-left, 25 push-right. Predicted action = average = push *centre* of T. The gripper contacts the T's stem, not either valid push point. Success rate: ~12%.
+**BC with MSE:** trains on 50 demos, 25 push-left, 25 push-right. Predicted action = average = push *centre* of T. The gripper contacts the T's stem, not either valid push point. Success rate: ~12%.
 
 **Diffusion Policy:** models the full bimodal distribution. At inference it samples one mode:
 - Sample 1 → push-left trajectory (score: 0.91 success)
@@ -169,7 +169,7 @@ Consider a T-push task where the robot must push a T-shaped block, which can be 
 
 Both work because each is a *coherent* action sequence from one mode, not an average of two. Reported success rate in Chi et al. (2023): 76% vs BC's 12% on this task.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The action chunking aspect of Diffusion Policy — generating 8–16 future actions simultaneously — also prevents chattering. Single-step policies oscillate between modes at each timestep. Chunking commits to one mode for multiple steps, producing smooth, physically plausible trajectories.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The action chunking aspect of Diffusion Policy, generating 8–16 future actions simultaneously, also prevents chattering. Single-step policies oscillate between modes at each timestep. Chunking commits to one mode for multiple steps, producing smooth, physically plausible trajectories.</div>
 
 ## Conditioning Strategies
 

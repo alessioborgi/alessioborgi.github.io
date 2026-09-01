@@ -6,7 +6,7 @@ categories: [diffusion]
 book: diffusion
 subsection: flow-matching
 tags: [rectified-flow, flow-matching, few-step-sampling, reflow]
-excerpt: "A perfectly straight generative trajectory is exactly solvable in a single Euler step. Every extra sampling step you pay for is buying back curvature — so rectified flow attacks the curvature itself rather than the solver."
+excerpt: "A perfectly straight generative trajectory is exactly solvable in a single Euler step. Every extra sampling step you pay for is buying back curvature, so rectified flow attacks the curvature itself rather than the solver."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Rectified flow is flow matching with the simplest possible probability path — a straight line between noise and data, travelled at constant speed. That makes each <em>conditional</em> trajectory exactly integrable in one Euler step, but the <em>marginal</em> field the network actually learns is still curved, because paths from different examples cross. Reflow fixes this by retraining on the model's own (noise, sample) pairs, which removes the crossings and straightens the marginal field. The price is that each reflow round learns from synthetic data and drifts a little further from the real distribution.
+  <strong>TL;DR:</strong> Rectified flow is flow matching with the simplest possible probability path, a straight line between noise and data, travelled at constant speed. That makes each <em>conditional</em> trajectory exactly integrable in one Euler step, but the <em>marginal</em> field the network actually learns is still curved, because paths from different examples cross. Reflow fixes this by retraining on the model's own (noise, sample) pairs, which removes the crossings and straightens the marginal field. The price is that each reflow round learns from synthetic data and drifts a little further from the real distribution.
 </div>
 
 ## The simplest path you can write down
@@ -33,7 +33,7 @@ u_t = \frac{dx_t}{dt} = x_1 - x_0
 \]
 </div>
 
-The velocity target does not depend on \\(t\\) at all. Training is one line — sample a pair, sample a time, sample the point on the segment between them, and regress:
+The velocity target does not depend on \\(t\\) at all. Training is one line, sample a pair, sample a time, sample the point on the segment between them, and regress:
 
 <div class="formula-box">
 \[
@@ -46,9 +46,9 @@ No noise schedule, no $$\bar{\alpha}_t$$, no signal-to-noise weighting to tune. 
 
 ## Why straightness is the whole game
 
-Any ODE sampler approximates $$x_1 = x_0 + \int_0^1 v_\theta(x_t,t)\,dt$$. Euler with \\(N\\) steps freezes the velocity across each interval of length \\(1/N\\). If the velocity along the trajectory is genuinely constant, freezing it costs nothing — one step of size 1 is *exact*, not approximate. All discretisation error comes from the velocity changing as you move, which is the definition of curvature.
+Any ODE sampler approximates $$x_1 = x_0 + \int_0^1 v_\theta(x_t,t)\,dt$$. Euler with \\(N\\) steps freezes the velocity across each interval of length \\(1/N\\). If the velocity along the trajectory is genuinely constant, freezing it costs nothing, one step of size 1 is *exact*, not approximate. All discretisation error comes from the velocity changing as you move, which is the definition of curvature.
 
-Take the one-dimensional pair \\(x_0 = -1\\), \\(x_1 = 2\\). Under the straight path the velocity is \\(3\\) everywhere, so a single Euler step gives \\(-1 + 3 = 2\\): exact. Under a variance-preserving path \\(x_t = \cos(\tfrac{\pi t}{2})x_0 + \sin(\tfrac{\pi t}{2})x_1\\), the initial velocity is \\(\tfrac{\pi}{2}x_1 = \pi\\), and one Euler step gives \\(-1 + \pi \approx 2.1416\\) — an error of \\(0.1416\\), about 4.7% of the total displacement of \\(3\\), from a single well-behaved curve. Stack that error across dimensions and across a bent trajectory and you get the familiar need for tens of steps.
+Take the one-dimensional pair \\(x_0 = -1\\), \\(x_1 = 2\\). Under the straight path the velocity is \\(3\\) everywhere, so a single Euler step gives \\(-1 + 3 = 2\\): exact. Under a variance-preserving path \\(x_t = \cos(\tfrac{\pi t}{2})x_0 + \sin(\tfrac{\pi t}{2})x_1\\), the initial velocity is \\(\tfrac{\pi}{2}x_1 = \pi\\), and one Euler step gives \\(-1 + \pi \approx 2.1416\\), an error of \\(0.1416\\), about 4.7% of the total displacement of \\(3\\), from a single well-behaved curve. Stack that error across dimensions and across a bent trajectory and you get the familiar need for tens of steps.
 
 <div class="blog-figure">
 <figure>
@@ -85,7 +85,7 @@ Take the one-dimensional pair \\(x_0 = -1\\), \\(x_1 = 2\\). Under the straight 
   <text x="320" y="26" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">Same endpoints, different step budgets</text>
   <text x="320" y="44" text-anchor="middle" font-size="10" fill="#475569">step count is set by curvature, not by how far apart the endpoints are</text>
 </svg>
-<figcaption>Notice that every dashed Euler chord lies outside the bend it is meant to follow — a straight-line step cannot track a turning trajectory, so the error accumulates and the last node lands short of \(x_1\). On the orange segment the velocity never changes, so the size of the step is irrelevant: one step and a hundred steps give the same answer.</figcaption>
+<figcaption>Notice that every dashed Euler chord lies outside the bend it is meant to follow, a straight-line step cannot track a turning trajectory, so the error accumulates and the last node lands short of \(x_1\). On the orange segment the velocity never changes, so the size of the step is irrelevant: one step and a hundred steps give the same answer.</figcaption>
 </figure>
 </div>
 
@@ -96,7 +96,7 @@ Here is the part that is easy to miss. The linear interpolation makes each *cond
 So a freshly trained rectified flow is not actually straight. It is trained on straight targets, which is a different claim.
 
 <div class="insight-box">
-  <strong>Key Insight — reflow removes the crossings, not the curvature:</strong> the curvature exists because the training coupling pairs each \(x_1\) with an <em>independent</em> \(x_0\), so segments cross. Reflow replaces that independent coupling with the deterministic one the model itself induces: run the ODE from \(x_0\) and record where it lands. Trajectories of an ODE cannot cross — the field assigns one velocity per point — so the new coupling is crossing-free by construction, and its straight-line interpolations are consistent with a single field. Straightening is a consequence of fixing the coupling, not something optimised directly.
+  <strong>Key Insight, reflow removes the crossings, not the curvature:</strong> the curvature exists because the training coupling pairs each \(x_1\) with an <em>independent</em> \(x_0\), so segments cross. Reflow replaces that independent coupling with the deterministic one the model itself induces: run the ODE from \(x_0\) and record where it lands. Trajectories of an ODE cannot cross, the field assigns one velocity per point, so the new coupling is crossing-free by construction, and its straight-line interpolations are consistent with a single field. Straightening is a consequence of fixing the coupling, not something optimised directly.
 </div>
 
 ## Reflow
@@ -107,7 +107,7 @@ Concretely, with a trained field \\(v^{k}\\):
 2. Integrate \\(dx/dt = v^{k}(x,t)\\) accurately from \\(t=0\\) to \\(t=1\\) to get \\(z_1\\).
 3. Train \\(v^{k+1}\\) with the same objective, but on the coupled pairs \\((x_0, z_1)\\) instead of independently drawn \\((x_0, x_1)\\).
 
-Liu et al. prove two things about this operation. The marginal at \\(t=1\\) is preserved — reflow rewires which noise maps to which sample without changing the distribution of samples — and no convex transport cost increases, so the new coupling is at least as cheap as the old one. Iterating, the straightness of the best of the first \\(K\\) rectified flows decays as \\(O(1/K)\\).
+Liu et al. prove two things about this operation. The marginal at \\(t=1\\) is preserved, reflow rewires which noise maps to which sample without changing the distribution of samples, and no convex transport cost increases, so the new coupling is at least as cheap as the old one. Iterating, the straightness of the best of the first \\(K\\) rectified flows decays as \\(O(1/K)\\).
 
 ## What reflow costs
 
@@ -123,9 +123,9 @@ In practice two rounds is the usual stopping point: the first reflow buys most o
 
 ## Where it landed
 
-Reflow alone moves sampling into the few-step regime. Reaching a single step still needs distillation — train a network to map \\(x_0\\) straight to \\(z_1\\) — but after reflow the map it must imitate is close to linear, which is why distilling a 2-rectified flow is so much easier than distilling a raw diffusion model. The formulation also scaled: Stable Diffusion 3 (Esser et al., 2024) uses the rectified-flow interpolant as its forward process and samples \\(t\\) from a logit-normal distribution, concentrating training on the intermediate times where prediction is hardest.
+Reflow alone moves sampling into the few-step regime. Reaching a single step still needs distillation, train a network to map \\(x_0\\) straight to \\(z_1\\), but after reflow the map it must imitate is close to linear, which is why distilling a 2-rectified flow is so much easier than distilling a raw diffusion model. The formulation also scaled: Stable Diffusion 3 (Esser et al., 2024) uses the rectified-flow interpolant as its forward process and samples \\(t\\) from a logit-normal distribution, concentrating training on the intermediate times where prediction is hardest.
 
-The broader lesson is that sampling cost was never really about the number of denoising steps. It was about how bent the path from noise to data is — something you choose when you design the probability path, not something you discover afterwards and patch with a better solver. [DDIM](/blog/diffusion/ddim/) attacked the same cost from the solver side and reached tens of steps; changing the path reaches single digits. For the two formulations side by side, see [diffusion vs flow matching](/blog/diffusion/diffusion-vs-flow-matching/), and for the corruption-based starting point, the [diffusion overview](/blog/diffusion/overview/).
+The broader lesson is that sampling cost was never really about the number of denoising steps. It was about how bent the path from noise to data is, something you choose when you design the probability path, not something you discover afterwards and patch with a better solver. [DDIM](/blog/diffusion/ddim/) attacked the same cost from the solver side and reached tens of steps; changing the path reaches single digits. For the two formulations side by side, see [diffusion vs flow matching](/blog/diffusion/diffusion-vs-flow-matching/), and for the corruption-based starting point, the [diffusion overview](/blog/diffusion/overview/).
 
 ## References
 

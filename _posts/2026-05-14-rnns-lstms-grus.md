@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A recurrent network carries one hidden state forward and applies the same weights at every step. Training it sends gradients backwards through a product of Jacobians, which decays or explodes geometrically in the sequence length — so plain RNNs cannot learn long-range dependencies. The LSTM's fix is a cell state updated <em>additively</em> and gated, so the gradient path along it is multiplication by a forget gate rather than by a weight matrix. What neither fixes is that recurrence is inherently sequential.
+<strong>TL;DR:</strong> A recurrent network carries one hidden state forward and applies the same weights at every step. Training it sends gradients backwards through a product of Jacobians, which decays or explodes geometrically in the sequence length, so plain RNNs cannot learn long-range dependencies. The LSTM's fix is a cell state updated <em>additively</em> and gated, so the gradient path along it is multiplication by a forget gate rather than by a weight matrix. What neither fixes is that recurrence is inherently sequential.
 </div>
 
 ## Weight sharing, but across time
@@ -32,7 +32,7 @@ h_t = \sigma\bigl(W_h h_{t-1} + W_x x_t + b\bigr), \qquad t = 1, \dots, n .
 \]
 </div>
 
-One hidden state $$h_t$$ summarises everything seen so far. The same $$W_h$$, $$W_x$$, $$b$$ apply at every step, so the model handles sequences of any length with a fixed parameter count — the same bargain a CNN strikes for images of any size.
+One hidden state $$h_t$$ summarises everything seen so far. The same $$W_h$$, $$W_x$$, $$b$$ apply at every step, so the model handles sequences of any length with a fixed parameter count, the same bargain a CNN strikes for images of any size.
 
 ## Backpropagation through time, and the product that kills it
 
@@ -53,15 +53,15 @@ A product of $$k$$ matrices. In the scalar case it is literally $$w^k$$, and tha
 | 0.95 | 0.599 | 0.0769 | $$5.92\times10^{-3}$$ |
 | 1.10 | 2.59 | 117 | $$1.38\times10^{4}$$ |
 
-A weight of $$0.9$$ — not small, not pathological — reduces the gradient by a factor of about 38,000 over a hundred steps. A weight of $$1.1$$ multiplies it by 14,000. The knife edge at exactly $$1$$ has measure zero.
+A weight of $$0.9$$, not small, not pathological, reduces the gradient by a factor of about 38,000 over a hundred steps. A weight of $$1.1$$ multiplies it by 14,000. The knife edge at exactly $$1$$ has measure zero.
 
 The nonlinearity makes it worse rather than better. For $$\tanh$$, $$\sigma' = 1 - \tanh^2 \le 1$$, with equality only at zero: $$\sigma'(1) = 0.42$$ and $$\sigma'(2) = 0.071$$. Once units saturate, each step contributes a factor well below one. Twenty steps at an effective factor of $$0.42$$ gives $$2.9\times10^{-8}$$.
 
 <div class="insight-box">
-<strong>The asymmetry is the important part.</strong> Exploding gradients are easy to fix: clip the gradient norm and carry on. The direction survives, only the magnitude is capped. Vanishing gradients cannot be fixed that way — there is no information left to rescale. Multiplying a number that has underflowed to \(10^{-8}\) by a large constant recovers nothing. That is why the architectures below attack vanishing specifically.
+<strong>The asymmetry is the important part.</strong> Exploding gradients are easy to fix: clip the gradient norm and carry on. The direction survives, only the magnitude is capped. Vanishing gradients cannot be fixed that way, there is no information left to rescale. Multiplying a number that has underflowed to \(10^{-8}\) by a large constant recovers nothing. That is why the architectures below attack vanishing specifically.
 </div>
 
-The general phenomenon — gradients travelling through a long product of Jacobians — is the same one covered in the [gradient descent chapter](/blog/basics/gradient-descent-and-backprop/), and it is the reason residual connections exist in deep feedforward networks too.
+The general phenomenon, gradients travelling through a long product of Jacobians, is the same one covered in the [gradient descent chapter](/blog/basics/gradient-descent-and-backprop/), and it is the reason residual connections exist in deep feedforward networks too.
 
 ## The LSTM: an additive path through time
 
@@ -88,7 +88,7 @@ The cell update line is the whole design. Look at what it does to the gradient:
 \]
 </div>
 
-Not a weight matrix. Not a saturating nonlinearity's derivative. Just the forget gate, elementwise. The path from $$c_{t-k}$$ to $$c_t$$ is a product of forget gates, and if the network learns to keep $$f \approx 1$$ on some coordinate, that coordinate's gradient passes through essentially undamped. With $$f = 0.99$$, a hundred steps still retains $$0.99^{100} = 0.37$$ of the signal — against $$2.7\times10^{-5}$$ for the vanilla recurrence at $$w = 0.9$$.
+Not a weight matrix. Not a saturating nonlinearity's derivative. Just the forget gate, elementwise. The path from $$c_{t-k}$$ to $$c_t$$ is a product of forget gates, and if the network learns to keep $$f \approx 1$$ on some coordinate, that coordinate's gradient passes through essentially undamped. With $$f = 0.99$$, a hundred steps still retains $$0.99^{100} = 0.37$$ of the signal, against $$2.7\times10^{-5}$$ for the vanilla recurrence at $$w = 0.9$$.
 
 <div class="blog-figure">
 <figure>
@@ -97,7 +97,7 @@ Not a weight matrix. Not a saturating nonlinearity's derivative. Just the forget
   <desc id="lstm-desc">In the vanilla recurrent network the state passes through a weight matrix and a nonlinearity at every step. In the LSTM the cell state runs straight through, modified only by an elementwise forget gate and an additive update.</desc>
   <rect width="560" height="236" fill="#f8fafc" rx="10"/>
 
-  <text x="16" y="26" font-size="10" font-weight="700" fill="#9a3412">Vanilla RNN — every step multiplies by Wₕ and a saturating σ′</text>
+  <text x="16" y="26" font-size="10" font-weight="700" fill="#9a3412">Vanilla RNN, every step multiplies by Wₕ and a saturating σ′</text>
   <line x1="30" y1="66" x2="530" y2="66" stroke="#ea580c" stroke-width="2"/>
   <polygon points="530,61 542,66 530,71" fill="#ea580c"/>
   <g fill="#ffedd5" stroke="#ea580c" stroke-width="1.6">
@@ -112,7 +112,7 @@ Not a weight matrix. Not a saturating nonlinearity's derivative. Just the forget
   <text x="466" y="71" text-anchor="middle" font-size="9" fill="#9a3412">Wₕ, σ</text>
   <text x="280" y="98" text-anchor="middle" font-size="9" fill="#9a3412">gradient carries a product of k Jacobians → 0.9¹⁰⁰ ≈ 2.7 × 10⁻⁵</text>
 
-  <text x="16" y="140" font-size="10" font-weight="700" fill="#0f766e">LSTM — the cell state runs straight through</text>
+  <text x="16" y="140" font-size="10" font-weight="700" fill="#0f766e">LSTM, the cell state runs straight through</text>
   <line x1="30" y1="180" x2="530" y2="180" stroke="#0d9488" stroke-width="4"/>
   <polygon points="530,174 544,180 530,186" fill="#0d9488"/>
   <g fill="#ccfbf1" stroke="#0d9488" stroke-width="1.6">
@@ -138,7 +138,7 @@ Not a weight matrix. Not a saturating nonlinearity's derivative. Just the forget
 
 ## The GRU
 
-The GRU merges the cell and hidden state and uses two gates instead of three — an update gate interpolating between keeping the old state and taking the new candidate, and a reset gate controlling how much history enters the candidate. Fewer parameters, same additive-path idea.
+The GRU merges the cell and hidden state and uses two gates instead of three, an update gate interpolating between keeping the old state and taking the new candidate, and a reset gate controlling how much history enters the candidate. Fewer parameters, same additive-path idea.
 
 Whether GRU or LSTM is better is task-dependent and usually a small effect. Anyone claiming a universal winner is overstating.
 
@@ -146,14 +146,14 @@ Whether GRU or LSTM is better is task-dependent and usually a small effect. Anyo
 
 The gating fixes the gradient problem well enough to be useful. Two limits remain, and neither is about gradients.
 
-**Recurrence is sequential.** Computing $$h_t$$ requires $$h_{t-1}$$. That dependency cannot be parallelised across time, so training time scales with sequence length no matter how many GPUs you own. This is a hardware argument, not a modelling one — and it turned out to be the decisive one, because the models that won were the ones that could absorb more compute.
+**Recurrence is sequential.** Computing $$h_t$$ requires $$h_{t-1}$$. That dependency cannot be parallelised across time, so training time scales with sequence length no matter how many GPUs you own. This is a hardware argument, not a modelling one, and it turned out to be the decisive one, because the models that won were the ones that could absorb more compute.
 
 **Everything passes through one vector.** In an encoder–decoder, the entire input is compressed into a single fixed-size state before decoding begins. Long inputs must lose information; the vector does not grow.
 
 **The path between distant positions is long.** Information from position 1 reaching position 100 traverses 99 recurrent steps, each an opportunity to be overwritten. Path length is $$O(n)$$.
 
 <div class="warning-box">
-<strong>Where this leads.</strong> Attention removes both limits at once: every position attends to every other in a single step, so the path length between any two becomes \(O(1)\) instead of \(O(n)\), and all positions are computed in parallel rather than in sequence. The cost is that attention compares every pair, which is \(O(n^2)\) work and memory in the sequence length — a trade the <a href="/blog/transformers/overview/">Transformers book</a> takes up from here.
+<strong>Where this leads.</strong> Attention removes both limits at once: every position attends to every other in a single step, so the path length between any two becomes \(O(1)\) instead of \(O(n)\), and all positions are computed in parallel rather than in sequence. The cost is that attention compares every pair, which is \(O(n^2)\) work and memory in the sequence length, a trade the <a href="/blog/transformers/overview/">Transformers book</a> takes up from here.
 
 None of which makes recurrence obsolete. For short sequences, streaming inputs where the future is genuinely unavailable, or tight memory budgets, a GRU remains a sensible and much smaller choice.
 </div>
@@ -161,10 +161,10 @@ None of which makes recurrence obsolete. For short sequences, streaming inputs w
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>An RNN shares weights across time as a CNN shares them across space — a fixed parameter count for any sequence length.</li>
+  <li>An RNN shares weights across time as a CNN shares them across space, a fixed parameter count for any sequence length.</li>
   <li>Backpropagation through time carries a product of \(k\) Jacobians, so gradients move geometrically in \(k\). At \(w = 0.9\), a hundred steps leaves \(2.7\times10^{-5}\); at \(w = 1.1\) it reaches \(1.4\times10^{4}\).</li>
-  <li>Exploding gradients are fixable by clipping. Vanishing gradients are not — there is nothing left to rescale. That asymmetry is what the gating architectures target.</li>
-  <li>The LSTM's cell state is updated additively, so \(\partial c_t / \partial c_{t-1} = f_t\) — a gate, not a weight matrix. At \(f = 0.99\), 0.37 of the gradient survives a hundred steps.</li>
+  <li>Exploding gradients are fixable by clipping. Vanishing gradients are not, there is nothing left to rescale. That asymmetry is what the gating architectures target.</li>
+  <li>The LSTM's cell state is updated additively, so \(\partial c_t / \partial c_{t-1} = f_t\), a gate, not a weight matrix. At \(f = 0.99\), 0.37 of the gradient survives a hundred steps.</li>
   <li>Initialise the forget-gate bias positive so the cell defaults to remembering.</li>
   <li>What ended RNNs was not gradients but parallelism: recurrence is inherently sequential, and the path between distant positions is \(O(n)\). Attention makes both \(O(1)\), at a quadratic cost in sequence length.</li>
 </ul>

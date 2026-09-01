@@ -33,11 +33,11 @@ toc_label: "Contents"
 
 ## The Locomotion Challenge
 
-**Intuition first.** Walking is a controlled fall: you lean forward, swing a leg out to catch yourself, then repeat. Each footstep is a brief collision with the ground that redirects momentum. The robot must time these collisions precisely — too early and it stumbles forward, too late and it falls. Classical controllers hand-craft these contact schedules; RL discovers them by trial and error in simulation, finding schedules that are not only correct but also robust to unexpected terrain.
+**Intuition first.** Walking is a controlled fall: you lean forward, swing a leg out to catch yourself, then repeat. Each footstep is a brief collision with the ground that redirects momentum. The robot must time these collisions precisely, too early and it stumbles forward, too late and it falls. Classical controllers hand-craft these contact schedules; RL discovers them by trial and error in simulation, finding schedules that are not only correct but also robust to unexpected terrain.
 
 Legged locomotion is fundamentally a problem of controlling dynamic, underactuated systems in continuous contact with an uncertain environment. Classical approaches relied on carefully engineered gaits, zero-moment point (ZMP) control, and model predictive control with manually designed contact schedules. These methods work reliably on flat terrain but struggle with stairs, rubble, and dynamic disturbances.
 
-Deep reinforcement learning has changed this picture dramatically. RL-trained policies learn to coordinate many joints simultaneously, adapt contact schedules implicitly, and develop robust recovery behaviours — capabilities that took years to engineer classically.
+Deep reinforcement learning has changed this picture dramatically. RL-trained policies learn to coordinate many joints simultaneously, adapt contact schedules implicitly, and develop robust recovery behaviours, capabilities that took years to engineer classically.
 
 <style>
 @keyframes stepFL { 0%,100%{transform:translateY(0);} 25%{transform:translateY(-18px);} }
@@ -102,7 +102,7 @@ Deep reinforcement learning has changed this picture dramatically. RL-trained po
 
 ## MuJoCo and the RL Locomotion Benchmark
 
-**MuJoCo** (Multi-Joint dynamics with Contact, Todorov et al. 2012) became the standard simulator for learning locomotion policies. Its accurate contact dynamics and fast simulation made it ideal for the compute-intensive rollouts that RL requires. Classic MuJoCo benchmarks — HalfCheetah, Ant, Hopper, Humanoid — established standard evaluation protocols and drove rapid algorithmic progress.
+**MuJoCo** (Multi-Joint dynamics with Contact, Todorov et al. 2012) became the standard simulator for learning locomotion policies. Its accurate contact dynamics and fast simulation made it ideal for the compute-intensive rollouts that RL requires. Classic MuJoCo benchmarks, HalfCheetah, Ant, Hopper, Humanoid, established standard evaluation protocols and drove rapid algorithmic progress.
 
 The reward structure in MuJoCo locomotion typically balances:
 
@@ -135,7 +135,7 @@ For a bipedal robot with target speed $$v^* = 1.0$$ m/s, a common reward at each
 | Foot clearance | $$+\min(z_\text{foot}, 0.05)$$ during swing | +0.1 |
 | Termination | $$-1$$ on fall | −1.0 |
 
-The foot-clearance term nudges the policy to lift feet rather than drag them, naturally producing stepping behaviour. The torque penalty discourages energy waste, causing smooth, efficient gaits to emerge — not because they were programmed, but because they minimise cost.
+The foot-clearance term nudges the policy to lift feet rather than drag them, naturally producing stepping behaviour. The torque penalty discourages energy waste, causing smooth, efficient gaits to emerge, not because they were programmed, but because they minimise cost.
 
 ## Rapid Motor Adaptation (RMA)
 
@@ -143,7 +143,7 @@ The foot-clearance term nudges the policy to lift feet rather than drag them, na
 
 ## Cassie and Bipedal Locomotion
 
-Bipedal locomotion is harder than quadrupedal — the robot must maintain balance on two legs with a high centre of mass. **Cassie** (Agility Robotics) demonstrated RL-trained walking, running, and stair climbing. A key challenge is the point-foot contact model (Cassie has no flat feet), which requires precise timing of contact events.
+Bipedal locomotion is harder than quadrupedal, the robot must maintain balance on two legs with a high centre of mass. **Cassie** (Agility Robotics) demonstrated RL-trained walking, running, and stair climbing. A key challenge is the point-foot contact model (Cassie has no flat feet), which requires precise timing of contact events.
 
 Training involves additional constraints to prevent falls during learning, often implemented via early termination (resetting episodes when the robot tips past a threshold angle) and reference-motion tracking (initialising the policy close to a reference trajectory to guide exploration).
 

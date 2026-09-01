@@ -6,7 +6,7 @@ categories: [stats-basics]
 book: stats-basics
 subsection: estimation
 tags: [maximum-likelihood, fisher-information, map, kl-divergence]
-excerpt: "Pick the parameter under which the data you actually observed would have been least surprising. That single sentence generates the Gaussian mean, cross-entropy loss, and — once you add a prior — L2 regularisation."
+excerpt: "Pick the parameter under which the data you actually observed would have been least surprising. That single sentence generates the Gaussian mean, cross-entropy loss, and, once you add a prior, L2 regularisation."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The likelihood is the sampling density read as a function of the parameter with the data held fixed. Maximising it is equivalent to minimising the KL divergence from the empirical distribution to your model, which is why the negative log-likelihood is the loss function in most of supervised learning. For a Gaussian the MLE gives \(\hat\mu = \bar{x}\) and \(\hat\sigma^2 = \frac{1}{n}\sum_i (x_i - \bar{x})^2\) — and that variance estimate is biased low. Adding a prior turns MLE into MAP, and a Gaussian prior is exactly an L2 penalty.
+  <strong>TL;DR:</strong> The likelihood is the sampling density read as a function of the parameter with the data held fixed. Maximising it is equivalent to minimising the KL divergence from the empirical distribution to your model, which is why the negative log-likelihood is the loss function in most of supervised learning. For a Gaussian the MLE gives \(\hat\mu = \bar{x}\) and \(\hat\sigma^2 = \frac{1}{n}\sum_i (x_i - \bar{x})^2\), and that variance estimate is biased low. Adding a prior turns MLE into MAP, and a Gaussian prior is exactly an L2 penalty.
 </div>
 
 ## Likelihood is the density, read sideways
@@ -31,7 +31,7 @@ L(\theta) = \prod_{i=1}^{n} p(x_i \mid \theta)
 \]
 </div>
 
-Algebraically this is the joint density. Conceptually it is something different: the data are fixed and known, and \\(\theta\\) is the free argument. \\(L(\theta)\\) is *not* a probability distribution over \\(\theta\\) — it does not integrate to one, and rescaling it changes nothing about where the maximum is. Only ratios of likelihoods at different \\(\theta\\) carry meaning.
+Algebraically this is the joint density. Conceptually it is something different: the data are fixed and known, and \\(\theta\\) is the free argument. \\(L(\theta)\\) is *not* a probability distribution over \\(\theta\\), it does not integrate to one, and rescaling it changes nothing about where the maximum is. Only ratios of likelihoods at different \\(\theta\\) carry meaning.
 
 We maximise the logarithm because sums are easier than products in three separate ways: the derivative of a sum is a sum of derivatives; the exponential families that dominate practice have log-densities that are simple polynomials; and a product of \\(10^5\\) densities underflows to zero in floating point while its log does not. Since \\(\log\\) is strictly increasing, the maximiser is unchanged.
 
@@ -60,7 +60,7 @@ Now differentiate in \\(\sigma^2\\), treating it as a single variable \\(v\\):
 Concretely, for the five measurements 2.1, 1.9, 2.4, 2.0, 2.6: the sum is 11.0 so \\(\hat\mu = 2.2\\), and the squared deviations \\(0.01 + 0.09 + 0.04 + 0.04 + 0.16\\) total 0.34. The MLE gives \\(\hat\sigma^2 = 0.34/5 = 0.068\\), while the unbiased estimator gives \\(0.34/4 = 0.085\\). The ratio is \\(0.8 = (n-1)/n\\), exactly as the Bessel argument in [descriptive statistics](/blog/stats-basics/descriptive-statistics/) predicts.
 
 <div class="warning-box">
-  <strong>Interview trap — "is the MLE biased?":</strong> for the Gaussian mean, no. For the variance, yes: \(\mathbb{E}[\hat\sigma^2] = \frac{n-1}{n}\sigma^2\), an underestimate at every finite \(n\). The reason is that the MLE divides by \(n\) while measuring deviations from the fitted \(\bar{x}\) rather than the true \(\mu\). Maximum likelihood is <em>consistent</em> and asymptotically efficient under regularity conditions, but it carries no finite-sample unbiasedness guarantee — and unbiasedness is not preserved by reparameterisation, whereas the MLE is (the MLE of \(\sigma\) is \(\sqrt{\hat\sigma^2}\)).
+  <strong>Interview trap, "is the MLE biased?":</strong> for the Gaussian mean, no. For the variance, yes: \(\mathbb{E}[\hat\sigma^2] = \frac{n-1}{n}\sigma^2\), an underestimate at every finite \(n\). The reason is that the MLE divides by \(n\) while measuring deviations from the fitted \(\bar{x}\) rather than the true \(\mu\). Maximum likelihood is <em>consistent</em> and asymptotically efficient under regularity conditions, but it carries no finite-sample unbiasedness guarantee, and unbiasedness is not preserved by reparameterisation, whereas the MLE is (the MLE of \(\sigma\) is \(\sqrt{\hat\sigma^2}\)).
 </div>
 
 ## Curvature is information
@@ -75,7 +75,7 @@ I(\theta) = -\,\mathbb{E}\!\left[\frac{\partial^2 \log p(x\mid\theta)}{\partial\
 \]
 </div>
 
-\\(I(\theta)\\) is the Fisher information per observation — the expected curvature of the log-density at the truth. A sharply peaked log-likelihood means small parameter changes cost a lot of fit, so the parameter is well determined; a flat one means many values fit almost equally well. For the Gaussian mean, \\(I(\mu) = 1/\sigma^2\\), so the asymptotic variance of \\(\hat\mu\\) is \\(\sigma^2/n\\) — which here is the exact finite-sample answer too.
+\\(I(\theta)\\) is the Fisher information per observation, the expected curvature of the log-density at the truth. A sharply peaked log-likelihood means small parameter changes cost a lot of fit, so the parameter is well determined; a flat one means many values fit almost equally well. For the Gaussian mean, \\(I(\mu) = 1/\sigma^2\\), so the asymptotic variance of \\(\hat\mu\\) is \\(\sigma^2/n\\), which here is the exact finite-sample answer too.
 
 <div class="blog-figure">
 <figure>
@@ -101,7 +101,7 @@ I(\theta) = -\,\mathbb{E}\!\left[\frac{\partial^2 \log p(x\mid\theta)}{\partial\
   <text x="82" y="100" font-size="10" font-weight="700" fill="#0e7490">n = 5 (flat)</text>
   <text x="500" y="115" font-size="10" font-weight="700" fill="#c2410c">n = 20 (sharp)</text>
 </svg>
-<figcaption>Notice that the peak location is the same in both curves — more data does not move the estimate, it narrows the set of parameters that explain the data almost as well. Curvature at the peak <em>is</em> the information, and its reciprocal is the squared standard error.</figcaption>
+<figcaption>Notice that the peak location is the same in both curves, more data does not move the estimate, it narrows the set of parameters that explain the data almost as well. Curvature at the peak <em>is</em> the information, and its reciprocal is the squared standard error.</figcaption>
 </figure>
 </div>
 
@@ -140,7 +140,7 @@ MAP is MLE plus one extra additive term. Take linear regression with Gaussian no
 which is ridge regression with \\(\lambda = \sigma^2/\tau^2\\). A tight prior (small \\(\tau\\)) means heavy regularisation; a flat prior recovers plain MLE. A Laplace prior gives L1 and hence lasso by the same route.
 
 <div class="insight-box">
-  <strong>Key Insight — MAP is not Bayesian inference:</strong> MAP returns the mode of the posterior, a single point, and discards the rest of the distribution. That makes it reparameterisation-<em>dependent</em> — the mode of a density moves under a nonlinear change of variables while the posterior itself does not — and it says nothing about uncertainty. Genuine Bayesian inference keeps the whole posterior; see <a href="/blog/stats-basics/bayesian-vs-frequentist/">Bayesian versus frequentist</a>. MAP is best understood as regularised optimisation wearing Bayesian notation.
+  <strong>Key Insight, MAP is not Bayesian inference:</strong> MAP returns the mode of the posterior, a single point, and discards the rest of the distribution. That makes it reparameterisation-<em>dependent</em>, the mode of a density moves under a nonlinear change of variables while the posterior itself does not, and it says nothing about uncertainty. Genuine Bayesian inference keeps the whole posterior; see <a href="/blog/stats-basics/bayesian-vs-frequentist/">Bayesian versus frequentist</a>. MAP is best understood as regularised optimisation wearing Bayesian notation.
 </div>
 
 <div class="key-takeaways">

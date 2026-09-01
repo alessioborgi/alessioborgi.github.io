@@ -3,7 +3,7 @@ title: "Clustering-Deepening: Clustering Algorithms for Object Tracking & Image 
 collection: projects
 layout: single
 permalink: /projects/clustering-deepening/
-excerpt: "An in-depth study of clustering algorithms — from k-Means to DBSCAN and GMMs — applied to object tracking and image segmentation."
+excerpt: "An in-depth study of clustering algorithms, from k-Means to DBSCAN and GMMs, applied to object tracking and image segmentation."
 author_profile: true
 github: "https://github.com/alessioborgi/Clustering-Deepening"
 tags:

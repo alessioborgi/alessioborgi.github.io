@@ -52,12 +52,12 @@
 
 Comprehensive technical blog series with interactive posts, mathematical foundations, and paper figures:
 
-- **[Book I: Transformers](https://alessioborgi.github.io/blog/)** — Architecture, attention mechanisms, and applications
-- **[Book II: Graph Neural Networks](https://alessioborgi.github.io/blog/)** — Message passing, aggregation, and graph learning
-- **[Book III: Sheaf Networks](https://alessioborgi.github.io/blog/)** — Differential geometry and cellular learning
-- **[Book IV: Topological Deep Learning](https://alessioborgi.github.io/blog/)** — Persistent homology, TDA, and topological methods
-- **[Book V: Reinforcement Learning](https://alessioborgi.github.io/blog/)** — MDPs, value-based, policy-gradient, and applications
-- **[Book VI: Robotics](https://alessioborgi.github.io/blog/)** — Perception, control, manipulation, and sim-to-real transfer
+- **[Book I: Transformers](https://alessioborgi.github.io/blog/)**, Architecture, attention mechanisms, and applications
+- **[Book II: Graph Neural Networks](https://alessioborgi.github.io/blog/)**, Message passing, aggregation, and graph learning
+- **[Book III: Sheaf Networks](https://alessioborgi.github.io/blog/)**, Differential geometry and cellular learning
+- **[Book IV: Topological Deep Learning](https://alessioborgi.github.io/blog/)**, Persistent homology, TDA, and topological methods
+- **[Book V: Reinforcement Learning](https://alessioborgi.github.io/blog/)**, MDPs, value-based, policy-gradient, and applications
+- **[Book VI: Robotics](https://alessioborgi.github.io/blog/)**, Perception, control, manipulation, and sim-to-real transfer
 
 ---
 
@@ -95,10 +95,10 @@ Comprehensive technical blog series with interactive posts, mathematical foundat
 
 I'm passionate about collaborative research and open science. I actively contribute to:
 
-- **Peer Review** — Reviewer for major ML/AI conferences (NeurIPS, ICML, ICLR, CVPR)
-- **Open Source** — Active contributor to GNN toolkits and deep learning libraries
-- **Mentoring** — Supporting students in geometric deep learning and robotics research
-- **Research Partnerships** — Always open to collaborative projects in GNNs, topological methods, robotics, and generative AI
+- **Peer Review**, Reviewer for major ML/AI conferences (NeurIPS, ICML, ICLR, CVPR)
+- **Open Source**, Active contributor to GNN toolkits and deep learning libraries
+- **Mentoring**, Supporting students in geometric deep learning and robotics research
+- **Research Partnerships**, Always open to collaborative projects in GNNs, topological methods, robotics, and generative AI
 
 **If you're interested in:**
 - Collaborating on research or publications

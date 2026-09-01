@@ -6,7 +6,7 @@ categories: [math-basics]
 book: math-basics
 subsection: optimisation
 tags: [convexity, gradient-descent, kkt, condition-number]
-excerpt: "Convexity buys one enormous guarantee — every local minimum is global — and it says nothing at all about speed. Deep learning throws the guarantee away and still works, and it is worth being precise about how much of that we actually understand."
+excerpt: "Convexity buys one enormous guarantee, every local minimum is global, and it says nothing at all about speed. Deep learning throws the guarantee away and still works, and it is worth being precise about how much of that we actually understand."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A convex function lies below its chords and above its tangents, and those two facts give the guarantee that makes convex problems tractable: any stationary point is a global minimum. Convexity says nothing about speed — that is set by the condition number \(\kappa = L/\mu\), which controls both how elongated the level sets are and how slowly gradient descent crawls along them. Constraints are handled by Lagrange multipliers and, with inequalities, by KKT. Deep learning is non-convex, trains anyway, and the honest position is that we have partial explanations rather than a theory.
+  <strong>TL;DR:</strong> A convex function lies below its chords and above its tangents, and those two facts give the guarantee that makes convex problems tractable: any stationary point is a global minimum. Convexity says nothing about speed, that is set by the condition number \(\kappa = L/\mu\), which controls both how elongated the level sets are and how slowly gradient descent crawls along them. Constraints are handled by Lagrange multipliers and, with inequalities, by KKT. Deep learning is non-convex, trains anyway, and the honest position is that we have partial explanations rather than a theory.
 </div>
 
 ## Sets, functions, and the one guarantee
@@ -32,9 +32,9 @@ f\bigl(\theta x + (1-\theta)y\bigr) \le \theta f(x) + (1-\theta)f(y)
 \]
 </div>
 
-In words: the chord never dips below the graph. Equivalently, the epigraph — everything on or above the graph — is a convex set.
+In words: the chord never dips below the graph. Equivalently, the epigraph, everything on or above the graph, is a convex set.
 
-The payoff is a single theorem. **Every local minimum of a convex function is a global minimum.** The argument is two lines: suppose $$x$$ is a local minimum but $$f(y) < f(x)$$ for some $$y$$. Then for small $$\theta$$ the point $$\theta y + (1-\theta)x$$ lies inside the neighbourhood where $$x$$ was supposed to be optimal, yet convexity bounds its value by $$\theta f(y) + (1-\theta)f(x) < f(x)$$ — a contradiction. That is the entire reason convex problems are considered solved: there is nowhere to get stuck.
+The payoff is a single theorem. **Every local minimum of a convex function is a global minimum.** The argument is two lines: suppose $$x$$ is a local minimum but $$f(y) < f(x)$$ for some $$y$$. Then for small $$\theta$$ the point $$\theta y + (1-\theta)x$$ lies inside the neighbourhood where $$x$$ was supposed to be optimal, yet convexity bounds its value by $$\theta f(y) + (1-\theta)f(x) < f(x)$$, a contradiction. That is the entire reason convex problems are considered solved: there is nowhere to get stuck.
 
 ## The two characterisations you will be asked for
 
@@ -46,9 +46,9 @@ f(y) \ge f(x) + \nabla f(x)^\top (y - x) \quad \text{for all } x, y .
 \]
 </div>
 
-The tangent plane at any point is a global underestimator. Set $$\nabla f(x) = 0$$ and the right-hand side becomes $$f(x)$$, so $$f(y) \ge f(x)$$ everywhere — a vanishing gradient certifies global optimality, which is exactly what fails in the non-convex case.
+The tangent plane at any point is a global underestimator. Set $$\nabla f(x) = 0$$ and the right-hand side becomes $$f(x)$$, so $$f(y) \ge f(x)$$ everywhere, a vanishing gradient certifies global optimality, which is exactly what fails in the non-convex case.
 
-For twice-differentiable $$f$$, the **second-order condition** is that the [Hessian](/blog/math-basics/jacobian-and-hessian/) is positive semi-definite everywhere, $$\nabla^2 f(x) \succeq 0$$: no direction of negative curvature exists anywhere. If moreover $$\nabla^2 f \succeq \mu I$$ with $$\mu > 0$$, $$f$$ is **$$\mu$$-strongly convex** — it is at least as curved as a quadratic bowl. If $$\nabla^2 f \preceq L I$$, $$f$$ is **$$L$$-smooth**: its gradient is Lipschitz with constant $$L$$.
+For twice-differentiable $$f$$, the **second-order condition** is that the [Hessian](/blog/math-basics/jacobian-and-hessian/) is positive semi-definite everywhere, $$\nabla^2 f(x) \succeq 0$$: no direction of negative curvature exists anywhere. If moreover $$\nabla^2 f \succeq \mu I$$ with $$\mu > 0$$, $$f$$ is **$$\mu$$-strongly convex**, it is at least as curved as a quadratic bowl. If $$\nabla^2 f \preceq L I$$, $$f$$ is **$$L$$-smooth**: its gradient is Lipschitz with constant $$L$$.
 
 ## The condition number sets the speed
 
@@ -61,9 +61,9 @@ Convexity guarantees you arrive; $$\kappa = L/\mu$$ decides when. For $$L$$-smoo
 \]
 </div>
 
-Without strong convexity the rate degrades to $$O(1/k)$$, and Nesterov's accelerated method improves the strongly convex count to $$O(\sqrt{\kappa}\log(1/\varepsilon))$$ — which is optimal for first-order methods on this class.
+Without strong convexity the rate degrades to $$O(1/k)$$, and Nesterov's accelerated method improves the strongly convex count to $$O(\sqrt{\kappa}\log(1/\varepsilon))$$, which is optimal for first-order methods on this class.
 
-Take $$f(x,y) = \tfrac12(x^2 + 10y^2)$$, so $$\mu = 1$$, $$L = 10$$, $$\kappa = 10$$. The optimal step is $$2/11$$, and the per-iteration factor is $$9/11 \approx 0.818$$: roughly 12 iterations to gain one digit of accuracy, for a problem in two variables. Starting from $$(10, 3)$$, the iterates are $$(8.18, -2.45)$$, $$(6.69, 2.01)$$, $$(5.48, -1.64)$$ — the second coordinate flips sign every step while the first crawls. The level sets are ellipses with axis ratio $$\sqrt{\kappa} \approx 3.16$$, and the gradient points across the valley rather than along it.
+Take $$f(x,y) = \tfrac12(x^2 + 10y^2)$$, so $$\mu = 1$$, $$L = 10$$, $$\kappa = 10$$. The optimal step is $$2/11$$, and the per-iteration factor is $$9/11 \approx 0.818$$: roughly 12 iterations to gain one digit of accuracy, for a problem in two variables. Starting from $$(10, 3)$$, the iterates are $$(8.18, -2.45)$$, $$(6.69, 2.01)$$, $$(5.48, -1.64)$$, the second coordinate flips sign every step while the first crawls. The level sets are ellipses with axis ratio $$\sqrt{\kappa} \approx 3.16$$, and the gradient points across the valley rather than along it.
 
 <div class="blog-figure">
 <figure>
@@ -103,13 +103,13 @@ Take $$f(x,y) = \tfrac12(x^2 + 10y^2)$$, so $$\mu = 1$$, $$L = 10$$, $$\kappa = 
     <marker id="cvA" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L0,5 L7,2.5z" fill="#c2410c"/></marker>
   </defs>
 </svg>
-<figcaption>Notice that the zig-zag is not a badly tuned step size — this <em>is</em> the optimal fixed step. Ill-conditioning is a property of the problem, which is why preconditioning, normalisation layers and adaptive methods all attack κ rather than η.</figcaption>
+<figcaption>Notice that the zig-zag is not a badly tuned step size, this <em>is</em> the optimal fixed step. Ill-conditioning is a property of the problem, which is why preconditioning, normalisation layers and adaptive methods all attack κ rather than η.</figcaption>
 </figure>
 </div>
 
 ## Constraints: Lagrange and KKT
 
-With an equality constraint, minimise $$f(x)$$ subject to $$h(x) = 0$$. At an optimum you cannot move along the constraint surface and decrease $$f$$, which means $$\nabla f$$ has no component tangent to the surface — so it must be parallel to $$\nabla h$$. Introduce a multiplier and write the Lagrangian $$\mathcal{L}(x,\nu) = f(x) + \nu\, h(x)$$; stationarity in $$x$$ recovers $$\nabla f + \nu \nabla h = 0$$, and stationarity in $$\nu$$ recovers the constraint.
+With an equality constraint, minimise $$f(x)$$ subject to $$h(x) = 0$$. At an optimum you cannot move along the constraint surface and decrease $$f$$, which means $$\nabla f$$ has no component tangent to the surface, so it must be parallel to $$\nabla h$$. Introduce a multiplier and write the Lagrangian $$\mathcal{L}(x,\nu) = f(x) + \nu\, h(x)$$; stationarity in $$x$$ recovers $$\nabla f + \nu \nabla h = 0$$, and stationarity in $$\nu$$ recovers the constraint.
 
 Inequalities add one idea. For $$\min f(x)$$ subject to $$g_i(x) \le 0$$ and $$h_j(x) = 0$$, the **KKT conditions** at an optimum are
 
@@ -120,25 +120,25 @@ g_i \le 0,\quad h_j = 0,\quad \lambda_i \ge 0,\quad \lambda_i\, g_i = 0 .
 \]
 </div>
 
-The last line is **complementary slackness**: either a constraint is active ($$g_i = 0$$) or its multiplier is zero, so inactive constraints exert no force. The sign condition $$\lambda_i \ge 0$$ encodes that an inequality pushes in one direction only. These are necessary at any optimum satisfying a constraint qualification, and for convex problems also *sufficient*. In a support vector machine the points with $$\lambda_i > 0$$ are precisely those on the margin — which is what "support vector" means.
+The last line is **complementary slackness**: either a constraint is active ($$g_i = 0$$) or its multiplier is zero, so inactive constraints exert no force. The sign condition $$\lambda_i \ge 0$$ encodes that an inequality pushes in one direction only. These are necessary at any optimum satisfying a constraint qualification, and for convex problems also *sufficient*. In a support vector machine the points with $$\lambda_i > 0$$ are precisely those on the margin, which is what "support vector" means.
 
 ## The non-convex elephant
 
-None of the above applies to a deep network. The loss is non-convex in the weights — even a two-layer network with permutation symmetry has factorially many equivalent minima — and yet stochastic gradient descent reliably finds solutions that generalise. What is actually established, as opposed to folklore:
+None of the above applies to a deep network. The loss is non-convex in the weights, even a two-layer network with permutation symmetry has factorially many equivalent minima, and yet stochastic gradient descent reliably finds solutions that generalise. What is actually established, as opposed to folklore:
 
 - **Saddle points, not local minima, are the obstacle.** In high dimensions a random critical point has mixed curvature with overwhelming probability, and perturbed gradient methods provably escape strict saddles in polynomial time.
-- **Over-parameterisation helps, provably, but only in an idealisation.** In the infinite-width neural tangent kernel limit training becomes effectively convex and gradient descent reaches a global minimum — but real networks learn features and the NTK does not, so this explains the idealisation, not the practice.
+- **Over-parameterisation helps, provably, but only in an idealisation.** In the infinite-width neural tangent kernel limit training becomes effectively convex and gradient descent reaches a global minimum, but real networks learn features and the NTK does not, so this explains the idealisation, not the practice.
 - **Minima are connected, not isolated.** Independently trained solutions can be joined by paths of near-constant loss, so the landscape looks more like broad connected valleys than separate basins.
 - **Generalisation is not explained.** The same networks that fit real data also fit randomly permuted labels perfectly, so capacity arguments alone cannot say why the real solutions generalise.
 
 Convexity is a certificate of global optimality that deep learning gives up; what replaces it is empirical.
 
 <div class="insight-box">
-  <strong>Key Insight — convexity and conditioning answer different questions:</strong> convexity determines <em>whether</em> you find the optimum, conditioning determines <em>how fast</em>. A convex problem with \(\kappa = 10^6\) is hopeless in practice; a non-convex one with benign curvature trains in an afternoon. Almost every practical trick — batch normalisation, careful initialisation, Adam's diagonal preconditioner, residual connections — is aimed at the conditioning term, not the convexity one.
+  <strong>Key Insight, convexity and conditioning answer different questions:</strong> convexity determines <em>whether</em> you find the optimum, conditioning determines <em>how fast</em>. A convex problem with \(\kappa = 10^6\) is hopeless in practice; a non-convex one with benign curvature trains in an afternoon. Almost every practical trick, batch normalisation, careful initialisation, Adam's diagonal preconditioner, residual connections, is aimed at the conditioning term, not the convexity one.
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — "convex means easy" and "non-convex means stuck".</strong> Both are wrong. Convexity gives no rate; an ill-conditioned convex problem can be far harder than a well-behaved non-convex one. Conversely, non-convex does not mean trapped in bad local minima — for large networks the empirical difficulty is saddles, plateaus and conditioning. A third trap: convexity of a composition. \(f(g(x))\) is convex when \(f\) is convex and non-decreasing and \(g\) is convex; drop the monotonicity and it fails, which is why a convex loss on top of a network is still non-convex overall.
+  <strong>Interview trap, "convex means easy" and "non-convex means stuck".</strong> Both are wrong. Convexity gives no rate; an ill-conditioned convex problem can be far harder than a well-behaved non-convex one. Conversely, non-convex does not mean trapped in bad local minima, for large networks the empirical difficulty is saddles, plateaus and conditioning. A third trap: convexity of a composition. \(f(g(x))\) is convex when \(f\) is convex and non-decreasing and \(g\) is convex; drop the monotonicity and it fails, which is why a convex loss on top of a network is still non-convex overall.
 </div>
 
 <div class="key-takeaways">

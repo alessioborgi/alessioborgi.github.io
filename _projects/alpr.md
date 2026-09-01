@@ -3,7 +3,7 @@ title: "ALPR: Automatic License Plate Recognition System"
 collection: projects
 layout: single
 permalink: /projects/alpr/
-excerpt: "End-to-end real-time license plate detection and OCR pipeline with dual GUIs — one for security managers, one for drivers — built with PyTorch and Streamlit."
+excerpt: "End-to-end real-time license plate detection and OCR pipeline with dual GUIs, one for security managers, one for drivers, built with PyTorch and Streamlit."
 author_profile: true
 github: "https://github.com/alessioborgi/ALPR-Automatic-License-Plate-Recognition"
 tags:

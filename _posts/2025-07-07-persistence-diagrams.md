@@ -29,7 +29,7 @@ permalink: /blog/persistent-homology/persistence-diagrams/
 {% include figure image_path="/images/blog/tdl/carriere2020_perslay.png" alt="Persistence diagrams" caption="Persistence diagram and vectorisation (Carrière et al., 2020)" %}
 
 
-**Intuition First.** A persistence diagram is a scatter plot where each dot represents one topological feature. The x-axis is when the feature was born, the y-axis when it died. Dots close to the diagonal (birth ≈ death) lived briefly — likely noise. Dots far from the diagonal persisted long — likely real structure. Reading a persistence diagram is like reading a fingerprint: the pattern of dots, especially the off-diagonal ones, is a unique signature of the data's shape.
+**Intuition First.** A persistence diagram is a scatter plot where each dot represents one topological feature. The x-axis is when the feature was born, the y-axis when it died. Dots close to the diagonal (birth ≈ death) lived briefly, likely noise. Dots far from the diagonal persisted long, likely real structure. Reading a persistence diagram is like reading a fingerprint: the pattern of dots, especially the off-diagonal ones, is a unique signature of the data's shape.
 
 <style>
 @keyframes dot-pop {
@@ -85,20 +85,20 @@ permalink: /blog/persistent-homology/persistence-diagrams/
 
 ## From Barcode to Persistence Diagram
 
-The **barcode** of a filtration is the collection of intervals \(\mathcal{B}_k = \{[b_i, d_i)\}_{i}\) — one interval per topological feature in dimension \(k\). The barcode is a complete invariant of the persistence module (by the decomposition theorem).
+The **barcode** of a filtration is the collection of intervals \(\mathcal{B}_k = \{[b_i, d_i)\}_{i}\), one interval per topological feature in dimension \(k\). The barcode is a complete invariant of the persistence module (by the decomposition theorem).
 
 The **persistence diagram** \(\mathrm{dgm}_k\) is obtained by plotting each interval \([b_i, d_i)\) as a point \((b_i, d_i)\) in \(\mathbb{R}^2\). Since \(d_i > b_i\) always (by the elder rule), all points lie strictly above the diagonal \(y = x\). Features with \(d_i = \infty\) (essential homology classes) are sometimes represented on a line at infinity or with a special marker.
 
-The diagonal itself is also part of the diagram, counted with infinite multiplicity — this convention is needed to define the bottleneck distance (every point can be matched to its projection on the diagonal, representing "death at birth").
+The diagonal itself is also part of the diagram, counted with infinite multiplicity, this convention is needed to define the bottleneck distance (every point can be matched to its projection on the diagonal, representing "death at birth").
 
 ## Reading Persistence Diagrams
 
 The geometry of the persistence diagram encodes shape information:
 
 - **Distance from diagonal**: \(d_i - b_i\) is the **persistence** (lifetime) of the feature. Large persistence = significant feature. Small persistence = noise candidate.
-- **Position along diagonal**: \((b_i + d_i)/2\) is the "centre" of the feature's lifetime — when it was most "alive."
-- **Number of points**: the total number of points (off-diagonal) in \(\mathrm{dgm}_k\) equals \(\sum_\varepsilon \Delta\beta_k(\varepsilon)\) — the number of independent birth or death events.
-- **Multiplicity**: a point \((b, d)\) with multiplicity \(m > 1\) means \(m\) independent features share the same birth and death scale — common in symmetric data.
+- **Position along diagonal**: \((b_i + d_i)/2\) is the "centre" of the feature's lifetime, when it was most "alive."
+- **Number of points**: the total number of points (off-diagonal) in \(\mathrm{dgm}_k\) equals \(\sum_\varepsilon \Delta\beta_k(\varepsilon)\), the number of independent birth or death events.
+- **Multiplicity**: a point \((b, d)\) with multiplicity \(m > 1\) means \(m\) independent features share the same birth and death scale, common in symmetric data.
 
 For a typical point cloud sampled from a circle:
 - \(\mathrm{dgm}_0\): many points near the diagonal (short-lived components merging), plus one essential point at \((0, \infty)\).
@@ -122,13 +122,13 @@ A useful scalar summary of a persistence diagram is the **persistence entropy**:
 
 where the sum is over all finite-persistence points. High entropy means many features of similar persistence; low entropy means a few dominant features. Persistence entropy is a stable, monotone topological invariant used as a single-number shape descriptor.
 
-<div class="insight-box"><strong>Key Insight:</strong> The diagonal $$y = x$$ in the persistence diagram is not just a geometric boundary — it is the "noise axis." The stability theorem (Cohen-Steiner et al., 2007) says that under $$\delta$$-perturbation of the input, every point in the diagram moves by at most $$\delta$$ in the bottleneck metric. Features with persistence $$d - b > 2\delta$$ are guaranteed to survive perturbation. This gives a principled noise threshold: ignore everything within distance $$\delta$$ of the diagonal.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The diagonal $$y = x$$ in the persistence diagram is not just a geometric boundary, it is the "noise axis." The stability theorem (Cohen-Steiner et al., 2007) says that under $$\delta$$-perturbation of the input, every point in the diagram moves by at most $$\delta$$ in the bottleneck metric. Features with persistence $$d - b > 2\delta$$ are guaranteed to survive perturbation. This gives a principled noise threshold: ignore everything within distance $$\delta$$ of the diagonal.</div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The diagonal in a persistence diagram plays two roles. Geometrically, it separates signal (far) from noise (near). Algebraically, it is the support of the "trivial" persistence module — features born and immediately dead. Including the diagonal with infinite multiplicity is what makes the bottleneck distance a proper metric: every unmatched point from one diagram gets matched to its closest diagonal point in the other.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The diagonal in a persistence diagram plays two roles. Geometrically, it separates signal (far) from noise (near). Algebraically, it is the support of the "trivial" persistence module, features born and immediately dead. Including the diagonal with infinite multiplicity is what makes the bottleneck distance a proper metric: every unmatched point from one diagram gets matched to its closest diagonal point in the other.</div>
 
 ## Worked Example: Annulus vs Disk
 
-**Annulus** (ring): sample points from $$\{x : 1 \leq |x| \leq 2\}$$. The Vietoris-Rips filtration at appropriate scale produces $$\mathrm{dgm}_0 = \{(0, \infty)\}$$ (one component) and $$\mathrm{dgm}_1 = \{(b_1, \infty)\}$$ (one essential loop). The point $$(b_1, \infty)$$ is far from the diagonal — a strong signal.
+**Annulus** (ring): sample points from $$\{x : 1 \leq |x| \leq 2\}$$. The Vietoris-Rips filtration at appropriate scale produces $$\mathrm{dgm}_0 = \{(0, \infty)\}$$ (one component) and $$\mathrm{dgm}_1 = \{(b_1, \infty)\}$$ (one essential loop). The point $$(b_1, \infty)$$ is far from the diagonal, a strong signal.
 
 **Disk**: sample from $$\{x : |x| \leq 2\}$$. Same $$\mathrm{dgm}_0$$. But $$\mathrm{dgm}_1 = \emptyset$$ (or only near-diagonal noise points). The disk has no loop. A classifier trained on persistence diagrams trivially distinguishes the two shapes.
 

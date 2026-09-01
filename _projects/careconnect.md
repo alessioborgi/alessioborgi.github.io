@@ -15,7 +15,7 @@ tags:
   - Robotics
 ---
 
-CareConnect is an AI-driven system for hospital environment monitoring. Clinical staff can query sensor data using plain natural language, receive real-time visualisations, and trigger automated responses — all through a conversational interface powered by LangChain and large language models.
+CareConnect is an AI-driven system for hospital environment monitoring. Clinical staff can query sensor data using plain natural language, receive real-time visualisations, and trigger automated responses, all through a conversational interface powered by LangChain and large language models.
 
 ## Motivation
 
@@ -24,7 +24,7 @@ Hospital environments generate continuous streams of sensor data (temperature, h
 ## Architecture
 
 - **Sensor layer:** MQTT broker receives real-time telemetry from environmental IoT devices deployed in hospital rooms.
-- **LangChain agent:** an LLM-powered agent with tool access — it can query the sensor database, request time-series plots, and issue MQTT commands to actuators (e.g., HVAC adjustments, alert notifications).
+- **LangChain agent:** an LLM-powered agent with tool access, it can query the sensor database, request time-series plots, and issue MQTT commands to actuators (e.g., HVAC adjustments, alert notifications).
 - **Chat interface:** staff interact via a simple chat UI; the agent interprets queries, fetches relevant data, and responds with text + charts.
 - **Automated actions:** threshold violations trigger pre-configured actions (notifications, device commands) without human intervention.
 

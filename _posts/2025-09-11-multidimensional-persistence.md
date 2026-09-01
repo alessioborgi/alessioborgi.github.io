@@ -6,7 +6,7 @@ book: tdl
 subsection: core
 tags: [multidimensional-persistence, bifiltration, rank-invariant, multiparameter]
 published: false
-excerpt: "When data has multiple meaningful scale parameters (e.g., scale and density), a single filtration parameter is insufficient. Multidimensional persistence indexes complexes by tuples of parameters — but the elegant barcode theorem no longer holds, and only weaker invariants (rank functions, fibered barcodes) are computable."
+excerpt: "When data has multiple meaningful scale parameters (e.g., scale and density), a single filtration parameter is insufficient. Multidimensional persistence indexes complexes by tuples of parameters, but the elegant barcode theorem no longer holds, and only weaker invariants (rank functions, fibered barcodes) are computable."
 author_profile: true
 read_time: true
 icon: "🧊"
@@ -24,9 +24,9 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> In 1D persistence, a bifiltration indexed by (scale, density) encodes richer topological information than either parameter alone. However, the 1D interval decomposition theorem fails in higher dimensions — most 2-parameter persistence modules are not decomposable into intervals. The rank invariant and fibered barcodes provide computable weaker summaries.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> In 1D persistence, a bifiltration indexed by (scale, density) encodes richer topological information than either parameter alone. However, the 1D interval decomposition theorem fails in higher dimensions, most 2-parameter persistence modules are not decomposable into intervals. The rank invariant and fibered barcodes provide computable weaker summaries.</div>
 
-**Intuition First.** Single-parameter persistence is like watching a shape through one adjustable lens: you control the scale, and the topology changes as you zoom. Multidimensional persistence is like having two independent lenses simultaneously — scale and density, for instance. The bad news is that no single "barcode" can encode what two independent lenses see: you get a two-dimensional parameter space, and the algebra becomes wild. The good news is that you can always slice along a line and get a 1D barcode for that slice — this is the fibered barcode, and it's practically very useful.
+**Intuition First.** Single-parameter persistence is like watching a shape through one adjustable lens: you control the scale, and the topology changes as you zoom. Multidimensional persistence is like having two independent lenses simultaneously, scale and density, for instance. The bad news is that no single "barcode" can encode what two independent lenses see: you get a two-dimensional parameter space, and the algebra becomes wild. The good news is that you can always slice along a line and get a 1D barcode for that slice, this is the fibered barcode, and it's practically very useful.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 480 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;font-family:sans-serif;">
@@ -72,7 +72,7 @@ toc_label: "Contents"
   <line x1="310" y1="109" x2="380" y2="109" stroke="#1e40af" stroke-width="4" opacity="0.4"/>
   <text x="270" y="138" font-size="9" fill="#64748b">t along L →</text>
 </svg>
-<figcaption>Left: the rank invariant of a 2-parameter persistence module as a heatmap over parameter space (r, ρ). The orange dashed line L is one slice. Right: restricting the module to L gives a 1D barcode — the fibered barcode on that line.</figcaption>
+<figcaption>Left: the rank invariant of a 2-parameter persistence module as a heatmap over parameter space (r, ρ). The orange dashed line L is one slice. Right: restricting the module to L gives a 1D barcode, the fibered barcode on that line.</figcaption>
 </figure></div>
 
 ## Why Multiple Parameters?
@@ -89,7 +89,7 @@ The **Rips density bifiltration** defines $$K^{(r,\rho)} = \mathrm{Rips}(P_\rho,
 
 A **2-parameter persistence module** assigns a vector space $$M_{(a,b)}$$ to each point $$(a,b) \in \mathbb{R}^2$$ and a linear map $$M_{(a,b)} \to M_{(a',b')}$$ whenever $$(a,b) \leq (a', b')$$ (componentwise). This is a functor from the poset $$(\mathbb{R}^2, \leq)$$ to vector spaces.
 
-**The bad news** (Carlsson & Zomorodian 2009): For 2-parameter persistence modules over fields, there is generally **no complete discrete invariant** analogous to the barcode. The indecomposable representations of the 2-parameter grid poset are not classified by a finite set of intervals — the representation theory is "wild."
+**The bad news** (Carlsson & Zomorodian 2009): For 2-parameter persistence modules over fields, there is generally **no complete discrete invariant** analogous to the barcode. The indecomposable representations of the 2-parameter grid poset are not classified by a finite set of intervals, the representation theory is "wild."
 
 ## Computable Invariants
 
@@ -104,9 +104,9 @@ The rank invariant captures how many topological features persist from scale $$(
 
 **RIVET**: A software tool (Lesnick & Wright 2015) that computes and visualises fibered barcodes efficiently using a 2D arrangement structure.
 
-<div class="insight-box"><strong>Key Insight:</strong> The failure of a complete barcode-type invariant in 2+ parameters is fundamental — it is not a computational limitation but an algebraic one. Recent work (2020–2025) on "minimal presentations" and "stable rank invariants" is making multidimensional persistence increasingly practical. For most applications, the fibered barcode computed along a relevant family of lines gives sufficient information.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The failure of a complete barcode-type invariant in 2+ parameters is fundamental, it is not a computational limitation but an algebraic one. Recent work (2020–2025) on "minimal presentations" and "stable rank invariants" is making multidimensional persistence increasingly practical. For most applications, the fibered barcode computed along a relevant family of lines gives sufficient information.</div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The algebraic hardness of multidimensional persistence is not a gap waiting to be filled — it is provably fundamental. The representation theory of the 2-parameter grid poset is "wild" (contains all finite-dimensional algebras as quotients), meaning no finite list of indecomposable types can exist. Practical progress therefore comes from weaker but computable invariants: the rank invariant, fibered barcodes, and minimal presentations, all of which are now implemented in RIVET.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The algebraic hardness of multidimensional persistence is not a gap waiting to be filled, it is provably fundamental. The representation theory of the 2-parameter grid poset is "wild" (contains all finite-dimensional algebras as quotients), meaning no finite list of indecomposable types can exist. Practical progress therefore comes from weaker but computable invariants: the rank invariant, fibered barcodes, and minimal presentations, all of which are now implemented in RIVET.</div>
 
 ## References
 

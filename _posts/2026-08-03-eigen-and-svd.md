@@ -6,7 +6,7 @@ categories: [math-basics]
 book: math-basics
 subsection: linear-algebra
 tags: [eigenvalues, svd, spectral-theorem, low-rank]
-excerpt: "Eigenvectors are the directions a matrix does not rotate — when they exist. The SVD asks a weaker question that always has an answer, and that is exactly why it, not the eigendecomposition, is the workhorse of applied linear algebra."
+excerpt: "Eigenvectors are the directions a matrix does not rotate, when they exist. The SVD asks a weaker question that always has an answer, and that is exactly why it, not the eigendecomposition, is the workhorse of applied linear algebra."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> An eigenvector satisfies \(Av = \lambda v\) — a direction the map only rescales. Some matrices have too few of them to form a basis and cannot be diagonalised at all. Symmetric matrices are the happy case: the spectral theorem gives real eigenvalues and an <em>orthonormal</em> eigenbasis. The SVD drops the requirement that input and output directions be the same, and in exchange it exists for <em>every</em> matrix: \(A = U\Sigma V^\top\), read as rotate, scale, rotate. Truncating it gives the provably best low-rank approximation.
+  <strong>TL;DR:</strong> An eigenvector satisfies \(Av = \lambda v\), a direction the map only rescales. Some matrices have too few of them to form a basis and cannot be diagonalised at all. Symmetric matrices are the happy case: the spectral theorem gives real eigenvalues and an <em>orthonormal</em> eigenbasis. The SVD drops the requirement that input and output directions be the same, and in exchange it exists for <em>every</em> matrix: \(A = U\Sigma V^\top\), read as rotate, scale, rotate. Truncating it gives the provably best low-rank approximation.
 </div>
 
 ## Invariant directions
@@ -39,7 +39,7 @@ A = P\Lambda P^{-1}, \qquad \Lambda = \operatorname{diag}(\lambda_1,\dots,\lambd
 \]
 </div>
 
-Applying $$A$$ a hundred times becomes $$P\Lambda^{100}P^{-1}$$: raise the diagonal entries to the hundredth power and stop. This is why eigenvalues govern the long-run behaviour of any repeated linear process — power iteration, Markov chains, linear recurrences, the stability of a linearised dynamical system.
+Applying $$A$$ a hundred times becomes $$P\Lambda^{100}P^{-1}$$: raise the diagonal entries to the hundredth power and stop. This is why eigenvalues govern the long-run behaviour of any repeated linear process, power iteration, Markov chains, linear recurrences, the stability of a linearised dynamical system.
 
 ## When diagonalisation fails
 
@@ -51,7 +51,7 @@ N = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}.
 \]
 </div>
 
-Its characteristic polynomial is $$(1-\lambda)^2$$, so $$\lambda = 1$$ twice. But solving $$(N - I)v = 0$$ gives only the line spanned by $$(1,0)^\top$$: one eigendirection where two are needed. $$N$$ is *defective* and no $$P$$ exists. Nothing pathological is happening — a shear genuinely has only one invariant direction — but the eigendecomposition simply has no answer to give.
+Its characteristic polynomial is $$(1-\lambda)^2$$, so $$\lambda = 1$$ twice. But solving $$(N - I)v = 0$$ gives only the line spanned by $$(1,0)^\top$$: one eigendirection where two are needed. $$N$$ is *defective* and no $$P$$ exists. Nothing pathological is happening, a shear genuinely has only one invariant direction, but the eigendecomposition simply has no answer to give.
 
 Even when diagonalisation succeeds, for non-symmetric $$A$$ the eigenvectors need not be orthogonal, $$P$$ can be badly conditioned, and the eigenvalues can be complex.
 
@@ -65,7 +65,7 @@ A = Q\Lambda Q^\top, \qquad Q^\top Q = I .
 \]
 </div>
 
-The inverse is now a transpose, which is numerically ideal. Covariance matrices, Gram matrices $$X^\top X$$, graph Laplacians and Hessians are all symmetric, which is why the spectral theorem does so much work in machine learning — PCA is exactly this decomposition applied to a covariance matrix.
+The inverse is now a transpose, which is numerically ideal. Covariance matrices, Gram matrices $$X^\top X$$, graph Laplacians and Hessians are all symmetric, which is why the spectral theorem does so much work in machine learning, PCA is exactly this decomposition applied to a covariance matrix.
 
 ## The SVD: weaken the question, always get an answer
 
@@ -87,7 +87,7 @@ A^\top A = V\Sigma^\top U^\top U \Sigma V^\top = V(\Sigma^\top\Sigma)V^\top .
 \]
 </div>
 
-$$A^\top A$$ is symmetric positive semi-definite, so this is its spectral decomposition: the right singular vectors are its eigenvectors, and $$\sigma_i = \sqrt{\lambda_i(A^\top A)}$$. Symmetrically, the left singular vectors are eigenvectors of $$AA^\top$$. (In practice nobody forms $$A^\top A$$ to compute an SVD — squaring the matrix squares its condition number — but the identity is the right mental model.)
+$$A^\top A$$ is symmetric positive semi-definite, so this is its spectral decomposition: the right singular vectors are its eigenvectors, and $$\sigma_i = \sqrt{\lambda_i(A^\top A)}$$. Symmetrically, the left singular vectors are eigenvectors of $$AA^\top$$. (In practice nobody forms $$A^\top A$$ to compute an SVD, squaring the matrix squares its condition number, but the identity is the right mental model.)
 
 ## A worked $$2\times2$$ example, exactly
 
@@ -99,7 +99,7 @@ A = \begin{pmatrix} 3 & 0 \\ 4 & 5 \end{pmatrix}.
 \]
 </div>
 
-It is triangular, so its **eigenvalues are 3 and 5**, with eigenvectors $$(1,-2)^\top/\sqrt5$$ and $$(0,1)^\top$$ — not orthogonal, since $$A$$ is not symmetric.
+It is triangular, so its **eigenvalues are 3 and 5**, with eigenvectors $$(1,-2)^\top/\sqrt5$$ and $$(0,1)^\top$$, not orthogonal, since $$A$$ is not symmetric.
 
 Now the SVD. $$A^\top A = \begin{pmatrix} 25 & 20 \\ 20 & 25\end{pmatrix}$$, whose eigenvalues are $$25 \pm 20$$, that is $$45$$ and $$5$$, with eigenvectors $$(1,1)^\top/\sqrt2$$ and $$(1,-1)^\top/\sqrt2$$. Hence
 
@@ -181,16 +181,16 @@ Write the SVD as a sum of rank-one pieces, $$A = \sum_i \sigma_i u_i v_i^\top$$,
 For our $$A$$, the rank-one truncation is $$\sigma_1 u_1 v_1^\top = \begin{pmatrix} 1.5 & 1.5 \\ 4.5 & 4.5\end{pmatrix}$$, and the residual $$A - A_1 = \begin{pmatrix} 1.5 & -1.5 \\ -0.5 & 0.5\end{pmatrix}$$ has Frobenius norm $$\sqrt{2.25+2.25+0.25+0.25} = \sqrt5 = \sigma_2$$, exactly as the theorem predicts.
 
 <div class="insight-box">
-  <strong>Key Insight — the SVD exists because it asks less:</strong> the eigendecomposition demands one orthonormal basis that works simultaneously as input and output basis, and for most matrices no such basis exists. The SVD allows two different bases, \(V\) on the way in and \(U\) on the way out. That extra freedom is exactly what makes it unconditionally available — and why the defective shear \(N = \begin{pmatrix}1&1\\0&1\end{pmatrix}\), which has no eigendecomposition, still has a perfectly good SVD with singular values \(\varphi \approx 1.618\) and \(1/\varphi \approx 0.618\) whose product is \(1 = \lvert\det N\rvert\).
+  <strong>Key Insight, the SVD exists because it asks less:</strong> the eigendecomposition demands one orthonormal basis that works simultaneously as input and output basis, and for most matrices no such basis exists. The SVD allows two different bases, \(V\) on the way in and \(U\) on the way out. That extra freedom is exactly what makes it unconditionally available, and why the defective shear \(N = \begin{pmatrix}1&1\\0&1\end{pmatrix}\), which has no eigendecomposition, still has a perfectly good SVD with singular values \(\varphi \approx 1.618\) and \(1/\varphi \approx 0.618\) whose product is \(1 = \lvert\det N\rvert\).
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — eigenvalues are not singular values.</strong> They coincide only when \(A\) is symmetric positive semi-definite; for symmetric indefinite \(A\), \(\sigma_i = \lvert\lambda_i\rvert\); in general they are unrelated in size, as the example above shows (eigenvalues 3 and 5, singular values 6.708 and 2.236). Two consequences people get wrong under pressure: the operator 2-norm is \(\sigma_{\max}\), not \(\lvert\lambda\rvert_{\max}\); and the right singular vectors are eigenvectors of \(A^\top A\), <em>not</em> of \(A\).
+  <strong>Interview trap, eigenvalues are not singular values.</strong> They coincide only when \(A\) is symmetric positive semi-definite; for symmetric indefinite \(A\), \(\sigma_i = \lvert\lambda_i\rvert\); in general they are unrelated in size, as the example above shows (eigenvalues 3 and 5, singular values 6.708 and 2.236). Two consequences people get wrong under pressure: the operator 2-norm is \(\sigma_{\max}\), not \(\lvert\lambda\rvert_{\max}\); and the right singular vectors are eigenvectors of \(A^\top A\), <em>not</em> of \(A\).
 </div>
 
 ## Where this shows up
 
-PCA is the SVD of the centred data matrix; whitening, the pseudoinverse and stable rank-deficient least squares all come straight from $$U\Sigma V^\top$$. The condition number $$\kappa_2(A) = \sigma_{\max}/\sigma_{\min}$$ — which governs error amplification and reappears in [convergence rates](/blog/math-basics/convexity-and-optimisation/) — is about singular values, not eigenvalues.
+PCA is the SVD of the centred data matrix; whitening, the pseudoinverse and stable rank-deficient least squares all come straight from $$U\Sigma V^\top$$. The condition number $$\kappa_2(A) = \sigma_{\max}/\sigma_{\min}$$, which governs error amplification and reappears in [convergence rates](/blog/math-basics/convexity-and-optimisation/), is about singular values, not eigenvalues.
 
 <div class="key-takeaways">
   <h3>Recap</h3>
@@ -206,7 +206,7 @@ PCA is the SVD of the centred data matrix; whitening, the pseudoinverse and stab
 ## References
 
 1. Eckart, C., & Young, G. [The approximation of one matrix by another of lower rank](https://doi.org/10.1007/BF02288367). *Psychometrika* 1(3), 211–218, 1936.
-2. Trefethen, L. N., & Bau, D. *Numerical Linear Algebra*. SIAM, 1997 — lectures 4–5 on the SVD.
+2. Trefethen, L. N., & Bau, D. *Numerical Linear Algebra*. SIAM, 1997, lectures 4–5 on the SVD.
 3. Golub, G. H., & Van Loan, C. F. *Matrix Computations*, 4th ed., ch. 2 and 8. Johns Hopkins University Press, 2013.
 4. Strang, G. *Introduction to Linear Algebra*, 6th ed., ch. 6–7. Wellesley-Cambridge Press, 2023.
 5. Halko, N., Martinsson, P.-G., & Tropp, J. A. [Finding Structure with Randomness: Probabilistic Algorithms for Constructing Approximate Matrix Decompositions](https://arxiv.org/abs/0909.4061). *SIAM Review* 53(2), 217–288, 2011.

@@ -8,7 +8,7 @@ subsection: supervised
 tags: [svm, kernel-trick, margin, rbf, classification]
 published: true
 is_overview: false
-excerpt: "Among all the hyperplanes that separate two classes, one sits furthest from both. Finding it turns out to depend on the data only through inner products — and that single fact is what lets you work in a space you never build."
+excerpt: "Among all the hyperplanes that separate two classes, one sits furthest from both. Finding it turns out to depend on the data only through inner products, and that single fact is what lets you work in a space you never build."
 author_profile: true
 read_time: true
 icon: "📐"
@@ -19,16 +19,16 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> If two classes can be separated by a straight line, infinitely many lines will do it. The SVM picks the one with the widest empty corridor around it, which turns out to depend on only a handful of points — the support vectors. Solving it reveals that both the fit and the prediction touch the data <em>only</em> through inner products \(x_i^\top x_j\). Replace that inner product with a kernel and you are working in a much larger feature space without ever constructing it.
+<strong>TL;DR:</strong> If two classes can be separated by a straight line, infinitely many lines will do it. The SVM picks the one with the widest empty corridor around it, which turns out to depend on only a handful of points, the support vectors. Solving it reveals that both the fit and the prediction touch the data <em>only</em> through inner products \(x_i^\top x_j\). Replace that inner product with a kernel and you are working in a much larger feature space without ever constructing it.
 </div>
 
 ## Which separating line?
 
-Take two classes that a straight line can separate. There is not one such line; there is a continuum of them, and some are visibly worse than others — a line that shaves past a training point will misclassify the next sample drawn from near it.
+Take two classes that a straight line can separate. There is not one such line; there is a continuum of them, and some are visibly worse than others, a line that shaves past a training point will misclassify the next sample drawn from near it.
 
 The support vector machine makes the choice precise: **pick the hyperplane whose distance to the nearest point of either class is as large as possible.**
 
-Write the hyperplane as $$w^\top x + b = 0$$. The signed distance from a point $$x_i$$ to it is $$(w^\top x_i + b)/\lVert w \rVert$$. This is over-parameterised — scaling $$w$$ and $$b$$ together changes nothing geometrically — so fix the scale by demanding that the closest points satisfy $$\lvert w^\top x_i + b \rvert = 1$$. With that convention the two margin boundaries are $$w^\top x + b = \pm 1$$, the distance between them is $$2/\lVert w \rVert$$, and the problem becomes:
+Write the hyperplane as $$w^\top x + b = 0$$. The signed distance from a point $$x_i$$ to it is $$(w^\top x_i + b)/\lVert w \rVert$$. This is over-parameterised, scaling $$w$$ and $$b$$ together changes nothing geometrically, so fix the scale by demanding that the closest points satisfy $$\lvert w^\top x_i + b \rvert = 1$$. With that convention the two margin boundaries are $$w^\top x + b = \pm 1$$, the distance between them is $$2/\lVert w \rVert$$, and the problem becomes:
 
 <div class="formula-box">
 \[
@@ -97,7 +97,7 @@ Take $$w = (1,0)$$ and $$b = -1$$, so the hyperplane is $$x_1 = 1$$. Evaluating 
 Every constraint holds, four of them with equality, and $$\lVert w \rVert = 1$$ gives a margin of $$2/1 = 2$$. A brute-force search over separating directions confirms nothing beats it.
 
 <div class="insight-box">
-<strong>The property the name refers to.</strong> Delete \((3,2)\) and \((-1,2)\) and re-solve: you get exactly the same hyperplane and exactly the same margin. Only the points touching the margin constrain the answer. Everything else could be moved freely — as long as it stays outside the corridor — without changing a thing. Those touching points are the <strong>support vectors</strong>, and there are usually far fewer of them than there are training examples.
+<strong>The property the name refers to.</strong> Delete \((3,2)\) and \((-1,2)\) and re-solve: you get exactly the same hyperplane and exactly the same margin. Only the points touching the margin constrain the answer. Everything else could be moved freely, as long as it stays outside the corridor, without changing a thing. Those touching points are the <strong>support vectors</strong>, and there are usually far fewer of them than there are training examples.
 </div>
 
 ## Soft margins, for data that is not separable
@@ -126,12 +126,12 @@ f(x) = \sum_i \alpha_i y_i \, x_i^\top x + b ,
 \]
 </div>
 
-with $$\alpha_i \ge 0$$ and — this is the same observation as before, now falling out of the algebra — $$\alpha_i = 0$$ for every point that is not a support vector.
+with $$\alpha_i \ge 0$$ and, this is the same observation as before, now falling out of the algebra, $$\alpha_i = 0$$ for every point that is not a support vector.
 
 Look at what $$f$$ actually touches. Not the coordinates of $$x$$. Only the **inner product** between $$x$$ and each support vector. The training problem has the same character: the dual objective involves the data solely through the pairwise products $$x_i^\top x_j$$.
 
 <div class="insight-box">
-<strong>So the coordinates were never needed.</strong> If an algorithm reads the data only through inner products, you can hand it a different inner product and it will not notice. That is the whole idea. You do not need to know where the points are in some enormous feature space — you only need to know the angles and lengths between them there.
+<strong>So the coordinates were never needed.</strong> If an algorithm reads the data only through inner products, you can hand it a different inner product and it will not notice. That is the whole idea. You do not need to know where the points are in some enormous feature space, you only need to know the angles and lengths between them there.
 </div>
 
 ## The kernel trick, made concrete
@@ -162,10 +162,10 @@ f(x) = \sum_{i \in \text{SV}} \alpha_i y_i \, k(x_i, x) + b .
 \]
 </div>
 
-**Common kernels.** The linear kernel $$k(x,z) = x^\top z$$ recovers the plain SVM. The polynomial kernel $$(x^\top z + c)^d$$ gives all monomials up to degree $$d$$. The RBF kernel $$k(x,z) = \exp(-\gamma \lVert x - z \rVert^2)$$ corresponds to an infinite-dimensional feature space — which is only usable *because* you never construct it. Its $$\gamma$$ controls locality: large $$\gamma$$ makes each support vector's influence decay quickly, giving a wiggly boundary that can overfit; small $$\gamma$$ approaches a linear fit.
+**Common kernels.** The linear kernel $$k(x,z) = x^\top z$$ recovers the plain SVM. The polynomial kernel $$(x^\top z + c)^d$$ gives all monomials up to degree $$d$$. The RBF kernel $$k(x,z) = \exp(-\gamma \lVert x - z \rVert^2)$$ corresponds to an infinite-dimensional feature space, which is only usable *because* you never construct it. Its $$\gamma$$ controls locality: large $$\gamma$$ makes each support vector's influence decay quickly, giving a wiggly boundary that can overfit; small $$\gamma$$ approaches a linear fit.
 
 <div class="warning-box">
-<strong>Not every function is a kernel.</strong> \(k\) must be symmetric and positive semi-definite — every Gram matrix \(K_{ij} = k(x_i, x_j)\) it produces must be PSD. That condition is what guarantees a feature space exists, and it is what keeps the optimisation convex. Invent a similarity function that violates it and the "kernel" SVM you get is solving a different, possibly non-convex problem.
+<strong>Not every function is a kernel.</strong> \(k\) must be symmetric and positive semi-definite, every Gram matrix \(K_{ij} = k(x_i, x_j)\) it produces must be PSD. That condition is what guarantees a feature space exists, and it is what keeps the optimisation convex. Invent a similarity function that violates it and the "kernel" SVM you get is solving a different, possibly non-convex problem.
 </div>
 
 ## What SVMs do not buy you
@@ -183,11 +183,11 @@ f(x) = \sum_{i \in \text{SV}} \alpha_i y_i \, k(x_i, x) + b .
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>Among the infinitely many separating hyperplanes, the SVM takes the one maximising the corridor width \(2/\lVert w \rVert\) — which makes it the minimiser of \(\lVert w \rVert^2\) under margin constraints.</li>
+  <li>Among the infinitely many separating hyperplanes, the SVM takes the one maximising the corridor width \(2/\lVert w \rVert\), which makes it the minimiser of \(\lVert w \rVert^2\) under margin constraints.</li>
   <li>Only the points touching the margin matter. Deleting the rest changes nothing, which is what "support vector" means and why the solution is sparse.</li>
-  <li>The soft margin adds slack variables and the parameter \(C\), trading margin width against violations — a regularisation knob, not a convenience.</li>
+  <li>The soft margin adds slack variables and the parameter \(C\), trading margin width against violations, a regularisation knob, not a convenience.</li>
   <li>Both the training problem and the prediction touch the data only through inner products. That is the fact the kernel trick exploits.</li>
-  <li>\((x^\top z)^2\) in 2-D is <em>exactly</em> an inner product of explicit 3-D feature vectors — expand it and see. RBF does the same thing into an infinite-dimensional space you never build.</li>
+  <li>\((x^\top z)^2\) in 2-D is <em>exactly</em> an inner product of explicit 3-D feature vectors, expand it and see. RBF does the same thing into an infinite-dimensional space you never build.</li>
   <li>The costs are real: quadratic-to-cubic training, no native probabilities, two coupled hyperparameters, and no interpretability once kernelised.</li>
 </ul>
 </div>

@@ -6,7 +6,7 @@ book: gnn
 subsection: pooling
 tags: [topkpool, sagpool, sparse-pooling, graph-classification, node-selection]
 published: true
-excerpt: "Instead of soft cluster assignment (DiffPool), TopKPool and SAGPool select a subset of the most important nodes — producing a smaller but sparser graph at each level. Hard selection is scalable but requires careful score learning."
+excerpt: "Instead of soft cluster assignment (DiffPool), TopKPool and SAGPool select a subset of the most important nodes, producing a smaller but sparser graph at each level. Hard selection is scalable but requires careful score learning."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> TopKPool selects the top-k nodes by a learned importance score and subgraphs on them. SAGPool improves this by computing scores using a GNN — so the importance of a node depends on its neighbourhood, not just its features. Both avoid DiffPool's quadratic memory cost at the expense of losing unselected nodes entirely.
+<strong>TL;DR:</strong> TopKPool selects the top-k nodes by a learned importance score and subgraphs on them. SAGPool improves this by computing scores using a GNN, so the importance of a node depends on its neighbourhood, not just its features. Both avoid DiffPool's quadratic memory cost at the expense of losing unselected nodes entirely.
 </div>
 
 ## Intuition First: Selecting the Most Important Witnesses
 
-Imagine summarising a long meeting by selecting the 5 most informative speakers and ignoring the rest. TopKPool does exactly this for graphs: it learns a score for each node (how informative is this node for the prediction?) and keeps only the top-k scoring nodes. The key question is how to score nodes — by their own features alone (TopKPool) or by how important they are in the context of their neighbourhood (SAGPool).
+Imagine summarising a long meeting by selecting the 5 most informative speakers and ignoring the rest. TopKPool does exactly this for graphs: it learns a score for each node (how informative is this node for the prediction?) and keeps only the top-k scoring nodes. The key question is how to score nodes, by their own features alone (TopKPool) or by how important they are in the context of their neighbourhood (SAGPool).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Hard selection (top-\(k\)) is non-differentiable — you cannot backpropagate through a ranking. The workaround is to <em>gate</em> the retained embeddings by their own score, \(h'_i = h_i \cdot g(y_i)\) with \(g\) a squashing function. That multiplication is the whole trick: without it the score \(y_i\) would appear only inside the ranking and would receive no gradient at all, so the projection or scoring GNN could never be trained.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Hard selection (top-\(k\)) is non-differentiable, you cannot backpropagate through a ranking. The workaround is to <em>gate</em> the retained embeddings by their own score, \(h'_i = h_i \cdot g(y_i)\) with \(g\) a squashing function. That multiplication is the whole trick: without it the score \(y_i\) would appear only inside the ranking and would receive no gradient at all, so the projection or scoring GNN could never be trained.</div>
 
 <style>
 @keyframes node-select {
@@ -151,10 +151,10 @@ A' \;=\; A_{\mathrm{idx},\,\mathrm{idx}}
 \]
 </div>
 
-Note that the gate here is $$y$$ itself, already squashed by $$\tanh$$ inside the score — SAGPool uses $$\tanh$$ where gPool uses a sigmoid. The consequence is that a SAGPool gate can be negative, flipping the sign of a retained node's features, whereas a gPool gate only ever attenuates.
+Note that the gate here is $$y$$ itself, already squashed by $$\tanh$$ inside the score, SAGPool uses $$\tanh$$ where gPool uses a sigmoid. The consequence is that a SAGPool gate can be negative, flipping the sign of a retained node's features, whereas a gPool gate only ever attenuates.
 
 <div class="insight-box">
-<strong>TopKPool vs SAGPool:</strong> both perform the same hard top-\(k\) selection and the same gating; the difference is entirely in the scoring function. TopKPool scores a node from its own row of \(H\) alone (a projection onto a learned vector \(p\)); SAGPool scores it with a one-layer GNN, so the neighbourhood enters the score directly. The SAGPool paper reports that this structure-aware scoring gives better graph classification accuracy — as one would expect, since a pooling decision about which parts of a graph to keep is intrinsically a structural question.
+<strong>TopKPool vs SAGPool:</strong> both perform the same hard top-\(k\) selection and the same gating; the difference is entirely in the scoring function. TopKPool scores a node from its own row of \(H\) alone (a projection onto a learned vector \(p\)); SAGPool scores it with a one-layer GNN, so the neighbourhood enters the score directly. The SAGPool paper reports that this structure-aware scoring gives better graph classification accuracy, as one would expect, since a pooling decision about which parts of a graph to keep is intrinsically a structural question.
 </div>
 
 ## Differentiability via Score Gating
@@ -175,7 +175,7 @@ Now $$y$$ appears in the forward output as a smooth multiplicative factor, so
 $$\partial H'_i/\partial y_{\mathrm{idx}(i)} = H_{\mathrm{idx}(i),:}\, g'(y_{\mathrm{idx}(i)})$$
 is nonzero and the scorer learns. What still does not receive gradient is the *selection*: a node that was dropped contributes nothing to the loss and therefore gets no signal about whether it should have been kept. Training can only refine the ranking of nodes it already keeps, which is why these methods are sensitive to initialisation and why an unlucky early ranking can persist.
 
-This is the same device attention uses to avoid one-hot selection — soften the discrete choice into a multiplication so gradients have somewhere to flow.
+This is the same device attention uses to avoid one-hot selection, soften the discrete choice into a multiplication so gradients have somewhere to flow.
 
 ## Hierarchical Pooling with TopK/SAGPool
 
@@ -183,11 +183,11 @@ Both methods are designed for stacking:
 
 ```
 Layer 1: N nodes → GNN → TopKPool → k₁ nodes
-Layer 2: k₁ nodes → GNN → TopKPool → k₂ nodes  
+Layer 2: k₁ nodes → GNN → TopKPool → k₂ nodes
 Layer 3: k₂ nodes → GNN → Global pool → graph embedding
 ```
 
-At each level, the graph shrinks. The final global pooling (mean/sum/max) operates on a small set of "important" nodes — the hierarchically selected representatives.
+At each level, the graph shrinks. The final global pooling (mean/sum/max) operates on a small set of "important" nodes, the hierarchically selected representatives.
 
 ## Comparison with DiffPool
 
@@ -198,24 +198,24 @@ At each level, the graph shrinks. The final global pooling (mean/sum/max) operat
 | Memory | $$O(N^2)$$ | $$O(N + E)$$ | $$O(N + E)$$ |
 | Scales to large graphs | No | Yes | Yes |
 | Neighbourhood-aware scores | Yes | No | Yes |
-| Nodes discarded | None — every node contributes to every cluster | Unselected nodes dropped | Unselected nodes dropped |
+| Nodes discarded | None, every node contributes to every cluster | Unselected nodes dropped | Unselected nodes dropped |
 | Coarsened graph | Dense | Sparse (induced subgraph) | Sparse (induced subgraph) |
 | Differentiability | Full | Score gating only; selection is not | Score gating only; selection is not |
 
 ## Practical Notes
 
-**Ratio $$k/N$$:** typically set to 0.5 or 0.25 per level — halving or quartering the graph at each pooling step. Because the ratio is relative, the absolute $$k$$ adapts to each graph's size, which is one advantage over DiffPool's fixed cluster count. Too aggressive → information loss. Too gentle → insufficient compression.
+**Ratio $$k/N$$:** typically set to 0.5 or 0.25 per level, halving or quartering the graph at each pooling step. Because the ratio is relative, the absolute $$k$$ adapts to each graph's size, which is one advantage over DiffPool's fixed cluster count. Too aggressive → information loss. Too gentle → insufficient compression.
 
-**Edge dropping:** nodes dropped at level $$l$$ take their edges with them. If two retained nodes were connected only through dropped nodes, they become disconnected in $$A'$$ — the induced subgraph does not reconnect them. Stacked over several levels this can fragment the graph into isolated nodes, at which point further message passing does nothing and only the final global readout still carries signal.
+**Edge dropping:** nodes dropped at level $$l$$ take their edges with them. If two retained nodes were connected only through dropped nodes, they become disconnected in $$A'$$, the induced subgraph does not reconnect them. Stacked over several levels this can fragment the graph into isolated nodes, at which point further message passing does nothing and only the final global readout still carries signal.
 
 **Batch handling:** when training on graphs of different sizes, pooling ratios produce different absolute node counts. PyTorch Geometric handles this with batch indexing.
 
 ## Summary
 
-TopKPool and SAGPool trade DiffPool's expressiveness for scalability: by selecting a sparse subset of nodes rather than soft-assigning all nodes to all clusters, they pool in time and memory linear in the graph, at the cost of discarding unselected nodes entirely. The two differ only in how a node is scored — a projection of its own features versus a one-layer GNN over its neighbourhood — and in both cases it is the multiplication of retained features by their gated score, not the ranking, that makes the scorer trainable at all.
+TopKPool and SAGPool trade DiffPool's expressiveness for scalability: by selecting a sparse subset of nodes rather than soft-assigning all nodes to all clusters, they pool in time and memory linear in the graph, at the cost of discarding unselected nodes entirely. The two differ only in how a node is scored, a projection of its own features versus a one-layer GNN over its neighbourhood, and in both cases it is the multiplication of retained features by their gated score, not the ranking, that makes the scorer trainable at all.
 
 ## References
 
 - Gao, H., & Ji, S. (2019). [Graph U-Nets](https://arxiv.org/abs/1905.05178). *ICML 2019* (TopKPool / gPool).
 - Lee, J., Lee, I., & Kang, J. (2019). [Self-Attention Graph Pooling](https://arxiv.org/abs/1904.08082). *ICML 2019* (SAGPool).
-- Ying, R., You, J., Morris, C., Ren, X., Hamilton, W. L., & Leskovec, J. (2018). [Hierarchical Graph Representation Learning with Differentiable Pooling](https://arxiv.org/abs/1806.08804). *NeurIPS 2018* (DiffPool — the alternative approach).
+- Ying, R., You, J., Morris, C., Ren, X., Hamilton, W. L., & Leskovec, J. (2018). [Hierarchical Graph Representation Learning with Differentiable Pooling](https://arxiv.org/abs/1806.08804). *NeurIPS 2018* (DiffPool, the alternative approach).

@@ -20,12 +20,12 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> Oversmoothing = forward-pass feature collapse from too much averaging: \(\hat{A}^{K} \to u_1u_1^{\top}\), so nearby nodes become indistinguishable. Oversquashing = information and gradient collapse at bottleneck edges: \(\lVert \partial h_v^{(K)}/\partial x_u \rVert\) is throttled by \((\hat{A}^{K})_{vu}\) for distant \(u\). Both worsen with depth, but in different ways, on different nodes, and they need different fixes.
 </div>
-{% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Oversmoothing vs oversquashing" caption="Over-smoothing vs over-squashing — two distinct failure modes in deep GNNs (Topping et al., 2022)" %}
+{% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Oversmoothing vs oversquashing" caption="Over-smoothing vs over-squashing, two distinct failure modes in deep GNNs (Topping et al., 2022)" %}
 
 
 ## Intuition First
 
-Imagine you are in a room full of people whispering a message from person to person. **Oversmoothing** is what happens when everyone repeats the average of all messages they heard — after enough rounds, everyone says the same thing. The content has been diluted to nothing.
+Imagine you are in a room full of people whispering a message from person to person. **Oversmoothing** is what happens when everyone repeats the average of all messages they heard, after enough rounds, everyone says the same thing. The content has been diluted to nothing.
 
 **Oversquashing** is different: imagine two distant groups connected by a single corridor (one "bridge" person). All information between the groups must squeeze through that one person. No matter how many rounds of whispering, the bridge person cannot faithfully relay an exponentially growing flood of messages.
 
@@ -92,7 +92,7 @@ Same symptom (performance collapse), completely different causes.
   <text x="390" y="125" class="label-text">🔴 Bridge = bottleneck</text>
   <text x="390" y="140" class="label-text">Exponential info squashed through 1 edge</text>
 </svg>
-<figcaption>Left: oversmoothing — node features fade toward a uniform value. Right: oversquashing — all cross-cluster information must traverse the single red bridge node.</figcaption>
+<figcaption>Left: oversmoothing, node features fade toward a uniform value. Right: oversquashing, all cross-cluster information must traverse the single red bridge node.</figcaption>
 </figure></div>
 
 ## The Confusion
@@ -125,7 +125,7 @@ You add layers hoping to capture longer-range patterns, but performance peaks at
 
 **Symptom:** accuracy peaks at 2-3 layers, then monotonically decreases. MAD scores drop toward zero with depth.
 
-**Fix:** residual connections (GCNII), APPNP, JK-Net (jumping knowledge). Do NOT add more layers — that makes it worse.
+**Fix:** residual connections (GCNII), APPNP, JK-Net (jumping knowledge). Do NOT add more layers, that makes it worse.
 
 ## When You Have Oversquashing
 
@@ -133,20 +133,20 @@ You have a task requiring long-range reasoning (e.g., predicting whether two dis
 
 **Symptom:** performance on long-range tasks (e.g., LRGB benchmarks) is poor regardless of depth. Jacobian norms near zero for distant node pairs.
 
-**Fix:** graph rewiring (SDRF, add virtual nodes), global attention (Graph Transformers, GPS). Adding residual connections does NOT fix oversquashing — information still can't reach distant nodes.
+**Fix:** graph rewiring (SDRF, add virtual nodes), global attention (Graph Transformers, GPS). Adding residual connections does NOT fix oversquashing, information still can't reach distant nodes.
 
 ## Worked Diagnostic Example
 
-Consider a 4-layer GCN on a path graph: A — B — C — D — E — F — G — H — I — J (10 nodes, so the distance from A to J is 9).
+Consider a 4-layer GCN on a path graph: A, B, C, D, E, F, G, H, I, J (10 nodes, so the distance from A to J is 9).
 
-**Oversmoothing check:** track the Mean Average Distance (MAD) between node embeddings at each layer. As depth grows, MAD falls monotonically toward zero — the embeddings collapse onto $$\mathrm{span}(u_1)$$ and all nodes start to look alike. If you need to classify node A differently from node J, the model progressively loses the ability to do so.
+**Oversmoothing check:** track the Mean Average Distance (MAD) between node embeddings at each layer. As depth grows, MAD falls monotonically toward zero, the embeddings collapse onto $$\mathrm{span}(u_1)$$ and all nodes start to look alike. If you need to classify node A differently from node J, the model progressively loses the ability to do so.
 
-**Oversquashing check:** look at the Jacobian $$\partial h_A^{(K)} / \partial x_J$$ — how much does node J's input affect node A's output?
+**Oversquashing check:** look at the Jacobian $$\partial h_A^{(K)} / \partial x_J$$, how much does node J's input affect node A's output?
 
-- With $$K = 4$$, node A's receptive field reaches only 4 hops, and $$\mathrm{dist}(A,J) = 9 > 4$$. So $$(\hat{A}^{4})_{AJ} = 0$$ and hence $$\partial h_A^{(4)}/\partial x_J = 0$$ exactly — A literally cannot see J. No training fixes this; it is a statement about the computation graph.
+- With $$K = 4$$, node A's receptive field reaches only 4 hops, and $$\mathrm{dist}(A,J) = 9 > 4$$. So $$(\hat{A}^{4})_{AJ} = 0$$ and hence $$\partial h_A^{(4)}/\partial x_J = 0$$ exactly, A literally cannot see J. No training fixes this; it is a statement about the computation graph.
 - With $$K = 9$$ the receptive field does reach J, but $$(\hat{A}^{9})_{AJ}$$ is minuscule, so the bound $$\lVert \partial h_A^{(9)}/\partial x_J \rVert \le (cw)^{9}(\hat{A}^{9})_{AJ}$$ is near zero anyway.
 
-A caveat on the second point, because it is a common overstatement: on a *path* the receptive field grows only linearly, not exponentially, and there is exactly one path from A to J. The decay here is not "exponentially many competing paths" — it comes from the random-walk mass spreading out over the whole 9-hop neighbourhood at every step, so that the share arriving from J alone is exponentially small in the distance. The exponential-fan-in story applies to tree-like or expander graphs; the effective-resistance story covers the path case too, and both are instances of the same $$(\hat{A}^{K})_{vu}$$ bound.
+A caveat on the second point, because it is a common overstatement: on a *path* the receptive field grows only linearly, not exponentially, and there is exactly one path from A to J. The decay here is not "exponentially many competing paths", it comes from the random-walk mass spreading out over the whole 9-hop neighbourhood at every step, so that the share arriving from J alone is exponentially small in the distance. The exponential-fan-in story applies to tree-like or expander graphs; the effective-resistance story covers the path case too, and both are instances of the same $$(\hat{A}^{K})_{vu}$$ bound.
 
 Both problems can coexist: you need 9 layers to reach J (depth demand), but 9 layers cause oversmoothing. The fix is not "just add more layers."
 
@@ -177,7 +177,7 @@ a rank-one collapse controlled by the spectral gap. Oversquashing is about an **
 \]
 </div>
 
-So one pathology says the powers of $$\hat{A}$$ converge to something uninformative, while the other says specific entries of those powers are too small. Depth pushes on both at once — which is exactly why it cannot resolve either.
+So one pathology says the powers of $$\hat{A}$$ converge to something uninformative, while the other says specific entries of those powers are too small. Depth pushes on both at once, which is exactly why it cannot resolve either.
 
 They create opposing pressures on depth:
 - Oversmoothing says: use FEWER layers
@@ -217,7 +217,7 @@ The resolution: **decouple propagation from transformation** (APPNP, SGC) and/or
 | Can more layers help? | Never (makes it worse) | Should, but squashing increases too |
 | Key fix | Residuals, less aggregation | Rewiring, global attention |
 
-These two pathologies define the fundamental challenges of deep GNNs. Understanding both — and distinguishing them — is essential for diagnosing GNN failures and choosing appropriate solutions.
+These two pathologies define the fundamental challenges of deep GNNs. Understanding both, and distinguishing them, is essential for diagnosing GNN failures and choosing appropriate solutions.
 
 ## References
 

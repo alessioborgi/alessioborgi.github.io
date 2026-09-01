@@ -321,7 +321,7 @@ author_profile: true
 </style>
 
 <p class="blog-library-intro">
-  Welcome to my research blog — structured like a <strong>library of books</strong>. Each book covers a major AI topic; every chapter is a short, self-contained post you can read in 3–5 minutes. Start with the <em>Start Here</em> overview of any book, then dive into whichever chapters interest you most.
+  Welcome to my research blog, structured like a <strong>library of books</strong>. Each book covers a major AI topic; every chapter is a short, self-contained post you can read in 3–5 minutes. Start with the <em>Start Here</em> overview of any book, then dive into whichever chapters interest you most.
 </p>
 
 <div class="blog-library-note">
@@ -387,7 +387,7 @@ author_profile: true
 {% assign py_overview = pyp_posts | where_exp: "p", "p.is_overview" | first %}
 
 {% comment %} Book 0 renders its sections from the b_groups list further down,
-   which re-derives each group from basics_posts — so only the overview is
+   which re-derives each group from basics_posts, so only the overview is
    assigned here. {% endcomment %}
 {% assign b_overview = basics_posts | where_exp: "p", "p.is_overview" | first %}
 
@@ -448,7 +448,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🧠</span>
     <div>
-      <h2>Book 0 — Basics</h2>
+      <h2>Book 0, Basics</h2>
       <p>The neural-network foundations that make the later books easier to understand</p>
     </div>
   </div>
@@ -501,7 +501,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🤖</span>
     <div>
-      <h2>Book I — Transformers</h2>
+      <h2>Book I, Transformers</h2>
       <p>From the attention mechanism to GPT, BERT, ViT, and beyond</p>
     </div>
   </div>
@@ -598,7 +598,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🕸️</span>
     <div>
-      <h2>Book II — Graph Neural Networks</h2>
+      <h2>Book II, Graph Neural Networks</h2>
       <p>Graphs, spectral theory, and learning architectures for relational data</p>
     </div>
   </div>
@@ -779,7 +779,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🌿</span>
     <div>
-      <h2>Book III — Sheaf Neural Networks</h2>
+      <h2>Book III, Sheaf Neural Networks</h2>
       <p>From cellular sheaf theory to neural diffusion and attention</p>
     </div>
   </div>
@@ -895,7 +895,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🔺</span>
     <div>
-      <h2>Book IV — Topological Deep Learning</h2>
+      <h2>Book IV, Topological Deep Learning</h2>
       <p>From simplicial complexes and homology groups to barcodes, stability theorems, and TDA for machine learning</p>
     </div>
   </div>
@@ -1004,13 +1004,13 @@ author_profile: true
 </div>
 
 <!-- ════════════════════════════════════════════════════════ -->
-<!-- Book V — Reinforcement Learning                         -->
+<!-- Book V, Reinforcement Learning                         -->
 <!-- ════════════════════════════════════════════════════════ -->
 <div class="blog-book" data-book="rl">
   <div class="book-banner">
     <span class="book-icon">🎮</span>
     <div>
-      <h2>Book V — Reinforcement Learning</h2>
+      <h2>Book V, Reinforcement Learning</h2>
       <p>From MDPs and Bellman equations through deep RL, policy gradients, model-based methods, MARL, and RLHF</p>
     </div>
   </div>
@@ -1136,13 +1136,13 @@ author_profile: true
 </div>
 
 <!-- ════════════════════════════════════════════════════════ -->
-<!-- Book VI — Robotics                                      -->
+<!-- Book VI, Robotics                                      -->
 <!-- ════════════════════════════════════════════════════════ -->
 <div class="blog-book" data-book="robotics">
   <div class="book-banner">
     <span class="book-icon">🤖</span>
     <div>
-      <h2>Book VI — Learning-Based Robotics</h2>
+      <h2>Book VI, Learning-Based Robotics</h2>
       <p>From kinematics and sensors through SLAM, imitation learning, sim-to-real, diffusion policy, and foundation models</p>
     </div>
   </div>
@@ -1297,7 +1297,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🌫️</span>
     <div>
-      <h2>Book VII — Diffusion Models</h2>
+      <h2>Book VII, Diffusion Models</h2>
       <p>From denoising a fixed corruption to score-based SDEs, guidance, fast samplers and flow matching</p>
     </div>
   </div>
@@ -1347,7 +1347,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🧊</span>
     <div>
-      <h2>Book VIII — Geometric Deep Learning</h2>
+      <h2>Book VIII, Geometric Deep Learning</h2>
       <p>Why convolutions, attention, message passing and sheaves are one blueprint applied to different symmetries</p>
     </div>
   </div>
@@ -1399,8 +1399,8 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">📐</span>
     <div>
-      <h2>A1 — Mathematical Basics</h2>
-      <p>Linear algebra and calculus for machine learning — built for a fast recap before interviews</p>
+      <h2>A1, Mathematical Basics</h2>
+      <p>Linear algebra and calculus for machine learning, built for a fast recap before interviews</p>
     </div>
   </div>
   <div class="book-body">
@@ -1443,7 +1443,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">📊</span>
     <div>
-      <h2>A2 — Statistics Basics</h2>
+      <h2>A2, Statistics Basics</h2>
       <p>Estimation, inference and the interpretations people get wrong under pressure</p>
     </div>
   </div>
@@ -1487,7 +1487,7 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🎲</span>
     <div>
-      <h2>A3 — Probability Basics</h2>
+      <h2>A3, Probability Basics</h2>
       <p>The language every likelihood, generative model and loss function is written in</p>
     </div>
   </div>
@@ -1531,8 +1531,8 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🔺</span>
     <div>
-      <h2>A4 — Geometry Basics</h2>
-      <p>Metric spaces, manifolds and symmetry — the geometry behind embeddings and equivariant models</p>
+      <h2>A4, Geometry Basics</h2>
+      <p>Metric spaces, manifolds and symmetry, the geometry behind embeddings and equivariant models</p>
     </div>
   </div>
   <div class="book-body">
@@ -1575,8 +1575,8 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">⚛️</span>
     <div>
-      <h2>A5 — Physics Basics</h2>
-      <p>Mechanics, statistical physics and stochastic processes — where diffusion models and energy-based models come from</p>
+      <h2>A5, Physics Basics</h2>
+      <p>Mechanics, statistical physics and stochastic processes, where diffusion models and energy-based models come from</p>
     </div>
   </div>
   <div class="book-body">
@@ -1622,8 +1622,8 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🖥️</span>
     <div>
-      <h2>A6 — Computer Science Basics</h2>
-      <p>Complexity, data structures and algorithms — the fundamentals technical interviews actually test</p>
+      <h2>A6, Computer Science Basics</h2>
+      <p>Complexity, data structures and algorithms, the fundamentals technical interviews actually test</p>
     </div>
   </div>
   <div class="book-body">
@@ -1666,8 +1666,8 @@ author_profile: true
   <div class="book-banner">
     <span class="book-icon">🐍</span>
     <div>
-      <h2>A7 — Python Programming Primer</h2>
-      <p>A detailed, example-first guide to writing Python properly — syntax through to idiom and performance</p>
+      <h2>A7, Python Programming Primer</h2>
+      <p>A detailed, example-first guide to writing Python properly, syntax through to idiom and performance</p>
     </div>
   </div>
   <div class="book-body">

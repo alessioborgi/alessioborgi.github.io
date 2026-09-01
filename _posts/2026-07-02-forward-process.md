@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The forward process is a Markov chain that shrinks the image by \(\sqrt{1-\beta_t}\) and adds variance \(\beta_t\). The shrink factor is not cosmetic — without it the variance grows without bound instead of converging to \(\mathcal{N}(\mathbf{0},\mathbf{I})\). Because Gaussians compose, the whole chain collapses to a single closed-form jump governed by \(\bar{\alpha}_t\), which is what makes training cheap. The choice of schedule then decides how the signal-to-noise ratio decays, and the standard linear schedule wastes about a third of its steps on inputs that are already indistinguishable from noise.
+  <strong>TL;DR:</strong> The forward process is a Markov chain that shrinks the image by \(\sqrt{1-\beta_t}\) and adds variance \(\beta_t\). The shrink factor is not cosmetic, without it the variance grows without bound instead of converging to \(\mathcal{N}(\mathbf{0},\mathbf{I})\). Because Gaussians compose, the whole chain collapses to a single closed-form jump governed by \(\bar{\alpha}_t\), which is what makes training cheap. The choice of schedule then decides how the signal-to-noise ratio decays, and the standard linear schedule wastes about a third of its steps on inputs that are already indistinguishable from noise.
 </div>
 
 ## Two things the corruption has to do
@@ -49,7 +49,7 @@ v_t = (1-\beta_t)\,v_{t-1} + \beta_t
 
 This recursion has a fixed point at $$v = 1$$, and it is attracting: $$v_t - 1 = (1-\beta_t)(v_{t-1}-1)$$, so the gap to unit variance shrinks by a factor $$1-\beta_t$$ every step. Data normalised to unit variance stays there; data that is not gets pulled in.
 
-Now delete the shrink factor, so that $$\mathbf{x}_t = \mathbf{x}_{t-1} + \sqrt{\beta_t}\,\mathbf{z}$$. The recursion becomes $$v_t = v_{t-1} + \beta_t$$, and the variance is just an accumulating sum. With the standard linear schedule — $$T = 1000$$, $$\beta$$ rising linearly from $$10^{-4}$$ to $$0.02$$ — that sum is $$\sum_t \beta_t = 10.05$$, so unit-variance data would end at variance $$11.05$$, a standard deviation of $$3.32$$. The terminal distribution then depends on $$T$$ and on the schedule, and no fixed prior matches it. Variance-exploding formulations do exist and work, but they have to rescale explicitly at sampling time; see the [score-SDE view](/blog/diffusion/score-based-sde/).
+Now delete the shrink factor, so that $$\mathbf{x}_t = \mathbf{x}_{t-1} + \sqrt{\beta_t}\,\mathbf{z}$$. The recursion becomes $$v_t = v_{t-1} + \beta_t$$, and the variance is just an accumulating sum. With the standard linear schedule, $$T = 1000$$, $$\beta$$ rising linearly from $$10^{-4}$$ to $$0.02$$, that sum is $$\sum_t \beta_t = 10.05$$, so unit-variance data would end at variance $$11.05$$, a standard deviation of $$3.32$$. The terminal distribution then depends on $$T$$ and on the schedule, and no fixed prior matches it. Variance-exploding formulations do exist and work, but they have to rescale explicitly at sampling time; see the [score-SDE view](/blog/diffusion/score-based-sde/).
 
 ## The closed-form jump
 
@@ -87,7 +87,7 @@ Values for $$T=1000$$, $$\beta$$ linear from $$10^{-4}$$ to $$0.02$$:
 | 800 | 0.00153 | 0.039 | 0.999 | 0.00153 |
 | 1000 | 0.00004 | 0.006 | 1.000 | 0.00004 |
 
-Read the last three rows. By $$t=600$$ the signal amplitude is 16% of the noise amplitude; by $$t=800$$ it is 4%. Taking $$\mathrm{SNR} = 0.01$$ as a generous threshold for "there is nothing recoverable here", the linear schedule crosses it at $$t = 675$$ — so **325 of the 1000 steps operate on inputs that are effectively pure noise**. Those steps still cost a network evaluation at sampling time and still consume gradient updates during training.
+Read the last three rows. By $$t=600$$ the signal amplitude is 16% of the noise amplitude; by $$t=800$$ it is 4%. Taking $$\mathrm{SNR} = 0.01$$ as a generous threshold for "there is nothing recoverable here", the linear schedule crosses it at $$t = 675$$, so **325 of the 1000 steps operate on inputs that are effectively pure noise**. Those steps still cost a network evaluation at sampling time and still consume gradient updates during training.
 
 ## The cosine schedule
 
@@ -106,7 +106,7 @@ with a small offset $$s = 0.008$$ that keeps $$\beta_1$$ from collapsing to zero
 <figure>
 <svg role="img" aria-labelledby="fwdp-title fwdp-desc" viewBox="0 0 640 190" style="max-width:640px;width:100%;height:auto">
   <title id="fwdp-title">Log signal-to-noise ratio against timestep for the linear and cosine schedules</title>
-  <desc id="fwdp-desc">Two decreasing curves on axes running from timestep 0 to 1000 horizontally and log signal-to-noise ratio from plus 6 down to minus 10 vertically. The linear schedule (orange) falls steeply and crosses log SNR of minus 4.6 at timestep 675. The cosine schedule (teal) falls almost as a straight line and does not cross minus 4.6 until timestep 937. A dashed grey line marks log SNR equal to minus 4.6, labelled "signal-to-noise ratio 0.01 — effectively pure noise".</desc>
+  <desc id="fwdp-desc">Two decreasing curves on axes running from timestep 0 to 1000 horizontally and log signal-to-noise ratio from plus 6 down to minus 10 vertically. The linear schedule (orange) falls steeply and crosses log SNR of minus 4.6 at timestep 675. The cosine schedule (teal) falls almost as a straight line and does not cross minus 4.6 until timestep 937. A dashed grey line marks log SNR equal to minus 4.6, labelled "signal-to-noise ratio 0.01, effectively pure noise".</desc>
   <rect x="1" y="1" width="638" height="188" rx="9" fill="#f8fafc" stroke="#cbd5e1"/>
   <line x1="60" y1="30" x2="60" y2="152" stroke="#475569" stroke-width="1"/>
   <line x1="60" y1="152" x2="606" y2="152" stroke="#475569" stroke-width="1"/>
@@ -125,7 +125,7 @@ with a small offset $$s = 0.008$$ that keeps $$\beta_1$$ from collapsing to zero
   <text x="333" y="180" text-anchor="middle" font-size="10" fill="#334155">timestep t</text>
   <text x="18" y="95" text-anchor="middle" font-size="10" fill="#334155" transform="rotate(-90 18 95)">log SNR</text>
   <line x1="60" y1="109.5" x2="606" y2="109.5" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="602" y="106" text-anchor="end" font-size="9.5" fill="#475569">SNR = 0.01 — effectively pure noise</text>
+  <text x="602" y="106" text-anchor="end" font-size="9.5" fill="#475569">SNR = 0.01, effectively pure noise</text>
   <polyline fill="none" stroke="#c2410c" stroke-width="2"
     points="87,48.7 114,58.8 168,70.1 222,78.2 276,85.7 330,93.5 384,102.2 438,112.2 492,123.6 546,136.5 600,150"/>
   <polyline fill="none" stroke="#0e7490" stroke-width="2"
@@ -142,12 +142,12 @@ with a small offset $$s = 0.008$$ that keeps $$\beta_1$$ from collapsing to zero
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — the schedule is a budget allocation:</strong> \(T\) is a budget of network evaluations, and the schedule decides how that budget is spread across noise levels. A schedule that drives \(\bar{\alpha}_t\) to zero early is not "more thorough" — it has simply spent a large block of its budget mapping noise to noise, at both training and sampling time. Reading the schedule as a log-SNR curve rather than as a \(\beta\) sequence makes the misallocation obvious, and it is why later work parameterises schedules by SNR directly.
+  <strong>Key Insight, the schedule is a budget allocation:</strong> \(T\) is a budget of network evaluations, and the schedule decides how that budget is spread across noise levels. A schedule that drives \(\bar{\alpha}_t\) to zero early is not "more thorough", it has simply spent a large block of its budget mapping noise to noise, at both training and sampling time. Reading the schedule as a log-SNR curve rather than as a \(\beta\) sequence makes the misallocation obvious, and it is why later work parameterises schedules by SNR directly.
 </div>
 
 ## When it matters and when it does not
 
-The gap is largest at low resolution. Nichol & Dhariwal report that the linear schedule is noticeably sub-optimal at $$32\times32$$ and $$64\times64$$, and that under it a substantial prefix of the reverse process can be skipped with little effect on sample quality — a direct symptom of the wasted region. At $$256\times256$$ the difference narrows, because a high-resolution image carries far more information and survives longer under the same relative noise.
+The gap is largest at low resolution. Nichol & Dhariwal report that the linear schedule is noticeably sub-optimal at $$32\times32$$ and $$64\times64$$, and that under it a substantial prefix of the reverse process can be skipped with little effect on sample quality, a direct symptom of the wasted region. At $$256\times256$$ the difference narrows, because a high-resolution image carries far more information and survives longer under the same relative noise.
 
 The other consequence surfaces in [DDIM](/blog/diffusion/ddim/) and other fast samplers. When you drop from 1000 steps to 30, you subsample the schedule, and steps drawn from a dead region contribute nothing. A schedule with a well-spread log-SNR curve is a precondition for short sampling, not an independent refinement.
 

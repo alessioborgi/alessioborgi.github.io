@@ -6,7 +6,7 @@ categories: [geometry-basics]
 book: geometry-basics
 subsection: differential
 tags: [riemannian, geodesics, hyperbolic-embeddings, slerp]
-excerpt: "Put an inner product on every tangent space and let it vary smoothly: that single object determines lengths, angles, distances, straight lines and volume. It also explains why a hierarchy embeds badly in Euclidean space and beautifully in hyperbolic space — the volume is in the wrong place."
+excerpt: "Put an inner product on every tangent space and let it vary smoothly: that single object determines lengths, angles, distances, straight lines and volume. It also explains why a hierarchy embeds badly in Euclidean space and beautifully in hyperbolic space, the volume is in the wrong place."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,12 +18,12 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A Riemannian metric assigns an inner product \(g_p\) to each tangent space, varying smoothly with \(p\). Curve length is \(\int\sqrt{g_\gamma(\dot\gamma,\dot\gamma)}\,dt\) and distance is the infimum over curves. Geodesics are the locally length-minimising, constant-speed curves — the manifold's straight lines. The exponential map \(\exp_p(v)\) walks along the geodesic leaving \(p\) with velocity \(v\) for unit time, and \(\log_p\) inverts it locally, so the pair moves you between the manifold and a flat tangent space. SLERP is exactly this on the sphere. And in hyperbolic space the volume of a ball grows like \(e^r\) rather than \(r^d\), which is why trees embed there with almost no distortion.
+  <strong>TL;DR:</strong> A Riemannian metric assigns an inner product \(g_p\) to each tangent space, varying smoothly with \(p\). Curve length is \(\int\sqrt{g_\gamma(\dot\gamma,\dot\gamma)}\,dt\) and distance is the infimum over curves. Geodesics are the locally length-minimising, constant-speed curves, the manifold's straight lines. The exponential map \(\exp_p(v)\) walks along the geodesic leaving \(p\) with velocity \(v\) for unit time, and \(\log_p\) inverts it locally, so the pair moves you between the manifold and a flat tangent space. SLERP is exactly this on the sphere. And in hyperbolic space the volume of a ball grows like \(e^r\) rather than \(r^d\), which is why trees embed there with almost no distortion.
 </div>
 
 ## The metric is the only input
 
-A smooth manifold has tangent spaces but no way to measure anything in them. A **Riemannian metric** $$g$$ supplies one: a positive-definite inner product $$g_p(\cdot,\cdot)$$ on $$T_pM$$ for each $$p$$, depending smoothly on $$p$$. In coordinates it is a symmetric positive-definite matrix field $$g_{ij}(x)$$ — the first fundamental form of the [curvature](/blog/geometry-basics/curvature/) post, promoted to a definition rather than inherited from an ambient space.
+A smooth manifold has tangent spaces but no way to measure anything in them. A **Riemannian metric** $$g$$ supplies one: a positive-definite inner product $$g_p(\cdot,\cdot)$$ on $$T_pM$$ for each $$p$$, depending smoothly on $$p$$. In coordinates it is a symmetric positive-definite matrix field $$g_{ij}(x)$$, the first fundamental form of the [curvature](/blog/geometry-basics/curvature/) post, promoted to a definition rather than inherited from an ambient space.
 
 Everything else follows. The length of a curve $$\gamma:[0,1]\to M$$ is
 
@@ -45,7 +45,7 @@ A **geodesic** is a constant-speed curve that is *locally* length-minimising: ev
 \]
 </div>
 
-where the Christoffel symbols $$\Gamma^k_{ij}$$ are built from first derivatives of $$g$$. The equation says the acceleration has no component inside the tangent space — the curve is as straight as the manifold permits.
+where the Christoffel symbols $$\Gamma^k_{ij}$$ are built from first derivatives of $$g$$. The equation says the acceleration has no component inside the tangent space, the curve is as straight as the manifold permits.
 
 "Locally" is doing real work. On the sphere, the geodesics are great circles, and a great-circle arc of $$200^\circ$$ is a geodesic but is emphatically not the shortest route; the complementary $$160^\circ$$ arc is. Geodesics are also not unique in general: antipodal points on a sphere are joined by infinitely many.
 
@@ -68,7 +68,7 @@ where the Christoffel symbols $$\Gamma^k_{ij}$$ are built from first derivatives
   <text x="200" y="176" font-size="10.5" fill="#475569" text-anchor="middle">central angle 120°</text>
   <text x="200" y="236" font-size="10.5" fill="#334155" text-anchor="middle">the chord is shorter, but it is not on the sphere</text>
 </svg>
-<figcaption>Notice that the straight line is genuinely shorter — geodesics minimise length only among curves that stay on the manifold. Interpolating linearly in the ambient space leaves the surface, which is the failure SLERP fixes.</figcaption>
+<figcaption>Notice that the straight line is genuinely shorter, geodesics minimise length only among curves that stay on the manifold. Interpolating linearly in the ambient space leaves the surface, which is the failure SLERP fixes.</figcaption>
 </figure>
 </div>
 
@@ -82,7 +82,7 @@ Given $$p \in M$$ and $$v \in T_pM$$, let $$\gamma_v$$ be the unique geodesic wi
 \]
 </div>
 
-$$\exp_p$$ takes a tangent vector — a flat, linear object you can do arithmetic with — and returns a point on the manifold, travelling a distance $$\lVert v\rVert_g$$ in the direction $$v$$. $$\log_p(q)$$ returns the initial velocity needed to reach $$q$$. Together they are the standard device for optimisation on manifolds: pull the problem into $$T_pM$$, take a Euclidean step, push back with $$\exp$$. The inverse only exists locally — on the unit sphere the injectivity radius is $$\pi$$, and beyond that geodesics start colliding.
+$$\exp_p$$ takes a tangent vector, a flat, linear object you can do arithmetic with, and returns a point on the manifold, travelling a distance $$\lVert v\rVert_g$$ in the direction $$v$$. $$\log_p(q)$$ returns the initial velocity needed to reach $$q$$. Together they are the standard device for optimisation on manifolds: pull the problem into $$T_pM$$, take a Euclidean step, push back with $$\exp$$. The inverse only exists locally, on the unit sphere the injectivity radius is $$\pi$$, and beyond that geodesics start colliding.
 
 On the unit sphere $$S^{n-1}$$ the maps are explicit: $$\exp_p(v) = \cos(\lVert v\rVert)\,p + \sin(\lVert v\rVert)\,v/\lVert v\rVert$$. Feed that the tangent direction toward $$q$$ and you get spherical linear interpolation:
 
@@ -93,7 +93,7 @@ On the unit sphere $$S^{n-1}$$ the maps are explicit: $$\exp_p(v) = \cos(\lVert 
 \]
 </div>
 
-SLERP is not a heuristic for interpolating unit vectors, it is $$\exp_p\!\big(t\log_p(q)\big)$$ written out. It matters because linear interpolation shrinks: the midpoint of two unit vectors has norm $$\cos(\Omega/2)$$, so at $$\Omega = 60^\circ$$ the lerped midpoint has norm $$0.866$$ and at $$\Omega = 120^\circ$$ only $$0.5$$ — halfway between two latents, at half the radius, in a region the model never saw during training.
+SLERP is not a heuristic for interpolating unit vectors, it is $$\exp_p\!\big(t\log_p(q)\big)$$ written out. It matters because linear interpolation shrinks: the midpoint of two unit vectors has norm $$\cos(\Omega/2)$$, so at $$\Omega = 60^\circ$$ the lerped midpoint has norm $$0.866$$ and at $$\Omega = 120^\circ$$ only $$0.5$$, halfway between two latents, at half the radius, in a region the model never saw during training.
 
 ## Hyperbolic space and the volume argument
 
@@ -114,7 +114,7 @@ The metric blows up near the boundary, so the rim is infinitely far away and the
 | $$10$$ | $$69{,}193$$ | $$314.2$$ | $$220$$ |
 
 <div class="insight-box">
-  <strong>Key Insight — why trees fit:</strong> a complete \(b\)-ary tree has on the order of \(b^r\) nodes within \(r\) hops of the root, and if the embedding is to preserve distances, those nodes need room that also grows like \(b^r\). Euclidean space offers only \(r^d\) — polynomial against exponential — so the descendants get crushed together and distortion grows with depth. Hyperbolic area grows like \(\pi e^r\) for large \(r\), matching the tree's own growth rate. Sarkar's construction makes this exact: any tree embeds into \(\mathbb{H}^2\) with distortion arbitrarily close to \(1\). Negative curvature is not a trick for hierarchies, it is the same shape as a hierarchy.
+  <strong>Key Insight, why trees fit:</strong> a complete \(b\)-ary tree has on the order of \(b^r\) nodes within \(r\) hops of the root, and if the embedding is to preserve distances, those nodes need room that also grows like \(b^r\). Euclidean space offers only \(r^d\), polynomial against exponential, so the descendants get crushed together and distortion grows with depth. Hyperbolic area grows like \(\pi e^r\) for large \(r\), matching the tree's own growth rate. Sarkar's construction makes this exact: any tree embeds into \(\mathbb{H}^2\) with distortion arbitrarily close to \(1\). Negative curvature is not a trick for hierarchies, it is the same shape as a hierarchy.
 </div>
 
 This is what Poincaré embeddings exploit for taxonomies such as WordNet, reaching better reconstruction with a handful of hyperbolic dimensions than Euclidean embeddings manage with far more; hyperbolic neural networks and hyperbolic GNNs extend the layers themselves to the manifold.
@@ -130,7 +130,7 @@ This is what Poincaré embeddings exploit for taxonomies such as WordNet, reachi
     <li>Geodesics solve \(\ddot\gamma^k + \Gamma^k_{ij}\dot\gamma^i\dot\gamma^j = 0\) and are locally, not globally, length-minimising.</li>
     <li>\(\exp_p(v) = \gamma_v(1)\) maps tangent vectors to points; \(\log_p\) inverts it near \(p\). Riemannian optimisation is: \(\log\), Euclidean step, \(\exp\).</li>
     <li>SLERP is \(\exp_p(t\log_p q)\) on the sphere; linear interpolation shrinks norms by \(\cos(\Omega/2)\) at the midpoint.</li>
-    <li>Ball volume grows like \(e^r\) in hyperbolic space versus \(r^d\) in Euclidean space, matching the \(b^r\) growth of a tree — hence low-distortion hierarchy embeddings.</li>
+    <li>Ball volume grows like \(e^r\) in hyperbolic space versus \(r^d\) in Euclidean space, matching the \(b^r\) growth of a tree, hence low-distortion hierarchy embeddings.</li>
   </ul>
 </div>
 

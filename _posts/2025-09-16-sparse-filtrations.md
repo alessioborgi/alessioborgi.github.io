@@ -6,7 +6,7 @@ book: tdl
 subsection: computation
 tags: [sparse-filtrations, vietoris-rips, sparse-rips, sparsification, scalability]
 published: false
-excerpt: "The Vietoris-Rips complex grows exponentially with point count. Sparse filtrations — particularly the sparse Rips construction of Sheehy and Cavanna et al. — produce O(n)-simplex complexes that approximate the full Rips persistence diagram up to a controlled multiplicative error."
+excerpt: "The Vietoris-Rips complex grows exponentially with point count. Sparse filtrations, particularly the sparse Rips construction of Sheehy and Cavanna et al., produce O(n)-simplex complexes that approximate the full Rips persistence diagram up to a controlled multiplicative error."
 author_profile: true
 read_time: true
 icon: "🪶"
@@ -28,7 +28,7 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Imagine you have 1000 GPS points tracing a hiking trail. The full Rips complex would try every subset — nearly 2^1000 simplices. But most of those simplices are redundant: if you already know points within 10 m form a connected blob, you don't need every 50-simplex inside that blob to prove connectivity. Sparse filtrations are like thinning a dense forest into a skeleton: keep only the trees that carry load-bearing topological information, prune the rest.
+Imagine you have 1000 GPS points tracing a hiking trail. The full Rips complex would try every subset, nearly 2^1000 simplices. But most of those simplices are redundant: if you already know points within 10 m form a connected blob, you don't need every 50-simplex inside that blob to prove connectivity. Sparse filtrations are like thinning a dense forest into a skeleton: keep only the trees that carry load-bearing topological information, prune the rest.
 
 <style>
 @keyframes pruneNode {
@@ -138,9 +138,9 @@ For $$n = 500$$ points in $$\mathbb{R}^3$$:
 | Sparse Rips (ε = 0.5) | ~3,000 | < 1 sec |
 | Sparse Rips (ε = 0.1) | ~12,000 | ~2 sec |
 
-The (1+ε)-approximation error means persistence pairs (b,d) become (b′,d′) with b′/b, d′/d ∈ [1/(1+ε), 1+ε]. At ε = 0.5 this is a 50% relative error on birth/death times — acceptable for topological shape analysis where we care about *which* features are long-lived, not their exact values.
+The (1+ε)-approximation error means persistence pairs (b,d) become (b′,d′) with b′/b, d′/d ∈ [1/(1+ε), 1+ε]. At ε = 0.5 this is a 50% relative error on birth/death times, acceptable for topological shape analysis where we care about *which* features are long-lived, not their exact values.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The trade-off is not accuracy vs. speed in the traditional sense — it is <em>additive stability</em> (full Rips, exact) vs. <em>multiplicative approximation</em> (sparse Rips, fast). For classification tasks that use persistent homology as a feature, multiplicative approximation is usually sufficient: classifiers trained on sparse features perform within 1–2% of classifiers trained on full features, while being 100× faster to compute.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The trade-off is not accuracy vs. speed in the traditional sense, it is <em>additive stability</em> (full Rips, exact) vs. <em>multiplicative approximation</em> (sparse Rips, fast). For classification tasks that use persistent homology as a feature, multiplicative approximation is usually sufficient: classifiers trained on sparse features perform within 1–2% of classifiers trained on full features, while being 100× faster to compute.</div>
 
 ## Cavanna–Jahanseir–Sheehy Variant
 

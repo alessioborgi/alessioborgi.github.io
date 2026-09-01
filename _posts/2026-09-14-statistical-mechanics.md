@@ -6,7 +6,7 @@ categories: [physics-basics]
 book: physics-basics
 subsection: thermodynamics
 tags: [statistical-mechanics, boltzmann, energy-based-models, temperature]
-excerpt: "Counting microstates gives you the Boltzmann distribution, and the Boltzmann distribution gives you softmax, simulated annealing and energy-based models. The partition function is not a bookkeeping constant — it is the object that contains every thermodynamic quantity, and it is intractable for exactly that reason."
+excerpt: "Counting microstates gives you the Boltzmann distribution, and the Boltzmann distribution gives you softmax, simulated annealing and energy-based models. The partition function is not a bookkeeping constant, it is the object that contains every thermodynamic quantity, and it is intractable for exactly that reason."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,12 +18,12 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Maximise entropy subject to a fixed mean energy and you get \(p(x) \propto e^{-E(x)/kT}\). The normaliser \(Z = \sum_x e^{-E(x)/kT}\) is a sum over exponentially many states, and it is not a mere constant: derivatives of \(\log Z\) with respect to inverse temperature give the mean energy, the energy variance, and everything else. Temperature is a sharpness dial — the same dial as softmax temperature and the cooling schedule of simulated annealing. Energy-based models in ML are this distribution with \(E\) replaced by a network.
+  <strong>TL;DR:</strong> Maximise entropy subject to a fixed mean energy and you get \(p(x) \propto e^{-E(x)/kT}\). The normaliser \(Z = \sum_x e^{-E(x)/kT}\) is a sum over exponentially many states, and it is not a mere constant: derivatives of \(\log Z\) with respect to inverse temperature give the mean energy, the energy variance, and everything else. Temperature is a sharpness dial, the same dial as softmax temperature and the cooling schedule of simulated annealing. Energy-based models in ML are this distribution with \(E\) replaced by a network.
 </div>
 
 ## Microstates and macrostates
 
-A microstate is a complete specification of the system: every position, every momentum, every spin. A macrostate is what you can actually measure — energy, pressure, magnetisation. Enormously many microstates map to the same macrostate, and the whole subject is built on that many-to-one map.
+A microstate is a complete specification of the system: every position, every momentum, every spin. A macrostate is what you can actually measure, energy, pressure, magnetisation. Enormously many microstates map to the same macrostate, and the whole subject is built on that many-to-one map.
 
 The founding assumption is the one that sounds like it says nothing: for an isolated system at fixed energy, every accessible microstate is equally likely. Macroscopic regularity then comes from counting, not from dynamics. A macrostate realised by $$10^{20}$$ microstates dominates one realised by $$10^{10}$$ so overwhelmingly that fluctuations are unobservable.
 
@@ -54,12 +54,12 @@ $$Z$$ looks like a normaliser. It is in fact the cumulant generating function of
 \]
 </div>
 
-and the Helmholtz free energy is $$F = -kT\log Z = \langle E\rangle - TS$$. Heat capacity, susceptibilities, phase transitions — all are derivatives of $$\log Z$$. Knowing $$Z$$ as a function of temperature and the external parameters means knowing the thermodynamics completely.
+and the Helmholtz free energy is $$F = -kT\log Z = \langle E\rangle - TS$$. Heat capacity, susceptibilities, phase transitions, all are derivatives of $$\log Z$$. Knowing $$Z$$ as a function of temperature and the external parameters means knowing the thermodynamics completely.
 
 That is also why it is hard. $$Z$$ is a sum over every configuration: $$2^N$$ terms for $$N$$ binary spins, an integral over $$\mathbb R^d$$ for continuous states. For $$N = 100$$ spins that is $$2^{100} \approx 1.3\times10^{30}$$ terms.
 
 <div class="warning-box">
-  <strong>Interview trap:</strong> calling \(Z\) "just a normalising constant" is the most common slip here. It is a constant in \(x\) but a rich function of \(\beta\) and of the model parameters, and every thermodynamic observable is one of its log-derivatives. The practical corollary in ML: the <em>score</em> \(\nabla_x \log p(x) = -\nabla_x E(x)\) is free of \(Z\), which is why score-based samplers never need it — but any likelihood comparison, model selection, or evidence estimate does need it, and no amount of clever sampling makes that go away.
+  <strong>Interview trap:</strong> calling \(Z\) "just a normalising constant" is the most common slip here. It is a constant in \(x\) but a rich function of \(\beta\) and of the model parameters, and every thermodynamic observable is one of its log-derivatives. The practical corollary in ML: the <em>score</em> \(\nabla_x \log p(x) = -\nabla_x E(x)\) is free of \(Z\), which is why score-based samplers never need it, but any likelihood comparison, model selection, or evidence estimate does need it, and no amount of clever sampling makes that go away.
 </div>
 
 ## Temperature as a sharpness control
@@ -85,7 +85,7 @@ Halving the temperature does not shift probability mass a little; it squares the
 Simulated annealing exploits exactly this. Sample at high $$T$$, where the distribution is nearly flat and the chain can cross energy barriers; lower $$T$$ slowly so the chain settles into deep minima instead of the first one it meets (Kirkpatrick et al., 1983). The same logic drives the noise schedule in annealed Langevin sampling for [score-based models](/blog/diffusion/score-based-sde/), where high noise plays the role of high temperature.
 
 <div class="insight-box">
-  <strong>Key Insight — why the exponential and nothing else:</strong> the form \(e^{-\beta E}\) is not a modelling choice. It is the unique distribution that maximises entropy given a fixed mean energy, so it is the least-committed distribution consistent with what you know. Any other functional form smuggles in information you do not have. This is Jaynes's maximum-entropy argument, and it is why the same exponential family appears in logistic regression, CRFs, softmax policies and Gibbs sampling — all of them are "assume as little as possible subject to matching some expectations".
+  <strong>Key Insight, why the exponential and nothing else:</strong> the form \(e^{-\beta E}\) is not a modelling choice. It is the unique distribution that maximises entropy given a fixed mean energy, so it is the least-committed distribution consistent with what you know. Any other functional form smuggles in information you do not have. This is Jaynes's maximum-entropy argument, and it is why the same exponential family appears in logistic regression, CRFs, softmax policies and Gibbs sampling, all of them are "assume as little as possible subject to matching some expectations".
 </div>
 
 ## Energy-based models
@@ -98,14 +98,14 @@ An EBM sets $$p_\theta(x) = e^{-E_\theta(x)}/Z(\theta)$$ with $$E_\theta$$ a net
 \]
 </div>
 
-The first term pushes the energy of observed data down; the second pushes the energy of the model's own samples up. Because that expectation is over $$p_\theta$$, training requires sampling from the model at every step — which is why contrastive divergence, persistent chains and Langevin samplers exist. The intractability of $$Z$$ has simply moved from the objective into the gradient. Getting those samples is what [Langevin dynamics](/blog/physics-basics/diffusion-and-brownian-motion/) and [HMC](/blog/physics-basics/hamiltonian-dynamics/) are for.
+The first term pushes the energy of observed data down; the second pushes the energy of the model's own samples up. Because that expectation is over $$p_\theta$$, training requires sampling from the model at every step, which is why contrastive divergence, persistent chains and Langevin samplers exist. The intractability of $$Z$$ has simply moved from the objective into the gradient. Getting those samples is what [Langevin dynamics](/blog/physics-basics/diffusion-and-brownian-motion/) and [HMC](/blog/physics-basics/hamiltonian-dynamics/) are for.
 
 <div class="key-takeaways">
 <h3>Recap</h3>
 <ul>
   <li>Maximum entropy at fixed mean energy forces \(p(x) = e^{-\beta E(x)}/Z\), with \(\beta = 1/kT\) the multiplier on the energy constraint.</li>
   <li>\(Z\) is not a bookkeeping constant: \(-\partial_\beta \log Z = \langle E\rangle\), \(\partial_\beta^2 \log Z = \operatorname{Var}(E)\), and \(F = -kT\log Z\).</li>
-  <li>\(Z\) is intractable because it sums over all configurations — \(2^{100}\approx 1.3\times10^{30}\) terms for 100 binary spins.</li>
+  <li>\(Z\) is intractable because it sums over all configurations, \(2^{100}\approx 1.3\times10^{30}\) terms for 100 binary spins.</li>
   <li>Softmax with temperature is the Boltzmann distribution with \(E_i = -z_i\); low \(T\) sharpens, high \(T\) flattens, and annealing walks from one to the other.</li>
   <li>EBM training needs samples from the model itself, because \(\nabla_\theta \log Z = -\mathbb{E}_{p_\theta}[\nabla_\theta E_\theta]\).</li>
 </ul>

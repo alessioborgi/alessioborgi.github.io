@@ -6,7 +6,7 @@ book: gnn
 subsection: applications
 tags: [molecules, drug-discovery, QSAR, molecular-property, ADMET]
 published: true
-excerpt: "Graph neural networks are transforming computational drug discovery. Molecules are natural graphs, and GNNs learn molecular representations that predict toxicity, solubility, binding affinity, and synthesis feasibility — tasks that previously required expensive laboratory experiments."
+excerpt: "Graph neural networks are transforming computational drug discovery. Molecules are natural graphs, and GNNs learn molecular representations that predict toxicity, solubility, binding affinity, and synthesis feasibility, tasks that previously required expensive laboratory experiments."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Drug discovery requires predicting how molecules interact with biological targets — a task that historically required either expensive experiments or hand-designed descriptors. A molecule is a graph \(G = (V, E)\) with atoms as nodes and bonds as edges, so a GNN can learn its representation end to end instead of consuming a fixed fingerprint. Gilmer et al. (2017) showed this works on the QM9 quantum-chemistry benchmark, and the same recipe now underpins large-scale virtual screening.
+<strong>TL;DR:</strong> Drug discovery requires predicting how molecules interact with biological targets, a task that historically required either expensive experiments or hand-designed descriptors. A molecule is a graph \(G = (V, E)\) with atoms as nodes and bonds as edges, so a GNN can learn its representation end to end instead of consuming a fixed fingerprint. Gilmer et al. (2017) showed this works on the QM9 quantum-chemistry benchmark, and the same recipe now underpins large-scale virtual screening.
 </div>
 {% include figure image_path="/images/blog/gnn/gilmer2017_mpnn.png" alt="MPNN for molecular property prediction" caption="MPNN for molecular property prediction on QM9 (Gilmer et al., 2017)" %}
 
 
 ## The Drug Discovery Pipeline
 
-**Intuition First:** Finding a drug is like searching for a key that fits a specific lock (the protein target). Drug-like chemical space is commonly estimated at around $$10^{60}$$ molecules — far too many to test physically. A GNN is trained on known key–lock pairs to predict which untested keys are likely to fit. It learns that certain atom arrangements near certain bond types correlate with good binding, then uses those patterns to score large virtual libraries far faster than any experimental campaign could.
+**Intuition First:** Finding a drug is like searching for a key that fits a specific lock (the protein target). Drug-like chemical space is commonly estimated at around $$10^{60}$$ molecules, far too many to test physically. A GNN is trained on known key–lock pairs to predict which untested keys are likely to fit. It learns that certain atom arrangements near certain bond types correlate with good binding, then uses those patterns to score large virtual libraries far faster than any experimental campaign could.
 
 Industry estimates put the cost of an approved drug at over a decade of work and \\$2B+ in capitalised R&D spend. GNNs are used to accelerate three stages:
 
@@ -88,17 +88,17 @@ h_v^{(k)} = U^{(k)}\!\left( h_v^{(k-1)},\, m_v^{(k)} \right),
 \]
 </div>
 
-Here $$M^{(k)}$$ is the message function, $$U^{(k)}$$ the update function (a GRU in the original paper), and $$R$$ a permutation-invariant readout. Because the message depends on $$e_{uv}$$, a double bond and a single bond between the same atom types send different messages — which is the whole point for chemistry.
+Here $$M^{(k)}$$ is the message function, $$U^{(k)}$$ the update function (a GRU in the original paper), and $$R$$ a permutation-invariant readout. Because the message depends on $$e_{uv}$$, a double bond and a single bond between the same atom types send different messages, which is the whole point for chemistry.
 
 **AttentiveFP (Xiong et al., 2019):** adds graph attention for molecular property prediction. Handles multi-task learning across different ADMET endpoints.
 
-**GROVER (Rong et al., 2020):** self-supervised pre-training of a graph transformer on 10M unlabelled molecules, then fine-tuning on small labelled datasets. This mitigates — rather than solves — label scarcity in drug discovery.
+**GROVER (Rong et al., 2020):** self-supervised pre-training of a graph transformer on 10M unlabelled molecules, then fine-tuning on small labelled datasets. This mitigates, rather than solves, label scarcity in drug discovery.
 
 **MolBERT / ChemBERTa:** treat SMILES as a token sequence and apply BERT-style pre-training. Competitive with graph-based methods on several benchmarks, which is a useful reminder that the graph inductive bias is not always decisive.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Why pre-training matters:</strong> Labelled molecular data is expensive — a binding-affinity assay across a compound series easily runs to \$100K+, so labelled sets are small while unlabelled ones are not. GNNs trained from scratch on a few thousand labelled molecules overfit readily. Pre-training on millions of unlabelled molecules from ChEMBL or PubChem gives a much better starting point, and Hu et al. (2020) show that the choice of pre-training strategy matters: naive pre-training can transfer <em>negatively</em>, and gains appear reliably only when node-level and graph-level objectives are combined.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Why pre-training matters:</strong> Labelled molecular data is expensive, a binding-affinity assay across a compound series easily runs to \$100K+, so labelled sets are small while unlabelled ones are not. GNNs trained from scratch on a few thousand labelled molecules overfit readily. Pre-training on millions of unlabelled molecules from ChEMBL or PubChem gives a much better starting point, and Hu et al. (2020) show that the choice of pre-training strategy matters: naive pre-training can transfer <em>negatively</em>, and gains appear reliably only when node-level and graph-level objectives are combined.</div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The most impactful use of GNNs in drug discovery is not replacing wet-lab experiments — it is prioritising them. Screening is a funnel: a GNN scores a very large virtual library cheaply, the surviving candidates go to physics-based docking, and only the last, smallest tier is actually synthesised and assayed. Each stage is orders of magnitude more expensive per molecule than the one before it, so the GNN earns its keep purely by improving the ranking at the widest, cheapest point of the funnel. It is a first-pass filter, not a replacement for experiment — and a filter with modest precision is still valuable when the alternative is choosing at random.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The most impactful use of GNNs in drug discovery is not replacing wet-lab experiments, it is prioritising them. Screening is a funnel: a GNN scores a very large virtual library cheaply, the surviving candidates go to physics-based docking, and only the last, smallest tier is actually synthesised and assayed. Each stage is orders of magnitude more expensive per molecule than the one before it, so the GNN earns its keep purely by improving the ranking at the widest, cheapest point of the funnel. It is a first-pass filter, not a replacement for experiment, and a filter with modest precision is still valuable when the alternative is choosing at random.</div>
 
 ## Virtual Screening at Scale
 
@@ -109,7 +109,7 @@ Here $$M^{(k)}$$ is the message function, $$U^{(k)}$$ the update function (a GRU
 2. Run inference over a large virtual library
 3. Select the top-$$k$$ predicted actives for experimental validation
 
-The value here is not that the GNN is right about any individual molecule — it is that inference costs a forward pass while an assay costs reagents and weeks, so even a modestly accurate ranking changes which experiments get run.
+The value here is not that the GNN is right about any individual molecule, it is that inference costs a forward pass while an assay costs reagents and weeks, so even a modestly accurate ranking changes which experiments get run.
 
 ## Protein-Ligand Interaction
 
@@ -131,7 +131,7 @@ Beyond single-molecule property prediction: predicting how a small molecule (lig
 
 ## Summary
 
-GNNs are now a standard molecular representation-learning method in computational chemistry, sitting alongside — rather than wholly replacing — handcrafted fingerprints, which remain surprisingly competitive baselines on small datasets. The distinctive advantages are end-to-end learning of the representation, the ability to condition messages on bond features, and compatibility with both 2D connectivity and 3D geometry through equivariant variants. The honest summary of the benchmark literature is that GNNs win consistently where data is plentiful and structure matters (QM9, large PCBA-style assay collections), and win less clearly on small, noisy ADMET endpoints.
+GNNs are now a standard molecular representation-learning method in computational chemistry, sitting alongside, rather than wholly replacing, handcrafted fingerprints, which remain surprisingly competitive baselines on small datasets. The distinctive advantages are end-to-end learning of the representation, the ability to condition messages on bond features, and compatibility with both 2D connectivity and 3D geometry through equivariant variants. The honest summary of the benchmark literature is that GNNs win consistently where data is plentiful and structure matters (QM9, large PCBA-style assay collections), and win less clearly on small, noisy ADMET endpoints.
 
 ## References
 

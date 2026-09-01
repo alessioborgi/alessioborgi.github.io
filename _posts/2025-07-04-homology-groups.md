@@ -25,11 +25,11 @@ permalink: /blog/persistent-homology/homology-groups/
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Homology groups \(H_k\) are algebraic invariants that count k-dimensional holes in a topological space: \(H_0\) counts connected components, \(H_1\) counts loops/tunnels, \(H_2\) counts enclosed voids. They are computable from simplicial complexes via linear algebra over \(\mathbb{Z}_2\), and their ranks — the Betti numbers \(\beta_k\) — form the numerical shape fingerprint that persistent homology tracks across scales.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Homology groups \(H_k\) are algebraic invariants that count k-dimensional holes in a topological space: \(H_0\) counts connected components, \(H_1\) counts loops/tunnels, \(H_2\) counts enclosed voids. They are computable from simplicial complexes via linear algebra over \(\mathbb{Z}_2\), and their ranks, the Betti numbers \(\beta_k\), form the numerical shape fingerprint that persistent homology tracks across scales.</div>
 {% include figure image_path="/images/blog/tdl/hofer2020_topological_layers.png" alt="Homology and topological layers" caption="Topological layer representations of homology (Hofer et al., 2020)" %}
 
 
-**Intuition First.** Homology answers the question: *how many independent holes does this shape have, in each dimension?* A hole is a cycle — a closed loop or surface with no boundary — that is not itself the boundary of something higher-dimensional. A disk has no \(H_1\) because its boundary circle *bounds* the disk interior. A hollow sphere has \(H_2 = \mathbb{Z}\) because its surface is a cycle but bounds nothing inside the complex (when the interior is empty). The chain complex machinery is just a systematic way to make "cycle" and "boundary" precise and computable.
+**Intuition First.** Homology answers the question: *how many independent holes does this shape have, in each dimension?* A hole is a cycle, a closed loop or surface with no boundary, that is not itself the boundary of something higher-dimensional. A disk has no \(H_1\) because its boundary circle *bounds* the disk interior. A hollow sphere has \(H_2 = \mathbb{Z}\) because its surface is a cycle but bounds nothing inside the complex (when the interior is empty). The chain complex machinery is just a systematic way to make "cycle" and "boundary" precise and computable.
 
 <style>
 @keyframes hole-pulse {
@@ -62,7 +62,7 @@ permalink: /blog/persistent-homology/homology-groups/
 
 ## Chain Groups and the Boundary Operator
 
-Given a simplicial complex \(K\), the **k-th chain group** \(C_k(K)\) is the vector space over \(\mathbb{Z}_2 = \{0, 1\}\) (arithmetic mod 2) with basis the set of all k-simplices in \(K\). An element of \(C_k\) is a formal sum (with \(\mathbb{Z}_2\) coefficients) of k-simplices — called a **k-chain**.
+Given a simplicial complex \(K\), the **k-th chain group** \(C_k(K)\) is the vector space over \(\mathbb{Z}_2 = \{0, 1\}\) (arithmetic mod 2) with basis the set of all k-simplices in \(K\). An element of \(C_k\) is a formal sum (with \(\mathbb{Z}_2\) coefficients) of k-simplices, called a **k-chain**.
 
 Working over \(\mathbb{Z}_2\) has a major advantage: signs disappear (\(-1 = 1\)), so we never need to choose orientations for simplices. The theory works identically over \(\mathbb{Z}\) or any field, but \(\mathbb{Z}_2\) is standard in TDA software.
 
@@ -74,7 +74,7 @@ The **boundary operator** \(\partial_k: C_k \to C_{k-1}\) maps each k-simplex to
 
 (over $$\mathbb{Z}_2$$, so each face appears with coefficient 1). Extended linearly to all chains.
 
-**Fundamental property**: $$\partial_{k-1} \circ \partial_k = 0$$ — the boundary of a boundary is empty. This is easy to verify: each $$(k-2)$$-face of $$\sigma$$ appears exactly twice in $$\partial(\partial(\sigma))$$, and $$1 + 1 = 0$$ in $$\mathbb{Z}_2$$.
+**Fundamental property**: $$\partial_{k-1} \circ \partial_k = 0$$, the boundary of a boundary is empty. This is easy to verify: each $$(k-2)$$-face of $$\sigma$$ appears exactly twice in $$\partial(\partial(\sigma))$$, and $$1 + 1 = 0$$ in $$\mathbb{Z}_2$$.
 
 ## The Chain Complex and Homology
 
@@ -85,8 +85,8 @@ The boundary operators chain together into a **chain complex**:
 </div>
 
 Because $$\partial_{k-1} \circ \partial_k = 0$$, we have $$\mathrm{im}(\partial_{k+1}) \subseteq \ker(\partial_k)$$. Define:
-- **k-cycles**: $$Z_k = \ker(\partial_k)$$ — chains with empty boundary (closed loops).
-- **k-boundaries**: $$B_k = \mathrm{im}(\partial_{k+1})$$ — chains that are boundaries of something.
+- **k-cycles**: $$Z_k = \ker(\partial_k)$$, chains with empty boundary (closed loops).
+- **k-boundaries**: $$B_k = \mathrm{im}(\partial_{k+1})$$, chains that are boundaries of something.
 
 The **k-th homology group** is the quotient:
 
@@ -107,7 +107,7 @@ The **k-th Betti number** is $$\beta_k = \mathrm{rank}(H_k(K))$$ (the dimension 
 
 The Euler characteristic satisfies $$\chi(K) = \sum_k (-1)^k \beta_k$$ (Euler-Poincaré formula).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Working over $$\mathbb{Z}_2$$ (mod-2 arithmetic) is not just a convenience — it makes boundary computations purely about binary matrices with no sign bookkeeping. The cost is losing orientation information, but for TDA (where we want counts, not signed invariants) this is almost always acceptable and dramatically simplifies the algorithms.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Working over $$\mathbb{Z}_2$$ (mod-2 arithmetic) is not just a convenience, it makes boundary computations purely about binary matrices with no sign bookkeeping. The cost is losing orientation information, but for TDA (where we want counts, not signed invariants) this is almost always acceptable and dramatically simplifies the algorithms.</div>
 
 ## Worked Example: The Triangle Boundary
 
@@ -116,9 +116,9 @@ Consider the **boundary of a triangle**: three vertices $$v_0, v_1, v_2$$, three
 - $$C_1 = \mathbb{Z}_2^3$$ (basis: $$e_{01}, e_{12}, e_{02}$$)
 - $$C_2 = 0$$ (no 2-simplex)
 
-Boundary operator $$\partial_1$$: $$\partial_1(e_{ij}) = v_i + v_j$$ (mod 2). The full cycle $$e_{01} + e_{12} + e_{02}$$ satisfies $$\partial_1(e_{01} + e_{12} + e_{02}) = (v_0 + v_1) + (v_1 + v_2) + (v_0 + v_2) = 0$$ in $$\mathbb{Z}_2$$. So $$Z_1 = \{0, e_{01}+e_{12}+e_{02}\} \cong \mathbb{Z}_2$$. Since $$C_2 = 0$$, we have $$B_1 = 0$$. Therefore $$H_1 = \mathbb{Z}_2$$, confirming **one loop** — exactly what we see: the triangle boundary forms a single closed cycle with no filling.
+Boundary operator $$\partial_1$$: $$\partial_1(e_{ij}) = v_i + v_j$$ (mod 2). The full cycle $$e_{01} + e_{12} + e_{02}$$ satisfies $$\partial_1(e_{01} + e_{12} + e_{02}) = (v_0 + v_1) + (v_1 + v_2) + (v_0 + v_2) = 0$$ in $$\mathbb{Z}_2$$. So $$Z_1 = \{0, e_{01}+e_{12}+e_{02}\} \cong \mathbb{Z}_2$$. Since $$C_2 = 0$$, we have $$B_1 = 0$$. Therefore $$H_1 = \mathbb{Z}_2$$, confirming **one loop**, exactly what we see: the triangle boundary forms a single closed cycle with no filling.
 
-<div class="insight-box"><strong>Key Insight:</strong> Homology detects holes by finding cycles that are not boundaries. A disk has no $$H_1$$ because its boundary circle bounds the interior. A circle (without interior) has $$H_1 = \mathbb{Z}$$ because its fundamental cycle does not bound anything. This distinction — cycle vs. boundary — is precisely what persistent homology tracks: a feature is "born" when a new cycle appears, and "dies" when that cycle becomes a boundary as more simplices are added.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Homology detects holes by finding cycles that are not boundaries. A disk has no $$H_1$$ because its boundary circle bounds the interior. A circle (without interior) has $$H_1 = \mathbb{Z}$$ because its fundamental cycle does not bound anything. This distinction, cycle vs. boundary, is precisely what persistent homology tracks: a feature is "born" when a new cycle appears, and "dies" when that cycle becomes a boundary as more simplices are added.</div>
 
 ## References
 

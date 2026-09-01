@@ -25,11 +25,11 @@ permalink: /blog/persistent-homology/simplicial-complexes/
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> A simplicial complex is a topological space built from vertices, edges, triangles, and higher-dimensional analogues called simplices. It is the combinatorial structure that TDA uses to approximate the shape of point cloud data. The key axiom — downward closure — ensures that every face of every simplex is also in the complex, giving a well-defined boundary operator and making homology computable.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> A simplicial complex is a topological space built from vertices, edges, triangles, and higher-dimensional analogues called simplices. It is the combinatorial structure that TDA uses to approximate the shape of point cloud data. The key axiom, downward closure, ensures that every face of every simplex is also in the complex, giving a well-defined boundary operator and making homology computable.</div>
 {% include figure image_path="/images/blog/tdl/gabrielsson2020_gfl.png" alt="Simplicial complex geometry" caption="Simplicial complex representations (Gabrielsson et al., 2020)" %}
 
 
-**Intuition First.** Think of building a Lego model. Individual bricks are 0-simplices (vertices). Connecting two bricks with a rod gives a 1-simplex (edge). Filling a triangle of three connected bricks with a flat plate gives a 2-simplex. The *downward closure* rule says: you can only add the plate once all three rods are in place. This mirrors how TDA builds complexes — higher-dimensional pieces can only enter after all their lower-dimensional faces are present.
+**Intuition First.** Think of building a Lego model. Individual bricks are 0-simplices (vertices). Connecting two bricks with a rod gives a 1-simplex (edge). Filling a triangle of three connected bricks with a flat plate gives a 2-simplex. The *downward closure* rule says: you can only add the plate once all three rods are in place. This mirrors how TDA builds complexes, higher-dimensional pieces can only enter after all their lower-dimensional faces are present.
 
 <style>
 @keyframes simplex-appear {
@@ -104,10 +104,10 @@ The **dimension** of $$K$$ is the maximum dimension of any simplex it contains. 
 Key examples:
 - **Graph**: a 1-dimensional simplicial complex with vertex set $$V$$ and edge set $$E \subseteq \binom{V}{2}$.
 - **Clique complex** of a graph $$G$$: add a $$k$$-simplex for every $$(k+1)$$-clique in $$G$$.
-- **Boundary of a tetrahedron**: four triangles, six edges, four vertices — homeomorphic to $$S^2$$.
-- **Solid tetrahedron**: includes the interior 3-simplex — contractible, hence topologically trivial.
+- **Boundary of a tetrahedron**: four triangles, six edges, four vertices, homeomorphic to $$S^2$$.
+- **Solid tetrahedron**: includes the interior 3-simplex, contractible, hence topologically trivial.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The downward closure axiom is not bureaucratic bookkeeping — it is what makes the boundary operator <em>well-defined</em>. If a triangle's edges were not in the complex, the formula ∂₂[v₀v₁v₂] = [v₁v₂] − [v₀v₂] + [v₀v₁] would reference nonexistent objects. Every TDA filtration must respect this: a triangle can only enter the filtration after all three of its edges (and all three vertices) are already present.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The downward closure axiom is not bureaucratic bookkeeping, it is what makes the boundary operator <em>well-defined</em>. If a triangle's edges were not in the complex, the formula ∂₂[v₀v₁v₂] = [v₁v₂] − [v₀v₂] + [v₀v₁] would reference nonexistent objects. Every TDA filtration must respect this: a triangle can only enter the filtration after all three of its edges (and all three vertices) are already present.</div>
 
 ## The Euler Characteristic
 
@@ -127,7 +127,7 @@ The deep connection is $$\chi(K) = \sum_k (-1)^k \beta_k$$ where $$\beta_k = \ma
 
 ## Worked Example: Building a Complex Step by Step
 
-Take four vertices $$v_0, v_1, v_2, v_3$$. Start empty. Add vertices one by one (all four are 0-simplices). Now add edges: $$[v_0 v_1], [v_1 v_2], [v_0 v_2]$$ — this forms a triangle *boundary* (no filled interior yet). At this point $$\beta_0 = 2$$ (two components: $$\{v_0,v_1,v_2\}$$ and $$\{v_3\}$$) and $$\beta_1 = 1$$ (one loop). Add edge $$[v_0 v_3]$$ — the two components merge, $$\beta_0 = 1$$. Now fill in the triangle by adding the 2-simplex $$[v_0 v_1 v_2]$$ — the loop dies, $$\beta_1 = 0$$. The Euler characteristic at the end: $$\chi = 4 - 4 + 1 = 1$$, matching a contractible space.
+Take four vertices $$v_0, v_1, v_2, v_3$$. Start empty. Add vertices one by one (all four are 0-simplices). Now add edges: $$[v_0 v_1], [v_1 v_2], [v_0 v_2]$$, this forms a triangle *boundary* (no filled interior yet). At this point $$\beta_0 = 2$$ (two components: $$\{v_0,v_1,v_2\}$$ and $$\{v_3\}$$) and $$\beta_1 = 1$$ (one loop). Add edge $$[v_0 v_3]$$, the two components merge, $$\beta_0 = 1$$. Now fill in the triangle by adding the 2-simplex $$[v_0 v_1 v_2]$$, the loop dies, $$\beta_1 = 0$$. The Euler characteristic at the end: $$\chi = 4 - 4 + 1 = 1$$, matching a contractible space.
 
 ## The Nerve Theorem
 
@@ -135,9 +135,9 @@ Given a finite cover $$\mathcal{U} = \{U_\alpha\}$$ of a topological space $$X$$
 
 **Nerve Theorem** (Leray, Borsuk): If every non-empty intersection $$U_{\alpha_0} \cap \cdots \cap U_{\alpha_k}$$ is contractible, then $$|\mathcal{N}(\mathcal{U})|$$ is homotopy equivalent to $$X$$.
 
-This theorem underlies the entire TDA pipeline: when we build a Čech complex from balls of radius $$\varepsilon$$ around each data point, the nerve theorem guarantees the complex faithfully captures the topology of the union of balls — which approximates the underlying data manifold.
+This theorem underlies the entire TDA pipeline: when we build a Čech complex from balls of radius $$\varepsilon$$ around each data point, the nerve theorem guarantees the complex faithfully captures the topology of the union of balls, which approximates the underlying data manifold.
 
-<div class="insight-box"><strong>Key Insight:</strong> Downward closure is not just a convenience — it is what makes the boundary operator well-defined and hence what makes homology computable. Without it, the chain complex structure breaks down. Every TDA filtration must respect this axiom: adding a triangle forces adding all three of its edges and all three vertices first.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Downward closure is not just a convenience, it is what makes the boundary operator well-defined and hence what makes homology computable. Without it, the chain complex structure breaks down. Every TDA filtration must respect this axiom: adding a triangle forces adding all three of its edges and all three vertices first.</div>
 
 ## References
 

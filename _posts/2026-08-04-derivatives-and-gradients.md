@@ -6,7 +6,7 @@ categories: [math-basics]
 book: math-basics
 subsection: calculus
 tags: [gradients, chain-rule, backpropagation, autodiff]
-excerpt: "Treating the derivative as a slope stops working the moment there is more than one input. Treating it as the best linear approximation keeps working forever — and makes backpropagation an obvious consequence of the chain rule rather than an algorithm to memorise."
+excerpt: "Treating the derivative as a slope stops working the moment there is more than one input. Treating it as the best linear approximation keeps working forever, and makes backpropagation an obvious consequence of the chain rule rather than an algorithm to memorise."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The derivative at a point is the linear map that best approximates the function near that point. For a scalar-valued function that map is a <em>row</em> object — a covector — and the gradient is the column vector representing it through the Euclidean inner product. The gradient points along steepest ascent only because we chose that inner product. The chain rule composes these linear maps, and backpropagation is nothing more than evaluating the resulting product of Jacobians from the left, which is cheap exactly when there is one scalar output.
+  <strong>TL;DR:</strong> The derivative at a point is the linear map that best approximates the function near that point. For a scalar-valued function that map is a <em>row</em> object, a covector, and the gradient is the column vector representing it through the Euclidean inner product. The gradient points along steepest ascent only because we chose that inner product. The chain rule composes these linear maps, and backpropagation is nothing more than evaluating the resulting product of Jacobians from the left, which is cheap exactly when there is one scalar output.
 </div>
 
 ## The definition that survives more than one variable
@@ -31,7 +31,7 @@ f(x + h) = f(x) + Df(x)[h] + o(\lVert h\rVert)\quad\text{as } h \to 0 .
 \]
 </div>
 
-$$Df(x)$$ is *the* best linear approximation — the error it leaves behind vanishes faster than $$\lVert h\rVert$$ itself. Everything else in differential calculus is bookkeeping about how to represent and compose this map.
+$$Df(x)$$ is *the* best linear approximation, the error it leaves behind vanishes faster than $$\lVert h\rVert$$ itself. Everything else in differential calculus is bookkeeping about how to represent and compose this map.
 
 For $$f:\mathbb{R}^n\to\mathbb{R}$$, $$Df(x)$$ eats a vector and returns a scalar, so it is a linear functional: a $$1\times n$$ row. Write it in coordinates and it is the row of partial derivatives.
 
@@ -53,7 +53,7 @@ In standard coordinates with the Euclidean inner product this makes $$\nabla f$$
 \]
 </div>
 
-while an ordinary tangent vector transforms as $$v_x = P v_y$$. Gradients transform by $$P^\top$$, vectors by $$P$$. The two rules agree only when $$P$$ is orthogonal. So the gradient is not really a vector in the same sense as a displacement — it is a covector wearing a vector's clothes, and the disguise only holds up in orthonormal coordinates.
+while an ordinary tangent vector transforms as $$v_x = P v_y$$. Gradients transform by $$P^\top$$, vectors by $$P$$. The two rules agree only when $$P$$ is orthogonal. So the gradient is not really a vector in the same sense as a displacement, it is a covector wearing a vector's clothes, and the disguise only holds up in orthonormal coordinates.
 
 The practical consequence is concrete: **gradient descent is not invariant to reparameterisation**. Rescale one weight by 1000 and the descent trajectory changes, even though the function being optimised is the same. That is the entire motivation for natural gradient methods, which replace the Euclidean inner product with one adapted to the model.
 
@@ -69,7 +69,7 @@ D_v f(x) = Df(x)[v] = \langle \nabla f(x), v\rangle .
 
 Maximise this over unit $$v$$. Cauchy–Schwarz gives $$\langle \nabla f, v\rangle \le \lVert \nabla f\rVert_2 \lVert v\rVert_2$$ with equality only when $$v \parallel \nabla f$$, so the steepest ascent direction is $$\nabla f / \lVert\nabla f\rVert_2$$ and the maximal rate is $$\lVert\nabla f\rVert_2$$.
 
-Note where the $$\lVert\cdot\rVert_2$$ entered: in the constraint. Constrain $$\lVert v\rVert_\infty \le 1$$ instead and the maximiser becomes $$v = \operatorname{sign}(\nabla f)$$, a sign vector rather than a scaled gradient. "The gradient is the direction of steepest ascent" is true relative to the Euclidean norm and false in general — and the $$L^\infty$$ version is not an academic curiosity, it is close to what sign-based and adaptive optimisers actually take as their step direction.
+Note where the $$\lVert\cdot\rVert_2$$ entered: in the constraint. Constrain $$\lVert v\rVert_\infty \le 1$$ instead and the maximiser becomes $$v = \operatorname{sign}(\nabla f)$$, a sign vector rather than a scaled gradient. "The gradient is the direction of steepest ascent" is true relative to the Euclidean norm and false in general, and the $$L^\infty$$ version is not an academic curiosity, it is close to what sign-based and adaptive optimisers actually take as their step direction.
 
 ## The chain rule is composition of linear maps
 
@@ -93,19 +93,19 @@ Df(x) = J_L J_{L-1} \cdots J_1 .
 
 Matrix multiplication is associative, so that product can be bracketed either way, and the two choices have wildly different costs.
 
-- **Forward mode** evaluates right to left: $$J_L(\cdots(J_2(J_1 e)))$$, propagating one input perturbation $$e$$ forward. One pass gives one *column* of the full Jacobian — the sensitivity of all outputs to one input. Getting everything needs $$n$$ passes.
-- **Reverse mode** evaluates left to right: $$((\bar{y}^\top J_L)J_{L-1})\cdots J_1$$, propagating one output covector backwards. One pass gives one *row* — the sensitivity of one output to all inputs. Getting everything needs $$m$$ passes.
+- **Forward mode** evaluates right to left: $$J_L(\cdots(J_2(J_1 e)))$$, propagating one input perturbation $$e$$ forward. One pass gives one *column* of the full Jacobian, the sensitivity of all outputs to one input. Getting everything needs $$n$$ passes.
+- **Reverse mode** evaluates left to right: $$((\bar{y}^\top J_L)J_{L-1})\cdots J_1$$, propagating one output covector backwards. One pass gives one *row*, the sensitivity of one output to all inputs. Getting everything needs $$m$$ passes.
 
-Training a network is the case $$m = 1$$: a single scalar loss, and $$n$$ in the billions. Reverse mode therefore needs exactly one backward pass to obtain the entire gradient, at a cost that is a small constant multiple of the forward pass — the "cheap gradient" result, with the constant typically under 5. Forward mode would need one pass per parameter. That asymmetry, not any property of neural networks specifically, is why backpropagation is the algorithm.
+Training a network is the case $$m = 1$$: a single scalar loss, and $$n$$ in the billions. Reverse mode therefore needs exactly one backward pass to obtain the entire gradient, at a cost that is a small constant multiple of the forward pass, the "cheap gradient" result, with the constant typically under 5. Forward mode would need one pass per parameter. That asymmetry, not any property of neural networks specifically, is why backpropagation is the algorithm.
 
 Nothing is free: reverse mode must keep intermediate activations alive until the backward pass reaches them, which is where training memory goes, and why activation checkpointing trades recomputation for memory.
 
 <div class="insight-box">
-  <strong>Key Insight — backpropagation is bracketing, not an algorithm:</strong> forward and reverse mode compute exactly the same Jacobian product and differ only in association order. Reverse mode wins for \(n \gg m\) and loses for \(m \gg n\) — which is why Jacobian-vector products in forward mode are the right tool for, say, propagating uncertainty through a model with few inputs, and why a Hessian-vector product is computed as reverse mode applied to a forward-mode directional derivative.
+  <strong>Key Insight, backpropagation is bracketing, not an algorithm:</strong> forward and reverse mode compute exactly the same Jacobian product and differ only in association order. Reverse mode wins for \(n \gg m\) and loses for \(m \gg n\), which is why Jacobian-vector products in forward mode are the right tool for, say, propagating uncertainty through a model with few inputs, and why a Hessian-vector product is computed as reverse mode applied to a forward-mode directional derivative.
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — row versus column.</strong> \(Df(x)\) for scalar \(f\) is a \(1\times n\) row; \(\nabla f(x)\) is the \(n\times 1\) column, and \(\nabla f = (Df)^\top\). Mixing them silently produces answers that are right up to a transpose, which is the single most common error in [matrix calculus](/blog/math-basics/matrix-calculus/). A second trap: a vanishing gradient means <em>stationary</em>, not <em>minimal</em> — you need <a href="/blog/math-basics/jacobian-and-hessian/">curvature</a> to distinguish a minimum from a saddle.
+  <strong>Interview trap, row versus column.</strong> \(Df(x)\) for scalar \(f\) is a \(1\times n\) row; \(\nabla f(x)\) is the \(n\times 1\) column, and \(\nabla f = (Df)^\top\). Mixing them silently produces answers that are right up to a transpose, which is the single most common error in [matrix calculus](/blog/math-basics/matrix-calculus/). A second trap: a vanishing gradient means <em>stationary</em>, not <em>minimal</em>, you need <a href="/blog/math-basics/jacobian-and-hessian/">curvature</a> to distinguish a minimum from a saddle.
 </div>
 
 <div class="key-takeaways">

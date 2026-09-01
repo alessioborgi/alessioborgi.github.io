@@ -24,11 +24,11 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Standard boundary matrix reduction reduces each column left-to-right, taking O(n³) worst case. The twist algorithm (Chen & Kerber 2011) processes columns in two passes — forwards for high dimensions and backwards for low — to exploit that positive simplices never need full reduction. The clearing optimisation (Cohen-Steiner et al.) zeros columns for "positive" simplices immediately, halving work in practice.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Standard boundary matrix reduction reduces each column left-to-right, taking O(n³) worst case. The twist algorithm (Chen & Kerber 2011) processes columns in two passes, forwards for high dimensions and backwards for low, to exploit that positive simplices never need full reduction. The clearing optimisation (Cohen-Steiner et al.) zeros columns for "positive" simplices immediately, halving work in practice.</div>
 
 ## Intuition First
 
-The standard persistence algorithm is like reducing a triangular matrix left-to-right — but it does a lot of redundant work. Imagine building a jigsaw: if you already know a piece belongs to a completed section, you don't need to try fitting it again. The **clearing optimisation** recognises finished pairs and skips them. The **twist algorithm** goes further: by exploiting the duality between low and high dimensions, it completes one pass and immediately knows half the answers for the other pass.
+The standard persistence algorithm is like reducing a triangular matrix left-to-right, but it does a lot of redundant work. Imagine building a jigsaw: if you already know a piece belongs to a completed section, you don't need to try fitting it again. The **clearing optimisation** recognises finished pairs and skips them. The **twist algorithm** goes further: by exploiting the duality between low and high dimensions, it completes one pass and immediately knows half the answers for the other pass.
 
 <style>
 @keyframes colFade {
@@ -156,7 +156,7 @@ The standard persistence algorithm is like reducing a triangular matrix left-to-
   <rect x="170" y="185" width="12" height="10" rx="1" fill="#fca5a5"/>
   <text x="184" y="194" font-size="9" fill="#475569">Cleared (skip)</text>
 </svg>
-<figcaption style="text-align:center;font-size:.85em;color:#64748b;">Clearing zeros out "positive" simplex columns once their pair is identified — eliminating about half of all column reductions in practice.</figcaption>
+<figcaption style="text-align:center;font-size:.85em;color:#64748b;">Clearing zeros out "positive" simplex columns once their pair is identified, eliminating about half of all column reductions in practice.</figcaption>
 </figure></div>
 
 ## Standard Reduction Recap
@@ -183,13 +183,13 @@ In practice, clearing eliminates about half of all column reductions on typical 
 
 ## Worked Example: Complexity Reduction
 
-Suppose we have a triangulated torus (genus-1 surface) with 100 vertices, 300 edges, and 200 triangles — 600 simplices total. Standard reduction:
+Suppose we have a triangulated torus (genus-1 surface) with 100 vertices, 300 edges, and 200 triangles, 600 simplices total. Standard reduction:
 
 - **Worst case**: 600³ / 6 ≈ 36 million operations.
 - **With clearing**: after reducing the 200 triangle columns (finding H₁ pairs), ~150 of the 300 edge columns are immediately cleared. Only ~150 edges need reduction. Effective matrix: 600 × 150. Speedup: roughly 2×.
-- **Twist + clearing**: the twist processes dimension 2 first, finds 100 pairs, clears 100 edges; then processes dimension 1 using those clearings. In practice on manifold data, this achieves near-linear time in the output size (number of persistence pairs), which is just ~200 for a torus — a 100,000× speedup over the naive bound.
+- **Twist + clearing**: the twist processes dimension 2 first, finds 100 pairs, clears 100 edges; then processes dimension 1 using those clearings. In practice on manifold data, this achieves near-linear time in the output size (number of persistence pairs), which is just ~200 for a torus, a 100,000× speedup over the naive bound.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The twist algorithm's benefit is not asymptotic improvement in the worst case — it is still O(n³) in theory. The practical speedup comes from the fact that on geometric complexes (arising from point cloud data on manifolds), the vast majority of columns are cleared before they need reduction. This is why Ripser can compute persistence of 10,000-point clouds in seconds.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The twist algorithm's benefit is not asymptotic improvement in the worst case, it is still O(n³) in theory. The practical speedup comes from the fact that on geometric complexes (arising from point cloud data on manifolds), the vast majority of columns are cleared before they need reduction. This is why Ripser can compute persistence of 10,000-point clouds in seconds.</div>
 
 ## The Twist Algorithm
 

@@ -85,7 +85,7 @@ toc_label: "Contents"
 
 ## Why ReLU Was Not the End of the Story
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Think of ReLU as a light switch — fully off or fully on. That simplicity is great for optimization, but sometimes you want a dimmer: something that transitions smoothly from "mostly off" to "fully on," with a meaningful response even near zero. Modern activations are dimmers — they keep ReLU's "pass positives strongly" behaviour while giving the network richer structure near the transition point.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Think of ReLU as a light switch, fully off or fully on. That simplicity is great for optimization, but sometimes you want a dimmer: something that transitions smoothly from "mostly off" to "fully on," with a meaningful response even near zero. Modern activations are dimmers, they keep ReLU's "pass positives strongly" behaviour while giving the network richer structure near the transition point.</div>
 
 ReLU solved a huge optimization problem, but it also introduced a blunt shape:
 
@@ -120,7 +120,7 @@ That makes them feel more like **soft gates** than hard thresholds.
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/basics/activation-soft-gating.svg" alt="Diagram comparing a hard ReLU switch with smoother GELU, SiLU, and Mish style gating">
-<figcaption>Figure 1 — ReLU flips on abruptly; GELU, SiLU, and Mish let the signal turn on gradually and keep more structure around zero.</figcaption>
+<figcaption>Figure 1, ReLU flips on abruptly; GELU, SiLU, and Mish let the signal turn on gradually and keep more structure around zero.</figcaption>
 </figure>
 </div>
 
@@ -136,7 +136,7 @@ These functions keep the positive linear branch, but replace the dead negative s
 
 They acknowledge that "all negatives become zero" is sometimes too crude.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why a negative floor helps:</strong> ReLU neurons that receive consistently negative input produce zero output and zero gradient — they are effectively dead. ELU solves this by letting negative inputs produce a small but non-zero output (approaching \(-\alpha \approx -1\)). This creates a negative mean activation that pushes subsequent layers to self-correct, reducing the need for careful initialization. SELU takes this further by choosing \(\alpha\) and the scale \(\lambda\) analytically (\(\lambda \approx 1.0507\), \(\alpha \approx 1.6733\)) so that the activations' mean and variance automatically stay near (0, 1) across layers — a built-in batch-norm effect at no extra computation cost.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, why a negative floor helps:</strong> ReLU neurons that receive consistently negative input produce zero output and zero gradient, they are effectively dead. ELU solves this by letting negative inputs produce a small but non-zero output (approaching \(-\alpha \approx -1\)). This creates a negative mean activation that pushes subsequent layers to self-correct, reducing the need for careful initialization. SELU takes this further by choosing \(\alpha\) and the scale \(\lambda\) analytically (\(\lambda \approx 1.0507\), \(\alpha \approx 1.6733\)) so that the activations' mean and variance automatically stay near (0, 1) across layers, a built-in batch-norm effect at no extra computation cost.</div>
 
 ### GELU
 
@@ -150,9 +150,9 @@ GELU is the activation you now see everywhere in Transformers.
 
 where $$\Phi(x)$$ is the Gaussian cumulative distribution function: instead of passing all positive signals and rejecting all negative ones, GELU keeps a value in proportion to how likely it is to be useful under a Gaussian view of the input.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> GELU can be read as "stochastic ReLU." If neuron inputs are roughly Gaussian, then \(\Phi(x)\) is the probability that a standard normal sample is less than \(x\). So \(\operatorname{GELU}(x) = x \cdot P(\text{keep this value})\) — it applies a data-driven soft gate. At \(x=0\), exactly half the signal is gated through. At \(x=2\), roughly 97% passes. At \(x=-2\), only 3% passes. Unlike ReLU, even mildly negative values contribute a small residual signal.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> GELU can be read as "stochastic ReLU." If neuron inputs are roughly Gaussian, then \(\Phi(x)\) is the probability that a standard normal sample is less than \(x\). So \(\operatorname{GELU}(x) = x \cdot P(\text{keep this value})\), it applies a data-driven soft gate. At \(x=0\), exactly half the signal is gated through. At \(x=2\), roughly 97% passes. At \(x=-2\), only 3% passes. Unlike ReLU, even mildly negative values contribute a small residual signal.</div>
 
-**Step-by-step numerical comparison — GELU vs. ReLU vs. ELU at key input values:**
+**Step-by-step numerical comparison, GELU vs. ReLU vs. ELU at key input values:**
 
 | $$x$$ | ReLU | ELU ($$\alpha=1$$) | GELU | $$\operatorname{GELU}'$$ |
 |---|---|---|---|---|
@@ -163,7 +163,7 @@ where $$\Phi(x)$$ is the Gaussian cumulative distribution function: instead of p
 | 2 | 2 | 2 | **1.955** | 1.086 |
 | 3 | 3 | 3 | **2.996** | 1.010 |
 
-Notice how GELU preserves a small negative output near $$x=-1$$ (−0.159), giving gradients a foothold even in the mildly negative region — something ReLU completely discards.
+Notice how GELU preserves a small negative output near $$x=-1$$ (−0.159), giving gradients a foothold even in the mildly negative region, something ReLU completely discards.
 
 ### Swish and SiLU
 
@@ -173,9 +173,9 @@ Notice how GELU preserves a small negative output near $$x=-1$$ (−0.159), givi
 \]
 </div>
 
-Swish is the same family idea; SiLU is the common fixed version — smooth, slightly non-monotonic, and behaving like a gated linear response.
+Swish is the same family idea; SiLU is the common fixed version, smooth, slightly non-monotonic, and behaving like a gated linear response.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> \(\operatorname{SiLU} = x \cdot \sigma(x)\) has a beautiful interpretation: the sigmoid term acts as a learned data-driven gate on the identity term. When \(x\) is large and positive, \(\sigma(x) \to 1\) so SiLU behaves like identity. When \(x\) is large and negative, \(\sigma(x) \to 0\) so SiLU suppresses — but smoothly. The slight dip below zero near \(x \approx -1.28\) (SiLU minimum \(\approx -0.278\)) gives the network a small negative anchor, which empirically helps optimization.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> \(\operatorname{SiLU} = x \cdot \sigma(x)\) has a beautiful interpretation: the sigmoid term acts as a learned data-driven gate on the identity term. When \(x\) is large and positive, \(\sigma(x) \to 1\) so SiLU behaves like identity. When \(x\) is large and negative, \(\sigma(x) \to 0\) so SiLU suppresses, but smoothly. The slight dip below zero near \(x \approx -1.28\) (SiLU minimum \(\approx -0.278\)) gives the network a small negative anchor, which empirically helps optimization.</div>
 
 ### Mish
 
@@ -191,7 +191,7 @@ It is smooth, non-monotonic, and often visually looks like "a softer Swish with 
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mish wraps SiLU's gating idea inside a tanh, which compresses the gate values into \((-1, 1)\) before scaling by \(x\). The result is unbounded above (like ReLU/SiLU), bounded-below (minimum \(\approx -0.31\)), and has continuous higher-order derivatives. The richer curvature near zero gives optimizers more informative local slope information to work with.</div>
 
-**Worked example — tracing a value through SiLU vs GELU vs Mish:**
+**Worked example, tracing a value through SiLU vs GELU vs Mish:**
 
 Let $$x = -0.5$$ (a mildly negative pre-activation):
 
@@ -232,7 +232,7 @@ All three modern activations preserve a small but non-zero gradient where ReLU g
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/basics/activation-modern-grid.svg" alt="Grid of modern activation functions including ELU, SELU, CELU, GELU, Swish, SiLU, Mish, Hard Sigmoid, Hard Tanh, Hard Swish, Bent Identity, and Arctan">
-<figcaption>Figure 2 — Modern activations mostly differ in how sharply they transition around zero and how much negative information they preserve.</figcaption>
+<figcaption>Figure 2, Modern activations mostly differ in how sharply they transition around zero and how much negative information they preserve.</figcaption>
 </figure>
 </div>
 
@@ -329,7 +329,7 @@ Smooth functions are more expensive than piecewise-linear ones, which is why app
 - **Hard Tanh:** clipped tanh-like shape
 - **Hard Swish:** approximation of Swish used in mobile models
 
-<!-- Animated: SiLU (Swish) vs Hard Swish overlay — showing the approximation -->
+<!-- Animated: SiLU (Swish) vs Hard Swish overlay, showing the approximation -->
 <style>
 @keyframes traceHard {
   from { stroke-dashoffset: 500; }
@@ -362,7 +362,7 @@ Smooth functions are more expensive than piecewise-linear ones, which is why app
   <!-- SiLU smooth curve -->
   <!-- x=-3:≈-0.14, x=-2:≈-0.24, x=-1:≈-0.27, x=0:0, x=1:0.73, x=2:1.76, x=3:2.86 -->
   <path d="M50,163 C80,162 112,165 174,168 S215,159 236,155 C258,151 285,126 298,135 L360,80 L420,30" class="hs-fn hs-silu"/>
-  <!-- Hard Swish: piecewise — 0 for x≤-3, x*(x+3)/6 for -3<x<3, x for x≥3 -->
+  <!-- Hard Swish: piecewise, 0 for x≤-3, x*(x+3)/6 for -3<x<3, x for x≥3 -->
   <!-- at x=-3: 0, at x=-2: -2*1/6≈-0.33, at x=-1: -1*2/6≈-0.33, at x=0: 0, at x=1: 1*4/6≈0.67, at x=2: 2*5/6≈1.67, at x=3: 3 -->
   <path d="M50,155 L112,163 L174,163 L236,155 L298,138 L360,84 L420,30" class="hs-fn hs-hard"/>
   <!-- legend -->
@@ -371,7 +371,7 @@ Smooth functions are more expensive than piecewise-linear ones, which is why app
   <line x1="200" y1="186" x2="225" y2="186" stroke="#0891b2" stroke-width="2.2" stroke-dasharray="6,3"/>
   <text x="230" y="190" class="hs-leg" fill="#0891b2">Hard Swish (approx.)</text>
 </svg>
-<figcaption>SiLU (solid orange) vs. Hard Swish approximation (dashed blue). Hard Swish clips to zero below x=−3, uses the piecewise formula x(x+3)/6 in the middle range, and becomes linear above x=3. The two curves are nearly identical in [−1, 1] — close enough that mobile networks accept the tradeoff for faster on-device computation.</figcaption>
+<figcaption>SiLU (solid orange) vs. Hard Swish approximation (dashed blue). Hard Swish clips to zero below x=−3, uses the piecewise formula x(x+3)/6 in the middle range, and becomes linear above x=3. The two curves are nearly identical in [−1, 1], close enough that mobile networks accept the tradeoff for faster on-device computation.</figcaption>
 </figure>
 </div>
 
@@ -467,7 +467,7 @@ The best activation is not the one with the fanciest formula. It is the one whos
 3. the hardware budget,
 4. the role of that layer inside the model.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — the convergence story:</strong> GELU, SiLU, and Mish are all smooth approximations of the same underlying idea: a data-dependent soft gate applied to the linear pre-activation. They differ mainly in <em>how</em> they compute the gate (Gaussian CDF, sigmoid, or tanh∘softplus) and in the precise shape of the negative dip. In practice, the differences between them are usually smaller than the difference between any of them and plain ReLU.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, the convergence story:</strong> GELU, SiLU, and Mish are all smooth approximations of the same underlying idea: a data-dependent soft gate applied to the linear pre-activation. They differ mainly in <em>how</em> they compute the gate (Gaussian CDF, sigmoid, or tanh∘softplus) and in the precise shape of the negative dip. In practice, the differences between them are usually smaller than the difference between any of them and plain ReLU.</div>
 
 ## References
 

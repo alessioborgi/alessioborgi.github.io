@@ -6,7 +6,7 @@ book: gnn
 subsection: pooling
 tags: [pooling, readout, graph-classification, aggregation, global-pooling]
 published: true
-excerpt: "To predict a property of an entire graph, node embeddings must be aggregated into a single vector. The choice of global pooling — mean, sum, or max — is not arbitrary: each has distinct expressive power and fits different tasks."
+excerpt: "To predict a property of an entire graph, node embeddings must be aggregated into a single vector. The choice of global pooling, mean, sum, or max, is not arbitrary: each has distinct expressive power and fits different tasks."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,16 +18,16 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> After message passing, a readout function aggregates all node embeddings into a single graph embedding. Mean pooling is permutation-invariant and size-normalised. Sum pooling retains count information. Max pooling captures extremes. Each has different expressivity — sum is the most expressive for distinguishing graph sizes and multisets.
+<strong>TL;DR:</strong> After message passing, a readout function aggregates all node embeddings into a single graph embedding. Mean pooling is permutation-invariant and size-normalised. Sum pooling retains count information. Max pooling captures extremes. Each has different expressivity, sum is the most expressive for distinguishing graph sizes and multisets.
 </div>
 {% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Graph-level readout" caption="Graph classification via global pooling of node representations (Xu et al., 2019)" %}
 
 
 ## Intuition First: Summarising a Set of Vectors
 
-After message passing you have a bag of node embeddings — an unordered set of vectors. You need to compress this whole set into a single fixed-size vector. Think of it like summarising a group of people: you could report the average height (mean), the total weight (sum), or the tallest person (max). Each statistic captures different information, and each is lossy in a different way. The same is true for graph readout.
+After message passing you have a bag of node embeddings, an unordered set of vectors. You need to compress this whole set into a single fixed-size vector. Think of it like summarising a group of people: you could report the average height (mean), the total weight (sum), or the tallest person (max). Each statistic captures different information, and each is lossy in a different way. The same is true for graph readout.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mean readout is size-blind — a graph with one active node looks identical to one with 100 active nodes. Sum readout preserves count, making it strictly more expressive. For tasks like "how many atoms of type X does this molecule have?", only sum readout gives the right answer.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mean readout is size-blind, a graph with one active node looks identical to one with 100 active nodes. Sum readout preserves count, making it strictly more expressive. For tasks like "how many atoms of type X does this molecule have?", only sum readout gives the right answer.</div>
 
 <style>
 @keyframes pool-highlight {
@@ -80,7 +80,7 @@ After message passing you have a bag of node embeddings — an unordered set of 
 
 ## The Readout Problem
 
-A $$K$$-layer GNN produces a set of node embeddings $$\{h_v^{(K)} : v \in V\}$$ — equivalently the layer matrix $$H^{(K)} \in \mathbb{R}^{N \times d}$$ with one row per node. For node-level tasks (node classification, link prediction), these are used directly. For **graph-level tasks** (graph classification, graph regression), they must be compressed into a single vector $$h_G$$.
+A $$K$$-layer GNN produces a set of node embeddings $$\{h_v^{(K)} : v \in V\}$$, equivalently the layer matrix $$H^{(K)} \in \mathbb{R}^{N \times d}$$ with one row per node. For node-level tasks (node classification, link prediction), these are used directly. For **graph-level tasks** (graph classification, graph regression), they must be compressed into a single vector $$h_G$$.
 
 This compression is the **readout** or **global pooling** step. It must be:
 1. **Permutation-invariant:** the same graph regardless of node ordering
@@ -98,12 +98,12 @@ h_G \;=\; \frac{1}{\lvert V \rvert}\sum_{v \in V} h_v^{(K)}
 **Properties:**
 - Permutation-invariant: yes
 - Normalised by graph size: yes (divides by $$\lvert V \rvert$$)
-- Sensitive to graph size: no — a graph with 10 identical nodes and one with 100 identical nodes give the same embedding
+- Sensitive to graph size: no, a graph with 10 identical nodes and one with 100 identical nodes give the same embedding
 - Captures average node behaviour
 
-**When to use:** tasks where the typical node matters — e.g., average atom property in a molecule, average sentiment in a document graph.
+**When to use:** tasks where the typical node matters, e.g., average atom property in a molecule, average sentiment in a document graph.
 
-**Failure case:** cannot distinguish a graph with one active node from a graph with 100 identical active nodes — mean pooling normalises out the count.
+**Failure case:** cannot distinguish a graph with one active node from a graph with 100 identical active nodes, mean pooling normalises out the count.
 
 ## Sum Pooling
 
@@ -119,7 +119,7 @@ h_G \;=\; \sum_{v \in V} h_v^{(K)}
 - Injective over multisets: yes, when composed with a learnable node-wise transform and the feature space is countable
 - Captures total contribution of all nodes
 
-**When to use:** tasks where the total matters — e.g., total charge of a molecule, total influence in a social network.
+**When to use:** tasks where the total matters, e.g., total charge of a molecule, total influence in a social network.
 
 **Expressive power:** Xu et al. (GIN, 2019) show that a readout of the form $$h_G = \sum_{v} \phi(h_v^{(K)})$$ with a learnable $$\phi$$ can represent any function of the multiset of node embeddings, provided the embeddings come from a countable set. Neither mean nor max has that property: mean discards multiplicities, max discards everything but the per-dimension extremes.
 
@@ -138,17 +138,17 @@ h_G \;=\; \sum_{v \in V} h_v^{(K)}
 - Captures the most prominent feature value in each dimension
 - Insensitive to count of nodes with non-maximal features
 
-**When to use:** tasks where the extreme matters — e.g., is there any toxic functional group? Does any node have property X?
+**When to use:** tasks where the extreme matters, e.g., is there any toxic functional group? Does any node have property X?
 
-**Failure case:** cannot distinguish $$\{1, 2\}$$ from $$\{2\}$$ — max pooling drops information about non-maximal elements.
+**Failure case:** cannot distinguish $$\{1, 2\}$$ from $$\{2\}$$, max pooling drops information about non-maximal elements.
 
 <div class="insight-box">
-<strong>The multiset analogy:</strong> Think of pooling as summarising a multiset of vectors. Mean collapses \(\{1,1,1\}\) and \(\{1\}\) to the same value. Max collapses \(\{1,2\}\) and \(\{2\}\). Sum separates both pairs — while still discarding ordering, which is exactly what permutation invariance requires.
+<strong>The multiset analogy:</strong> Think of pooling as summarising a multiset of vectors. Mean collapses \(\{1,1,1\}\) and \(\{1\}\) to the same value. Max collapses \(\{1,2\}\) and \(\{2\}\). Sum separates both pairs, while still discarding ordering, which is exactly what permutation invariance requires.
 </div>
 
 ## Expressivity Ranking
 
-Composed with a learnable node-wise transform, sum readout is the most expressive of the three: it is the only one of them that can represent an arbitrary function of the multiset of node embeddings drawn from a countable universe. This is what allows GIN to reach the 1-WL bound at graph level — and 1-WL is an upper bound on what *any* message-passing GNN can distinguish.
+Composed with a learnable node-wise transform, sum readout is the most expressive of the three: it is the only one of them that can represent an arbitrary function of the multiset of node embeddings drawn from a countable universe. This is what allows GIN to reach the 1-WL bound at graph level, and 1-WL is an upper bound on what *any* message-passing GNN can distinguish.
 
 Compared as bare statistics, though, mean and max are not simply "weaker than sum": they are incomparable to each other, and each separates some multisets that sum does not.
 
@@ -170,7 +170,7 @@ h_G = concat( mean_pool(H), sum_pool(H), max_pool(H) )
 
 This captures average behaviour (mean), count sensitivity (sum), and extreme values (max) simultaneously.
 
-For graphs where structure at different scales matters (molecules with atoms and functional groups, social networks with individuals and communities), **hierarchical pooling** — covered in DiffPool and TopK-Pool posts — is more appropriate than flat global pooling.
+For graphs where structure at different scales matters (molecules with atoms and functional groups, social networks with individuals and communities), **hierarchical pooling**, covered in DiffPool and TopK-Pool posts, is more appropriate than flat global pooling.
 
 ## Summary
 
@@ -181,7 +181,7 @@ For graphs where structure at different scales matters (molecules with atoms and
 | Max | $$\max_v h_v$$ (elementwise) | No | Extreme values | Existence queries |
 | Concat(all) | $$[\,\text{mean};\text{sum};\text{max}\,]$$ | Partial | Combined | General tasks |
 
-The choice of readout is as important as the choice of message passing architecture: on graph-level tasks where the count of a substructure is what the label depends on, swapping mean for sum is the difference between a model that can express the target function and one that provably cannot — no amount of extra message-passing depth compensates for a readout that has already thrown the information away.
+The choice of readout is as important as the choice of message passing architecture: on graph-level tasks where the count of a substructure is what the label depends on, swapping mean for sum is the difference between a model that can express the target function and one that provably cannot, no amount of extra message-passing depth compensates for a readout that has already thrown the information away.
 
 ## References
 

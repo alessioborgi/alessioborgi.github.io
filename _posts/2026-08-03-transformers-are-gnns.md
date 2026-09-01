@@ -8,7 +8,7 @@ subsection: unification
 tags: [transformers, gnn, attention, gat, geometric-deep-learning]
 published: true
 is_overview: false
-excerpt: "Write self-attention in the message-passing template and you get the Graph Attention Network equations with one substitution: the neighbourhood becomes the whole input. The two architectures are not analogous — they are the same operator on different graphs."
+excerpt: "Write self-attention in the message-passing template and you get the Graph Attention Network equations with one substitution: the neighbourhood becomes the whole input. The two architectures are not analogous, they are the same operator on different graphs."
 author_profile: true
 read_time: true
 icon: "🔗"
@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A Graph Attention Network computes attention over a node's neighbours. A Transformer computes attention over every token. Written in the same notation, the equations differ in exactly one symbol — \(\mathcal{N}_i\) against \(\mathcal{S}\). So a Transformer is a GNN whose graph happens to be complete, and a GAT is a Transformer whose attention has been masked by an adjacency matrix. This chapter does the substitution carefully, then flags two places where "identical" is stronger than the mathematics supports.
+<strong>TL;DR:</strong> A Graph Attention Network computes attention over a node's neighbours. A Transformer computes attention over every token. Written in the same notation, the equations differ in exactly one symbol, \(\mathcal{N}_i\) against \(\mathcal{S}\). So a Transformer is a GNN whose graph happens to be complete, and a GAT is a Transformer whose attention has been masked by an adjacency matrix. This chapter does the substitution carefully, then flags two places where "identical" is stronger than the mathematics supports.
 </div>
 
 ## The two update rules
@@ -81,17 +81,17 @@ V = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{pmatrix}.
 | 1 | $$\{0,1,2\}$$ | (0.2119, 0.5761, 0.2119) | (0.4239, 0.7881) |
 | 2 | $$\{1,2\}$$ | (0, 0.2689, 0.7311) | (0.7311, 1.0000) |
 
-Two things to read off. Node 1 is adjacent to everything, so its row is **identical** in both tables — locality is only a constraint where it actually removes something. And computing the GAT instead as *global attention with $$-\infty$$ on non-edges* reproduces the GAT table exactly, to machine precision.
+Two things to read off. Node 1 is adjacent to everything, so its row is **identical** in both tables, locality is only a constraint where it actually removes something. And computing the GAT instead as *global attention with $$-\infty$$ on non-edges* reproduces the GAT table exactly, to machine precision.
 
 <div class="insight-box">
-<strong>So masking is the whole difference.</strong> A GAT is a Transformer with an attention mask given by the adjacency matrix. Set the mask to all-ones and you recover full self-attention — I checked this collapse numerically and it is exact, not approximate. This is why modern graph libraries implement GATs as masked attention kernels rather than as gather-scatter loops.
+<strong>So masking is the whole difference.</strong> A GAT is a Transformer with an attention mask given by the adjacency matrix. Set the mask to all-ones and you recover full self-attention, I checked this collapse numerically and it is exact, not approximate. This is why modern graph libraries implement GATs as masked attention kernels rather than as gather-scatter loops.
 </div>
 
 ## Where "identical" overstates it
 
 The equivalence is real, and two details are usually glossed. Neither breaks the argument; both matter if you are implementing or reasoning precisely.
 
-**The message function is not pairwise.** The message-passing template says $$m_{ij} = \psi(h_i, h_j)$$ — a function of two nodes. But the attention weight has a softmax denominator summing over the *entire* neighbourhood, so the message from $$j$$ to $$i$$ depends on every other neighbour of $$i$$ as well. Written honestly it is $$\psi\bigl(h_i, h_j; \{h_{j'}\}_{j' \in \mathcal{N}_i}\bigr)$$. Attention-based GNNs therefore sit slightly outside the strict pairwise formulation, in a class sometimes distinguished as *anisotropic* message passing. The three-step template still applies; step 1 is just doing more than the notation admits.
+**The message function is not pairwise.** The message-passing template says $$m_{ij} = \psi(h_i, h_j)$$, a function of two nodes. But the attention weight has a softmax denominator summing over the *entire* neighbourhood, so the message from $$j$$ to $$i$$ depends on every other neighbour of $$i$$ as well. Written honestly it is $$\psi\bigl(h_i, h_j; \{h_{j'}\}_{j' \in \mathcal{N}_i}\bigr)$$. Attention-based GNNs therefore sit slightly outside the strict pairwise formulation, in a class sometimes distinguished as *anisotropic* message passing. The three-step template still applies; step 1 is just doing more than the notation admits.
 
 **The surrounding layer is not the same.** The attention *cores* match. The layers around them do not, in practice. A Transformer layer wraps attention in a residual connection, layer normalisation, and a token-wise MLP:
 
@@ -104,14 +104,14 @@ h_i^{\ell+1} = \operatorname{MLP}\Bigl( \operatorname{LayerNorm}\bigl( h_i^{\ell
 A standard GAT layer has the residual but typically no token-wise feedforward block. That block is not a detail: it holds **more learnable parameters than the attention mechanism does**. So "Transformers are GNNs" is precise about the aggregation operator and loose about the layer, and most of a Transformer's parameters live in the part the equivalence does not cover.
 
 <div class="warning-box">
-<strong>A third simplification, stated by the paper itself:</strong> the scores above omit the \(1/\sqrt{d_k}\) factor from real scaled dot-product attention. It changes nothing structurally — it is a variance correction, covered in the <a href="/blog/transformers/scaled-dot-product-attention/">Transformers book</a> — but the equations as written are a simplified attention, not the deployed one.
+<strong>A third simplification, stated by the paper itself:</strong> the scores above omit the \(1/\sqrt{d_k}\) factor from real scaled dot-product attention. It changes nothing structurally, it is a variance correction, covered in the <a href="/blog/transformers/scaled-dot-product-attention/">Transformers book</a>, but the equations as written are a simplified attention, not the deployed one.
 </div>
 
 ## What the equivalence buys you
 
-**A Transformer has no graph, and that is a choice with two edges.** Committing to a sparse graph is an inductive bias: helpful when the structure is real, harmful when it is wrong or incomplete. The pathologies Book II documents — [oversmoothing](/blog/gnn/oversmoothing/) and [oversquashing](/blog/gnn/oversquashing/) — are consequences of forcing information through a fixed sparse topology. A complete graph has no bottleneck to squash through. It also has no prior, so everything must be learned from data.
+**A Transformer has no graph, and that is a choice with two edges.** Committing to a sparse graph is an inductive bias: helpful when the structure is real, harmful when it is wrong or incomplete. The pathologies Book II documents, [oversmoothing](/blog/gnn/oversmoothing/) and [oversquashing](/blog/gnn/oversquashing/), are consequences of forcing information through a fixed sparse topology. A complete graph has no bottleneck to squash through. It also has no prior, so everything must be learned from data.
 
-**Positional encodings are how you put the structure back, softly.** A Transformer given no positional information cannot tell one ordering of its input from another — it is a set model. Positional encodings inject order as a *feature* rather than as an architectural constraint, so the model can use it or ignore it. That idea transfers directly to graphs: encode structural information (Laplacian eigenvectors, random-walk statistics, shortest-path distances) as node features and hand them to a Transformer. This is the recipe behind **Graph Transformers**, which combine local message passing with global attention.
+**Positional encodings are how you put the structure back, softly.** A Transformer given no positional information cannot tell one ordering of its input from another, it is a set model. Positional encodings inject order as a *feature* rather than as an architectural constraint, so the model can use it or ignore it. That idea transfers directly to graphs: encode structural information (Laplacian eigenvectors, random-walk statistics, shortest-path distances) as node features and hand them to a Transformer. This is the recipe behind **Graph Transformers**, which combine local message passing with global attention.
 
 **GATs and Transformers are one implementation.** If your framework has a fast masked-attention kernel, you have a fast GAT.
 
@@ -120,9 +120,9 @@ A standard GAT layer has the residual but typically no token-wise feedforward bl
 <ul>
   <li>Self-attention and graph attention differ in one symbol: the index set the softmax normalises over. \(\mathcal{S}\) gives a Transformer, \(\mathcal{N}_i\) gives a GAT.</li>
   <li>Verified on three tokens: computing a GAT as global attention masked with \(-\infty\) on non-edges reproduces local attention exactly, and an all-ones mask recovers full self-attention.</li>
-  <li>A node adjacent to everything has an identical row either way — locality only constrains where it actually removes candidates.</li>
+  <li>A node adjacent to everything has an identical row either way, locality only constrains where it actually removes candidates.</li>
   <li>The message function is not truly pairwise: the softmax denominator makes every message depend on the whole neighbourhood.</li>
-  <li>The equivalence covers the attention core, not the full layer. The token-wise MLP — which holds more parameters than attention — has no GAT counterpart.</li>
+  <li>The equivalence covers the attention core, not the full layer. The token-wise MLP, which holds more parameters than attention, has no GAT counterpart.</li>
   <li>No graph means no structural prior and no bottleneck. Positional and structural encodings put the information back as features rather than as constraints, which is what Graph Transformers do.</li>
 </ul>
 </div>

@@ -28,13 +28,13 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Imagine folding a piece of paper into a cylinder — you have changed its shape but not its topology (it still has one hole). Now tape the ends together to make a torus — the topology changed (now two independent loops). Standard autoencoders are like origami: they can fold and distort freely. TopoAE adds a rule: "the number of holes in the latent space must match the number of holes in the data." This forces the encoder to be topologically honest, not just geometrically faithful at a local level.
+Imagine folding a piece of paper into a cylinder, you have changed its shape but not its topology (it still has one hole). Now tape the ends together to make a torus, the topology changed (now two independent loops). Standard autoencoders are like origami: they can fold and distort freely. TopoAE adds a rule: "the number of holes in the latent space must match the number of holes in the data." This forces the encoder to be topologically honest, not just geometrically faithful at a local level.
 
 ## Standard Autoencoders and Topological Distortion
 
 A standard autoencoder minimises \(\|x - \hat{x}\|^2\) (reconstruction loss). This encourages point-wise fidelity but makes no guarantees about the global structure of the latent space.
 
-**Problem**: Methods like t-SNE and UMAP empirically preserve local structure (nearby points stay nearby) but can distort global topology — a single connected manifold can be fragmented into disconnected clusters, or a loop can be contracted to a point.
+**Problem**: Methods like t-SNE and UMAP empirically preserve local structure (nearby points stay nearby) but can distort global topology, a single connected manifold can be fragmented into disconnected clusters, or a loop can be contracted to a point.
 
 ## The TopoAE Objective
 
@@ -69,9 +69,9 @@ For \(H_1\) (loops): if the input data lies near a circle, the latent space is f
 
 Suppose input data \(X\) is 100 points sampled from a circle \(S^1\) in \(\mathbb{R}^2\).
 
-**Rips persistence of \(X\)**: one long-lived \(H_1\) bar at \((b, d) \approx (0.15, 0.85)\) — the circle's loop.
+**Rips persistence of \(X\)**: one long-lived \(H_1\) bar at \((b, d) \approx (0.15, 0.85)\), the circle's loop.
 
-**Standard AE** encodes to \(Z \subset \mathbb{R}^2\) via reconstruction loss only. It may produce a crescent shape (no full loop), giving \(\mathrm{dgm}(Z)\) with only short-lived \(H_1\) bars. The single long bar from \(\mathrm{dgm}(X)\) is unmatched — Wasserstein distance is large.
+**Standard AE** encodes to \(Z \subset \mathbb{R}^2\) via reconstruction loss only. It may produce a crescent shape (no full loop), giving \(\mathrm{dgm}(Z)\) with only short-lived \(H_1\) bars. The single long bar from \(\mathrm{dgm}(X)\) is unmatched, Wasserstein distance is large.
 
 **TopoAE**: the topological loss penalises this mismatch. Gradient flows back through the Rips filtration distance on \(Z\), pushing the latent codes to complete the loop. After training, \(\mathrm{dgm}(Z)\) has one long \(H_1\) bar ≈ \((0.15, 0.85)\), matching \(\mathrm{dgm}(X)\) with near-zero topological loss.
 
@@ -144,7 +144,7 @@ Suppose input data \(X\) is 100 points sampled from a circle \(S^1\) in \(\mathb
 | VAE | No guarantee | No |
 | TopoAE | Yes (via reconstruction) | Yes (via topology loss) |
 
-<div class="insight-box"><strong>Key Insight:</strong> The failure mode of standard autoencoders is that the latent space "folds" the data manifold — a torus can become a cylinder or even a disc in the latent space, destroying H₁ features. TopoAE's topological loss detects this folding (as new short-lived H₁ features or death of long-lived features) and penalises it, maintaining the "shape" of the data manifold throughout training.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The failure mode of standard autoencoders is that the latent space "folds" the data manifold, a torus can become a cylinder or even a disc in the latent space, destroying H₁ features. TopoAE's topological loss detects this folding (as new short-lived H₁ features or death of long-lived features) and penalises it, maintaining the "shape" of the data manifold throughout training.</div>
 
 ## References
 

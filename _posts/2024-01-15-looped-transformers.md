@@ -5,7 +5,7 @@ categories: [transformers]
 book: transformers
 tags: [looped-transformer, weight-tying, inference-time-compute]
 published: false
-excerpt: "What if instead of making the model wider, you ran the same block multiple times? Looped Transformers tie weights across layers and iterate, trading compute for depth without extra parameters — and they're behind modern 'thinking' models."
+excerpt: "What if instead of making the model wider, you ran the same block multiple times? Looped Transformers tie weights across layers and iterate, trading compute for depth without extra parameters, and they're behind modern 'thinking' models."
 author_profile: true
 read_time: true
 is_overview: false
@@ -57,7 +57,7 @@ hₜ = Block(h_{t-1})  # iteration T
 output = head(hₜ)
 ```
 
-The block learns to be a general "refinement step" that improves representations iteratively — like a recurrence in a modern skin.
+The block learns to be a general "refinement step" that improves representations iteratively, like a recurrence in a modern skin.
 
 <div class="blog-figure">
 <figure>
@@ -117,8 +117,8 @@ The block learns to be a general "refinement step" that improves representations
 
 Consider how you solve a mental arithmetic problem:
 
-- *"2 + 2?"* — you answer instantly, one "pass" through your brain.
-- *"147 × 23?"* — you work through it step by step, running your reasoning machinery several times.
+- *"2 + 2?"*, you answer instantly, one "pass" through your brain.
+- *"147 × 23?"*, you work through it step by step, running your reasoning machinery several times.
 
 Your brain does not become physically larger for hard problems. It just runs longer. Looped Transformers apply exactly this principle: one block, many iterations.
 
@@ -177,13 +177,13 @@ This connects to a broader idea called **inference-time scaling** or **test-time
 |---|---|
 | **Universal Transformer** (Dehghani 2018) | Weight-tied layers with adaptive halting per position |
 | **Albert** | Weight-tied encoder layers (parameter efficiency, not computation) |
-| **Mixture of Experts (MoE)** | Different experts per token but shared routing — related |
+| **Mixture of Experts (MoE)** | Different experts per token but shared routing, related |
 | **Diffusion LMs** | Iteratively refine the output sequence |
 | **o1 / o3 / R1** | Generate a long chain-of-thought "scratchpad" before answering |
 
 ## Limitations
 
-- Training deeper "looped" networks can be harder — gradients must flow through many applications of the same block.
+- Training deeper "looped" networks can be harder, gradients must flow through many applications of the same block.
 - Harder to specialise different layers for different types of representations (early layers vs. late layers in standard Transformers learn qualitatively different things).
 - Varying T at inference creates deployment complexity.
 
@@ -192,7 +192,7 @@ This connects to a broader idea called **inference-time scaling** or **test-time
 <ul>
   <li>Looped Transformers apply one <strong>weight-tied block T times</strong>, mimicking depth without proportional parameters.</li>
   <li>T can be varied at inference: more loops = more compute = better answers for hard problems.</li>
-  <li>Connects to <strong>inference-time scaling</strong> — the key idea behind reasoning models like o1 and R1.</li>
+  <li>Connects to <strong>inference-time scaling</strong>, the key idea behind reasoning models like o1 and R1.</li>
   <li>Trade-off: harder to train, may lack the specialisation benefits of independent layer weights.</li>
 </ul>
 </div>

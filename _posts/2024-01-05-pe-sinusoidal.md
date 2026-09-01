@@ -41,7 +41,7 @@ toc_label: "Contents"
 
 ## Intuition First: Why Waves?
 
-Imagine you want to give each position in a sequence a unique "fingerprint" using only values between −1 and +1. A single sine wave won't work — it repeats. But if you stack many sine waves at different frequencies, their combined values at any position form a unique signature (like a barcode).
+Imagine you want to give each position in a sequence a unique "fingerprint" using only values between −1 and +1. A single sine wave won't work, it repeats. But if you stack many sine waves at different frequencies, their combined values at any position form a unique signature (like a barcode).
 
 That's exactly what sinusoidal PE does: each dimension of the encoding vector is one wave of a specific frequency. Low-index dimensions oscillate fast; high-index dimensions oscillate slowly. Together, they uniquely identify any position.
 
@@ -68,7 +68,7 @@ Sinusoidal PE does the same in a continuous, smooth way:
 - **High dimensions ($$i$$ small → high frequency):** the sin/cos oscillates rapidly, capturing fine-grained position differences.
 - **Low dimensions ($$i$$ large → low frequency):** the sin/cos changes slowly, encoding coarse position.
 
-Each position gets a unique fingerprint — a mix of fast and slow oscillations — that the model can read.
+Each position gets a unique fingerprint, a mix of fast and slow oscillations, that the model can read.
 
 <div class="blog-figure">
 <figure>
@@ -221,8 +221,8 @@ So
 
 Now compare $$\mathrm{pos} = 2$$:
 ```
-PE(2, dim=0) = sin(2.0) ≈  0.909    (changed a lot — high frequency)
-PE(2, dim=2) = sin(0.02) ≈ 0.020    (barely changed — low frequency)
+PE(2, dim=0) = sin(2.0) ≈  0.909    (changed a lot, high frequency)
+PE(2, dim=2) = sin(0.02) ≈ 0.020    (barely changed, low frequency)
 ```
 
 The high-frequency dims (left) distinguish nearby positions; the low-frequency dims (right) distinguish distant ones. Together they uniquely encode every position.
@@ -233,27 +233,27 @@ The high-frequency dims (left) distinguish nearby positions; the low-frequency d
 
 ## Three Key Properties
 
-**1. Uniqueness.** The combination of many frequencies produces a unique vector for each position — like a fingerprint. Two positions will never have the same PE vector.
+**1. Uniqueness.** The combination of many frequencies produces a unique vector for each position, like a fingerprint. Two positions will never have the same PE vector.
 
 **2. Smooth transitions.** Adjacent positions have similar PE vectors. The model can learn that nearby positions are related without any explicit guidance.
 
-**3. Relative encoding via dot products.** The dot product $$\mathrm{PE}(\mathrm{pos}_1) \cdot \mathrm{PE}(\mathrm{pos}_2)$$ depends only on the *distance* $$\mathrm{pos}_1 - \mathrm{pos}_2$$. This means the model can implicitly reason about relative distances from absolute positions — a crucial and non-obvious property.
+**3. Relative encoding via dot products.** The dot product $$\mathrm{PE}(\mathrm{pos}_1) \cdot \mathrm{PE}(\mathrm{pos}_2)$$ depends only on the *distance* $$\mathrm{pos}_1 - \mathrm{pos}_2$$. This means the model can implicitly reason about relative distances from absolute positions, a crucial and non-obvious property.
 
 ## Why Use 10000?
 
-The base 10000 is chosen so that the wavelengths span from $$2\pi$$ (highest frequency, dim 0) to $$10000 \cdot 2\pi$$ (lowest frequency, last dim). This gives the model coverage over positions from 1 to roughly 10,000 tokens — sufficient for most early use cases.
+The base 10000 is chosen so that the wavelengths span from $$2\pi$$ (highest frequency, dim 0) to $$10000 \cdot 2\pi$$ (lowest frequency, last dim). This gives the model coverage over positions from 1 to roughly 10,000 tokens, sufficient for most early use cases.
 
 ## Limitations
 
 - Fixed formula, so it can't be fine-tuned for a specific task.
 - Extrapolation beyond the training length is imperfect, though better than learned absolute PEs.
-- Modern LLMs (with 128K+ context windows) need better solutions — enter RoPE and ALiBi.
+- Modern LLMs (with 128K+ context windows) need better solutions, enter RoPE and ALiBi.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li>Sinusoidal PE uses <strong>sin/cos at geometrically decreasing frequencies</strong> to build unique position fingerprints.</li>
-  <li>No parameters — fully deterministic and requires no training.</li>
+  <li>No parameters, fully deterministic and requires no training.</li>
   <li>Adjacent positions have similar encodings; the dot product encodes <strong>relative distance implicitly</strong>.</li>
   <li>Works well for sequences up to ~10K tokens; modern LLMs prefer RoPE or ALiBi for longer contexts.</li>
 </ul>

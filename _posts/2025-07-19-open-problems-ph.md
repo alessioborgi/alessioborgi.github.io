@@ -22,7 +22,7 @@ permalink: /blog/persistent-homology/open-problems-ph/
 
 ## Intuition First
 
-Persistent homology has gone from a theoretical curiosity (Edelsbrunner, Letscher, Zomorodian, 2002) to a practical ML tool in roughly two decades. The core 1-parameter theory is now mature: stability theorems, efficient algorithms (Ripser), differentiable layers (PersLay, PLLay), and biological applications all exist. But several fundamental challenges remain unsolved — and their solutions could unlock the next wave of topological ML.
+Persistent homology has gone from a theoretical curiosity (Edelsbrunner, Letscher, Zomorodian, 2002) to a practical ML tool in roughly two decades. The core 1-parameter theory is now mature: stability theorems, efficient algorithms (Ripser), differentiable layers (PersLay, PLLay), and biological applications all exist. But several fundamental challenges remain unsolved, and their solutions could unlock the next wave of topological ML.
 
 This post surveys the five most important open problems, each with a brief description of why it is hard and what partial progress exists.
 
@@ -34,9 +34,9 @@ This post surveys the five most important open problems, each with a brief descr
 - A point cloud with noise: filter by both scale *and* density (points in sparse regions might be noise at any scale).
 - A time-varying graph: filter by both edge weight *and* time.
 
-With two parameters, you get a **2-parameter persistence module** — a family of vector spaces indexed by $$\mathbb{R}^2$$ rather than $$\mathbb{R}$$.
+With two parameters, you get a **2-parameter persistence module**, a family of vector spaces indexed by $$\mathbb{R}^2$$ rather than $$\mathbb{R}$$.
 
-**Why it is hard.** The structure theorem for 1-parameter persistence says: every persistence module decomposes uniquely into interval modules (bars). No such theorem exists in 2+ parameters — the algebraic structure is vastly more complex. There is no finite complete discrete invariant of a 2-parameter persistence module. This means there is no natural "2-parameter barcode."
+**Why it is hard.** The structure theorem for 1-parameter persistence says: every persistence module decomposes uniquely into interval modules (bars). No such theorem exists in 2+ parameters, the algebraic structure is vastly more complex. There is no finite complete discrete invariant of a 2-parameter persistence module. This means there is no natural "2-parameter barcode."
 
 **Partial progress.** Several incomplete invariants exist:
 - **Rank invariant** (Carlsson & Zomorodian, 2009): a function on pairs of parameter values. Complete in 1-D, incomplete in 2-D.
@@ -44,7 +44,7 @@ With two parameters, you get a **2-parameter persistence module** — a family o
 - **Multipersistence modules via minimal presentations** (Lesnick & Wright, 2022): compute a minimal free resolution; partial invariants extracted from it.
 - **RIVET** (Lesnick & Wright, 2015): software for interactive 2-parameter persistence visualisation.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The absence of a complete discrete invariant for multiparameter persistence is not a gap in computational methods — it is a deep algebraic fact. The category of 2-parameter persistence modules does not have the same decomposition theory as the 1-parameter case. Any practical solution will necessarily be an approximation or a restricted invariant, not the full structure.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The absence of a complete discrete invariant for multiparameter persistence is not a gap in computational methods, it is a deep algebraic fact. The category of 2-parameter persistence modules does not have the same decomposition theory as the 1-parameter case. Any practical solution will necessarily be an approximation or a restricted invariant, not the full structure.</div>
 
 ---
 
@@ -53,7 +53,7 @@ With two parameters, you get a **2-parameter persistence module** — a family o
 **The problem.** Ripser can handle point clouds of ~100,000 points for \(H_1\) in seconds. But modern datasets have millions of points (genomics, LiDAR, graph neural networks on large graphs). At \(n = 10^6\), even storing the distance matrix (\(n^2/2\) entries) requires 4 TB of memory.
 
 **Specific bottlenecks:**
-- The Vietoris-Rips complex has up to \(2^n\) simplices — exponential in \(n\).
+- The Vietoris-Rips complex has up to \(2^n\) simplices, exponential in \(n\).
 - Matrix reduction is \(O(m^3)\) in the worst case, even with optimisations.
 - High-dimensional (\(H_k\) for \(k \geq 3\)) computation is much slower than \(H_1\).
 
@@ -82,7 +82,7 @@ More precisely: given a trained model with a topological layer, can we **interpr
 
 ## Problem 4: Sheaf Theory and Higher-Order TDA
 
-**The problem.** Persistent homology computes global homological invariants of a filtered space. But many applications need **local** topological information — how does the topology vary from region to region, not just globally? Sheaf theory provides the right mathematical framework.
+**The problem.** Persistent homology computes global homological invariants of a filtered space. But many applications need **local** topological information, how does the topology vary from region to region, not just globally? Sheaf theory provides the right mathematical framework.
 
 A **sheaf** on a simplicial complex assigns a vector space (the "stalk") to each simplex, with restriction maps between them. Sheaf cohomology generalises simplicial cohomology and captures local-to-global relationships.
 
@@ -91,7 +91,7 @@ A **sheaf** on a simplicial complex assigns a vector space (the "stalk") to each
 - **Cellular sheaves** (Hansen & Ghrist, 2019) provide a framework for signal processing on graphs that generalises graph Laplacians and spectral GNNs.
 - **Sheaf neural networks** (Barbero et al., 2022) have shown improved performance on heterophilic graphs.
 
-**Open challenge:** Define a notion of **persistence for sheaves** that is stable, computable, and interpretable — and integrate it into end-to-end differentiable ML pipelines.
+**Open challenge:** Define a notion of **persistence for sheaves** that is stable, computable, and interpretable, and integrate it into end-to-end differentiable ML pipelines.
 
 ---
 
@@ -99,7 +99,7 @@ A **sheaf** on a simplicial complex assigns a vector space (the "stalk") to each
 
 **The problem.** Current differentiable TDA (PersLay, PLLay, topological autoencoders) differentiates through the *vectorisation* of persistence diagrams, but the diagram itself is computed by a non-differentiable algorithm (boundary matrix reduction). Gradients flow through birth/death values but not through the pairing structure.
 
-This means: the network cannot learn to **create or destroy** topological features through gradient descent — it can only move existing features. If the initial filtration has no loops, no gradient signal will create a loop, even if the loss would benefit from one.
+This means: the network cannot learn to **create or destroy** topological features through gradient descent, it can only move existing features. If the initial filtration has no loops, no gradient signal will create a loop, even if the loss would benefit from one.
 
 **What a fully differentiable TDA layer would need:**
 1. A smooth approximation to the persistence pairing that is differentiable with respect to all filtration values.
@@ -176,7 +176,7 @@ This means: the network cannot learn to **create or destroy** topological featur
   <text x="385" y="186" text-anchor="middle" font-size="9" fill="#166534">Ripser, stability</text>
   <text x="385" y="199" text-anchor="middle" font-size="9" fill="#166534">theorems</text>
 </svg>
-<figcaption>Open problems mapped by research maturity and potential impact. The mature 1-parameter PH core (green box, bottom right) is solved. The five open problems cluster at lower maturity and higher impact — the frontier of topological ML.</figcaption>
+<figcaption>Open problems mapped by research maturity and potential impact. The mature 1-parameter PH core (green box, bottom right) is solved. The five open problems cluster at lower maturity and higher impact, the frontier of topological ML.</figcaption>
 </figure>
 </div>
 
@@ -198,7 +198,7 @@ This means: the network cannot learn to **create or destroy** topological featur
 
 Each of these open problems, if solved, would unlock a qualitatively new class of applications:
 
-- **Multiparameter PH** would let us analyse data with multiple natural scales simultaneously — critical for noisy biological data.
+- **Multiparameter PH** would let us analyse data with multiple natural scales simultaneously, critical for noisy biological data.
 - **Scalability** would bring TDA to large language model training, large-scale genomics, and real-time applications.
 - **Interpretability** would make TDA trustworthy for high-stakes domains (medicine, materials science).
 - **Sheaf TDA** would unify topological and spectral graph methods into a single framework.

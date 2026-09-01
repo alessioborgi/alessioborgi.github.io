@@ -45,7 +45,7 @@ The **PID (Proportional-Integral-Derivative) controller** is the workhorse of in
 - **Integral** term: eliminates steady-state error by accumulating it over time. Can cause **integral windup** when the actuator saturates.
 - **Derivative** term: damping based on the rate of change of error. Reduces oscillation but amplifies sensor noise.
 
-PID operates in **joint space** — one controller per joint. Cross-coupling between joints (due to inertia and Coriolis forces) is handled as a disturbance, which works for slow, light robots but breaks down for fast or heavy manipulation.
+PID operates in **joint space**, one controller per joint. Cross-coupling between joints (due to inertia and Coriolis forces) is handled as a disturbance, which works for slow, light robots but breaks down for fast or heavy manipulation.
 
 Computed torque control (a model-based approach) adds the inverse dynamics $$M(\mathbf{q})\ddot{\mathbf{q}} + C(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q})$$ as a feedforward term, linearising and decoupling the system so that simple PID suffices in the error space.
 
@@ -129,9 +129,9 @@ Higher-priority tasks (balance) are solved exactly; lower-priority tasks (reachi
 \(\min_{u_{0:H-1}} \sum_{t=0}^{H-1} \ell(x_t, u_t) + \ell_f(x_H) \quad \text{s.t.} \quad x_{t+1} = f(x_t, u_t)\)
 </div>
 
-Only the first action is executed; the optimisation repeats at the next timestep (receding horizon). MPC naturally handles constraints (joint limits, contact forces) and provides anticipatory behaviour. **MPPI (Model Predictive Path Integral)** solves this via sampling: thousands of random trajectories are simulated, weighted by their costs, and combined via importance sampling — amenable to GPU parallelisation.
+Only the first action is executed; the optimisation repeats at the next timestep (receding horizon). MPC naturally handles constraints (joint limits, contact forces) and provides anticipatory behaviour. **MPPI (Model Predictive Path Integral)** solves this via sampling: thousands of random trajectories are simulated, weighted by their costs, and combined via importance sampling, amenable to GPU parallelisation.
 
-<div class="insight-box"><strong>Key Insight:</strong> The trend in robot control is hybrid: model-based controllers provide stability and safety guarantees, while learned components handle unmodelled dynamics and task-specific adaptation. This "model-based + learned residual" paradigm combines the best of both worlds — interpretability and data efficiency.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The trend in robot control is hybrid: model-based controllers provide stability and safety guarantees, while learned components handle unmodelled dynamics and task-specific adaptation. This "model-based + learned residual" paradigm combines the best of both worlds, interpretability and data efficiency.</div>
 
 ## References
 

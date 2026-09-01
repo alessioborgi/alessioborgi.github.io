@@ -6,7 +6,7 @@ book: gnn
 subsection: geometric
 tags: [equivariance, invariance, symmetry, group-theory, E(n)]
 published: true
-excerpt: "Equivariance formalises the idea that a function should 'commute with symmetry transformations.' A rotation-equivariant model applied to rotated input gives the rotated output — no extra training needed. This is the foundation for geometric deep learning."
+excerpt: "Equivariance formalises the idea that a function should 'commute with symmetry transformations.' A rotation-equivariant model applied to rotated input gives the rotated output, no extra training needed. This is the foundation for geometric deep learning."
 author_profile: true
 read_time: true
 is_overview: false
@@ -24,7 +24,7 @@ toc_label: "Contents"
 
 ## Groups and Symmetry
 
-**Intuition First:** Think of a compass. No matter which direction you hold it, it still points north — the reading is *invariant* to how you rotate your body. Now think of your shadow: if you rotate 90°, your shadow rotates 90° too — the shadow is *equivariant* to your rotation. These two everyday observations capture the entire mathematical framework of geometric deep learning.
+**Intuition First:** Think of a compass. No matter which direction you hold it, it still points north, the reading is *invariant* to how you rotate your body. Now think of your shadow: if you rotate 90°, your shadow rotates 90° too, the shadow is *equivariant* to your rotation. These two everyday observations capture the entire mathematical framework of geometric deep learning.
 
 A **group** $$G$$ is a set of transformations $$\{g\}$$ with a composition rule, an identity, and inverses. The groups relevant to 3D geometry differ in exactly two questions: are translations included, and are reflections?
 
@@ -36,13 +36,13 @@ A **group** $$G$$ is a set of transformations $$\{g\}$$ with a composition rule,
 | $$\mathrm{E}(3)$$ | yes | yes | yes |
 | $$\mathrm{E}(n)$$ | yes | yes | yes (in $$n$$ dimensions) |
 
-$$\mathrm{O}(3) = \{Q \in \mathbb{R}^{3\times 3} : Q^{\!\top}Q = I\}$$, and $$\mathrm{SO}(3)$$ is its subgroup with $$\det Q = +1$$ — the "S" is for *special*, meaning determinant one, meaning no reflections. Adding translations turns $$\mathrm{O}(3)$$ into $$\mathrm{E}(3)$$ and $$\mathrm{SO}(3)$$ into $$\mathrm{SE}(3)$$; the "E" is for *Euclidean*.
+$$\mathrm{O}(3) = \{Q \in \mathbb{R}^{3\times 3} : Q^{\!\top}Q = I\}$$, and $$\mathrm{SO}(3)$$ is its subgroup with $$\det Q = +1$$, the "S" is for *special*, meaning determinant one, meaning no reflections. Adding translations turns $$\mathrm{O}(3)$$ into $$\mathrm{E}(3)$$ and $$\mathrm{SO}(3)$$ into $$\mathrm{SE}(3)$$; the "E" is for *Euclidean*.
 
 For molecular tasks the choice between $$\mathrm{SE}(3)$$ and $$\mathrm{E}(3)$$ is substantive: an $$\mathrm{E}(3)$$-invariant model gives mirror-image molecules identical predictions, which is right for energy and wrong for anything that depends on chirality.
 
 ## Invariance vs Equivariance
 
-Let $$\rho_{\text{in}}$$ and $$\rho_{\text{out}}$$ be the **representations** of $$G$$ on the input and output spaces — the concrete matrices by which a group element acts on each.
+Let $$\rho_{\text{in}}$$ and $$\rho_{\text{out}}$$ be the **representations** of $$G$$ on the input and output spaces, the concrete matrices by which a group element acts on each.
 
 **$$G$$-invariant:** the output does not move when the input is transformed.
 
@@ -77,12 +77,12 @@ Note also that $$\rho_{\text{in}}$$ and $$\rho_{\text{out}}$$ need not coincide 
 2. The model might learn approximate invariance, not exact invariance
 3. Generalisation to unseen orientations is not guaranteed
 
-**Equivariant approach:** build the constraint into the architecture. The model is exactly equivariant by design — for any input orientation, the output transforms correctly. No augmentation needed.
+**Equivariant approach:** build the constraint into the architecture. The model is exactly equivariant by design, for any input orientation, the output transforms correctly. No augmentation needed.
 
 **Practical advantage:** on molecular benchmarks, equivariant models generally reach a given accuracy from substantially fewer training samples than augmentation-based ones. The size of the gap depends on the task and the symmetry group, so treat it as a consistent direction rather than a fixed factor.
 
 <div class="insight-box">
-<strong>The CNN analogy:</strong> A CNN is equivariant to translations — shifting the image shifts the feature maps by the same amount. This is baked into the convolution operation (shared weights + sliding window). We don't augment with all possible image shifts; instead, the architecture encodes translation equivariance. Geometric GNNs do the same for rotations and reflections.
+<strong>The CNN analogy:</strong> A CNN is equivariant to translations, shifting the image shifts the feature maps by the same amount. This is baked into the convolution operation (shared weights + sliding window). We don't augment with all possible image shifts; instead, the architecture encodes translation equivariance. Geometric GNNs do the same for rotations and reflections.
 </div>
 
 ## Worked Example: Invariant vs Equivariant in 2D
@@ -91,14 +91,14 @@ Note also that $$\rho_{\text{in}}$$ and $$\rho_{\text{out}}$$ need not coincide 
 
 After rotation: $$x_1' = (0, 1)$$, $$x_2' = (-1, 0)$$.
 
-**Invariant quantity — distance:**
+**Invariant quantity, distance:**
 - Before: $$\lVert x_1 - x_2 \rVert = \lVert (1, -1) \rVert = \sqrt{2}$$
 - After: $$\lVert x_1' - x_2' \rVert = \lVert (1, 1) \rVert = \sqrt{2}$$ ✓ same
 
-**Equivariant quantity — force vector** (suppose $$F = (0.5, -0.5)$$ before rotation):
-- After rotation: $$R F = (0.5, 0.5)$$ — the force has rotated by 90° too
+**Equivariant quantity, force vector** (suppose $$F = (0.5, -0.5)$$ before rotation):
+- After rotation: $$R F = (0.5, 0.5)$$, the force has rotated by 90° too
 - A model that outputs $$(0.5, -0.5)$$ for the original and $$(0.5, 0.5)$$ for the rotated version satisfies $$\Phi(Rx) = R\,\Phi(x)$$ and is equivariant.
-- A model that outputs $$(0.5, -0.5)$$ regardless of orientation satisfies $$\Phi(Rx) = \Phi(x)$$. That is *invariance*, and for a force it is simply wrong — it would predict the same force direction for a molecule lying in any orientation.
+- A model that outputs $$(0.5, -0.5)$$ regardless of orientation satisfies $$\Phi(Rx) = \Phi(x)$$. That is *invariance*, and for a force it is simply wrong, it would predict the same force direction for a molecule lying in any orientation.
 
 This is the pair to keep in mind: the same input transformation, two different correct-looking equations, and only one of them is the right specification for a vector-valued target.
 
@@ -138,7 +138,7 @@ This is the pair to keep in mind: the same input transformation, two different c
   <text x="356" y="136" font-size="9" fill="#10b981">F'=R·F</text>
   <text x="200" y="163" text-anchor="middle" font-size="9" fill="#9ca3af">d is unchanged (invariant) · F turns by the same R (equivariant)</text>
 </svg>
-<figcaption>The same rotation R is applied to the whole configuration. The separation <em>d</em> between the two atoms is drawn at identical length in both panels — that scalar is <strong>invariant</strong>. The force arrow, by contrast, turns through the same 90° as the molecule: F points up-and-right before, down-and-right after. That is <strong>equivariance</strong>, F′ = R·F.</figcaption>
+<figcaption>The same rotation R is applied to the whole configuration. The separation <em>d</em> between the two atoms is drawn at identical length in both panels, that scalar is <strong>invariant</strong>. The force arrow, by contrast, turns through the same 90° as the molecule: F points up-and-right before, down-and-right after. That is <strong>equivariance</strong>, F′ = R·F.</figcaption>
 </figure>
 </div>
 
@@ -174,11 +174,11 @@ Limitation: expensive. The number of admissible $$(\ell_{\text{in}}, \ell_f, \el
 ## Building Equivariant Layers
 
 A layer stays equivariant if it is built only from:
-1. Equivariant linear maps — acting on the irrep index, i.e. mixing channels *within* a degree, never across degrees arbitrarily
+1. Equivariant linear maps, acting on the irrep index, i.e. mixing channels *within* a degree, never across degrees arbitrarily
 2. Invariant scalars (distances, norms, inner products) used as coefficients
 3. Tensor products of irreps, contracted with Clebsch–Gordan coefficients
 
-The key constraint: **never feed raw coordinates into an arbitrary MLP alongside scalars**. $$\mathrm{MLP}(Rx) \ne R\,\mathrm{MLP}(x)$$ in general, and one such layer destroys the equivariance of the whole network — the property is only as strong as its weakest layer.
+The key constraint: **never feed raw coordinates into an arbitrary MLP alongside scalars**. $$\mathrm{MLP}(Rx) \ne R\,\mathrm{MLP}(x)$$ in general, and one such layer destroys the equivariance of the whole network, the property is only as strong as its weakest layer.
 
 ## Summary
 
@@ -186,14 +186,14 @@ The key constraint: **never feed raw coordinates into an arbitrary MLP alongside
 |---------|-----------|---------|
 | Invariant | $$\Phi(\rho(g)x) = \Phi(x)$$ | Potential energy |
 | Equivariant | $$\Phi(\rho_{\text{in}}(g)x) = \rho_{\text{out}}(g)\Phi(x)$$ | Forces |
-| Relationship | Invariance is equivariance with $$\rho_{\text{out}} = I$$ | — |
+| Relationship | Invariance is equivariance with $$\rho_{\text{out}} = I$$ |, |
 | Augmentation | Learn symmetry from data | Expensive, approximate |
 | Architectural equivariance | Baked-in symmetry | Exact, sample-efficient |
 | Scalar ($$\ell = 0$$) | $$\rho(R) = 1$$ | Energy, charge |
 | Vector ($$\ell = 1$$) | $$\rho(R) = R$$ | Force, velocity |
 | Degree $$\ell$$ | $$\rho(R) = D^{\ell}(R)$$, size $$2\ell+1$$ | Quadrupole ($$\ell = 2$$) |
 
-Equivariance is the mathematical foundation of geometric deep learning. Every architecture in the next posts — EGNN, SE(3)-Transformers, TFN — is a concrete instantiation of these principles.
+Equivariance is the mathematical foundation of geometric deep learning. Every architecture in the next posts, EGNN, SE(3)-Transformers, TFN, is a concrete instantiation of these principles.
 
 ## References
 

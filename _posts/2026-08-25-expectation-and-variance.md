@@ -6,7 +6,7 @@ categories: [prob-basics]
 book: prob-basics
 subsection: distributions
 tags: [expectation, variance, covariance, correlation]
-excerpt: "Expectation adds up no matter how tangled the dependence. Variance does not — and the correction term, covariance, is where most of the interesting behaviour of ensembles, portfolios and minibatch gradients lives."
+excerpt: "Expectation adds up no matter how tangled the dependence. Variance does not, and the correction term, covariance, is where most of the interesting behaviour of ensembles, portfolios and minibatch gradients lives."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,12 +18,12 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> \(\mathbb{E}[X+Y]=\mathbb{E}X+\mathbb{E}Y\) always, with no independence assumption — which makes indicator decompositions absurdly effective. Variance only adds when the covariance vanishes: \(\operatorname{Var}(X+Y)=\operatorname{Var}X+\operatorname{Var}Y+2\operatorname{Cov}(X,Y)\). Correlation is normalised covariance and detects <em>linear</em> association only, so zero correlation does not mean independence. The laws of total expectation and total variance let you compute either by conditioning.
+  <strong>TL;DR:</strong> \(\mathbb{E}[X+Y]=\mathbb{E}X+\mathbb{E}Y\) always, with no independence assumption, which makes indicator decompositions absurdly effective. Variance only adds when the covariance vanishes: \(\operatorname{Var}(X+Y)=\operatorname{Var}X+\operatorname{Var}Y+2\operatorname{Cov}(X,Y)\). Correlation is normalised covariance and detects <em>linear</em> association only, so zero correlation does not mean independence. The laws of total expectation and total variance let you compute either by conditioning.
 </div>
 
 ## Expectation
 
-For a discrete variable $$\mathbb{E}[X]=\sum_x x\,p(x)$$; for a continuous one $$\mathbb{E}[X]=\int x\,p(x)\,dx$$. Both are the same object — an integral against the distribution — and both can fail to exist when the tails are heavy enough, as for the Cauchy.
+For a discrete variable $$\mathbb{E}[X]=\sum_x x\,p(x)$$; for a continuous one $$\mathbb{E}[X]=\int x\,p(x)\,dx$$. Both are the same object, an integral against the distribution, and both can fail to exist when the tails are heavy enough, as for the Cauchy.
 
 The property that matters is **linearity**:
 
@@ -35,7 +35,7 @@ The property that matters is **linearity**:
 
 for any $$a,b$$ and *any* joint distribution of $$X$$ and $$Y$$. Dependence is irrelevant because the identity is a statement about the integral, which is linear before any probabilistic structure is imposed.
 
-That freedom is what makes indicator decompositions so effective. Take a uniformly random permutation of $$n$$ items and count fixed points — elements left in their own position. Let $$I_i = 1$$ if item $$i$$ is fixed. The $$I_i$$ are heavily dependent, but $$\mathbb{E}[I_i] = P(\text{item } i \text{ fixed}) = 1/n$$, so
+That freedom is what makes indicator decompositions so effective. Take a uniformly random permutation of $$n$$ items and count fixed points, elements left in their own position. Let $$I_i = 1$$ if item $$i$$ is fixed. The $$I_i$$ are heavily dependent, but $$\mathbb{E}[I_i] = P(\text{item } i \text{ fixed}) = 1/n$$, so
 
 <div class="formula-box">
 \[
@@ -46,7 +46,7 @@ That freedom is what makes indicator decompositions so effective. Take a uniform
 for every $$n$$. No inclusion–exclusion, no derangement formula. Whenever a quantity is a count, write it as a sum of indicators before doing anything else.
 
 <div class="warning-box">
-  <strong>Interview trap — assuming linearity needs independence:</strong> it does not. The common follow-up, "what about \(\mathbb{E}[XY]\)?", <em>does</em>: \(\mathbb{E}[XY]=\mathbb{E}[X]\mathbb{E}[Y]\) requires uncorrelatedness (which independence implies). Keep the two straight — sums are always free, products are not.
+  <strong>Interview trap, assuming linearity needs independence:</strong> it does not. The common follow-up, "what about \(\mathbb{E}[XY]\)?", <em>does</em>: \(\mathbb{E}[XY]=\mathbb{E}[X]\mathbb{E}[Y]\) requires uncorrelatedness (which independence implies). Keep the two straight, sums are always free, products are not.
 </div>
 
 ## Variance and the covariance term
@@ -86,7 +86,7 @@ Let $$X$$ be uniform on $$\{-1,0,1\}$$ and set $$Y = X^2$$. Then $$\mathbb{E}[X]
 
 Yet $$Y$$ is a deterministic function of $$X$$. Concretely, $$P(Y=0)=\tfrac13$$ while $$P(Y=0\mid X=1)=0$$, so the two are as dependent as it is possible to be. The same works for $$X\sim\mathcal{N}(0,1)$$, $$Y=X^2$$, since $$\mathbb{E}[X^3]=0$$ by symmetry.
 
-The converse direction does hold: independence implies $$\mathbb{E}[XY]=\mathbb{E}X\,\mathbb{E}Y$$, hence zero covariance. The one place the implication reverses is the jointly Gaussian case — for a multivariate normal, zero covariance really does mean independence, which is why the trap is so easy to fall into after a term of working with Gaussians.
+The converse direction does hold: independence implies $$\mathbb{E}[XY]=\mathbb{E}X\,\mathbb{E}Y$$, hence zero covariance. The one place the implication reverses is the jointly Gaussian case, for a multivariate normal, zero covariance really does mean independence, which is why the trap is so easy to fall into after a term of working with Gaussians.
 
 <div class="blog-figure">
 <figure>
@@ -122,7 +122,7 @@ Conditioning gives two decompositions that are used constantly. The **law of tot
 \]
 </div>
 
-— average within groups, then average the group averages, weighted by group size. The **law of total variance** splits spread the same way:
+, average within groups, then average the group averages, weighted by group size. The **law of total variance** splits spread the same way:
 
 <div class="formula-box">
 \[
@@ -133,7 +133,7 @@ Conditioning gives two decompositions that are used constantly. The **law of tot
 A worked case: a value comes from one of two groups with equal probability; group 0 has mean 0 and variance 1, group 1 has mean 4 and variance 1. Within-group term: $$\mathbb{E}[\operatorname{Var}(Y\mid X)] = 1$$. Between-group term: the conditional means are 0 and 4 with probability $$\tfrac12$$ each, so their variance is $$8 - 2^2 = 4$$. Total: $$\operatorname{Var}(Y) = 1 + 4 = 5$$. Checking directly, $$\mathbb{E}[Y]=2$$ and $$\mathbb{E}[Y^2] = \tfrac12(1+0)+\tfrac12(1+16) = 9$$, giving $$9-4=5$$.
 
 <div class="insight-box">
-  <strong>Key Insight — total variance is the uncertainty decomposition:</strong> read \(X\) as "which model" in a deep ensemble and \(Y\) as the prediction. The within-group term \(\mathbb{E}[\operatorname{Var}(Y\mid X)]\) is <em>aleatoric</em> uncertainty — noise no model can remove — and the between-group term \(\operatorname{Var}(\mathbb{E}[Y\mid X])\) is <em>epistemic</em>, the disagreement between models, which more data can shrink. The split reported by Bayesian deep learning methods is precisely this identity.
+  <strong>Key Insight, total variance is the uncertainty decomposition:</strong> read \(X\) as "which model" in a deep ensemble and \(Y\) as the prediction. The within-group term \(\mathbb{E}[\operatorname{Var}(Y\mid X)]\) is <em>aleatoric</em> uncertainty, noise no model can remove, and the between-group term \(\operatorname{Var}(\mathbb{E}[Y\mid X])\) is <em>epistemic</em>, the disagreement between models, which more data can shrink. The split reported by Bayesian deep learning methods is precisely this identity.
 </div>
 
 ## Where this goes next
@@ -146,7 +146,7 @@ Means and variances for the standard families are tabulated in [common distribut
     <li>Linearity of expectation holds for any dependence; \(\mathbb{E}[XY]=\mathbb{E}X\,\mathbb{E}Y\) does not.</li>
     <li>\(\operatorname{Var}(X+Y)=\operatorname{Var}X+\operatorname{Var}Y+2\operatorname{Cov}(X,Y)\); ensemble averaging floors at \(\rho\sigma^2\).</li>
     <li>Correlation captures linear association only: \(X\) uniform on \(\{-1,0,1\}\) with \(Y=X^2\) has \(\rho=0\) and total dependence.</li>
-    <li>Independence \(\Rightarrow\) uncorrelated, never the reverse — except for jointly Gaussian variables.</li>
+    <li>Independence \(\Rightarrow\) uncorrelated, never the reverse, except for jointly Gaussian variables.</li>
     <li>Total variance splits into within-group (aleatoric) and between-group (epistemic) parts.</li>
   </ul>
 </div>

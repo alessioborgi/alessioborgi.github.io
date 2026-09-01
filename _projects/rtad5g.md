@@ -14,7 +14,7 @@ tags:
   - HPE
 ---
 
-RTAD5G is a real-time anomaly detection system developed for 5G network environments in collaboration with **Hewlett Packard Enterprise (HPE)**. It processes continuous streams of network telemetry — KPIs, counters, and performance indicators — and flags anomalous behaviour in near real-time to support proactive network operations.
+RTAD5G is a real-time anomaly detection system developed for 5G network environments in collaboration with **Hewlett Packard Enterprise (HPE)**. It processes continuous streams of network telemetry, KPIs, counters, and performance indicators, and flags anomalous behaviour in near real-time to support proactive network operations.
 
 ## Problem Context
 

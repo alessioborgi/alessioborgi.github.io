@@ -5,7 +5,7 @@ date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [attention, multi-head]
-excerpt: "One attention head sees one relationship. Multiple heads running in parallel let the model capture syntax, semantics, and coreference simultaneously — here's how."
+excerpt: "One attention head sees one relationship. Multiple heads running in parallel let the model capture syntax, semantics, and coreference simultaneously, here's how."
 author_profile: true
 read_time: true
 is_overview: false
@@ -47,7 +47,7 @@ toc_label: "Contents"
 
 ## Why One Head Isn't Enough
 
-A single self-attention head computes one set of relevance scores across all token pairs. But language is rich: in one sentence, "bank" might need to attend to "river" for its meaning AND to "withdrew" for its syntactic role — simultaneously.
+A single self-attention head computes one set of relevance scores across all token pairs. But language is rich: in one sentence, "bank" might need to attend to "river" for its meaning AND to "withdrew" for its syntactic role, simultaneously.
 
 With a single head, the model must average these signals into one distribution, losing specificity. Multiple heads solve this by each specialising in a different type of relationship.
 
@@ -63,7 +63,7 @@ To fully understand "bank" you need to resolve two things simultaneously:
 - Its **syntactic role** (it is the grammatical subject)
 - Its **semantic disambiguation** (river context → geographical bank, not financial)
 
-A single attention head must blend these two signals into one distribution. Head A might focus on syntax while Head B focuses on nearby context — and the final linear layer W_O combines both views.
+A single attention head must blend these two signals into one distribution. Head A might focus on syntax while Head B focuses on nearby context, and the final linear layer W_O combines both views.
 
 ## The Idea: Parallel Subspaces
 
@@ -85,7 +85,7 @@ The original "Attention Is All You Need" paper uses:
 - Number of heads: **h = 8**
 - Head dimension: **d_k = d_v = 512 / 8 = 64**
 
-So each head works in a 64-dimensional subspace — much cheaper per head, but collectively richer than a single 512-dim head.
+So each head works in a 64-dimensional subspace, much cheaper per head, but collectively richer than a single 512-dim head.
 
 The formula is simply:
 
@@ -138,7 +138,7 @@ Concat: [a, b, c, d]     (back to d_model = 4)
 × W_O:  final 4-dim output
 ```
 
-W_O mixes both views — it can learn to weight syntactic information from head₁ more heavily for certain tasks (e.g., POS tagging) or semantic information from head₂ more heavily for others (e.g., coreference).
+W_O mixes both views, it can learn to weight syntactic information from head₁ more heavily for certain tasks (e.g., POS tagging) or semantic information from head₂ more heavily for others (e.g., coreference).
 
 <div class="blog-figure">
 <figure>
@@ -191,7 +191,7 @@ W_O mixes both views — it can learn to weight syntactic information from head�
   <text x="170" y="168" text-anchor="middle" font-size="8" fill="#1e40af">syntax focus</text>
   <text x="170" y="178" text-anchor="middle" font-size="8" fill="#059669">semantic focus</text>
 </svg>
-<figcaption>Two heads run in parallel — each glows when "active". Their outputs are concatenated and mixed by W_O to produce the final multi-head representation.</figcaption>
+<figcaption>Two heads run in parallel, each glows when "active". Their outputs are concatenated and mixed by W_O to produce the final multi-head representation.</figcaption>
 </figure>
 </div>
 
@@ -203,7 +203,7 @@ The total compute is the same as one big attention head (d² operations), but sp
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li>Multi-Head Attention runs <strong>h independent attention operations</strong> in lower-dimensional subspaces.</li>
-  <li>Each head learns a different set of Q, K, V projections — and tends to specialise in different relationship types.</li>
+  <li>Each head learns a different set of Q, K, V projections, and tends to specialise in different relationship types.</li>
   <li>Outputs are <strong>concatenated</strong> and projected back to d_model with a final linear layer W_O.</li>
   <li>Total compute ≈ single-head attention; expressive power is strictly greater.</li>
 </ul>

@@ -72,7 +72,7 @@ toc_label: "Contents"
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/hetsheaf-paper.png" alt="First page of the Heterogeneous Sheaf Neural Networks paper" caption="Paper preview — Heterogeneous Sheaf Neural Networks (Braithwaite et al., 2024)." %}
+{% include figure image_path="/images/blog/papers/hetsheaf-paper.png" alt="First page of the Heterogeneous Sheaf Neural Networks paper" caption="Paper preview, Heterogeneous Sheaf Neural Networks (Braithwaite et al., 2024)." %}
 </div>
 
 ## The Problem: Pooling in Sheaf Models Is Not Ordinary Pooling
@@ -205,11 +205,11 @@ The big picture is simple: before you aggregate, make sure the quantities you ag
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/papers/hetsheaf-sheafpool.png" alt="SheafPool architecture with whitening, anchor-guided alignment, invariant attention weights, stalk pooling, and invariant graph feature extraction">
-<figcaption>Figure 1 — SheafPool first normalises each local stalk, then aligns residual frame ambiguity with a shared anchor, assigns invariant attention weights, pools the aligned stalks, and finally extracts graph-level features from invariant channel-wise energies. The whole point is to make graph readout independent of local basis choices.</figcaption>
+<figcaption>Figure 1, SheafPool first normalises each local stalk, then aligns residual frame ambiguity with a shared anchor, assigns invariant attention weights, pools the aligned stalks, and finally extracts graph-level features from invariant channel-wise energies. The whole point is to make graph readout independent of local basis choices.</figcaption>
 </figure>
 </div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — the coordinate-system analogy:</strong> Imagine pooling GPS coordinates from sensors in different countries, each using a different local coordinate system (one uses UTM Zone 30N, another uses a national grid rotated by 47°). If you average the raw coordinates, the result is meaningless — the average of metres-east in two incompatible frames is not a position anywhere. SheafPool is the mandatory coordinate-system conversion that must happen <em>before</em> any aggregation. Whitening removes the scale and covariance distortion (like converting all distances to metres), and anchor-guided alignment removes the rotational ambiguity (like choosing a common north direction). Only after both steps does averaging produce a meaningful pooled representation.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, the coordinate-system analogy:</strong> Imagine pooling GPS coordinates from sensors in different countries, each using a different local coordinate system (one uses UTM Zone 30N, another uses a national grid rotated by 47°). If you average the raw coordinates, the result is meaningless, the average of metres-east in two incompatible frames is not a position anywhere. SheafPool is the mandatory coordinate-system conversion that must happen <em>before</em> any aggregation. Whitening removes the scale and covariance distortion (like converting all distances to metres), and anchor-guided alignment removes the rotational ambiguity (like choosing a common north direction). Only after both steps does averaging produce a meaningful pooled representation.</div>
 
 ## Why Whitening and Alignment Are Both Needed
 
@@ -237,17 +237,17 @@ Consider two nodes with $$d=2$$ stalks before pooling:
 - $$h_1 = [2, 0]$$ (a vector pointing along the x-axis with magnitude 2)
 - $$h_2 = [0, 3]$$ (a vector pointing along the y-axis with magnitude 3)
 
-**Step 1 — Whitening.** Whitening normalises each stalk by its own Euclidean norm (or covariance, depending on the implementation). Using norm-whitening: $$h_1' = h_1 / \lVert h_1 \rVert = [2,0] / 2 =$$ **[1, 0]**, and $$h_2' = h_2 / \lVert h_2 \rVert = [0,3] / 3 =$$ **[0, 1]**.
+**Step 1, Whitening.** Whitening normalises each stalk by its own Euclidean norm (or covariance, depending on the implementation). Using norm-whitening: $$h_1' = h_1 / \lVert h_1 \rVert = [2,0] / 2 =$$ **[1, 0]**, and $$h_2' = h_2 / \lVert h_2 \rVert = [0,3] / 3 =$$ **[0, 1]**.
 
-**Step 2 — Alignment.** The anchor frame is the identity $$I$$. Both [1,0] and [0,1] are already orthonormal, so they are in canonical form after alignment. No rotation is needed in this example.
+**Step 2, Alignment.** The anchor frame is the identity $$I$$. Both [1,0] and [0,1] are already orthonormal, so they are in canonical form after alignment. No rotation is needed in this example.
 
-**Step 3 — Invariant energies.** The channel-wise energy for each stalk is $$E_i = \lVert h_i' \rVert^2$$. Since $$h_1'$$ and $$h_2'$$ are unit vectors: $$E_1 = \lVert [1,0] \rVert^2 =$$ **1** and $$E_2 = \lVert [0,1] \rVert^2 =$$ **1**.
+**Step 3, Invariant energies.** The channel-wise energy for each stalk is $$E_i = \lVert h_i' \rVert^2$$. Since $$h_1'$$ and $$h_2'$$ are unit vectors: $$E_1 = \lVert [1,0] \rVert^2 =$$ **1** and $$E_2 = \lVert [0,1] \rVert^2 =$$ **1**.
 
-**Step 4 — Graph representation.** The pooled graph feature vector is $$[E_1, E_2] =$$ **[1, 1]**.
+**Step 4, Graph representation.** The pooled graph feature vector is $$[E_1, E_2] =$$ **[1, 1]**.
 
-**Basis invariance check.** Now scale $$h_1$$ by 2: $$h_{1,\text{scaled}} = [4, 0]$$. After whitening: $$[4,0] / 4 = [1, 0]$$ — the same unit vector as before. The invariant energy $$E_1 = 1$$ is unchanged. The graph embedding [1, 1] is identical. This demonstrates that SheafPool's readout is scale-invariant: doubling a stalk vector does not change the graph embedding, because the relevant information is the direction (captured by the whitened vector) not the magnitude.
+**Basis invariance check.** Now scale $$h_1$$ by 2: $$h_{1,\text{scaled}} = [4, 0]$$. After whitening: $$[4,0] / 4 = [1, 0]$$, the same unit vector as before. The invariant energy $$E_1 = 1$$ is unchanged. The graph embedding [1, 1] is identical. This demonstrates that SheafPool's readout is scale-invariant: doubling a stalk vector does not change the graph embedding, because the relevant information is the direction (captured by the whitened vector) not the magnitude.
 
-**Why this matters.** Without whitening, the naive mean pool of $$h_1 = [2,0]$$ and $$h_2 = [0,3]$$ gives $$[1.0, 1.5]$$ — while the naive mean of $$[4,0]$$ and $$[0,3]$$ gives $$[2.0, 1.5]$$. These are different graph embeddings for what is structurally the same graph under a local basis change. SheafPool eliminates this spurious dependence on local coordinate scale.
+**Why this matters.** Without whitening, the naive mean pool of $$h_1 = [2,0]$$ and $$h_2 = [0,3]$$ gives $$[1.0, 1.5]$$, while the naive mean of $$[4,0]$$ and $$[0,3]$$ gives $$[2.0, 1.5]$$. These are different graph embeddings for what is structurally the same graph under a local basis change. SheafPool eliminates this spurious dependence on local coordinate scale.
 
 ## What It Buys in Practice
 

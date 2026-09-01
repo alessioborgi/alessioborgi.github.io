@@ -7,7 +7,7 @@ book: tdl
 subsection: ml-integration
 tags: [topological-deep-learning, cell-complexes, combinatorial-complexes, hypergraphs, higher-order]
 published: true
-excerpt: "A simplicial complex cannot hold a benzene ring as a single cell — filling the hexagon costs three edges between atoms that share no bond, and this one constraint is what cell and combinatorial complexes exist to remove."
+excerpt: "A simplicial complex cannot hold a benzene ring as a single cell, filling the hexagon costs three edges between atoms that share no bond, and this one constraint is what cell and combinatorial complexes exist to remove."
 author_profile: true
 read_time: true
 is_overview: false
@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The downward-closure axiom forces a simplicial complex to contain every subset of every cell, which pins the dimension of a cell to its size: a two-dimensional cell has exactly three vertices, full stop. So a six-membered ring cannot be one face — triangulating it costs three diagonals between atoms that are not bonded. Cell complexes drop that constraint by gluing a disc along <em>any</em> boundary cycle; hypergraphs drop it in a different direction, allowing arbitrary subsets with no boundary structure at all; combinatorial complexes keep only a set of cells, an order-preserving rank, and a neighbourhood relation, which is all message passing ever needed. The cost is real: the more permissive the domain, the less inherited theory you get. Simplicial complexes hand you a canonical signed boundary map and a Hodge Laplacian; a general combinatorial complex hands you neighbourhood matrices and nothing else.
+  <strong>TL;DR:</strong> The downward-closure axiom forces a simplicial complex to contain every subset of every cell, which pins the dimension of a cell to its size: a two-dimensional cell has exactly three vertices, full stop. So a six-membered ring cannot be one face, triangulating it costs three diagonals between atoms that are not bonded. Cell complexes drop that constraint by gluing a disc along <em>any</em> boundary cycle; hypergraphs drop it in a different direction, allowing arbitrary subsets with no boundary structure at all; combinatorial complexes keep only a set of cells, an order-preserving rank, and a neighbourhood relation, which is all message passing ever needed. The cost is real: the more permissive the domain, the less inherited theory you get. Simplicial complexes hand you a canonical signed boundary map and a Hodge Laplacian; a general combinatorial complex hands you neighbourhood matrices and nothing else.
 </div>
 
 ## The rule that gets in the way
@@ -32,9 +32,9 @@ A simplicial complex $$K$$ on a vertex set $$V$$ is a collection of non-empty fi
 \]
 </div>
 
-That single axiom does more work than it looks. Because every subset of a cell must itself be a cell, and because the cells are subsets of $$V$$, the dimension of a cell is determined by its size: a cell with $$p+1$$ vertices is a $$p$$-simplex, and there is no other option. A two-dimensional cell is a triangle. Not a square, not a pentagon — a triangle.
+That single axiom does more work than it looks. Because every subset of a cell must itself be a cell, and because the cells are subsets of $$V$$, the dimension of a cell is determined by its size: a cell with $$p+1$$ vertices is a $$p$$-simplex, and there is no other option. A two-dimensional cell is a triangle. Not a square, not a pentagon, a triangle.
 
-Now take a benzene-style aromatic ring: six carbons, six bonds, no chords. The ring is the chemically meaningful object. Aromaticity is a property of the cycle as a whole, not of any individual bond, so you would like the ring to *be* a cell — one two-dimensional object with its own feature vector, participating in message passing alongside the atoms and the bonds.
+Now take a benzene-style aromatic ring: six carbons, six bonds, no chords. The ring is the chemically meaningful object. Aromaticity is a property of the cycle as a whole, not of any individual bond, so you would like the ring to *be* a cell, one two-dimensional object with its own feature vector, participating in message passing alongside the atoms and the bonds.
 
 In a simplicial complex you cannot have that. The only two-dimensional cells available are triangles, so filling the hexagon means triangulating it. A convex polygon with $$n$$ vertices triangulates into $$n-2$$ triangles using $$n-3$$ diagonals. For $$n = 6$$ that is **four triangles and three diagonals**. Fanning from atom 1, the diagonals are 1–3, 1–4 and 1–5: the two meta relationships and the para relationship. None of them is a bond. The filled ring now carries **nine edges where the molecule has six**, and nineteen cells in total ($$6 + 9 + 4$$) against the thirteen ($$6 + 6 + 1$$) that a single hexagonal face would need.
 
@@ -90,13 +90,13 @@ In a simplicial complex you cannot have that. The only two-dimensional cells ava
   <text x="490" y="252" text-anchor="middle" font-size="11" fill="#475569">boundary = the six real bonds</text>
   <text x="490" y="270" text-anchor="middle" font-size="11" fill="#475569">13 cells in total</text>
 </svg>
-<figcaption>Left: filling a six-membered ring inside a simplicial complex. A hexagon triangulates into four 2-simplices, which needs three diagonals (dashed) joining atoms that share no bond, giving nine edges and nineteen cells. Right: the same ring as a single 2-cell attached along the six real bonds — six edges, one face, thirteen cells, and nothing invented.</figcaption>
+<figcaption>Left: filling a six-membered ring inside a simplicial complex. A hexagon triangulates into four 2-simplices, which needs three diagonals (dashed) joining atoms that share no bond, giving nine edges and nineteen cells. Right: the same ring as a single 2-cell attached along the six real bonds, six edges, one face, thirteen cells, and nothing invented.</figcaption>
 </figure>
 </div>
 
-The obvious workaround is worse. Add a phantom vertex at the ring centre and cone the hexagon over it: that is seven vertices, twelve edges and six triangles, twenty-five cells, plus an atom that does not exist. And no triangulation is canonical — a hexagon has $$C_4 = 14$$ distinct triangulations, and nothing in the chemistry prefers one of them.
+The obvious workaround is worse. Add a phantom vertex at the ring centre and cone the hexagon over it: that is seven vertices, twelve edges and six triangles, twenty-five cells, plus an atom that does not exist. And no triangulation is canonical, a hexagon has $$C_4 = 14$$ distinct triangulations, and nothing in the chemistry prefers one of them.
 
-Be precise about what is actually lost here, because it is easy to overstate. Closure does not stop you *representing* the ring. Leave the hexagon unfilled and it is a genuine 1-cycle; $$H_1$$ sees it, persistent homology sees it. What closure prevents is making the ring a **single cell** — an object with a rank, a learnable feature vector, and a defined place in the neighbourhood structure that messages travel along. That is the thing higher-order networks want, and closure denies it.
+Be precise about what is actually lost here, because it is easy to overstate. Closure does not stop you *representing* the ring. Leave the hexagon unfilled and it is a genuine 1-cycle; $$H_1$$ sees it, persistent homology sees it. What closure prevents is making the ring a **single cell**, an object with a rank, a learnable feature vector, and a defined place in the neighbourhood structure that messages travel along. That is the thing higher-order networks want, and closure denies it.
 
 <div class="insight-box">
   <strong>Key Insight:</strong> The problem is not that simplicial complexes are too small a class of spaces. Up to homotopy they are not: the filled hexagon and the four-triangle fan are both contractible discs, so no topological invariant tells them apart. The problem is that a neural network reads <em>cells</em>, not homotopy types. Nineteen cells with three fictitious adjacencies is a different computational object from thirteen cells with none, even when the two are topologically identical.
@@ -122,25 +122,25 @@ C_p \;=\; \operatorname{im}\partial_{p+1} \,\oplus\, \ker L_p \,\oplus\, \operat
 \]
 </div>
 
-with $$\ker L_p \cong H_p(K;\mathbb{R})$$. None of this requires a choice: order the vertices and everything else follows. That canonicality is the asset. Remember it — section six is about what happens when you spend it.
+with $$\ker L_p \cong H_p(K;\mathbb{R})$$. None of this requires a choice: order the vertices and everything else follows. That canonicality is the asset. Remember it, section six is about what happens when you spend it.
 
 ## Cell complexes: glue a disc along whatever you like
 
 A CW complex is built one dimension at a time. Start with a set of points, the 0-cells. To add a 1-cell, take a closed interval and glue its two endpoints onto points already present. To add a 2-cell, take a closed disc $$D^2$$ and glue its boundary circle onto the existing structure by a continuous **attaching map**. In general, a $$p$$-cell is a copy of $$D^p$$ glued along $$S^{p-1}$$ to the part of the complex already built.
 
-All the freedom is in the attaching map, and nothing in the definition says the circle has to land on three edges. It can run once around the six bonds of an aromatic ring and stop. The result is a legitimate 2-cell whose boundary is exactly the ring — a hexagonal face with six boundary edges, none of them invented.
+All the freedom is in the attaching map, and nothing in the definition says the circle has to land on three edges. It can run once around the six bonds of an aromatic ring and stop. The result is a legitimate 2-cell whose boundary is exactly the ring, a hexagonal face with six boundary edges, none of them invented.
 
 For the combinatorial setting the case that matters is the **regular** one, where each attaching map is a homeomorphism onto its image and the boundary of every cell is a union of lower-dimensional cells. Regularity is what keeps the structure finite and bookkeepable: incidence numbers land in $$\{-1, 0, +1\}$$ and can be read off the combinatorics instead of computed as degrees of maps.
 
-Two facts fix the relationship to simplices. Every simplicial complex *is* a regular cell complex — a $$p$$-simplex is a $$p$$-disc attached along its faces, and closure guarantees those faces are present. The converse fails concretely: on six vertices carrying exactly the six edges of a 6-cycle, no triangle exists, so no 2-simplex can be attached at all, while a cell complex attaches one hexagonal face without adding a thing.
+Two facts fix the relationship to simplices. Every simplicial complex *is* a regular cell complex, a $$p$$-simplex is a $$p$$-disc attached along its faces, and closure guarantees those faces are present. The converse fails concretely: on six vertices carrying exactly the six edges of a 6-cycle, no triangle exists, so no 2-simplex can be attached at all, while a cell complex attaches one hexagonal face without adding a thing.
 
-In practice you get a cell complex from a graph by a **lift**: choose a family of cycles and attach a 2-cell to each. Bodnar et al. use exactly this in CW Networks, and the payoff is easy to see on a small example. Take the disjoint union of two triangles, and take a single 6-cycle. Both have six vertices, six edges, and every vertex of degree 2 whose neighbours also have degree 2 — so 1-WL assigns the same colour to every vertex of both graphs at every round and never separates them. Lift by attaching a 2-cell to each cycle and the two objects stop being comparable at a glance: one has two faces with boundary length 3, the other has one face with boundary length 6.
+In practice you get a cell complex from a graph by a **lift**: choose a family of cycles and attach a 2-cell to each. Bodnar et al. use exactly this in CW Networks, and the payoff is easy to see on a small example. Take the disjoint union of two triangles, and take a single 6-cycle. Both have six vertices, six edges, and every vertex of degree 2 whose neighbours also have degree 2, so 1-WL assigns the same colour to every vertex of both graphs at every round and never separates them. Lift by attaching a 2-cell to each cycle and the two objects stop being comparable at a glance: one has two faces with boundary length 3, the other has one face with boundary length 6.
 
 ## Hypergraphs relax a different axiom
 
-A hypergraph is a pair $$(V, E)$$ where $$E$$ is a set of non-empty subsets of $$V$$ of any size. There is no closure requirement and no relation asserted between a hyperedge and its subsets. A paper with five authors is one hyperedge on five vertices; it does not claim that any four of them ever collaborated. Reaching for a simplicial complex here would be a modelling error, because closure would manufacture exactly that claim — thirty smaller collaborations that never happened.
+A hypergraph is a pair $$(V, E)$$ where $$E$$ is a set of non-empty subsets of $$V$$ of any size. There is no closure requirement and no relation asserted between a hyperedge and its subsets. A paper with five authors is one hyperedge on five vertices; it does not claim that any four of them ever collaborated. Reaching for a simplicial complex here would be a modelling error, because closure would manufacture exactly that claim, thirty smaller collaborations that never happened.
 
-So hypergraphs are the right semantics for set-valued data, and precisely the wrong semantics for geometry. A hyperedge has no boundary. There is no interior-to-boundary hierarchy, no notion of "the faces of this cell", nothing that plays the role of $$\partial$$. That is why the usual hypergraph learning reductions — clique expansion, star expansion — discard information: they flatten a set-type relation onto pairwise or bipartite structure that was never the point.
+So hypergraphs are the right semantics for set-valued data, and precisely the wrong semantics for geometry. A hyperedge has no boundary. There is no interior-to-boundary hierarchy, no notion of "the faces of this cell", nothing that plays the role of $$\partial$$. That is why the usual hypergraph learning reductions, clique expansion, star expansion, discard information: they flatten a set-type relation onto pairwise or bipartite structure that was never the point.
 
 Notice that hypergraphs and cell complexes relax two *different* things. Cell complexes keep a boundary hierarchy and give up the size-equals-dimension rule. Hypergraphs give up the hierarchy entirely and keep nothing in its place. Neither contains the other.
 
@@ -164,7 +164,7 @@ Read off what is required: a set of cells $$x$$, some notion of which cells are 
 \]
 </div>
 
-Condition (i) says the singletons are cells. Condition (ii) — the rank function is order-preserving — is the entire replacement for closure. It does not require that subsets of a cell be cells; it only requires that when a subset *does* happen to be a cell, its rank is no larger. That is enough to organise the cells into a hierarchy of interior-to-boundary relations without demanding that the hierarchy be complete.
+Condition (i) says the singletons are cells. Condition (ii), the rank function is order-preserving, is the entire replacement for closure. It does not require that subsets of a cell be cells; it only requires that when a subset *does* happen to be a cell, its rank is no larger. That is enough to organise the cells into a hierarchy of interior-to-boundary relations without demanding that the hierarchy be complete.
 
 From the rank function and set inclusion you can define the neighbourhoods directly. Hajij et al. define down-incidence and up-incidence (the cells strictly contained in, or strictly containing, a given cell), together with adjacency and coadjacency (cells of equal rank linked through a higher-rank or lower-rank cell), each optionally restricted by a prescribed rank gap. These become the incidence matrices $$B_{r,k}$$ and adjacency matrices $$A_{r,k}$$ that the layer above sums over.
 
@@ -194,7 +194,7 @@ Generality is bought, not granted, and the currency is inherited theory.
 
 **You lose the canonical boundary map.** The alternating-sum formula works because closure guarantees that a $$p$$-simplex has all $$p+1$$ of its facets and that they are indexed by which vertex was deleted. Regular cell complexes still give you a chain complex, but the incidence numbers now depend on chosen orientations and on the chosen cell structure. A general combinatorial complex gives you nothing of the kind. The framework supplies *unsigned* incidence and adjacency matrices, and an unsigned incidence matrix does not compose to zero: without signs there is no chain complex, hence no homology, hence no Hodge Laplacian in the strict sense. What you actually hold is a symmetric non-negative diffusion operator. It is a perfectly good thing to run a network on, but its kernel is not a homology group and its spectrum decomposes nothing.
 
-**You lose canonicality of the object itself.** A Vietoris–Rips complex is determined by a metric and a scale — hand two people the same point cloud and they build the same complex. A ring lift is determined by taste. Fill all induced cycles up to length six? Up to length eight? Use a minimum cycle basis, which need not be unique? Each answer produces a different complex, a different operator and different predictions, and none of them is forced by the data. This is a real modelling burden that does not exist upstream.
+**You lose canonicality of the object itself.** A Vietoris–Rips complex is determined by a metric and a scale, hand two people the same point cloud and they build the same complex. A ring lift is determined by taste. Fill all induced cycles up to length six? Up to length eight? Use a minimum cycle basis, which need not be unique? Each answer produces a different complex, a different operator and different predictions, and none of them is forced by the data. This is a real modelling burden that does not exist upstream.
 
 **Topological invariance does not rescue you.** Cellular homology is independent of the CW structure, so a topologist can afford to be relaxed about which structure they chose. A network cannot: it reads cells, and the cells are not invariant. The same space admits many cell structures, and the inductive bias you install is a property of the structure, not of the space.
 
@@ -203,7 +203,7 @@ Generality is bought, not granted, and the currency is inherited theory.
 **The expressivity theory thins out.** Message Passing Simplicial Networks and CW Networks come with WL-style tests and proved separations. A "combinatorial complex network" is not a single model class: its power depends on which of the incidence and adjacency relations you actually switch on, so a theorem about one instantiation says little about another. Treat the framework as a language for writing models down, not as a model with guarantees attached.
 
 <div class="warning-box">
-  <strong>The trap:</strong> "more general" reads as "strictly better", and it is not. Moving from simplicial to combinatorial does not add capability for free — it removes constraints, and some of those constraints were load-bearing theorems. If your pipeline consumes a Hodge decomposition or a persistence diagram, generalising the domain deletes the thing you were using.
+  <strong>The trap:</strong> "more general" reads as "strictly better", and it is not. Moving from simplicial to combinatorial does not add capability for free, it removes constraints, and some of those constraints were load-bearing theorems. If your pipeline consumes a Hodge decomposition or a persistence diagram, generalising the domain deletes the thing you were using.
 </div>
 
 ## How to choose
@@ -223,10 +223,10 @@ Default to the smallest domain that can express the relation you care about, and
 <ul>
   <li>Downward closure ties a simplicial cell's dimension to its size, so a two-dimensional cell has exactly three vertices. That is the constraint everything downstream is reacting to.</li>
   <li>Filling a 6-ring simplicially costs three diagonals between non-bonded atoms (four triangles, nine edges, nineteen cells) against six edges and one face for a cell complex. Coning over a phantom centre is worse: twenty-five cells and an atom that does not exist.</li>
-  <li>Closure does not stop you seeing the ring in \(H_1\). It stops the ring from being a single cell with its own feature vector — which is what higher-order message passing actually needs.</li>
+  <li>Closure does not stop you seeing the ring in \(H_1\). It stops the ring from being a single cell with its own feature vector, which is what higher-order message passing actually needs.</li>
   <li>A \(p\)-cell is a disc \(D^p\) glued along \(S^{p-1}\) by an attaching map. Because the map is arbitrary, a 2-cell can span a cycle of any length.</li>
   <li>Hypergraphs relax a <em>different</em> axiom: arbitrary subsets, no closure, but also no boundary and no hierarchy. They do not contain cell complexes and are not contained by them.</li>
-  <li>A combinatorial complex keeps only cells, an order-preserving rank and neighbourhood relations — the three things the message-passing equation actually reads.</li>
+  <li>A combinatorial complex keeps only cells, an order-preserving rank and neighbourhood relations, the three things the message-passing equation actually reads.</li>
   <li>The cost is inherited theory. No canonical signed boundary map means no chain complex, no homology and no Hodge Laplacian; unsigned incidence gives a diffusion operator whose kernel means nothing.</li>
   <li>The lift is a modelling choice, not a construction. Which cycles you fill is not determined by the data, and the resulting cells are not topological invariants.</li>
   <li>Choose by the relation you have: set-valued gives a hypergraph, boundaries give a cell complex, Hodge theory keeps you simplicial, and a combinatorial complex is the container when you need more than one.</li>

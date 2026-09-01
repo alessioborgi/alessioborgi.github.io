@@ -6,7 +6,7 @@ book: tdl
 subsection: core
 tags: [zigzag-persistence, quiver, interval-decomposition, dynamic-topology]
 published: false
-excerpt: "Standard persistence tracks topology as we grow a complex monotonically. Zigzag persistence generalises this to sequences where simplices can be added AND removed — enabling TDA for time-varying data, sliding windows, and data with changing membership."
+excerpt: "Standard persistence tracks topology as we grow a complex monotonically. Zigzag persistence generalises this to sequences where simplices can be added AND removed, enabling TDA for time-varying data, sliding windows, and data with changing membership."
 author_profile: true
 read_time: true
 icon: "⚡"
@@ -26,7 +26,7 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> Zigzag persistence handles sequences K₁ ↔ K₂ ↔ ⋯ ↔ Kₙ where arrows can go in either direction (inclusions or deletions). Algebraically, it replaces the persistence module (linear maps between vector spaces in one direction) with a module over a quiver with arbitrary orientations. The interval decomposition theorem still holds, giving a well-defined barcode.</div>
 
-**Intuition First.** Standard persistence is like watching a one-way movie: the complex only grows. Zigzag persistence allows the movie to run both forward and backward — simplices can be added and removed. This is essential for real-world dynamic data, like a swarm of moving sensors where points appear, move, and disappear. Algebraically, the sequence of vector spaces now has maps going in both directions, like a zigzag path. Remarkably, the same decomposition theorem holds: the zigzag module still breaks into independent intervals, giving a well-defined barcode.
+**Intuition First.** Standard persistence is like watching a one-way movie: the complex only grows. Zigzag persistence allows the movie to run both forward and backward, simplices can be added and removed. This is essential for real-world dynamic data, like a swarm of moving sensors where points appear, move, and disappear. Algebraically, the sequence of vector spaces now has maps going in both directions, like a zigzag path. Remarkably, the same decomposition theorem holds: the zigzag module still breaks into independent intervals, giving a well-defined barcode.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 520 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;font-family:sans-serif;">
@@ -83,13 +83,13 @@ A **zigzag filtration** is a sequence of simplicial complexes connected by maps 
 
 <div class="math-box">$$K_1 \leftrightarrow K_2 \leftrightarrow K_3 \leftrightarrow \cdots \leftrightarrow K_n$$</div>
 
-where each $$\leftrightarrow$$ is either an inclusion ($$K_i \hookrightarrow K_{i+1}$$) or a deletion ($$K_i \hookleftarrow K_{i+1}$$). Applying $$H_n$$ gives a sequence of vector spaces connected by linear maps in alternating directions — a **zigzag module** over the quiver $$1 \leftrightarrow 2 \leftrightarrow \cdots \leftrightarrow n$$.
+where each $$\leftrightarrow$$ is either an inclusion ($$K_i \hookrightarrow K_{i+1}$$) or a deletion ($$K_i \hookleftarrow K_{i+1}$$). Applying $$H_n$$ gives a sequence of vector spaces connected by linear maps in alternating directions, a **zigzag module** over the quiver $$1 \leftrightarrow 2 \leftrightarrow \cdots \leftrightarrow n$$.
 
 ## Interval Decomposition
 
 **Theorem (Carlsson & de Silva 2010)**: Every zigzag module over a field decomposes uniquely (up to isomorphism) as a direct sum of **interval modules** $$\mathbb{I}[b,d]$$.
 
-Each interval module $$\mathbb{I}[b,d]$$ contributes one persistence bar from index $$b$$ to $$d$$. The resulting **zigzag persistence diagram** has the same form as standard persistence diagrams and carries the same topological information — the birth and death of homological features.
+Each interval module $$\mathbb{I}[b,d]$$ contributes one persistence bar from index $$b$$ to $$d$$. The resulting **zigzag persistence diagram** has the same form as standard persistence diagrams and carries the same topological information, the birth and death of homological features.
 
 **Key difference from standard persistence**: In standard persistence, birth always precedes death and both correspond to simplex additions. In zigzag persistence, a feature can be "born" at a deletion (when a cycle becomes a boundary) and "die" at an addition (when it gets filled in).
 
@@ -97,7 +97,7 @@ Each interval module $$\mathbb{I}[b,d]$$ contributes one persistence bar from in
 
 The standard persistence algorithm (boundary matrix reduction) does not directly apply to zigzag modules. Carlsson and de Silva gave an algorithm based on a "diamond principle": whenever two adjacent maps change direction (forming a diamond), the persistence of the involved generators can be updated with local modifications. The resulting algorithm runs in $$O(n^3)$$ time.
 
-<div class="insight-box"><strong>Key Insight:</strong> Zigzag persistence is the right tool for temporal point cloud data. For a trajectory of point clouds P₁, P₂, ..., Pₙ, define K_i = Rips(Pᵢ, r) and connect adjacent complexes via their union: K_i ↪ K_i ∪ K_{i+1} ↩ K_{i+1}. The resulting zigzag filtration captures which topological features are persistent across time — surviving both appearances and disappearances of points.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Zigzag persistence is the right tool for temporal point cloud data. For a trajectory of point clouds P₁, P₂, ..., Pₙ, define K_i = Rips(Pᵢ, r) and connect adjacent complexes via their union: K_i ↪ K_i ∪ K_{i+1} ↩ K_{i+1}. The resulting zigzag filtration captures which topological features are persistent across time, surviving both appearances and disappearances of points.</div>
 
 ## References
 

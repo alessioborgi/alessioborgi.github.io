@@ -6,7 +6,7 @@ categories: [stats-basics]
 book: stats-basics
 subsection: inference
 tags: [bootstrap, permutation-test, cross-validation, resampling]
-excerpt: "If you cannot resample from the population, resample from your sample instead. That one substitution gives standard errors and intervals for statistics whose sampling distributions nobody can write down — and it fails in ways worth memorising."
+excerpt: "If you cannot resample from the population, resample from your sample instead. That one substitution gives standard errors and intervals for statistics whose sampling distributions nobody can write down, and it fails in ways worth memorising."
 author_profile: true
 read_time: true
 is_overview: false
@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## The substitution
 
-The quantity you want is the sampling distribution of \\(\hat\theta\\) under the true \\(F\\) — and you cannot have it, because you have one sample, not many, and you do not know \\(F\\). The bootstrap replaces \\(F\\) with \\(\hat F_n\\), the empirical distribution putting mass \\(1/n\\) on each observed point, and samples from *that*. Sampling from \\(\hat F_n\\) is exactly drawing \\(n\\) points with replacement.
+The quantity you want is the sampling distribution of \\(\hat\theta\\) under the true \\(F\\), and you cannot have it, because you have one sample, not many, and you do not know \\(F\\). The bootstrap replaces \\(F\\) with \\(\hat F_n\\), the empirical distribution putting mass \\(1/n\\) on each observed point, and samples from *that*. Sampling from \\(\hat F_n\\) is exactly drawing \\(n\\) points with replacement.
 
 <div class="formula-box">
 \[
@@ -33,7 +33,7 @@ The quantity you want is the sampling distribution of \\(\hat\theta\\) under the
 \]
 </div>
 
-The spread of $$\{\hat\theta^{*(b)}\}$$ estimates the spread of \\(\hat\theta\\). The justification is asymptotic: \\(\hat F_n \to F\\) uniformly by Glivenko–Cantelli, and for smooth enough statistics the bootstrap distribution converges to the true sampling distribution. Note that a bootstrap resample omits any given observation with probability \\((1-1/n)^n \to e^{-1} = 0.368\\), so each resample uses about 63% of the distinct data points — the fact behind out-of-bag error in random forests.
+The spread of $$\{\hat\theta^{*(b)}\}$$ estimates the spread of \\(\hat\theta\\). The justification is asymptotic: \\(\hat F_n \to F\\) uniformly by Glivenko–Cantelli, and for smooth enough statistics the bootstrap distribution converges to the true sampling distribution. Note that a bootstrap resample omits any given observation with probability \\((1-1/n)^n \to e^{-1} = 0.368\\), so each resample uses about 63% of the distinct data points, the fact behind out-of-bag error in random forests.
 
 ## A worked interval
 
@@ -63,7 +63,7 @@ The **percentile bootstrap** takes the 2.5th and 97.5th percentiles of the resam
 </figure>
 </div>
 
-The bootstrap interval is asymmetric because the bootstrap distribution is — the right answer for skewed data, and one the \\(t\\) interval cannot give since it is symmetric by construction.
+The bootstrap interval is asymmetric because the bootstrap distribution is, the right answer for skewed data, and one the \\(t\\) interval cannot give since it is symmetric by construction.
 
 ## Where it fails
 
@@ -71,28 +71,28 @@ The failure cases are the interview question.
 
 **Extremes.** For \\(\hat\theta = \max_i x_i\\), every resample maximum is one of the observed values and equals the sample maximum with probability \\(1 - (1-1/n)^n \approx 0.632\\). The bootstrap distribution has an atom of mass there and cannot represent the smooth true one. Bickel and Freedman (1981) give the condition: the statistic must depend smoothly on the underlying distribution, and extreme order statistics do not.
 
-**Heavy tails.** With infinite variance — a Cauchy, or a Pareto with tail index below 2 — the sample mean has no limiting normal distribution and the bootstrap is inconsistent for it.
+**Heavy tails.** With infinite variance, a Cauchy, or a Pareto with tail index below 2, the sample mean has no limiting normal distribution and the bootstrap is inconsistent for it.
 
-**Dependence.** The resampling step assumes exchangeability. Applied naively to a time series it destroys autocorrelation, so it will underestimate the variance of a mean by a factor that grows with the dependence. The fix is to resample contiguous blocks — the moving-block or stationary bootstrap (Politis and Romano, 1994) — with block length long enough to preserve the correlation structure.
+**Dependence.** The resampling step assumes exchangeability. Applied naively to a time series it destroys autocorrelation, so it will underestimate the variance of a mean by a factor that grows with the dependence. The fix is to resample contiguous blocks, the moving-block or stationary bootstrap (Politis and Romano, 1994), with block length long enough to preserve the correlation structure.
 
 ## Permutation tests
 
 To test whether two groups differ, apply the same trick to the null. Under \\(H_0\\) the group labels are meaningless, so any reassignment is as likely as the one observed: enumerate the relabellings, compute the statistic for each, and see where the observed value lands.
 
-Group A: 12, 15, 15, 18. Group B: 22, 27, 41, 88. The observed difference of means is \\(44.5 - 15.0 = 29.5\\). There are \\(\binom{8}{4} = 70\\) ways to split eight numbers into two groups of four, and exactly 2 of them — the observed split and its mirror image — give a difference of 29.5 or more in absolute value. So the exact two-sided p-value is \\(2/70 = 0.029\\).
+Group A: 12, 15, 15, 18. Group B: 22, 27, 41, 88. The observed difference of means is \\(44.5 - 15.0 = 29.5\\). There are \\(\binom{8}{4} = 70\\) ways to split eight numbers into two groups of four, and exactly 2 of them, the observed split and its mirror image, give a difference of 29.5 or more in absolute value. So the exact two-sided p-value is \\(2/70 = 0.029\\).
 
 <div class="warning-box">
-  <strong>Interview trap — resolution is bounded by the design:</strong> that 0.029 is the <em>smallest p-value obtainable</em> with four observations per group, because the most extreme split already sits at \(2/70\). No effect size, however enormous, can push a 4-versus-4 permutation test below 0.01. The same logic applies to the bootstrap: with \(B\) resamples a percentile interval can only resolve tail probabilities to about \(1/B\), so \(B = 1{,}000\) is not enough for a 99% interval. Use \(B \ge 10{,}000\) when you care about the tails.
+  <strong>Interview trap, resolution is bounded by the design:</strong> that 0.029 is the <em>smallest p-value obtainable</em> with four observations per group, because the most extreme split already sits at \(2/70\). No effect size, however enormous, can push a 4-versus-4 permutation test below 0.01. The same logic applies to the bootstrap: with \(B\) resamples a percentile interval can only resolve tail probabilities to about \(1/B\), so \(B = 1{,}000\) is not enough for a 99% interval. Use \(B \ge 10{,}000\) when you care about the tails.
 </div>
 
 ## Cross-validation is resampling too
 
-\\(k\\)-fold CV is a resampling estimate of generalisation error, and it inherits a resampling problem: the folds are *not* independent. Any two training sets in 5-fold CV share three of the five parts — 75% of each training set — so the models are correlated, and so are their errors.
+\\(k\\)-fold CV is a resampling estimate of generalisation error, and it inherits a resampling problem: the folds are *not* independent. Any two training sets in 5-fold CV share three of the five parts, 75% of each training set, so the models are correlated, and so are their errors.
 
 The naive standard error \\(s/\sqrt{k}\\) across folds therefore understates the true variability, often badly. Bengio and Grandvalet (2004) proved something stronger: there is *no* unbiased estimator of the variance of \\(k\\)-fold cross-validation. Fold spread is a rough signal, not a confidence interval.
 
 <div class="insight-box">
-  <strong>Key Insight — what the bootstrap actually assumes:</strong> not normality, and not a formula for \(\hat\theta\), but that \(\hat F_n\) is a good enough stand-in for \(F\) <em>for the functional you are computing</em>. That is why it works beautifully for means, medians and correlations, all of which depend on \(F\) smoothly, and fails for maxima, which depend on the sharp edge of \(F\) that a finite sample never observes. Ask "does my statistic depend on a part of the distribution my sample can see?" and the failure cases stop needing memorisation.
+  <strong>Key Insight, what the bootstrap actually assumes:</strong> not normality, and not a formula for \(\hat\theta\), but that \(\hat F_n\) is a good enough stand-in for \(F\) <em>for the functional you are computing</em>. That is why it works beautifully for means, medians and correlations, all of which depend on \(F\) smoothly, and fails for maxima, which depend on the sharp edge of \(F\) that a finite sample never observes. Ask "does my statistic depend on a part of the distribution my sample can see?" and the failure cases stop needing memorisation.
 </div>
 
 <div class="key-takeaways">
@@ -102,7 +102,7 @@ The naive standard error \\(s/\sqrt{k}\\) across folds therefore understates the
     <li>Percentile CI = the 2.5th and 97.5th percentiles of the resampled statistics; it inherits the skew of the data, unlike a symmetric \(t\) interval.</li>
     <li>Fails for extremes, infinite-variance tails and dependent data; use a block bootstrap for time series.</li>
     <li>Permutation tests give exact p-values, but resolution is limited by the number of relabellings: 4 versus 4 bottoms out at \(2/70 = 0.029\).</li>
-    <li>k-fold CV is resampling with correlated folds — no unbiased variance estimator exists, so do not read fold spread as a confidence interval.</li>
+    <li>k-fold CV is resampling with correlated folds, no unbiased variance estimator exists, so do not read fold spread as a confidence interval.</li>
   </ul>
 </div>
 

@@ -33,7 +33,7 @@ toc_label: "Contents"
 
 ## What is 6-DOF Pose Estimation?
 
-**Intuition first.** Imagine closing your eyes and having a friend place a mug somewhere on the table. To pick it up, you need to know two things: *where* it is (translation — x, y, z coordinates) and *which way* it faces (rotation — is the handle pointing left or right?). Together these six numbers fully describe the mug's pose. Miss the rotation by even 20 degrees and the robot's fingers close on air instead of the handle.
+**Intuition first.** Imagine closing your eyes and having a friend place a mug somewhere on the table. To pick it up, you need to know two things: *where* it is (translation, x, y, z coordinates) and *which way* it faces (rotation, is the handle pointing left or right?). Together these six numbers fully describe the mug's pose. Miss the rotation by even 20 degrees and the robot's fingers close on air instead of the handle.
 
 A robot arm reaching for a mug needs to know not just where the mug is (3D position: x, y, z) but also how it is oriented (3 rotation angles: roll, pitch, yaw). Together these 6 degrees of freedom constitute the **6-DOF pose** of the object, typically represented as a rigid transformation \(T \in SE(3)\):
 
@@ -47,7 +47,7 @@ Accurate pose estimation is the bridge between robot perception and manipulation
 
 **Instance-level pose estimation** assumes a known 3D model of the exact object to be estimated. The system is trained (or evaluated) on a specific object and cannot generalise to unseen instances.
 
-**Category-level pose estimation** estimates pose for novel object instances from a known category (e.g., "mug") without seeing the specific object in training. This requires learning category-level shape priors — a much harder problem that has seen rapid progress with implicit shape representations and normalised coordinate spaces (NOCS).
+**Category-level pose estimation** estimates pose for novel object instances from a known category (e.g., "mug") without seeing the specific object in training. This requires learning category-level shape priors, a much harder problem that has seen rapid progress with implicit shape representations and normalised coordinate spaces (NOCS).
 
 ## PoseCNN: Direct Regression from RGB-D
 
@@ -150,13 +150,13 @@ where $$K_i$$ are 3D keypoints, $$k_i$$ are predicted 2D keypoints, and $$\pi$$ 
 
 ## FoundPose and Foundation Model Features
 
-**FoundPose** (Ornek et al. 2023) leverages features from large vision foundation models (DINOv2) for pose estimation. Because DINOv2 features are richly semantic and generalise across object appearances, FoundPose can establish correspondences between query images and object templates without any pose-specific training — enabling zero-shot pose estimation on novel objects.
+**FoundPose** (Ornek et al. 2023) leverages features from large vision foundation models (DINOv2) for pose estimation. Because DINOv2 features are richly semantic and generalise across object appearances, FoundPose can establish correspondences between query images and object templates without any pose-specific training, enabling zero-shot pose estimation on novel objects.
 
 The approach extracts dense feature maps from both the query image and a set of rendered templates of the object at known poses, finds the best-matching template via feature similarity, and refines the estimate with pose optimisation. This foundation model approach represents a shift from per-object trained systems to generalised pose estimators.
 
 ## Pose-in-the-Loop Grasp Planning
 
-Pose estimation does not exist in isolation — it feeds directly into grasp planning. A common pipeline:
+Pose estimation does not exist in isolation, it feeds directly into grasp planning. A common pipeline:
 
 1. Segment the target object from the scene (Mask R-CNN or SAM).
 2. Estimate its 6-DOF pose using PoseCNN or a keypoint method.
@@ -164,7 +164,7 @@ Pose estimation does not exist in isolation — it feeds directly into grasp pla
 4. Filter grasps for kinematic feasibility and collision-freeness.
 5. Execute the highest-ranked feasible grasp.
 
-Errors in pose estimation propagate to grasp success. Closed-loop approaches with visual feedback during execution — visual servoing — reduce the impact of pose estimation errors by continuously correcting the robot's approach trajectory.
+Errors in pose estimation propagate to grasp success. Closed-loop approaches with visual feedback during execution, visual servoing, reduce the impact of pose estimation errors by continuously correcting the robot's approach trajectory.
 
 ## References
 

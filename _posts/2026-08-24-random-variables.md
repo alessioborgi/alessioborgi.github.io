@@ -6,7 +6,7 @@ categories: [prob-basics]
 book: prob-basics
 subsection: distributions
 tags: [random-variables, pdf, cdf, change-of-variables]
-excerpt: "A probability density can be 2, or 200, and nothing is wrong. Getting clear on what a PDF actually is fixes half the confusion about continuous distributions — and explains the Jacobian term that makes normalising flows work."
+excerpt: "A probability density can be 2, or 200, and nothing is wrong. Getting clear on what a PDF actually is fixes half the confusion about continuous distributions, and explains the Jacobian term that makes normalising flows work."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,12 +18,12 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A random variable is a function from outcomes to numbers. Discrete ones carry a PMF, which gives probabilities directly; continuous ones carry a PDF, which does not — \(p(x)\) is a density per unit \(x\), can exceed 1, and only becomes a probability after integration. The CDF works for both. Transforming a variable multiplies its density by a Jacobian determinant, and inverting the CDF turns uniform noise into samples from anything.
+  <strong>TL;DR:</strong> A random variable is a function from outcomes to numbers. Discrete ones carry a PMF, which gives probabilities directly; continuous ones carry a PDF, which does not, \(p(x)\) is a density per unit \(x\), can exceed 1, and only becomes a probability after integration. The CDF works for both. Transforming a variable multiplies its density by a Jacobian determinant, and inverting the CDF turns uniform noise into samples from anything.
 </div>
 
 ## From outcomes to numbers
 
-A random variable $$X$$ is a measurable function $$X:\Omega\to\mathbb{R}$$ — it labels each outcome with a number. Rolling two dice, $$\Omega$$ has 36 elements, and $$X = $$ "sum" collapses them onto $$\{2,\dots,12\}$$. Probability then transfers: $$P(X = 7) = P(\{\omega : X(\omega)=7\}) = 6/36$$. This pushforward is why we can stop mentioning $$\Omega$$ almost immediately; all the information lives in the induced distribution on $$\mathbb{R}$$.
+A random variable $$X$$ is a measurable function $$X:\Omega\to\mathbb{R}$$, it labels each outcome with a number. Rolling two dice, $$\Omega$$ has 36 elements, and $$X = $$ "sum" collapses them onto $$\{2,\dots,12\}$$. Probability then transfers: $$P(X = 7) = P(\{\omega : X(\omega)=7\}) = 6/36$$. This pushforward is why we can stop mentioning $$\Omega$$ almost immediately; all the information lives in the induced distribution on $$\mathbb{R}$$.
 
 **Discrete** variables take countably many values and are described by a **PMF** $$p(x) = P(X=x)$$, with $$p(x)\in[0,1]$$ and $$\sum_x p(x)=1$$. Each value is a genuine probability.
 
@@ -36,7 +36,7 @@ P(a \le X \le b) = \int_a^b p(x)\,dx .
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — "\(p(x)\) is the probability of \(x\)":</strong> it is not, and it is not even bounded by 1. A uniform distribution on \([0, 0.5]\) has density \(p(x) = 2\) everywhere on that interval, because \(2 \times 0.5 = 1\). A narrow Gaussian with \(\sigma = 0.01\) peaks at \(1/(\sigma\sqrt{2\pi}) \approx 39.9\). The density has units of probability <em>per unit \(x\)</em>; only \(p(x)\,dx\) is dimensionless. This is also why log-likelihoods of continuous models can be positive, and why comparing them across different data scalings is meaningless.
+  <strong>Interview trap, "\(p(x)\) is the probability of \(x\)":</strong> it is not, and it is not even bounded by 1. A uniform distribution on \([0, 0.5]\) has density \(p(x) = 2\) everywhere on that interval, because \(2 \times 0.5 = 1\). A narrow Gaussian with \(\sigma = 0.01\) peaks at \(1/(\sigma\sqrt{2\pi}) \approx 39.9\). The density has units of probability <em>per unit \(x\)</em>; only \(p(x)\,dx\) is dimensionless. This is also why log-likelihoods of continuous models can be positive, and why comparing them across different data scalings is meaningless.
 </div>
 
 The object that unifies both cases is the **CDF**
@@ -47,7 +47,7 @@ F(x) = P(X \le x),
 \]
 </div>
 
-which is non-decreasing, right-continuous, and runs from 0 to 1. It jumps at atoms of a discrete variable and is continuous with $$F'(x) = p(x)$$ for a continuous one. Because $$F$$ always exists, statements phrased through CDFs — convergence in distribution, quantiles, stochastic dominance — apply uniformly to both kinds.
+which is non-decreasing, right-continuous, and runs from 0 to 1. It jumps at atoms of a discrete variable and is continuous with $$F'(x) = p(x)$$ for a continuous one. Because $$F$$ always exists, statements phrased through CDFs, convergence in distribution, quantiles, stochastic dominance, apply uniformly to both kinds.
 
 ## Change of variables
 
@@ -103,12 +103,12 @@ For the exponential with rate $$\lambda$$, $$F(x) = 1-e^{-\lambda x}$$, so $$F^{
   </g>
   <text x="22" y="112" font-size="11" fill="#475569" transform="rotate(-90 22 112)">F(x)</text>
 </svg>
-<figcaption>Notice that where the CDF is steep, a small slice of \(u\) maps to a small slice of \(x\) — that is where the density is high. Steepness of \(F\) <em>is</em> the density, which is why inverting it lands samples in the right places automatically.</figcaption>
+<figcaption>Notice that where the CDF is steep, a small slice of \(u\) maps to a small slice of \(x\), that is where the density is high. Steepness of \(F\) <em>is</em> the density, which is why inverting it lands samples in the right places automatically.</figcaption>
 </figure>
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — the density is a bookkeeping device, the CDF is the real object:</strong> the CDF exists for every random variable, discrete, continuous or mixed, and determines the distribution completely. The PDF exists only when \(F\) is differentiable, and its value at a point is meaningless in isolation. When a claim about densities looks paradoxical — a density above 1, a likelihood that changes when you switch from metres to centimetres — restate it in terms of \(F\) and the paradox disappears.
+  <strong>Key Insight, the density is a bookkeeping device, the CDF is the real object:</strong> the CDF exists for every random variable, discrete, continuous or mixed, and determines the distribution completely. The PDF exists only when \(F\) is differentiable, and its value at a point is meaningless in isolation. When a claim about densities looks paradoxical, a density above 1, a likelihood that changes when you switch from metres to centimetres, restate it in terms of \(F\) and the paradox disappears.
 </div>
 
 ## Where this goes next
@@ -121,7 +121,7 @@ Summarising a distribution by a few numbers rather than a whole function is [exp
     <li>A random variable is a measurable map \(\Omega\to\mathbb{R}\); the distribution is the pushforward of \(P\).</li>
     <li>A PMF gives probabilities; a PDF gives density per unit \(x\) and may exceed 1. Only \(\int p\,dx\) is a probability.</li>
     <li>The CDF \(F(x)=P(X\le x)\) exists always and characterises the distribution.</li>
-    <li>Under \(Y=g(X)\), densities pick up \(|\det J|\) — the identity behind normalising flows.</li>
+    <li>Under \(Y=g(X)\), densities pick up \(|\det J|\), the identity behind normalising flows.</li>
     <li>\(F^{-1}(U)\) with \(U\sim\mathrm{Uniform}(0,1)\) samples from \(F\); for \(\mathrm{Exp}(\lambda)\) that is \(-\log(U)/\lambda\).</li>
   </ul>
 </div>

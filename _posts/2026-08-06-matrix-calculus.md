@@ -6,7 +6,7 @@ categories: [math-basics]
 book: math-basics
 subsection: calculus
 tags: [matrix-calculus, gradients, layout-convention, least-squares]
-excerpt: "Most matrix-calculus mistakes are not mistakes about calculus. They are mistakes about which convention you were using, and they produce an answer that is correct up to a transpose — which is to say, wrong."
+excerpt: "Most matrix-calculus mistakes are not mistakes about calculus. They are mistakes about which convention you were using, and they produce an answer that is correct up to a transpose, which is to say, wrong."
 author_profile: true
 read_time: true
 is_overview: false
@@ -31,10 +31,10 @@ Everyone agrees that $$\partial y/\partial x$$ collects all the partials $$\part
 
 Machine learning almost always wants the second, for a mundane reason: the gradient is subtracted from the parameter, so it had better have the parameter's shape. This is the **shape convention**, and it is what `w.grad` holds in every autodiff framework. Numerical analysis and control theory tend to prefer numerator layout, because the chain rule then reads as plain left-to-right matrix multiplication, $$D(f\circ g) = Df\,Dg$$.
 
-Both are correct. The damage comes from silently mixing them mid-derivation — you get an answer whose entries are all right and whose orientation is wrong, and a shape check that happens to pass because the matrix was square.
+Both are correct. The damage comes from silently mixing them mid-derivation, you get an answer whose entries are all right and whose orientation is wrong, and a shape check that happens to pass because the matrix was square.
 
 <div class="warning-box">
-  <strong>Interview trap — the layout tells you where the transpose goes.</strong> Two specific errors dominate. First, \(\nabla_x(x^\top A x) = (A + A^\top)x\), which equals \(2Ax\) <em>only</em> when \(A\) is symmetric — assuming symmetry unstated is the single most common slip. Second, \(\nabla_x \lVert Ax - b\rVert^2 = 2A^\top(Ax-b)\) and not \(2A(Ax-b)\); when \(A\) is rectangular the wrong version does not even typecheck, and when \(A\) is square it silently gives the wrong direction. State your convention before you start, and check shapes at every line.
+  <strong>Interview trap, the layout tells you where the transpose goes.</strong> Two specific errors dominate. First, \(\nabla_x(x^\top A x) = (A + A^\top)x\), which equals \(2Ax\) <em>only</em> when \(A\) is symmetric, assuming symmetry unstated is the single most common slip. Second, \(\nabla_x \lVert Ax - b\rVert^2 = 2A^\top(Ax-b)\) and not \(2A(Ax-b)\); when \(A\) is rectangular the wrong version does not even typecheck, and when \(A\) is square it silently gives the wrong direction. State your convention before you start, and check shapes at every line.
 </div>
 
 ## The reference table
@@ -80,7 +80,7 @@ f(x+h) - f(x) = (r + Ah)^\top(r + Ah) - r^\top r
 \]
 </div>
 
-The cross terms combined because $$r^\top A h$$ and $$h^\top A^\top r$$ are the same scalar — a $$1\times1$$ matrix equals its own transpose, which is the one manipulation this method needs. By the [definition of the derivative](/blog/math-basics/derivatives-and-gradients/), the linear term *is* $$Df(x)[h]$$, and the quadratic remainder is $$o(\lVert h\rVert)$$. Now rewrite the linear term as an inner product with $$h$$:
+The cross terms combined because $$r^\top A h$$ and $$h^\top A^\top r$$ are the same scalar, a $$1\times1$$ matrix equals its own transpose, which is the one manipulation this method needs. By the [definition of the derivative](/blog/math-basics/derivatives-and-gradients/), the linear term *is* $$Df(x)[h]$$, and the quadratic remainder is $$o(\lVert h\rVert)$$. Now rewrite the linear term as an inner product with $$h$$:
 
 <div class="formula-box">
 \[
@@ -102,12 +102,12 @@ f(x+h) - f(x) = h^\top A x + x^\top A h + h^\top A h
 because $$h^\top A x = \langle h, Ax\rangle$$ and $$x^\top A h = \langle A^\top x, h\rangle$$. The symmetric case collapses to $$2Ax$$; the general case does not.
 
 <div class="insight-box">
-  <strong>Key Insight — differentials are layout-free:</strong> write \(df = \langle G, dx\rangle\) for vectors, or \(df = \operatorname{tr}(G^\top dX)\) for matrices, and \(G\) <em>is</em> the gradient in the shape convention, automatically. You never choose a layout, so you cannot mix two. The trace form also explains why so many matrix identities are really one identity: cyclic invariance, \(\operatorname{tr}(ABC) = \operatorname{tr}(BCA)\), lets you shuffle \(dX\) into the rightmost position, and whatever is left multiplying it is the answer.
+  <strong>Key Insight, differentials are layout-free:</strong> write \(df = \langle G, dx\rangle\) for vectors, or \(df = \operatorname{tr}(G^\top dX)\) for matrices, and \(G\) <em>is</em> the gradient in the shape convention, automatically. You never choose a layout, so you cannot mix two. The trace form also explains why so many matrix identities are really one identity: cyclic invariance, \(\operatorname{tr}(ABC) = \operatorname{tr}(BCA)\), lets you shuffle \(dX\) into the rightmost position, and whatever is left multiplying it is the answer.
 </div>
 
 ## Checking yourself
 
-Three checks catch nearly every error before it reaches code. **Shapes**: the gradient must have the shape of the variable. **Scalars**: set $$n = 1$$ and confirm the expression reduces to ordinary calculus — $$\nabla_x(ax^2)$$ should give $$2ax$$. **Finite differences**: compare against $$(f(x + \varepsilon e_i) - f(x - \varepsilon e_i))/2\varepsilon$$ with $$\varepsilon \approx 10^{-5}$$; the central difference has $$O(\varepsilon^2)$$ error and will agree to five or six digits when the analytic gradient is right.
+Three checks catch nearly every error before it reaches code. **Shapes**: the gradient must have the shape of the variable. **Scalars**: set $$n = 1$$ and confirm the expression reduces to ordinary calculus, $$\nabla_x(ax^2)$$ should give $$2ax$$. **Finite differences**: compare against $$(f(x + \varepsilon e_i) - f(x - \varepsilon e_i))/2\varepsilon$$ with $$\varepsilon \approx 10^{-5}$$; the central difference has $$O(\varepsilon^2)$$ error and will agree to five or six digits when the analytic gradient is right.
 
 <div class="key-takeaways">
   <h3>Recap</h3>
@@ -122,7 +122,7 @@ Three checks catch nearly every error before it reaches code. **Shapes**: the gr
 
 ## References
 
-1. Petersen, K. B., & Pedersen, M. S. [*The Matrix Cookbook*](https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf), version 20121115, 2012 — sections 2 and 9 cover every identity above.
-2. Magnus, J. R., & Neudecker, H. *Matrix Differential Calculus with Applications in Statistics and Econometrics*, 3rd ed. Wiley, 2019 — the rigorous treatment of the differential method.
+1. Petersen, K. B., & Pedersen, M. S. [*The Matrix Cookbook*](https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf), version 20121115, 2012, sections 2 and 9 cover every identity above.
+2. Magnus, J. R., & Neudecker, H. *Matrix Differential Calculus with Applications in Statistics and Econometrics*, 3rd ed. Wiley, 2019, the rigorous treatment of the differential method.
 3. Parr, T., & Howard, J. [The Matrix Calculus You Need For Deep Learning](https://arxiv.org/abs/1802.01528). arXiv:1802.01528, 2018.
 4. Golub, G. H., & Van Loan, C. F. *Matrix Computations*, 4th ed., ch. 5 on least squares. Johns Hopkins University Press, 2013.

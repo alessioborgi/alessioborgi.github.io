@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Entropy is expected surprise, \(H(p) = -\sum_x p(x)\log p(x)\). Cross-entropy \(H(p,q)\) is the cost of coding \(p\) with a code built for \(q\), and it decomposes as \(H(p) + D_{\mathrm{KL}}(p\|q)\) — so minimising it over \(q\) minimises the KL. KL is non-negative and zero only when \(p=q\), but it is asymmetric and violates the triangle inequality, so it is not a distance. Which argument you put first decides whether your fit covers modes or chases one.
+  <strong>TL;DR:</strong> Entropy is expected surprise, \(H(p) = -\sum_x p(x)\log p(x)\). Cross-entropy \(H(p,q)\) is the cost of coding \(p\) with a code built for \(q\), and it decomposes as \(H(p) + D_{\mathrm{KL}}(p\|q)\), so minimising it over \(q\) minimises the KL. KL is non-negative and zero only when \(p=q\), but it is asymmetric and violates the triangle inequality, so it is not a distance. Which argument you put first decides whether your fit covers modes or chases one.
 </div>
 
 ## Entropy
@@ -45,9 +45,9 @@ D_{\mathrm{KL}}(p\,\|\,q) = \sum_x p(x)\log\frac{p(x)}{q(x)} .
 \]
 </div>
 
-The **KL divergence** is the excess — the bits you waste for using the wrong code. By Jensen's inequality it is non-negative, and it is zero exactly when $$p=q$$.
+The **KL divergence** is the excess, the bits you waste for using the wrong code. By Jensen's inequality it is non-negative, and it is zero exactly when $$p=q$$.
 
-This decomposition explains the classification loss. Take $$p$$ to be the one-hot label distribution and $$q$$ the model's softmax output. Then $$H(p) = 0$$ — the label is certain — so cross-entropy *equals* the KL divergence, and it reduces to $$-\log q(y_{\text{true}})$$: the negative log-likelihood of the correct class. Training a classifier by cross-entropy is maximum likelihood with a categorical noise model, and it is simultaneously KL minimisation. The three descriptions are one computation.
+This decomposition explains the classification loss. Take $$p$$ to be the one-hot label distribution and $$q$$ the model's softmax output. Then $$H(p) = 0$$, the label is certain, so cross-entropy *equals* the KL divergence, and it reduces to $$-\log q(y_{\text{true}})$$: the negative log-likelihood of the correct class. Training a classifier by cross-entropy is maximum likelihood with a categorical noise model, and it is simultaneously KL minimisation. The three descriptions are one computation.
 
 More generally, maximum likelihood over a dataset of $$n$$ points is
 
@@ -72,10 +72,10 @@ D_{\mathrm{KL}}(q\|p) = 0.368\ \text{nats} = 0.531\ \text{bits}.
 \]
 </div>
 
-Different numbers for the same pair. The asymmetry has a clear source: $$D_{\mathrm{KL}}(p\Vert q)$$ averages $$\log(p/q)$$ under $$p$$, so it is enormous — infinite, in fact — wherever $$p$$ puts mass and $$q$$ puts none, and completely indifferent to regions where $$q$$ has mass but $$p$$ does not. Call $$D_{\mathrm{KL}}(p\Vert q)$$ a "distance" in an interview and expect to be asked which direction you meant.
+Different numbers for the same pair. The asymmetry has a clear source: $$D_{\mathrm{KL}}(p\Vert q)$$ averages $$\log(p/q)$$ under $$p$$, so it is enormous, infinite, in fact, wherever $$p$$ puts mass and $$q$$ puts none, and completely indifferent to regions where $$q$$ has mass but $$p$$ does not. Call $$D_{\mathrm{KL}}(p\Vert q)$$ a "distance" in an interview and expect to be asked which direction you meant.
 
 <div class="warning-box">
-  <strong>Interview trap — treating KL as a distance:</strong> it is asymmetric, unbounded, and can be \(+\infty\) between two perfectly reasonable distributions with different supports. That last point is why GAN training with a KL-like objective gives vanishing gradients when generator and data manifolds do not overlap, and why the Wasserstein distance — a genuine metric that stays finite and informative across disjoint supports — was proposed as a replacement. If you need a symmetric quantity, the Jensen–Shannon divergence symmetrises KL, and its square root <em>is</em> a metric.
+  <strong>Interview trap, treating KL as a distance:</strong> it is asymmetric, unbounded, and can be \(+\infty\) between two perfectly reasonable distributions with different supports. That last point is why GAN training with a KL-like objective gives vanishing gradients when generator and data manifolds do not overlap, and why the Wasserstein distance, a genuine metric that stays finite and informative across disjoint supports, was proposed as a replacement. If you need a symmetric quantity, the Jensen–Shannon divergence symmetrises KL, and its square root <em>is</em> a metric.
 </div>
 
 ## Mutual information
@@ -88,15 +88,15 @@ I(X;Y) = D_{\mathrm{KL}}\bigl(p(x,y) \,\|\, p(x)p(y)\bigr) = H(X) - H(X\mid Y) =
 \]
 </div>
 
-It measures how many bits knowing $$Y$$ saves you when describing $$X$$. It is symmetric, non-negative, and zero exactly under independence — so, unlike correlation, it detects *any* dependence, including the parabola counterexample from [expectation and variance](/blog/prob-basics/expectation-and-variance/). The cost is that estimating it from samples in high dimensions is hard, which is why the ML literature is full of variational lower bounds on $$I$$ rather than direct estimates.
+It measures how many bits knowing $$Y$$ saves you when describing $$X$$. It is symmetric, non-negative, and zero exactly under independence, so, unlike correlation, it detects *any* dependence, including the parabola counterexample from [expectation and variance](/blog/prob-basics/expectation-and-variance/). The cost is that estimating it from samples in high dimensions is hard, which is why the ML literature is full of variational lower bounds on $$I$$ rather than direct estimates.
 
 ## Forward versus reverse KL
 
 Fit a simple $$q_\theta$$ to a complicated $$p$$. The direction you choose changes the answer.
 
-**Forward, $$D_{\mathrm{KL}}(p\Vert q)$$** — the expectation is over $$p$$, so any region where $$p>0$$ but $$q\approx0$$ contributes a huge $$\log(p/q)$$. The fit is *zero-avoiding*: it spreads $$q$$ to cover every mode, including the empty space between them. This is the maximum-likelihood direction.
+**Forward, $$D_{\mathrm{KL}}(p\Vert q)$$**, the expectation is over $$p$$, so any region where $$p>0$$ but $$q\approx0$$ contributes a huge $$\log(p/q)$$. The fit is *zero-avoiding*: it spreads $$q$$ to cover every mode, including the empty space between them. This is the maximum-likelihood direction.
 
-**Reverse, $$D_{\mathrm{KL}}(q\Vert p)$$** — the expectation is over $$q$$, so regions where $$q\approx0$$ cost nothing regardless of $$p$$. The penalty falls on placing $$q$$ mass where $$p$$ has none. The fit is *zero-forcing* and **mode-seeking**: it collapses onto one mode and ignores the rest. This is the direction used by variational inference, because the ELBO is derived from $$D_{\mathrm{KL}}(q\Vert p)$$ — and it is why variational posteriors are famously over-confident and under-dispersed.
+**Reverse, $$D_{\mathrm{KL}}(q\Vert p)$$**, the expectation is over $$q$$, so regions where $$q\approx0$$ cost nothing regardless of $$p$$. The penalty falls on placing $$q$$ mass where $$p$$ has none. The fit is *zero-forcing* and **mode-seeking**: it collapses onto one mode and ignores the rest. This is the direction used by variational inference, because the ELBO is derived from $$D_{\mathrm{KL}}(q\Vert p)$$, and it is why variational posteriors are famously over-confident and under-dispersed.
 
 <div class="blog-figure">
 <figure>
@@ -115,17 +115,17 @@ Fit a simple $$q_\theta$$ to a complicated $$p$$. The direction you choose chang
   </g>
   <g font-size="10" fill="#475569"><text x="120" y="30">target p (grey), fitted q (colour)</text></g>
 </svg>
-<figcaption>Notice where each fit puts mass it should not. Forward KL fills the valley between the modes — samples from it will look like neither mode. Reverse KL puts nothing there, but silently drops half the target.</figcaption>
+<figcaption>Notice where each fit puts mass it should not. Forward KL fills the valley between the modes, samples from it will look like neither mode. Reverse KL puts nothing there, but silently drops half the target.</figcaption>
 </figure>
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — the direction encodes what you are willing to be wrong about:</strong> forward KL punishes <em>missing</em> mass, so it prefers a blurry model that covers everything — the classic explanation for blurry likelihood-trained generative samples. Reverse KL punishes <em>invented</em> mass, so it prefers a sharp model that covers part of the truth. Neither is more correct; the choice states whether false negatives or false positives are the worse failure for your application.
+  <strong>Key Insight, the direction encodes what you are willing to be wrong about:</strong> forward KL punishes <em>missing</em> mass, so it prefers a blurry model that covers everything, the classic explanation for blurry likelihood-trained generative samples. Reverse KL punishes <em>invented</em> mass, so it prefers a sharp model that covers part of the truth. Neither is more correct; the choice states whether false negatives or false positives are the worse failure for your application.
 </div>
 
 ## Where this goes next
 
-The Gaussian's maximum-entropy property, and the families whose entropies have closed forms, are in [common distributions](/blog/prob-basics/common-distributions/). Estimation and model selection built on likelihood — AIC, likelihood ratios — appear in [statistics basics](/blog/stats-basics/overview/).
+The Gaussian's maximum-entropy property, and the families whose entropies have closed forms, are in [common distributions](/blog/prob-basics/common-distributions/). Estimation and model selection built on likelihood, AIC, likelihood ratios, appear in [statistics basics](/blog/stats-basics/overview/).
 
 <div class="key-takeaways">
   <h3>Recap</h3>

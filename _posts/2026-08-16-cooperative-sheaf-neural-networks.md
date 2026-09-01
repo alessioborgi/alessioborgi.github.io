@@ -8,7 +8,7 @@ subsection: core-papers
 tags: [sheaf-neural-networks, directed-graphs, oversquashing, cooperative-gnns, long-range, conformal-maps]
 published: true
 is_overview: false
-excerpt: "A sheaf gives every node a matrix-valued say in how its neighbours reach it — but not in whether they do. Set a node's restriction maps to zero to stop it listening and you also stop it speaking. Fixing that needs sheaves on directed graphs, and the fix costs the Laplacian its positive semi-definiteness."
+excerpt: "A sheaf gives every node a matrix-valued say in how its neighbours reach it, but not in whether they do. Set a node's restriction maps to zero to stop it listening and you also stop it speaking. Fixing that needs sheaves on directed graphs, and the fix costs the Laplacian its positive semi-definiteness."
 author_profile: true
 read_time: true
 icon: "🎧"
@@ -32,18 +32,18 @@ toc_label: "Contents"
 
 Finkelshtein et al.'s cooperative GNNs treat nodes as players who pick an action each layer: **PROPAGATE** (send only), **LISTEN** (receive only), **STANDARD** (both), **ISOLATE** (neither). An auxiliary *action network* chooses, trained through discrete choices with a straight-through Gumbel-Softmax estimator. The motivation is oversquashing: if a node can decline to relay, exponentially growing neighbourhoods stop being compressed into fixed-size vectors.
 
-Sheaf networks look like they should already have this. A restriction map $$\mathcal{F}_{i \trianglelefteq e}$$ is a full $$d \times d$$ matrix per incident pair — surely setting it to zero silences that channel? The paper asks precisely this and answers negatively.
+Sheaf networks look like they should already have this. A restriction map $$\mathcal{F}_{i \trianglelefteq e}$$ is a full $$d \times d$$ matrix per incident pair, surely setting it to zero silences that channel? The paper asks precisely this and answers negatively.
 
 ## Why one restriction map cannot do both jobs
 
 <div class="insight-box">
-<strong>Proposition 3.1.</strong> If \(L_{\mathcal{F}}(X)_i\) does not depend on \(x_j\) for any neighbour \(j\) of \(i\), then either \(L_{\mathcal{F}}(X)_j = 0\) or \(L_{\mathcal{F}}(X)_j = \sum_{j,i\trianglelefteq e}\mathcal{F}^{\top}_{j \trianglelefteq e}\mathcal{F}_{j\trianglelefteq e}x_j\) — in words, if \(i\) does not LISTEN then \(i\) cannot PROPAGATE either, whatever \(j\) does. <strong>PROPAGATE collapses into ISOLATE.</strong>
+<strong>Proposition 3.1.</strong> If \(L_{\mathcal{F}}(X)_i\) does not depend on \(x_j\) for any neighbour \(j\) of \(i\), then either \(L_{\mathcal{F}}(X)_j = 0\) or \(L_{\mathcal{F}}(X)_j = \sum_{j,i\trianglelefteq e}\mathcal{F}^{\top}_{j \trianglelefteq e}\mathcal{F}_{j\trianglelefteq e}x_j\), in words, if \(i\) does not LISTEN then \(i\) cannot PROPAGATE either, whatever \(j\) does. <strong>PROPAGATE collapses into ISOLATE.</strong>
 </div>
 
 The cleanest version of the argument is the picture rather than the proposition. In a **flat vector bundle** there is a single orthogonal map $$O_i$$ per node, used for every incident edge. The off-diagonal Laplacian blocks are $$-O_i^{\top}O_j$$, so $$O_i = 0$$ zeroes both the block that feeds $$j$$ into $$i$$ *and* the block that feeds $$i$$ into $$j$$. One knob, two directions. The only reachable actions are STANDARD and ISOLATE.
 
 <div class="warning-box">
-<strong>The general-sheaf proof is looser than the flat-bundle picture.</strong> Appendix A.1 argues that \(\mathcal{F}^{\top}_{i\trianglelefteq e}\mathcal{F}_{j \trianglelefteq e}x_j = 0\) means \(\mathcal{F}_{j\trianglelefteq e}x_j \in \ker(\mathcal{F}^{\top}_{i \trianglelefteq e})\), and concludes "thus \(\mathcal{F}_{i\trianglelefteq e}x_i = 0\) or \(\mathcal{F}_{j \trianglelefteq e}x_j = 0\)". But \(\ker(\mathcal{F}^{\top}_{i\trianglelefteq e}) = (\operatorname{im}\mathcal{F}_{i \trianglelefteq e})^{\perp}\), so what actually follows is <em>orthogonality</em>, and the dichotomy needs \(\mathcal{F}_{i \trianglelefteq e}\) to have full rank — the generic case, but a hypothesis rather than a consequence. Nothing downstream depends on the gap, since the architecture is built on flat bundles where the conclusion is immediate. Worth knowing before citing Proposition 3.1 as stated.
+<strong>The general-sheaf proof is looser than the flat-bundle picture.</strong> Appendix A.1 argues that \(\mathcal{F}^{\top}_{i\trianglelefteq e}\mathcal{F}_{j \trianglelefteq e}x_j = 0\) means \(\mathcal{F}_{j\trianglelefteq e}x_j \in \ker(\mathcal{F}^{\top}_{i \trianglelefteq e})\), and concludes "thus \(\mathcal{F}_{i\trianglelefteq e}x_i = 0\) or \(\mathcal{F}_{j \trianglelefteq e}x_j = 0\)". But \(\ker(\mathcal{F}^{\top}_{i\trianglelefteq e}) = (\operatorname{im}\mathcal{F}_{i \trianglelefteq e})^{\perp}\), so what actually follows is <em>orthogonality</em>, and the dichotomy needs \(\mathcal{F}_{i \trianglelefteq e}\) to have full rank, the generic case, but a hypothesis rather than a consequence. Nothing downstream depends on the gap, since the architecture is built on flat bundles where the conclusion is immediate. Worth knowing before citing Proposition 3.1 as stated.
 </div>
 
 ## Sheaves on directed graphs
@@ -88,10 +88,10 @@ L^{\mathrm{out}}_{\mathcal{F}}(X)_i = \sum_{j\in N(i)}\big(S_i^{\top}S_ix_i - T_
 Note that the two share their off-diagonal blocks, $$-T_i^{\top}S_j$$: **the target map of the receiver times the source map of the sender.** That factorisation is the whole design. Whether $$i$$ receives is governed by $$T_i$$ alone; whether $$j$$ is heard is governed by $$S_j$$ alone.
 
 <div class="insight-box">
-<strong>Why conformal rather than orthogonal.</strong> The maps are \(S_i = C_{S_i}Q_i\) and \(T_i = C_{T_i}R_i\) — an orthogonal matrix times a learned positive scalar. Householder reflections build the orthogonal part. The consequence is practical: block diagonals become <em>scalars times the identity</em>, so the \(D^{-1/2}\) normalisation is both numerically stable and cheap. This is the same trick that makes \(O(d)\)-NSD easier to normalise than Gen-NSD, and the extra scalar is what lets a map shrink toward zero continuously instead of being constrained to the orthogonal group.
+<strong>Why conformal rather than orthogonal.</strong> The maps are \(S_i = C_{S_i}Q_i\) and \(T_i = C_{T_i}R_i\), an orthogonal matrix times a learned positive scalar. Householder reflections build the orthogonal part. The consequence is practical: block diagonals become <em>scalars times the identity</em>, so the \(D^{-1/2}\) normalisation is both numerically stable and cheap. This is the same trick that makes \(O(d)\)-NSD easier to normalise than Gen-NSD, and the extra scalar is what lets a map shrink toward zero continuously instead of being constrained to the orthogonal group.
 </div>
 
-**Proposition 4.1** confirms the design does what it should: $$T_i = 0$$ gives $$((L^{\mathrm{in}}_{\mathcal{F}})^{\top}L^{\mathrm{out}}_{\mathcal{F}}X)_i = 0$$, and $$S_k = 0$$ for a neighbour $$k$$ removes $$x_k$$ from $$i$$'s update. (The prose introducing it has the equalities inverted — it reads "Setting $$T_i \neq 0$$ drives $$i$$ to LISTEN" where the proposition establishes the $$T_i = 0$$ direction. A typo, but it inverts the meaning of the paragraph.)
+**Proposition 4.1** confirms the design does what it should: $$T_i = 0$$ gives $$((L^{\mathrm{in}}_{\mathcal{F}})^{\top}L^{\mathrm{out}}_{\mathcal{F}}X)_i = 0$$, and $$S_k = 0$$ for a neighbour $$k$$ removes $$x_k$$ from $$i$$'s update. (The prose introducing it has the equalities inverted, it reads "Setting $$T_i \neq 0$$ drives $$i$$ to LISTEN" where the proposition establishes the $$T_i = 0$$ direction. A typo, but it inverts the meaning of the paragraph.)
 
 ## Doubling the receptive field
 
@@ -99,10 +99,10 @@ Note that the two share their off-diagonal blocks, $$-T_i^{\top}S_j$$: **the tar
 
 **Proposition 4.3** is the sharper claim: for $$i$$ and $$j$$ at distance $$t$$, CSNN can route $$j$$'s information to $$i$$ by layer $$t$$ while **ignoring every intermediate node on the path**. Example 4.4 makes it concrete on the four-node path $$1 \leftrightarrow 2 \leftrightarrow 3 \leftrightarrow 4$$: at layer 1 set every map to zero except $$T_{3,1}$$ and $$S_{4,1}$$, so only $$x_3$$ updates, to $$-2T^{\top}_{4,1}S_{4,1}x^{(0)}_4$$; at layer 2 keep only $$T_{2,2}, S_{3,2}$$; at layer 3 only $$T_{1,3}, S_{2,3}$$. The result is that $$x^{(3)}_1$$ depends on $$x^{(0)}_4$$ and on nothing else.
 
-Against the standard oversquashing bound $$\lvert \partial x^{(t)}_i / \partial x^{(0)}_j\rvert \le c^t \hat{A}^t_{ij}$$, the point is that CSNN's Jacobian "can be as high as the values of the non-zero $$T_i$$ and $$S_i$$ permit" — the conformal scalars are unbounded above, so sensitivity need not decay with distance.
+Against the standard oversquashing bound $$\lvert \partial x^{(t)}_i / \partial x^{(0)}_j\rvert \le c^t \hat{A}^t_{ij}$$, the point is that CSNN's Jacobian "can be as high as the values of the non-zero $$T_i$$ and $$S_i$$ permit", the conformal scalars are unbounded above, so sensitivity need not decay with distance.
 
 <div class="warning-box">
-<strong>These are existence results about the maps, not about training.</strong> Propositions 4.1 and 4.3 say suitable \(S_i, T_i\) <em>exist</em>. Nothing in the paper measures whether a trained CSNN actually drives conformal scalars toward zero, how often nodes end up in a near-ISOLATE state, or whether the hand-constructed routing of Example 4.4 is anywhere near what gradient descent finds. The same gap exists in CO-GNN, so it is a shared convention rather than a peculiar omission — but "can learn to ignore" is doing real work in the claims, and it is unverified.
+<strong>These are existence results about the maps, not about training.</strong> Propositions 4.1 and 4.3 say suitable \(S_i, T_i\) <em>exist</em>. Nothing in the paper measures whether a trained CSNN actually drives conformal scalars toward zero, how often nodes end up in a near-ISOLATE state, or whether the hand-constructed routing of Example 4.4 is anywhere near what gradient descent finds. The same gap exists in CO-GNN, so it is a shared convention rather than a peculiar omission, but "can learn to ignore" is doing real work in the claims, and it is unverified.
 </div>
 
 ## The cost: the operator is no longer a Laplacian
@@ -112,7 +112,7 @@ One sentence in Section 5 deserves to be in the abstract:
 > The in- and out-Laplacians we defined here are not particular cases of the Laplacians over quivers: they obtain a positive semi-definite matrix while our Laplacians can have complex eigenvalues with negative real parts.
 
 <div class="insight-box">
-<strong>What that forfeits.</strong> Everything spectral. Positive semi-definiteness is what gives \(\ker\Delta_{\mathcal{F}} \cong H^0(G;\mathcal{F})\), what makes the sheaf Dirichlet energy \(x^{\top}\Delta_{\mathcal{F}}x\) a non-negative quantity that diffusion provably contracts, and what underwrites NSD's separation hierarchy and every <a href="/blog/sheaf/spectral-sheaf-theory/">result in Hansen and Ghrist</a>. An operator with complex eigenvalues of negative real part is not a Laplacian in that sense at all, and the dynamics it generates need not converge. CSNN's own theory — receptive field and Jacobian sensitivity — is combinatorial, not spectral, which is consistent; but the paper never says outright that the exchange has happened. This is the same trade <a href="/blog/sheaf/dnsd-paper/">DNSD</a> makes by replacing the Laplacian with a sheaf adjacency, and it is becoming the standard way sheaf architectures buy depth and reach.
+<strong>What that forfeits.</strong> Everything spectral. Positive semi-definiteness is what gives \(\ker\Delta_{\mathcal{F}} \cong H^0(G;\mathcal{F})\), what makes the sheaf Dirichlet energy \(x^{\top}\Delta_{\mathcal{F}}x\) a non-negative quantity that diffusion provably contracts, and what underwrites NSD's separation hierarchy and every <a href="/blog/sheaf/spectral-sheaf-theory/">result in Hansen and Ghrist</a>. An operator with complex eigenvalues of negative real part is not a Laplacian in that sense at all, and the dynamics it generates need not converge. CSNN's own theory, receptive field and Jacobian sensitivity, is combinatorial, not spectral, which is consistent; but the paper never says outright that the exchange has happened. This is the same trade <a href="/blog/sheaf/dnsd-paper/">DNSD</a> makes by replacing the Laplacian with a sheaf adjacency, and it is becoming the standard way sheaf architectures buy depth and reach.
 </div>
 
 ## Results
@@ -136,7 +136,7 @@ That is six of seven, but the margin over $$O(d)$$-NSD is the more striking numb
 The older Pei et al. splits tell a similar story with one exception. CSNN takes Texas at 87.30, Wisconsin at 90.00 and Film at 38.03, all best in table, then loses Cornell at 81.62 against Diag-NSD's 86.49.
 
 <div class="warning-box">
-<strong>Cornell is a 4.87-point loss, and it is not incidental.</strong> It is a heterophilic dataset, exactly the regime CSNN targets, and it loses to the simplest sheaf baseline in the table. Cornell has 183 nodes and 280 edges — the smallest graph in the suite — and CSNN carries two conformal maps per node where Diag-NSD carries \(d\) diagonal entries per edge. The pattern (more machinery, small graph, worse result) matches what <a href="/blog/sheaf/conn-nsd-paper/">Conn-NSD</a> and <a href="/blog/sheaf/joint-diffusion-sheaf/">JdSNN</a> both report from the opposite direction. The paper reports the number without comment.
+<strong>Cornell is a 4.87-point loss, and it is not incidental.</strong> It is a heterophilic dataset, exactly the regime CSNN targets, and it loses to the simplest sheaf baseline in the table. Cornell has 183 nodes and 280 edges, the smallest graph in the suite, and CSNN carries two conformal maps per node where Diag-NSD carries \(d\) diagonal entries per edge. The pattern (more machinery, small graph, worse result) matches what <a href="/blog/sheaf/conn-nsd-paper/">Conn-NSD</a> and <a href="/blog/sheaf/joint-diffusion-sheaf/">JdSNN</a> both report from the opposite direction. The paper reports the number without comment.
 </div>
 
 Finally, on the Peptides datasets from the Long Range Graph Benchmark, under a 500k parameter budget and averaged over four seeds, CSNN takes peptides-struct at 24.32 ± 0.04 MAE. That is the best result in the table and by some way the tightest variance. On peptides-func it comes second at 71.58 ± 0.80, behind BuNN's 72.76 ± 0.65.
@@ -153,10 +153,10 @@ The architecture is the other half: strong empirically, thinner theoretically. N
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li>A standard sheaf Laplacian's off-diagonal block \(-\mathcal{F}^{\top}_{i\trianglelefteq e}\mathcal{F}_{j \trianglelefteq e}\) governs both directions at once, so a node that stops listening also stops speaking: PROPAGATE collapses to ISOLATE.</li>
-  <li>Directed cellular sheaves give each node a source map \(S_i\) and a target map \(T_i\). The shared off-diagonal block becomes \(-T_i^{\top}S_j\) — receiver's target times sender's source — decoupling the two roles.</li>
+  <li>Directed cellular sheaves give each node a source map \(S_i\) and a target map \(T_i\). The shared off-diagonal block becomes \(-T_i^{\top}S_j\), receiver's target times sender's source, decoupling the two roles.</li>
   <li>Conformal maps (orthogonal × learned positive scalar) make block diagonals scalar multiples of the identity, so normalisation is stable, and let a channel close continuously.</li>
   <li>Composing the two Laplacians doubles reach to \(2t\) hops in \(t\) layers, and Prop. 4.3 shows a path can be routed while ignoring every node on it.</li>
-  <li>The composed operator is <strong>not positive semi-definite</strong> — stated once, in related work. That discards the kernel-equals-global-sections identity, Dirichlet-energy contraction, and NSD's separation theory.</li>
+  <li>The composed operator is <strong>not positive semi-definite</strong>, stated once, in related work. That discards the kernel-equals-global-sections identity, Dirichlet-energy contraction, and NSD's separation theory.</li>
   <li>Best on 9 of 11 node-classification benchmarks, beating \(O(d)\)-NSD by up to 12.2 points, and 100% on NeighborsMatch out to radius 8. Loses Cornell to Diag-NSD by 4.87 and amazon-ratings to CO-GNN by 2.13.</li>
   <li>Best MAE on peptides-struct (24.32 ± 0.04); second on peptides-func.</li>
 </ul>

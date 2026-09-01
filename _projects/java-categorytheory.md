@@ -3,7 +3,7 @@ title: "Java-CategoryTheory: A Category Theory Library in Java"
 collection: projects
 layout: single
 permalink: /projects/java-categorytheory/
-excerpt: "A Java library that models core Category Theory constructs — categories, functors, natural transformations — and demonstrates their practical role in software design."
+excerpt: "A Java library that models core Category Theory constructs, categories, functors, natural transformations, and demonstrates their practical role in software design."
 author_profile: true
 github: "https://github.com/alessioborgi/Java-CategoryTheory"
 tags:
@@ -22,7 +22,7 @@ Category Theory is the study of mathematical structures and their relationships 
 ## Library Contents
 
 - **Categories:** Modelled as a set of objects and composable morphisms satisfying identity and associativity laws.
-- **Functors:** Structure-preserving maps between categories — the mathematical foundation of `map` operations.
+- **Functors:** Structure-preserving maps between categories, the mathematical foundation of `map` operations.
 - **Natural Transformations:** Morphisms between functors, generalising polymorphic functions.
 - **Monads:** Defined categorically, with concrete implementations for common patterns (Option, Result).
 - **Limits & Colimits:** Products, coproducts, and pushouts as universal constructions.

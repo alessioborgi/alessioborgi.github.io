@@ -6,7 +6,7 @@ book: tdl
 subsection: core
 tags: [elder-rule, pairing-uniqueness, persistence-algorithm, birth-death]
 published: false
-excerpt: "The elder rule describes exactly how the standard persistence algorithm pairs simplices: when a simplex kills a class, it pairs with the 'youngest' class it could kill. The pairing uniqueness theorem guarantees this assignment is canonical — independent of the reduction algorithm used."
+excerpt: "The elder rule describes exactly how the standard persistence algorithm pairs simplices: when a simplex kills a class, it pairs with the 'youngest' class it could kill. The pairing uniqueness theorem guarantees this assignment is canonical, independent of the reduction algorithm used."
 author_profile: true
 read_time: true
 icon: "📜"
@@ -142,7 +142,7 @@ The H₀ persistence diagram has pairs: **(2,5), (3,6), (4,7)** plus one infinit
 
 This is non-trivial: there are many valid sequences of column operations that reduce the boundary matrix, but they all produce the same set of pairs $$(i, j)$$.
 
-<div class="insight-box"><strong>Key Insight:</strong> Pairing uniqueness is what makes persistent homology a well-defined invariant of the filtration, not just an artifact of the algorithm. Different software implementations (Ripser, GUDHI, Javaplex, Dionysus) may use different reduction strategies and even different algorithmic paradigms, but they all output the same persistence pairs — because the pairing is canonically determined by the filtration itself.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Pairing uniqueness is what makes persistent homology a well-defined invariant of the filtration, not just an artifact of the algorithm. Different software implementations (Ripser, GUDHI, Javaplex, Dionysus) may use different reduction strategies and even different algorithmic paradigms, but they all output the same persistence pairs, because the pairing is canonically determined by the filtration itself.</div>
 
 ## References
 

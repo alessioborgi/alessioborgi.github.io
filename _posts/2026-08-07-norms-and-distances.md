@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A norm is a choice of what "big" means, and different choices give unit balls of different shapes — a diamond for \(L^1\), a sphere for \(L^2\), a cube for \(L^\infty\). That shape is the whole story behind \(L^1\) sparsity: the diamond's extreme points sit on the coordinate axes, so a constrained optimum lands there for a whole cone of gradient directions. Operator norms measure how much a matrix can stretch, with \(\lVert A\rVert_2 = \sigma_{\max}\). Cosine similarity and Euclidean distance give identical rankings on unit-norm vectors and diverge as soon as magnitude carries information.
+  <strong>TL;DR:</strong> A norm is a choice of what "big" means, and different choices give unit balls of different shapes, a diamond for \(L^1\), a sphere for \(L^2\), a cube for \(L^\infty\). That shape is the whole story behind \(L^1\) sparsity: the diamond's extreme points sit on the coordinate axes, so a constrained optimum lands there for a whole cone of gradient directions. Operator norms measure how much a matrix can stretch, with \(\lVert A\rVert_2 = \sigma_{\max}\). Cosine similarity and Euclidean distance give identical rankings on unit-norm vectors and diverge as soon as magnitude carries information.
 </div>
 
 ## What a norm has to satisfy
@@ -34,7 +34,7 @@ The $$L^p$$ family, for $$p \ge 1$$, is
 \]
 </div>
 
-The $$p \ge 1$$ restriction is not decoration. For $$p < 1$$ the triangle inequality fails — with $$x = (1,0)$$ and $$y = (0,1)$$, the "$$L^{1/2}$$ norm" of $$x+y$$ is $$(1+1)^2 = 4$$ while $$\lVert x\rVert + \lVert y\rVert = 2$$. The $$L^0$$ "norm", the count of non-zeros, is not a norm either, which is exactly why $$L^1$$ is used as its convex surrogate.
+The $$p \ge 1$$ restriction is not decoration. For $$p < 1$$ the triangle inequality fails, with $$x = (1,0)$$ and $$y = (0,1)$$, the "$$L^{1/2}$$ norm" of $$x+y$$ is $$(1+1)^2 = 4$$ while $$\lVert x\rVert + \lVert y\rVert = 2$$. The $$L^0$$ "norm", the count of non-zeros, is not a norm either, which is exactly why $$L^1$$ is used as its convex surrogate.
 
 For a concrete comparison take $$v = (3, -4, 0, 12)$$: $$\lVert v\rVert_1 = 19$$, $$\lVert v\rVert_2 = \sqrt{9+16+144} = 13$$, $$\lVert v\rVert_\infty = 12$$. The ordering $$\lVert v\rVert_\infty \le \lVert v\rVert_2 \le \lVert v\rVert_1$$ holds for every vector, and the reverse bounds $$\lVert v\rVert_1 \le \sqrt{n}\,\lVert v\rVert_2$$ and $$\lVert v\rVert_2 \le \sqrt{n}\,\lVert v\rVert_\infty$$ are both tight at $$v = (1,1,\dots,1)$$.
 
@@ -52,7 +52,7 @@ Replace the diamond with the circle and the argument collapses. At every point o
 <figure>
 <svg role="img" aria-labelledby="nb-title nb-desc" viewBox="0 0 640 215" style="max-width:640px;width:100%;height:auto">
   <title id="nb-title">Unit balls of the L1, L2 and L-infinity norms, and why the L1 constraint yields a zero coefficient</title>
-  <desc id="nb-desc">Left panel: three nested unit balls sharing a centre — an orange diamond with vertices at plus and minus one on each axis (L1), a teal circle of radius one (L2), and a dark grey square from minus one to one on both axes (L-infinity). All three pass through the points (1,0) and (0,1). Right panel: the same orange diamond with circular loss contours centred at a least-squares optimum up and to the right of it. The contours grow until the first one touches the diamond, and the touching point is the top corner, where the first coordinate is exactly zero.</desc>
+  <desc id="nb-desc">Left panel: three nested unit balls sharing a centre, an orange diamond with vertices at plus and minus one on each axis (L1), a teal circle of radius one (L2), and a dark grey square from minus one to one on both axes (L-infinity). All three pass through the points (1,0) and (0,1). Right panel: the same orange diamond with circular loss contours centred at a least-squares optimum up and to the right of it. The contours grow until the first one touches the diamond, and the touching point is the top corner, where the first coordinate is exactly zero.</desc>
   <rect x="1" y="1" width="638" height="213" rx="9" fill="#f8fafc" stroke="#cbd5e1"/>
 
   <g stroke="#cbd5e1" stroke-width="1">
@@ -82,7 +82,7 @@ Replace the diamond with the circle and the argument collapses. At every point o
   <text x="553" y="141" font-size="9.5" fill="#475569">w₁</text>
   <text x="476" y="20" font-size="9.5" fill="#475569">w₂</text>
 </svg>
-<figcaption>Notice that the corner is reached for a whole wedge of possible optimum locations, not one special one. Swap the diamond for the circle and every contact point becomes a single isolated case — which is why L² shrinks but never zeroes.</figcaption>
+<figcaption>Notice that the corner is reached for a whole wedge of possible optimum locations, not one special one. Swap the diamond for the circle and every contact point becomes a single isolated case, which is why L² shrinks but never zeroes.</figcaption>
 </figure>
 </div>
 
@@ -98,7 +98,7 @@ An **induced** (operator) norm asks how much a matrix can stretch a vector:
 
 Three of them are computable in closed form: $$\lVert A\rVert_2 = \sigma_{\max}$$, the largest [singular value](/blog/math-basics/eigen-and-svd/); $$\lVert A\rVert_1$$ is the largest absolute column sum; $$\lVert A\rVert_\infty$$ is the largest absolute row sum. Induced norms are submultiplicative, $$\lVert AB\rVert \le \lVert A\rVert\lVert B\rVert$$, and satisfy $$\lVert I\rVert = 1$$ by construction.
 
-The **Frobenius** norm treats the matrix as a long vector, $$\lVert A\rVert_F = \sqrt{\sum_{ij}a_{ij}^2} = \sqrt{\operatorname{tr}(A^\top A)} = \sqrt{\sum_i \sigma_i^2}$$. It is submultiplicative but *not* induced by any vector norm — the giveaway is $$\lVert I_n\rVert_F = \sqrt{n} \ne 1$$.
+The **Frobenius** norm treats the matrix as a long vector, $$\lVert A\rVert_F = \sqrt{\sum_{ij}a_{ij}^2} = \sqrt{\operatorname{tr}(A^\top A)} = \sqrt{\sum_i \sigma_i^2}$$. It is submultiplicative but *not* induced by any vector norm, the giveaway is $$\lVert I_n\rVert_F = \sqrt{n} \ne 1$$.
 
 Taking $$A = \begin{pmatrix} 3 & 0\\ 4 & 5\end{pmatrix}$$ from the SVD post, whose singular values are $$3\sqrt5$$ and $$\sqrt5$$:
 
@@ -135,14 +135,14 @@ Expand the squared distance:
 
 If both vectors are $$L^2$$-normalised this collapses to $$2 - 2\cos\theta$$, a strictly decreasing function of the cosine. On the unit sphere the two measures are therefore *rank-equivalent*: nearest neighbours by cosine and by Euclidean distance are the same set, in the same order. Arguing about which to use for normalised embeddings is arguing about nothing.
 
-They diverge when magnitude carries meaning. Cosine discards it: $$(1,1)$$ and $$(100,100)$$ are identical. Use cosine when direction is the signal and norm is an artefact — word embeddings, where norm tracks token frequency, or document term vectors of wildly different lengths. Use Euclidean when magnitude is part of the data: physical coordinates, k-means centroids, any regression target space.
+They diverge when magnitude carries meaning. Cosine discards it: $$(1,1)$$ and $$(100,100)$$ are identical. Use cosine when direction is the signal and norm is an artefact, word embeddings, where norm tracks token frequency, or document term vectors of wildly different lengths. Use Euclidean when magnitude is part of the data: physical coordinates, k-means centroids, any regression target space.
 
 <div class="insight-box">
-  <strong>Key Insight — choosing a norm is choosing a geometry, and the geometry chooses the answer:</strong> the same optimisation problem gives dense solutions under \(L^2\), sparse ones under \(L^1\), and equal-magnitude ones under \(L^\infty\), purely because of the shape of the ball. The same logic reappears in optimisation: \(\lVert v\rVert_2 \le 1\) makes steepest descent follow the gradient, while \(\lVert v\rVert_\infty \le 1\) makes it follow \(\operatorname{sign}(\nabla f)\).
+  <strong>Key Insight, choosing a norm is choosing a geometry, and the geometry chooses the answer:</strong> the same optimisation problem gives dense solutions under \(L^2\), sparse ones under \(L^1\), and equal-magnitude ones under \(L^\infty\), purely because of the shape of the ball. The same logic reappears in optimisation: \(\lVert v\rVert_2 \le 1\) makes steepest descent follow the gradient, while \(\lVert v\rVert_\infty \le 1\) makes it follow \(\operatorname{sign}(\nabla f)\).
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — the Frobenius norm is not the spectral norm.</strong> \(\lVert A\rVert_F = \sqrt{\sum_i \sigma_i^2}\) and \(\lVert A\rVert_2 = \sigma_{\max}\); they agree only for rank-one matrices. A second trap: \(\lVert A\rVert_2\) is the largest <em>singular</em> value, not the largest eigenvalue or the largest entry. And a third: cosine similarity is not a metric — it violates the triangle inequality, which is why libraries convert it to \(1 - \cos\theta\) or to Euclidean distance on normalised vectors before building any index that assumes metric structure.
+  <strong>Interview trap, the Frobenius norm is not the spectral norm.</strong> \(\lVert A\rVert_F = \sqrt{\sum_i \sigma_i^2}\) and \(\lVert A\rVert_2 = \sigma_{\max}\); they agree only for rank-one matrices. A second trap: \(\lVert A\rVert_2\) is the largest <em>singular</em> value, not the largest eigenvalue or the largest entry. And a third: cosine similarity is not a metric, it violates the triangle inequality, which is why libraries convert it to \(1 - \cos\theta\) or to Euclidean distance on normalised vectors before building any index that assumes metric structure.
 </div>
 
 <div class="key-takeaways">

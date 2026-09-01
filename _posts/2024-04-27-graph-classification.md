@@ -6,7 +6,7 @@ book: gnn
 subsection: pooling
 tags: [graph-classification, readout, end-to-end, GIN, benchmarks]
 published: true
-excerpt: "Graph classification is the task of predicting a label for an entire graph. It requires composing message passing (node embeddings), readout (graph embedding), and a classifier — and all three choices interact to determine model expressiveness."
+excerpt: "Graph classification is the task of predicting a label for an entire graph. It requires composing message passing (node embeddings), readout (graph embedding), and a classifier, and all three choices interact to determine model expressiveness."
 author_profile: true
 read_time: true
 is_overview: false
@@ -25,7 +25,7 @@ toc_label: "Contents"
 
 ## The Graph Classification Pipeline
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Graph classification is the hardest test of a GNN because the entire graph — regardless of size — must be squashed into a single fixed-size vector. The readout step is the bottleneck: use mean pooling and you lose count information; use sum and you keep it but the scale grows with graph size. Choosing the right readout is as important as choosing the right message-passing architecture.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Graph classification is the hardest test of a GNN because the entire graph, regardless of size, must be squashed into a single fixed-size vector. The readout step is the bottleneck: use mean pooling and you lose count information; use sum and you keep it but the scale grows with graph size. Choosing the right readout is as important as choosing the right message-passing architecture.</div>
 
 Given a dataset of graphs $$\{(G_1, y_1), \dots, (G_n, y_n)\}$$, the goal is to learn a function $$f : G \mapsto y$$. Unlike node classification (predict a per-node label) or link prediction (predict edge existence), graph classification must process entire graphs of varying sizes.
 
@@ -49,7 +49,7 @@ Prediction ŷ
 
 ## Message Passing for Graph Classification
 
-The message passing stage is the same as for node-level tasks. The only difference: we do not use the final node embeddings directly — we aggregate them.
+The message passing stage is the same as for node-level tasks. The only difference: we do not use the final node embeddings directly, we aggregate them.
 
 **JK-Net readout:** rather than using only the last-layer embeddings, JK-Net concatenates each node's intermediate embeddings across layers before pooling:
 
@@ -67,7 +67,7 @@ Consider two graphs both representing "benzene-like rings" but of different size
 - **Graph A:** 6 nodes, each with feature value 1. Mean pooling: 6/6 = **1.0**. Sum pooling: **6**.
 - **Graph B:** 3 nodes, each with feature value 1. Mean pooling: 3/3 = **1.0**. Sum pooling: **3**.
 
-Mean pooling gives identical embeddings for A and B — the classifier cannot distinguish them. Sum pooling gives 6 vs 3 — the size difference is captured. For tasks where ring size matters (e.g., predicting molecule toxicity), this distinction is critical.
+Mean pooling gives identical embeddings for A and B, the classifier cannot distinguish them. Sum pooling gives 6 vs 3, the size difference is captured. For tasks where ring size matters (e.g., predicting molecule toxicity), this distinction is critical.
 
 <style>
 @keyframes highlight-bar {
@@ -123,7 +123,7 @@ Mean pooling gives identical embeddings for A and B — the classifier cannot di
 
 ## The GIN Recipe for Graph Classification
 
-GIN (Graph Isomorphism Network) matches the 1-WL test — the strongest any message-passing GNN can be. For graph classification:
+GIN (Graph Isomorphism Network) matches the 1-WL test, the strongest any message-passing GNN can be. For graph classification:
 
 1. **$$K$$ layers of GIN message passing** (sum aggregation + injective MLP)
 2. **Sum readout within each layer, concatenation across layers:**
@@ -160,23 +160,23 @@ The combination of sum aggregation (injective over multisets), sum readout (pres
 
 ## What Actually Moves the Needle
 
-Rather than quote accuracy figures — which on these datasets vary enormously with the split, the folds, and the hyperparameter budget — it is more useful to state the ordering that theory predicts and that ablations consistently reproduce:
+Rather than quote accuracy figures, which on these datasets vary enormously with the split, the folds, and the hyperparameter budget, it is more useful to state the ordering that theory predicts and that ablations consistently reproduce:
 
 - Swapping **mean readout for sum** is the single largest architectural change available on tasks whose label depends on counts or on graph size. It is a change in what the model *can* express, not a tuning improvement.
 - Swapping **GCN aggregation for GIN aggregation** matters for the same reason one level down: it makes the neighbourhood aggregation injective rather than averaging.
 - **Hierarchical pooling** (DiffPool, SAGPool) and **learned readout** (Set2Set, attention) help when the label depends on intermediate-scale structure that a single flat pool blurs away. When it does not, they mostly add parameters.
 
 <div class="warning-box">
-<strong>On reading reported numbers:</strong> published accuracies on the small TUDatasets are not comparable across papers unless the evaluation protocol matches exactly. Differences of a couple of points on MUTAG (188 graphs — roughly 19 graphs per test fold in 10-fold CV) are within the noise of which fold split was drawn. Treat the ordering above as the reliable signal and any specific number as protocol-dependent.
+<strong>On reading reported numbers:</strong> published accuracies on the small TUDatasets are not comparable across papers unless the evaluation protocol matches exactly. Differences of a couple of points on MUTAG (188 graphs, roughly 19 graphs per test fold in 10-fold CV) are within the noise of which fold split was drawn. Treat the ordering above as the reliable signal and any specific number as protocol-dependent.
 </div>
 
 ## End-to-End Training Intuition
 
-**Intuition first.** Think of graph classification like classifying handwritten digits: the convolutional layers (= message passing) extract local features; pooling (= readout) combines them into a fixed-size vector; the dense layers (= MLP) make the final call. The key difference is that graphs have no spatial grid — "pooling" must be permutation-invariant.
+**Intuition first.** Think of graph classification like classifying handwritten digits: the convolutional layers (= message passing) extract local features; pooling (= readout) combines them into a fixed-size vector; the dense layers (= MLP) make the final call. The key difference is that graphs have no spatial grid, "pooling" must be permutation-invariant.
 
 ## Common Failure Modes
 
-**Readout bottleneck:** using mean pooling with a powerful GNN loses count information — two graphs with different sizes but proportionally identical node distributions get the same embedding.
+**Readout bottleneck:** using mean pooling with a powerful GNN loses count information, two graphs with different sizes but proportionally identical node distributions get the same embedding.
 
 **Depth collapse:** adding too many message passing layers → oversmoothing → all node embeddings identical → graph embeddings identical regardless of structure.
 
@@ -184,7 +184,7 @@ Rather than quote accuracy figures — which on these datasets vary enormously w
 
 ## End-to-End Training
 
-The entire pipeline (GNN + readout + MLP) is trained end-to-end with a single loss (cross-entropy for classification, MSE for regression). The readout step admits gradients for all standard choices: sum, mean and max are differentiable almost everywhere; attention readout is smooth; DiffPool is fully differentiable through its soft assignment; TopKPool and SAGPool are differentiable only through the score gating — the top-$$k$$ selection itself contributes no gradient, so dropped nodes receive no learning signal.
+The entire pipeline (GNN + readout + MLP) is trained end-to-end with a single loss (cross-entropy for classification, MSE for regression). The readout step admits gradients for all standard choices: sum, mean and max are differentiable almost everywhere; attention readout is smooth; DiffPool is fully differentiable through its soft assignment; TopKPool and SAGPool are differentiable only through the score gating, the top-$$k$$ selection itself contributes no gradient, so dropped nodes receive no learning signal.
 
 ## Summary
 
@@ -200,6 +200,6 @@ Graph classification ties together all the concepts in the pooling section: the 
 
 ## References
 
-- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826). *ICLR 2019* (GIN — most expressive MPNN for graph classification).
+- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826). *ICLR 2019* (GIN, most expressive MPNN for graph classification).
 - Xu, K., Li, C., Tian, Y., Sonobe, T., Kawarabayashi, K., & Jegelka, S. (2018). [Representation Learning on Graphs with Jumping Knowledge Networks](https://arxiv.org/abs/1806.03536). *ICML 2018* (JK-Net readout).
 - Hu, W., Fey, M., Zitnik, M., Dong, Y., Ren, H., Liu, B., Catasta, M., & Leskovec, J. (2020). [Open Graph Benchmark: Datasets for Machine Learning on Graphs](https://arxiv.org/abs/2005.00687). *NeurIPS 2020* (OGB benchmarks).

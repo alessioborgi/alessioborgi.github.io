@@ -17,12 +17,12 @@ toc: true
 toc_label: "Contents"
 ---
 <div class="tldr-box">
-<strong>TL;DR:</strong> A static graph has fixed topology throughout learning. A dynamic graph changes over time: edges form and dissolve, nodes arrive and depart, features drift. Dynamic graphs come in two forms — discrete-time (snapshots) and continuous-time (event streams). Each requires different modelling assumptions.
+<strong>TL;DR:</strong> A static graph has fixed topology throughout learning. A dynamic graph changes over time: edges form and dissolve, nodes arrive and depart, features drift. Dynamic graphs come in two forms, discrete-time (snapshots) and continuous-time (event streams). Each requires different modelling assumptions.
 </div>
 {% include figure image_path="/images/blog/gnn/rossi2020_tgn.png" alt="Dynamic graph evolution" caption="Continuous-time dynamic graph: event stream processed by TGN (Rossi et al., 2020)" %}
 
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A static GNN is like a map printed once — it is accurate at print time but goes stale the moment a new road opens. A dynamic graph model is like a live navigation app — it ingests new events continuously and always reflects the current state. The choice between snapshot (DTDG) and event-stream (CTDG) models is really a question of how finely you need to track time: daily snapshots suffice for monthly patterns, but millisecond transactions demand continuous-time treatment.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A static GNN is like a map printed once, it is accurate at print time but goes stale the moment a new road opens. A dynamic graph model is like a live navigation app, it ingests new events continuously and always reflects the current state. The choice between snapshot (DTDG) and event-stream (CTDG) models is really a question of how finely you need to track time: daily snapshots suffice for monthly patterns, but millisecond transactions demand continuous-time treatment.</div>
 
 ## Why Graphs Change Over Time
 
@@ -47,7 +47,7 @@ The graph is observed as a sequence of snapshots:
 \]
 </div>
 
-Each snapshot $$G_t$$ is a full graph at time $$t$$, with its own node set $$V_t$$, edge set $$E_t$$ and feature matrix $$X_t$$. Between snapshots, changes are not tracked — only the state at each observation.
+Each snapshot $$G_t$$ is a full graph at time $$t$$, with its own node set $$V_t$$, edge set $$E_t$$ and feature matrix $$X_t$$. Between snapshots, changes are not tracked, only the state at each observation.
 
 **Modelling approach:** run a GNN on each snapshot, then apply a temporal model (RNN/Transformer) across snapshots to capture evolution.
 
@@ -70,7 +70,7 @@ The graph is a stream of timestamped events:
 
 Each event is an interaction between $$u_i$$ and $$v_i$$ occurring at time $$t_i$$ with optional features $$f_i$$. Nodes may also have state updates at specific times.
 
-**Modelling approach:** maintain a memory state for each node, updated upon each interaction. Compute node embeddings on demand for any time $$t$$ — using only events with timestamp $$\le t$$, never later ones.
+**Modelling approach:** maintain a memory state for each node, updated upon each interaction. Compute node embeddings on demand for any time $$t$$, using only events with timestamp $$\le t$$, never later ones.
 
 **Examples:**
 - Reddit posts (user posts to subreddit at timestamp)
@@ -93,14 +93,14 @@ Events at time $$t$$ may depend on events at $$t - k$$ (historical context). Cap
 
 ### 4. Causality
 
-Every prediction about time $$t$$ must be computed from events strictly in the past. Shuffling an event stream before splitting into train and test — as one would for i.i.d. data — leaks future edges into the past and inflates results. Dynamic-graph splits are always chronological.
+Every prediction about time $$t$$ must be computed from events strictly in the past. Shuffling an event stream before splitting into train and test, as one would for i.i.d. data, leaks future edges into the past and inflates results. Dynamic-graph splits are always chronological.
 
 ### 3. Forgetting and Recency
 
 Not all past events are equally relevant. A social interaction from 3 years ago matters less than one from last week. Models must balance memory capacity with relevance weighting.
 
 <div class="insight-box">
-<strong>The memory bottleneck:</strong> Naive CTDG models replay all past events to compute current node states — \(O(\lvert \text{history} \rvert)\) per query. TGN and similar architectures solve this with fixed-size memory modules that summarise history efficiently, analogous to how LSTMs summarise sequence history in a fixed hidden state.
+<strong>The memory bottleneck:</strong> Naive CTDG models replay all past events to compute current node states, \(O(\lvert \text{history} \rvert)\) per query. TGN and similar architectures solve this with fixed-size memory modules that summarise history efficiently, analogous to how LSTMs summarise sequence history in a fixed hidden state.
 </div>
 
 ## Visualising DTDG vs CTDG
@@ -161,9 +161,9 @@ Not all past events are equally relevant. A social interaction from 3 years ago 
   <!-- legend -->
   <circle cx="255" cy="110" r="5" fill="#10b981"/><text x="265" y="114" font-size="9" fill="#64748b">edge add</text>
   <circle cx="315" cy="110" r="5" fill="#f97316"/><text x="325" y="114" font-size="9" fill="#64748b">edge remove</text>
-  <text x="345" y="140" font-size="9" fill="#64748b" text-anchor="middle">Exact timestamps — no information lost</text>
+  <text x="345" y="140" font-size="9" fill="#64748b" text-anchor="middle">Exact timestamps, no information lost</text>
 </svg>
-<figcaption>DTDG (left) collapses events between snapshots into a single state — fine for monthly data, but events between snapshots vanish. CTDG (right) records every event with its exact timestamp, preserving full temporal resolution at the cost of more complex modelling.</figcaption>
+<figcaption>DTDG (left) collapses events between snapshots into a single state, fine for monthly data, but events between snapshots vanish. CTDG (right) records every event with its exact timestamp, preserving full temporal resolution at the cost of more complex modelling.</figcaption>
 </figure></div>
 
 ## DTDG vs CTDG: Practical Trade-offs
@@ -194,7 +194,7 @@ Not all past events are equally relevant. A social interaction from 3 years ago 
 
 | Concept | Definition |
 |---------|-----------|
-| Static graph | Fixed $$(V, E, X)$$ — standard GNN setting |
+| Static graph | Fixed $$(V, E, X)$$, standard GNN setting |
 | Snapshot graph | Series $$G_1, \dots, G_T$$ of static graphs |
 | Event stream | Ordered sequence of timestamped interactions |
 | Inductive | Generalises to nodes not seen during training |

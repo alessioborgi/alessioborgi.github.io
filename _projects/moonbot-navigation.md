@@ -3,7 +3,7 @@ title: "MoonBot Navigation"
 collection: projects
 layout: single
 permalink: /projects/moonbot-navigation/
-excerpt: "Autonomous lunar rover navigation and interaction — winner of the TESP 2025 Competition."
+excerpt: "Autonomous lunar rover navigation and interaction, winner of the TESP 2025 Competition."
 author_profile: true
 github: "https://github.com/alessioborgi/MoonBot-Navigation"
 tags:

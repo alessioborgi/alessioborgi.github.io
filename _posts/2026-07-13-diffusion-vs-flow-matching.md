@@ -6,7 +6,7 @@ categories: [diffusion]
 book: diffusion
 subsection: flow-matching
 tags: [diffusion, flow-matching, rectified-flow, probability-paths]
-excerpt: "Flow matching is often presented as the successor to diffusion. It is more accurate — and more useful — to say that diffusion is one particular probability path inside the flow-matching framework, and not the straightest one available."
+excerpt: "Flow matching is often presented as the successor to diffusion. It is more accurate, and more useful, to say that diffusion is one particular probability path inside the flow-matching framework, and not the straightest one available."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Both methods learn a time-dependent vector field that transports a Gaussian into the data distribution, and both train it by regressing on a target that is available in closed form for a single data point. They differ in which path is chosen and what the network is asked to output. Diffusion's variance-preserving path traces a quarter circle in schedule space; flow matching's linear path is the chord. Diffusion is a valid flow-matching path with a particular scheduler, so the two are not competing paradigms — the practical differences are curvature, and therefore step count.
+  <strong>TL;DR:</strong> Both methods learn a time-dependent vector field that transports a Gaussian into the data distribution, and both train it by regressing on a target that is available in closed form for a single data point. They differ in which path is chosen and what the network is asked to output. Diffusion's variance-preserving path traces a quarter circle in schedule space; flow matching's linear path is the chord. Diffusion is a valid flow-matching path with a particular scheduler, so the two are not competing paradigms, the practical differences are curvature, and therefore step count.
 </div>
 
 ## The shared skeleton
@@ -45,11 +45,11 @@ the velocity that generates it is constant along each pair: $$\mathbf{u}_t(\math
 \]
 </div>
 
-and their key result is that this conditional objective has the same gradient as regressing on the intractable marginal field. The same trick — regress on a per-example target, recover the marginal in expectation — is exactly what makes the diffusion loss work.
+and their key result is that this conditional objective has the same gradient as regressing on the intractable marginal field. The same trick, regress on a per-example target, recover the marginal in expectation, is exactly what makes the diffusion loss work.
 
 ## The schedule as a curve
 
-Write both methods in a common form: $$\mathbf{x}_t = \alpha_t\,\mathbf{x}_1 + \sigma_t\,\boldsymbol{\epsilon}$$, with \\(\alpha_t\\) the signal coefficient, \\(\sigma_t\\) the noise coefficient, $$\mathbf{x}_1$$ the data point and \\(\boldsymbol{\epsilon}\\) standard Gaussian noise. A schedule is then a curve in the \\((\sigma,\alpha)\\) plane from \\((1,0)\\) — pure noise — to \\((0,1)\\) — clean data.
+Write both methods in a common form: $$\mathbf{x}_t = \alpha_t\,\mathbf{x}_1 + \sigma_t\,\boldsymbol{\epsilon}$$, with \\(\alpha_t\\) the signal coefficient, \\(\sigma_t\\) the noise coefficient, $$\mathbf{x}_1$$ the data point and \\(\boldsymbol{\epsilon}\\) standard Gaussian noise. A schedule is then a curve in the \\((\sigma,\alpha)\\) plane from \\((1,0)\\), pure noise, to \\((0,1)\\), clean data.
 
 - **Variance-preserving diffusion:** $$\alpha_t = \sqrt{\bar{\alpha}_t}$$, $$\sigma_t = \sqrt{1-\bar{\alpha}_t}$$, so \\(\alpha_t^2 + \sigma_t^2 = 1\\). The schedule is a **quarter circle**.
 - **Rectified flow / linear flow matching:** \\(\alpha_t = t\\), \\(\sigma_t = 1-t\\), so \\(\alpha_t + \sigma_t = 1\\). The schedule is the **chord**.
@@ -81,7 +81,7 @@ Write both methods in a common form: $$\mathbf{x}_t = \alpha_t\,\mathbf{x}_1 + \
     <text x="300" y="80" fill="#c2410c">■ variance-preserving diffusion: α² + σ² = 1</text>
     <text x="300" y="100" fill="#0e7490">■ linear flow matching: α + σ = 1</text>
     <text x="300" y="124" fill="#475569">The arc has length π/2 ≈ 1.571;</text>
-    <text x="300" y="140" fill="#475569">the chord has length √2 ≈ 1.414 — the arc is ~11% longer.</text>
+    <text x="300" y="140" fill="#475569">the chord has length √2 ≈ 1.414, the arc is ~11% longer.</text>
   </g>
   <text x="320" y="26" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">Both schedules join the same two endpoints</text>
 </svg>
@@ -99,10 +99,10 @@ Given the shared form, differentiating $$\mathbf{x}_t = \alpha_t\mathbf{x}_1 + \
 \]
 </div>
 
-So a velocity prediction and a noise prediction determine each other exactly, given $$\mathbf{x}_t$$ and the schedule. A flow-matching model can be read as a noise predictor and vice versa. The choice is a conditioning and loss-weighting decision, not a change of hypothesis class — though it is a consequential one, because it changes which noise levels the squared error effectively emphasises.
+So a velocity prediction and a noise prediction determine each other exactly, given $$\mathbf{x}_t$$ and the schedule. A flow-matching model can be read as a noise predictor and vice versa. The choice is a conditioning and loss-weighting decision, not a change of hypothesis class, though it is a consequential one, because it changes which noise levels the squared error effectively emphasises.
 
 <div class="insight-box">
-  <strong>Key Insight — "straight" refers to the conditional path, not the sampling trajectory:</strong> the linear interpolant makes each individual noise-to-data pair a straight line, but the learned marginal field averages over all pairs that pass through a point, and the resulting trajectories still bend. This is precisely the gap that <em>reflow</em> closes: re-train on pairs generated by the model's own ODE, so the coupling between noise and data stops crossing, and the marginal trajectories straighten. Flow matching alone buys reduced curvature; straightness is a second procedure.
+  <strong>Key Insight, "straight" refers to the conditional path, not the sampling trajectory:</strong> the linear interpolant makes each individual noise-to-data pair a straight line, but the learned marginal field averages over all pairs that pass through a point, and the resulting trajectories still bend. This is precisely the gap that <em>reflow</em> closes: re-train on pairs generated by the model's own ODE, so the coupling between noise and data stops crossing, and the marginal trajectories straighten. Flow matching alone buys reduced curvature; straightness is a second procedure.
 </div>
 
 ## Side by side
@@ -113,12 +113,12 @@ So a velocity prediction and a noise prediction determine each other exactly, gi
 | Network output | noise $$\boldsymbol{\epsilon}_\theta$$ (or $$\mathbf{x}_0$$, or \\(\mathbf{v}\\)) | velocity $$\mathbf{v}_\theta$$ |
 | Regression target | the noise actually drawn | $$\mathbf{x}_1-\mathbf{x}_0$$, constant per pair |
 | Default sampling | ancestral SDE; PF-ODE also available | ODE |
-| Noise endpoint | $$\bar{\alpha}_T$$ is small but nonzero — the noise end is not exactly Gaussian | exactly Gaussian by construction |
+| Noise endpoint | $$\bar{\alpha}_T$$ is small but nonzero, the noise end is not exactly Gaussian | exactly Gaussian by construction |
 | Path curvature | higher | lower, and reducible further by reflow |
 | Typical steps, no distillation | ~20–50 | ~10–30 |
 | Relationship | a Gaussian probability path with a specific scheduler | the general framework containing it |
 
-The row worth dwelling on is the endpoint. In discrete-time diffusion $$\sqrt{\bar{\alpha}_T}$$ is small but not zero, so the terminal distribution is not quite the Gaussian you sample from — the well-documented signal-leakage problem that forces schedule fixes such as zero terminal SNR. The linear interpolant has no such mismatch: at \\(t=0\\) the state is the noise sample exactly.
+The row worth dwelling on is the endpoint. In discrete-time diffusion $$\sqrt{\bar{\alpha}_T}$$ is small but not zero, so the terminal distribution is not quite the Gaussian you sample from, the well-documented signal-leakage problem that forces schedule fixes such as zero terminal SNR. The linear interpolant has no such mismatch: at \\(t=0\\) the state is the noise sample exactly.
 
 <div class="warning-box">
   <strong>The trap:</strong> treating "flow matching beats diffusion" as an architectural claim. The U-Net or DiT, the conditioning, the data and the guidance are unchanged; what changes is the interpolant and the loss weighting. Reported gains are real but come from those choices, and a diffusion model re-weighted onto a comparable schedule closes much of the gap.

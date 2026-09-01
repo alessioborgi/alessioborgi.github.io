@@ -52,7 +52,7 @@ toc_label: "Contents"
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/relative-pe-paper.png" alt="First page of the Self-Attention with Relative Position Representations paper" caption="Paper preview — Self-Attention with Relative Position Representations (Shaw et al., 2018)." %}
+{% include figure image_path="/images/blog/papers/relative-pe-paper.png" alt="First page of the Self-Attention with Relative Position Representations paper" caption="Paper preview, Self-Attention with Relative Position Representations (Shaw et al., 2018)." %}
 </div>
 {% include figure image_path="/images/blog/transformers/raffel2020_t5.png" alt="T5 and relative positional bias" caption="T5 popularised a lightweight learned relative attention bias instead of absolute positional vectors (Raffel et al., 2020)." %}
 
@@ -62,9 +62,9 @@ toc_label: "Contents"
 
 ## The Problem with Absolute Position
 
-Absolute PEs assign a position vector based on where a token sits in the sequence — position 0, position 1, etc.
+Absolute PEs assign a position vector based on where a token sits in the sequence, position 0, position 1, etc.
 
-But think about what really matters for attention: whether token A is **close to** or **far from** token B, not exactly where either one sits in a global index. The word "love" in *"I love dogs"* and *"I really truly love dogs"* has the same relationship to "dogs" (it's the verb, directly preceding the object) — even though its absolute position is different.
+But think about what really matters for attention: whether token A is **close to** or **far from** token B, not exactly where either one sits in a global index. The word "love" in *"I love dogs"* and *"I really truly love dogs"* has the same relationship to "dogs" (it's the verb, directly preceding the object), even though its absolute position is different.
 
 Relative PE captures exactly this intuition.
 
@@ -78,7 +78,7 @@ Shaw, Uszkoreit, and Vaswani modify the attention score between token $$i$$ and 
 \]
 </div>
 
-Here $$a_{ij}$$ is the embedding for the *clipped relative distance* $$\mathrm{clip}(i - j,\, -k,\, k)$$. A maximum distance $$k$$ (e.g., 16) is used — beyond that, all distances share the same embedding.
+Here $$a_{ij}$$ is the embedding for the *clipped relative distance* $$\mathrm{clip}(i - j,\, -k,\, k)$$. A maximum distance $$k$$ (e.g., 16) is used, beyond that, all distances share the same embedding.
 
 <div class="blog-figure">
 <figure>
@@ -159,15 +159,15 @@ With T5-style relative bias and $$m$$ (head slope) $$= 0.5$$, the attention scor
 | "and"                         | 3         | $$+2$$   | $$b(+2)$$        |
 | "cats"                        | 4         | $$+3$$   | $$b(+3)$$        |
 
-The biases $$b(-1)$$, $$b(0)$$, $$b(+1)$$, … are small learned scalars. Crucially, if this same sentence fragment appeared at positions 50–54 in a longer document, the *exact same bias values* apply — because only the relative distances matter, not the absolute indices.
+The biases $$b(-1)$$, $$b(0)$$, $$b(+1)$$, … are small learned scalars. Crucially, if this same sentence fragment appeared at positions 50–54 in a longer document, the *exact same bias values* apply, because only the relative distances matter, not the absolute indices.
 
 <div class="insight-box">
-<strong>Why this matters at scale:</strong> a model trained on sequences of 512 tokens using relative PE can still correctly apply the bias \(b(+1)\) at positions 1000 and 1001 — it has seen "distance 1" millions of times. An absolute-PE model at position 1000 has seen that index far less often.
+<strong>Why this matters at scale:</strong> a model trained on sequences of 512 tokens using relative PE can still correctly apply the bias \(b(+1)\) at positions 1000 and 1001, it has seen "distance 1" millions of times. An absolute-PE model at position 1000 has seen that index far less often.
 </div>
 
 ## Why Relative PE Generalises Better
 
-Absolute PE puts a token at "position 42" — if training sequences were at most 64 long, the model learned what position 42 means. At position 200? It never saw that index.
+Absolute PE puts a token at "position 42", if training sequences were at most 64 long, the model learned what position 42 means. At position 200? It never saw that index.
 
 Relative PE never mentions global positions. It only says "these two tokens are 5 apart." As long as the model has seen pairs 5 apart before (which it almost certainly has), it can handle any sequence length.
 
@@ -176,7 +176,7 @@ Relative PE never mentions global positions. It only says "these two tokens are 
 <ul>
   <li>Relative PE encodes the <strong>gap between pairs of tokens</strong>, not their absolute position.</li>
   <li>Shaw et al. (2018) adds a learned vector to the QK dot-product; T5 adds a simpler scalar bias.</li>
-  <li>Generalises better to longer sequences — the model never sees an "unseen absolute position".</li>
+  <li>Generalises better to longer sequences, the model never sees an "unseen absolute position".</li>
   <li>T5-style relative biases are lightweight (one small table) and used across Flan-T5, Switch Transformer, and more.</li>
 </ul>
 </div>

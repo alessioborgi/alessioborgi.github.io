@@ -115,7 +115,7 @@ The abbreviation CSS stands for "Cascading Style Sheets".
 
 ### Cite Tag
 
-"Code is poetry." ---<cite>Automattic</cite>
+"Code is poetry." <cite>Automattic</cite>
 
 ### Code Tag
 

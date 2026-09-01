@@ -35,7 +35,7 @@ If you wish to disable cookies, you may do so through your web browser options. 
 
 ### Google Analytics
 
-This site uses Google Analytics 4 to understand how visitors engage with the content — which pages are read, roughly where readers come from, and which devices they use. It reports aggregate trends and does not identify individual visitors to me. IP addresses are anonymised.
+This site uses Google Analytics 4 to understand how visitors engage with the content, which pages are read, roughly where readers come from, and which devices they use. It reports aggregate trends and does not identify individual visitors to me. IP addresses are anonymised.
 
 You can read the [Google Privacy Policy](https://policies.google.com/privacy) and, if you prefer to be excluded entirely, install the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout).
 
@@ -55,7 +55,7 @@ This site does not currently display advertising. Should that change, this secti
 
 ### Consent for visitors in the EEA and the UK
 
-If you are visiting from the European Economic Area or the United Kingdom, you will be asked for consent before any non-essential cookies — including analytics and advertising cookies — are set. You can change or withdraw that choice at any time using the privacy settings link in the consent banner.
+If you are visiting from the European Economic Area or the United Kingdom, you will be asked for consent before any non-essential cookies, including analytics and advertising cookies, are set. You can change or withdraw that choice at any time using the privacy settings link in the consent banner.
 
 ### Contact
 

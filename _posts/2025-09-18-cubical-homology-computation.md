@@ -6,7 +6,7 @@ book: tdl
 subsection: computation
 tags: [cubical-homology, image-persistence, cubical-complex, pixel-filtration]
 published: false
-excerpt: "For image data, cubical complexes — built from pixels, edges, and faces on regular grids — are the natural setting for persistent homology. Cubical persistence avoids the combinatorial explosion of simplicial complexes and enables direct filtration by pixel intensity values."
+excerpt: "For image data, cubical complexes, built from pixels, edges, and faces on regular grids, are the natural setting for persistent homology. Cubical persistence avoids the combinatorial explosion of simplicial complexes and enables direct filtration by pixel intensity values."
 author_profile: true
 read_time: true
 icon: "🖼️"
@@ -24,11 +24,11 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> A 2D image is a natural cubical complex: pixels are 2-cubes, edges between adjacent pixels are 1-cubes, and corners are 0-cubes. Filtering by pixel intensity gives a filtration whose persistence diagram captures topological features (connected components, loops, cavities) at all scales. Libraries like Cubical Ripser and GUDHI compute cubical persistence in O(n log n) for n pixels — far faster than building a Rips complex.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> A 2D image is a natural cubical complex: pixels are 2-cubes, edges between adjacent pixels are 1-cubes, and corners are 0-cubes. Filtering by pixel intensity gives a filtration whose persistence diagram captures topological features (connected components, loops, cavities) at all scales. Libraries like Cubical Ripser and GUDHI compute cubical persistence in O(n log n) for n pixels, far faster than building a Rips complex.</div>
 
 ## Intuition First
 
-An image is already a filtration — you just don't know it yet. Sort pixels from darkest to brightest and add them one by one. Watch what happens: isolated bright blobs appear (H₀ births), blobs merge (H₀ deaths), a ring of bright pixels closes around a dark center (H₁ birth), the ring merges into a larger region (H₁ death). The persistence diagram of this pixel-ordering process is the complete multi-scale topological fingerprint of the image — no triangulation needed.
+An image is already a filtration, you just don't know it yet. Sort pixels from darkest to brightest and add them one by one. Watch what happens: isolated bright blobs appear (H₀ births), blobs merge (H₀ deaths), a ring of bright pixels closes around a dark center (H₁ birth), the ring merges into a larger region (H₁ death). The persistence diagram of this pixel-ordering process is the complete multi-scale topological fingerprint of the image, no triangulation needed.
 
 <style>
 @keyframes pixelFill {
@@ -114,7 +114,7 @@ An image is already a filtration — you just don't know it yet. Sort pixels fro
   <circle cx="305" cy="192" r="4" fill="#a855f7"/>
   <text x="312" y="196" font-size="8" fill="#64748b">H₁ (loops)</text>
 </svg>
-<figcaption style="text-align:center;font-size:.85em;color:#64748b;">Left: 5×5 image with a bright ring around a dark center. Right: persistence diagram — several short H₀ bars (bright blobs merging), one long H₁ bar (the robust ring), and noise near the diagonal.</figcaption>
+<figcaption style="text-align:center;font-size:.85em;color:#64748b;">Left: 5×5 image with a bright ring around a dark center. Right: persistence diagram, several short H₀ bars (bright blobs merging), one long H₁ bar (the robust ring), and noise near the diagonal.</figcaption>
 </figure></div>
 
 ## Cubical Complexes for Images
@@ -130,7 +130,7 @@ For a 2D image of size $$m \times n$$:
 - **1-cubes** (edges): horizontal and vertical edges between adjacent pixels.
 - **2-cubes** (faces): unit squares between 4-adjacent pixels.
 
-Total complex size: $$O(mn)$$ — much smaller than the $$O(2^{mn})$$ worst case for a full simplicial complex.
+Total complex size: $$O(mn)$$, much smaller than the $$O(2^{mn})$$ worst case for a full simplicial complex.
 
 ## Sublevel Set Filtration
 
@@ -138,7 +138,7 @@ Given a scalar function $$f: \mathbb{R}^d \to \mathbb{R}$$ (e.g., image intensit
 
 $$K_t = \{Q \in K : f(Q) \leq t\}$$
 
-where $$f(Q)$$ for a cube $$Q$$ is typically defined as $$\max_{v \in \text{vertices}(Q)} f(v)$$ — the maximum vertex value. This ensures monotonicity: $$K_s \subseteq K_t$$ whenever $$s \leq t$$.
+where $$f(Q)$$ for a cube $$Q$$ is typically defined as $$\max_{v \in \text{vertices}(Q)} f(v)$$, the maximum vertex value. This ensures monotonicity: $$K_s \subseteq K_t$$ whenever $$s \leq t$$.
 
 The **superlevel set filtration** (filtering by $$f(Q) \geq t$$) is used for detecting "dark blobs" in images.
 
@@ -158,7 +158,7 @@ The sign conventions ensure $$\partial^2 = 0$$, so cubical homology is well-defi
 2. Apply the standard persistence algorithm with column reduction.
 3. Use the cohomology algorithm in the reverse direction for speedup.
 
-**Performance**: On a $$256 \times 256$$ image (65536 pixels), cubical persistence computation takes under 1 second. For a $$256^3$$ volumetric image (~16 million voxels), it takes a few minutes — feasible for medical imaging workflows.
+**Performance**: On a $$256 \times 256$$ image (65536 pixels), cubical persistence computation takes under 1 second. For a $$256^3$$ volumetric image (~16 million voxels), it takes a few minutes, feasible for medical imaging workflows.
 
 ## Applications
 

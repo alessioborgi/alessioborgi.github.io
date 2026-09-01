@@ -6,7 +6,7 @@ book: sheaf
 subsection: core-papers
 tags: [restriction-map, parameterisation, scalar, diagonal, orthogonal, general, expressiveness]
 published: false
-excerpt: "The choice of restriction map type — scalar, diagonal, orthogonal, or general — is the most consequential hyperparameter in a sheaf GNN. Each type trades off expressiveness, parameter count, computational cost, and geometric interpretation. This post gives a complete comparison to guide practical architecture decisions."
+excerpt: "The choice of restriction map type, scalar, diagonal, orthogonal, or general, is the most consequential hyperparameter in a sheaf GNN. Each type trades off expressiveness, parameter count, computational cost, and geometric interpretation. This post gives a complete comparison to guide practical architecture decisions."
 author_profile: true
 read_time: true
 is_overview: false
@@ -29,7 +29,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Four main restriction map types: (1) scalar (1 param/map — recovers signed attention), (2) diagonal (d params/map — feature-wise scaling, best cost-accuracy tradeoff), (3) orthogonal (d(d-1)/2 params/map — gauge-equivariant, no scaling), (4) general (d² params/map — most expressive, prone to overfitting). The Sheaf Laplacian's block structure changes qualitatively with each choice, affecting null space dimension, spectral gap, and what relational patterns the model can represent.
+<strong>TL;DR:</strong> Four main restriction map types: (1) scalar (1 param/map, recovers signed attention), (2) diagonal (d params/map, feature-wise scaling, best cost-accuracy tradeoff), (3) orthogonal (d(d-1)/2 params/map, gauge-equivariant, no scaling), (4) general (d² params/map, most expressive, prone to overfitting). The Sheaf Laplacian's block structure changes qualitatively with each choice, affecting null space dimension, spectral gap, and what relational patterns the model can represent.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Restriction map parameterisations" caption="Restriction map types: scalar, diagonal, symmetric, orthogonal (Bodnar et al., 2022)" %}
 
@@ -155,7 +155,7 @@ Consistency condition: F_{u▷e} x_u = F_{v▷e} x_v, i.e.:
 [0  1] [x_u²] = [0 -1] [x_v²]
 ```
 
-This forces x_u¹ = x_v¹ (channel 1 is homophilic — same value) and x_u² = −x_v² (channel 2 is heterophilic — opposite values). The sheaf encodes two independent relationships simultaneously: one "friends" channel and one "rivals" channel. The global section space is { (a, b, a, −b) : a,b ∈ ℝ } — two-dimensional, not the constant functions.
+This forces x_u¹ = x_v¹ (channel 1 is homophilic, same value) and x_u² = −x_v² (channel 2 is heterophilic, opposite values). The sheaf encodes two independent relationships simultaneously: one "friends" channel and one "rivals" channel. The global section space is { (a, b, a, −b) : a,b ∈ ℝ }, two-dimensional, not the constant functions.
 
 **Orthogonal map:** F_{u▷e} = I₂, F_{v▷e} = [[0, 1], [−1, 0]] (90° rotation).
 
@@ -166,7 +166,7 @@ x_u¹ = x_v²
 x_u² = −x_v¹
 ```
 
-Adjacent nodes must hold signals that are 90° rotations of each other. For example, if x_v = (3, 1), then x_u = (1, −3). The relationship is purely geometric — no scaling, no per-channel independence. The global section space is all signals related by 90° rotation along each edge — this is a parallel transport constraint, not a sign pattern.
+Adjacent nodes must hold signals that are 90° rotations of each other. For example, if x_v = (3, 1), then x_u = (1, −3). The relationship is purely geometric, no scaling, no per-channel independence. The global section space is all signals related by 90° rotation along each edge, this is a parallel transport constraint, not a sign pattern.
 
 **Key difference:** Diagonal maps impose independent per-channel signs (flexible, learnable); orthogonal maps impose a geometric rotation (equivariant, no magnitude information). Both can be zero-energy without the nodes having equal features.
 
@@ -181,11 +181,11 @@ Adjacent nodes must hold signals that are 90° rotations of each other. For exam
 [Δ_F]_{uv} = −s_{u▷e} · s_{v▷e} · I ∈ ℝ^{d×d}
 </div>
 
-(scalar multiple of identity — the Sheaf Laplacian is a scalar-weighted graph Laplacian tensor-product with I_d).
+(scalar multiple of identity, the Sheaf Laplacian is a scalar-weighted graph Laplacian tensor-product with I_d).
 
 **Null space:** Same dimension as standard graph Laplacian null space × d. Global sections = constant-per-component functions, same as GCN.
 
-**Expressive power:** Equivalent to a signed graph Laplacian — can represent positive (same-class, homophily) or negative (different-class, heterophily) edges, but with identity relational geometry.
+**Expressive power:** Equivalent to a signed graph Laplacian, can represent positive (same-class, homophily) or negative (different-class, heterophily) edges, but with identity relational geometry.
 
 **Relation to prior work:** Scalar sheaves are exactly the **signed graph Laplacians** used in SSGC (Zhu et al., 2021). FAGCN's signed attention (a_{uv} ∈ [−1, +1]) is a soft scalar sheaf.
 
@@ -202,11 +202,11 @@ Adjacent nodes must hold signals that are 90° rotations of each other. For exam
 [Δ_F]_{uv} = −diag(f₁_{u▷e}f₁_{v▷e}, ..., f_d_{u▷e}f_d_{v▷e})
 </div>
 
-A diagonal matrix — each feature dimension has its own independent signed weight.
+A diagonal matrix, each feature dimension has its own independent signed weight.
 
 **Null space:** Can be larger than standard Laplacian null space. Each feature dimension has its own scalar sheaf; the overall null space is the intersection of d independent scalar sheaf null spaces.
 
-**Expressive power:** Can represent d independent signed weights per edge — different channels can be treated as homophilic (positive weight) or heterophilic (negative weight). This decouples the heterophily handling per feature dimension.
+**Expressive power:** Can represent d independent signed weights per edge, different channels can be treated as homophilic (positive weight) or heterophilic (negative weight). This decouples the heterophily handling per feature dimension.
 
 **When to use:** The recommended default for most tasks. Provides the best accuracy-vs-cost tradeoff in NSD experiments.
 
@@ -223,17 +223,17 @@ A diagonal matrix — each feature dimension has its own independent signed weig
 [Δ_F]_{uv} = −O_{u▷e}ᵀ O_{v▷e} ∈ O(d)
 </div>
 
-The off-diagonal block is an orthogonal matrix — this is the Connection Laplacian.
+The off-diagonal block is an orthogonal matrix, this is the Connection Laplacian.
 
-**Null space:** Global sections are parallel-transported signals — signals consistent with the connection. For a flat connection (trivial holonomy), dim ker = d. For non-flat connections, dim ker can be lower.
+**Null space:** Global sections are parallel-transported signals, signals consistent with the connection. For a flat connection (trivial holonomy), dim ker = d. For non-flat connections, dim ker can be lower.
 
 **Expressive power:** Can represent arbitrary rotations between adjacent nodes (but no scaling). This is the natural choice for geometric data where relative orientations matter.
 
-**Gauge equivariance:** Yes — the Connection Laplacian is O(d)-gauge-equivariant by construction. Equivariant sheaf GNNs require orthogonal maps.
+**Gauge equivariance:** Yes, the Connection Laplacian is O(d)-gauge-equivariant by construction. Equivariant sheaf GNNs require orthogonal maps.
 
 **When to use:** Geometric data (molecules, point clouds), synchronisation tasks, when gauge equivariance is required.
 
-**Key limitation:** Cannot scale features — ||O_{v▷e} x|| = ||x||. If feature magnitude carries task-relevant information, orthogonal maps discard it.
+**Key limitation:** Cannot scale features, ||O_{v▷e} x|| = ||x||. If feature magnitude carries task-relevant information, orthogonal maps discard it.
 
 ## Type 4: General Linear Maps
 
@@ -246,9 +246,9 @@ The off-diagonal block is an orthogonal matrix — this is the Connection Laplac
 [Δ_F]_{uv} = −F_{u▷e}ᵀ F_{v▷e} ∈ ℝ^{d×d}  (general matrix)
 </div>
 
-**Null space:** The null space is the intersection of d² linear constraints — highly task-dependent. Can be very large (if many maps share common null vectors) or trivial.
+**Null space:** The null space is the intersection of d² linear constraints, highly task-dependent. Can be very large (if many maps share common null vectors) or trivial.
 
-**Expressive power:** Maximum — can represent any linear relational structure between adjacent nodes. Subsumes scalar, diagonal, and orthogonal maps as special cases.
+**Expressive power:** Maximum, can represent any linear relational structure between adjacent nodes. Subsumes scalar, diagonal, and orthogonal maps as special cases.
 
 **Risk:** With d² parameters per map, general maps have high capacity and can overfit on small graphs. The Sheaf Laplacian may become nearly rank-deficient if the maps degenerate.
 
@@ -262,7 +262,7 @@ The off-diagonal block is an orthogonal matrix — this is the Connection Laplac
 
 **Parameters per edge:** 2·d(d+1)/2 = d(d+1) per edge.
 
-**Property:** The Sheaf Laplacian blocks [Δ_F]_{uv} = −F_{u▷e}ᵀ F_{v▷e} are symmetric (since F is symmetric and the product of symmetric matrices is symmetric iff they commute — but this is approximately true if maps are near-diagonal).
+**Property:** The Sheaf Laplacian blocks [Δ_F]_{uv} = −F_{u▷e}ᵀ F_{v▷e} are symmetric (since F is symmetric and the product of symmetric matrices is symmetric iff they commute, but this is approximately true if maps are near-diagonal).
 
 **When to use:** When the relational geometry is undirected (the map from u to e is "the same" as from e to u in some sense). Fewer parameters than general, more expressive than diagonal.
 
@@ -278,7 +278,7 @@ The off-diagonal block is an orthogonal matrix — this is the Connection Laplac
 
 ## Impact on Null Space Dimension
 
-The null space dimension dim(H⁰) = dim ker(Δ_F) determines the long-time attractor of sheaf diffusion — what information is preserved at large depth.
+The null space dimension dim(H⁰) = dim ker(Δ_F) determines the long-time attractor of sheaf diffusion, what information is preserved at large depth.
 
 | Map type | dim H⁰ (connected graph, generic maps) |
 |---|---|
@@ -289,20 +289,20 @@ The null space dimension dim(H⁰) = dim ker(Δ_F) determines the long-time attr
 | Orthogonal (non-flat) | < d |
 | General | ≥ 0 (depends on learned maps) |
 
-The key insight: NSD with general or diagonal maps can learn maps that increase dim(H⁰) beyond d — the model adapts its oversmoothing attractor to the task.
+The key insight: NSD with general or diagonal maps can learn maps that increase dim(H⁰) beyond d, the model adapts its oversmoothing attractor to the task.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Decision Tree for Map Type:</strong> Start with <strong>diagonal</strong>: good default for most tasks, cheap, interpretable, handles per-channel heterophily. If gauge equivariance is required (geometric data, synchronisation tasks, equivariant architectures), upgrade to <strong>orthogonal</strong>. If the graph is large (&gt;10k nodes) with abundant labels and complex relational structure that diagonal cannot capture, try <strong>general</strong> with L2 regularisation. Use <strong>scalar</strong> only as a diagnostic baseline to check whether d×d relational geometry matters at all for your task.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, Decision Tree for Map Type:</strong> Start with <strong>diagonal</strong>: good default for most tasks, cheap, interpretable, handles per-channel heterophily. If gauge equivariance is required (geometric data, synchronisation tasks, equivariant architectures), upgrade to <strong>orthogonal</strong>. If the graph is large (&gt;10k nodes) with abundant labels and complex relational structure that diagonal cannot capture, try <strong>general</strong> with L2 regularisation. Use <strong>scalar</strong> only as a diagnostic baseline to check whether d×d relational geometry matters at all for your task.</div>
 
 ## Practical Recommendations
 
-1. **Start with diagonal maps** — they work well empirically, have few parameters, and are interpretable.
+1. **Start with diagonal maps**, they work well empirically, have few parameters, and are interpretable.
 2. **Use orthogonal maps** when gauge equivariance is needed or the data has a natural geometric interpretation.
 3. **Use general maps** only with sufficient training data (>1k nodes per class) and appropriate regularisation.
 4. **Never use scalar maps** unless the goal is to test whether sheaf structure beyond signs is beneficial.
-5. **Stalk dimension d=2 or d=3** usually suffices — increasing d beyond 5 rarely helps and increases cost.
+5. **Stalk dimension d=2 or d=3** usually suffices, increasing d beyond 5 rarely helps and increases cost.
 
 ## References
 
 - Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (ablation over map types: general, diagonal, orthogonal, symmetric).
-- Barbero, F., Bodnar, C., de Ocáriz Borde, H. S., Bronstein, M., Veličković, P., & Liò, P. (2022). [Sheaf Attention Networks](https://arxiv.org/abs/2210.01066). *NeurIPS 2022 Workshop* (orthogonal maps with attention — gauge-equivariant architecture).
-- Singer, A. (2011). [Angular Synchronisation by Eigenvectors and Semidefinite Programming](https://arxiv.org/abs/0911.3448). *Applied and Computational Harmonic Analysis* (orthogonal maps as connection Laplacian — motivates the orthogonal parameterisation).
+- Barbero, F., Bodnar, C., de Ocáriz Borde, H. S., Bronstein, M., Veličković, P., & Liò, P. (2022). [Sheaf Attention Networks](https://arxiv.org/abs/2210.01066). *NeurIPS 2022 Workshop* (orthogonal maps with attention, gauge-equivariant architecture).
+- Singer, A. (2011). [Angular Synchronisation by Eigenvectors and Semidefinite Programming](https://arxiv.org/abs/0911.3448). *Applied and Computational Harmonic Analysis* (orthogonal maps as connection Laplacian, motivates the orthogonal parameterisation).

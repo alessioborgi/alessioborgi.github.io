@@ -3,7 +3,7 @@ title: "Home-Automation: Smart Home with IoT and Arduino"
 collection: projects
 layout: single
 permalink: /projects/home-automation/
-excerpt: "End-to-end smart home system — from a physical miniature house build to Arduino-powered sensors, automated routines, and a companion mobile app."
+excerpt: "End-to-end smart home system, from a physical miniature house build to Arduino-powered sensors, automated routines, and a companion mobile app."
 author_profile: true
 github: "https://github.com/alessioborgi/Home-Automation"
 tags:

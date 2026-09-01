@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A conditional diffusion model trained the obvious way treats the prompt as a weak hint. Classifier guidance sharpened it, but needed a separate classifier trained on noisy images. Classifier-free guidance removes that classifier by training a single network on both the conditional and unconditional task — drop the condition on roughly 10% of examples — and then extrapolating past the conditional prediction at sampling time. The guidance weight \(w\) is a dial from "diverse and vague" to "on-prompt and samey", and turning it up means you are no longer sampling from the true conditional distribution.
+  <strong>TL;DR:</strong> A conditional diffusion model trained the obvious way treats the prompt as a weak hint. Classifier guidance sharpened it, but needed a separate classifier trained on noisy images. Classifier-free guidance removes that classifier by training a single network on both the conditional and unconditional task, drop the condition on roughly 10% of examples, and then extrapolating past the conditional prediction at sampling time. The guidance weight \(w\) is a dial from "diverse and vague" to "on-prompt and samey", and turning it up means you are no longer sampling from the true conditional distribution.
 </div>
 
 ## Conditioning is not control
 
 Feeding a text embedding into the denoiser gives you $$\epsilon_\theta(\mathbf{x}_t, t, c)$$, a model of \\(p(\mathbf{x}\mid c)\\). Trained this way it works, but weakly: the prompt nudges the sample rather than governing it. The reason is that the training loss rewards covering the data, and the conditional and unconditional distributions of natural images overlap heavily. A model can score well while largely ignoring \\(c\\).
 
-What users want is not a sample from \\(p(\mathbf{x}\mid c)\\). They want a sample from the part of \\(p(\mathbf{x}\mid c)\\) where the prompt is *unambiguously* satisfied — a sharpened, mode-seeking version of it.
+What users want is not a sample from \\(p(\mathbf{x}\mid c)\\). They want a sample from the part of \\(p(\mathbf{x}\mid c)\\) where the prompt is *unambiguously* satisfied, a sharpened, mode-seeking version of it.
 
 ## Classifier guidance, and why it was awkward
 
@@ -39,7 +39,7 @@ Dhariwal and Nichol's answer was to attach an explicit classifier $$p_\phi(c \mi
 
 Here \\(s\\) is the guidance scale and $$\bar{\alpha}_t$$ the cumulative signal coefficient of the forward process. The correction says: move in the direction that increases the classifier's confidence in \\(c\\).
 
-The awkwardness is the classifier itself. It has to accept $$\mathbf{x}_t$$, not a clean image, so an off-the-shelf ImageNet classifier is useless — you must train a bespoke one on noisy inputs across all timesteps. That is a second model, a second training pipeline and a second failure mode. Worse, gradients of a classifier on near-pure noise are exactly the adversarial-example regime: the classifier can be made confident by perturbations that do not correspond to real image structure. And for free-form text there is no classifier to train in the first place.
+The awkwardness is the classifier itself. It has to accept $$\mathbf{x}_t$$, not a clean image, so an off-the-shelf ImageNet classifier is useless, you must train a bespoke one on noisy inputs across all timesteps. That is a second model, a second training pipeline and a second failure mode. Worse, gradients of a classifier on near-pure noise are exactly the adversarial-example regime: the classifier can be made confident by perturbations that do not correspond to real image structure. And for free-form text there is no classifier to train in the first place.
 
 ## The trick: be your own classifier
 
@@ -61,7 +61,7 @@ At sampling time, substitute and rearrange, and the guided noise prediction is a
 \]
 </div>
 
-Read it as a lever. At \\(w = 0\\) you get the unconditional model and the prompt is ignored. At \\(w = 1\\) the two terms cancel to $$\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, c)$$ — ordinary conditional sampling. At \\(w > 1\\) you overshoot *past* the conditional prediction, along the direction that distinguishes "with prompt" from "without prompt". Typical text-to-image settings sit between 5 and 10. (Some papers write $$\tilde{\boldsymbol{\epsilon}} = (1+s)\boldsymbol{\epsilon}_c - s\,\boldsymbol{\epsilon}_\varnothing$$; that is the same equation with \\(w = 1+s\\).)
+Read it as a lever. At \\(w = 0\\) you get the unconditional model and the prompt is ignored. At \\(w = 1\\) the two terms cancel to $$\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, c)$$, ordinary conditional sampling. At \\(w > 1\\) you overshoot *past* the conditional prediction, along the direction that distinguishes "with prompt" from "without prompt". Typical text-to-image settings sit between 5 and 10. (Some papers write $$\tilde{\boldsymbol{\epsilon}} = (1+s)\boldsymbol{\epsilon}_c - s\,\boldsymbol{\epsilon}_\varnothing$$; that is the same equation with \\(w = 1+s\\).)
 
 <div class="blog-figure">
 <figure>
@@ -89,7 +89,7 @@ Read it as a lever. At \\(w = 0\\) you get the unconditional model and the promp
   <path d="M90,124 L90,132 L200,132 L200,124" fill="none" stroke="#0e7490" stroke-width="1.3"/>
   <text x="145" y="148" text-anchor="middle" font-size="10" fill="#0e7490">the difference the prompt makes</text>
   <path d="M200,124 L200,160 L530,160 L530,124" fill="none" stroke="#c2410c" stroke-width="1.3"/>
-  <text x="365" y="176" text-anchor="middle" font-size="10" fill="#c2410c">extrapolation — no data ever lived here</text>
+  <text x="365" y="176" text-anchor="middle" font-size="10" fill="#c2410c">extrapolation, no data ever lived here</text>
   <text x="320" y="26" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">Noise-prediction space at a fixed timestep</text>
 </svg>
 <figcaption>Notice that the useful setting is not between the two model outputs but far beyond one of them. Guidance is extrapolation, not interpolation, which is exactly why it degrades sample statistics as \(w\) grows.</figcaption>
@@ -97,7 +97,7 @@ Read it as a lever. At \\(w = 0\\) you get the unconditional model and the promp
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — what distribution you are actually sampling:</strong> converting the guided prediction back into a score gives \(\tilde{s} = \nabla\log p(\mathbf{x}) + w\,\nabla\log p(c\mid\mathbf{x})\), which is the score of \(p(\mathbf{x})\,p(c\mid\mathbf{x})^{w}\), not of \(p(\mathbf{x}\mid c)\). For \(w>1\) the likelihood term is raised to a power greater than one, so the density is sharpened around whatever the model finds most prompt-like. Guidance is deliberate, controlled bias. It is also not exact even as a sampler for that tilted density, because the sequence of tilted marginals is not the forward diffusion of any single distribution.
+  <strong>Key Insight, what distribution you are actually sampling:</strong> converting the guided prediction back into a score gives \(\tilde{s} = \nabla\log p(\mathbf{x}) + w\,\nabla\log p(c\mid\mathbf{x})\), which is the score of \(p(\mathbf{x})\,p(c\mid\mathbf{x})^{w}\), not of \(p(\mathbf{x}\mid c)\). For \(w>1\) the likelihood term is raised to a power greater than one, so the density is sharpened around whatever the model finds most prompt-like. Guidance is deliberate, controlled bias. It is also not exact even as a sampler for that tilted density, because the sequence of tilted marginals is not the forward diffusion of any single distribution.
 </div>
 
 ## The trade-off, stated honestly
@@ -109,7 +109,7 @@ Read it as a lever. At \\(w = 0\\) you get the unconditional model and the promp
 | \\(w \approx 7\\) | strong, including attributes | noticeably reduced | rising saturation and contrast |
 | \\(w \ge 15\\) | over-literal | collapses towards one composition | blown-out colours, cartoon edges, clipping |
 
-Two costs are unavoidable. The first is compute: every sampling step needs both a conditional and an unconditional forward pass, so sampling is about twice as expensive per step (batching the two halves together hides the latency, not the FLOPs). The second is the saturation blow-up. Extrapolating in \\(\boldsymbol{\epsilon}\\)-space pushes the implied clean image $$\hat{\mathbf{x}}_0$$ outside the valid pixel range, and the errors compound over steps. Imagen's dynamic thresholding — rescaling $$\hat{\mathbf{x}}_0$$ by a per-step percentile rather than hard-clipping it — is the standard patch, and it is what makes very high guidance weights usable at all.
+Two costs are unavoidable. The first is compute: every sampling step needs both a conditional and an unconditional forward pass, so sampling is about twice as expensive per step (batching the two halves together hides the latency, not the FLOPs). The second is the saturation blow-up. Extrapolating in \\(\boldsymbol{\epsilon}\\)-space pushes the implied clean image $$\hat{\mathbf{x}}_0$$ outside the valid pixel range, and the errors compound over steps. Imagen's dynamic thresholding, rescaling $$\hat{\mathbf{x}}_0$$ by a per-step percentile rather than hard-clipping it, is the standard patch, and it is what makes very high guidance weights usable at all.
 
 <div class="warning-box">
   <strong>Where it breaks:</strong> guidance interacts with the sampler. At low step counts the extrapolated field is stiffer, so a weight that looks fine at 50 steps can produce burnt-out images at 10. And because guidance narrows the distribution, evaluating a guided model on diversity-sensitive metrics measures the guidance weight almost as much as it measures the model.

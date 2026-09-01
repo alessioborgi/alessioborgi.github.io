@@ -6,7 +6,7 @@ book: sheaf
 subsection: theory
 tags: [oversmoothing, null-space, global-section, Dirichlet-energy, depth, convergence]
 published: false
-excerpt: "Standard GNN oversmoothing is a collapse of node features to a d-dimensional constant subspace — a consequence of the graph Laplacian's null space being exactly the constant functions. Sheaf diffusion replaces this with convergence to the space of global sections, which can be much larger and task-relevant. This post makes the full theoretical argument precise."
+excerpt: "Standard GNN oversmoothing is a collapse of node features to a d-dimensional constant subspace, a consequence of the graph Laplacian's null space being exactly the constant functions. Sheaf diffusion replaces this with convergence to the space of global sections, which can be much larger and task-relevant. This post makes the full theoretical argument precise."
 author_profile: true
 read_time: true
 is_overview: false
@@ -29,7 +29,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Standard GCN oversmoothing: iterating h ← (I−L̃)h collapses all node features to constants (dim 1 per component). Cause: null space of L is span{1_N}. Fix: replace L with the Sheaf Laplacian Δ_F, whose null space is H⁰(G, F) — a richer space determined by the restriction maps. When maps are learned, H⁰ is adapted to the task, preserving discriminative features at large depth.
+<strong>TL;DR:</strong> Standard GCN oversmoothing: iterating h ← (I−L̃)h collapses all node features to constants (dim 1 per component). Cause: null space of L is span{1_N}. Fix: replace L with the Sheaf Laplacian Δ_F, whose null space is H⁰(G, F), a richer space determined by the restriction maps. When maps are learned, H⁰ is adapted to the task, preserving discriminative features at large depth.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_accuracy.png" alt="Sheaf avoids oversmoothing" caption="Sheaf GNNs avoid oversmoothing: non-trivial ker(Δ_F) preserves signal (Bodnar et al., 2022)" %}
 
@@ -116,18 +116,18 @@ toc_label: "Contents"
   </circle>
   <text x="345" y="195" text-anchor="middle" font-size="10" fill="#374151">features stay class-distinct</text>
 </svg>
-<figcaption>GCN (left): node colors — blue (class 0) and orange (class 1) — gradually fade to gray as layers increase, losing all class information. Sheaf diffusion (right): restriction maps (−1 on cross-class edges) keep colors vivid by encoding the antipodal class structure as a global section.</figcaption>
+<figcaption>GCN (left): node colors, blue (class 0) and orange (class 1), gradually fade to gray as layers increase, losing all class information. Sheaf diffusion (right): restriction maps (−1 on cross-class edges) keep colors vivid by encoding the antipodal class structure as a global section.</figcaption>
 </figure></div>
 
 ## Intuition First: Why Oversmoothing Happens
 
-Think of graph diffusion as heat spreading on a metal plate. Standard GCN is like a plate with uniform thermal conductivity — heat always flows from hot to cold, and eventually the entire plate reaches the same temperature. That uniform temperature is the constant function: the oversmoothing attractor.
+Think of graph diffusion as heat spreading on a metal plate. Standard GCN is like a plate with uniform thermal conductivity, heat always flows from hot to cold, and eventually the entire plate reaches the same temperature. That uniform temperature is the constant function: the oversmoothing attractor.
 
-Now imagine that some junctions have a *sign flip* — they transmit heat with a phase inversion. A node at 1°C next to a node at -1°C can be "in equilibrium" without both becoming 0°C. The restriction map encodes exactly this: it defines what counts as "equal temperature" at each junction.
+Now imagine that some junctions have a *sign flip*, they transmit heat with a phase inversion. A node at 1°C next to a node at -1°C can be "in equilibrium" without both becoming 0°C. The restriction map encodes exactly this: it defines what counts as "equal temperature" at each junction.
 
-**Sheaf diffusion replaces the single boring attractor (constants) with a richer one (global sections) — which can vary across nodes in structured, task-relevant ways.**
+**Sheaf diffusion replaces the single boring attractor (constants) with a richer one (global sections), which can vary across nodes in structured, task-relevant ways.**
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The oversmoothing problem is entirely a null-space problem. GCN's null space is {constants} — dim d for N nodes. NSD's null space is H⁰(G,F) — can be much larger and can encode class-structure. The fix is not adding skip connections (though they help further); the fix is changing the null space itself by learning the restriction maps. Once the null space contains the task-optimal features, convergence to it is desirable, not harmful.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The oversmoothing problem is entirely a null-space problem. GCN's null space is {constants}, dim d for N nodes. NSD's null space is H⁰(G,F), can be much larger and can encode class-structure. The fix is not adding skip connections (though they help further); the fix is changing the null space itself by learning the restriction maps. Once the null space contains the task-optimal features, convergence to it is desirable, not harmful.</div>
 
 ## The Classical Oversmoothing Result
 
@@ -143,7 +143,7 @@ As k → ∞ (assuming spectral radius of W < 1 and connected G):
 Ã^k → π · 1ᵀ  where π_v = deg(v) / (2|E|)
 </div>
 
-So H^{(k)} → (1 · πᵀ X W) — each node's representation converges to the same d-dimensional vector, weighted by its degree. All inter-node discrimination is destroyed.
+So H^{(k)} → (1 · πᵀ X W), each node's representation converges to the same d-dimensional vector, weighted by its degree. All inter-node discrimination is destroyed.
 
 **In terms of the Laplacian:** The convergence is equivalent to:
 
@@ -187,7 +187,7 @@ ker(Δ_F) = H⁰(G, F) = { x : F_{u▷e}x_u = F_{v▷e}x_v ∀(u,v,e) }
 dim ker(Δ_F) ≥ d   and   ker(Δ_F) ⊉ {constant functions}
 </div>
 
-*Proof sketch:* The constant functions satisfy F_{u▷e}x_u = F_{v▷e}x_v when x_u = x_v = c (constant) only if F_{u▷e}c = F_{v▷e}c for all edges — i.e., (F_{u▷e} − F_{v▷e})c = 0. For non-identical maps and generic constants c, this fails. So constants are NOT in ker(Δ_F) for non-trivial sheaves, and ker(Δ_F) is a different (richer) space.
+*Proof sketch:* The constant functions satisfy F_{u▷e}x_u = F_{v▷e}x_v when x_u = x_v = c (constant) only if F_{u▷e}c = F_{v▷e}c for all edges, i.e., (F_{u▷e} − F_{v▷e})c = 0. For non-identical maps and generic constants c, this fails. So constants are NOT in ker(Δ_F) for non-trivial sheaves, and ker(Δ_F) is a different (richer) space.
 
 **Consequence:** Sheaf diffusion converges to the space of global sections, not to constants. Global sections can vary across nodes (in structured ways determined by the restriction maps) while still satisfying the pairwise consistency constraints.
 
@@ -199,9 +199,9 @@ Define the **discrimination ratio** as the ratio of the dimension of the oversmo
 ρ(F) = dim H⁰(G, F) / (Nd)
 </div>
 
-For GCN: ρ(GCN) = 1/N per feature dimension — collapses to 1 value per N nodes.
+For GCN: ρ(GCN) = 1/N per feature dimension, collapses to 1 value per N nodes.
 
-For NSD with learned diagonal maps: ρ(NSD) can be up to d/(Nd) × K for some K dependent on the map structure — potentially much larger than 1/N.
+For NSD with learned diagonal maps: ρ(NSD) can be up to d/(Nd) × K for some K dependent on the map structure, potentially much larger than 1/N.
 
 **In the best case:** NSD with full-rank diagonal maps on a connected graph can achieve dim H⁰ = d (same as GCN if maps are sign-consistent) up to potentially Nd − rank(δ₀) dimensions.
 
@@ -209,19 +209,19 @@ For NSD with learned diagonal maps: ρ(NSD) can be up to d/(Nd) × K for some K 
 
 Increasing the stalk dimension d has a direct effect on the oversmoothing attractor:
 
-For the standard Laplacian: ker(L ⊗ I_d) = {constants}^d — dimension d per component.
+For the standard Laplacian: ker(L ⊗ I_d) = {constants}^d, dimension d per component.
 
-For a non-trivial sheaf: dim H⁰(G, F) can scale with d in complex ways. For generic diagonal maps, dim H⁰ scales as O(d) — larger d gives a richer attractor.
+For a non-trivial sheaf: dim H⁰(G, F) can scale with d in complex ways. For generic diagonal maps, dim H⁰ scales as O(d), larger d gives a richer attractor.
 
-**Practical implication:** Increasing d from 1 to 2 or 3 can substantially increase the information retained after many diffusion steps — this is one reason NSD with d=2 outperforms d=1 on deep architectures.
+**Practical implication:** Increasing d from 1 to 2 or 3 can substantially increase the information retained after many diffusion steps, this is one reason NSD with d=2 outperforms d=1 on deep architectures.
 
 ## Depth vs Oversmoothing: Sheaf vs Standard GNNs
 
 <div class="insight-box">
-<strong>Empirical observation:</strong> In standard GNNs, performance peaks at K=2–3 layers and degrades sharply for K>5. In NSD, performance is more robust to depth — the oversmoothing attractor (H⁰) is task-relevant, so converging to it is beneficial rather than destructive. PNSD extends this further by adding learnable spectral filtering that can "stop short" of the attractor if beneficial.
+<strong>Empirical observation:</strong> In standard GNNs, performance peaks at K=2–3 layers and degrades sharply for K>5. In NSD, performance is more robust to depth, the oversmoothing attractor (H⁰) is task-relevant, so converging to it is beneficial rather than destructive. PNSD extends this further by adding learnable spectral filtering that can "stop short" of the attractor if beneficial.
 </div>
 
-**Why standard GNNs suffer more:** The constant-function attractor has zero discriminative power for node classification — adjacent nodes of different classes become indistinguishable. The global-section attractor of sheaf GNNs can maintain inter-class distinctions if the restriction maps are learned appropriately.
+**Why standard GNNs suffer more:** The constant-function attractor has zero discriminative power for node classification, adjacent nodes of different classes become indistinguishable. The global-section attractor of sheaf GNNs can maintain inter-class distinctions if the restriction maps are learned appropriately.
 
 ## Rate of Convergence to H⁰
 
@@ -237,18 +237,18 @@ where λ_gap = λ_{dim H⁰ + 1}(Δ_F^{norm}) is the smallest non-zero eigenvalu
 - Large spectral gap → fast convergence → fewer layers needed to reach H⁰
 - Small spectral gap → slow convergence → many layers preserve gradient components
 
-For optimal depth, choose K such that (1 − λ_gap)^K ≈ 0.1 — i.e., K ≈ 2/λ_gap. Graphs with small spectral gap (nearly disconnected) require many more layers.
+For optimal depth, choose K such that (1 − λ_gap)^K ≈ 0.1, i.e., K ≈ 2/λ_gap. Graphs with small spectral gap (nearly disconnected) require many more layers.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Deeper Is Better in NSD:</strong> In standard GCN, deeper = worse: each added layer pushes features closer to the constant attractor, erasing class discrimination. In NSD, deeper = better (up to the spectral gap): each added layer pushes features closer to H⁰(G, F) — a task-relevant space that the model has learned to encode class structure in. The "fix" for oversmoothing is not skip connections (though they help further) — it is the null space change. Correct restriction maps make the task-optimal features a global section, so convergence to H⁰ is convergence to the right answer, not away from it.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, Deeper Is Better in NSD:</strong> In standard GCN, deeper = worse: each added layer pushes features closer to the constant attractor, erasing class discrimination. In NSD, deeper = better (up to the spectral gap): each added layer pushes features closer to H⁰(G, F), a task-relevant space that the model has learned to encode class structure in. The "fix" for oversmoothing is not skip connections (though they help further), it is the null space change. Correct restriction maps make the task-optimal features a global section, so convergence to H⁰ is convergence to the right answer, not away from it.</div>
 
 ## Worked Example: 3-Node Sheaf Oversmoothing
 
-**Setup:** path graph u — v — w (two edges: e₁ = (u,v), e₂ = (v,w)). Initial features: x_u = 1, x_v = 0, x_w = 0 (a localised signal at u).
+**Setup:** path graph u, v, w (two edges: e₁ = (u,v), e₂ = (v,w)). Initial features: x_u = 1, x_v = 0, x_w = 0 (a localised signal at u).
 
 **Standard GCN, 10 layers:** The normalised graph Laplacian of a path P₃ has null space span{(1,1,1)}. After many GCN steps:
 
 ```
-(1, 0, 0) → (1/3, 1/3, 1/3)  [uniform constant — all information lost]
+(1, 0, 0) → (1/3, 1/3, 1/3)  [uniform constant, all information lost]
 ```
 
 This is oversmoothing: x_u = x_v = x_w at convergence. The null space of L is exactly the constants.
@@ -272,7 +272,7 @@ proj_{ker} (1,0,0) = [(1,0,0)·(−1,1,1) / ||(−1,1,1)||²] (−1,1,1)
                    = [−1/3] (−1,1,1) = (1/3, −1/3, −1/3)
 ```
 
-The attractor is NOT the constant (1/3, 1/3, 1/3) but the antipodal pattern (1/3, −1/3, −1/3). Nodes u and v/w remain distinguishable — sheaf diffusion converges to a non-trivial structured signal, not to uniformity.
+The attractor is NOT the constant (1/3, 1/3, 1/3) but the antipodal pattern (1/3, −1/3, −1/3). Nodes u and v/w remain distinguishable, sheaf diffusion converges to a non-trivial structured signal, not to uniformity.
 
 ## Skip Connections and Residual Sheaf Diffusion
 
@@ -288,7 +288,7 @@ With α < 1, the update is a convex combination of the current signal and the di
 H^{(∞)} = [I + (α/(1−α)) Δ_F^{norm}]^{-1} X₀
 </div>
 
-This is APPNP-style personalised PageRank applied to the Sheaf Laplacian — the solution is close to X₀ (via the (1−α) term) while being partially smoothed toward H⁰. Oversmoothing is avoided regardless of depth.
+This is APPNP-style personalised PageRank applied to the Sheaf Laplacian, the solution is close to X₀ (via the (1−α) term) while being partially smoothed toward H⁰. Oversmoothing is avoided regardless of depth.
 
 ## Formal Connection to Dirichlet Energy
 
@@ -298,7 +298,7 @@ The oversmoothing of standard GNNs can be precisely characterised by the Dirichl
 E(H) = tr(Hᵀ L H) = Σ_{(u,v)∈E} ||h_u − h_v||²
 </div>
 
-As layers increase, E(H^{(k)}) → 0 — features become identical. This is the mathematical definition of oversmoothing.
+As layers increase, E(H^{(k)}) → 0, features become identical. This is the mathematical definition of oversmoothing.
 
 For sheaf GNNs, the **Sheaf Dirichlet energy**:
 
@@ -306,10 +306,10 @@ For sheaf GNNs, the **Sheaf Dirichlet energy**:
 E_F(H) = tr(Hᵀ Δ_F H) = Σ_{(u,v)∈E} ||F_{u▷e}h_u − F_{v▷e}h_v||²
 </div>
 
-converges to 0 as well — but this means features satisfy the sheaf consistency condition, not that they are identical. The model learns to represent the relational structure of the graph, not to erase all differences.
+converges to 0 as well, but this means features satisfy the sheaf consistency condition, not that they are identical. The model learns to represent the relational structure of the graph, not to erase all differences.
 
 ## References
 
 - Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (the main theoretical source for the null-space account of sheaf oversmoothing avoidance).
-- Li, Q., Han, Z., & Wu, X.-M. (2018). [Deeper Insights Into Graph Convolutional Networks for Semi-Supervised Classification](https://arxiv.org/abs/1801.07606). *AAAI 2018* (the classic oversmoothing result for GCN — the standard GNN baseline being improved upon).
-- Oono, K., & Suzuki, T. (2020). [Graph Neural Networks Exponentially Lose Expressive Power for Node Classification](https://arxiv.org/abs/1905.10947). *ICLR 2020* (formal exponential convergence rate of GNN oversmoothing — quantifies what sheaf diffusion avoids).
+- Li, Q., Han, Z., & Wu, X.-M. (2018). [Deeper Insights Into Graph Convolutional Networks for Semi-Supervised Classification](https://arxiv.org/abs/1801.07606). *AAAI 2018* (the classic oversmoothing result for GCN, the standard GNN baseline being improved upon).
+- Oono, K., & Suzuki, T. (2020). [Graph Neural Networks Exponentially Lose Expressive Power for Node Classification](https://arxiv.org/abs/1905.10947). *ICLR 2020* (formal exponential convergence rate of GNN oversmoothing, quantifies what sheaf diffusion avoids).

@@ -2,7 +2,7 @@
 permalink: /
 title: "Alessio Borgi - About"
 author_profile: true
-redirect_from: 
+redirect_from:
   - /about/
   - /about.html
 ---
@@ -493,7 +493,7 @@ redirect_from:
 .ab-ml-card__meta    { font-size: 0.77rem; color: var(--ab-muted); margin-top: auto; padding-top: 0.4rem; }
 
 /* ============================================================
-   REPO CARDS — dark GitHub-style
+   REPO CARDS, dark GitHub-style
    ============================================================ */
 .ab-repo-grid {
   display: grid;
@@ -597,7 +597,7 @@ redirect_from:
       </div>
     </div>
     <div class="ab-hero__portrait">
-      <img src="/images/Alessio_Wizard.png" alt="Alessio Borgi — AI Researcher" />
+      <img src="/images/Alessio_Wizard.png" alt="Alessio Borgi, AI Researcher" />
     </div>
   </div>
 </div>
@@ -872,7 +872,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
       <div class="pad">
         <div class="lab">Total Stars</div>
         <div class="stat">
-          <div class="num">{% if gh and gh.total_stars %}{{ gh.total_stars }}{% else %}—{% endif %}</div>
+          <div class="num">{% if gh and gh.total_stars %}{{ gh.total_stars }}{% else %}, {% endif %}</div>
         </div>
       </div>
     </div>
@@ -880,7 +880,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
       <div class="pad">
         <div class="lab">Total Forks</div>
         <div class="stat">
-          <div class="num">{% if gh and gh.total_forks %}{{ gh.total_forks }}{% else %}—{% endif %}</div>
+          <div class="num">{% if gh and gh.total_forks %}{{ gh.total_forks }}{% else %}, {% endif %}</div>
         </div>
       </div>
     </div>
@@ -888,7 +888,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
       <div class="pad">
         <div class="lab">Public Repos</div>
         <div class="stat">
-          <div class="num">{% if gh and gh.public_repos %}{{ gh.public_repos }}{% else %}—{% endif %}</div>
+          <div class="num">{% if gh and gh.public_repos %}{{ gh.public_repos }}{% else %}, {% endif %}</div>
         </div>
       </div>
     </div>
@@ -896,7 +896,7 @@ I'm a PhD student in <strong>Graph Neural Networks and Generative AI</strong>, u
       <div class="pad">
         <div class="lab">Followers</div>
         <div class="stat">
-          <div class="num">{% if gh and gh.followers %}{{ gh.followers }}{% else %}—{% endif %}</div>
+          <div class="num">{% if gh and gh.followers %}{{ gh.followers }}{% else %}, {% endif %}</div>
         </div>
       </div>
     </div>

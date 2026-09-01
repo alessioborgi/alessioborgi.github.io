@@ -6,7 +6,7 @@ book: sheaf
 subsection: foundations
 tags: [connection-Laplacian, gauge-theory, orthogonal-maps, holonomy, angular-synchronisation, O(d)]
 published: false
-excerpt: "When all restriction maps are orthogonal matrices, the Sheaf Laplacian becomes the Connection Laplacian — the graph analogue of the gauge-covariant Laplacian in differential geometry. This post covers the O(d) gauge group, holonomy, curvature on graphs, and the angular synchronisation problem that motivates orthogonal sheaf maps."
+excerpt: "When all restriction maps are orthogonal matrices, the Sheaf Laplacian becomes the Connection Laplacian, the graph analogue of the gauge-covariant Laplacian in differential geometry. This post covers the O(d) gauge group, holonomy, curvature on graphs, and the angular synchronisation problem that motivates orthogonal sheaf maps."
 author_profile: true
 read_time: true
 is_overview: false
@@ -34,7 +34,7 @@ toc_label: "Contents"
 
 ## Intuition First: Rotations on a Graph
 
-Picture a network of gyroscopes (nodes), each spinning in its own local 2D plane. When two gyroscopes are connected (edge), the connection tells you how to *rotate* one gyroscope's local frame to match the other's. If you carry a vector around a loop of gyroscopes and it comes back rotated (not equal to where you started), the loop has **non-trivial holonomy** — the connection has curvature.
+Picture a network of gyroscopes (nodes), each spinning in its own local 2D plane. When two gyroscopes are connected (edge), the connection tells you how to *rotate* one gyroscope's local frame to match the other's. If you carry a vector around a loop of gyroscopes and it comes back rotated (not equal to where you started), the loop has **non-trivial holonomy**, the connection has curvature.
 
 An O(d)-sheaf on a graph is exactly this: restriction maps that are rotations. The Connection Laplacian governs how signals "parallel transport" through the network. Gauge invariance means the physics doesn't change if you re-orient every gyroscope independently.
 
@@ -79,14 +79,14 @@ An O(d)-sheaf on a graph is exactly this: restriction maps that are rotations. T
     <marker id="oArr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#f97316"/></marker>
   </defs>
 </svg>
-<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Two stalks with O(d) restriction maps. The blue vector h_u at node u is animated rotating; O_uv h_u (orange) is its parallel transport into v's frame. The holonomy around any cycle is the composition of these rotation maps — flat means the composition is the identity.</figcaption>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Two stalks with O(d) restriction maps. The blue vector h_u at node u is animated rotating; O_uv h_u (orange) is its parallel transport into v's frame. The holonomy around any cycle is the composition of these rotation maps, flat means the composition is the identity.</figcaption>
 </figure></div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Gauge invariance is what separates <em>physics</em> from <em>coordinate choices</em>. The eigenvalues of the Connection Laplacian are gauge-invariant — they do not depend on which local frame you use at each node. This is why they are the "right" quantities to compute: two graphs with the same eigenvalues of L_C have the same relational geometry up to local basis changes. Neural networks that process eigenvalues (or eigenvectors modulo gauge) of L_C are respecting this invariance.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Gauge invariance is what separates <em>physics</em> from <em>coordinate choices</em>. The eigenvalues of the Connection Laplacian are gauge-invariant, they do not depend on which local frame you use at each node. This is why they are the "right" quantities to compute: two graphs with the same eigenvalues of L_C have the same relational geometry up to local basis changes. Neural networks that process eigenvalues (or eigenvectors modulo gauge) of L_C are respecting this invariance.</div>
 
 ## From General Sheaves to Connections
 
-A general cellular sheaf has restriction maps F_{v▷e} ∈ ℝ^{d×d}. When these maps are constrained to be orthogonal matrices — F_{v▷e} ∈ O(d) — the sheaf is called an **O(d)-connection** (or vector bundle with connection) on G.
+A general cellular sheaf has restriction maps F_{v▷e} ∈ ℝ^{d×d}. When these maps are constrained to be orthogonal matrices, F_{v▷e} ∈ O(d), the sheaf is called an **O(d)-connection** (or vector bundle with connection) on G.
 
 The Connection Laplacian is:
 
@@ -97,7 +97,7 @@ The Connection Laplacian is:
 
 This is exactly the Sheaf Laplacian Δ_F when all F_{v▷e} are orthogonal. Note: O_{u▷e}ᵀ O_{v▷e} = O_{u▷e}ᵻ O_{v▷e} (since Oᵀ = O⁻¹ for orthogonal matrices).
 
-The (u,v) block of L_C is an orthogonal matrix (times −1) — each off-diagonal block encodes the "relative orientation" between nodes u and v, as seen from the edge e.
+The (u,v) block of L_C is an orthogonal matrix (times −1), each off-diagonal block encodes the "relative orientation" between nodes u and v, as seen from the edge e.
 
 ## Gauge Symmetry
 
@@ -111,7 +111,7 @@ O_{v▷e}  ↦  g_{target(e)} · O_{v▷e} · g_v⁻¹
 
 where target(e) is the edge stalk (which has its own gauge). This is exactly the gauge transformation of a vector bundle connection in differential geometry.
 
-**Gauge invariance of L_C:** The eigenvalues of L_C are gauge-invariant — they depend only on the holonomy of the connection, not on the choice of local frame at each node. This is why the spectrum of L_C is a meaningful invariant of the graph-with-connection.
+**Gauge invariance of L_C:** The eigenvalues of L_C are gauge-invariant, they depend only on the holonomy of the connection, not on the choice of local frame at each node. This is why the spectrum of L_C is a meaningful invariant of the graph-with-connection.
 
 **Gauge equivariance of sheaf diffusion:** The solution X(t) to dX/dt = −L_C X transforms equivariantly: if X(0) transforms by {g_v}, then X(t) transforms by {g_v} for all t. Equivariant sheaf GNNs encode this symmetry exactly.
 
@@ -125,12 +125,12 @@ Hol(γ) = O_{v₀▷e₀₁}ᵻ O_{v₁▷e₀₁} · O_{v₁▷e₁₂}ᵻ O_{v
 
 (composing the "transport" around the cycle). The holonomy Hol(γ) ∈ O(d) measures how a vector is rotated after parallel transport around γ.
 
-**Trivial holonomy:** Hol(γ) = I for all cycles γ. This means the connection is **flat** — there exists a consistent global gauge where all restriction maps are the identity. A flat connection has dim H⁰ = d (full-rank global sections).
+**Trivial holonomy:** Hol(γ) = I for all cycles γ. This means the connection is **flat**, there exists a consistent global gauge where all restriction maps are the identity. A flat connection has dim H⁰ = d (full-rank global sections).
 
-**Non-trivial holonomy:** The connection has **curvature** — information is "twisted" as it travels around cycles. For H¹ ≠ 0, cycles contribute non-trivial holonomy that cannot be gauged away.
+**Non-trivial holonomy:** The connection has **curvature**, information is "twisted" as it travels around cycles. For H¹ ≠ 0, cycles contribute non-trivial holonomy that cannot be gauged away.
 
 <div class="insight-box">
-<strong>Intuition for neural networks:</strong> When a sheaf GNN learns orthogonal restriction maps, it is learning a discrete connection on a graph — assigning a relative rotation to each edge. If the learned connection has high holonomy (strong curvature), the model has encoded that information about the graph's relational structure changes as one moves around cycles. This is richer than what a standard GNN can represent.
+<strong>Intuition for neural networks:</strong> When a sheaf GNN learns orthogonal restriction maps, it is learning a discrete connection on a graph, assigning a relative rotation to each edge. If the learned connection has high holonomy (strong curvature), the model has encoded that information about the graph's relational structure changes as one moves around cycles. This is richer than what a standard GNN can represent.
 </div>
 
 ## Angular Synchronisation: The Classic Problem
@@ -145,7 +145,7 @@ The Connection Laplacian arises naturally: the synchronisation problem can be so
 min_{θ} Σ_{(u,v)∈E} ||θ_v − R(θ_{uv})θ_u||²_F = min_X xᵀ L_C x
 </div>
 
-where x = (θ_v)_v is the concatenation of angle vectors. The solution is the bottom eigenvectors of L_C — the global sections of the O(2)-connection.
+where x = (θ_v)_v is the concatenation of angle vectors. The solution is the bottom eigenvectors of L_C, the global sections of the O(2)-connection.
 
 **Applications:** cryo-EM reconstruction, sensor network localisation, 3D point cloud alignment, camera calibration from relative poses.
 
@@ -200,10 +200,10 @@ The Connection Laplacian is the discrete analogue of the gauge-covariant Laplaci
 - Restriction maps → parallel transport maps
 - Connection Laplacian → Bochner Laplacian
 
-This connection to Riemannian geometry explains why sheaf GNNs with orthogonal maps are naturally positioned to handle geometric graph learning tasks — molecular force fields, protein structure, point cloud alignment — where the relevant symmetries are continuous rotation groups.
+This connection to Riemannian geometry explains why sheaf GNNs with orthogonal maps are naturally positioned to handle geometric graph learning tasks, molecular force fields, protein structure, point cloud alignment, where the relevant symmetries are continuous rotation groups.
 
 ## References
 
-- Singer, A. (2011). [Angular Synchronization by Eigenvectors and Semidefinite Programming](https://arxiv.org/abs/0911.3448). *Applied and Computational Harmonic Analysis* (angular synchronisation via the connection Laplacian — the foundational paper connecting L_C to estimation theory).
+- Singer, A. (2011). [Angular Synchronization by Eigenvectors and Semidefinite Programming](https://arxiv.org/abs/0911.3448). *Applied and Computational Harmonic Analysis* (angular synchronisation via the connection Laplacian, the foundational paper connecting L_C to estimation theory).
 - Bandeira, A. S., Singer, A., & Spielman, D. A. (2013). [A Cheeger Inequality for the Graph Connection Laplacian](https://arxiv.org/abs/1204.3873). *SIAM Journal on Matrix Analysis* (Cheeger constant for L_C relating spectral gap to synchronisation difficulty).
 - Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (uses orthogonal restriction maps as a special case of NSD, showing connection to gauge equivariance).

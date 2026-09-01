@@ -6,7 +6,7 @@ book: gnn
 subsection: expressivity
 tags: [oversquashing, bottleneck, Jacobian, graph-rewiring, long-range]
 published: true
-excerpt: "Oversquashing occurs when exponentially many node features must be compressed into a fixed-size embedding through a bottleneck edge. It is the reason GNNs struggle with long-range dependencies — not just oversmoothing."
+excerpt: "Oversquashing occurs when exponentially many node features must be compressed into a fixed-size embedding through a bottleneck edge. It is the reason GNNs struggle with long-range dependencies, not just oversmoothing."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,16 +18,16 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> In \(K\)-layer message passing, node \(v\)'s embedding must summarise information from its \(K\)-hop neighbourhood \(\mathcal{N}_K(v)\), which on a tree-like graph grows exponentially with \(K\). If the route to a distant important node passes through a single bottleneck edge, that node's contribution is diluted by exponentially many competing signals. This is oversquashing — distinct from oversmoothing.
+<strong>TL;DR:</strong> In \(K\)-layer message passing, node \(v\)'s embedding must summarise information from its \(K\)-hop neighbourhood \(\mathcal{N}_K(v)\), which on a tree-like graph grows exponentially with \(K\). If the route to a distant important node passes through a single bottleneck edge, that node's contribution is diluted by exponentially many competing signals. This is oversquashing, distinct from oversmoothing.
 </div>
 {% include figure image_path="/images/blog/gnn/topping2022_oversquashing.png" alt="Over-squashing bottleneck" caption="Over-squashing and graph curvature as an information bottleneck (Topping et al., 2022)" %}
 
 
 ## Intuition First: The Telephone Game Through a Bottleneck
 
-Imagine passing a message through a chain of people, but at one point the chain narrows to a single person who must relay messages from 1,000 people on one side to 1,000 people on the other. That single relay is a bottleneck: the message each person on the far side receives is an extremely compressed, noisy version of the original. Oversquashing is exactly this — distant node information must squeeze through bottleneck edges into a fixed-size embedding, losing fidelity exponentially with distance.
+Imagine passing a message through a chain of people, but at one point the chain narrows to a single person who must relay messages from 1,000 people on one side to 1,000 people on the other. That single relay is a bottleneck: the message each person on the far side receives is an extremely compressed, noisy version of the original. Oversquashing is exactly this, distant node information must squeeze through bottleneck edges into a fixed-size embedding, losing fidelity exponentially with distance.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing and oversquashing are opposites in a sense: oversmoothing means <em>too much</em> information from nearby nodes floods the embedding; oversquashing means <em>too little</em> information from distant nodes reaches the embedding. More layers hurt oversmoothing but would help oversquashing — yet more layers also squash more. The root fix is changing the graph topology, not just depth.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing and oversquashing are opposites in a sense: oversmoothing means <em>too much</em> information from nearby nodes floods the embedding; oversquashing means <em>too little</em> information from distant nodes reaches the embedding. More layers hurt oversmoothing but would help oversquashing, yet more layers also squash more. The root fix is changing the graph topology, not just depth.</div>
 
 <style>
 @keyframes flow-pulse {
@@ -90,7 +90,7 @@ Imagine passing a message through a chain of people, but at one point the chain 
   <line x1="245" y1="60" x2="285" y2="75" class="sq-edge"/>
   <line x1="245" y1="90" x2="285" y2="75" class="sq-edge"/>
   <line x1="245" y1="90" x2="285" y2="105" class="sq-edge"/>
-  <text x="200" y="128" class="sq-lbl" fill="#64748b">All left-subtree info must flow through one edge — exponential compression</text>
+  <text x="200" y="128" class="sq-lbl" fill="#64748b">All left-subtree info must flow through one edge, exponential compression</text>
 </svg>
 <figcaption>Oversquashing: information from many left-subtree nodes must pass through a single bottleneck edge, arriving severely compressed on the right side.</figcaption>
 </figure></div>
@@ -110,7 +110,7 @@ Oversmoothing (too many layers → embeddings converge) and oversquashing (long-
 
 ## The Exponential Growth Problem
 
-In a $$K$$-layer MPNN, node $$v$$'s embedding $$h_v^{(K)}$$ depends on every node within $$K$$ hops — its receptive field $$\mathcal{N}_K(v)$$. On a graph that is locally tree-like with branching factor $$d$$, that set grows exponentially:
+In a $$K$$-layer MPNN, node $$v$$'s embedding $$h_v^{(K)}$$ depends on every node within $$K$$ hops, its receptive field $$\mathcal{N}_K(v)$$. On a graph that is locally tree-like with branching factor $$d$$, that set grows exponentially:
 
 <div class="formula-box">
 \[
@@ -120,7 +120,7 @@ In a $$K$$-layer MPNN, node $$v$$'s embedding $$h_v^{(K)}$$ depends on every nod
 
 where $$p$$ is the fixed hidden width. The width $$p$$ does not grow with $$K$$, so the information any single distant node $$u$$ can claim shrinks roughly like $$1/d^{K}$$. Even if $$u$$'s feature is critical for predicting $$v$$'s label, it is drowned out.
 
-Note the condition: this exponential argument needs the neighbourhood to actually expand. On a path or a cycle, $$\lvert\mathcal{N}_K(v)\rvert$$ grows only linearly, and oversquashing there arises from a different mechanism — the decay of the propagation operator over distance, quantified next.
+Note the condition: this exponential argument needs the neighbourhood to actually expand. On a path or a cycle, $$\lvert\mathcal{N}_K(v)\rvert$$ grows only linearly, and oversquashing there arises from a different mechanism, the decay of the propagation operator over distance, quantified next.
 
 ## The Jacobian Analysis
 
@@ -142,7 +142,7 @@ which measures how sensitive $$v$$'s $$K$$-layer embedding is to $$u$$'s input f
 
 where $$w$$ bounds the norms of the weight matrices, $$c$$ bounds the Lipschitz constant of the non-linearity, and $$\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$$ is the same propagation matrix as in the oversmoothing post. The topology enters through the single factor $$(\hat{A}^{K})_{vu}$$.
 
-Two consequences follow. First, if $$u$$ is more than $$K$$ hops from $$v$$ then $$(\hat{A}^{K})_{vu} = 0$$ exactly — no amount of training can create sensitivity that the receptive field does not contain. Second, when $$u$$ is reachable but only through a bottleneck, $$(\hat{A}^{K})_{vu}$$ is tiny, so the forward signal *and* the gradient $$\partial \mathcal{L}/\partial x_u$$ are both suppressed: the model cannot learn that $$u$$ matters for $$v$$.
+Two consequences follow. First, if $$u$$ is more than $$K$$ hops from $$v$$ then $$(\hat{A}^{K})_{vu} = 0$$ exactly, no amount of training can create sensitivity that the receptive field does not contain. Second, when $$u$$ is reachable but only through a bottleneck, $$(\hat{A}^{K})_{vu}$$ is tiny, so the forward signal *and* the gradient $$\partial \mathcal{L}/\partial x_u$$ are both suppressed: the model cannot learn that $$u$$ matters for $$v$$.
 
 <div class="insight-box">
 <strong>What the bound does and does not say:</strong> it is an <em>upper</em> bound. A small \((\hat{A}^{K})_{vu}\) proves that sensitivity <em>must</em> be small; a large one does not guarantee the model actually uses the connection. That asymmetry is exactly what makes it useful as a diagnosis of failure rather than a guarantee of success.
@@ -157,7 +157,7 @@ Two consequences follow. First, if $$u$$ is more than $$K$$ hops from $$v$$ then
 Oversquashing is worst when:
 
 1. **The path between relevant nodes is long** (diameter >> number of layers)
-2. **Bottleneck edges connect high-degree subtrees** — many nodes compete through a single edge
+2. **Bottleneck edges connect high-degree subtrees**, many nodes compete through a single edge
 3. **The graph has tree-like structure** (few cycles, exponential neighbourhood growth)
 
 Real examples where this matters:
@@ -186,27 +186,27 @@ The **sensitivity score** $$\lVert \partial h_v^{(K)} / \partial x_u \rVert$$ me
 
 Two topology-only proxies avoid training a model at all:
 
-- **Commute time** $$\tau(u,v)$$ — the expected number of steps for a random walk to go from $$u$$ to $$v$$ and back. High commute time means information struggles to flow between them.
+- **Commute time** $$\tau(u,v)$$, the expected number of steps for a random walk to go from $$u$$ to $$v$$ and back. High commute time means information struggles to flow between them.
 - **Effective resistance** $$R(u,v)$$, the resistance between $$u$$ and $$v$$ when each edge is a unit resistor. The two are proportional, $$\tau(u,v) = 2\lvert E\rvert\, R(u,v)$$, and effective resistance is the quantity that later work (Di Giovanni et al., 2023) ties directly to oversquashing: pairs separated by high effective resistance are exactly the pairs whose Jacobian is provably small.
 
 ## Solutions: Graph Rewiring
 
 **Graph rewiring** adds or removes edges to reduce bottlenecks:
 
-- **SDRF (Stochastic Discrete Ricci Flow):** adds edges around the most negatively curved edges — edges with negative curvature are bottlenecks
+- **SDRF (Stochastic Discrete Ricci Flow):** adds edges around the most negatively curved edges, edges with negative curvature are bottlenecks
 - **DIGL:** adds edges between nodes with high personalized PageRank similarity
 - **CurvDrop:** removes edges with high negative curvature (bottlenecks) and adds long-range connections
 
 **Other approaches:**
-- **Global attention (Graph Transformers):** bypasses all bottlenecks — every node attends to every node directly
+- **Global attention (Graph Transformers):** bypasses all bottlenecks, every node attends to every node directly
 - **APPNP:** personalized PageRank allows distant information to flow via many paths simultaneously
 - **Virtual node:** add a single virtual node connected to all other nodes, providing a global communication channel
 
 ## Curvature and Oversquashing
 
-Topping et al. (2022) connected oversquashing to a notion of **discrete Ricci curvature**. They introduce the *balanced Forman curvature* $$\mathrm{Ric}(u,v)$$ of an edge — a combinatorial quantity built from the degrees $$d_u, d_v$$, the number of triangles containing $$(u,v)$$, and the 4-cycles through it. An edge is negatively curved when its endpoints share few common neighbours and few short cycles: locally, the edge is the only route between two otherwise separate regions.
+Topping et al. (2022) connected oversquashing to a notion of **discrete Ricci curvature**. They introduce the *balanced Forman curvature* $$\mathrm{Ric}(u,v)$$ of an edge, a combinatorial quantity built from the degrees $$d_u, d_v$$, the number of triangles containing $$(u,v)$$, and the 4-cycles through it. An edge is negatively curved when its endpoints share few common neighbours and few short cycles: locally, the edge is the only route between two otherwise separate regions.
 
-The link to oversquashing runs through the Jacobian bound above. Their result is a *conditional* one, not a blanket guarantee: for a graph containing a sufficiently negatively curved edge, they prove an upper bound on $$\lVert \partial h_v^{(K)}/\partial x_u \rVert$$ for pairs $$u,v$$ on opposite sides of it, and show that a curvature-guided rewiring (SDRF) increases the curvature of the worst edges. That improves the bound; it does not prove that a trained model's downstream accuracy must improve. What it does establish is the direction of the connection — from graph geometry (curvature) to information flow (oversquashing).
+The link to oversquashing runs through the Jacobian bound above. Their result is a *conditional* one, not a blanket guarantee: for a graph containing a sufficiently negatively curved edge, they prove an upper bound on $$\lVert \partial h_v^{(K)}/\partial x_u \rVert$$ for pairs $$u,v$$ on opposite sides of it, and show that a curvature-guided rewiring (SDRF) increases the curvature of the worst edges. That improves the bound; it does not prove that a trained model's downstream accuracy must improve. What it does establish is the direction of the connection, from graph geometry (curvature) to information flow (oversquashing).
 
 ## Summary
 

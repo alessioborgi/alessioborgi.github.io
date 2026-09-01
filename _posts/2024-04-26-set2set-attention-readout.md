@@ -6,7 +6,7 @@ book: gnn
 subsection: pooling
 tags: [set2set, attention-readout, readout, LSTM, graph-classification]
 published: true
-excerpt: "Mean and sum readout treat all nodes equally. Attention readout learns which nodes matter most for a given task. Set2Set goes further — it uses an LSTM to iteratively query the node set, producing richer graph representations than single-pass pooling."
+excerpt: "Mean and sum readout treat all nodes equally. Attention readout learns which nodes matter most for a given task. Set2Set goes further, it uses an LSTM to iteratively query the node set, producing richer graph representations than single-pass pooling."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Attention readout weights node embeddings by learned importance scores before summing — nodes that matter more for the task contribute more to the graph embedding. Set2Set extends this with an LSTM that makes T passes over the node set, each time computing a different attention query. This yields a richer, order-invariant graph summary.
+<strong>TL;DR:</strong> Attention readout weights node embeddings by learned importance scores before summing, nodes that matter more for the task contribute more to the graph embedding. Set2Set extends this with an LSTM that makes T passes over the node set, each time computing a different attention query. This yields a richer, order-invariant graph summary.
 </div>
 {% include figure image_path="/images/blog/gnn/vinyals2016_set2set.png" alt="Set2Set order-invariant readout" caption="Set2Set: order-invariant sequence-to-sequence readout (Vinyals et al., 2016)" %}
 
 
 ## Beyond Uniform Pooling
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mean pooling computes the "average node" — it cannot distinguish a graph with one highly important node from one where all nodes are equally mediocre. Attention readout is the fix: it learns a per-node importance score during training, so the final graph embedding is dominated by the nodes that actually matter for the task.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mean pooling computes the "average node", it cannot distinguish a graph with one highly important node from one where all nodes are equally mediocre. Attention readout is the fix: it learns a per-node importance score during training, so the final graph embedding is dominated by the nodes that actually matter for the task.</div>
 
 Mean and sum pooling treat all nodes identically. But for most tasks, nodes differ greatly in importance:
 - In a molecule, the reactive functional group matters more than inert backbone atoms
@@ -122,7 +122,7 @@ This is a single-pass soft attention over all nodes. The model learns which node
 - Differentiable: all operations are smooth
 - Task-conditioned: $$\alpha_v$$ depends on $$h_v$$, which already encodes $$v$$'s local neighbourhood
 
-**Limitation:** the *logit* $$a_v$$ is computed from $$h_v$$ alone. The softmax does couple the nodes, but only through a single global normaliser — it can rescale the weights, not change their relative order. So a node cannot be judged important *because of* what some other node contributes; the ranking of nodes is fixed before any comparison between them happens.
+**Limitation:** the *logit* $$a_v$$ is computed from $$h_v$$ alone. The softmax does couple the nodes, but only through a single global normaliser, it can rescale the weights, not change their relative order. So a node cannot be judged important *because of* what some other node contributes; the ranking of nodes is fixed before any comparison between them happens.
 
 ## Set2Set (Vinyals et al., 2016)
 
@@ -160,12 +160,12 @@ h_G \;=\; [\,q_T \,;\, m_T\,] \;\in\; \mathbb{R}^{2d}
 
 ### Why an LSTM Readout Is Still Order-Invariant
 
-An LSTM is the archetypal order-*sensitive* module, so its presence in a readout looks like a contradiction. It is not, and the reason is worth being precise about: **the LSTM does not consume the nodes**. It is unrolled over $$T$$ *processing steps*, a number fixed as a hyperparameter and completely independent of $$N$$. The nodes enter only through $$e_v^t$$, the softmax, and the weighted sum $$m_t$$ — and every one of those three is a symmetric function of the node set. Permute the nodes and each $$\alpha_v^t$$ follows its node, $$m_t$$ is unchanged, so $$q_{t+1}$$ is unchanged, and by induction $$h_G$$ is unchanged.
+An LSTM is the archetypal order-*sensitive* module, so its presence in a readout looks like a contradiction. It is not, and the reason is worth being precise about: **the LSTM does not consume the nodes**. It is unrolled over $$T$$ *processing steps*, a number fixed as a hyperparameter and completely independent of $$N$$. The nodes enter only through $$e_v^t$$, the softmax, and the weighted sum $$m_t$$, and every one of those three is a symmetric function of the node set. Permute the nodes and each $$\alpha_v^t$$ follows its node, $$m_t$$ is unchanged, so $$q_{t+1}$$ is unchanged, and by induction $$h_G$$ is unchanged.
 
 This is exactly the point of the paper's title, *Order Matters*: feeding a set to a sequence model in some arbitrary order makes the output depend on that order, which is wrong. Set2Set's fix is to let the recurrence run over reads of the set rather than over its elements.
 
 <div class="insight-box">
-<strong>Why multiple passes?</strong> At step \(t=1\) the query \(q_1\) comes from the initial LSTM state and carries no information about the graph, so attention is close to uniform. At step \(t=2\) the query has been conditioned on what step 1 read, and can direct attention elsewhere. By step \(T\) the LSTM has produced a sequence of queries, each "reading" a different aspect of the node set. This is analogous to multi-head attention reading different subspaces — with the difference that Set2Set's reads are sequential and conditioned on each other, whereas attention heads are computed in parallel and independently.
+<strong>Why multiple passes?</strong> At step \(t=1\) the query \(q_1\) comes from the initial LSTM state and carries no information about the graph, so attention is close to uniform. At step \(t=2\) the query has been conditioned on what step 1 read, and can direct attention elsewhere. By step \(T\) the LSTM has produced a sequence of queries, each "reading" a different aspect of the node set. This is analogous to multi-head attention reading different subspaces, with the difference that Set2Set's reads are sequential and conditioned on each other, whereas attention heads are computed in parallel and independently.
 </div>
 
 ## Worked Example: Set2Set on a 3-Node Graph
@@ -175,19 +175,19 @@ Consider a graph with 3 nodes and embeddings $$h_1 = [1, 0]$$, $$h_2 = [0, 1]$$,
 **Step $$t=1$$:** initial query $$q_1 = [0.5, 0.5]$$ (from the learned initial LSTM state)
 
 - Scores: $$e_1^1 = q_1^{\top}h_1 = 0.5$$, $$e_2^1 = 0.5$$, $$e_3^1 = 1.0$$
-- Softmax over $$(0.5,\,0.5,\,1.0)$$: $$\alpha^1 \approx [0.274,\; 0.274,\; 0.452]$$ — node 3 wins, and nodes 1 and 2 are tied
+- Softmax over $$(0.5,\,0.5,\,1.0)$$: $$\alpha^1 \approx [0.274,\; 0.274,\; 0.452]$$, node 3 wins, and nodes 1 and 2 are tied
 - Attended message: $$m_1 = 0.274\,[1,0] + 0.274\,[0,1] + 0.452\,[1,1] \approx [0.726,\; 0.726]$$
-- LSTM update: $$(q_2, c_2) = \mathrm{LSTM}([q_1 ; m_1], c_1)$$ — suppose it returns $$q_2 \approx [0.8, 0.2]$$
+- LSTM update: $$(q_2, c_2) = \mathrm{LSTM}([q_1 ; m_1], c_1)$$, suppose it returns $$q_2 \approx [0.8, 0.2]$$
 
 **Step $$t=2$$:** the new query $$q_2 = [0.8, 0.2]$$ emphasises the first dimension
 
 - Scores: $$e_1^2 = 0.8$$, $$e_2^2 = 0.2$$, $$e_3^2 = 1.0$$
-- Softmax over $$(0.8,\,0.2,\,1.0)$$: $$\alpha^2 \approx [0.361,\; 0.198,\; 0.441]$$ — node 3 is still the largest, but node 1 has now overtaken node 2
+- Softmax over $$(0.8,\,0.2,\,1.0)$$: $$\alpha^2 \approx [0.361,\; 0.198,\; 0.441]$$, node 3 is still the largest, but node 1 has now overtaken node 2
 - Attended message: $$m_2 = 0.361\,[1,0] + 0.198\,[0,1] + 0.441\,[1,1] \approx [0.802,\; 0.639]$$
 
 **Final embedding:** $$h_G = [q_2 ; m_2] \approx [0.8,\; 0.2,\; 0.80,\; 0.64]$$, of dimension $$2d = 4$$.
 
-Notice what the second step bought: step 1 could not separate nodes 1 and 2 at all — its query was symmetric in the two coordinates, so they received identical weights. Step 2's query, conditioned on what step 1 read, breaks that tie. A single attention pass with a symmetric query would have left nodes 1 and 2 indistinguishable in the summary.
+Notice what the second step bought: step 1 could not separate nodes 1 and 2 at all, its query was symmetric in the two coordinates, so they received identical weights. Step 2's query, conditioned on what step 1 read, breaks that tie. A single attention pass with a symmetric query would have left nodes 1 and 2 indistinguishable in the summary.
 
 ## Set2Set vs Attention Readout vs Sum
 

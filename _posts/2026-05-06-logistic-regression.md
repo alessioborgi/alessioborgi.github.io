@@ -8,7 +8,7 @@ subsection: supervised
 tags: [logistic-regression, classification, cross-entropy, sigmoid, softmax]
 published: true
 is_overview: false
-excerpt: "Logistic regression is not a squashed linear regression — it is a straight line drawn in log-odds space, which is why one coefficient means one multiplication of the odds, and why perfectly separable data drives that coefficient to infinity."
+excerpt: "Logistic regression is not a squashed linear regression, it is a straight line drawn in log-odds space, which is why one coefficient means one multiplication of the odds, and why perfectly separable data drives that coefficient to infinity."
 author_profile: true
 read_time: true
 icon: "🎯"
@@ -19,18 +19,18 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Fit a straight line to a 0/1 target and it walks off both ends of the probability scale. Logistic regression fixes this by putting the line somewhere else: not in \(p\), but in the <em>log-odds</em> \(\log\frac{p}{1-p} = x^\top\beta\). That single move buys three things — outputs trapped in \((0,1)\), coefficients that read as "one unit of \(x_j\) multiplies the odds by \(e^{\beta_j}\)", and a convex loss (cross-entropy, the negative log-likelihood of a Bernoulli) with no closed-form solution but a very well-behaved one. What it does not buy you: a curved decision boundary, a causal claim, or protection against the failure mode where perfectly separable data sends the coefficients to infinity.
+  <strong>TL;DR:</strong> Fit a straight line to a 0/1 target and it walks off both ends of the probability scale. Logistic regression fixes this by putting the line somewhere else: not in \(p\), but in the <em>log-odds</em> \(\log\frac{p}{1-p} = x^\top\beta\). That single move buys three things, outputs trapped in \((0,1)\), coefficients that read as "one unit of \(x_j\) multiplies the odds by \(e^{\beta_j}\)", and a convex loss (cross-entropy, the negative log-likelihood of a Bernoulli) with no closed-form solution but a very well-behaved one. What it does not buy you: a curved decision boundary, a causal claim, or protection against the failure mode where perfectly separable data sends the coefficients to infinity.
 </div>
 
 ## Why you cannot just fit a line
 
 Take six observations, one feature. Hours of practice $$x = 1,\dots,6$$; whether the attempt succeeded, $$y = 0,0,1,0,1,1$$. Least squares on this gives the line $$\hat{y} = -0.2 + 0.2x$$, with fitted values $$0.0,\ 0.2,\ 0.4,\ 0.6,\ 0.8,\ 1.0$$. Inside the data range it looks respectable. Step outside and it is nonsense: at $$x = 0$$ it predicts a probability of $$-0.2$$, at $$x = 7$$ it predicts $$1.2$$, and it keeps going. A model of a probability that returns numbers outside $$[0,1]$$ is not a model of a probability.
 
-The unboundedness is the visible problem. The deeper one is that least squares is the wrong loss for this target. Minimising squared error is maximum likelihood under Gaussian noise of constant variance. A Bernoulli outcome has variance $$p(1-p)$$, which is zero at the ends and largest at $$p = 0.5$$ — the noise level is a function of the mean, so the constant-variance assumption is violated by construction. Squared error also treats a confident wrong answer far too gently: predicting $$0.99$$ when the truth is $$0$$ costs $$0.98$$, less than four times the cost of predicting $$0.5$$. A probabilistic model should be punished much harder than that for confident nonsense.
+The unboundedness is the visible problem. The deeper one is that least squares is the wrong loss for this target. Minimising squared error is maximum likelihood under Gaussian noise of constant variance. A Bernoulli outcome has variance $$p(1-p)$$, which is zero at the ends and largest at $$p = 0.5$$, the noise level is a function of the mean, so the constant-variance assumption is violated by construction. Squared error also treats a confident wrong answer far too gently: predicting $$0.99$$ when the truth is $$0$$ costs $$0.98$$, less than four times the cost of predicting $$0.5$$. A probabilistic model should be punished much harder than that for confident nonsense.
 
 ## The reframing: linear in the log-odds
 
-Rather than squash a linear prediction into range as an afterthought, change *what* is linear. The **odds** of an event are $$\frac{p}{1-p}$$, a number in $$(0,\infty)$$. Take a log and you get the **log-odds**, or logit, which ranges over the whole real line — exactly the range a linear function produces. So put the line there:
+Rather than squash a linear prediction into range as an afterthought, change *what* is linear. The **odds** of an event are $$\frac{p}{1-p}$$, a number in $$(0,\infty)$$. Take a log and you get the **log-odds**, or logit, which ranges over the whole real line, exactly the range a linear function produces. So put the line there:
 
 <div class="formula-box">
 \[
@@ -48,12 +48,12 @@ p \;=\; \sigma(x^\top\beta) \;=\; \frac{1}{1+e^{-x^\top\beta}}
 \]
 </div>
 
-The sigmoid is not a design choice bolted on to keep outputs tidy. It is what you are forced into once you decide the log-odds are linear. Everything interpretable about logistic regression follows from reading the model in that first form rather than the second. (For the sigmoid's other life — as a neuron's nonlinearity, where its saturating derivative causes rather than solves problems — see the chapter on [activation functions](/blog/basics/activation-functions/).)
+The sigmoid is not a design choice bolted on to keep outputs tidy. It is what you are forced into once you decide the log-odds are linear. Everything interpretable about logistic regression follows from reading the model in that first form rather than the second. (For the sigmoid's other life, as a neuron's nonlinearity, where its saturating derivative causes rather than solves problems, see the chapter on [activation functions](/blog/basics/activation-functions/).)
 
 **What a coefficient means.** Increase $$x_j$$ by one unit, holding the rest fixed. The log-odds rise by $$\beta_j$$, so the odds are multiplied by $$e^{\beta_j}$$. That multiplier is the **odds ratio**, and it is the same everywhere on the curve: a coefficient of $$0.7$$ means "doubles the odds" whether you started at odds of 1:100 or 10:1. This constancy is the whole payoff, and it is why the interpretation lives on the odds scale and not the probability scale.
 
 <div class="warning-box">
-  <strong>The interpretation trap:</strong> "\(\beta_j = 1.2\), so a unit of \(x_j\) adds 1.2 to the probability" is wrong, and it is the single most common misreading. The effect on the <em>probability</em> is \(\partial p/\partial x_j = \beta_j\, p(1-p)\) — it depends on where you already are. It is largest at \(p = 0.5\), where it equals \(\beta_j/4\), and it vanishes at both extremes. With the fitted \(\beta_1 = 1.2140\) below, the steepest the probability ever moves is \(0.3035\) per unit of \(x\), and near \(p = 0.05\) it moves by only about \(0.058\). Constant on the log-odds scale does not mean constant on the probability scale.
+  <strong>The interpretation trap:</strong> "\(\beta_j = 1.2\), so a unit of \(x_j\) adds 1.2 to the probability" is wrong, and it is the single most common misreading. The effect on the <em>probability</em> is \(\partial p/\partial x_j = \beta_j\, p(1-p)\), it depends on where you already are. It is largest at \(p = 0.5\), where it equals \(\beta_j/4\), and it vanishes at both extremes. With the fitted \(\beta_1 = 1.2140\) below, the steepest the probability ever moves is \(0.3035\) per unit of \(x\), and near \(p = 0.05\) it moves by only about \(0.058\). Constant on the log-odds scale does not mean constant on the probability scale.
 </div>
 
 ## A worked example, by hand
@@ -75,13 +75,13 @@ Suppose the fitted model is $$\beta_0 = -4$$ and $$\beta_1 = 1$$, so the log-odd
 </table>
 </div>
 
-Read the columns across and the structure is visible. The log-odds column is an arithmetic sequence — it goes up by exactly 1 each row, because that is what "linear in the log-odds" means. The odds column is a geometric sequence, multiplied by $$e = 2.7183$$ each row. The probability column is neither; it is squeezed, moving by $$0.23$$ between $$x = 4$$ and $$x = 5$$ but only by $$0.15$$ between $$x = 5$$ and $$x = 6$$, even though the log-odds moved by 1 in both cases. The model is a straight line, but only one of these three columns can show it.
+Read the columns across and the structure is visible. The log-odds column is an arithmetic sequence, it goes up by exactly 1 each row, because that is what "linear in the log-odds" means. The odds column is a geometric sequence, multiplied by $$e = 2.7183$$ each row. The probability column is neither; it is squeezed, moving by $$0.23$$ between $$x = 4$$ and $$x = 5$$ but only by $$0.15$$ between $$x = 5$$ and $$x = 6$$, even though the log-odds moved by 1 in both cases. The model is a straight line, but only one of these three columns can show it.
 
 Check one entry by hand: at $$x = 5$$, $$p = 2.7183/(1+2.7183) = 2.7183/3.7183 = 0.7311$$. And note the symmetry: $$p(3) = 1 - p(5)$$, because $$\sigma(-z) = 1 - \sigma(z)$$.
 
 ## The loss: cross-entropy is a log-likelihood
 
-The model says $$y \mid x \sim \mathrm{Bernoulli}(p)$$ with $$p = \sigma(x^\top\beta)$$, so a single observation has probability $$p^{y}(1-p)^{1-y}$$ — which is $$p$$ when $$y=1$$ and $$1-p$$ when $$y=0$$. Multiply over independent observations, take a log, and negate:
+The model says $$y \mid x \sim \mathrm{Bernoulli}(p)$$ with $$p = \sigma(x^\top\beta)$$, so a single observation has probability $$p^{y}(1-p)^{1-y}$$, which is $$p$$ when $$y=1$$ and $$1-p$$ when $$y=0$$. Multiply over independent observations, take a log, and negate:
 
 <div class="formula-box">
 \[
@@ -90,7 +90,7 @@ The model says $$y \mid x \sim \mathrm{Bernoulli}(p)$$ with $$p = \sigma(x^\top\
 \]
 </div>
 
-That is binary cross-entropy. It is not a separate idea imported from information theory and hoped to work — it *is* the negative log-likelihood of the Bernoulli model, and minimising it is maximum likelihood. Its shape is the point: as $$p_i \to 0$$ while $$y_i = 1$$, the loss goes to infinity. Confident and wrong is unboundedly expensive, which is exactly the property squared error lacks.
+That is binary cross-entropy. It is not a separate idea imported from information theory and hoped to work, it *is* the negative log-likelihood of the Bernoulli model, and minimising it is maximum likelihood. Its shape is the point: as $$p_i \to 0$$ while $$y_i = 1$$, the loss goes to infinity. Confident and wrong is unboundedly expensive, which is exactly the property squared error lacks.
 
 Differentiating gives a gradient of unusual tidiness. With $$X$$ the $$n \times d$$ design matrix and $$p$$ the vector of fitted probabilities,
 
@@ -103,13 +103,13 @@ Differentiating gives a gradient of unusual tidiness. With $$X$$ the $$n \times 
 \]
 </div>
 
-The gradient is the design matrix times the residual — formally identical to linear regression, with $$p$$ in place of $$X\beta$$. All the sigmoid derivatives cancel against the logarithms in the loss.
+The gradient is the design matrix times the residual, formally identical to linear regression, with $$p$$ in place of $$X\beta$$. All the sigmoid derivatives cancel against the logarithms in the loss.
 
 ### Why this one is convex and squared error is not
 
 Every $$w_i = p_i(1-p_i)$$ is strictly positive, so for any vector $$v$$ we have $$v^\top X^\top W X v = \sum_i w_i (x_i^\top v)^2 \ge 0$$. The Hessian is positive semidefinite everywhere, so cross-entropy is convex in $$\beta$$: no local minima, no saddles to escape, and any point with zero gradient is a global optimum. If $$X$$ has full column rank the loss is strictly convex, and the optimum is unique when it exists.
 
-Squared error applied to a sigmoid has no such guarantee. The chain rule leaves an extra $$\sigma'$$ factor squared and a second-derivative term that can go negative, and it does. Evaluating the Hessian of $$\sum_i (y_i - p_i)^2$$ on the six-point dataset at $$\beta = (-6, 1)$$ gives eigenvalues $$-0.0177$$ and $$3.1660$$ — one of them negative, which settles it: that objective is non-convex. Worse, it has flat regions far from the answer. At $$\beta = (-27.31,\ 10.96)$$ the gradient norm is $$1.3 \times 10^{-5}$$ while the objective sits at $$1.0000$$, against a global minimum of $$0.8487$$. Gradient descent that wanders in there effectively stops. Cross-entropy has no such traps.
+Squared error applied to a sigmoid has no such guarantee. The chain rule leaves an extra $$\sigma'$$ factor squared and a second-derivative term that can go negative, and it does. Evaluating the Hessian of $$\sum_i (y_i - p_i)^2$$ on the six-point dataset at $$\beta = (-6, 1)$$ gives eigenvalues $$-0.0177$$ and $$3.1660$$, one of them negative, which settles it: that objective is non-convex. Worse, it has flat regions far from the answer. At $$\beta = (-27.31,\ 10.96)$$ the gradient norm is $$1.3 \times 10^{-5}$$ while the objective sits at $$1.0000$$, against a global minimum of $$0.8487$$. Gradient descent that wanders in there effectively stops. Cross-entropy has no such traps.
 
 ## No closed form, and what you use instead
 
@@ -141,10 +141,10 @@ On our six points it converges in five iterations:
 
 The starting loss of $$4.1589$$ is not arbitrary: at $$\beta = 0$$ every $$p_i = 0.5$$, so $$\mathcal{L} = 6\log 2 = 4.1589$$. The converged model is $$\log\frac{p}{1-p} = -4.2491 + 1.2140\,x$$, giving an odds ratio of $$e^{1.2140} = 3.3670$$ per extra hour and fitted probabilities $$0.0459,\ 0.1393,\ 0.3527,\ 0.6473,\ 0.8607,\ 0.9541$$. Cross-entropy per observation is $$2.4780/6 = 0.4130$$, down from $$0.6931$$ for a model that predicts the base rate.
 
-IRLS uses the exact Hessian, so it converges quadratically and needs no learning rate — but each step costs $$O(nd^2 + d^3)$$, which rules it out for wide feature sets. Gradient descent, or SGD on mini-batches, is the alternative: slower per unit of progress, trivially cheap per step, and unconditionally headed for the same global optimum. This is also exactly why a single sigmoid output unit trained with cross-entropy is the last layer of so many neural networks — logistic regression is that layer, and the whole network is the feature map feeding it.
+IRLS uses the exact Hessian, so it converges quadratically and needs no learning rate, but each step costs $$O(nd^2 + d^3)$$, which rules it out for wide feature sets. Gradient descent, or SGD on mini-batches, is the alternative: slower per unit of progress, trivially cheap per step, and unconditionally headed for the same global optimum. This is also exactly why a single sigmoid output unit trained with cross-entropy is the last layer of so many neural networks, logistic regression is that layer, and the whole network is the feature map feeding it.
 
 <div class="insight-box">
-  <strong>Key Insight — the score equations are moment matching:</strong> \(X^\top(y-p) = 0\) says the fitted probabilities reproduce the data's moments exactly. On our fit, \(\sum_i p_i = 3.0000 = \sum_i y_i\) (the intercept column), and \(\sum_i x_i p_i = 14.0000 = \sum_i x_i y_i\) (the feature column). The first identity holds whenever the model has an intercept, and it means the average predicted probability always equals the observed base rate. Maximum likelihood forces in-sample calibration on you for free — which is a strong argument for keeping the intercept, and a warning that in-sample calibration proves nothing.
+  <strong>Key Insight, the score equations are moment matching:</strong> \(X^\top(y-p) = 0\) says the fitted probabilities reproduce the data's moments exactly. On our fit, \(\sum_i p_i = 3.0000 = \sum_i y_i\) (the intercept column), and \(\sum_i x_i p_i = 14.0000 = \sum_i x_i y_i\) (the feature column). The first identity holds whenever the model has an intercept, and it means the average predicted probability always equals the observed base rate. Maximum likelihood forces in-sample calibration on you for free, which is a strong argument for keeping the intercept, and a warning that in-sample calibration proves nothing.
 </div>
 
 ## The decision boundary is a hyperplane
@@ -157,9 +157,9 @@ x^\top\beta = 0,
 \]
 </div>
 
-which is a hyperplane — a point in one dimension, a line in two, a plane in three. Logistic regression is a *linear* classifier; the sigmoid bends the probability surface but not the boundary. In our fit the boundary sits at $$x^\star = 4.2491/1.2140 = 3.500$$, midway between the two groups.
+which is a hyperplane, a point in one dimension, a line in two, a plane in three. Logistic regression is a *linear* classifier; the sigmoid bends the probability surface but not the boundary. In our fit the boundary sits at $$x^\star = 4.2491/1.2140 = 3.500$$, midway between the two groups.
 
-Changing the threshold does not curve the boundary, it only slides it: thresholding at $$p \ge \tau$$ is thresholding the log-odds at $$\log\frac{\tau}{1-\tau}$$, which is the same hyperplane with a shifted intercept. If you need a boundary that is genuinely curved, the fix is features (interactions, splines, polynomials) or a different model — not a different cut-off.
+Changing the threshold does not curve the boundary, it only slides it: thresholding at $$p \ge \tau$$ is thresholding the log-odds at $$\log\frac{\tau}{1-\tau}$$, which is the same hyperplane with a shifted intercept. If you need a boundary that is genuinely curved, the fix is features (interactions, splines, polynomials) or a different model, not a different cut-off.
 
 <div class="blog-figure">
 <figure>
@@ -194,7 +194,7 @@ Changing the threshold does not curve the boundary, it only slides it: threshold
   </g>
   <text x="335" y="295" text-anchor="middle" font-size="10.5" fill="#334155">feature x (hours of practice)</text>
 </svg>
-<figcaption>The fitted model \(\log\frac{p}{1-p} = -4.2491 + 1.2140\,x\). Filled markers are the six observations at \(y=0\) and \(y=1\); hollow markers on the curve are the fitted probabilities. The point at \(x=4\) has \(y=0\) but a fitted probability of 0.6473 — the model gets it wrong, and cross-entropy charges \(-\log(1-0.6473) = 1.042\) nats for it. The curve is a sigmoid, but the boundary it induces is a single point at \(x = 3.5\).</figcaption>
+<figcaption>The fitted model \(\log\frac{p}{1-p} = -4.2491 + 1.2140\,x\). Filled markers are the six observations at \(y=0\) and \(y=1\); hollow markers on the curve are the fitted probabilities. The point at \(x=4\) has \(y=0\) but a fitted probability of 0.6473, the model gets it wrong, and cross-entropy charges \(-\log(1-0.6473) = 1.042\) nats for it. The curve is a sigmoid, but the boundary it induces is a single point at \(x = 3.5\).</figcaption>
 </figure>
 </div>
 
@@ -212,7 +212,7 @@ p_k \;=\; \frac{e^{z_k}}{\sum_{j=1}^{K} e^{z_j}},
 
 The second identity is the same reframing again: every *pairwise* log-odds is linear in $$x$$. Concretely, with scores $$z = (2,\ 1,\ -0.5)$$ the exponentials are $$7.3891,\ 2.7183,\ 0.6065$$, summing to $$10.7139$$, so $$p = (0.6897,\ 0.2537,\ 0.0566)$$. The log-odds of class 1 against class 2 are $$2 - 1 = 1$$, and indeed $$0.6897/0.2537 = 2.7183 = e$$.
 
-Two consequences follow immediately. First, softmax is **shift-invariant**: subtract 2 from every score and the probabilities are unchanged (this is what the standard max-subtraction trick exploits for numerical stability). Second, and less comfortably, that invariance means the parameters are **not identifiable** — adding any fixed vector to every $$\beta_k$$ leaves all predictions untouched. Statistical software fixes this by pinning one class as the reference with $$\beta_K = 0$$, at which point $$K = 2$$ collapses back to exactly the binary sigmoid model. Machine-learning libraries usually keep all $$K$$ vectors and let weight decay pick a representative. Both are fine; you just cannot interpret a raw softmax coefficient without knowing which convention produced it.
+Two consequences follow immediately. First, softmax is **shift-invariant**: subtract 2 from every score and the probabilities are unchanged (this is what the standard max-subtraction trick exploits for numerical stability). Second, and less comfortably, that invariance means the parameters are **not identifiable**, adding any fixed vector to every $$\beta_k$$ leaves all predictions untouched. Statistical software fixes this by pinning one class as the reference with $$\beta_K = 0$$, at which point $$K = 2$$ collapses back to exactly the binary sigmoid model. Machine-learning libraries usually keep all $$K$$ vectors and let weight decay pick a representative. Both are fine; you just cannot interpret a raw softmax coefficient without knowing which convention produced it.
 
 ## The failure that actually bites: separability
 
@@ -233,9 +233,9 @@ Here is a real problem that catches people. Change one label so the classes are 
 </table>
 </div>
 
-The coefficients diverge and the loss creeps towards zero without ever reaching it. There is no maximum-likelihood estimate: the likelihood has a supremum of 1 that no finite $$\beta$$ attains, because a steeper sigmoid always fits separated data slightly better than a less steep one. Albert and Anderson (1984) characterised exactly when this happens — complete or quasi-complete separation of the data by a hyperplane.
+The coefficients diverge and the loss creeps towards zero without ever reaching it. There is no maximum-likelihood estimate: the likelihood has a supremum of 1 that no finite $$\beta$$ attains, because a steeper sigmoid always fits separated data slightly better than a less steep one. Albert and Anderson (1984) characterised exactly when this happens, complete or quasi-complete separation of the data by a hyperplane.
 
-Notice what does *and does not* go wrong. The ratio $$-\beta_0/\beta_1$$ is $$3.5$$ at every single iteration; the boundary is pinned and sensible from the start. Only the *scale* runs away. So the classifier is fine and the probabilities are garbage — the model reports certainty of $$1 - 10^{-12}$$ from six data points. In practice you meet this whenever there are more features than rows, when one-hot encoding rare categories, or when a leaked variable perfectly predicts the label. The symptoms are enormous coefficients, standard errors even more enormous, an optimiser that hits its iteration cap, and a training loss suspiciously close to zero.
+Notice what does *and does not* go wrong. The ratio $$-\beta_0/\beta_1$$ is $$3.5$$ at every single iteration; the boundary is pinned and sensible from the start. Only the *scale* runs away. So the classifier is fine and the probabilities are garbage, the model reports certainty of $$1 - 10^{-12}$$ from six data points. In practice you meet this whenever there are more features than rows, when one-hot encoding rare categories, or when a leaked variable perfectly predicts the label. The symptoms are enormous coefficients, standard errors even more enormous, an optimiser that hits its iteration cap, and a training loss suspiciously close to zero.
 
 **The fix is regularisation.** Add $$\tfrac{\lambda}{2}\lVert\beta\rVert^2$$ to the loss (leaving the intercept unpenalised) and the objective becomes strictly convex and coercive, so a finite minimiser exists no matter what the data look like. On the separable set:
 
@@ -251,7 +251,7 @@ Notice what does *and does not* go wrong. The ratio $$-\beta_0/\beta_1$$ is $$3.
 </table>
 </div>
 
-Every row puts the boundary at $$3.5$$. The penalty is not choosing a better classifier — it is choosing how confident to be, and the answer is "less than infinitely". This is the same $$\lambda$$ as ridge regression, and by the same argument it is a Gaussian prior on $$\beta$$; $$L_1$$ works too and additionally zeroes coefficients. Firth's penalised likelihood (1993) is the classical alternative when you want the bias correction rather than the shrinkage.
+Every row puts the boundary at $$3.5$$. The penalty is not choosing a better classifier, it is choosing how confident to be, and the answer is "less than infinitely". This is the same $$\lambda$$ as ridge regression, and by the same argument it is a Gaussian prior on $$\beta$$; $$L_1$$ works too and additionally zeroes coefficients. Firth's penalised likelihood (1993) is the classical alternative when you want the bias correction rather than the shrinkage.
 
 <div class="blog-figure">
 <figure>
@@ -289,7 +289,7 @@ Every row puts the boundary at $$3.5$$. The penalty is not choosing a better cla
   </g>
   <text x="250" y="295" text-anchor="middle" font-size="10.5" fill="#334155">feature x, separable labels</text>
 </svg>
-<figcaption>Separable data, four fits. The three unregularised IRLS iterates steepen without limit towards a step function; by iteration 10 the model assigns \(x=3\) a probability of 0.00066 and \(x=4\) a probability of 0.99934, and by iteration 30 both are within \(1.6 \times 10^{-12}\) of certainty. The dashed ridge fit with \(\lambda=1\) stays gentle. All four cross \(p=0.5\) at \(x=3.5\) — the divergence is entirely in the scale of \(\beta\), never in the boundary.</figcaption>
+<figcaption>Separable data, four fits. The three unregularised IRLS iterates steepen without limit towards a step function; by iteration 10 the model assigns \(x=3\) a probability of 0.00066 and \(x=4\) a probability of 0.99934, and by iteration 30 both are within \(1.6 \times 10^{-12}\) of certainty. The dashed ridge fit with \(\lambda=1\) stays gentle. All four cross \(p=0.5\) at \(x=3.5\), the divergence is entirely in the scale of \(\beta\), never in the boundary.</figcaption>
 </figure>
 </div>
 
@@ -308,13 +308,13 @@ q = 0.99:\quad &-\bigl[0.7\log 0.99 + 0.3\log 0.01\bigr] = 1.3886.
 \]
 </div>
 
-The Brier scores separate them too, $$0.2100$$ against $$0.2941$$. Both are **proper scoring rules**: they are minimised, in expectation, by reporting the true probability. Accuracy is not proper — it is indifferent between these two models. If a downstream decision uses the probability rather than the label (expected-value thresholds, ranking under a budget, risk pricing), that indifference is expensive.
+The Brier scores separate them too, $$0.2100$$ against $$0.2941$$. Both are **proper scoring rules**: they are minimised, in expectation, by reporting the true probability. Accuracy is not proper, it is indifferent between these two models. If a downstream decision uses the probability rather than the label (expected-value thresholds, ranking under a budget, risk pricing), that indifference is expensive.
 
-Logistic regression tends to come out reasonably calibrated on data drawn from the fitting distribution, for the moment-matching reason above. Three caveats, and they matter. In-sample calibration of the mean is automatic and therefore not evidence of anything. Regularisation deliberately shrinks $$\beta$$ towards zero, which pulls probabilities towards the base rate and makes a heavily penalised model systematically under-confident. And nothing here survives a shift in the base rate between training and deployment — resampling to balance classes changes the intercept by roughly $$\log$$ of the sampling-rate ratio, and you have to put it back if you want probabilities you can use.
+Logistic regression tends to come out reasonably calibrated on data drawn from the fitting distribution, for the moment-matching reason above. Three caveats, and they matter. In-sample calibration of the mean is automatic and therefore not evidence of anything. Regularisation deliberately shrinks $$\beta$$ towards zero, which pulls probabilities towards the base rate and makes a heavily penalised model systematically under-confident. And nothing here survives a shift in the base rate between training and deployment, resampling to balance classes changes the intercept by roughly $$\log$$ of the sampling-rate ratio, and you have to put it back if you want probabilities you can use.
 
 ## What it does not buy you
 
-The boundary is a hyperplane in whatever feature space you hand it, so any curvature must come from you. The coefficients are conditional on the other variables in the model and are not causal — drop a confounder and every remaining coefficient changes. Interpretability is on the log-odds scale; the effect on a probability varies along the curve. Convexity guarantees you find the best fit *of this model*, not that this model is any good. And with rare positives, a low cross-entropy is easy to achieve by predicting the base rate everywhere, so pair it with a measure that looks at ranking.
+The boundary is a hyperplane in whatever feature space you hand it, so any curvature must come from you. The coefficients are conditional on the other variables in the model and are not causal, drop a confounder and every remaining coefficient changes. Interpretability is on the log-odds scale; the effect on a probability varies along the curve. Convexity guarantees you find the best fit *of this model*, not that this model is any good. And with rare positives, a low cross-entropy is easy to achieve by predicting the base rate everywhere, so pair it with a measure that looks at ranking.
 
 What you do get is a model that is fast, convex, calibrated by construction on its own training data, gives an odds ratio per feature that a domain expert can argue with, and fails loudly rather than quietly when the data are separable. That is a good trade for a first model, and often for the last one.
 
@@ -323,11 +323,11 @@ What you do get is a model that is fast, convex, calibrated by construction on i
   <ul>
     <li><strong>The line lives in log-odds space.</strong> \(\log\frac{p}{1-p} = x^\top\beta\); the sigmoid is what you get by inverting it, not a squashing function chosen for convenience.</li>
     <li><strong>Coefficients are odds ratios.</strong> A unit of \(x_j\) multiplies the odds by \(e^{\beta_j}\), everywhere on the curve. The effect on the probability is \(\beta_j\,p(1-p)\), at most \(\beta_j/4\).</li>
-    <li><strong>Cross-entropy is the Bernoulli negative log-likelihood</strong>, with gradient \(-X^\top(y-p)\) and Hessian \(X^\top W X \succeq 0\) — convex everywhere. Squared error on a sigmoid is not: on the worked data its Hessian at \(\beta=(-6,1)\) has eigenvalues \(-0.0177\) and \(3.1660\).</li>
+    <li><strong>Cross-entropy is the Bernoulli negative log-likelihood</strong>, with gradient \(-X^\top(y-p)\) and Hessian \(X^\top W X \succeq 0\), convex everywhere. Squared error on a sigmoid is not: on the worked data its Hessian at \(\beta=(-6,1)\) has eigenvalues \(-0.0177\) and \(3.1660\).</li>
     <li><strong>No closed form, and it does not matter.</strong> IRLS reached \(\beta = (-4.2491,\ 1.2140)\) in five iterations, cross-entropy \(4.1589 \to 2.4780\); gradient descent gets to the same global optimum more slowly.</li>
-    <li><strong>The boundary is a hyperplane</strong> \(x^\top\beta = 0\) — here the single point \(x = 3.5\). Changing the threshold slides it; it never bends it.</li>
+    <li><strong>The boundary is a hyperplane</strong> \(x^\top\beta = 0\), here the single point \(x = 3.5\). Changing the threshold slides it; it never bends it.</li>
     <li><strong>Softmax generalises it</strong>: every pairwise log-odds \(\log(p_k/p_m) = x^\top(\beta_k-\beta_m)\) is linear. Shift-invariance makes the parameters unidentifiable until you fix a reference class.</li>
-    <li><strong>Separable data has no MLE.</strong> On separable labels IRLS drove \(\beta_1\) past 54 with loss \(3 \times 10^{-12}\), while the boundary sat at 3.5 the whole time. An \(L_2\) penalty restores a finite solution — \(\beta_1 = 1.1206\) at \(\lambda = 1\) — without moving the boundary.</li>
+    <li><strong>Separable data has no MLE.</strong> On separable labels IRLS drove \(\beta_1\) past 54 with loss \(3 \times 10^{-12}\), while the boundary sat at 3.5 the whole time. An \(L_2\) penalty restores a finite solution, \(\beta_1 = 1.1206\) at \(\lambda = 1\), without moving the boundary.</li>
     <li><strong>Calibration is a separate axis from accuracy.</strong> Predicting 0.70 and predicting 0.99 against a true rate of 0.70 both score 70% accuracy, but log-loss 0.6109 against 1.3886. Use a proper scoring rule when the probability is what you act on.</li>
   </ul>
 </div>

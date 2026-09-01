@@ -6,7 +6,7 @@ categories: [transformers]
 book: transformers
 subsection: core
 tags: [attention, scaling, softmax, gradients]
-excerpt: "Dividing by √d_k is not just a trick — it prevents softmax from saturating and dying in high-dimensional spaces. Here's the math and the intuition."
+excerpt: "Dividing by √d_k is not just a trick, it prevents softmax from saturating and dying in high-dimensional spaces. Here's the math and the intuition."
 author_profile: true
 read_time: true
 is_overview: false
@@ -95,7 +95,7 @@ Softmax is defined as:
 \]
 </div>
 
-When inputs are large — say the vector $$[35, 2, -10, 1]$$ — the exponential function amplifies differences exponentially. The largest value dominates completely. The output becomes something like $$[\approx 1.0,\ \approx 0.0,\ \approx 0.0,\ \approx 0.0]$$.
+When inputs are large, say the vector $$[35, 2, -10, 1]$$, the exponential function amplifies differences exponentially. The largest value dominates completely. The output becomes something like $$[\approx 1.0,\ \approx 0.0,\ \approx 0.0,\ \approx 0.0]$$.
 
 This is called **softmax saturation**. The "soft" maximum collapses into a hard argmax.
 
@@ -111,7 +111,7 @@ Softmax saturation is catastrophic for learning because it causes **gradient dea
 \]
 </div>
 
-When \(\mathrm{softmax}(x_i) \approx 1\), the factor \((1-\mathrm{softmax}(x_i))\) is near zero.  
+When \(\mathrm{softmax}(x_i) \approx 1\), the factor \((1-\mathrm{softmax}(x_i))\) is near zero.
 When \(\mathrm{softmax}(x_i) \approx 0\), the leading \(\mathrm{softmax}(x_i)\) term is near zero.
 
 In both cases: no gradient flows. No learning happens. The attention weights are stuck.
@@ -157,7 +157,7 @@ A score of 8 vs. −8 in a 4-token sequence:
 ```
 softmax([8, -8, 2, -1]) ≈ [0.9997, 0.000, 0.003, 0.0001]
 ```
-Nearly all weight on one token — a hard argmax. Gradient $$\approx 0$$.
+Nearly all weight on one token, a hard argmax. Gradient $$\approx 0$$.
 
 **After scaling by** $$\sqrt{64} = 8$$:
 ```

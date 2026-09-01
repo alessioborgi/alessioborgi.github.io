@@ -3,7 +3,7 @@ title: "StyleAligned: Zero-Shot Style Alignment in Text-to-Image Generation"
 collection: projects
 layout: single
 permalink: /projects/stylealigned/
-excerpt: "A zero-shot framework for consistent style transfer in text-to-image generation — using minimal shared attention to propagate a reference style without fine-tuning."
+excerpt: "A zero-shot framework for consistent style transfer in text-to-image generation, using minimal shared attention to propagate a reference style without fine-tuning."
 author_profile: true
 github: "https://github.com/alessioborgi/StyleAligned"
 tags:
@@ -18,7 +18,7 @@ StyleAligned implements and extends the **StyleAligned** framework for zero-shot
 
 ## Core Idea
 
-Standard text-to-image models generate each image independently. StyleAligned conditions the denoising process on a reference image by **sharing self-attention keys and values** across the batch during inference. This minimal coupling is enough to transfer colour palette, brush style, and artistic texture — while leaving semantic content free to follow the text prompt.
+Standard text-to-image models generate each image independently. StyleAligned conditions the denoising process on a reference image by **sharing self-attention keys and values** across the batch during inference. This minimal coupling is enough to transfer colour palette, brush style, and artistic texture, while leaving semantic content free to follow the text prompt.
 
 ## Extensions
 

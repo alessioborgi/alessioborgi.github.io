@@ -29,16 +29,16 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Standard sheaf GNNs (NSD, PNSD, SheafAN) use local aggregation — only direct neighbours contribute to a node's update. Graph Transformers add global attention — all pairs of nodes can interact. Sheaf Transformers combine sheaf-based local aggregation with global attention by: (1) using sheaf maps as structural biases in the attention matrix, (2) transporting attention values through sheaf restriction maps, or (3) alternating sheaf diffusion and global attention layers.
+<strong>TL;DR:</strong> Standard sheaf GNNs (NSD, PNSD, SheafAN) use local aggregation, only direct neighbours contribute to a node's update. Graph Transformers add global attention, all pairs of nodes can interact. Sheaf Transformers combine sheaf-based local aggregation with global attention by: (1) using sheaf maps as structural biases in the attention matrix, (2) transporting attention values through sheaf restriction maps, or (3) alternating sheaf diffusion and global attention layers.
 </div>
 {% include figure image_path="/images/blog/sheaf/rampasek2022_gps.png" alt="Sheaf Transformer GPS design" caption="GPS: alternating local (sheaf) and global (attention) layers (Rampášek et al., 2022)" %}
 
 
 ## The Local vs Global Trade-off
 
-Sheaf GNNs are local models — they aggregate from the K-hop neighbourhood (K = number of layers). For tasks requiring long-range dependencies (K >> graph diameter), standard sheaf GNNs either need many layers (oversmoothing risk) or can't reach the relevant nodes.
+Sheaf GNNs are local models, they aggregate from the K-hop neighbourhood (K = number of layers). For tasks requiring long-range dependencies (K >> graph diameter), standard sheaf GNNs either need many layers (oversmoothing risk) or can't reach the relevant nodes.
 
-Graph Transformers solve this with **global attention** — every pair (u, v) computes an attention score, and every node receives information from all nodes regardless of graph distance.
+Graph Transformers solve this with **global attention**, every pair (u, v) computes an attention score, and every node receives information from all nodes regardless of graph distance.
 
 The two approaches are complementary:
 - **Sheaf diffusion:** principled local geometry, handles heterophily, avoids oversmoothing, but local
@@ -64,13 +64,13 @@ where b_{uv} is a structural bias (distance, centrality, etc.).
 b_{uv}^{sheaf} = h_uᵀ [Δ_F^{-1}]_{uv} h_v
 </div>
 
-where [Δ_F^{-1}]_{uv} is the (u,v)-block of the pseudoinverse of the Sheaf Laplacian — measuring the **sheaf effective resistance** between u and v.
+where [Δ_F^{-1}]_{uv} is the (u,v)-block of the pseudoinverse of the Sheaf Laplacian, measuring the **sheaf effective resistance** between u and v.
 
 High sheaf effective resistance → u and v are weakly connected in the sheaf → low attention bias. Low sheaf effective resistance → strongly connected in sheaf → high attention bias.
 
 This is the sheaf generalisation of the effective resistance bias used in GRIT and related graph Transformers.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why transport matters:</strong> Computing attention between two nodes without transporting through restriction maps is like comparing distances measured in metres vs feet without converting first. Node u's key vector lives in u's local stalk frame; node v's query vector lives in v's local stalk frame. Without the transport map O_{uv}, the inner product Q h_v · K h_u mixes coordinates from two incompatible frames — the resulting attention score is geometrically meaningless. Transporting h_u into v's frame first ensures the attention score measures genuine feature similarity in a consistent coordinate system.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, why transport matters:</strong> Computing attention between two nodes without transporting through restriction maps is like comparing distances measured in metres vs feet without converting first. Node u's key vector lives in u's local stalk frame; node v's query vector lives in v's local stalk frame. Without the transport map O_{uv}, the inner product Q h_v · K h_u mixes coordinates from two incompatible frames, the resulting attention score is geometrically meaningless. Transporting h_u into v's frame first ensures the attention score measures genuine feature similarity in a consistent coordinate system.</div>
 
 ## Design Option 2: Transported Attention
 
@@ -88,7 +88,7 @@ For non-adjacent nodes (no direct restriction map), O_{uv} is estimated as the c
 O_{u→v} ≈ O_{u▷e₁} · O_{e₁▷w₁} · O_{w₁▷e₂} · ... · O_{e_k▷v}
 </div>
 
-(parallel transport along the path). This requires path discovery and composition — expensive but topologically meaningful.
+(parallel transport along the path). This requires path discovery and composition, expensive but topologically meaningful.
 
 <style>
 @keyframes flowToken {
@@ -188,7 +188,7 @@ The sheaf layer handles local relational structure; the attention layer handles 
 
 **Implementation:** Use the sheaf predictor only for the sheaf layers (predicting maps from current H). The attention layers use standard Q, K, V projections. No modification of the attention mechanism is needed.
 
-This is analogous to GPS (General, Powerful, Scalable) graph networks (Rampášek et al., 2022), which alternate MPNN layers and Transformer layers — but replace MPNN with sheaf diffusion.
+This is analogous to GPS (General, Powerful, Scalable) graph networks (Rampášek et al., 2022), which alternate MPNN layers and Transformer layers, but replace MPNN with sheaf diffusion.
 
 ## Sheaf Positional Encodings
 
@@ -197,7 +197,7 @@ An orthogonal contribution of sheaves to Transformers: using eigenvectors of Δ_
 Standard positional encodings for graph Transformers use eigenvectors of the graph Laplacian L (LSPE, Kreuzer et al., 2021). The sheaf Laplacian eigenvectors provide richer PEs:
 - They depend on both topology (through G) and relational geometry (through F)
 - They are task-adaptive when F is learned (the PEs change during training)
-- They have dimension Nd (vs N for standard LapPE) — more discriminative
+- They have dimension Nd (vs N for standard LapPE), more discriminative
 
 **Sheaf PE computation:**
 <div class="math-box">
@@ -218,13 +218,13 @@ These PEs can be used as input features to any graph Transformer, adding sheaf s
 | GPS (MPNN + Attn) | MPNN | Global attention | Partial | O((E+N²)·d) |
 | **Sheaf Transformer** | **Sheaf diffusion** | **Global attention** | **Yes** | **O(E·d²+N²·d)** |
 
-The Sheaf Transformer achieves the best of all worlds — at the cost of combining both local (O(E·d²)) and global (O(N²·d)) computation.
+The Sheaf Transformer achieves the best of all worlds, at the cost of combining both local (O(E·d²)) and global (O(N²·d)) computation.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — The Sheaf Transformer as a natural endpoint:</strong> The Sheaf Transformer is the natural culmination of the entire sheaf GNN research line. It handles <em>heterophily</em> (via learned restriction maps that adapt to different edge types), avoids <em>oversmoothing</em> (the sheaf diffusion null-space preserves task-relevant features), enables <em>long-range dependencies</em> (via global attention bypassing the K-hop locality constraint), and has <em>rich positional encodings</em> (Δ_F eigenvectors are task-adaptive, changing during training). The central challenge is computational cost: combining O(E·d²) local and O(N²·d) global terms is expensive. Solving the scalability problem (linear attention, hierarchical sheaf + attention) is the key open engineering question for making Sheaf Transformers practical at scale.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, The Sheaf Transformer as a natural endpoint:</strong> The Sheaf Transformer is the natural culmination of the entire sheaf GNN research line. It handles <em>heterophily</em> (via learned restriction maps that adapt to different edge types), avoids <em>oversmoothing</em> (the sheaf diffusion null-space preserves task-relevant features), enables <em>long-range dependencies</em> (via global attention bypassing the K-hop locality constraint), and has <em>rich positional encodings</em> (Δ_F eigenvectors are task-adaptive, changing during training). The central challenge is computational cost: combining O(E·d²) local and O(N²·d) global terms is expensive. Solving the scalability problem (linear attention, hierarchical sheaf + attention) is the key open engineering question for making Sheaf Transformers practical at scale.</div>
 
 ## Scalability
 
-The main challenge: global attention scales as O(N²) — prohibitive for large graphs (N > 10⁴).
+The main challenge: global attention scales as O(N²), prohibitive for large graphs (N > 10⁴).
 
 Solutions:
 1. **Linear attention:** approximate softmax attention with O(N) cost (Performer, Linformer). Compatible with sheaf local layers.
@@ -239,6 +239,6 @@ Solutions:
 
 ## References
 
-- Rampášek, L., Galkin, M., Dwivedi, V. P., Lim, A. T., Wolf, G., & Beaini, D. (2022). [Recipe for a General, Powerful, Scalable Graph Transformer](https://arxiv.org/abs/2205.12454). *NeurIPS 2022* (GPS: alternating MPNN and Transformer layers — the architecture template Sheaf Transformers build on).
-- Kreuzer, D., Beaini, D., Hamilton, W., Létourneau, V., & Tossou, P. (2021). [Rethinking Graph Transformers with Spectral Attention](https://arxiv.org/abs/2106.03893). *NeurIPS 2021* (SAT: spectral attention using Laplacian eigenvectors as PEs — extended to sheaves via Δ_F eigenvectors).
-- Ying, C., Cai, T., Luo, S., Zheng, S., Ke, G., He, D., Shen, Y., & Liu, T.-Y. (2021). [Do Transformers Really Perform Bad for Graph Representation?](https://arxiv.org/abs/2106.05234). *NeurIPS 2021* (Graphormer: structural biases in graph Transformer attention — the approach extended with sheaf effective resistance biases).
+- Rampášek, L., Galkin, M., Dwivedi, V. P., Lim, A. T., Wolf, G., & Beaini, D. (2022). [Recipe for a General, Powerful, Scalable Graph Transformer](https://arxiv.org/abs/2205.12454). *NeurIPS 2022* (GPS: alternating MPNN and Transformer layers, the architecture template Sheaf Transformers build on).
+- Kreuzer, D., Beaini, D., Hamilton, W., Létourneau, V., & Tossou, P. (2021). [Rethinking Graph Transformers with Spectral Attention](https://arxiv.org/abs/2106.03893). *NeurIPS 2021* (SAT: spectral attention using Laplacian eigenvectors as PEs, extended to sheaves via Δ_F eigenvectors).
+- Ying, C., Cai, T., Luo, S., Zheng, S., Ke, G., He, D., Shen, Y., & Liu, T.-Y. (2021). [Do Transformers Really Perform Bad for Graph Representation?](https://arxiv.org/abs/2106.05234). *NeurIPS 2021* (Graphormer: structural biases in graph Transformer attention, the approach extended with sheaf effective resistance biases).

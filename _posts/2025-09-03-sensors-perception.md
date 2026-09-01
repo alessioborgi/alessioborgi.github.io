@@ -6,7 +6,7 @@ book: robotics
 subsection: foundations
 tags: [sensors, cameras, lidar, imu, sensor-fusion, pointcloud]
 published: false
-excerpt: "Modern robots fuse data from cameras, LiDAR, and IMUs to perceive their environment — understanding sensor noise models and calibration is essential for reliable robot perception."
+excerpt: "Modern robots fuse data from cameras, LiDAR, and IMUs to perceive their environment, understanding sensor noise models and calibration is essential for reliable robot perception."
 author_profile: true
 read_time: true
 is_overview: false
@@ -27,13 +27,13 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> No single sensor is sufficient for robust robot perception. Cameras provide rich texture but lack depth; LiDAR provides precise 3D geometry but is expensive and sparse; IMUs measure motion at high frequency but drift over time. Sensor fusion — particularly Kalman filtering — combines their complementary strengths. Point cloud processing networks like PointNet enable direct learning on 3D data.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> No single sensor is sufficient for robust robot perception. Cameras provide rich texture but lack depth; LiDAR provides precise 3D geometry but is expensive and sparse; IMUs measure motion at high frequency but drift over time. Sensor fusion, particularly Kalman filtering, combines their complementary strengths. Point cloud processing networks like PointNet enable direct learning on 3D data.</div>
 {% include figure image_path="/images/blog/robotics/qi2017_pointnet.png" alt="PointNet for robot perception" caption="PointNet: deep learning on 3D point clouds for robot perception (Qi et al., 2017)" %}
 
 
 ## Sensor Modalities
 
-**Intuition first.** No single sensor tells the whole story. A camera sees colour and texture but is blind to depth. LiDAR measures precise distances but captures no colour. An IMU feels every vibration but drifts badly over time. Fusion is not a luxury — it is the only way to build a reliable picture of the world.
+**Intuition first.** No single sensor tells the whole story. A camera sees colour and texture but is blind to depth. LiDAR measures precise distances but captures no colour. An IMU feels every vibration but drifts badly over time. Fusion is not a luxury, it is the only way to build a reliable picture of the world.
 
 <style>
 @keyframes lidar-sweep {
@@ -79,17 +79,17 @@ toc_label: "Contents"
 <figcaption>LiDAR sweeps across the scene (teal beam, orange return points). The camera covers a narrow forward FOV (purple cone). The IMU (amber box) measures motion at high frequency. Each sensor has complementary strengths.</figcaption>
 </figure></div>
 
-**RGB cameras** are the most widely deployed sensor in robotics. They capture rich texture and color information at low cost. However, they are projective sensors — depth information is lost in the 2D image plane. Stereo cameras recover depth via triangulation but require careful calibration and struggle with textureless regions.
+**RGB cameras** are the most widely deployed sensor in robotics. They capture rich texture and color information at low cost. However, they are projective sensors, depth information is lost in the 2D image plane. Stereo cameras recover depth via triangulation but require careful calibration and struggle with textureless regions.
 
 **RGB-D cameras** (e.g., Intel RealSense, Microsoft Kinect) add per-pixel depth using structured light or time-of-flight. They provide a registered color-depth image pair, enabling direct 3D reconstruction at short range (0.2–4 m). At longer ranges or in outdoor bright light, structured light degrades.
 
-**LiDAR (Light Detection and Ranging)** emits laser pulses and measures time-of-flight to reconstruct precise 3D point clouds. A Velodyne HDL-64E generates 1.3 million points per second with centimetre-level accuracy and 360° horizontal field of view. LiDAR is robust to lighting conditions and long-range, but expensive and sparse — objects have far fewer LiDAR points than image pixels.
+**LiDAR (Light Detection and Ranging)** emits laser pulses and measures time-of-flight to reconstruct precise 3D point clouds. A Velodyne HDL-64E generates 1.3 million points per second with centimetre-level accuracy and 360° horizontal field of view. LiDAR is robust to lighting conditions and long-range, but expensive and sparse, objects have far fewer LiDAR points than image pixels.
 
-**Inertial Measurement Units (IMUs)** combine accelerometers and gyroscopes to measure linear acceleration and angular velocity at 100–1000 Hz. IMUs are lightweight, cheap, and fast — but suffer from integration drift. A small bias in the accelerometer grows to significant position error after a few seconds of dead-reckoning.
+**Inertial Measurement Units (IMUs)** combine accelerometers and gyroscopes to measure linear acceleration and angular velocity at 100–1000 Hz. IMUs are lightweight, cheap, and fast, but suffer from integration drift. A small bias in the accelerometer grows to significant position error after a few seconds of dead-reckoning.
 
 **Force/torque sensors** at the wrist measure contact forces in 6-DOF (3 forces, 3 torques). They are essential for compliant manipulation, assembly tasks, and safe human-robot interaction.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Sensor comparison at a glance — <strong>Camera</strong>: rich colour/texture, cheap, no direct depth; <strong>LiDAR</strong>: precise 3D geometry, 360° FOV, expensive, lighting-robust; <strong>RGB-D</strong>: colour + depth, short range only; <strong>IMU</strong>: 100–1000 Hz motion, lightweight, drifts fast; <strong>Force/torque</strong>: contact quality, essential for assembly but adds weight and cost. Real robots almost always fuse at least two of these modalities.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Sensor comparison at a glance, <strong>Camera</strong>: rich colour/texture, cheap, no direct depth; <strong>LiDAR</strong>: precise 3D geometry, 360° FOV, expensive, lighting-robust; <strong>RGB-D</strong>: colour + depth, short range only; <strong>IMU</strong>: 100–1000 Hz motion, lightweight, drifts fast; <strong>Force/torque</strong>: contact quality, essential for assembly but adds weight and cost. Real robots almost always fuse at least two of these modalities.</div>
 
 ## Calibration: Intrinsic and Extrinsic
 
@@ -101,7 +101,7 @@ toc_label: "Contents"
 
 where $$f_x, f_y$$ are focal lengths in pixels, $$(c_x, c_y)$$ is the principal point, and the extrinsic matrix $$[R \mid t]$$ maps world to camera coordinates. Lens distortion adds radial and tangential correction terms. Calibration uses checkerboard patterns (Zhang 2000) to solve for $$K$$ and distortion coefficients.
 
-**Extrinsic calibration** determines the rigid-body transform between sensor coordinate frames — e.g., the LiDAR-to-camera transform $$T_{LC} \in SE(3)$$. This is done by finding correspondences between 3D LiDAR points and 2D image points on a calibration target.
+**Extrinsic calibration** determines the rigid-body transform between sensor coordinate frames, e.g., the LiDAR-to-camera transform $$T_{LC} \in SE(3)$$. This is done by finding correspondences between 3D LiDAR points and 2D image points on a calibration target.
 
 ## Sensor Fusion: Kalman Filtering
 
@@ -119,7 +119,7 @@ The IMU provides high-rate predictions (predict step); GPS or visual odometry pr
 
 ### EKF Fusion Worked Example
 
-Suppose a robot is navigating at 1 m/s. Its IMU provides acceleration measurements at 200 Hz. After 1 second of pure dead-reckoning, a 0.01 m/s² accelerometer bias accumulates to **0.5 cm** position error — acceptable. After 10 seconds: **50 cm**. After 60 seconds: **18 m**. This is why GPS/visual corrections in the EKF update step are not optional; they reset drift before it compounds catastrophically.
+Suppose a robot is navigating at 1 m/s. Its IMU provides acceleration measurements at 200 Hz. After 1 second of pure dead-reckoning, a 0.01 m/s² accelerometer bias accumulates to **0.5 cm** position error, acceptable. After 10 seconds: **50 cm**. After 60 seconds: **18 m**. This is why GPS/visual corrections in the EKF update step are not optional; they reset drift before it compounds catastrophically.
 
 ## Point Cloud Processing
 
@@ -127,7 +127,7 @@ Raw LiDAR or RGBD data arrives as an **unordered point cloud** $$\mathcal{P} = \
 
 **PointNet** (Qi et al. 2017) solves this with a permutation-invariant architecture: apply a shared MLP to each point independently, then aggregate with a global max-pool. Despite its simplicity, PointNet achieves strong results on 3D object classification and segmentation. **PointNet++** extends this with hierarchical local feature aggregation using ball queries, capturing local geometry at multiple scales.
 
-**VoxelNet** discretises the point cloud into a regular voxel grid and applies 3D convolutions — more computationally expensive but captures local density structure. Modern LiDAR detectors (CenterPoint, VoxelNeXt) combine voxelisation with sparse convolutions for efficient inference.
+**VoxelNet** discretises the point cloud into a regular voxel grid and applies 3D convolutions, more computationally expensive but captures local density structure. Modern LiDAR detectors (CenterPoint, VoxelNeXt) combine voxelisation with sparse convolutions for efficient inference.
 
 <div class="insight-box"><strong>Key Insight:</strong> The move from hand-crafted sensor processing pipelines to learned representations (PointNet, learned stereo depth, learned IMU calibration) mirrors the broader trend in robotics: raw sensor data fed into neural networks outperforms carefully engineered feature extractors when sufficient training data is available.</div>
 

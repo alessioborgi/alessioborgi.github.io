@@ -6,7 +6,7 @@ categories: [cs-basics]
 book: cs-basics
 subsection: data-structures
 tags: [stacks, queues, heaps, priority-queue]
-excerpt: "A heap is a tree with no pointers — just an array and two index formulas — and building one from n items takes O(n), not O(n log n). The sum that proves it is the most quotable derivation in this book."
+excerpt: "A heap is a tree with no pointers, just an array and two index formulas, and building one from n items takes O(n), not O(n log n). The sum that proves it is the most quotable derivation in this book."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A stack is LIFO, a queue is FIFO, and swapping one for the other turns depth-first search into breadth-first search — that is the entire difference between the two traversals. A binary heap is a complete binary tree flattened into an array, where the children of \(i\) live at \(2i+1\) and \(2i+2\), giving \(O(\log n)\) worst-case push and pop and \(O(1)\) access to the minimum. Heapifying \(n\) items in place is \(\Theta(n)\), not \(\Theta(n\log n)\), because almost all nodes sit near the bottom and barely move.
+  <strong>TL;DR:</strong> A stack is LIFO, a queue is FIFO, and swapping one for the other turns depth-first search into breadth-first search, that is the entire difference between the two traversals. A binary heap is a complete binary tree flattened into an array, where the children of \(i\) live at \(2i+1\) and \(2i+2\), giving \(O(\log n)\) worst-case push and pop and \(O(1)\) access to the minimum. Heapifying \(n\) items in place is \(\Theta(n)\), not \(\Theta(n\log n)\), because almost all nodes sit near the bottom and barely move.
 </div>
 
 ## Stacks: last in, first out
@@ -48,15 +48,15 @@ In Python, use a plain `list`: `append` and `pop()` are the stack operations.
 
 ## Queues: first in, first out
 
-Enqueue at the back, dequeue at the front. FIFO processes things in arrival order, which is what you want for level-by-level exploration — [BFS](/blog/cs-basics/graphs-and-traversal/) visits vertices in non-decreasing distance from the source precisely because its frontier is a queue — and for producer/consumer pipelines such as a data loader's task queue.
+Enqueue at the back, dequeue at the front. FIFO processes things in arrival order, which is what you want for level-by-level exploration, [BFS](/blog/cs-basics/graphs-and-traversal/) visits vertices in non-decreasing distance from the source precisely because its frontier is a queue, and for producer/consumer pipelines such as a data loader's task queue.
 
 Do not use a `list` as a queue. `pop(0)` shifts every remaining element and is $$\Theta(n)$$, turning an $$O(V+E)$$ BFS into $$O(V^2)$$. Use `collections.deque`, a double-ended queue implemented as a doubly linked list of fixed-size blocks: `append`, `appendleft`, `pop` and `popleft` are all $$\Theta(1)$$ worst case, at the price of $$\Theta(n)$$ indexing in the middle.
 
-A deque subsumes both structures — and gives you sliding-window maxima, monotonic queues, and ring buffers via `deque(maxlen=k)`.
+A deque subsumes both structures, and gives you sliding-window maxima, monotonic queues, and ring buffers via `deque(maxlen=k)`.
 
 ## Heaps: a tree with no pointers
 
-A **binary heap** is a complete binary tree — every level full except possibly the last, which fills left to right — satisfying the heap property: every node is $$\le$$ both of its children (min-heap). Completeness means it can be stored in an array with no pointers at all:
+A **binary heap** is a complete binary tree, every level full except possibly the last, which fills left to right, satisfying the heap property: every node is $$\le$$ both of its children (min-heap). Completeness means it can be stored in an array with no pointers at all:
 
 <div class="formula-box">
 \[
@@ -120,9 +120,9 @@ A **binary heap** is a complete binary tree — every level full except possibly
     <text x="182" y="322">0</text><text x="237" y="322">1</text><text x="292" y="322">2</text>
     <text x="347" y="322">3</text><text x="402" y="322">4</text><text x="457" y="322">5</text>
   </g>
-  <text x="320" y="340" text-anchor="middle" font-size="9.5" fill="#0c4a6e">children of index i are at 2i+1 and 2i+2 — no pointers stored</text>
+  <text x="320" y="340" text-anchor="middle" font-size="9.5" fill="#0c4a6e">children of index i are at 2i+1 and 2i+2, no pointers stored</text>
 </svg>
-<figcaption>Notice that the tree edges are not stored anywhere: they are recomputed by arithmetic. Notice also that three of the six nodes are leaves — in general about half — and a leaf costs nothing to sift down, which is the whole reason build-heap is linear.</figcaption>
+<figcaption>Notice that the tree edges are not stored anywhere: they are recomputed by arithmetic. Notice also that three of the six nodes are leaves, in general about half, and a leaf costs nothing to sift down, which is the whole reason build-heap is linear.</figcaption>
 </figure>
 </div>
 
@@ -130,7 +130,7 @@ A **binary heap** is a complete binary tree — every level full except possibly
 
 ## Why build-heap is Θ(n)
 
-Heapifying an arbitrary array by pushing $$n$$ items one at a time costs $$O(n \log n)$$. Doing it bottom-up — sift down every node from the last internal node backwards — costs only $$\Theta(n)$$.
+Heapifying an arbitrary array by pushing $$n$$ items one at a time costs $$O(n \log n)$$. Doing it bottom-up, sift down every node from the last internal node backwards, costs only $$\Theta(n)$$.
 
 The argument is a counting one. In a heap of $$n$$ nodes there are at most $$\lceil n/2^{h+1}\rceil$$ nodes of height $$h$$, and sifting a node of height $$h$$ costs $$O(h)$$. So the total is
 
@@ -172,11 +172,11 @@ print(data)                            # a valid heap, NOT a sorted list
 `heapq` gives a **min-heap** only; for a max-heap, push negated keys. It has no decrease-key, so the usual pattern is to push a new entry and skip stale ones when popped ("lazy deletion").
 
 <div class="insight-box">
-  <strong>Key Insight — the restriction is what makes it fast.</strong> A sorted array also gives \(O(1)\) access to the minimum, but pays \(\Theta(n)\) per insertion to stay sorted. A heap maintains a far weaker invariant — each node beats its own children, and nothing is claimed about siblings or cousins — and that weakness is exactly what lets a repair touch only one root-to-leaf path. Partial order costs \(\log n\) to maintain; total order costs \(n\).
+  <strong>Key Insight, the restriction is what makes it fast.</strong> A sorted array also gives \(O(1)\) access to the minimum, but pays \(\Theta(n)\) per insertion to stay sorted. A heap maintains a far weaker invariant, each node beats its own children, and nothing is claimed about siblings or cousins, and that weakness is exactly what lets a repair touch only one root-to-leaf path. Partial order costs \(\log n\) to maintain; total order costs \(n\).
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — a heap is not sorted.</strong> <code>heap[0]</code> is the minimum, but <code>heap[1]</code> and <code>heap[2]</code> are in no particular order relative to the rest, and the array is not ascending. Finding the <em>maximum</em> of a min-heap is \(\Theta(n)\); getting sorted output costs \(n\) pops at \(\Theta(\log n)\) each. Two more: <code>heapq</code> functions assume the list is already a valid heap, so <code>heapify</code> first or the results are silently wrong; and <code>list.pop(0)</code> as a dequeue is \(\Theta(n)\), which quietly makes BFS quadratic.
+  <strong>Interview trap, a heap is not sorted.</strong> <code>heap[0]</code> is the minimum, but <code>heap[1]</code> and <code>heap[2]</code> are in no particular order relative to the rest, and the array is not ascending. Finding the <em>maximum</em> of a min-heap is \(\Theta(n)\); getting sorted output costs \(n\) pops at \(\Theta(\log n)\) each. Two more: <code>heapq</code> functions assume the list is already a valid heap, so <code>heapify</code> first or the results are silently wrong; and <code>list.pop(0)</code> as a dequeue is \(\Theta(n)\), which quietly makes BFS quadratic.
 </div>
 
 <div class="key-takeaways">
@@ -193,7 +193,7 @@ print(data)                            # a valid heap, NOT a sorted list
 ## References
 
 1. Williams, J. W. J. Algorithm 232: Heapsort. *Communications of the ACM* 7(6), 347–348, 1964.
-2. Floyd, R. W. Algorithm 245: Treesort 3. *Communications of the ACM* 7(12), 701, 1964 — the linear bottom-up construction.
-3. Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. [*Introduction to Algorithms*, 4th ed.](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/) MIT Press, 2022 — ch. 6.
-4. Python Software Foundation. [heapq — Heap queue algorithm](https://docs.python.org/3/library/heapq.html) and [collections.deque](https://docs.python.org/3/library/collections.html#collections.deque).
-5. CPython source. [Modules/_collectionsmodule.c](https://github.com/python/cpython/blob/main/Modules/_collectionsmodule.c) — the block-linked-list deque.
+2. Floyd, R. W. Algorithm 245: Treesort 3. *Communications of the ACM* 7(12), 701, 1964, the linear bottom-up construction.
+3. Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. [*Introduction to Algorithms*, 4th ed.](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/) MIT Press, 2022, ch. 6.
+4. Python Software Foundation. [heapq, Heap queue algorithm](https://docs.python.org/3/library/heapq.html) and [collections.deque](https://docs.python.org/3/library/collections.html#collections.deque).
+5. CPython source. [Modules/_collectionsmodule.c](https://github.com/python/cpython/blob/main/Modules/_collectionsmodule.c), the block-linked-list deque.

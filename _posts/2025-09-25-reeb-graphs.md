@@ -28,7 +28,7 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Imagine a mountain range as a terrain function \(f: M \to \mathbb{R}\) (height). At sea level you see one large island. As you raise the water level, the island splits into two peaks, then each peak becomes a smaller cap. The Reeb graph records exactly these events: each split or merge is a node, and each continuous "strand" between events is an edge. It is the minimal graph that captures how the topology of the terrain changes with height — a topological skeleton stripped of all geometric detail.
+Imagine a mountain range as a terrain function \(f: M \to \mathbb{R}\) (height). At sea level you see one large island. As you raise the water level, the island splits into two peaks, then each peak becomes a smaller cap. The Reeb graph records exactly these events: each split or merge is a node, and each continuous "strand" between events is an edge. It is the minimal graph that captures how the topology of the terrain changes with height, a topological skeleton stripped of all geometric detail.
 
 ## Definition
 
@@ -49,7 +49,7 @@ The quotient map \(\pi: M \to \mathcal{R}(f)\) induces a function \(\bar{f}: \ma
 - A merge = two components joining (a "death" of the younger one by the elder rule).
 - The merge tree is the Reeb graph restricted to \(H_0\).
 
-**Contour tree**: For \(f: M \to \mathbb{R}\) on a simply-connected domain (\(H_1 = 0\)), the Reeb graph is a tree — the contour tree. It can be computed as the "gluing" of the join tree and split tree.
+**Contour tree**: For \(f: M \to \mathbb{R}\) on a simply-connected domain (\(H_1 = 0\)), the Reeb graph is a tree, the contour tree. It can be computed as the "gluing" of the join tree and split tree.
 
 ## Connection to Persistence
 
@@ -66,13 +66,13 @@ Consider \(f: [0,1] \to \mathbb{R}\) on a 1D graph with two bumps:
 \(f = \underbrace{0.1}_{\text{valley}} \to \underbrace{0.8}_{\text{peak 1}} \to \underbrace{0.3}_{\text{saddle}} \to \underbrace{0.9}_{\text{peak 2}} \to \underbrace{0.05}_{\text{valley}}\)
 
 Sweep from bottom up:
-- \(f=0.05\): right valley appears — one component born.
-- \(f=0.1\): left valley appears — second component born.
-- \(f=0.3\): saddle — both components merge into one (elder rule: the one born at \(f=0.05\) survives; the \(f=0.1\) component dies, persistence \(= 0.3 - 0.1 = 0.2\)).
-- \(f=0.8\): peak 1 — sublevel set gains a new local max; no new component (already connected).
-- \(f=0.9\): peak 2 — global maximum.
+- \(f=0.05\): right valley appears, one component born.
+- \(f=0.1\): left valley appears, second component born.
+- \(f=0.3\): saddle, both components merge into one (elder rule: the one born at \(f=0.05\) survives; the \(f=0.1\) component dies, persistence \(= 0.3 - 0.1 = 0.2\)).
+- \(f=0.8\): peak 1, sublevel set gains a new local max; no new component (already connected).
+- \(f=0.9\): peak 2, global maximum.
 
-**Reeb graph**: two leaf nodes (the two valleys), one internal node (the saddle merge), and two leaf nodes at the peaks — forming a "Y then Y" shape. The merge tree records the single pair \((0.1, 0.3)\).
+**Reeb graph**: two leaf nodes (the two valleys), one internal node (the saddle merge), and two leaf nodes at the peaks, forming a "Y then Y" shape. The merge tree records the single pair \((0.1, 0.3)\).
 
 <style>
 @keyframes reeb-rise {
@@ -181,7 +181,7 @@ Sweep from bottom up:
 - **Shape analysis**: Reeb graphs of 3D meshes (height function) capture pose-invariant shape structure. Two poses of the same person have homeomorphic Reeb graphs.
 - **Data analysis (Mapper)**: The Mapper algorithm approximates the Reeb graph from a finite point cloud sample.
 
-<div class="insight-box"><strong>Key Insight:</strong> The merge tree is the "free" data structure you get from the persistence algorithm — every persistence computation on H₀ implicitly computes a merge tree. The contour tree and full Reeb graph go further by tracking also how components split (in the superlevel set direction). In machine learning, the merge tree is increasingly used as a "topology-aware" representation of scalar fields on graphs and images, where it captures more structure than a simple persistence diagram.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The merge tree is the "free" data structure you get from the persistence algorithm, every persistence computation on H₀ implicitly computes a merge tree. The contour tree and full Reeb graph go further by tracking also how components split (in the superlevel set direction). In machine learning, the merge tree is increasingly used as a "topology-aware" representation of scalar fields on graphs and images, where it captures more structure than a simple persistence diagram.</div>
 
 ## References
 

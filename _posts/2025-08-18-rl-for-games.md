@@ -6,7 +6,7 @@ book: rl
 subsection: applications
 tags: [DQN, AlphaGo, AlphaStar, games, superhuman-performance]
 published: false
-excerpt: "Games have been the proving ground for RL breakthroughs — from DQN's human-level Atari play to AlphaGo defeating world champions, AlphaStar mastering StarCraft II, and OpenAI Five conquering Dota 2."
+excerpt: "Games have been the proving ground for RL breakthroughs, from DQN's human-level Atari play to AlphaGo defeating world champions, AlphaStar mastering StarCraft II, and OpenAI Five conquering Dota 2."
 author_profile: true
 read_time: true
 is_overview: false
@@ -27,20 +27,20 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Games offer perfect sandboxes for RL research: clear objectives, fast simulation, and reliable evaluation. DQN demonstrated that deep RL could match humans on 49 Atari games. AlphaGo/Zero/MuZero achieved superhuman performance in Go, Chess, and Shogi. AlphaStar and OpenAI Five pushed RL into real-time strategy — imperfect information, vast action spaces, and long-horizon coordination.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Games offer perfect sandboxes for RL research: clear objectives, fast simulation, and reliable evaluation. DQN demonstrated that deep RL could match humans on 49 Atari games. AlphaGo/Zero/MuZero achieved superhuman performance in Go, Chess, and Shogi. AlphaStar and OpenAI Five pushed RL into real-time strategy, imperfect information, vast action spaces, and long-horizon coordination.</div>
 {% include figure image_path="/images/blog/rl/mnih2015_dqn.png" alt="RL for Atari games" caption="DQN superhuman performance on Atari (Mnih et al., 2015)" %}
 
 
 ## Intuition First: Games as Clean RL Laboratories
 
-Games have three properties that make them ideal RL benchmarks: (1) the reward is unambiguous — the score or win/loss is exactly what we want to maximise; (2) the simulator is fast — you can run millions of frames per second; and (3) human performance provides a clear evaluation target. These properties let researchers iterate quickly and measure progress precisely. Every major RL breakthrough has used a game as its proving ground before transferring the technique to harder real-world domains.
+Games have three properties that make them ideal RL benchmarks: (1) the reward is unambiguous, the score or win/loss is exactly what we want to maximise; (2) the simulator is fast, you can run millions of frames per second; and (3) human performance provides a clear evaluation target. These properties let researchers iterate quickly and measure progress precisely. Every major RL breakthrough has used a game as its proving ground before transferring the technique to harder real-world domains.
 
 <style>
 @keyframes bar-grow { from{height:0;} to{} }
 </style>
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 460 170" xmlns="http://www.w3.org/2000/svg" style="max-width:460px;width:100%;display:block;margin:auto;">
-  <text x="230" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#334155">RL Game Milestones — Difficulty vs. Year</text>
+  <text x="230" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#334155">RL Game Milestones, Difficulty vs. Year</text>
   <!-- Axis -->
   <line x1="40" y1="140" x2="440" y2="140" stroke="#94a3b8" stroke-width="1.5"/>
   <line x1="40" y1="20"  x2="40"  y2="140" stroke="#94a3b8" stroke-width="1.5"/>
@@ -90,7 +90,7 @@ DQN (Mnih et al. 2015) was the first demonstration that a single deep RL algorit
 
 <div class="math-box">y_t = r_t + γ max_{a'} Q_{θ⁻}(s_{t+1}, a')</div>
 
-DQN achieved human-level or superhuman performance on 29 of 49 Atari games, using only raw pixels and the game score — the same information available to a human player.
+DQN achieved human-level or superhuman performance on 29 of 49 Atari games, using only raw pixels and the game score, the same information available to a human player.
 
 ## AlphaGo: Mastering Go
 
@@ -100,7 +100,7 @@ Go was considered the holy grail of game AI: its branching factor (~250) and lon
 2. **Policy gradient self-play** to improve the policy beyond human level.
 3. **MCTS** guided by the policy network (for move selection) and a value network (for position evaluation).
 
-<div class="insight-box"><strong>Key Insight:</strong> AlphaGo's key innovation was using a value network to replace the expensive rollout phase in MCTS. Instead of simulating games to completion, a neural network directly estimates the win probability from a board position — collapsing the search horizon from hundreds of moves to a single forward pass.</div>
+<div class="insight-box"><strong>Key Insight:</strong> AlphaGo's key innovation was using a value network to replace the expensive rollout phase in MCTS. Instead of simulating games to completion, a neural network directly estimates the win probability from a board position, collapsing the search horizon from hundreds of moves to a single forward pass.</div>
 
 ## AlphaZero: Tabula Rasa Self-Play
 
@@ -108,7 +108,7 @@ AlphaZero (Silver et al. 2017) removed all human knowledge from AlphaGo: no expe
 
 <div class="math-box">(p, v) = f_θ(s)</div>
 
-Training is entirely self-play: MCTS with the current network generates training data, and gradient descent on the resulting (policy target, value target) pairs improves the network. AlphaZero surpassed AlphaGo, Stockfish (Chess), and Elmo (Shogi) — all from scratch, in hours of training.
+Training is entirely self-play: MCTS with the current network generates training data, and gradient descent on the resulting (policy target, value target) pairs improves the network. AlphaZero surpassed AlphaGo, Stockfish (Chess), and Elmo (Shogi), all from scratch, in hours of training.
 
 ## AlphaStar: StarCraft II
 
@@ -123,7 +123,7 @@ AlphaStar reached Grandmaster level, surpassing 99.8% of human players on the Eu
 
 ## OpenAI Five: Dota 2
 
-OpenAI Five (Berner et al. 2019) trained five PPO agents on Dota 2 — a cooperative multi-player game with a 45-minute horizon and 10,000+ possible actions per step. Using 128,000 CPU cores generating 900 years of self-play per day, OpenAI Five defeated the Dota 2 world champions in April 2019.
+OpenAI Five (Berner et al. 2019) trained five PPO agents on Dota 2, a cooperative multi-player game with a 45-minute horizon and 10,000+ possible actions per step. Using 128,000 CPU cores generating 900 years of self-play per day, OpenAI Five defeated the Dota 2 world champions in April 2019.
 
 ## The Broader Impact
 

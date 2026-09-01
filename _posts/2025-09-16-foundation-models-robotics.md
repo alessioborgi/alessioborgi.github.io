@@ -27,21 +27,21 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Foundation models — large models pre-trained on broad data — are entering robotics. RT-1 demonstrated that a Transformer trained on 130k diverse robot demonstrations generalises to novel tasks. RT-2 takes this further by co-fine-tuning a billion-parameter vision-language model on robot data, enabling emergent generalisation to instructions never seen in robot training. Open-source models like Octo and OpenVLA are making these capabilities accessible.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Foundation models, large models pre-trained on broad data, are entering robotics. RT-1 demonstrated that a Transformer trained on 130k diverse robot demonstrations generalises to novel tasks. RT-2 takes this further by co-fine-tuning a billion-parameter vision-language model on robot data, enabling emergent generalisation to instructions never seen in robot training. Open-source models like Octo and OpenVLA are making these capabilities accessible.</div>
 {% include figure image_path="/images/blog/robotics/brohan2023_rt2.png" alt="RT-2 vision-language-action model" caption="RT-2: Vision-Language-Action model for generalised robot control (Brohan et al., 2023)" %}
 
 
 ## The Case for Scale in Robot Learning
 
-**Intuition first.** A chef who has only ever cooked pasta will struggle with sushi. A chef who has cooked hundreds of dishes — pasta, sushi, curry, bread — develops transferable skills: knife technique, heat management, timing. The same logic applies to robot policies. A policy trained on 700 diverse tasks (RT-1) has learned *representations* of what "pick up" and "place in drawer" mean at a level that transfers to new objects, while a pasta-only policy has learned only pasta-specific muscle memory.
+**Intuition first.** A chef who has only ever cooked pasta will struggle with sushi. A chef who has cooked hundreds of dishes, pasta, sushi, curry, bread, develops transferable skills: knife technique, heat management, timing. The same logic applies to robot policies. A policy trained on 700 diverse tasks (RT-1) has learned *representations* of what "pick up" and "place in drawer" mean at a level that transfers to new objects, while a pasta-only policy has learned only pasta-specific muscle memory.
 
-Individually trained robot policies are brittle: a model trained to pick apples often fails on oranges. The success of large language models taught us that scale — more data, more parameters, more compute — enables emergent generalisation. The central question for robotics is: does the same principle apply when the "language" is actions?
+Individually trained robot policies are brittle: a model trained to pick apples often fails on oranges. The success of large language models taught us that scale, more data, more parameters, more compute, enables emergent generalisation. The central question for robotics is: does the same principle apply when the "language" is actions?
 
 The answer emerging from RT-1, RT-2, and their successors is: yes, but it requires large, diverse robot datasets and architectures that can absorb and transfer that diversity.
 
 ## RT-1: Transformer for Robot Learning
 
-**RT-1** (Brohan et al. 2022, arXiv:2212.06817) trained an 35M-parameter **EfficientNet + Transformer** architecture on a dataset of 130,000 demonstrations collected over 17 months by 13 robots in Google's office kitchens. Tasks spanned picking, placing, opening drawers, and knocking over objects — 700+ distinct tasks with natural language instructions.
+**RT-1** (Brohan et al. 2022, arXiv:2212.06817) trained an 35M-parameter **EfficientNet + Transformer** architecture on a dataset of 130,000 demonstrations collected over 17 months by 13 robots in Google's office kitchens. Tasks spanned picking, placing, opening drawers, and knocking over objects, 700+ distinct tasks with natural language instructions.
 
 The architecture:
 - An EfficientNet-B3 image encoder processes each camera frame.
@@ -55,9 +55,9 @@ a_t = argmax_a  p_theta(a | o_{t-5:t}, l)
 
 where $$o_{t-5:t}$$ is a stack of recent observations and $$l$$ is the language instruction.
 
-RT-1 achieved 97% success on seen tasks and, crucially, ~25% success on novel tasks not in the training set — demonstrating that broad training improves generalisation beyond specialised single-task models.
+RT-1 achieved 97% success on seen tasks and, crucially, ~25% success on novel tasks not in the training set, demonstrating that broad training improves generalisation beyond specialised single-task models.
 
-<div class="insight-box"><strong>Key Insight:</strong> The single most important finding from RT-1 is not the architecture — it is that scale and diversity of robot demonstrations matter. A policy trained across hundreds of tasks learns representations that transfer to new tasks, while a policy trained on a single task does not.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The single most important finding from RT-1 is not the architecture, it is that scale and diversity of robot demonstrations matter. A policy trained across hundreds of tasks learns representations that transfer to new tasks, while a policy trained on a single task does not.</div>
 
 <style>
 @keyframes tokenFlow {
@@ -110,11 +110,11 @@ RT-1 achieved 97% success on seen tasks and, crucially, ~25% success on novel ta
 
 The key insight: VLMs already encode rich semantic knowledge about objects, actions, and the physical world from internet-scale pre-training. By co-fine-tuning the VLM on robot data (web data and robot demonstrations simultaneously), RT-2 retains this general knowledge while acquiring robot-specific action generation.
 
-Results showed remarkable **emergent capabilities**: RT-2 could follow instructions like "move the banana to the correct country flag" (requiring reasoning about geography) without any robot demonstrations of this task — it transferred knowledge from the language pre-training.
+Results showed remarkable **emergent capabilities**: RT-2 could follow instructions like "move the banana to the correct country flag" (requiring reasoning about geography) without any robot demonstrations of this task, it transferred knowledge from the language pre-training.
 
 ## Open-Source: Octo and OpenVLA
 
-<div class="paper-box"><strong>Open-Source Ecosystem:</strong> RT-1 and RT-2 are proprietary. Octo (Ghosh et al. 2023) and OpenVLA (Kim et al. 2024) provide open-source generalist robot policies trained on the Open X-Embodiment dataset — a community effort aggregating robot demonstrations from 22 different research labs and embodiments.</div>
+<div class="paper-box"><strong>Open-Source Ecosystem:</strong> RT-1 and RT-2 are proprietary. Octo (Ghosh et al. 2023) and OpenVLA (Kim et al. 2024) provide open-source generalist robot policies trained on the Open X-Embodiment dataset, a community effort aggregating robot demonstrations from 22 different research labs and embodiments.</div>
 
 **Octo** is a 93M-parameter Transformer trained on 800k demonstrations across diverse robots. It supports language and goal-image conditioning, can be fine-tuned to new robots in minutes, and achieves competitive performance with proprietary models on standard benchmarks.
 
@@ -129,7 +129,7 @@ The core promise of foundation model approaches is systematic generalisation. Ev
 - Transfer across embodiments with brief fine-tuning
 - Exhibit emergent behaviours from language pre-training
 
-Remaining challenges include long-horizon tasks, precise manipulation, and the fundamental data bottleneck — even 130k demonstrations is tiny compared to the billions of tokens used to train language models.
+Remaining challenges include long-horizon tasks, precise manipulation, and the fundamental data bottleneck, even 130k demonstrations is tiny compared to the billions of tokens used to train language models.
 
 ## References
 

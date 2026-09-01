@@ -35,7 +35,7 @@ toc_label: "Contents"
 
 **Intuition first.** Think of learning to drive: you could try random steering until you accidentally stay in lane (RL with sparse reward), or you could sit next to an expert and copy what they do (imitation learning). Copying is far faster when good behaviour is easy to demonstrate but hard to describe with a score.
 
-Reinforcement learning requires a reward signal that can be difficult to specify for complex manipulation tasks — "pour water without spilling" is easy for a human to judge but hard to encode mathematically. Imitation learning sidesteps reward engineering by learning directly from expert demonstrations, making it practical for many real-world robotics tasks where human demonstrations are cheap to collect via teleoperation.
+Reinforcement learning requires a reward signal that can be difficult to specify for complex manipulation tasks, "pour water without spilling" is easy for a human to judge but hard to encode mathematically. Imitation learning sidesteps reward engineering by learning directly from expert demonstrations, making it practical for many real-world robotics tasks where human demonstrations are cheap to collect via teleoperation.
 
 <style>
 @keyframes slideDemo {
@@ -81,13 +81,13 @@ Reinforcement learning requires a reward signal that can be difficult to specify
 L(θ) = E_{(s,a) ~ D} [ -log π_θ(a | s) ]
 </div>
 
-BC is appealing in its simplicity and can be implemented with any standard supervised learning toolkit. In practice, it achieves surprisingly strong results on tasks with limited variation — robotic arm reaching, simple pick-and-place — when sufficient demonstrations are provided.
+BC is appealing in its simplicity and can be implemented with any standard supervised learning toolkit. In practice, it achieves surprisingly strong results on tasks with limited variation, robotic arm reaching, simple pick-and-place, when sufficient demonstrations are provided.
 
 ## The Covariate Shift Problem
 
-Despite its simplicity, BC has a fundamental flaw: **covariate shift**. During training, the policy sees states visited by the expert. During deployment, small prediction errors shift the state distribution slightly. The policy is now in states it has never seen, leading to more errors, further state shift, and ultimately catastrophic failure — even though the original training error was small.
+Despite its simplicity, BC has a fundamental flaw: **covariate shift**. During training, the policy sees states visited by the expert. During deployment, small prediction errors shift the state distribution slightly. The policy is now in states it has never seen, leading to more errors, further state shift, and ultimately catastrophic failure, even though the original training error was small.
 
-<div class="insight-box"><strong>Key Insight:</strong> BC's compounding error problem is not about fitting the training data well — it is about generalising to the distribution of states that the learner's own mistakes create. A policy with 1% error per step accumulates O(T²) total error over a horizon of T steps.</div>
+<div class="insight-box"><strong>Key Insight:</strong> BC's compounding error problem is not about fitting the training data well, it is about generalising to the distribution of states that the learner's own mistakes create. A policy with 1% error per step accumulates O(T²) total error over a horizon of T steps.</div>
 
 This is made formal in Ross et al. (2011): the expected loss of a BC policy over a trajectory of length \(T\) is bounded by \(O(\epsilon T^2)\) where \(\epsilon\) is the per-step imitation error, compared to \(O(\epsilon T)\) for an oracle with interactive corrections.
 
@@ -154,11 +154,11 @@ By training on states encountered by the learner (not just the expert), DAgger r
 min_π max_D  E_π[log D(s,a)] + E_{π*}[log(1 - D(s,a))]
 </div>
 
-The discriminator's output acts as a reward signal for the policy, which is optimised with any RL algorithm (typically TRPO or PPO). GAIL recovers the expert's state-action distribution without needing explicit access to the reward function — making it a powerful framework for learning from demonstrations in complex environments.
+The discriminator's output acts as a reward signal for the policy, which is optimised with any RL algorithm (typically TRPO or PPO). GAIL recovers the expert's state-action distribution without needing explicit access to the reward function, making it a powerful framework for learning from demonstrations in complex environments.
 
 ## Inverse Reinforcement Learning
 
-**Inverse RL (IRL)** takes a different angle: infer the expert's reward function from demonstrations, then use it to train a policy with standard RL. Maximum entropy IRL (Ziebart et al. 2008) recovers a reward $$R_\theta$$ such that the expert's trajectory distribution matches the distribution induced by the maximum-entropy policy under $$R_\theta$$. IRL is more interpretable than GAIL but computationally expensive — it requires solving an RL problem in an inner loop.
+**Inverse RL (IRL)** takes a different angle: infer the expert's reward function from demonstrations, then use it to train a policy with standard RL. Maximum entropy IRL (Ziebart et al. 2008) recovers a reward $$R_\theta$$ such that the expert's trajectory distribution matches the distribution induced by the maximum-entropy policy under $$R_\theta$$. IRL is more interpretable than GAIL but computationally expensive, it requires solving an RL problem in an inner loop.
 
 ## References
 

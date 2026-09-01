@@ -6,7 +6,7 @@ categories: [diffusion]
 book: diffusion
 subsection: flow-matching
 tags: [flow-matching, continuous-normalising-flows, generative-models, odes]
-excerpt: "Continuous normalising flows were elegant and nearly untrainable — every gradient step needed an ODE solve and a divergence estimate. Flow matching removes both by regressing a velocity field against a target you can write down in closed form, one example at a time."
+excerpt: "Continuous normalising flows were elegant and nearly untrainable, every gradient step needed an ODE solve and a divergence estimate. Flow matching removes both by regressing a velocity field against a target you can write down in closed form, one example at a time."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A continuous normalising flow turns noise into data by integrating a learned velocity field, but training one by maximum likelihood costs an ODE solve plus a divergence estimate per gradient step. Flow matching replaces that with plain regression: pick a probability path, write down the velocity field that generates it <em>for a single data point</em>, and regress against it. A short argument shows the conditional and the intractable marginal objectives have identical gradients. Diffusion turns out to be one particular — and curved — choice of path.
+  <strong>TL;DR:</strong> A continuous normalising flow turns noise into data by integrating a learned velocity field, but training one by maximum likelihood costs an ODE solve plus a divergence estimate per gradient step. Flow matching replaces that with plain regression: pick a probability path, write down the velocity field that generates it <em>for a single data point</em>, and regress against it. A short argument shows the conditional and the intractable marginal objectives have identical gradients. Diffusion turns out to be one particular, and curved, choice of path.
 </div>
 
 ## Flows you can sample from but cannot afford to train
@@ -32,7 +32,7 @@ A continuous normalising flow (CNF) defines a sample as the endpoint of an ODE. 
 \]
 </div>
 
-Here \\(\psi_t\\) is the *flow map* — where a starting point has moved to by time \\(t\\) — and the model distribution is the law of \\(\psi_1(x_0)\\). The appeal is that $$v_\theta$$ is unconstrained: any network defines a valid invertible map, with none of the triangular-Jacobian gymnastics of discrete normalising flows.
+Here \\(\psi_t\\) is the *flow map*, where a starting point has moved to by time \\(t\\), and the model distribution is the law of \\(\psi_1(x_0)\\). The appeal is that $$v_\theta$$ is unconstrained: any network defines a valid invertible map, with none of the triangular-Jacobian gymnastics of discrete normalising flows.
 
 The problem is training it. Fitting by maximum likelihood needs the density, which follows the instantaneous change-of-variables formula
 
@@ -42,7 +42,7 @@ The problem is training it. Fitting by maximum likelihood needs the density, whi
 \]
 </div>
 
-where $$\nabla \cdot v_\theta = \operatorname{tr}(\partial v_\theta / \partial x)$$ is the divergence. One log-likelihood therefore costs a full ODE solve plus a divergence estimate at every solver step — an exact trace needs \\(D\\) backward passes in \\(D\\) dimensions, and the usual Hutchinson estimator is cheaper but noisier. The solver sits *inside* the training loop.
+where $$\nabla \cdot v_\theta = \operatorname{tr}(\partial v_\theta / \partial x)$$ is the divergence. One log-likelihood therefore costs a full ODE solve plus a divergence estimate at every solver step, an exact trace needs \\(D\\) backward passes in \\(D\\) dimensions, and the usual Hutchinson estimator is cheaper but noisier. The solver sits *inside* the training loop.
 
 ## Regress the velocity instead
 
@@ -55,7 +55,7 @@ Suppose someone handed you a *probability path* \\(p_t\\) interpolating from noi
 \]
 </div>
 
-No solver, no divergence — one forward pass per sample. The catch is that neither \\(p_t\\) nor \\(u_t\\) is available: both are defined by the unknown data distribution.
+No solver, no divergence, one forward pass per sample. The catch is that neither \\(p_t\\) nor \\(u_t\\) is available: both are defined by the unknown data distribution.
 
 ## Conditioning makes the target computable
 
@@ -110,7 +110,7 @@ The cross term is where the definition of \\(u_t\\) earns its keep. Substituting
 which is precisely the cross term of $$\mathcal{L}_{\text{CFM}}$$. The only surviving difference is \\(\lVert u_t(x)\rVert^2\\) against \\(\lVert u_t(x\mid x_1)\rVert^2\\), and neither depends on \\(\theta\\). So $$\nabla_\theta \mathcal{L}_{\text{FM}} = \nabla_\theta \mathcal{L}_{\text{CFM}}$$: the two objectives differ by a constant and have the same minimiser.
 
 <div class="insight-box">
-  <strong>Key Insight — the network averages for you:</strong> the conditional targets are wildly inconsistent. The same point \(x_t\) can be produced from many different data points, each demanding a different velocity, so no network can fit them all. Squared error resolves the conflict in exactly the right way: the minimiser of an MSE is the conditional expectation, so the trained field converges to \(\mathbb{E}\!\left[u_t(x_t \mid x_1) \mid x_t = x\right]\) — which is the definition of the marginal field \(u_t(x)\). The averaging that looked intractable is done implicitly by the regression, not by you.
+  <strong>Key Insight, the network averages for you:</strong> the conditional targets are wildly inconsistent. The same point \(x_t\) can be produced from many different data points, each demanding a different velocity, so no network can fit them all. Squared error resolves the conflict in exactly the right way: the minimiser of an MSE is the conditional expectation, so the trained field converges to \(\mathbb{E}\!\left[u_t(x_t \mid x_1) \mid x_t = x\right]\), which is the definition of the marginal field \(u_t(x)\). The averaging that looked intractable is done implicitly by the regression, not by you.
 </div>
 
 ## The Gaussian probability path
@@ -136,7 +136,7 @@ u_t(x \mid x_1) = \frac{x_1 - (1-\sigma_{\min})\,x}{1 - (1-\sigma_{\min})\,t}
 \]
 </div>
 
-a *constant* velocity along each conditional path — the [rectified flow](/blog/diffusion/rectified-flow/) target. Here is the contrast in one dimension, with \\(x_0 = -1\\) and \\(x_1 = 2\\), against a variance-preserving path \\(x_t = \cos(\tfrac{\pi t}{2})x_0 + \sin(\tfrac{\pi t}{2})x_1\\):
+a *constant* velocity along each conditional path, the [rectified flow](/blog/diffusion/rectified-flow/) target. Here is the contrast in one dimension, with \\(x_0 = -1\\) and \\(x_1 = 2\\), against a variance-preserving path \\(x_t = \cos(\tfrac{\pi t}{2})x_0 + \sin(\tfrac{\pi t}{2})x_1\\):
 
 | \\(t\\) | linear \\(x_t\\) | linear \\(u_t\\) | VP \\(x_t\\) | VP \\(u_t\\) |
 |---|---|---|---|---|
@@ -146,7 +146,7 @@ a *constant* velocity along each conditional path — the [rectified flow](/blog
 | 0.75 | 1.250 | 3.000 | 1.465 | 2.654 |
 | 1.00 | 2.000 | 3.000 | 2.000 | 1.571 |
 
-Same endpoints, same framework, different geometry. The variance-preserving speed swings from 3.14 up to 3.50 and down to 1.57 — that variation is curvature, and curvature is what an ODE solver has to resolve with extra steps.
+Same endpoints, same framework, different geometry. The variance-preserving speed swings from 3.14 up to 3.50 and down to 1.57, that variation is curvature, and curvature is what an ODE solver has to resolve with extra steps.
 
 <div class="blog-figure">
 <figure>
@@ -190,12 +190,12 @@ Same endpoints, same framework, different geometry. The variance-preserving spee
     <marker id="fmArrM" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L0,5 L7,2.5z" fill="#c2410c"/></marker>
   </defs>
   <g font-size="10.5">
-    <text x="366" y="84" fill="#0e7490">uₜ(xₜ | x₁) — three conflicting targets</text>
-    <text x="366" y="140" fill="#c2410c" font-weight="700">uₜ(xₜ) — the average the network learns</text>
+    <text x="366" y="84" fill="#0e7490">uₜ(xₜ | x₁), three conflicting targets</text>
+    <text x="366" y="140" fill="#c2410c" font-weight="700">uₜ(xₜ), the average the network learns</text>
   </g>
   <text x="310" y="22" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">One point, many destinations</text>
 </svg>
-<figcaption>Notice that the conditional targets (teal) disagree at the same \(x_t\), and that the marginal velocity (orange) is shorter than any of them — averaging directions that point apart shrinks the result. The shrinkage measures how undecided the model still is about the destination, and it fades as \(t \to 1\) and the posterior over \(x_1\) concentrates on one point.</figcaption>
+<figcaption>Notice that the conditional targets (teal) disagree at the same \(x_t\), and that the marginal velocity (orange) is shorter than any of them, averaging directions that point apart shrinks the result. The shrinkage measures how undecided the model still is about the destination, and it fades as \(t \to 1\) and the posterior over \(x_1\) concentrates on one point.</figcaption>
 </figure>
 </div>
 
@@ -209,7 +209,7 @@ Training never touched a solver. Sampling is where one finally appears. Draw \\(
 \]
 </div>
 
-with any solver — Euler, midpoint, adaptive Runge–Kutta. The step count is now a *deployment* choice, decoupled from training, as it is for [DDIM](/blog/diffusion/ddim/), whose deterministic sampler is the same idea reached from the [score-based SDE](/blog/diffusion/score-based-sde/) direction. What flow matching adds is the freedom to design the path so that fewer steps suffice, which [rectified flow](/blog/diffusion/rectified-flow/) takes to its conclusion. For how the two formulations line up term by term, see [diffusion vs flow matching](/blog/diffusion/diffusion-vs-flow-matching/); for the corruption-based view they generalise, the [diffusion overview](/blog/diffusion/overview/).
+with any solver, Euler, midpoint, adaptive Runge–Kutta. The step count is now a *deployment* choice, decoupled from training, as it is for [DDIM](/blog/diffusion/ddim/), whose deterministic sampler is the same idea reached from the [score-based SDE](/blog/diffusion/score-based-sde/) direction. What flow matching adds is the freedom to design the path so that fewer steps suffice, which [rectified flow](/blog/diffusion/rectified-flow/) takes to its conclusion. For how the two formulations line up term by term, see [diffusion vs flow matching](/blog/diffusion/diffusion-vs-flow-matching/); for the corruption-based view they generalise, the [diffusion overview](/blog/diffusion/overview/).
 
 ## References
 

@@ -28,7 +28,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Any flow y on the edges of a simplicial complex decomposes as y = δ₀x + δ₁ᵀz + h where x is a node potential (gradient flow), z is a face potential (curl/rotational flow), and h is harmonic (non-exact, non-co-exact — topologically non-trivial). For graph sheaves, the decomposition uses the sheaf coboundary δ₀ and gives: node signals → sheaf gradient flows on edges; edge signals → sheaf-harmonic components; these components separate topological from geometric structure in graph data.
+<strong>TL;DR:</strong> Any flow y on the edges of a simplicial complex decomposes as y = δ₀x + δ₁ᵀz + h where x is a node potential (gradient flow), z is a face potential (curl/rotational flow), and h is harmonic (non-exact, non-co-exact, topologically non-trivial). For graph sheaves, the decomposition uses the sheaf coboundary δ₀ and gives: node signals → sheaf gradient flows on edges; edge signals → sheaf-harmonic components; these components separate topological from geometric structure in graph data.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2021_mpsn.png" alt="Hodge Laplacians on simplicial complex" caption="Hodge Laplacians on a simplicial complex: gradient, curl, harmonic (Bodnar et al., 2021)" %}
 
@@ -37,9 +37,9 @@ toc_label: "Contents"
 
 Imagine traffic flows on the roads of a city. Any traffic pattern can be split into three independent parts:
 
-1. **Gradient flow** — traffic driven by a pressure difference between intersections: cars flow from high-pressure areas to low-pressure areas along roads. This is like water running downhill. Remove the pressure gradient and this component vanishes.
-2. **Curl/rotational flow** — traffic circulating around city blocks in closed loops (e.g., a one-way roundabout). This component never builds up or dissipates — it just rotates.
-3. **Harmonic flow** — traffic that circulates around large-scale topological holes (e.g., the road network has a park in the middle that cars must drive around). This is neither a gradient (no pressure source) nor a small local curl — it is a global topological feature.
+1. **Gradient flow**, traffic driven by a pressure difference between intersections: cars flow from high-pressure areas to low-pressure areas along roads. This is like water running downhill. Remove the pressure gradient and this component vanishes.
+2. **Curl/rotational flow**, traffic circulating around city blocks in closed loops (e.g., a one-way roundabout). This component never builds up or dissipates, it just rotates.
+3. **Harmonic flow**, traffic that circulates around large-scale topological holes (e.g., the road network has a park in the middle that cars must drive around). This is neither a gradient (no pressure source) nor a small local curl, it is a global topological feature.
 
 The **Hodge decomposition** is precisely this split, applied to any graph signal. In sheaf diffusion: the gradient component of the input decays toward zero (diffusion resolves local disagreements); the harmonic component (H⁰ = ker Δ_F) is preserved; there is no "curl" component for a graph without triangles.
 
@@ -107,7 +107,7 @@ The **Hodge decomposition** is precisely this split, applied to any graph signal
     <marker id="hArr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7c3aed"/></marker>
   </defs>
 </svg>
-<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Hodge decomposition of a graph signal: the gradient component (left) is driven by a node-level potential and decays under sheaf diffusion. The harmonic component (right) circulates without a source and is preserved — it lives in ker(δ₀ᵀ), the co-closed subspace.</figcaption>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Hodge decomposition of a graph signal: the gradient component (left) is driven by a node-level potential and decays under sheaf diffusion. The harmonic component (right) circulates without a source and is preserved, it lives in ker(δ₀ᵀ), the co-closed subspace.</figcaption>
 </figure></div>
 
 ## The Classical Hodge Decomposition
@@ -119,9 +119,9 @@ y = δ₀ x + δ₁ᵀ z + h
 </div>
 
 where:
-- δ₀ x ∈ im(δ₀): the **gradient** component — y is the "gradient" of some node potential x ∈ ℝ^N
-- δ₁ᵀ z ∈ im(δ₁ᵀ): the **curl** component — y circulates around triangles (faces) with "face potential" z ∈ ℝ^T
-- h ∈ ker(δ₀ᵀ) ∩ ker(δ₁): the **harmonic** component — neither a gradient nor a curl
+- δ₀ x ∈ im(δ₀): the **gradient** component, y is the "gradient" of some node potential x ∈ ℝ^N
+- δ₁ᵀ z ∈ im(δ₁ᵀ): the **curl** component, y circulates around triangles (faces) with "face potential" z ∈ ℝ^T
+- h ∈ ker(δ₀ᵀ) ∩ ker(δ₁): the **harmonic** component, neither a gradient nor a curl
 
 The three components are orthogonal and their sum is unique. This is the graph version of the classical Helmholtz decomposition for vector fields.
 
@@ -146,7 +146,7 @@ L₁ = δ₀ δ₀ᵀ + δ₁ᵀ δ₁   (edge Hodge Laplacian)
 L₂ = δ₁ δ₁ᵀ   (face Laplacian)
 </div>
 
-The harmonic space for edges is ker(L₁) = ker(δ₀ᵀ) ∩ ker(δ₁) — the null space of the **edge Hodge Laplacian** L₁.
+The harmonic space for edges is ker(L₁) = ker(δ₀ᵀ) ∩ ker(δ₁), the null space of the **edge Hodge Laplacian** L₁.
 
 ## Hodge Decomposition for Sheaves
 
@@ -169,12 +169,12 @@ The harmonic space ker(δ₀ᵀ) = ker(Δ₁_F) where Δ₁_F = δ₀ δ₀ᵀ i
 
 For a flow y on the edges (e.g., traffic flow, communication, energy transfer):
 
-**Gradient component** δ₀ x: the flow is driven by a "pressure gradient" x at the nodes — like water flowing from high to low pressure. This is conservative (no cycles, follows the gradient of a scalar field). In the sheaf setting, x is a 0-cochain (node stalk assignment) and δ₀ x measures the disagreement induced by x.
+**Gradient component** δ₀ x: the flow is driven by a "pressure gradient" x at the nodes, like water flowing from high to low pressure. This is conservative (no cycles, follows the gradient of a scalar field). In the sheaf setting, x is a 0-cochain (node stalk assignment) and δ₀ x measures the disagreement induced by x.
 
-**Harmonic component** h: the flow has no pressure source — it circulates "around topological holes" in the graph. For a graph with g independent cycles, the harmonic space has dimension g (one harmonic mode per cycle).
+**Harmonic component** h: the flow has no pressure source, it circulates "around topological holes" in the graph. For a graph with g independent cycles, the harmonic space has dimension g (one harmonic mode per cycle).
 
 <div class="insight-box">
-<strong>For graph learning:</strong> The gradient component of an edge signal contains no topological information — it can be "explained" by node potentials. The harmonic component captures the genuinely topological structure of the flow, which cannot be recovered from nodes alone. Sheaf GNNs that process edge stalks can learn from harmonic components that node-only models miss.
+<strong>For graph learning:</strong> The gradient component of an edge signal contains no topological information, it can be "explained" by node potentials. The harmonic component captures the genuinely topological structure of the flow, which cannot be recovered from nodes alone. Sheaf GNNs that process edge stalks can learn from harmonic components that node-only models miss.
 </div>
 
 ## Application: Learning on Edge Flows
@@ -193,7 +193,7 @@ For edge-signal datasets, the appropriate model uses L₁ = δ₀ δ₀ᵀ (down
 dY/dt = −Δ₁_F Y   where Δ₁_F = δ₀ δ₀ᵀ  ∈ ℝ^{Ed × Ed}
 </div>
 
-This diffuses edge-stalk signals using the down-Laplacian — the sheaf generalisation of the edge Hodge Laplacian.
+This diffuses edge-stalk signals using the down-Laplacian, the sheaf generalisation of the edge Hodge Laplacian.
 
 ## Simplicial Sheaf Complexes
 
@@ -208,15 +208,15 @@ The Hodge Laplacians at each level become **sheaf Hodge Laplacians**:
 Δ^k_F = δ_{k-1} δ_{k-1}ᵀ + δ_k^ᵀ δ_k
 </div>
 
-The k-th cohomology H^k(K, F) measures the k-dimensional "holes" in the sheaf — generalising both H⁰ (global sections) and H¹ (edge-level obstructions).
+The k-th cohomology H^k(K, F) measures the k-dimensional "holes" in the sheaf, generalising both H⁰ (global sections) and H¹ (edge-level obstructions).
 
 ## Connection to Topological Deep Learning
 
-Bodnar et al. (2021) introduced **CW Networks** and **Cellular Isomorphism Networks** — GNNs that operate on CW complexes (which subsume simplicial complexes). These use message passing across cells of different dimensions, analogous to sheaf diffusion across different cochain levels.
+Bodnar et al. (2021) introduced **CW Networks** and **Cellular Isomorphism Networks**, GNNs that operate on CW complexes (which subsume simplicial complexes). These use message passing across cells of different dimensions, analogous to sheaf diffusion across different cochain levels.
 
 The connection: a sheaf on a CW complex provides the restriction maps between cells of adjacent dimension. CW-Net message passing is sheaf diffusion on the CW complex sheaf.
 
-**Giusti et al. (2023)** formalise this connection as **Topological Deep Learning** — a unified framework where:
+**Giusti et al. (2023)** formalise this connection as **Topological Deep Learning**, a unified framework where:
 - Node signals → C⁰ sheaf cochains
 - Edge signals → C¹ sheaf cochains
 - Triangle signals → C² sheaf cochains
@@ -236,12 +236,12 @@ Sheaf diffusion acts as:
 - X₀^{harm} preserved (in null space)
 - X₀^{grad} attenuated (gradient component decays)
 
-The **harmonic component X₀^{harm}** is the "globally consistent" part of the input — already a global section. The **gradient component X₀^{grad}** is the "inconsistent" part — diffusion tries to resolve it toward consistency.
+The **harmonic component X₀^{harm}** is the "globally consistent" part of the input, already a global section. The **gradient component X₀^{grad}** is the "inconsistent" part, diffusion tries to resolve it toward consistency.
 
 For heterophily: the optimal node features for classification may be in X₀^{grad} for some graphs and X₀^{harm} for others. NSD with general maps can adapt the null space to make the task-optimal features harmonic.
 
 ## References
 
-- Jiang, X., Lim, L.-H., Yao, Y., & Ye, Y. (2011). [Statistical Ranking and Combinatorial Hodge Theory](https://arxiv.org/abs/0811.1067). *Mathematical Programming 2011* (the graph Hodge decomposition applied to ranking and preference data — foundational for edge-flow analysis on graphs).
-- Bodnar, C., Frasca, F., Wang, Y. G., Otter, N., Montufar, G. F., Liò, P., & Bronstein, M. M. (2021). [Weisfeiler and Lehman Go Topological: Message Passing Simplicial Networks](https://arxiv.org/abs/2103.03212). *ICML 2021* (MPSN: message passing on simplicial complexes — the precursor to sheaf-on-simplicial-complexes models).
+- Jiang, X., Lim, L.-H., Yao, Y., & Ye, Y. (2011). [Statistical Ranking and Combinatorial Hodge Theory](https://arxiv.org/abs/0811.1067). *Mathematical Programming 2011* (the graph Hodge decomposition applied to ranking and preference data, foundational for edge-flow analysis on graphs).
+- Bodnar, C., Frasca, F., Wang, Y. G., Otter, N., Montufar, G. F., Liò, P., & Bronstein, M. M. (2021). [Weisfeiler and Lehman Go Topological: Message Passing Simplicial Networks](https://arxiv.org/abs/2103.03212). *ICML 2021* (MPSN: message passing on simplicial complexes, the precursor to sheaf-on-simplicial-complexes models).
 - Giusti, G., Battiloro, C., Testa, L., Di Lorenzo, P., Sardellitti, S., & Barbarossa, S. (2023). [Cell Attention Networks](https://arxiv.org/abs/2209.08179). *arXiv 2023* (CAN: attention on cellular complexes, related to sheaf attention on higher-order structures).

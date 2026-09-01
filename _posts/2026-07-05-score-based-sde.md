@@ -6,7 +6,7 @@ categories: [diffusion]
 book: diffusion
 subsection: formulations
 tags: [diffusion, score-matching, sde, probability-flow-ode]
-excerpt: "Noise prediction and score estimation are the same network in different units. Taking the step size to zero turns the whole method into a stochastic differential equation — and reveals a deterministic ODE with identical marginals hiding inside it."
+excerpt: "Noise prediction and score estimation are the same network in different units. Taking the step size to zero turns the whole method into a stochastic differential equation, and reveals a deterministic ODE with identical marginals hiding inside it."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The score \(\nabla_{\mathbf{x}}\log p(\mathbf{x})\) can be estimated without ever touching the normalising constant, and for a Gaussian perturbation kernel the optimal estimator is exactly \(-\boldsymbol{\epsilon}_\theta/\sqrt{1-\bar{\alpha}_t}\) — so a DDPM already <em>is</em> a score model. Letting the step size go to zero makes the forward chain a stochastic differential equation, of which DDPM is the variance-preserving discretisation. Every SDE has an associated probability-flow ODE with the same marginals at every time, which buys deterministic sampling and exact likelihoods.
+  <strong>TL;DR:</strong> The score \(\nabla_{\mathbf{x}}\log p(\mathbf{x})\) can be estimated without ever touching the normalising constant, and for a Gaussian perturbation kernel the optimal estimator is exactly \(-\boldsymbol{\epsilon}_\theta/\sqrt{1-\bar{\alpha}_t}\), so a DDPM already <em>is</em> a score model. Letting the step size go to zero makes the forward chain a stochastic differential equation, of which DDPM is the variance-preserving discretisation. Every SDE has an associated probability-flow ODE with the same marginals at every time, which buys deterministic sampling and exact likelihoods.
 </div>
 
 ## Why the score, and not the density
@@ -31,7 +31,7 @@ Fitting a density means dealing with $$p_\theta(\mathbf{x}) = \tilde{p}_\theta(\
 \]
 </div>
 
-The score is a vector field pointing towards higher density — locally, the direction in which the image becomes more plausible. Knowing it everywhere is enough to sample, via **Langevin dynamics**:
+The score is a vector field pointing towards higher density, locally, the direction in which the image becomes more plausible. Knowing it everywhere is enough to sample, via **Langevin dynamics**:
 
 <div class="formula-box">
 \[
@@ -42,7 +42,7 @@ The score is a vector field pointing towards higher density — locally, the dir
 
 Gradient ascent on log-density, with injected noise that stops the chain from collapsing onto a mode; as $$\delta\to0$$ and $$k\to\infty$$ the iterates are distributed according to $$p$$.
 
-Run naively this fails badly. Real data sits near a low-dimensional manifold, so $$\nabla\log p$$ is undefined off it and the estimate is unreliable anywhere the training data was sparse — which is almost everywhere the chain starts. Song & Ermon's fix was to estimate the score of *noised* versions of the data at many noise levels, and anneal from high noise to low. That is the same annealing structure as diffusion, arrived at from the other direction.
+Run naively this fails badly. Real data sits near a low-dimensional manifold, so $$\nabla\log p$$ is undefined off it and the estimate is unreliable anywhere the training data was sparse, which is almost everywhere the chain starts. Song & Ermon's fix was to estimate the score of *noised* versions of the data at many noise levels, and anneal from high noise to low. That is the same annealing structure as diffusion, arrived at from the other direction.
 
 ## The identity that connects the two views
 
@@ -81,9 +81,9 @@ Write $$\beta_i = \beta(t)\Delta t$$ with $$\Delta t = 1/N$$ and expand $$\sqrt{
 \]
 </div>
 
-*Variance preserving* because the drift's contraction exactly cancels the injected noise, holding the marginal variance at 1 — the continuous statement of [why the shrink factor is needed](/blog/diffusion/forward-process/). DDPM's linear schedule with $$T=1000$$ corresponds to $$\beta(t) = 0.1 + t(20-0.1)$$ for $$t\in[0,1]$$, since $$1000\times10^{-4}=0.1$$ and $$1000\times0.02=20$$.
+*Variance preserving* because the drift's contraction exactly cancels the injected noise, holding the marginal variance at 1, the continuous statement of [why the shrink factor is needed](/blog/diffusion/forward-process/). DDPM's linear schedule with $$T=1000$$ corresponds to $$\beta(t) = 0.1 + t(20-0.1)$$ for $$t\in[0,1]$$, since $$1000\times10^{-4}=0.1$$ and $$1000\times0.02=20$$.
 
-The VE-SDE has no drift at all: $$\mathbf{x}_t = \mathbf{x}_0 + \sigma(t)\mathbf{z}$$, with $$\sigma$$ growing geometrically over several orders of magnitude. This is the continuous limit of Song & Ermon's noise-conditional score networks, and it is where the two lineages meet — the same reverse-time machinery covers both.
+The VE-SDE has no drift at all: $$\mathbf{x}_t = \mathbf{x}_0 + \sigma(t)\mathbf{z}$$, with $$\sigma$$ growing geometrically over several orders of magnitude. This is the continuous limit of Song & Ermon's noise-conditional score networks, and it is where the two lineages meet, the same reverse-time machinery covers both.
 
 <div class="blog-figure">
 <figure>
@@ -108,8 +108,8 @@ The VE-SDE has no drift at all: $$\mathbf{x}_t = \mathbf{x}_0 + \sigma(t)\mathbf
   <text x="22" y="88" text-anchor="middle" font-size="10" fill="#334155" transform="rotate(-90 22 88)">marginal variance</text>
   <line x1="70" y1="90" x2="600" y2="90" stroke="#0e7490" stroke-width="2.2"/>
   <line x1="70" y1="150" x2="600" y2="39" stroke="#c2410c" stroke-width="2.2"/>
-  <text x="300" y="84" font-size="10.5" font-weight="700" fill="#0e7490">VP-SDE — variance pinned at 1</text>
-  <text x="330" y="112" font-size="10.5" font-weight="700" fill="#c2410c">VE-SDE — σ: 0.01 → 50</text>
+  <text x="300" y="84" font-size="10.5" font-weight="700" fill="#0e7490">VP-SDE, variance pinned at 1</text>
+  <text x="330" y="112" font-size="10.5" font-weight="700" fill="#c2410c">VE-SDE, σ: 0.01 → 50</text>
 </svg>
 <figcaption>Both processes end at a distribution that has forgotten the data, but by opposite routes. Notice that the VP prior is the fixed \(\mathcal{N}(\mathbf{0},\mathbf{I})\) regardless of the schedule, whereas the VE prior depends on \(\sigma_{\max}\) and must be large enough to swamp the data scale.</figcaption>
 </figure>
@@ -125,7 +125,7 @@ d\mathbf{x} = \big[f(\mathbf{x},t) - g(t)^2\nabla_{\mathbf{x}}\log p_t(\mathbf{x
 \]
 </div>
 
-Substituting our estimator makes this simulable, and the DDPM sampler is one particular discretisation of it. But there is a second object with the same marginals — the **probability-flow ODE**, obtained by halving the score coefficient and deleting the noise:
+Substituting our estimator makes this simulable, and the DDPM sampler is one particular discretisation of it. But there is a second object with the same marginals, the **probability-flow ODE**, obtained by halving the score coefficient and deleting the noise:
 
 <div class="formula-box">
 \[
@@ -135,7 +135,7 @@ Substituting our estimator makes this simulable, and the DDPM sampler is one par
 \]
 </div>
 
-The distributions $$p_t$$ match those of the SDE at every $$t$$; only the individual trajectories differ. Three things follow. Sampling becomes deterministic, so a latent $$\mathbf{x}_T$$ names one image and the map is invertible — the property [DDIM](/blog/diffusion/ddim/) exploits. Any black-box ODE solver applies, so adaptive higher-order methods can cut the step count. And because it is a continuous normalising flow, the instantaneous change-of-variables formula gives the *exact* likelihood, up to the divergence estimate:
+The distributions $$p_t$$ match those of the SDE at every $$t$$; only the individual trajectories differ. Three things follow. Sampling becomes deterministic, so a latent $$\mathbf{x}_T$$ names one image and the map is invertible, the property [DDIM](/blog/diffusion/ddim/) exploits. Any black-box ODE solver applies, so adaptive higher-order methods can cut the step count. And because it is a continuous normalising flow, the instantaneous change-of-variables formula gives the *exact* likelihood, up to the divergence estimate:
 
 <div class="formula-box">
 \[
@@ -146,7 +146,7 @@ The distributions $$p_t$$ match those of the SDE at every $$t$$; only the indivi
 with the divergence estimated by Hutchinson's trace trick. Unlike the ELBO this is not a bound.
 
 <div class="insight-box">
-  <strong>Key Insight — the model is the vector field, not the sampler:</strong> training gives a single object, the time-indexed score field. DDPM, DDIM, ancestral sampling, Heun and Runge–Kutta solvers, and likelihood evaluation are all read-outs of that one field. Nothing about the training objective privileges the stochastic reverse chain — it was simply the first discretisation anyone wrote down, and it is not the efficient one.
+  <strong>Key Insight, the model is the vector field, not the sampler:</strong> training gives a single object, the time-indexed score field. DDPM, DDIM, ancestral sampling, Heun and Runge–Kutta solvers, and likelihood evaluation are all read-outs of that one field. Nothing about the training objective privileges the stochastic reverse chain, it was simply the first discretisation anyone wrote down, and it is not the efficient one.
 </div>
 
 ## References

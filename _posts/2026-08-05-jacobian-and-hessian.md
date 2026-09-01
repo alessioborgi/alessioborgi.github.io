@@ -6,7 +6,7 @@ categories: [math-basics]
 book: math-basics
 subsection: calculus
 tags: [jacobian, hessian, curvature, second-order-methods]
-excerpt: "The Jacobian tells you how a map distorts volume — which is exactly the term normalising flows have to pay. The Hessian tells you the shape of the valley you are descending. Both are indispensable to reason with and, at a billion parameters, hopeless to form."
+excerpt: "The Jacobian tells you how a map distorts volume, which is exactly the term normalising flows have to pay. The Hessian tells you the shape of the valley you are descending. Both are indispensable to reason with and, at a billion parameters, hopeless to form."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The Jacobian is the matrix of the derivative of a vector-valued map, and its determinant is the local volume-scaling factor — which is why a change of variables pays a \(\log\lvert\det J\rvert\) term, and why normalising flows are architected so that determinant is cheap. The Hessian is the matrix of second derivatives; its eigenvalues are curvatures, and a stationary point is a minimum only when they are all positive. Newton's method uses the Hessian to become scale-invariant and locally quadratic, but at \(10^9\) parameters you can neither store it nor solve with it, so quasi-Newton methods reconstruct curvature from gradient differences instead.
+  <strong>TL;DR:</strong> The Jacobian is the matrix of the derivative of a vector-valued map, and its determinant is the local volume-scaling factor, which is why a change of variables pays a \(\log\lvert\det J\rvert\) term, and why normalising flows are architected so that determinant is cheap. The Hessian is the matrix of second derivatives; its eigenvalues are curvatures, and a stationary point is a minimum only when they are all positive. Newton's method uses the Hessian to become scale-invariant and locally quadratic, but at \(10^9\) parameters you can neither store it nor solve with it, so quasi-Newton methods reconstruct curvature from gradient differences instead.
 </div>
 
 ## The Jacobian
@@ -51,7 +51,7 @@ or, in the form that actually appears in code,
 \]
 </div>
 
-Read it as an accounting identity: if $$f$$ expands a neighbourhood, the same probability mass is spread over more volume, so the density there must drop — hence the subtraction.
+Read it as an accounting identity: if $$f$$ expands a neighbourhood, the same probability mass is spread over more volume, so the density there must drop, hence the subtraction.
 
 This single term dictates the design of normalising flows. A general $$\det J$$ costs $$O(n^3)$$ to evaluate and is recomputed every training step, which is fatal. The fix is architectural: make $$J$$ triangular. An affine coupling layer splits the input and writes
 
@@ -69,7 +69,7 @@ where $$s$$ and $$t$$ are arbitrary networks. Because $$y_1$$ ignores $$x_2$$, t
 \]
 </div>
 
-an $$O(n)$$ sum. The networks $$s$$ and $$t$$ can be as expressive as you like and never appear in the determinant — the expensive term was engineered away, not approximated.
+an $$O(n)$$ sum. The networks $$s$$ and $$t$$ can be as expressive as you like and never appear in the determinant, the expensive term was engineered away, not approximated.
 
 ## The Hessian and curvature
 
@@ -102,7 +102,7 @@ H = \begin{pmatrix} 2 & 4 \\ 4 & 2\end{pmatrix},
 Both diagonal entries are positive, yet the matrix is indefinite and the origin is a saddle. Check it directly: along the eigenvector $$(1,1)$$, $$f(t,t) = 6t^2$$ rises; along $$(1,-1)$$, $$f(t,-t) = -2t^2$$ falls.
 
 <div class="warning-box">
-  <strong>Interview trap — positive diagonal is not positive definite.</strong> The example above has \(H_{11}, H_{22} > 0\) and is still indefinite, because \(\det H = 4 - 16 = -12 < 0\). Definiteness is a statement about eigenvalues (or all leading principal minors), never about the diagonal alone. The related trap: \(\nabla f = 0\) alone establishes nothing — in high dimensions almost every stationary point of a deep network's loss is a saddle rather than a local minimum.
+  <strong>Interview trap, positive diagonal is not positive definite.</strong> The example above has \(H_{11}, H_{22} > 0\) and is still indefinite, because \(\det H = 4 - 16 = -12 < 0\). Definiteness is a statement about eigenvalues (or all leading principal minors), never about the diagonal alone. The related trap: \(\nabla f = 0\) alone establishes nothing, in high dimensions almost every stationary point of a deep network's loss is a saddle rather than a local minimum.
 </div>
 
 ## Newton's method, and why it loses
@@ -115,7 +115,7 @@ x_{k+1} = x_k - H(x_k)^{-1}\nabla f(x_k).
 \]
 </div>
 
-Two genuine advantages. It converges quadratically near a nondegenerate minimum — the number of correct digits roughly doubles per iteration. And it is affine invariant: reparameterise $$x \mapsto Px$$ and the iterates are unchanged, which repairs precisely the scale-sensitivity that makes plain gradient descent suffer on ill-conditioned problems.
+Two genuine advantages. It converges quadratically near a nondegenerate minimum, the number of correct digits roughly doubles per iteration. And it is affine invariant: reparameterise $$x \mapsto Px$$ and the iterates are unchanged, which repairs precisely the scale-sensitivity that makes plain gradient descent suffer on ill-conditioned problems.
 
 Three reasons it is nonetheless rare in deep learning:
 
@@ -135,10 +135,10 @@ B_{k+1}\, s_k = y_k, \qquad s_k = x_{k+1}-x_k,\quad y_k = \nabla f(x_{k+1}) - \n
 
 which is a finite-difference statement about curvature along the direction just travelled: gradients that changed a lot mean high curvature. L-BFGS goes further and stores only the last $$m$$ pairs $$(s_k, y_k)$$, typically $$m$$ between 5 and 20, reconstructing the step in $$O(mn)$$ time and memory. You get superlinear convergence in practice at roughly the cost of a gradient.
 
-The honest caveat: the secant condition assumes the two gradients being differenced come from the *same* function. With minibatch gradients they do not, and the curvature pairs are corrupted by sampling noise. That is why L-BFGS is standard for deterministic, full-batch problems — logistic regression, CRFs, physics-informed fitting — and largely absent from stochastic deep learning, where cheap diagonal preconditioners such as Adam occupy the same niche.
+The honest caveat: the secant condition assumes the two gradients being differenced come from the *same* function. With minibatch gradients they do not, and the curvature pairs are corrupted by sampling noise. That is why L-BFGS is standard for deterministic, full-batch problems, logistic regression, CRFs, physics-informed fitting, and largely absent from stochastic deep learning, where cheap diagonal preconditioners such as Adam occupy the same niche.
 
 <div class="insight-box">
-  <strong>Key Insight — curvature without the matrix:</strong> you rarely need \(H\) itself, only products \(Hv\). Since \(Hv = \nabla_x\bigl(\nabla f(x)^\top v\bigr)\), a Hessian–vector product is one reverse-mode pass over one forward-mode directional derivative — cost \(O(n)\), no \(n^2\) storage. Hessian-free optimisation, Gauss–Newton approximations and Hessian-based sharpness measures all live entirely on this fact.
+  <strong>Key Insight, curvature without the matrix:</strong> you rarely need \(H\) itself, only products \(Hv\). Since \(Hv = \nabla_x\bigl(\nabla f(x)^\top v\bigr)\), a Hessian–vector product is one reverse-mode pass over one forward-mode directional derivative, cost \(O(n)\), no \(n^2\) storage. Hessian-free optimisation, Gauss–Newton approximations and Hessian-based sharpness measures all live entirely on this fact.
 </div>
 
 <div class="key-takeaways">
@@ -146,7 +146,7 @@ The honest caveat: the secant condition assumes the two gradients being differen
   <ul>
     <li>\([J_f]_{ij} = \partial f_i/\partial x_j\); \(\det J\) is the local volume scaling factor.</li>
     <li>Change of variables costs \(-\log\lvert\det J\rvert\); coupling layers make \(J\) triangular so the term is an \(O(n)\) sum.</li>
-    <li>The Hessian is symmetric, its eigenvalues are curvatures, and a stationary point is a minimum only if all of them are positive — the diagonal alone tells you nothing.</li>
+    <li>The Hessian is symmetric, its eigenvalues are curvatures, and a stationary point is a minimum only if all of them are positive, the diagonal alone tells you nothing.</li>
     <li>Newton's method is affine invariant and locally quadratic, but costs \(O(n^2)\) memory and \(O(n^3)\) per solve, and steps towards saddles when \(H\) is indefinite.</li>
     <li>L-BFGS reconstructs curvature from \(m\) recent gradient differences in \(O(mn)\); it degrades under minibatch noise, which is why deep learning uses diagonal preconditioners instead.</li>
   </ul>

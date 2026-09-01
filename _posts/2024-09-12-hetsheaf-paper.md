@@ -7,7 +7,7 @@ book: sheaf
 subsection: extensions
 tags: [sheaf-neural-networks, heterogeneous-graphs, graph-neural-networks]
 published: true
-excerpt: "HetSheaf encodes graph heterogeneity directly in the sheaf data structure — type-aware stalks and restriction maps conditioned on node and edge types — instead of specialised architectural components, achieving +2pp on HGB with 10× fewer parameters."
+excerpt: "HetSheaf encodes graph heterogeneity directly in the sheaf data structure, type-aware stalks and restriction maps conditioned on node and edge types, instead of specialised architectural components, achieving +2pp on HGB with 10× fewer parameters."
 author_profile: true
 read_time: true
 icon: "🌿"
@@ -63,14 +63,14 @@ toc_label: "Contents"
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/hetsheaf-paper.png" alt="First page of the Heterogeneous Sheaf Neural Networks paper" caption="Paper preview — Heterogeneous Sheaf Neural Networks (Braithwaite et al., 2024)." %}
+{% include figure image_path="/images/blog/papers/hetsheaf-paper.png" alt="First page of the Heterogeneous Sheaf Neural Networks paper" caption="Paper preview, Heterogeneous Sheaf Neural Networks (Braithwaite et al., 2024)." %}
 </div>
 
 ## The Problem: Heterogeneity is Expensive
 
 Real-world graphs are rarely uniform. In a knowledge graph, nodes can be *people*, *organisations*, or *concepts*; edges can be *authored*, *affiliated with*, or *cited*. This is **heterogeneity**: multiple node types and edge types, each with its own feature space.
 
-Existing heterogeneous GNNs — R-GCN, HAN, HGT — handle this by adding type-specific modules: one transformation matrix per relation type, one attention head per meta-path, or separate encoders per node type. The result is parameter bloat and architectural complexity that grows with the number of types.
+Existing heterogeneous GNNs, R-GCN, HAN, HGT, handle this by adding type-specific modules: one transformation matrix per relation type, one attention head per meta-path, or separate encoders per node type. The result is parameter bloat and architectural complexity that grows with the number of types.
 
 **HetSheaf** asks: can we encode heterogeneity in the *structure* rather than the *architecture*?
 
@@ -91,7 +91,7 @@ HetSheaf makes two changes:
 <div class="blog-figure blog-figure--stacked">
 <figure>
 <img src="/images/blog/papers/hetsheaf-overview.png" alt="HetSheaf framework overview comparing architecture-level heterogeneity with sheaf-level heterogeneity">
-<figcaption>Figure 1 — HetSheaf’s main overview contrasts the standard approach of baking heterogeneity into the architecture with the sheaf-based alternative: node and edge types are absorbed directly into local stalk spaces and restriction maps, so the propagation rule itself stays unified and geometry-aware.</figcaption>
+<figcaption>Figure 1, HetSheaf’s main overview contrasts the standard approach of baking heterogeneity into the architecture with the sheaf-based alternative: node and edge types are absorbed directly into local stalk spaces and restriction maps, so the propagation rule itself stays unified and geometry-aware.</figcaption>
 </figure>
 </div>
 
@@ -136,7 +136,7 @@ HetSheaf makes two changes:
   <line x1="260" y1="130" x2="360" y2="130" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrow-het)">
     <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1.4s" begin="0.4s" repeatCount="indefinite"/>
   </line>
-  <!-- Node A: Person — circle (blue) -->
+  <!-- Node A: Person, circle (blue) -->
   <circle cx="100" cy="130" r="28" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="2.5">
     <animate attributeName="r" values="28;33;28" dur="2.4s" repeatCount="indefinite"/>
     <animate attributeName="fill-opacity" values="0.18;0.08;0.18" dur="2.4s" repeatCount="indefinite"/>
@@ -146,7 +146,7 @@ HetSheaf makes two changes:
   <!-- Stalk box A -->
   <rect x="60" y="165" width="80" height="22" rx="4" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
   <text x="100" y="180" text-anchor="middle" fill="#1e40af" font-size="9" font-family="monospace">x_A∈ℝ²</text>
-  <!-- Node B: Org — rectangle (green) -->
+  <!-- Node B: Org, rectangle (green) -->
   <rect x="218" y="107" width="52" height="46" rx="7" fill="#22c55e" fill-opacity="0.15" stroke="#22c55e" stroke-width="2.5">
     <animate attributeName="fill-opacity" values="0.15;0.05;0.15" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
     <animate attributeName="stroke-width" values="2.5;4;2.5" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
@@ -156,7 +156,7 @@ HetSheaf makes two changes:
   <!-- Stalk box B -->
   <rect x="204" y="165" width="80" height="22" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
   <text x="244" y="180" text-anchor="middle" fill="#166534" font-size="9" font-family="monospace">x_B∈ℝ²</text>
-  <!-- Node C: Concept — diamond (orange) -->
+  <!-- Node C: Concept, diamond (orange) -->
   <polygon points="388,102 416,130 388,158 360,130" fill="#f97316" fill-opacity="0.15" stroke="#f97316" stroke-width="2.5">
     <animate attributeName="fill-opacity" values="0.15;0.05;0.15" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
     <animate attributeName="stroke-width" values="2.5;4;2.5" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
@@ -173,7 +173,7 @@ HetSheaf makes two changes:
   <text x="317" y="121" text-anchor="middle" fill="#92400e" font-size="9">F^{O→C}_{v→e}</text>
   <!-- Title -->
   <text x="240" y="22" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="700">HetSheaf: Type-Conditioned Restriction Maps</text>
-  <text x="240" y="38" text-anchor="middle" fill="#64748b" font-size="10">Each edge type gets a different learned linear map — no separate modules needed</text>
+  <text x="240" y="38" text-anchor="middle" fill="#64748b" font-size="10">Each edge type gets a different learned linear map, no separate modules needed</text>
   <!-- Legend -->
   <circle cx="72" cy="240" r="6" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.5"/>
   <text x="82" y="244" fill="#374151" font-size="9">Person node</text>
@@ -182,7 +182,7 @@ HetSheaf makes two changes:
   <polygon points="204,240 210,234 216,240 210,246" fill="#f97316" fill-opacity="0.4" stroke="#f97316" stroke-width="1.5"/>
   <text x="222" y="244" fill="#374151" font-size="9">Concept node</text>
 </svg>
-<figcaption>HetSheaf assigns a different restriction map per edge type. Three node types (person, org, concept) with different local geometries share one propagation rule — heterogeneity lives in the maps, not the architecture.</figcaption>
+<figcaption>HetSheaf assigns a different restriction map per edge type. Three node types (person, org, concept) with different local geometries share one propagation rule, heterogeneity lives in the maps, not the architecture.</figcaption>
 </figure>
 </div>
 
@@ -231,7 +231,7 @@ The restriction maps can be instantiated in different ways, giving a family of *
 <div class="blog-figure blog-figure--stacked">
 <figure>
 <img src="/images/blog/papers/hetsheaf-predictors.png" alt="Heterogeneous Sheaf Predictor variants including Sheaf-NSD, ensemble, NE, EE, TE, NT, ET, and types">
-<figcaption>Figure 2 — The Heterogeneous Sheaf Predictor family shows how expressive power increases as restriction maps are conditioned on richer typed context. The variants progressively inject node-type functions, edge-type functions, or both, making it clear that HetSheaf is a framework for typed local geometry rather than one fixed predictor.</figcaption>
+<figcaption>Figure 2, The Heterogeneous Sheaf Predictor family shows how expressive power increases as restriction maps are conditioned on richer typed context. The variants progressively inject node-type functions, edge-type functions, or both, making it clear that HetSheaf is a framework for typed local geometry rather than one fixed predictor.</figcaption>
 </figure>
 </div>
 
@@ -258,13 +258,13 @@ The key idea is: **align first, pool later**. That is what makes graph-level pre
 <div class="blog-figure blog-figure--stacked">
 <figure>
 <img src="/images/blog/papers/hetsheaf-sheafpool.png" alt="SheafPool architecture with whitening, anchor-guided alignment, invariant attention weights, stalk pooling, and invariant graph feature extraction">
-<figcaption>Figure 3 — SheafPool solves the core graph-level readout problem step by step: whiten each stalk, align residual orientations with a shared anchor frame, compute invariant attention weights, pool aligned stalks into a receive-only token, and finally extract graph features through channel-wise invariant energies. This is what makes graph classification well-defined under local basis changes.</figcaption>
+<figcaption>Figure 3, SheafPool solves the core graph-level readout problem step by step: whiten each stalk, align residual orientations with a shared anchor frame, compute invariant attention weights, pool aligned stalks into a receive-only token, and finally extract graph features through channel-wise invariant energies. This is what makes graph classification well-defined under local basis changes.</figcaption>
 </figure>
 </div>
 
 ## Results
 
-Evaluation uses the **Heterogeneous Graph Benchmark (HGB)**: node classification on ACM, DBLP and IMDB, and link prediction on LastFM and MovieLens. Baselines are GAT, GCN, HAN, R-GCN and HGT, plus **HetSheaf-NSD** — the same pipeline with an ordinary type-blind sheaf predictor, which is the ablation that isolates what the type conditioning actually contributes.
+Evaluation uses the **Heterogeneous Graph Benchmark (HGB)**: node classification on ACM, DBLP and IMDB, and link prediction on LastFM and MovieLens. Baselines are GAT, GCN, HAN, R-GCN and HGT, plus **HetSheaf-NSD**, the same pipeline with an ordinary type-blind sheaf predictor, which is the ablation that isolates what the type conditioning actually contributes.
 
 **Node classification** (Macro F1 / Micro F1, 10 runs):
 
@@ -289,14 +289,14 @@ Evaluation uses the **Heterogeneous Graph Benchmark (HGB)**: node classification
 Reading these carefully:
 
 - **State of the art on ACM and DBLP**, and by a smaller margin than headline summaries of this work tend to suggest: +0.58 Macro F1 over R-GCN on ACM and +1.14 on DBLP.
-- **On IMDB, R-GCN wins** — 88.16 against 87.12 Macro F1 — and HGT also edges ahead. HetSheaf is competitive there, not best, and it reaches that with a far smaller parameter budget.
+- **On IMDB, R-GCN wins**, 88.16 against 87.12 Macro F1, and HGT also edges ahead. HetSheaf is competitive there, not best, and it reaches that with a far smaller parameter budget.
 - **Link prediction is a clean sweep** on both datasets and both metrics. The +1.22 AUROC over HetSheaf-NSD on LastFM is the single clearest demonstration that the type conditioning, and not merely the sheaf, is doing work. HGT runs out of GPU memory on both.
 - **Parameter efficiency is the strongest claim.** Averaged across datasets, the largest sheaf variant is roughly **111× smaller than R-GCN** and **17× smaller than HGT**. On ACM concretely: 155K parameters against R-GCN's 43M and HGT's 7.2M.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Architectures like R-GCN allocate <em>separate learnable parameters per relation type</em>, so the model grows with the number of types. A sheaf predictor instead <em>computes</em> the restriction map for each incident pair from features and type embeddings, so the parameter count is decoupled from the number of relations entirely. That is where the two-orders-of-magnitude gap comes from — not from a better-tuned architecture, but from a different place to put the heterogeneity.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Architectures like R-GCN allocate <em>separate learnable parameters per relation type</em>, so the model grows with the number of types. A sheaf predictor instead <em>computes</em> the restriction map for each incident pair from features and type embeddings, so the parameter count is decoupled from the number of relations entirely. That is where the two-orders-of-magnitude gap comes from, not from a better-tuned architecture, but from a different place to put the heterogeneity.</div>
 
 <div class="insight-box">
-<strong>Which restriction maps, and a reversal worth noting.</strong> The ablation finds <strong>general</strong> \(d \times d\) maps best for node classification and <strong>orthogonal</strong> maps worst — the opposite of <a href="/blog/sheaf/neural-sheaf-diffusion/">Neural Sheaf Diffusion</a>, where \(O(d)\) maps performed best. The proposed explanation is that orthogonal transformations are not expressive enough to encode interactions between genuinely incomparable typed feature spaces. For link prediction the effect largely vanishes, and diagonal maps do well — matching the pattern in the rest of the sheaf literature. The lesson is that the best restriction-map family is task-dependent, and the field's default assumptions come from homogeneous node classification.
+<strong>Which restriction maps, and a reversal worth noting.</strong> The ablation finds <strong>general</strong> \(d \times d\) maps best for node classification and <strong>orthogonal</strong> maps worst, the opposite of <a href="/blog/sheaf/neural-sheaf-diffusion/">Neural Sheaf Diffusion</a>, where \(O(d)\) maps performed best. The proposed explanation is that orthogonal transformations are not expressive enough to encode interactions between genuinely incomparable typed feature spaces. For link prediction the effect largely vanishes, and diagonal maps do well, matching the pattern in the rest of the sheaf literature. The lesson is that the best restriction-map family is task-dependent, and the field's default assumptions come from homogeneous node classification.
 </div>
 
 ## Why This Matters
@@ -308,9 +308,9 @@ The important shift is conceptual. Most heterogeneous GNNs ask: "what new neural
 <ul>
   <li>HetSheaf moves heterogeneity from the architecture into the data structure via type-aware sheaves.</li>
   <li>Restriction maps conditioned on node/edge types encode relational structure without type-specific modules.</li>
-  <li>SheafPool provides a basis-change-invariant graph-level readout — essential for correct graph classification with sheaves.</li>
+  <li>SheafPool provides a basis-change-invariant graph-level readout, essential for correct graph classification with sheaves.</li>
   <li>State of the art on ACM and DBLP node classification and on both link-prediction benchmarks; R-GCN still wins IMDB.</li>
   <li>Roughly 111× fewer parameters than R-GCN and 17× fewer than HGT, because the sheaf predictor computes relation-specific maps instead of storing per-relation weights.</li>
-  <li>General restriction maps beat orthogonal ones here — the reverse of the homogeneous case, and a sign that the best map family depends on the task.</li>
+  <li>General restriction maps beat orthogonal ones here, the reverse of the homogeneous case, and a sign that the best map family depends on the task.</li>
 </ul>
 </div>

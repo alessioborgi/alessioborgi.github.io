@@ -222,7 +222,7 @@ redirect_from:
 
       <div class="cv-tl-item">
         <div class="cv-tl-period">2025 – 2028</div>
-        <div class="cv-tl-title">Ph.D. — Engineering in Computer Science · Artificial Intelligence</div>
+        <div class="cv-tl-title">Ph.D., Engineering in Computer Science · Artificial Intelligence</div>
         <div class="cv-tl-org">🇮🇹 Sapienza University of Rome &nbsp;·&nbsp; 🇬🇧 University of Cambridge</div>
         <div class="cv-tl-body">
           <p><strong>Supervisor:</strong> <a href="https://www.cst.cam.ac.uk/people/pl219">Prof. Pietro Liò</a> (Cambridge) &nbsp;·&nbsp; <strong>Co-Supervisor:</strong> <a href="https://fabsilvestri.github.io/">Prof. Fabrizio Silvestri</a> (Sapienza)</p>
@@ -234,7 +234,7 @@ redirect_from:
 
       <div class="cv-tl-item">
         <div class="cv-tl-period">2023 – 2025</div>
-        <div class="cv-tl-title">M.Sc. — Artificial Intelligence &amp; Robotics</div>
+        <div class="cv-tl-title">M.Sc., Artificial Intelligence &amp; Robotics</div>
         <div class="cv-tl-org">🇮🇹 Sapienza University of Rome</div>
         <div class="cv-tl-body">
           <p><strong>Final mark:</strong> 110 / 110 &nbsp;<span class="cv-badge">🏅 Top marks</span></p>
@@ -246,11 +246,11 @@ redirect_from:
 
       <div class="cv-tl-item">
         <div class="cv-tl-period">2020 – 2023</div>
-        <div class="cv-tl-title">B.Sc. — Applied Computer Science &amp; Artificial Intelligence</div>
+        <div class="cv-tl-title">B.Sc., Applied Computer Science &amp; Artificial Intelligence</div>
         <div class="cv-tl-org">🇮🇹 Sapienza University of Rome</div>
         <div class="cv-tl-body">
           <p><strong>Final mark:</strong> 110 / 110 with Honours &nbsp;<span class="cv-badge">🏅 Summa cum laude</span></p>
-          <p><strong>Thesis:</strong> <em>Building Real-Time Multivariate Anomaly Detection Systems in Industry's 5G Networks</em> — <a href="https://github.com/alessioborgi/Bachelor-s-Thesis">GitHub</a></p>
+          <p><strong>Thesis:</strong> <em>Building Real-Time Multivariate Anomaly Detection Systems in Industry's 5G Networks</em>, <a href="https://github.com/alessioborgi/Bachelor-s-Thesis">GitHub</a></p>
           <p><strong>Membership:</strong> <a href="https://omnai.di.uniroma1.it/undergrad/">OmniAI Lab</a></p>
           <p><strong>Courses:</strong> Deep Learning, AI Lab &amp; Computer Vision, ML, AI, Web &amp; Software Architecture, Cybersecurity, Programming I/II, Databases, HCI, Networking, OS, Algorithms, Statistics, Startup &amp; Management, Computer Architecture, Calculus I/II/III, Linear Algebra, Physics, Probability, Foundations of CS.</p>
         </div>
@@ -258,11 +258,11 @@ redirect_from:
 
       <div class="cv-tl-item">
         <div class="cv-tl-period">2015 – 2020</div>
-        <div class="cv-tl-title">Secondary School — Information Technology</div>
+        <div class="cv-tl-title">Secondary School, Information Technology</div>
         <div class="cv-tl-org">🇮🇹 I.I.S. Guglielmo Marconi, Civitavecchia (Rome)</div>
         <div class="cv-tl-body">
           <p><strong>Final mark:</strong> 100 / 100 &nbsp;<span class="cv-badge">🏅 Top marks</span></p>
-          <p><strong>Project:</strong> <em>Electric Company: Ticketing System</em> — <a href="https://github.com/alessioborgi/ElectricCompany-TicketingSystem">GitHub</a></p>
+          <p><strong>Project:</strong> <em>Electric Company: Ticketing System</em>, <a href="https://github.com/alessioborgi/ElectricCompany-TicketingSystem">GitHub</a></p>
         </div>
       </div>
 
@@ -284,22 +284,22 @@ redirect_from:
 
       <div class="cv-tl-item">
         <div class="cv-tl-period">June – July 2025</div>
-        <div class="cv-tl-title">Space Robotics — Tohoku University, Space Robotics Lab</div>
+        <div class="cv-tl-title">Space Robotics, Tohoku University, Space Robotics Lab</div>
         <div class="cv-tl-org">🇯🇵 Sendai, Japan</div>
         <div class="cv-tl-body">
           <p><strong>Supervisor:</strong> <a href="https://astro.mech.tohoku.ac.jp/e/">Prof. Kazuya Yoshida</a></p>
-          <p><strong>Project:</strong> <a href="https://github.com/alessioborgi/MoonBot-Navigation"><em>MoonBot Navigation</em></a> — Autonomous lunar robot with Dijkstra-based path planning, visual object detection, custom gripper control.</p>
+          <p><strong>Project:</strong> <a href="https://github.com/alessioborgi/MoonBot-Navigation"><em>MoonBot Navigation</em></a>, Autonomous lunar robot with Dijkstra-based path planning, visual object detection, custom gripper control.</p>
           <p><span class="cv-badge cv-badge--gold">🏆 Won TESP 2025 Competition</span> <span class="cv-badge">📜 Certificate of Research Excellence</span></p>
         </div>
       </div>
 
       <div class="cv-tl-item">
         <div class="cv-tl-period">Aug – Sept 2024</div>
-        <div class="cv-tl-title">AI &amp; Robotics in Healthcare — Johannes Kepler Universität (JKU)</div>
+        <div class="cv-tl-title">AI &amp; Robotics in Healthcare, Johannes Kepler Universität (JKU)</div>
         <div class="cv-tl-org">🇦🇹 Linz, Austria</div>
         <div class="cv-tl-body">
           <p><strong>Supervisor:</strong> <a href="https://it-u.at/en/persons/team/alexander-steinmaurer/">Prof. Alexander Steinmaurer</a></p>
-          <p><strong>Project:</strong> <a href="https://github.com/alessioborgi/CareConnect"><em>CareConnect</em></a> — AI-driven hospital system for environmental data querying, real-time graph generation, and robotic action triggering via LangChain.</p>
+          <p><strong>Project:</strong> <a href="https://github.com/alessioborgi/CareConnect"><em>CareConnect</em></a>, AI-driven hospital system for environmental data querying, real-time graph generation, and robotic action triggering via LangChain.</p>
           <p><span class="cv-badge cv-badge--gold">🏅 Best Poster &amp; Project Award</span></p>
         </div>
       </div>
@@ -330,7 +330,7 @@ redirect_from:
             <li>Reduced models to train/maintain and lowered design/inference costs while preserving metrics.</li>
           </ul>
           <span class="cv-badge cv-badge--gold">🏆 Best HPE 2023 Paper Award (team)</span>
-          <span class="cv-badge">🏅 Honourable Mention — Internal Hackathon</span>
+          <span class="cv-badge">🏅 Honourable Mention, Internal Hackathon</span>
         </div>
       </div>
     </div>
@@ -359,7 +359,7 @@ redirect_from:
     <div class="cv-award">
       <div class="cv-award__icon">🚀</div>
       <div>
-        <div class="cv-award__title"><a href="/visiting-research/tohoku-2025/">Research Certificate of Excellence — TESP 2025 Winner</a></div>
+        <div class="cv-award__title"><a href="/visiting-research/tohoku-2025/">Research Certificate of Excellence, TESP 2025 Winner</a></div>
         <div class="cv-award__meta">Selected as top-1 student for the exchange period · Tohoku University, 🇯🇵 Japan 2025</div>
       </div>
     </div>
@@ -375,7 +375,7 @@ redirect_from:
     <div class="cv-award">
       <div class="cv-award__icon">🧠</div>
       <div>
-        <div class="cv-award__title"><a href="https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024">Best Poster Award — M2L Summer School</a></div>
+        <div class="cv-award__title"><a href="https://www.m2lschool.org/past-editions/m2l-2024-italy/posters-2024">Best Poster Award, M2L Summer School</a></div>
         <div class="cv-award__meta">Mediterranean Machine Learning Summer School · 🇮🇹 Milan, Italy 2024</div>
       </div>
     </div>
@@ -391,7 +391,7 @@ redirect_from:
     <div class="cv-award">
       <div class="cv-award__icon">💡</div>
       <div>
-        <div class="cv-award__title">Honourable Mention — HPE Internal Hackathon</div>
+        <div class="cv-award__title">Honourable Mention, HPE Internal Hackathon</div>
         <div class="cv-award__meta">Hewlett Packard Enterprise · 2023</div>
       </div>
     </div>
@@ -462,13 +462,13 @@ redirect_from:
     <h2 class="cv-section__hd-title">Certifications</h2>
   </div>
   <div class="cv-section__body">
-    <div class="cv-cert-item"><strong>Cambridge Assessment International Education</strong> — First Certificate (B2) &nbsp;<span class="cv-badge cv-badge--blue">ID: B3329535</span></div>
-    <div class="cv-cert-item"><strong>Instituto Cervantes</strong> — DELE A1 &nbsp;<span class="cv-badge cv-badge--blue">ID: S6516DL9BAHUJHY248TJ4V4KJ2</span></div>
-    <div class="cv-cert-item"><strong>DeepLearning.AI &amp; AWS</strong> — Generative AI with Large Language Models (Coursera) &nbsp;<span class="cv-badge cv-badge--blue">ID: VHCBD26QZP7W</span></div>
-    <div class="cv-cert-item"><strong>AWS</strong> — AI &amp; ML Scholarship Program</div>
-    <div class="cv-cert-item"><strong>COMAU</strong> — "Use and Programming" Robotic License &nbsp;<span class="cv-badge cv-badge--blue">ID: kDHqAdhwAT</span></div>
-    <div class="cv-cert-item"><strong>IBM</strong> — Cloud Core Certification</div>
-    <div class="cv-cert-item"><strong>IBM</strong> — Blockchain Essentials Certification</div>
+    <div class="cv-cert-item"><strong>Cambridge Assessment International Education</strong>, First Certificate (B2) &nbsp;<span class="cv-badge cv-badge--blue">ID: B3329535</span></div>
+    <div class="cv-cert-item"><strong>Instituto Cervantes</strong>, DELE A1 &nbsp;<span class="cv-badge cv-badge--blue">ID: S6516DL9BAHUJHY248TJ4V4KJ2</span></div>
+    <div class="cv-cert-item"><strong>DeepLearning.AI &amp; AWS</strong>, Generative AI with Large Language Models (Coursera) &nbsp;<span class="cv-badge cv-badge--blue">ID: VHCBD26QZP7W</span></div>
+    <div class="cv-cert-item"><strong>AWS</strong>, AI &amp; ML Scholarship Program</div>
+    <div class="cv-cert-item"><strong>COMAU</strong>, "Use and Programming" Robotic License &nbsp;<span class="cv-badge cv-badge--blue">ID: kDHqAdhwAT</span></div>
+    <div class="cv-cert-item"><strong>IBM</strong>, Cloud Core Certification</div>
+    <div class="cv-cert-item"><strong>IBM</strong>, Blockchain Essentials Certification</div>
   </div>
 </div>
 
@@ -495,7 +495,7 @@ redirect_from:
     <div class="cv-lang-row">
       <span class="cv-lang-name">🇪🇸 Spanish</span>
       <span class="cv-lang-level">A1</span>
-      <span class="cv-lang-desc">DELE A1 — Instituto Cervantes</span>
+      <span class="cv-lang-desc">DELE A1, Instituto Cervantes</span>
     </div>
   </div>
 </div>

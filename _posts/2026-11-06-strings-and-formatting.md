@@ -6,7 +6,7 @@ categories: [python-primer]
 book: python-primer
 subsection: data-structures
 tags: [python, strings, f-strings, unicode, encoding]
-excerpt: "Strings cannot be modified, so every method that looks like it edits one actually builds another. That single fact explains the whole `str` API — and why growing a string inside a loop can quietly become quadratic."
+excerpt: "Strings cannot be modified, so every method that looks like it edits one actually builds another. That single fact explains the whole `str` API, and why growing a string inside a loop can quietly become quadratic."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,12 +18,12 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A <code>str</code> is an immutable sequence of Unicode code points. Every "modifying" method returns a new string, so <code>s.replace(...)</code> without assigning it does nothing. f-strings (3.6+) are the formatting tool to use: <code>f"{value!r:&gt;10.3f}"</code> packs conversion, alignment and precision into one expression, and <code>f"{x=}"</code> prints the expression alongside its value. Build strings by collecting pieces in a list and calling <code>"".join(parts)</code> — repeated <code>+=</code> is quadratic whenever CPython's in-place optimisation does not apply.
+  <strong>TL;DR:</strong> A <code>str</code> is an immutable sequence of Unicode code points. Every "modifying" method returns a new string, so <code>s.replace(...)</code> without assigning it does nothing. f-strings (3.6+) are the formatting tool to use: <code>f"{value!r:&gt;10.3f}"</code> packs conversion, alignment and precision into one expression, and <code>f"{x=}"</code> prints the expression alongside its value. Build strings by collecting pieces in a list and calling <code>"".join(parts)</code>, repeated <code>+=</code> is quadratic whenever CPython's in-place optimisation does not apply.
 </div>
 
 ## An immutable sequence
 
-Strings index, slice and iterate exactly like [lists](/blog/python-primer/lists-and-tuples/) — but nothing can be assigned:
+Strings index, slice and iterate exactly like [lists](/blog/python-primer/lists-and-tuples/), but nothing can be assigned:
 
 ```python
 s = "hello"
@@ -33,7 +33,7 @@ s[0] = "H"
 # TypeError: 'str' object does not support item assignment
 ```
 
-So `s.upper()` returns a new string and leaves `s` alone. Forgetting to bind the result — writing `s.strip()` on a line by itself and wondering why the whitespace survived — is the single most common string bug.
+So `s.upper()` returns a new string and leaves `s` alone. Forgetting to bind the result, writing `s.strip()` on a line by itself and wondering why the whitespace survived, is the single most common string bug.
 
 Iterating a string yields one-character strings; there is no separate character type. Concatenation is `+`, repetition is `*`, and membership is a substring test: `"ell" in "hello"` is `True`.
 
@@ -55,7 +55,7 @@ Iterating a string yields one-character strings; there is no separate character 
 | `s.zfill(w)` / `.ljust(w,c)` / `.rjust` / `.center` | pad to width `w` | `str` |
 | `s.isdigit` / `.isalpha` / `.isspace` | character-class tests | `bool` |
 
-All are $$O(n)$$ or better, and none mutate — there is nothing to mutate.
+All are $$O(n)$$ or better, and none mutate, there is nothing to mutate.
 
 ```python
 line = "  name, age , city  "
@@ -65,7 +65,7 @@ print("a-b-c".split("-", 1))                      # -> ['a', 'b-c']
 print("-".join(["a", "b", "c"]))                  # -> a-b-c
 ```
 
-Two details that catch people. `split()` with no argument is *not* the same as `split(" ")`: the former collapses runs of whitespace and drops empty fields, the latter does neither. And `strip("xy")` removes any leading or trailing character *in the set* `{x, y}` — it is not a prefix removal. For that, Python 3.9 added `removeprefix` and `removesuffix`.
+Two details that catch people. `split()` with no argument is *not* the same as `split(" ")`: the former collapses runs of whitespace and drops empty fields, the latter does neither. And `strip("xy")` removes any leading or trailing character *in the set* `{x, y}`, it is not a prefix removal. For that, Python 3.9 added `removeprefix` and `removesuffix`.
 
 ```python
 t = "hello world"
@@ -84,7 +84,7 @@ name, n, pi = "ada", 7, 3.14159
 print(f"{name} has {n} items")   # -> ada has 7 items
 ```
 
-The `=` suffix ([Python 3.8+](https://docs.python.org/3/whatsnew/3.8.html)) prints the source text of the expression together with its value — a debugging shortcut worth using constantly:
+The `=` suffix ([Python 3.8+](https://docs.python.org/3/whatsnew/3.8.html)) prints the source text of the expression together with its value, a debugging shortcut worth using constantly:
 
 ```python
 print(f"{n=}, {pi=}")     # -> n=7, pi=3.14159
@@ -142,7 +142,7 @@ print(repr("C:\\path\\n"))   # -> 'C:\\path\\n'
 print(repr(r"C:\path\n"))    # -> 'C:\\path\\n'
 ```
 
-Both lines produce the *same* string — `r` changes how the literal is read, not what type you get. It matters most for regular expressions, where the pattern language has its own backslashes:
+Both lines produce the *same* string, `r` changes how the literal is read, not what type you get. It matters most for regular expressions, where the pattern language has its own backslashes:
 
 ```python
 import re
@@ -153,7 +153,7 @@ Without the `r`, you would be writing `"\\d+"` and hoping you counted correctly.
 
 ## `str` is not `bytes`
 
-A `str` is a sequence of Unicode **code points** — abstract characters. A `bytes` object is a sequence of integers in $$[0, 255]$$. Converting between them requires naming an encoding, and there is no default that is safe to assume:
+A `str` is a sequence of Unicode **code points**, abstract characters. A `bytes` object is a sequence of integers in $$[0, 255]$$. Converting between them requires naming an encoding, and there is no default that is safe to assume:
 
 ```python
 b = "café".encode("utf-8")
@@ -173,13 +173,13 @@ b + "x"
 # UnicodeEncodeError: 'ascii' codec can't encode character '\xe9' in position 3
 ```
 
-Indexing a `bytes` gives an `int`, not a one-byte `bytes` — `b[0]` is `99`, the code for `c`. The practical rule is to decode at the boundary of your program, work in `str` throughout, and encode again on the way out. Always pass `encoding="utf-8"` explicitly to `open()`, because the default is platform-dependent.
+Indexing a `bytes` gives an `int`, not a one-byte `bytes`, `b[0]` is `99`, the code for `c`. The practical rule is to decode at the boundary of your program, work in `str` throughout, and encode again on the way out. Always pass `encoding="utf-8"` explicitly to `open()`, because the default is platform-dependent.
 
 ## Why `+=` in a loop is the wrong tool
 
 Since strings are immutable, `s += piece` must in principle allocate a new string of length $$\lvert s\rvert + \lvert p\rvert$$ and copy everything. Do that $$n$$ times and you copy $$1 + 2 + \dots + n = O(n^2)$$ characters.
 
-CPython partly hides this: when the target is a simple local name and the string has exactly **one** reference, it resizes the buffer in place instead. The optimisation is real but fragile — store the string anywhere else, and the quadratic cost comes straight back. Measured on CPython 3.13, appending `"abc"` $$n$$ times while a second name also refers to the result:
+CPython partly hides this: when the target is a simple local name and the string has exactly **one** reference, it resizes the buffer in place instead. The optimisation is real but fragile, store the string anywhere else, and the quadratic cost comes straight back. Measured on CPython 3.13, appending `"abc"` $$n$$ times while a second name also refers to the result:
 
 | $$n$$ | `+=` with an alias | `"".join(parts)` |
 |---|---|---|
@@ -188,7 +188,7 @@ CPython partly hides this: when the target is a simple local name and the string
 | 100,000 | 226.8 ms | 0.243 ms |
 | 200,000 | 834.0 ms | 0.503 ms |
 
-Doubling $$n$$ roughly quadruples the left column and doubles the right — quadratic against linear, and a factor of about 1,660 at the bottom row. `join` wins because it walks the iterable once to total the lengths, allocates exactly one buffer, and copies each piece exactly once.
+Doubling $$n$$ roughly quadruples the left column and doubles the right, quadratic against linear, and a factor of about 1,660 at the bottom row. `join` wins because it walks the iterable once to total the lengths, allocates exactly one buffer, and copies each piece exactly once.
 
 ```python
 # don't
@@ -201,11 +201,11 @@ s = "".join(parts)
 ```
 
 <div class="insight-box">
-  <strong>Key Insight — never rely on the optimisation you cannot see:</strong> the in-place resize is a CPython implementation detail with no guarantee behind it. It is defeated by anything that takes a second reference to the string, by appending to a list element or attribute instead of a local, and by other interpreters. Writing <code>"".join(parts)</code> costs nothing extra to type and is linear on every implementation, which is why the standard library and every style guide prefer it.
+  <strong>Key Insight, never rely on the optimisation you cannot see:</strong> the in-place resize is a CPython implementation detail with no guarantee behind it. It is defeated by anything that takes a second reference to the string, by appending to a list element or attribute instead of a local, and by other interpreters. Writing <code>"".join(parts)</code> costs nothing extra to type and is linear on every implementation, which is why the standard library and every style guide prefer it.
 </div>
 
 <div class="warning-box">
-  <strong>The classic trap — string methods return, they do not modify.</strong> <code>s.strip()</code>, <code>s.replace(a, b)</code> and <code>s.upper()</code> all leave <code>s</code> untouched; you must write <code>s = s.strip()</code>. This is the mirror image of the list trap, where <code>xs.sort()</code> modifies in place and returns <code>None</code>. Learn the pair together: <em>mutable containers mutate and return <code>None</code>; immutable ones return a new object and change nothing.</em>
+  <strong>The classic trap, string methods return, they do not modify.</strong> <code>s.strip()</code>, <code>s.replace(a, b)</code> and <code>s.upper()</code> all leave <code>s</code> untouched; you must write <code>s = s.strip()</code>. This is the mirror image of the list trap, where <code>xs.sort()</code> modifies in place and returns <code>None</code>. Learn the pair together: <em>mutable containers mutate and return <code>None</code>; immutable ones return a new object and change nothing.</em>
 </div>
 
 Next, the [functions](/blog/python-primer/functions/) chapter, where mutability produces its most notorious surprise of all.
@@ -214,20 +214,20 @@ Next, the [functions](/blog/python-primer/functions/) chapter, where mutability 
   <h3>Recap</h3>
   <ul>
     <li><code>str</code> is an immutable sequence of Unicode code points; every method returns a new string, so bind the result.</li>
-    <li><code>split()</code> with no argument collapses whitespace runs; <code>strip(chars)</code> removes a character <em>set</em>, not a prefix — use <code>removeprefix</code> for that.</li>
+    <li><code>split()</code> with no argument collapses whitespace runs; <code>strip(chars)</code> removes a character <em>set</em>, not a prefix, use <code>removeprefix</code> for that.</li>
     <li>f-strings: <code>{expr!r:fill align width,.precision type}</code>, with <code>{x=}</code> for debugging and nested braces for a computed width.</li>
     <li>Raw strings change how a literal is parsed, not its type; use them for regular expressions.</li>
-    <li><code>str</code> and <code>bytes</code> never mix implicitly — decode on input, encode on output, and pass <code>encoding="utf-8"</code> explicitly.</li>
+    <li><code>str</code> and <code>bytes</code> never mix implicitly, decode on input, encode on output, and pass <code>encoding="utf-8"</code> explicitly.</li>
     <li>Accumulate pieces in a list and <code>"".join</code> them; repeated <code>+=</code> is quadratic whenever CPython's in-place resize does not apply.</li>
   </ul>
 </div>
 
 ## References
 
-1. Python Software Foundation. [Text Sequence Type — str](https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str).
+1. Python Software Foundation. [Text Sequence Type, str](https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str).
 2. Python Software Foundation. [Format Specification Mini-Language](https://docs.python.org/3/library/string.html#format-specification-mini-language).
 3. Python Software Foundation. [Unicode HOWTO](https://docs.python.org/3/howto/unicode.html).
-4. Smith, E. V. [PEP 498 — Literal String Interpolation](https://peps.python.org/pep-0498/).
-5. Talin. [PEP 3101 — Advanced String Formatting](https://peps.python.org/pep-3101/).
-6. Python Software Foundation. [What's New in Python 3.8 — f-string `=` specifier](https://docs.python.org/3/whatsnew/3.8.html).
-7. Python Software Foundation. [`re` — Regular expression operations](https://docs.python.org/3/library/re.html).
+4. Smith, E. V. [PEP 498, Literal String Interpolation](https://peps.python.org/pep-0498/).
+5. Talin. [PEP 3101, Advanced String Formatting](https://peps.python.org/pep-3101/).
+6. Python Software Foundation. [What's New in Python 3.8, f-string `=` specifier](https://docs.python.org/3/whatsnew/3.8.html).
+7. Python Software Foundation. [`re`, Regular expression operations](https://docs.python.org/3/library/re.html).

@@ -13,7 +13,7 @@
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK 0 — BASICS
+# BOOK 0, BASICS
 # ────────────────────────────────────────────────────────────────────────────
 basics:
   label: "Book 0: Basics"
@@ -60,7 +60,7 @@ basics:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK I — TRANSFORMERS
+# BOOK I, TRANSFORMERS
 # ────────────────────────────────────────────────────────────────────────────
 transformers:
   label: "Book I: Transformers"
@@ -103,7 +103,7 @@ transformers:
         - { slug: "2024-03-11-yarn",                  title: "YaRN: Yet Another RoPE Extension Method",                     published: online }
         - { slug: "2024-03-12-longrope",              title: "LongRoPE: Extending Context to 2 Million Tokens",             published: online }
         - { slug: "2024-03-22-fope",                  title: "FoPE: Fourier Position Embedding for Length Generalization",   published: online }
-        - { slug: "2026-05-11-gape-paper",            title: "GAPE: Remember to Forget — Gated Adaptive Positional Encoding",  published: online }
+        - { slug: "2026-05-11-gape-paper",            title: "GAPE: Remember to Forget, Gated Adaptive Positional Encoding",  published: online }
 
     vision:
       label: "Vision Transformers"
@@ -121,13 +121,13 @@ transformers:
         - { slug: "2024-01-10-bert",               title: "BERT: Bidirectional Transformers for Language Understanding",    published: offline }
         - { slug: "2024-01-11-gpt",                title: "GPT: Autoregressive Language Modelling at Scale",               published: offline }
         - { slug: "2024-01-12-t5",                 title: "T5: Every NLP Task as Text-to-Text",                            published: offline }
-        - { slug: "2024-01-13-vit",                title: "ViT: Vision Transformer — Images as Sequences of Patches",      published: offline }
+        - { slug: "2024-01-13-vit",                title: "ViT: Vision Transformer, Images as Sequences of Patches",      published: offline }
         - { slug: "2024-01-14-swin-transformer",   title: "Swin Transformer: Hierarchical Vision with Shifted Windows",    published: offline }
         - { slug: "2024-01-15-looped-transformers", title: "Looped Transformers: Thinking More with the Same Weights",     published: offline }
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK II — GRAPH NEURAL NETWORKS
+# BOOK II, GRAPH NEURAL NETWORKS
 # ────────────────────────────────────────────────────────────────────────────
 gnn:
   label: "Book II: Graph Neural Networks"
@@ -157,7 +157,7 @@ gnn:
         - { slug: "2024-02-05-gcn",                 title: "GCN: Graph Convolutional Networks",                                    published: online }
         - { slug: "2024-02-06-gat",                 title: "GAT: Graph Attention Networks",                                        published: online }
         - { slug: "2024-02-07-graphsage",           title: "GraphSAGE: Inductive Learning on Large Graphs",                       published: online }
-        - { slug: "2024-02-08-gin",                 title: "GIN: Graph Isomorphism Network — The Most Expressive GNN",            published: online }
+        - { slug: "2024-02-08-gin",                 title: "GIN: Graph Isomorphism Network, The Most Expressive GNN",            published: online }
         - { slug: "2024-04-06-chebnet",             title: "ChebNet: Spectral Graph Convolutions via Chebyshev Polynomials",      published: online }
         - { slug: "2024-04-07-sgc",                 title: "SGC: Simple Graph Convolution",                                        published: online }
         - { slug: "2024-04-08-appnp",               title: "APPNP: Personalized PageRank Meets Graph Neural Networks",            published: online }
@@ -246,7 +246,7 @@ gnn:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK III — SHEAF NEURAL NETWORKS (standalone series)
+# BOOK III, SHEAF NEURAL NETWORKS (standalone series)
 # ────────────────────────────────────────────────────────────────────────────
 sheaf:
   label: "Book III: Sheaf Neural Networks"
@@ -280,7 +280,7 @@ sheaf:
         - { slug: "2025-12-02-polynsd-paper",              title: "PolyNSD: Polynomial Neural Sheaf Diffusion (Borgi, Silvestri & Liò)",                            published: online }
         - { slug: "2026-07-28-deep-neural-sheaf-diffusion", title: "DNSD: Making Sheaf Diffusion Work at Depth (Bourgerie et al., 2026)",                           published: online }
         - { slug: "2026-08-16-cooperative-sheaf-neural-networks", title: "CSNN: Cooperative Sheaf Neural Networks (Ribeiro et al., 2025)",                          published: online }
-        - { slug: "2026-09-01-equivariant-sheaf-neural-networks", title: "ESNN: Equivariant Sheaf Neural Networks — Learning Geometric Transport on Graphs (Borgi, Severino, Silvestri & Liò, 2026)", published: online }
+        - { slug: "2026-09-01-equivariant-sheaf-neural-networks", title: "ESNN: Equivariant Sheaf Neural Networks, Learning Geometric Transport on Graphs (Borgi, Severino, Silvestri & Liò, 2026)", published: online }
         - { slug: "2025-06-11-sheaf-map-parameterisation", title: "Learning Sheaf Maps: Parameterisation Strategies Compared",                                      published: offline }
         - { slug: "2025-06-12-spectral-sheaf-convolution", title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves",                                       published: offline }
 
@@ -323,7 +323,7 @@ sheaf:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK IV — TOPOLOGICAL DEEP LEARNING
+# BOOK IV, TOPOLOGICAL DEEP LEARNING
 # ────────────────────────────────────────────────────────────────────────────
 tdl:
   label: "Book IV: Topological Deep Learning"
@@ -409,7 +409,7 @@ tdl:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK V — REINFORCEMENT LEARNING
+# BOOK V, REINFORCEMENT LEARNING
 # ────────────────────────────────────────────────────────────────────────────
 rl:
   label: "Book V: Reinforcement Learning"
@@ -466,7 +466,7 @@ rl:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK VI — LEARNING-BASED ROBOTICS
+# BOOK VI, LEARNING-BASED ROBOTICS
 # ────────────────────────────────────────────────────────────────────────────
 robotics:
   label: "Book VI: Learning-Based Robotics"
@@ -518,7 +518,7 @@ robotics:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# BOOK VII — GENERATIVE AI & STYLE TRANSFER
+# BOOK VII, GENERATIVE AI & STYLE TRANSFER
 # ────────────────────────────────────────────────────────────────────────────
 generative-ai:
   label: "Book VII: Generative AI & Style Transfer"
@@ -587,7 +587,7 @@ diffusion:
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# BOOK VIII — GEOMETRIC DEEP LEARNING
+# BOOK VIII, GEOMETRIC DEEP LEARNING
 # ──────────────────────────────────────────────────────────────────────────
 gdl:
   label: "Book VIII: Geometric Deep Learning"
@@ -865,7 +865,7 @@ python-primer:
     functions:
       label: "Functions & Generators"
       posts:
-        - { slug: "2026-11-07-functions", title: "Functions: Arguments, Scope, Closures — and the Default That Remembers", published: online }
+        - { slug: "2026-11-07-functions", title: "Functions: Arguments, Scope, Closures, and the Default That Remembers", published: online }
         - { slug: "2026-11-08-comprehensions-and-generators", title: "Comprehensions and Generators: Building Sequences Without Building Them", published: online }
 
     oop:

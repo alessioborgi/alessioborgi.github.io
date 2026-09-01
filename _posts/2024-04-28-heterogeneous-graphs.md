@@ -6,7 +6,7 @@ book: gnn
 subsection: heterogeneous
 tags: [heterogeneous-graph, relational, knowledge-graph, meta-path, HAN]
 published: true
-excerpt: "Most real-world graphs are heterogeneous — they contain multiple node types (users, items, tags) and edge types (clicks, rates, authors). Standard GNNs treat all nodes and edges identically, making them blind to this type structure."
+excerpt: "Most real-world graphs are heterogeneous, they contain multiple node types (users, items, tags) and edge types (clicks, rates, authors). Standard GNNs treat all nodes and edges identically, making them blind to this type structure."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,12 +18,12 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A heterogeneous graph has multiple node types and edge types. Standard GNNs use a single message function and aggregation — they cannot differentiate a "cites" edge from an "is-authored-by" edge. Handling heterogeneity requires type-specific message functions, meta-path decomposition, or relation-aware aggregation.
+<strong>TL;DR:</strong> A heterogeneous graph has multiple node types and edge types. Standard GNNs use a single message function and aggregation, they cannot differentiate a "cites" edge from an "is-authored-by" edge. Handling heterogeneity requires type-specific message functions, meta-path decomposition, or relation-aware aggregation.
 </div>
 {% include figure image_path="/images/blog/gnn/wang2019_han.png" alt="Heterogeneous attention network" caption="Heterogeneous graph with multiple node and edge types (Wang et al., 2019)" %}
 
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A standard GNN is like a phone directory that treats every contact the same — it cannot tell your doctor from your friend. A heterogeneous GNN reads the type tag on every node and edge, applying different transformations to "doctor" and "friend" relationships. The type structure often carries as much information as the topology itself.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A standard GNN is like a phone directory that treats every contact the same, it cannot tell your doctor from your friend. A heterogeneous GNN reads the type tag on every node and edge, applying different transformations to "doctor" and "friend" relationships. The type structure often carries as much information as the topology itself.</div>
 
 ## What Is a Heterogeneous Graph?
 
@@ -39,7 +39,7 @@ G = \bigl(V,\; E,\; \tau,\; \phi\bigr),
 \]
 </div>
 
-where $$\tau$$ maps each node to a node type from the type set $$\mathcal{A}$$, and $$\phi$$ maps each edge to a relation from the relation set $$\mathcal{R}$$. The graph is heterogeneous when $$\lvert\mathcal{A}\rvert > 1$$ **or** $$\lvert\mathcal{R}\rvert > 1$$ — one of the two suffices. A knowledge graph with a single entity type but hundreds of relations is heterogeneous; so is a bipartite user–item graph with a single edge type. The homogeneous case that standard GNNs assume is $$\lvert\mathcal{A}\rvert = \lvert\mathcal{R}\rvert = 1$$.
+where $$\tau$$ maps each node to a node type from the type set $$\mathcal{A}$$, and $$\phi$$ maps each edge to a relation from the relation set $$\mathcal{R}$$. The graph is heterogeneous when $$\lvert\mathcal{A}\rvert > 1$$ **or** $$\lvert\mathcal{R}\rvert > 1$$, one of the two suffices. A knowledge graph with a single entity type but hundreds of relations is heterogeneous; so is a bipartite user–item graph with a single edge type. The homogeneous case that standard GNNs assume is $$\lvert\mathcal{A}\rvert = \lvert\mathcal{R}\rvert = 1$$.
 
 **Examples:**
 
@@ -68,7 +68,7 @@ h_v^{(k)} \;=\; \mathrm{UPDATE}\Bigl(h_v^{(k-1)},\; \mathrm{AGG}\bigl(\bigl\{\,h
 applies the same message function to every neighbour in $$\mathcal{N}(v)$$, regardless of the edge type connecting them. This conflates semantically very different relationships:
 - "User A clicked Item B" and "Item B belongs-to Category C" are both aggregated identically
 - The model cannot learn that "cites" edges carry different information than "co-authored-by" edges
-- Node type differences are ignored — a Gene node and a Drug node are processed identically
+- Node type differences are ignored, a Gene node and a Drug node are processed identically
 
 ## Solutions Overview
 
@@ -135,7 +135,7 @@ applies the same message function to every neighbour in $$\mathcal{N}(v)$$, rega
   <line x1="90" y1="185" x2="110" y2="185" stroke="#10b981" stroke-width="1.5"/>
   <text x="114" y="189" font-size="9" fill="#64748b">belongs-to</text>
 </svg>
-<figcaption>A heterogeneous bipartite graph: three node types (Users, Items, Categories) and two edge types (clicks, belongs-to). A standard GNN would process all edges identically — losing the semantic distinction between "User clicks Item" and "Item belongs-to Category".</figcaption>
+<figcaption>A heterogeneous bipartite graph: three node types (Users, Items, Categories) and two edge types (clicks, belongs-to). A standard GNN would process all edges identically, losing the semantic distinction between "User clicks Item" and "Item belongs-to Category".</figcaption>
 </figure></div>
 
 ## Meta-Paths: Semantic Bridges
@@ -166,14 +166,14 @@ h_v^{(0)} \;=\; W_{\tau(v)}\, x_v \;+\; b_{\tau(v)}
 \]
 </div>
 
-A separate linear projection $$W_{\tau(v)}$$ per node type ensures all nodes live in the same embedding space before message passing begins. Note this is indexed by *node* type $$\tau(v)$$, not relation type — it is a different mechanism from the relation-specific $$W_r$$ above, and a full heterogeneous architecture typically needs both.
+A separate linear projection $$W_{\tau(v)}$$ per node type ensures all nodes live in the same embedding space before message passing begins. Note this is indexed by *node* type $$\tau(v)$$, not relation type, it is a different mechanism from the relation-specific $$W_r$$ above, and a full heterogeneous architecture typically needs both.
 
 ## Heterogeneous Graph Benchmarks
 
-- **ogbn-mag** (Open Graph Benchmark: Microsoft Academic Graph): four node types — 736,389 papers, 1,134,649 authors, 8,740 institutions and 59,965 fields of study — connected by citation, authorship, affiliation and topic edges. Only papers carry input features; the other three types do not, which is itself a defining difficulty of the benchmark.
-- **IMDB (heterogeneous):** Movies, Actors, Directors — classify movie genre
-- **ACM:** Papers, Authors, Subjects — classify research area
-- **DBLP:** Authors, Papers, Venues, Terms — author classification
+- **ogbn-mag** (Open Graph Benchmark: Microsoft Academic Graph): four node types, 736,389 papers, 1,134,649 authors, 8,740 institutions and 59,965 fields of study, connected by citation, authorship, affiliation and topic edges. Only papers carry input features; the other three types do not, which is itself a defining difficulty of the benchmark.
+- **IMDB (heterogeneous):** Movies, Actors, Directors, classify movie genre
+- **ACM:** Papers, Authors, Subjects, classify research area
+- **DBLP:** Authors, Papers, Venues, Terms, author classification
 
 ## Summary
 
@@ -184,7 +184,7 @@ A separate linear projection $$W_{\tau(v)}$$ per node type ensures all nodes liv
 | Relation-aware attention | Attention over relation types | HAN, HGT |
 | Type projection | Map all types to common space | HGT |
 
-Heterogeneous GNNs extend the MPNN framework to handle the multi-relational, multi-typed structure of real knowledge graphs, recommendation systems, and biomedical networks — domains where the type structure is often as important as the graph topology.
+Heterogeneous GNNs extend the MPNN framework to handle the multi-relational, multi-typed structure of real knowledge graphs, recommendation systems, and biomedical networks, domains where the type structure is often as important as the graph topology.
 
 ## References
 

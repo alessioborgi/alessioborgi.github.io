@@ -6,7 +6,7 @@ categories: [diffusion]
 book: diffusion
 subsection: foundations
 tags: [diffusion, reverse-process, posterior, v-prediction]
-excerpt: "Reversing a corruption is generally intractable. Diffusion escapes by taking steps small enough that the reverse conditional is itself Gaussian — so the network only has to output a mean. Which mean it outputs, though, turns out to matter a great deal."
+excerpt: "Reversing a corruption is generally intractable. Diffusion escapes by taking steps small enough that the reverse conditional is itself Gaussian, so the network only has to output a mean. Which mean it outputs, though, turns out to matter a great deal."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> For small \(\beta_t\), \(q(\mathbf{x}_{t-1}\mid\mathbf{x}_t)\) is Gaussian to first order in \(\beta_t\), so a network that emits a mean is expressive enough. Conditioning additionally on \(\mathbf{x}_0\) makes the posterior exactly Gaussian and available in closed form, which tells us precisely what the network should be regressing onto. Rewriting that target three different ways gives the \(\boldsymbol{\epsilon}\), \(\mathbf{x}_0\) and \(v\) parameterisations — mathematically equivalent, numerically very different at the ends of the schedule.
+  <strong>TL;DR:</strong> For small \(\beta_t\), \(q(\mathbf{x}_{t-1}\mid\mathbf{x}_t)\) is Gaussian to first order in \(\beta_t\), so a network that emits a mean is expressive enough. Conditioning additionally on \(\mathbf{x}_0\) makes the posterior exactly Gaussian and available in closed form, which tells us precisely what the network should be regressing onto. Rewriting that target three different ways gives the \(\boldsymbol{\epsilon}\), \(\mathbf{x}_0\) and \(v\) parameterisations, mathematically equivalent, numerically very different at the ends of the schedule.
 </div>
 
 ## The approximation that carries the method
@@ -41,7 +41,7 @@ The escape is a scale argument. Take logarithms:
 \]
 </div>
 
-The first term is a sharp quadratic of width $$\sqrt{\beta_t}$$ in $$\mathbf{x}_{t-1}$$. The second is the awkward one, but it is only evaluated inside that narrow window. Expanding $$\log q$$ to first order about $$\mathbf{x}_t/\sqrt{1-\beta_t}$$ leaves a quadratic in $$\mathbf{x}_{t-1}$$ — a Gaussian — with the neglected curvature term of order $$\beta_t$$. This is Feller's observation, and it is why $$T$$ has to be large: the step size is the approximation error. Take steps too big and the true reverse conditional becomes multimodal, and no single-mean Gaussian can represent it.
+The first term is a sharp quadratic of width $$\sqrt{\beta_t}$$ in $$\mathbf{x}_{t-1}$$. The second is the awkward one, but it is only evaluated inside that narrow window. Expanding $$\log q$$ to first order about $$\mathbf{x}_t/\sqrt{1-\beta_t}$$ leaves a quadratic in $$\mathbf{x}_{t-1}$$, a Gaussian, with the neglected curvature term of order $$\beta_t$$. This is Feller's observation, and it is why $$T$$ has to be large: the step size is the approximation error. Take steps too big and the true reverse conditional becomes multimodal, and no single-mean Gaussian can represent it.
 
 Note what the expansion produces: the linear coefficient is $$\nabla \log q(\mathbf{x}_{t-1})$$, the [score](/blog/diffusion/score-based-sde/). The reverse step is a Gaussian whose mean has been nudged along the score.
 
@@ -61,7 +61,7 @@ q(\mathbf{x}_{t-1}\mid\mathbf{x}_t,\mathbf{x}_0) = \mathcal{N}\!\left(\mathbf{x}
 \]
 </div>
 
-with $$\alpha_t = 1-\beta_t$$ and $$\bar{\alpha}_t = \prod_{s\le t}\alpha_s$$ as in the [forward process](/blog/diffusion/forward-process/). The mean is a blend of where you are and where you came from. The two coefficients sum to at most one — exactly one only at $$t=1$$, and strictly less otherwise — and they collapse neatly once $$\mathbf{x}_0$$ is eliminated.
+with $$\alpha_t = 1-\beta_t$$ and $$\bar{\alpha}_t = \prod_{s\le t}\alpha_s$$ as in the [forward process](/blog/diffusion/forward-process/). The mean is a blend of where you are and where you came from. The two coefficients sum to at most one, exactly one only at $$t=1$$, and strictly less otherwise, and they collapse neatly once $$\mathbf{x}_0$$ is eliminated.
 
 Substituting $$\mathbf{x}_0 = (\mathbf{x}_t - \sqrt{1-\bar{\alpha}_t}\,\boldsymbol{\epsilon})/\sqrt{\bar{\alpha}_t}$$ and using $$\sqrt{\bar{\alpha}_{t-1}}/\sqrt{\bar{\alpha}_t} = 1/\sqrt{\alpha_t}$$, the $$\mathbf{x}_t$$ coefficients combine as $$\big[\beta_t + \alpha_t(1-\bar{\alpha}_{t-1})\big]/\big[(1-\bar{\alpha}_t)\sqrt{\alpha_t}\big] = 1/\sqrt{\alpha_t}$$, leaving
 
@@ -71,7 +71,7 @@ Substituting $$\mathbf{x}_0 = (\mathbf{x}_t - \sqrt{1-\bar{\alpha}_t}\,\boldsymb
 \]
 </div>
 
-This is the sampler. Knowing the noise that produced $$\mathbf{x}_t$$ is equivalent to knowing the exact posterior mean, so predicting $$\boldsymbol{\epsilon}$$ is a sufficient parameterisation — the result that turns the whole [ELBO into an MSE](/blog/diffusion/ddpm-training/).
+This is the sampler. Knowing the noise that produced $$\mathbf{x}_t$$ is equivalent to knowing the exact posterior mean, so predicting $$\boldsymbol{\epsilon}$$ is a sufficient parameterisation, the result that turns the whole [ELBO into an MSE](/blog/diffusion/ddpm-training/).
 
 ## Three targets, one quantity
 
@@ -90,21 +90,21 @@ An error \(\delta\) in \(\hat{\mathbf{x}}_0\) becomes \((a/b)\delta\) in \(\hat{
 </div>
 <div class="formula-card">
 <strong>\(v\)-prediction</strong><br>
-\(v = a\boldsymbol{\epsilon} - b\mathbf{x}_0\). Then \(\mathbf{x}_0 = a\mathbf{x}_t - b v\) and \(\boldsymbol{\epsilon} = b\mathbf{x}_t + a v\), both with coefficients bounded by 1 — no amplification anywhere.
+\(v = a\boldsymbol{\epsilon} - b\mathbf{x}_0\). Then \(\mathbf{x}_0 = a\mathbf{x}_t - b v\) and \(\boldsymbol{\epsilon} = b\mathbf{x}_t + a v\), both with coefficients bounded by 1, no amplification anywhere.
 </div>
 </div>
 
 The $$v$$ identities are worth checking rather than trusting: $$a\mathbf{x}_t - bv = a(a\mathbf{x}_0+b\boldsymbol{\epsilon}) - b(a\boldsymbol{\epsilon}-b\mathbf{x}_0) = (a^2+b^2)\mathbf{x}_0 = \mathbf{x}_0$$, and symmetrically for $$\boldsymbol{\epsilon}$$. Geometrically $$(\mathbf{x}_t, v)$$ is $$(\mathbf{x}_0,\boldsymbol{\epsilon})$$ rotated by the angle $$\phi_t = \arctan(b/a)$$, which is why the transformation is norm-preserving in both directions.
 
 <div class="insight-box">
-  <strong>Key Insight — the parameterisations differ only in conditioning:</strong> all three carry identical information, and with an exact network they give identical samples. What differs is how a <em>bounded</em> network error maps onto the sampler's mean. \(\boldsymbol{\epsilon}\)-prediction is ill-conditioned where there is almost no signal left; \(\mathbf{x}_0\)-prediction is ill-conditioned where there is almost no noise left; \(v\) is a rotation, so it is well-conditioned throughout. That is exactly why \(v\) is standard for distillation and for schedules pushed to zero terminal SNR, where the \(t\to T\) endpoint is visited in earnest.
+  <strong>Key Insight, the parameterisations differ only in conditioning:</strong> all three carry identical information, and with an exact network they give identical samples. What differs is how a <em>bounded</em> network error maps onto the sampler's mean. \(\boldsymbol{\epsilon}\)-prediction is ill-conditioned where there is almost no signal left; \(\mathbf{x}_0\)-prediction is ill-conditioned where there is almost no noise left; \(v\) is a rotation, so it is well-conditioned throughout. That is exactly why \(v\) is standard for distillation and for schedules pushed to zero terminal SNR, where the \(t\to T\) endpoint is visited in earnest.
 </div>
 
 ## Fixed or learned variance
 
 The posterior variance $$\tilde{\beta}_t$$ is known, so a natural choice is $$\sigma_t^2 = \tilde{\beta}_t$$. Ho et al. show this is optimal when $$\mathbf{x}_0$$ is deterministic, while $$\sigma_t^2 = \beta_t$$ is optimal when the data is $$\mathcal{N}(\mathbf{0},\mathbf{I})$$; the two bracket the truth. In practice they behave almost identically, and for the linear schedule they are numerically close away from $$t=1$$: at $$t=500$$, $$\sqrt{\beta_t} = 0.10020$$ against $$\sqrt{\tilde{\beta}_t} = 0.10016$$; at $$t=100$$, $$0.04552$$ against $$0.04511$$. The ratio $$\tilde{\beta}_t/\beta_t = (1-\bar{\alpha}_{t-1})/(1-\bar{\alpha}_t)$$ is below one but approaches it once $$\bar{\alpha}_t$$ is small.
 
-They diverge exactly where it matters for likelihood. As $$t\to1$$, $$\bar{\alpha}_0 = 1$$ forces $$\tilde{\beta}_1 = 0$$ while $$\beta_1 = 10^{-4}$$ — an infinite relative gap on the term that dominates the negative log-likelihood. Nichol & Dhariwal therefore learn an interpolation in log space,
+They diverge exactly where it matters for likelihood. As $$t\to1$$, $$\bar{\alpha}_0 = 1$$ forces $$\tilde{\beta}_1 = 0$$ while $$\beta_1 = 10^{-4}$$, an infinite relative gap on the term that dominates the negative log-likelihood. Nichol & Dhariwal therefore learn an interpolation in log space,
 
 <div class="formula-box">
 \[

@@ -27,7 +27,7 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Robot safety is not just about performance — it is about guaranteeing that robots will not harm people or property. Safe RL extends MDPs with explicit safety constraints; control barrier functions provide hard real-time safety filters; reachability analysis proves formal safety properties; and industry standards like ISO 10218 define human-robot interaction requirements.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Robot safety is not just about performance, it is about guaranteeing that robots will not harm people or property. Safe RL extends MDPs with explicit safety constraints; control barrier functions provide hard real-time safety filters; reachability analysis proves formal safety properties; and industry standards like ISO 10218 define human-robot interaction requirements.</div>
 {% include figure image_path="/images/blog/robotics/brohan2022_rt1.png" alt="Safety in robot learning" caption="Safety-aware robot learning systems (Brohan et al., 2022)" %}
 
 <style>
@@ -89,9 +89,9 @@ toc_label: "Contents"
 
 ## Why Safety is Different from Performance
 
-Standard RL maximises expected reward — a useful objective for performance but insufficient for safety. A reward function that penalises collisions will reduce them on average, but average performance is not what matters when a robot arm is operating next to a human worker. What matters is a **guarantee**: the robot must never collide, regardless of how reward optimisation plays out.
+Standard RL maximises expected reward, a useful objective for performance but insufficient for safety. A reward function that penalises collisions will reduce them on average, but average performance is not what matters when a robot arm is operating next to a human worker. What matters is a **guarantee**: the robot must never collide, regardless of how reward optimisation plays out.
 
-This distinction — between optimising performance and guaranteeing safety — is fundamental. Safety engineering requires worst-case analysis, formal verification, and constraint satisfaction rather than expectation maximisation.
+This distinction, between optimising performance and guaranteeing safety, is fundamental. Safety engineering requires worst-case analysis, formal verification, and constraint satisfaction rather than expectation maximisation.
 
 ## Constrained Markov Decision Processes
 
@@ -135,13 +135,13 @@ This QP is solved in microseconds, making CBF-based safety filters compatible wi
 
 ## Reachability Analysis
 
-**Hamilton-Jacobi reachability** (Mitchell et al. 2005) provides formal safety guarantees by computing the set of states from which it is impossible to avoid a constraint violation (the **backward reachable tube**). This computation is exact — it considers all possible disturbances and worst-case dynamics — but scales exponentially with state dimension, limiting it to systems with fewer than ~6 dimensions.
+**Hamilton-Jacobi reachability** (Mitchell et al. 2005) provides formal safety guarantees by computing the set of states from which it is impossible to avoid a constraint violation (the **backward reachable tube**). This computation is exact, it considers all possible disturbances and worst-case dynamics, but scales exponentially with state dimension, limiting it to systems with fewer than ~6 dimensions.
 
 For high-dimensional robot systems, approximate reachability methods (neural Lyapunov functions, sampling-based verification) are needed. These provide probabilistic guarantees rather than strict formal ones.
 
 ## Safe Exploration
 
-During training, RL agents must explore — but exploration can be dangerous in physical systems. **Safe exploration** methods constrain the policy's exploratory actions:
+During training, RL agents must explore, but exploration can be dangerous in physical systems. **Safe exploration** methods constrain the policy's exploratory actions:
 
 - **Conservative safety bounds**: maintain a backup safe controller and switch to it whenever the exploratory policy would lead to a potentially unsafe state.
 - **Gaussian process models**: learn an uncertainty-aware model of the safety constraint and use the model's confidence bounds to constrain exploration (SafeOpt, Berkenkamp et al. 2016).

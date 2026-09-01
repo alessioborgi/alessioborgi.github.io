@@ -18,9 +18,9 @@ permalink: /blog/persistent-homology/topological-layers/
 
 ## Intuition First
 
-Persistent homology tells you about loops, voids, and connected components in your data. But standard neural networks are oblivious to this — they cannot be penalised for "producing output with the wrong number of loops" unless you can **differentiate through the topology computation** and send gradients back through it.
+Persistent homology tells you about loops, voids, and connected components in your data. But standard neural networks are oblivious to this, they cannot be penalised for "producing output with the wrong number of loops" unless you can **differentiate through the topology computation** and send gradients back through it.
 
-The challenge: persistent homology is combinatorial. The persistence pairs come from a sorting and column-reduction procedure. How do you differentiate through a sort? The answer is that you do not differentiate through the sort itself — the **pairing is fixed** at any given input configuration. You only need to differentiate through the **filtration values** (the scalar function values attached to simplices), treating the combinatorial pairing structure as a constant.
+The challenge: persistent homology is combinatorial. The persistence pairs come from a sorting and column-reduction procedure. How do you differentiate through a sort? The answer is that you do not differentiate through the sort itself, the **pairing is fixed** at any given input configuration. You only need to differentiate through the **filtration values** (the scalar function values attached to simplices), treating the combinatorial pairing structure as a constant.
 
 This is the key insight behind all differentiable TDA: the topology (which pairs exist) changes discretely, but the birth and death values (how long each feature lives) vary smoothly with the input. Gradients flow through the birth/death values, not through the pairing decisions.
 
@@ -34,11 +34,11 @@ Let $$f : K \to \mathbb{R}$$ be a filtration function on a simplicial complex $$
 
 $$\frac{\partial \mathcal{L}}{\partial f(\sigma)} = \sum_{i : \sigma = \sigma_i} \frac{\partial \mathcal{L}}{\partial b_i} + \sum_{i : \sigma = \tau_i} \frac{\partial \mathcal{L}}{\partial d_i}$$
 
-Each simplex $$\sigma$$ appears as the birth simplex of at most one pair and the death simplex of at most one pair. The gradient is therefore a sparse sum — at most two nonzero terms per simplex.
+Each simplex $$\sigma$$ appears as the birth simplex of at most one pair and the death simplex of at most one pair. The gradient is therefore a sparse sum, at most two nonzero terms per simplex.
 
-In practice, this means: once you have the persistence pairs from a forward pass, the backward pass through the diagram is $$O(m)$$ — as fast as a single linear layer.
+In practice, this means: once you have the persistence pairs from a forward pass, the backward pass through the diagram is $$O(m)$$, as fast as a single linear layer.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The gradient of a persistence-based loss is <em>extremely sparse</em>. Only the simplices that are birth or death simplices of a persistence pair receive nonzero gradient. In a typical filtration, this is a tiny fraction of all simplices — most simplices are in apparent pairs that contribute nothing to the loss, and their gradients are zero. This makes topological regularisation computationally cheap once the pairs are known.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The gradient of a persistence-based loss is <em>extremely sparse</em>. Only the simplices that are birth or death simplices of a persistence pair receive nonzero gradient. In a typical filtration, this is a tiny fraction of all simplices, most simplices are in apparent pairs that contribute nothing to the loss, and their gradients are zero. This makes topological regularisation computationally cheap once the pairs are known.</div>
 
 ---
 
@@ -151,21 +151,21 @@ The key modules are the **PH computation** (forward only, outputs pairs) and the
 
 ## Topological Regularisers
 
-**Goal 1 — Encourage one prominent loop** (e.g., latent space of an autoencoder should have circular structure):
+**Goal 1, Encourage one prominent loop** (e.g., latent space of an autoencoder should have circular structure):
 
 $$\mathcal{L}_{\text{topo}} = -\max_{i} (d_i^{H_1} - b_i^{H_1}) + \sum_{i \neq i^*} (d_i^{H_1} - b_i^{H_1})$$
 
-Maximise the most persistent $$H_1$$ feature while penalising all others — encourages exactly one loop.
+Maximise the most persistent $$H_1$$ feature while penalising all others, encourages exactly one loop.
 
-**Goal 2 — Push all $$H_1$$ bars to zero** (ensure simply-connected representation):
+**Goal 2, Push all $$H_1$$ bars to zero** (ensure simply-connected representation):
 
 $$\mathcal{L}_{\text{topo}} = \sum_i (d_i^{H_1} - b_i^{H_1})^2$$
 
-**Goal 3 — Match a target diagram** (shape supervision):
+**Goal 3, Match a target diagram** (shape supervision):
 
 $$\mathcal{L}_{\text{topo}} = W_2(\text{Dgm}(f_\theta(X)),\, \text{Dgm}_{\text{target}})$$
 
-This uses the 2-Wasserstein loss between diagrams — differentiable through the matching (the matching is fixed during the backward pass, so gradients flow only through the birth/death values of matched pairs).
+This uses the 2-Wasserstein loss between diagrams, differentiable through the matching (the matching is fixed during the backward pass, so gradients flow only through the birth/death values of matched pairs).
 
 ---
 
@@ -187,7 +187,7 @@ The topological autoencoder (Moor et al., 2020) trains a standard autoencoder wi
 
 $$\mathcal{L} = \|X - \hat{X}\|^2 + \lambda \cdot W_2(\text{Dgm}(X),\, \text{Dgm}(Z))$$
 
-where $$Z$$ is the latent representation. This encourages the encoder to be a topology-preserving map — loops in the input space appear as loops in the latent space.
+where $$Z$$ is the latent representation. This encourages the encoder to be a topology-preserving map, loops in the input space appear as loops in the latent space.
 
 In experiments on synthetic manifolds (sphere, torus, klein bottle), the topological autoencoder recovers the correct Betti numbers in the latent space, while standard autoencoders collapse topological structure.
 

@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A cellular sheaf on a graph assigns a vector space ("stalk") to each node and each edge, with linear "restriction maps" from node stalks to adjacent edge stalks. A global section is an assignment of vectors to all nodes that is "consistent" — the restriction maps agree at every edge. The sheaf Laplacian \(L_{\mathcal{F}} = \delta^{\top}\delta\) measures the degree of global inconsistency.
+<strong>TL;DR:</strong> A cellular sheaf on a graph assigns a vector space ("stalk") to each node and each edge, with linear "restriction maps" from node stalks to adjacent edge stalks. A global section is an assignment of vectors to all nodes that is "consistent", the restriction maps agree at every edge. The sheaf Laplacian \(L_{\mathcal{F}} = \delta^{\top}\delta\) measures the degree of global inconsistency.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Sheaf structure on a graph" caption="Cellular sheaf on a graph: node/edge stalks and restriction maps (Bodnar et al., 2022)" %}
 
 
 ## Sheaves in Ordinary Mathematics
 
-**Intuition First:** Imagine you're assembling a jigsaw puzzle. Each piece (node) has part of the picture. Two adjacent pieces (connected by an edge) must agree along their shared border — but the border on piece A's side is the same physical border as on piece B's side, viewed from slightly different angles. The "restriction maps" are exactly the rotation/flip transforms that make A's border match B's border. A global section is a completed puzzle where every adjacent pair agrees perfectly after applying those transforms.
+**Intuition First:** Imagine you're assembling a jigsaw puzzle. Each piece (node) has part of the picture. Two adjacent pieces (connected by an edge) must agree along their shared border, but the border on piece A's side is the same physical border as on piece B's side, viewed from slightly different angles. The "restriction maps" are exactly the rotation/flip transforms that make A's border match B's border. A global section is a completed puzzle where every adjacent pair agrees perfectly after applying those transforms.
 
 In mathematics, a sheaf is a tool for tracking local data (defined on open sets of a topological space) and understanding when local data can be assembled into global data.
 
@@ -94,10 +94,10 @@ H^0(G;\mathcal{F}) \;=\; \ker \delta ,
 
 and it measures how much consistent global data the sheaf supports.
 
-**Special case — trivial sheaf:** $$\mathcal{F}(v) = \mathbb{R}$$, $$\mathcal{F}(e) = \mathbb{R}$$, all restriction maps equal to $$1$$. Then $$(\delta x)_e = x_v - x_u$$ is just the ordinary graph gradient, and global sections are the functions that are constant on each connected component. This is exactly the setting in which the sheaf Laplacian becomes the ordinary graph Laplacian.
+**Special case, trivial sheaf:** $$\mathcal{F}(v) = \mathbb{R}$$, $$\mathcal{F}(e) = \mathbb{R}$$, all restriction maps equal to $$1$$. Then $$(\delta x)_e = x_v - x_u$$ is just the ordinary graph gradient, and global sections are the functions that are constant on each connected component. This is exactly the setting in which the sheaf Laplacian becomes the ordinary graph Laplacian.
 
 <div class="insight-box">
-<strong>Intuition via temperature:</strong> Imagine nodes are thermometers at different locations. The "sheaf" models how readings should relate across edges — maybe a north-facing thermometer at A and a south-facing one at B should read slightly differently even if they measure the same "true" temperature. The restriction maps encode this "transformation rule." A global section represents a consistent temperature assignment across the network after applying all local transformations.
+<strong>Intuition via temperature:</strong> Imagine nodes are thermometers at different locations. The "sheaf" models how readings should relate across edges, maybe a north-facing thermometer at A and a south-facing one at B should read slightly differently even if they measure the same "true" temperature. The restriction maps encode this "transformation rule." A global section represents a consistent temperature assignment across the network after applying all local transformations.
 </div>
 
 ## The Standard Graph as a Trivial Sheaf
@@ -120,15 +120,15 @@ L_{\mathcal{F}} \;=\; \delta^{\top}\delta \;=\; D - A \;=\; L,
 \]
 </div>
 
-the ordinary $$\lvert V \rvert \times \lvert V \rvert$$ graph Laplacian. If instead the stalks are $$\mathbb{R}^d$$ with identity restriction maps, one gets the block version $$L \otimes I_d$$, which applies the same scalar Laplacian independently to each of the $$d$$ coordinates. Either way, no per-edge structure is available — the sheaf is trivial.
+the ordinary $$\lvert V \rvert \times \lvert V \rvert$$ graph Laplacian. If instead the stalks are $$\mathbb{R}^d$$ with identity restriction maps, one gets the block version $$L \otimes I_d$$, which applies the same scalar Laplacian independently to each of the $$d$$ coordinates. Either way, no per-edge structure is available, the sheaf is trivial.
 
-GCN's propagation $$\hat{A} H = (I - \tilde{\Delta})H$$, with $$\tilde{\Delta}$$ the symmetric normalised Laplacian of the self-looped graph, is one Euler step of heat diffusion; and heat diffusion $$\dot{x} = -Lx$$ is precisely gradient flow on the Dirichlet energy $$\tfrac12\sum_{(u,v) \in E} \lVert x_u - x_v \rVert^2$$. Each layer therefore *decreases* that energy — which is another way of saying it pushes neighbours toward equality.
+GCN's propagation $$\hat{A} H = (I - \tilde{\Delta})H$$, with $$\tilde{\Delta}$$ the symmetric normalised Laplacian of the self-looped graph, is one Euler step of heat diffusion; and heat diffusion $$\dot{x} = -Lx$$ is precisely gradient flow on the Dirichlet energy $$\tfrac12\sum_{(u,v) \in E} \lVert x_u - x_v \rVert^2$$. Each layer therefore *decreases* that energy, which is another way of saying it pushes neighbours toward equality.
 
 ## Non-Trivial Sheaves Allow Disagreement
 
-With non-trivial restriction maps, the "agreement" condition becomes $$\mathcal{F}_{u \trianglelefteq e} x_u = \mathcal{F}_{v \trianglelefteq e} x_v$$ — $$x_u$$ and $$x_v$$ are not required to be equal, only to agree after transformation.
+With non-trivial restriction maps, the "agreement" condition becomes $$\mathcal{F}_{u \trianglelefteq e} x_u = \mathcal{F}_{v \trianglelefteq e} x_v$$, $$x_u$$ and $$x_v$$ are not required to be equal, only to agree after transformation.
 
-This allows adjacent nodes to have **different but compatible** features. In a heterophilic graph, two nodes with different labels might have very different features, but a learned sheaf map could rotate one into the other's space — making them "consistent" under the sheaf even though they are numerically different.
+This allows adjacent nodes to have **different but compatible** features. In a heterophilic graph, two nodes with different labels might have very different features, but a learned sheaf map could rotate one into the other's space, making them "consistent" under the sheaf even though they are numerically different.
 
 ## Worked Example: Global Section on a Triangle Graph
 
@@ -163,16 +163,16 @@ Orienting each edge from the alphabetically earlier node to the later one, the c
 2. Edge $$e_{vw}$$ gives $$x_w - 2 x_v = 0$$, hence $$x_w = 2 x_u$$.
 3. Edge $$e_{uw}$$ gives $$3 x_w - x_u = 0$$, and substituting gives $$3(2 x_u) - x_u = 5 x_u = 0$$, hence $$x_u = 0$$.
 
-**Conclusion:** $$H^0(G;\mathcal{F}) = 0$$ — the only global section is the zero vector, so this sheaf carries no non-trivial consistent signal. What killed it is the *cycle*: going around the triangle multiplies a value by $$2 \cdot 3 / 1 \neq 1$$, so the three edge constraints are mutually incompatible. On a tree the same maps would leave a one-dimensional space of sections, because there is no cycle to close.
+**Conclusion:** $$H^0(G;\mathcal{F}) = 0$$, the only global section is the zero vector, so this sheaf carries no non-trivial consistent signal. What killed it is the *cycle*: going around the triangle multiplies a value by $$2 \cdot 3 / 1 \neq 1$$, so the three edge constraints are mutually incompatible. On a tree the same maps would leave a one-dimensional space of sections, because there is no cycle to close.
 
-<div class="insight-box"><strong>Key Insight:</strong> The dimension of \(H^0(G;\mathcal{F}) = \ker \delta\) tells you how much "consistent information" the sheaf can carry. The trivial sheaf on a connected graph has a one-dimensional space of sections — the constants (\(d\)-dimensional if the stalks are \(\mathbb{R}^d\)). Non-trivial maps can shrink this space, and with the right maps can make it carry class information instead of a constant, which directly controls how diffusion with the sheaf Laplacian behaves at long times.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The dimension of \(H^0(G;\mathcal{F}) = \ker \delta\) tells you how much "consistent information" the sheaf can carry. The trivial sheaf on a connected graph has a one-dimensional space of sections, the constants (\(d\)-dimensional if the stalks are \(\mathbb{R}^d\)). Non-trivial maps can shrink this space, and with the right maps can make it carry class information instead of a constant, which directly controls how diffusion with the sheaf Laplacian behaves at long times.</div>
 
 ## Why Sheaves for Graphs?
 
 The sheaf framework provides:
 
 1. **Richer aggregation:** edges have their own "mediation" structure (restriction maps)
-2. **Heterophily handling:** adjacent nodes with different features are not forced to agree — the restriction maps can accommodate difference
+2. **Heterophily handling:** adjacent nodes with different features are not forced to agree, the restriction maps can accommodate difference
 3. **Mathematical guarantees:** the sheaf Laplacian inherits spectral theory from the standard Laplacian, with richer structure
 4. **Interpretability:** the consistency defect $$\lVert \delta x \rVert^2$$ measures "how inconsistent" the data is under the learned sheaf
 

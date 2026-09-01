@@ -6,7 +6,7 @@ book: tdl
 subsection: applications
 tags: [tda-materials, porous-materials, crystal-structure, phase-transitions, materials-informatics]
 published: false
-excerpt: "Persistent homology characterises the multi-scale structure of materials — from pore geometry in catalysts to glass transition in amorphous materials. H₀ captures connectivity, H₁ captures channels and rings, H₂ captures enclosed voids. These topological descriptors predict mechanical properties, adsorption capacity, and phase transitions more accurately than geometric averages."
+excerpt: "Persistent homology characterises the multi-scale structure of materials, from pore geometry in catalysts to glass transition in amorphous materials. H₀ captures connectivity, H₁ captures channels and rings, H₂ captures enclosed voids. These topological descriptors predict mechanical properties, adsorption capacity, and phase transitions more accurately than geometric averages."
 author_profile: true
 read_time: true
 icon: "⚗️"
@@ -28,7 +28,7 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Two sponges can have the same density but completely different gas transport properties — one has interconnected tunnels (a network of H₁ channels), the other has isolated closed bubbles (H₂ cavities). A simple average pore size misses this completely. TDA sees it directly: long H₁ bars mean through-channels (gas can diffuse); long H₂ bars mean sealed pores (gas is trapped). Materials scientists have been measuring pore size distributions for decades; TDA gives them pore topology distributions — a strictly richer description.
+Two sponges can have the same density but completely different gas transport properties, one has interconnected tunnels (a network of H₁ channels), the other has isolated closed bubbles (H₂ cavities). A simple average pore size misses this completely. TDA sees it directly: long H₁ bars mean through-channels (gas can diffuse); long H₂ bars mean sealed pores (gas is trapped). Materials scientists have been measuring pore size distributions for decades; TDA gives them pore topology distributions, a strictly richer description.
 
 ## Why Topology for Materials?
 
@@ -51,22 +51,22 @@ For a porous material represented as a 3D point cloud of atom positions \(P\):
 - \(H_1\) bars: channels/tunnels through the material. Long bars = persistent channels from large to small length scales.
 - \(H_2\) bars: enclosed pores/cages. Birth \(b\) = pore diameter; death \(d\) = smallest "bottleneck" in the pore wall.
 
-<div class="math-box">Pore accessibility: \(\{(b_k, d_k) \in H_2 : b_k > r_{gas}\}\) — cages accessible to molecules of radius \(r_{gas}\)</div>
+<div class="math-box">Pore accessibility: \(\{(b_k, d_k) \in H_2 : b_k > r_{gas}\}\), cages accessible to molecules of radius \(r_{gas}\)</div>
 
 ## Worked Example: Sponge vs. Foam
 
 Two porous materials, both with 30% void volume:
 
-**Material A — Interconnected channels** (like a zeolite):
+**Material A, Interconnected channels** (like a zeolite):
 - Atom positions form a periodic lattice with 1D tunnels of diameter 4 Å.
 - Rips filtration: \(H_1\) bars born at \(r \approx 2\) Å (when tunnel edges connect), dying at \(r \approx 8\) Å (when the tunnel is fully enclosed).
-- Persistence: \(8 - 2 = 6\) Å — long-lived H₁ bars indicating persistent through-channels.
-- \(H_2 = \emptyset\) (no closed voids — channels are open-ended).
+- Persistence: \(8 - 2 = 6\) Å, long-lived H₁ bars indicating persistent through-channels.
+- \(H_2 = \emptyset\) (no closed voids, channels are open-ended).
 
-**Material B — Closed-cell foam**:
+**Material B, Closed-cell foam**:
 - Atom positions form closed bubble walls of diameter ≈ 10 Å.
 - \(H_1\) bars: short (local ring structures in bubble walls), persistence ≈ 1–2 Å.
-- \(H_2\) bar: \((r_{\text{birth}} \approx 5, r_{\text{death}} \approx 12)\), persistence \(= 7\) Å — one large enclosed void per bubble.
+- \(H_2\) bar: \((r_{\text{birth}} \approx 5, r_{\text{death}} \approx 12)\), persistence \(= 7\) Å, one large enclosed void per bubble.
 
 **Prediction**: Material A will have \(10\times\) higher gas diffusion (H₁ channels = gas highways). Material B will have higher acoustic absorption (closed voids trap sound). TDA distinguishes them; pore size distributions (both peak near 4–5 Å) do not.
 
@@ -144,13 +144,13 @@ Two porous materials, both with 30% void volume:
   </rect>
   <text x="350" y="175" font-size="7" fill="#94a3b8">(short)</text>
 </svg>
-<figcaption>Material A (interconnected channels) produces long H₁ bars; Material B (closed foam) produces long H₂ bars. Same void fraction, completely different topology — and completely different gas transport properties.</figcaption>
+<figcaption>Material A (interconnected channels) produces long H₁ bars; Material B (closed foam) produces long H₂ bars. Same void fraction, completely different topology, and completely different gas transport properties.</figcaption>
 </figure>
 </div>
 
 ## Metal-Organic Frameworks (MOFs)
 
-MOFs are crystalline porous materials with precisely engineered pore geometry. A key problem is **screening** — choosing which of $$\sim 500000$$ synthesisable MOFs to test for gas storage.
+MOFs are crystalline porous materials with precisely engineered pore geometry. A key problem is **screening**, choosing which of $$\sim 500000$$ synthesisable MOFs to test for gas storage.
 
 **Lee et al. (2021)**: Trained an ML model using persistence diagram features of MOF atom clouds to predict methane storage capacity. The topological features (especially $$H_2$$ diagram) outperformed pure geometric features, capturing the "shape" of pores beyond simple radii.
 
@@ -170,7 +170,7 @@ For crystalline materials, the persistence diagram is a **crystal structure fing
 - The diagram is invariant to unit cell choice and atomic labelling.
 - Crystal structure databases can be searched by topological similarity.
 
-<div class="insight-box"><strong>Key Insight:</strong> Materials science and TDA are a natural fit because materials properties are fundamentally topological: whether electrons can percolate (electrical conductivity), whether molecules can diffuse (gas adsorption), whether cracks can propagate (fracture toughness) all depend on connectivity — H₀ and H₁ topology — not on mean distances. Classical materials descriptors (radial distribution functions, structure factors) are essentially statistics of pairwise distances and miss this connectivity information. TDA fills exactly this gap.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Materials science and TDA are a natural fit because materials properties are fundamentally topological: whether electrons can percolate (electrical conductivity), whether molecules can diffuse (gas adsorption), whether cracks can propagate (fracture toughness) all depend on connectivity, H₀ and H₁ topology, not on mean distances. Classical materials descriptors (radial distribution functions, structure factors) are essentially statistics of pairwise distances and miss this connectivity information. TDA fills exactly this gap.</div>
 
 ## References
 

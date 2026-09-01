@@ -45,7 +45,7 @@ toc_label: "Contents"
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/position-interpolation-paper.png" alt="First page of the Position Interpolation paper" caption="Paper preview — Extending Context Window of Large Language Models via Positional Interpolation (Chen et al., 2023)." %}
+{% include figure image_path="/images/blog/papers/position-interpolation-paper.png" alt="First page of the Position Interpolation paper" caption="Paper preview, Extending Context Window of Large Language Models via Positional Interpolation (Chen et al., 2023)." %}
 </div>
 
 <div class="blog-figure">
@@ -81,7 +81,7 @@ toc_label: "Contents"
   <rect x="182" y="242" width="395" height="28" rx="14" fill="#fef3c7" stroke="#f59e0b"/>
   <text x="379" y="260" text-anchor="middle" font-size="13" font-weight="700" fill="#78350f">pos' = pos × (Ltrain / Ltarget)</text>
 </svg>
-<figcaption>Figure 1 — Position Interpolation extends a RoPE model by squeezing larger positions back into the positional range seen during training. The architecture stays the same; the trick is to remap coordinates before applying the rotary transform. Source: [1].</figcaption>
+<figcaption>Figure 1, Position Interpolation extends a RoPE model by squeezing larger positions back into the positional range seen during training. The architecture stays the same; the trick is to remap coordinates before applying the rotary transform. Source: [1].</figcaption>
 </figure>
 </div>
 
@@ -93,7 +93,7 @@ toc_label: "Contents"
 
 Model: LLaMA-2 7B, trained at $$L_{\mathrm{train}} = 4096$$, target $$L_{\mathrm{target}} = 16384$$ (4× extension).
 
-**Without Position Interpolation — naive extrapolation:**
+**Without Position Interpolation, naive extrapolation:**
 - Token at position 5000: RoPE angle for dim $$i=0$$ = $$5000 \times \theta_0 = 5000 \times 1.0 =$$ **5000 radians**
 - The model during training never saw an angle beyond 4096 radians for this dimension
 - The attention pattern for this token is completely out-of-distribution → garbage output
@@ -101,13 +101,13 @@ Model: LLaMA-2 7B, trained at $$L_{\mathrm{train}} = 4096$$, target $$L_{\mathrm
 **With Position Interpolation:**
 - Rescale: $$\mathrm{pos}_{\mathrm{new}} = 5000 \times (4096 / 16384) = 5000 \times 0.25 =$$ **1250**
 - RoPE angle for dim $$i=0$$ = $$1250 \times 1.0 =$$ **1250 radians**
-- The model saw angles up to 4096 during training — 1250 is well within this range ✓
+- The model saw angles up to 4096 during training, 1250 is well within this range ✓
 - Token at position 16383 maps to: $$16383 \times 0.25 = 4095.75$$ ≈ still within training range ✓
 
 **The cost:** positions that were 1 apart (relative angle $$= \theta$$) now look like they are 0.25 apart (relative angle $$= 0.25 \times \theta$$). The model's learned sense of "adjacent" vs "nearby" is compressed. A short fine-tuning run (1000 steps) lets it readapt its attention patterns to the new compressed geometry.
 
 <div class="insight-box">
-<strong>High-frequency degradation:</strong> For the highest-frequency dimension (\(i=63\), \(\theta_{63} \approx 1/7244\)), adjacent tokens produce a relative angle of \(0.25/7244 \approx 0.0000345\) radians after interpolation — very small, and the model may struggle to distinguish adjacent from nearby tokens. This is precisely what NTK-Aware Scaling and YaRN later improved upon.
+<strong>High-frequency degradation:</strong> For the highest-frequency dimension (\(i=63\), \(\theta_{63} \approx 1/7244\)), adjacent tokens produce a relative angle of \(0.25/7244 \approx 0.0000345\) radians after interpolation, very small, and the model may struggle to distinguish adjacent from nearby tokens. This is precisely what NTK-Aware Scaling and YaRN later improved upon.
 </div>
 
 ## Why It Was Such a Big Deal

@@ -6,7 +6,7 @@ book: tdl
 subsection: foundations
 tags: [cubical-complex, cubical-homology, image-analysis, grid-topology]
 published: false
-excerpt: "Cubical complexes tile space with hypercubes instead of simplices — the natural choice for image data, time series, and voxel grids. Their homology captures the same topological invariants as simplicial homology, but with a structure perfectly adapted to pixel/voxel data."
+excerpt: "Cubical complexes tile space with hypercubes instead of simplices, the natural choice for image data, time series, and voxel grids. Their homology captures the same topological invariants as simplicial homology, but with a structure perfectly adapted to pixel/voxel data."
 author_profile: true
 read_time: true
 icon: "🟦"
@@ -24,9 +24,9 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> A cubical complex builds topology from elementary intervals [k, k+1] and their products — hypercubes. This is the native structure for image data: pixels are 0-cubes, edges between adjacent pixels are 1-cubes, and pixel squares are 2-cubes. Cubical persistence is implemented directly in CubicalRipser and GUDHI and runs faster on image data than any simplicial approach.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> A cubical complex builds topology from elementary intervals [k, k+1] and their products, hypercubes. This is the native structure for image data: pixels are 0-cubes, edges between adjacent pixels are 1-cubes, and pixel squares are 2-cubes. Cubical persistence is implemented directly in CubicalRipser and GUDHI and runs faster on image data than any simplicial approach.</div>
 
-**Intuition First.** Images are grids of pixels. Building a simplicial complex from pixel data requires triangulating those pixels — creating artificial diagonal edges that don't exist in the data. Cubical complexes avoid this: they work directly with the pixel grid, treating each pixel as a 0-cube (vertex), each shared edge as a 1-cube, and each 2×2 pixel square as a 2-cube. No triangulation needed, no artificial geometry introduced, and the sublevel-set filtration maps directly to sorting pixels by intensity.
+**Intuition First.** Images are grids of pixels. Building a simplicial complex from pixel data requires triangulating those pixels, creating artificial diagonal edges that don't exist in the data. Cubical complexes avoid this: they work directly with the pixel grid, treating each pixel as a 0-cube (vertex), each shared edge as a 1-cube, and each 2×2 pixel square as a 2-cube. No triangulation needed, no artificial geometry introduced, and the sublevel-set filtration maps directly to sorting pixels by intensity.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 460 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;font-family:sans-serif;">
@@ -103,9 +103,9 @@ As $$\alpha$$ increases, cubes enter one by one in order of their maximum pixel 
 
 This is directly useful for feature detection in medical images, materials science, and astronomical data.
 
-<div class="insight-box"><strong>Key Insight:</strong> Cubical persistence avoids the $$O(n^2)$$ edge creation cost of Vietoris-Rips on image data. A 512×512 image has 262,144 pixels; building a Vietoris-Rips complex would create ~34 billion edges. Cubical complexes only include edges between adjacent pixels — O(n) edges — making computation feasible. CubicalRipser handles millions of voxels.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Cubical persistence avoids the $$O(n^2)$$ edge creation cost of Vietoris-Rips on image data. A 512×512 image has 262,144 pixels; building a Vietoris-Rips complex would create ~34 billion edges. Cubical complexes only include edges between adjacent pixels, O(n) edges, making computation feasible. CubicalRipser handles millions of voxels.</div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Cubical homology computes exactly the same topological invariants as simplicial homology — connected components, loops, voids — but without any triangulation step. For image data the two give identical results, but cubical computation is far faster: a 512×512 image has 262,144 pixels but only ~524,000 edges and ~261,000 squares, vs. billions of simplices if you naively built a Vietoris-Rips complex. CubicalRipser handles 1000×1000×1000 voxel grids in minutes.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Cubical homology computes exactly the same topological invariants as simplicial homology, connected components, loops, voids, but without any triangulation step. For image data the two give identical results, but cubical computation is far faster: a 512×512 image has 262,144 pixels but only ~524,000 edges and ~261,000 squares, vs. billions of simplices if you naively built a Vietoris-Rips complex. CubicalRipser handles 1000×1000×1000 voxel grids in minutes.</div>
 
 ## References
 

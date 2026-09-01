@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> The <a href="/blog/gdl/transformers-are-gnns/">previous chapter</a> established that Transformers and GNNs compute the same thing on different graphs. This one asks why one of them took over. Attention compares every pair — asymptotically <em>more</em> work than sparse message passing — but expresses that work as dense matrix multiplication, which modern accelerators are built for. Sparse message passing needs gather and scatter over a neighbour index, which they are not. The winner was decided by hardware, not by mathematics.
+<strong>TL;DR:</strong> The <a href="/blog/gdl/transformers-are-gnns/">previous chapter</a> established that Transformers and GNNs compute the same thing on different graphs. This one asks why one of them took over. Attention compares every pair, asymptotically <em>more</em> work than sparse message passing, but expresses that work as dense matrix multiplication, which modern accelerators are built for. Sparse message passing needs gather and scatter over a neighbour index, which they are not. The winner was decided by hardware, not by mathematics.
 </div>
 
 ## The dense formulation
@@ -56,25 +56,25 @@ Sparse message passing does dramatically **less arithmetic**, and the gap widens
 n \;&lt;\; C \, k .
 \]
 </div>
-The crossover is linear in both the hardware constant and the graph's density. For a sparse graph with \(k\) around 10 and a large \(C\), that threshold sits in the thousands of nodes — which is above most sequence lengths and most molecular graphs, and far below a billion-node social network. I am not giving a number for \(C\): it depends on hardware, kernel and precision, and the source paper reports none. The <em>shape</em> of the trade-off is the point.
+The crossover is linear in both the hardware constant and the graph's density. For a sparse graph with \(k\) around 10 and a large \(C\), that threshold sits in the thousands of nodes, which is above most sequence lengths and most molecular graphs, and far below a billion-node social network. I am not giving a number for \(C\): it depends on hardware, kernel and precision, and the source paper reports none. The <em>shape</em> of the trade-off is the point.
 </div>
 
 This explains the exception the argument always carries: for very sparse or billion-scale graphs, message passing remains the only option. There, $$n \gg Ck$$ and no constant factor rescues $$n^2$$.
 
 ## The hardware lottery
 
-Sara Hooker's term for this: a research idea wins partly on merit and partly because it happens to fit the hardware available when it arrives. Ideas that need hardware nobody built lose, whatever their intrinsic quality — and the loss looks like the idea being wrong rather than being early.
+Sara Hooker's term for this: a research idea wins partly on merit and partly because it happens to fit the hardware available when it arrives. Ideas that need hardware nobody built lose, whatever their intrinsic quality, and the loss looks like the idea being wrong rather than being early.
 
-Transformers are the clean case. Attention was not selected because it does less work — it does more. It was selected because its work is shaped like the operation accelerators execute best, and because that shape kept paying off as models and datasets grew.
+Transformers are the clean case. Attention was not selected because it does less work, it does more. It was selected because its work is shaped like the operation accelerators execute best, and because that shape kept paying off as models and datasets grew.
 
-This connects to Sutton's *bitter lesson*: methods that scale with compute tend to beat methods that encode human insight about the problem. A GNN's sparse graph *is* encoded insight — a claim that these entities interact and those do not. A Transformer declines to make that claim and learns which pairs matter. When compute is scarce the encoded insight is valuable; when compute is abundant, learning it beats asserting it.
+This connects to Sutton's *bitter lesson*: methods that scale with compute tend to beat methods that encode human insight about the problem. A GNN's sparse graph *is* encoded insight, a claim that these entities interact and those do not. A Transformer declines to make that claim and learns which pairs matter. When compute is scarce the encoded insight is valuable; when compute is abundant, learning it beats asserting it.
 
 <div class="warning-box">
 <strong>Two things this argument does not establish.</strong>
 
-First, that structure is worthless. There is empirical evidence Transformers can <em>learn</em> the inductive biases GNNs hard-code — locality especially — when trained at sufficient scale and given positional encodings as hints. "Can learn given enough data and compute" is not "is better to learn"; on small scientific datasets the encoded prior is often still the better trade.
+First, that structure is worthless. There is empirical evidence Transformers can <em>learn</em> the inductive biases GNNs hard-code, locality especially, when trained at sufficient scale and given positional encodings as hints. "Can learn given enough data and compute" is not "is better to learn"; on small scientific datasets the encoded prior is often still the better trade.
 
-Second, that the lottery is permanent. It is a statement about current accelerators. Hardware with better sparse support, or graphs large enough to make \(n^2\) impossible, changes the arithmetic — and the equivalence from the previous chapter means the <em>model</em> need not change at all, only which implementation of the same operator you run.
+Second, that the lottery is permanent. It is a statement about current accelerators. Hardware with better sparse support, or graphs large enough to make \(n^2\) impossible, changes the arithmetic, and the equivalence from the previous chapter means the <em>model</em> need not change at all, only which implementation of the same operator you run.
 </div>
 
 ## What to take from it
@@ -86,12 +86,12 @@ Conceptually, this is the honest ending to the geometric deep learning story. Th
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>Attention is three dense matmuls and a softmax — no indices, no branching, and multi-head parallelises by reshaping to \(n \times k \times d/k\).</li>
+  <li>Attention is three dense matmuls and a softmax, no indices, no branching, and multi-head parallelises by reshaping to \(n \times k \times d/k\).</li>
   <li>Sparse message passing needs gather and scatter over a neighbour index: irregular, memory-bound, and poorly matched to current accelerators.</li>
-  <li>Attention does asymptotically <em>more</em> arithmetic — \(n^2\) pairs against \(nk\) messages, a 1,000× gap at \(n = 10^4, k = 10\) — and is still faster to train at typical scales.</li>
+  <li>Attention does asymptotically <em>more</em> arithmetic, \(n^2\) pairs against \(nk\) messages, a 1,000× gap at \(n = 10^4, k = 10\), and is still faster to train at typical scales.</li>
   <li>Dense wins while \(n &lt; Ck\), linear in the hardware constant and the graph's density. Above that, sparsity is the only option.</li>
   <li>The hardware lottery: architectures win partly because they fit the hardware of their moment. Attention's advantage is the <em>shape</em> of its computation, not the amount.</li>
-  <li>None of this shows structure is worthless, or that the outcome is permanent — and by the equivalence, changing implementation does not require changing the model.</li>
+  <li>None of this shows structure is worthless, or that the outcome is permanent, and by the equivalence, changing implementation does not require changing the model.</li>
 </ul>
 </div>
 

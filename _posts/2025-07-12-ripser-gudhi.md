@@ -22,8 +22,8 @@ Computing persistent homology naively means building the entire Vietoris-Rips co
 
 Ripser turns this around with two key insights:
 
-1. **Cohomology is dual to homology** — you get the same persistence pairs by reducing the *coboundary* matrix (rows become columns, the matrix is now lower-triangular). This is the "Ripser trick."
-2. **Most simplices are "apparent pairs"** — a simplex and its cofacet whose pair can be detected in $$O(1)$$ without any column operations. In practice, apparent pairs account for over 95% of all simplices in Rips complexes.
+1. **Cohomology is dual to homology**, you get the same persistence pairs by reducing the *coboundary* matrix (rows become columns, the matrix is now lower-triangular). This is the "Ripser trick."
+2. **Most simplices are "apparent pairs"**, a simplex and its cofacet whose pair can be detected in $$O(1)$$ without any column operations. In practice, apparent pairs account for over 95% of all simplices in Rips complexes.
 
 The result: Ripser computes PH in seconds on point clouds where naive reduction would take hours.
 
@@ -57,7 +57,7 @@ Apparent pairs can be checked in \(O(d)\) time (where \(d\) is the ambient dimen
 
 Instead of computing persistent homology directly, Ripser computes **persistent cohomology** via the coboundary matrix \(\delta = \partial^T\). The resulting persistence pairs are identical (by the universal coefficient theorem for fields), but the coboundary matrix has different sparsity structure that makes it faster to reduce.
 
-The combination of cohomology + apparent pairs + clearing gives Ripser its enormous practical speedup — typically 10x–1000x over naive boundary matrix reduction.
+The combination of cohomology + apparent pairs + clearing gives Ripser its enormous practical speedup, typically 10x–1000x over naive boundary matrix reduction.
 
 ---
 
@@ -140,7 +140,7 @@ The combination of cohomology + apparent pairs + clearing gives Ripser its enorm
   <text x="80" y="114" text-anchor="middle" font-size="10" fill="#94a3b8">T₀₁₂ (triangle)</text>
 
   <rect x="135" y="98" width="120" height="24" rx="3" fill="#f1f5f9"/>
-  <text x="195" y="114" text-anchor="middle" font-size="10" fill="#94a3b8">—</text>
+  <text x="195" y="114" text-anchor="middle" font-size="10" fill="#94a3b8">, </text>
 
   <rect x="260" y="98" width="115" height="24" rx="3" fill="#f1f5f9"/>
   <text x="317" y="114" text-anchor="middle" font-size="10" fill="#94a3b8">Paired by e₀₁ above</text>
@@ -209,8 +209,8 @@ On a noisy circle with $$n$$ points (MacBook Pro M2, 2024):
 |-----|-------------|-----------------|---------------------|
 | 500 | 8 | 12 | 1,400 |
 | 2,000 | 45 | 60 | timeout |
-| 10,000 | 380 | 420 | — |
-| 50,000 | 4,200 | 6,100 | — |
+| 10,000 | 380 | 420 |, |
+| 50,000 | 4,200 | 6,100 |, |
 
 The gap widens with dimension: for $$H_2$$ computation, Ripser's apparent pairs dominate even more.
 

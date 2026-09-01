@@ -6,7 +6,7 @@ categories: [cs-basics]
 book: cs-basics
 subsection: algorithms
 tags: [graphs, bfs, dfs, dijkstra, union-find]
-excerpt: "Dijkstra is greedy: it finalises the closest unvisited vertex and never revisits it. That is valid only because every edge adds weight — put one negative edge in the graph and the algorithm returns a wrong answer without complaining."
+excerpt: "Dijkstra is greedy: it finalises the closest unvisited vertex and never revisits it. That is valid only because every edge adds weight, put one negative edge in the graph and the algorithm returns a wrong answer without complaining."
 author_profile: true
 read_time: true
 is_overview: false
@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## Two representations
 
-An **adjacency list** stores, per vertex, the list of its neighbours: $$\Theta(V+E)$$ space, iterating a vertex's neighbours costs $$\Theta(\deg(u))$$, and testing whether a specific edge exists costs $$\Theta(\deg(u))$$. An **adjacency matrix** stores a $$V \times V$$ array: $$\Theta(V^2)$$ space, $$O(1)$$ edge test, but $$\Theta(V)$$ to walk one vertex's neighbours — even if it has two.
+An **adjacency list** stores, per vertex, the list of its neighbours: $$\Theta(V+E)$$ space, iterating a vertex's neighbours costs $$\Theta(\deg(u))$$, and testing whether a specific edge exists costs $$\Theta(\deg(u))$$. An **adjacency matrix** stores a $$V \times V$$ array: $$\Theta(V^2)$$ space, $$O(1)$$ edge test, but $$\Theta(V)$$ to walk one vertex's neighbours, even if it has two.
 
 | | Adjacency list | Adjacency matrix |
 |---|---|---|
@@ -32,7 +32,7 @@ An **adjacency list** stores, per vertex, the list of its neighbours: $$\Theta(V
 | Iterate neighbours of $$u$$ | $$\Theta(\deg u)$$ | $$\Theta(V)$$ |
 | Full traversal | $$\Theta(V+E)$$ | $$\Theta(V^2)$$ |
 
-Real graphs — social networks, road networks, citation graphs, molecules — are sparse, with $$E = O(V)$$ rather than $$\Theta(V^2)$$, so lists win by a wide margin: a million vertices in a matrix is $$10^{12}$$ entries. The matrix earns its place when the graph is genuinely dense, when the inner loop is repeated edge queries, or when you want to do spectral work on it — eigenvectors of the [graph Laplacian](/blog/gnn/graph-laplacian/), and the message-passing layers built on them in the [graph neural network book](/blog/gnn/overview/), operate on the matrix form (usually sparse-encoded).
+Real graphs, social networks, road networks, citation graphs, molecules, are sparse, with $$E = O(V)$$ rather than $$\Theta(V^2)$$, so lists win by a wide margin: a million vertices in a matrix is $$10^{12}$$ entries. The matrix earns its place when the graph is genuinely dense, when the inner loop is repeated edge queries, or when you want to do spectral work on it, eigenvectors of the [graph Laplacian](/blog/gnn/graph-laplacian/), and the message-passing layers built on them in the [graph neural network book](/blog/gnn/overview/), operate on the matrix form (usually sparse-encoded).
 
 ## BFS and DFS
 
@@ -68,11 +68,11 @@ print(bfs_shortest(adj, "a", "e"))   # ['a', 'b', 'd', 'e']
 
 Marking a vertex when it is *enqueued* rather than when it is dequeued is not a detail: mark late and a vertex with several discovered predecessors enters the queue several times, and the cost stops being linear.
 
-DFS goes deep first, and its recursion fits anything defined recursively on subgraphs: cycle detection (a back edge to a vertex still on the recursion stack), topological ordering, Tarjan's strongly connected components, articulation points. Its depth is $$\Theta(V)$$ worst case, so in Python a long path exhausts the [call stack](/blog/cs-basics/recursion-and-dp/) — write it iteratively for large graphs.
+DFS goes deep first, and its recursion fits anything defined recursively on subgraphs: cycle detection (a back edge to a vertex still on the recursion stack), topological ordering, Tarjan's strongly connected components, articulation points. Its depth is $$\Theta(V)$$ worst case, so in Python a long path exhausts the [call stack](/blog/cs-basics/recursion-and-dp/), write it iteratively for large graphs.
 
 ## Topological sort
 
-A topological order lists the vertices of a directed graph so that every edge points forwards. It exists **if and only if the graph is a DAG**. Kahn's algorithm computes one in $$\Theta(V+E)$$: compute in-degrees, seed a queue with the zero-in-degree vertices, and each time you emit a vertex decrement its successors' in-degrees, enqueueing any that reach zero. If fewer than $$V$$ vertices come out, the remainder contain a cycle — so the algorithm doubles as a cycle detector. This is how build systems order compilation, how spreadsheets order recalculation, and how an autograd engine orders the backward pass over its computation graph.
+A topological order lists the vertices of a directed graph so that every edge points forwards. It exists **if and only if the graph is a DAG**. Kahn's algorithm computes one in $$\Theta(V+E)$$: compute in-degrees, seed a queue with the zero-in-degree vertices, and each time you emit a vertex decrement its successors' in-degrees, enqueueing any that reach zero. If fewer than $$V$$ vertices come out, the remainder contain a cycle, so the algorithm doubles as a cycle detector. This is how build systems order compilation, how spreadsheets order recalculation, and how an autograd engine orders the backward pass over its computation graph.
 
 ## Shortest paths
 
@@ -115,7 +115,7 @@ The correctness argument is one sentence, and it contains the assumption: when $
   <text x="490" y="254" text-anchor="middle" font-size="9.5" fill="#0e7490">true distance is 1</text>
   <text x="320" y="268" text-anchor="middle" font-size="9.5" fill="#475569">B is extracted first (2 &lt; 3) and never reconsidered, so A→C→B = 3 − 2 = 1 is missed</text>
 </svg>
-<figcaption>Notice that the graph has no negative cycle and no ambiguity — the shortest path is well defined at 1. Dijkstra still fails, because it finalises B before ever looking at C. The error is silent: nothing raises, the answer is simply wrong.</figcaption>
+<figcaption>Notice that the graph has no negative cycle and no ambiguity, the shortest path is well defined at 1. Dijkstra still fails, because it finalises B before ever looking at C. The error is silent: nothing raises, the answer is simply wrong.</figcaption>
 </figure>
 </div>
 
@@ -123,7 +123,7 @@ The correctness argument is one sentence, and it contains the assumption: when $
 
 ## Union-find
 
-Disjoint-set union maintains a partition under two operations: `find(x)` returns the representative of $$x$$'s set, `union(a, b)` merges two sets. With **union by size** (hang the smaller tree under the larger) and **path compression** (re-point nodes at the root during `find`), $$m$$ operations on $$n$$ elements cost $$O(m\,\alpha(n))$$ amortised, where $$\alpha$$ is the inverse Ackermann function — below 5 for any $$n$$ that fits in the universe.
+Disjoint-set union maintains a partition under two operations: `find(x)` returns the representative of $$x$$'s set, `union(a, b)` merges two sets. With **union by size** (hang the smaller tree under the larger) and **path compression** (re-point nodes at the root during `find`), $$m$$ operations on $$n$$ elements cost $$O(m\,\alpha(n))$$ amortised, where $$\alpha$$ is the inverse Ackermann function, below 5 for any $$n$$ that fits in the universe.
 
 ```python
 class DSU:
@@ -153,14 +153,14 @@ print(d.find(0) == d.find(1))   # True
 print(d.find(0) == d.find(3))   # False
 ```
 
-Use it for Kruskal's minimum spanning tree, for streaming connected components, and for near-duplicate clustering — anywhere edges arrive online and you only ever ask "same component?". It cannot un-merge, and it cannot give you a path.
+Use it for Kruskal's minimum spanning tree, for streaming connected components, and for near-duplicate clustering, anywhere edges arrive online and you only ever ask "same component?". It cannot un-merge, and it cannot give you a path.
 
 <div class="insight-box">
-  <strong>Key Insight — BFS, DFS and Dijkstra are one algorithm with three frontier structures.</strong> Take a frontier of discovered-but-unfinished vertices; repeatedly remove one, finalise it, and add its undiscovered neighbours. Make the frontier a FIFO queue and you get BFS; a LIFO stack and you get DFS; a min-priority queue keyed by tentative distance and you get Dijkstra. That is why Dijkstra on unit weights is BFS with unnecessary overhead — and it locates the exact place the negative-weight assumption enters, namely the claim that removing the minimum means finalising it.
+  <strong>Key Insight, BFS, DFS and Dijkstra are one algorithm with three frontier structures.</strong> Take a frontier of discovered-but-unfinished vertices; repeatedly remove one, finalise it, and add its undiscovered neighbours. Make the frontier a FIFO queue and you get BFS; a LIFO stack and you get DFS; a min-priority queue keyed by tentative distance and you get Dijkstra. That is why Dijkstra on unit weights is BFS with unnecessary overhead, and it locates the exact place the negative-weight assumption enters, namely the claim that removing the minimum means finalising it.
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — Dijkstra and negative edges.</strong> It does not just get slow, it returns a wrong answer with no error, as the figure shows. Use Bellman–Ford (\(\Theta(VE)\)), or Johnson's reweighting for all-pairs. Related traps: BFS gives shortest paths only when edges are unweighted (or all equal); the visited set must be updated on enqueue, or the queue fills with duplicates; and a topological order exists only for a DAG — if Kahn's algorithm emits fewer than \(V\) vertices, you have found a cycle, not a bug.
+  <strong>Interview trap, Dijkstra and negative edges.</strong> It does not just get slow, it returns a wrong answer with no error, as the figure shows. Use Bellman–Ford (\(\Theta(VE)\)), or Johnson's reweighting for all-pairs. Related traps: BFS gives shortest paths only when edges are unweighted (or all equal); the visited set must be updated on enqueue, or the queue fills with duplicates; and a topological order exists only for a DAG, if Kahn's algorithm emits fewer than \(V\) vertices, you have found a cycle, not a bug.
 </div>
 
 <div class="key-takeaways">
@@ -170,7 +170,7 @@ Use it for Kruskal's minimum spanning tree, for streaming connected components, 
     <li>BFS and DFS are both \(\Theta(V+E)\); BFS gives fewest-edge paths and layers, DFS gives cycles, topological order and SCCs.</li>
     <li>Kahn's topological sort is \(\Theta(V+E)\) and detects cycles by emitting fewer than \(V\) vertices; the order exists only for DAGs.</li>
     <li>Dijkstra is \(\Theta((V+E)\log V)\) with a binary heap and requires non-negative weights; Bellman–Ford handles negatives at \(\Theta(VE)\).</li>
-    <li>Union-find with union by size and path compression is \(O(\alpha(n))\) amortised per operation — effectively constant, but merge-only.</li>
+    <li>Union-find with union by size and path compression is \(O(\alpha(n))\) amortised per operation, effectively constant, but merge-only.</li>
   </ul>
 </div>
 
@@ -180,5 +180,5 @@ Use it for Kruskal's minimum spanning tree, for streaming connected components, 
 2. Kahn, A. B. Topological sorting of large networks. *Communications of the ACM* 5(11), 558–562, 1962.
 3. Tarjan, R. E. Efficiency of a good but not linear set union algorithm. *Journal of the ACM* 22(2), 215–225, 1975.
 4. Fredman, M. L., & Tarjan, R. E. Fibonacci heaps and their uses in improved network optimization algorithms. *Journal of the ACM* 34(3), 596–615, 1987.
-5. Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. [*Introduction to Algorithms*, 4th ed.](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/) MIT Press, 2022 — part VI on graph algorithms.
-6. Sedgewick, R., & Wayne, K. [*Algorithms*, 4th ed.](https://algs4.cs.princeton.edu/40graphs/) — graph chapter with runnable code.
+5. Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. [*Introduction to Algorithms*, 4th ed.](https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/) MIT Press, 2022, part VI on graph algorithms.
+6. Sedgewick, R., & Wayne, K. [*Algorithms*, 4th ed.](https://algs4.cs.princeton.edu/40graphs/), graph chapter with runnable code.

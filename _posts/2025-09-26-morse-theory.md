@@ -24,17 +24,17 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> A Morse function f: M → ℝ has only non-degenerate critical points (where Hessian is non-singular). The Morse inequalities say: number of index-k critical points ≥ βk(M). The sublevel sets M≤t change topology only at critical values. As t passes a critical value of index k, one k-handle (≅ Dᵏ × Dⁿ⁻ᵏ) is attached — creating or killing a (k-1)-cycle. This is exactly persistence: the persistence pairing is a matching of critical points that create and kill homology classes.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> A Morse function f: M → ℝ has only non-degenerate critical points (where Hessian is non-singular). The Morse inequalities say: number of index-k critical points ≥ βk(M). The sublevel sets M≤t change topology only at critical values. As t passes a critical value of index k, one k-handle (≅ Dᵏ × Dⁿ⁻ᵏ) is attached, creating or killing a (k-1)-cycle. This is exactly persistence: the persistence pairing is a matching of critical points that create and kill homology classes.</div>
 
 ## Intuition First
 
-Think of a smooth landscape (a manifold) and a height function \(f\). As you hike upward, most of the time the terrain is featureless — a flat slope. Only at special points (a hilltop, a valley bottom, a mountain pass) does the shape of the landscape qualitatively change. Those special points are **critical points**. Morse theory is the precise dictionary between the type of each critical point (local min, saddle, local max) and the topological event it causes (a new connected component born, a loop created or killed, a void enclosed). Persistent homology is simply the pairing of these birth and death events.
+Think of a smooth landscape (a manifold) and a height function \(f\). As you hike upward, most of the time the terrain is featureless, a flat slope. Only at special points (a hilltop, a valley bottom, a mountain pass) does the shape of the landscape qualitatively change. Those special points are **critical points**. Morse theory is the precise dictionary between the type of each critical point (local min, saddle, local max) and the topological event it causes (a new connected component born, a loop created or killed, a void enclosed). Persistent homology is simply the pairing of these birth and death events.
 
 ## Morse Functions
 
 A smooth function \(f: M \to \mathbb{R}\) on a closed smooth manifold \(M^n\) is a **Morse function** if all critical points (where \(\nabla f = 0\)) are **non-degenerate**: the Hessian matrix \(H_p f\) is non-singular at every critical point \(p\).
 
-The **index** \(\lambda(p)\) of a critical point \(p\) is the number of negative eigenvalues of \(H_p f\) — the dimension of the "descending direction" at \(p\).
+The **index** \(\lambda(p)\) of a critical point \(p\) is the number of negative eigenvalues of \(H_p f\), the dimension of the "descending direction" at \(p\).
 
 **Generic Morse functions**: Morse functions are generic (dense in the space of smooth functions). Any smooth manifold admits a Morse function.
 
@@ -68,7 +68,7 @@ The sublevel set persistent homology of \(f: M \to \mathbb{R}\) is exactly the M
   - \(p_d\) has index \(k+1\) (kills the class at value \(d\)).
 - Unpaired critical points correspond to infinite persistence (essential classes).
 
-The **cancellation theorem**: if \(p_b\) and \(p_d\) are paired with \(d - b < \varepsilon\), there exists a perturbation \(g\) of \(f\) with \(\|f - g\|_\infty < \varepsilon\) that cancels the pair — removing both critical points. This is the smooth version of clearing.
+The **cancellation theorem**: if \(p_b\) and \(p_d\) are paired with \(d - b < \varepsilon\), there exists a perturbation \(g\) of \(f\) with \(\|f - g\|_\infty < \varepsilon\) that cancels the pair, removing both critical points. This is the smooth version of clearing.
 
 ## Worked Example: Torus Height Function
 

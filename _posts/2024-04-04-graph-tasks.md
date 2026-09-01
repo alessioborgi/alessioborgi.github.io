@@ -29,15 +29,15 @@ The task level determines:
 - How you compute the loss
 - Whether you need graph pooling
 
-The GNN backbone — the stack of message-passing layers producing node embeddings $$h_v^{(k)}$$ — is broadly the same. The key differences are in what you do with those embeddings at the end.
+The GNN backbone, the stack of message-passing layers producing node embeddings $$h_v^{(k)}$$, is broadly the same. The key differences are in what you do with those embeddings at the end.
 
 ## The Second Axis: Transductive vs Inductive
 
 Cutting across all three levels is the question of what the model is allowed to see at training time.
 
-**Transductive.** There is a single fixed graph $$G = (V, E)$$. The whole graph — including the structure and features of validation and test nodes — is available during training; only the *labels* of those nodes are withheld. Message passing therefore already produces embeddings for test nodes while training runs, and the model is never asked to handle a node it has not seen. Cora, CiteSeer and ogbn-arxiv are the standard examples.
+**Transductive.** There is a single fixed graph $$G = (V, E)$$. The whole graph, including the structure and features of validation and test nodes, is available during training; only the *labels* of those nodes are withheld. Message passing therefore already produces embeddings for test nodes while training runs, and the model is never asked to handle a node it has not seen. Cora, CiteSeer and ogbn-arxiv are the standard examples.
 
-**Inductive.** The model must produce embeddings for nodes or graphs that were entirely absent at training time — a new snapshot of a social graph, a fresh molecule, a held-out protein interaction network. Nothing about them entered the message-passing computation during training, so the model has to generalise the *aggregation function*, not memorise per-node vectors. This rules out methods that learn a free embedding table indexed by node id (DeepWalk, node2vec, matrix factorisation) and is precisely what GraphSAGE was designed for.
+**Inductive.** The model must produce embeddings for nodes or graphs that were entirely absent at training time, a new snapshot of a social graph, a fresh molecule, a held-out protein interaction network. Nothing about them entered the message-passing computation during training, so the model has to generalise the *aggregation function*, not memorise per-node vectors. This rules out methods that learn a free embedding table indexed by node id (DeepWalk, node2vec, matrix factorisation) and is precisely what GraphSAGE was designed for.
 
 The distinction is a property of the evaluation protocol, not of the architecture: the same GCN can be trained transductively on one dataset and inductively on another.
 
@@ -59,15 +59,15 @@ The distinction is a property of the evaluation protocol, not of the architectur
 \]
 </div>
 
-Apply a linear (or MLP) classifier to each node embedding independently — the same $$W$$ for every node, which is what makes the head independent of $$N$$.
+Apply a linear (or MLP) classifier to each node embedding independently, the same $$W$$ for every node, which is what makes the head independent of $$N$$.
 
-**Training setup:** most node-level benchmarks are **transductive** — one large graph, split into labelled train/validation/test nodes. The GNN runs message passing over the *full* graph, so test-node features and edges do influence the training-time computation; only the test *labels* are withheld from the loss.
+**Training setup:** most node-level benchmarks are **transductive**, one large graph, split into labelled train/validation/test nodes. The GNN runs message passing over the *full* graph, so test-node features and edges do influence the training-time computation; only the test *labels* are withheld from the loss.
 
 **Inductive setting:** you may instead train on one set of graphs and evaluate on entirely new ones (the PPI dataset is the standard example). Here the test graph never enters training at all, so the model must generalise the learned aggregation to unseen structure.
 
 ## Task 2: Edge-Level Prediction
 
-**What:** predict a property for a pair of nodes (u, v) — whether an edge should exist, or what type it is.
+**What:** predict a property for a pair of nodes (u, v), whether an edge should exist, or what type it is.
 
 **Examples:**
 - Recommender systems: will user u click on item v?
@@ -84,7 +84,7 @@ Apply a linear (or MLP) classifier to each node embedding independently — the 
 \]
 </div>
 
-Here $$f$$ is a scoring function — a dot product $$h_u^\top h_v$$, a concatenation fed to an MLP, or a Hadamard product $$h_u \odot h_v$$ fed to an MLP.
+Here $$f$$ is a scoring function, a dot product $$h_u^\top h_v$$, a concatenation fed to an MLP, or a Hadamard product $$h_u \odot h_v$$ fed to an MLP.
 
 **Training setup:** typically, the training edges are used to compute node embeddings, and a subset of edges (plus negative samples) are used as supervision. Care must be taken not to include test edges in the message-passing graph during training.
 
@@ -148,7 +148,7 @@ Like node classification but predicting a continuous value per node.
 Predict a continuous value for the whole graph.
 
 **Examples:**
-- Molecular property prediction (energy, HOMO-LUMO gap) — QM9 benchmark
+- Molecular property prediction (energy, HOMO-LUMO gap), QM9 benchmark
 - Graph-level count prediction
 
 ## Summary
@@ -167,5 +167,5 @@ All tasks share the same GNN backbone. Mastering graph-level tasks requires unde
 ## References
 
 - Hamilton, W. L. (2020). [Graph Representation Learning](https://www.cs.mcgill.ca/~wlh/grl_book/). *Synthesis Lectures on Artificial Intelligence and Machine Learning*.
-- Hamilton, W. L., Ying, R., & Leskovec, J. (2017). [Inductive Representation Learning on Large Graphs](https://arxiv.org/abs/1706.02216). *NeurIPS 2017* (GraphSAGE — the reference treatment of the inductive setting, learning an aggregation function rather than a per-node embedding table).
+- Hamilton, W. L., Ying, R., & Leskovec, J. (2017). [Inductive Representation Learning on Large Graphs](https://arxiv.org/abs/1706.02216). *NeurIPS 2017* (GraphSAGE, the reference treatment of the inductive setting, learning an aggregation function rather than a per-node embedding table).
 - Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv preprint*.

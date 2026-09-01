@@ -5,7 +5,7 @@ date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [positional-encoding, overview]
-excerpt: "Transformers see all tokens at once — which means without help they'd treat 'cat ate mouse' and 'mouse ate cat' the same. Positional encodings fix this. Here's the full landscape."
+excerpt: "Transformers see all tokens at once, which means without help they'd treat 'cat ate mouse' and 'mouse ate cat' the same. Positional encodings fix this. Here's the full landscape."
 author_profile: true
 read_time: true
 is_overview: false
@@ -42,7 +42,7 @@ toc_label: "Contents"
 
 ## The Order-Agnostic Problem
 
-Self-attention computes pairwise scores between all tokens. It doesn't matter if token A is first or last — the attention equation treats both identically. Shuffle the sentence and the model gets the exact same output (just with rows permuted).
+Self-attention computes pairwise scores between all tokens. It doesn't matter if token A is first or last, the attention equation treats both identically. Shuffle the sentence and the model gets the exact same output (just with rows permuted).
 
 This is catastrophic for language: "**dog bites man**" and "**man bites dog**" have opposite meanings.
 
@@ -124,7 +124,7 @@ The attention mechanism then sees the *mixed* vector and can pick up position in
 Absolute methods assign a vector to each *position index* (0, 1, 2, …). Relative methods instead encode the *distance between two tokens* (±1, ±2, …). Relative encodings tend to generalise better across lengths.
 
 **2. Fixed vs. Learned**
-Fixed methods (sinusoidal, ALiBi) use a deterministic formula — no extra parameters. Learned methods (BERT-style, relative biases) train position representations end-to-end. Learned = more flexible; fixed = no max-length constraint.
+Fixed methods (sinusoidal, ALiBi) use a deterministic formula, no extra parameters. Learned methods (BERT-style, relative biases) train position representations end-to-end. Learned = more flexible; fixed = no max-length constraint.
 
 **3. Extrapolation**
 Can the model handle sequences *longer* than those seen during training? This is the key practical question for LLMs serving long documents. ALiBi and RoPE generally win here; standard learned absolute PEs fail badly.
@@ -144,7 +144,7 @@ Can the model handle sequences *longer* than those seen during training? This is
     .bar5 { animation: bar-grow 1.0s ease-out 0.9s both; transform-origin: left center; }
     .bar6 { animation: bar-grow 1.0s ease-out 1.1s both; transform-origin: left center; }
   </style>
-  <text x="270" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Positional Encoding Methods — Extrapolation Capability</text>
+  <text x="270" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#374151">Positional Encoding Methods, Extrapolation Capability</text>
   <!-- Axis -->
   <line x1="170" y1="28" x2="520" y2="28" stroke="#e2e8f0" stroke-width="1"/>
   <text x="170" y="24" text-anchor="middle" font-size="8" fill="#9ca3af">0%</text>
@@ -205,6 +205,6 @@ Can the model handle sequences *longer* than those seen during training? This is
   <li>Self-attention is order-agnostic; PEs inject position information as vectors <strong>added to token embeddings</strong>.</li>
   <li>The main design axes are: absolute vs. relative, fixed vs. learned, extrapolation capability.</li>
   <li>Modern LLMs (LLaMA, Mistral, BLOOM) moved away from sinusoidal PEs toward RoPE and ALiBi.</li>
-  <li>Each subsequent chapter covers one PE method in depth — start with sinusoidal to understand the origin.</li>
+  <li>Each subsequent chapter covers one PE method in depth, start with sinusoidal to understand the origin.</li>
 </ul>
 </div>

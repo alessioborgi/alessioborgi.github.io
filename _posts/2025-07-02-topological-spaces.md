@@ -6,7 +6,7 @@ book: tdl
 subsection: foundations
 tags: [topology, topological-space, open-sets, continuity, homeomorphism]
 published: false
-excerpt: "Topology studies properties of spaces preserved under continuous deformations. This post introduces topological spaces, open sets, continuous maps, and homeomorphisms — building the vocabulary needed to formalise what it means for two shapes to be 'the same' without metrics."
+excerpt: "Topology studies properties of spaces preserved under continuous deformations. This post introduces topological spaces, open sets, continuous maps, and homeomorphisms, building the vocabulary needed to formalise what it means for two shapes to be 'the same' without metrics."
 author_profile: true
 read_time: true
 is_overview: false
@@ -25,11 +25,11 @@ permalink: /blog/persistent-homology/topological-spaces/
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> A topological space generalises metric spaces by specifying which subsets are "open" — capturing notions of nearness without distance. Continuous maps preserve this open-set structure, making topology the right language for shape-invariant data analysis. Two spaces that are homeomorphic (related by a continuous bijection with continuous inverse) have identical topological properties, including homology.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> A topological space generalises metric spaces by specifying which subsets are "open", capturing notions of nearness without distance. Continuous maps preserve this open-set structure, making topology the right language for shape-invariant data analysis. Two spaces that are homeomorphic (related by a continuous bijection with continuous inverse) have identical topological properties, including homology.</div>
 {% include figure image_path="/images/blog/tdl/hensel2021_topology_ml.png" alt="Topological spaces in ML" caption="Topological concepts underpinning TDA (Hensel et al., 2021)" %}
 
 
-**Intuition First.** In metric geometry, "close" means "small distance." But topology asks a more primitive question: *can you tell two points apart without measuring?* Open sets encode the answer. If every open set containing \(x\) also contains \(y\), then \(x\) and \(y\) are topologically indistinguishable — no experiment using only the topology can separate them. This purely set-theoretic notion of nearness is what makes topology invariant under stretching, bending, and continuous deformation.
+**Intuition First.** In metric geometry, "close" means "small distance." But topology asks a more primitive question: *can you tell two points apart without measuring?* Open sets encode the answer. If every open set containing \(x\) also contains \(y\), then \(x\) and \(y\) are topologically indistinguishable, no experiment using only the topology can separate them. This purely set-theoretic notion of nearness is what makes topology invariant under stretching, bending, and continuous deformation.
 
 <style>
 @keyframes morph-shape {
@@ -60,9 +60,9 @@ permalink: /blog/persistent-homology/topological-spaces/
   <!-- Line segment -->
   <line x1="395" y1="95" x2="415" y2="95" stroke="#ef4444" stroke-width="3"/>
   <!-- Note at bottom -->
-  <text x="210" y="155" font-size="10" fill="#64748b" text-anchor="middle">Removing a point from S¹ leaves a connected space; from a line segment — two disconnected pieces</text>
+  <text x="210" y="155" font-size="10" fill="#64748b" text-anchor="middle">Removing a point from S¹ leaves a connected space; from a line segment, two disconnected pieces</text>
 </svg>
-<figcaption>A circle and an ellipse are homeomorphic (same topology). A circle and a line segment are not — removing one point has different effects.</figcaption>
+<figcaption>A circle and an ellipse are homeomorphic (same topology). A circle and a line segment are not, removing one point has different effects.</figcaption>
 </figure></div>
 
 ## Topological Spaces: Nearness Without Distance
@@ -73,7 +73,7 @@ A **topological space** is a pair \((X, \tau)\) where \(X\) is a set and \(\tau 
 2. If \(U_\alpha \in \tau\) for all \(\alpha \in A\), then \(\bigcup_{\alpha \in A} U_\alpha \in \tau\) (arbitrary unions of open sets are open).
 3. If \(U_1, \ldots, U_n \in \tau\), then \(\bigcap_{i=1}^n U_i \in \tau\) (finite intersections of open sets are open).
 
-This definition generalises metric spaces: given a metric \(d\) on \(X\), the collection of all unions of open balls \(\{B(x, r) : x \in X, r > 0\}\) forms a topology — the **metric topology**. But many useful topologies do not arise from any metric.
+This definition generalises metric spaces: given a metric \(d\) on \(X\), the collection of all unions of open balls \(\{B(x, r) : x \in X, r > 0\}\) forms a topology, the **metric topology**. But many useful topologies do not arise from any metric.
 
 Key examples used in TDA:
 - **Discrete topology**: every subset is open. Every point is isolated.
@@ -89,7 +89,7 @@ A map \(f: X \to Y\) between topological spaces is **continuous** if the preimag
 \(f \text{ continuous} \iff \forall V \in \tau_Y,\; f^{-1}(V) \in \tau_X\)
 </div>
 
-This generalises the $$\varepsilon$$-$$\delta$$ definition from metric spaces. Continuous maps are the morphisms of the category of topological spaces — they preserve the structure we care about.
+This generalises the $$\varepsilon$$-$$\delta$$ definition from metric spaces. Continuous maps are the morphisms of the category of topological spaces, they preserve the structure we care about.
 
 A **homeomorphism** is a bijective continuous map $$f: X \to Y$$ whose inverse $$f^{-1}: Y \to X$$ is also continuous. Homeomorphic spaces are topologically identical: every topological property of $$X$$ holds for $$Y$$ and vice versa. The notation is $$X \cong Y$$.
 
@@ -97,9 +97,9 @@ Classical examples of homeomorphic (and non-homeomorphic) spaces:
 - The open interval $$(0,1) \cong \mathbb{R}$$ (via $$x \mapsto \tan(\pi x - \pi/2)$$).
 - The circle $$S^1$$ is **not** homeomorphic to $$\mathbb{R}$$: removing a point from $$S^1$$ leaves a connected space; removing a point from $$\mathbb{R}$$ disconnects it.
 - The torus $$T^2 = S^1 \times S^1$$ is not homeomorphic to $$S^2$$: they differ in fundamental group and first homology.
-- A coffee mug is homeomorphic to a donut (torus) — the classic topology joke reflects a real mathematical fact.
+- A coffee mug is homeomorphic to a donut (torus), the classic topology joke reflects a real mathematical fact.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The open-set axioms are the minimal structure needed to define continuity without a metric. A function is continuous if and only if pulling back open sets gives open sets — this single condition replaces the entire ε-δ machinery and works for spaces where no distance function exists.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The open-set axioms are the minimal structure needed to define continuity without a metric. A function is continuous if and only if pulling back open sets gives open sets, this single condition replaces the entire ε-δ machinery and works for spaces where no distance function exists.</div>
 
 ## Homotopy Equivalence: A Weaker Relation
 
@@ -110,11 +110,11 @@ Homotopy equivalence preserves homology groups. This is weaker than homeomorphis
 - An annulus $$\{x \in \mathbb{R}^2 : 1 \leq |x| \leq 2\}$$ is homotopy equivalent to $$S^1$$.
 - The punctured plane $$\mathbb{R}^2 \setminus \{0\}$$ is homotopy equivalent to $$S^1$$.
 
-<div class="insight-box"><strong>Key Insight:</strong> TDA uses topology rather than geometry because homology is a homotopy invariant. Two data clouds that are geometrically very different (scaled, rotated, slightly perturbed) but topologically the same will yield identical persistence diagrams — up to the stability bound. This is precisely the noise-robustness that makes TDA practical.</div>
+<div class="insight-box"><strong>Key Insight:</strong> TDA uses topology rather than geometry because homology is a homotopy invariant. Two data clouds that are geometrically very different (scaled, rotated, slightly perturbed) but topologically the same will yield identical persistence diagrams, up to the stability bound. This is precisely the noise-robustness that makes TDA practical.</div>
 
 ## Worked Example: The Punctured Plane
 
-Take $$X = \mathbb{R}^2 \setminus \{(0,0)\}$$, the plane with the origin removed. Define $$f: X \to S^1$$ by $$f(x,y) = (x,y)/\|(x,y)\|$$ and $$g: S^1 \to X$$ by inclusion. Then $$f \circ g = \mathrm{id}_{S^1}$$ and $$g \circ f$$ is homotopic to $$\mathrm{id}_X$$ via the straight-line homotopy $$H(x,t) = (1-t)x + t \cdot x/\|x\|$$. So $$X \simeq S^1$$. This means the punctured plane has $$H_1 \cong \mathbb{Z}$$ — it has exactly one independent loop (going around the origin), which is precisely what TDA detects.
+Take $$X = \mathbb{R}^2 \setminus \{(0,0)\}$$, the plane with the origin removed. Define $$f: X \to S^1$$ by $$f(x,y) = (x,y)/\|(x,y)\|$$ and $$g: S^1 \to X$$ by inclusion. Then $$f \circ g = \mathrm{id}_{S^1}$$ and $$g \circ f$$ is homotopic to $$\mathrm{id}_X$$ via the straight-line homotopy $$H(x,t) = (1-t)x + t \cdot x/\|x\|$$. So $$X \simeq S^1$$. This means the punctured plane has $$H_1 \cong \mathbb{Z}$$, it has exactly one independent loop (going around the origin), which is precisely what TDA detects.
 
 ## Compactness and Connectivity
 

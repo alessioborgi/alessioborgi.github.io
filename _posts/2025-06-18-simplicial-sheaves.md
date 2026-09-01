@@ -6,7 +6,7 @@ book: sheaf
 subsection: topological-dl
 tags: [simplicial-complex, topological-deep-learning, MPSN, CW-complex, higher-order, Bodnar]
 published: false
-excerpt: "Graphs are 1-dimensional CW complexes. The sheaf framework extends naturally to higher-dimensional simplicial complexes — adding triangles, tetrahedra, and higher cells — enabling message passing across cells of different dimensions. This is the foundation of Topological Deep Learning: a unifying framework for GNNs, simplicial networks, and sheaf networks."
+excerpt: "Graphs are 1-dimensional CW complexes. The sheaf framework extends naturally to higher-dimensional simplicial complexes, adding triangles, tetrahedra, and higher cells, enabling message passing across cells of different dimensions. This is the foundation of Topological Deep Learning: a unifying framework for GNNs, simplicial networks, and sheaf networks."
 author_profile: true
 read_time: true
 is_overview: false
@@ -35,11 +35,11 @@ toc_label: "Contents"
 
 ## Intuition First: Going Beyond Pairwise Relationships
 
-A graph only captures *pairwise* relationships — every edge connects exactly two nodes. But many real phenomena involve *three-way* or higher-order interactions that cannot be decomposed into pairs. A research triangle where three collaborators all directly influence each other is not the same as three separate pairs — the triangle has its own coherent meaning.
+A graph only captures *pairwise* relationships, every edge connects exactly two nodes. But many real phenomena involve *three-way* or higher-order interactions that cannot be decomposed into pairs. A research triangle where three collaborators all directly influence each other is not the same as three separate pairs, the triangle has its own coherent meaning.
 
-A **simplicial complex** adds cells for these interactions: triangles for 3-way, tetrahedra for 4-way, and so on. A **sheaf on a simplicial complex** puts a local vector space and restriction map on every cell at every dimension, so data can live on nodes, edges, triangles, and tetrahedra simultaneously — all connected by restriction maps that say how lower-dimensional data relates to higher-dimensional data.
+A **simplicial complex** adds cells for these interactions: triangles for 3-way, tetrahedra for 4-way, and so on. A **sheaf on a simplicial complex** puts a local vector space and restriction map on every cell at every dimension, so data can live on nodes, edges, triangles, and tetrahedra simultaneously, all connected by restriction maps that say how lower-dimensional data relates to higher-dimensional data.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A standard GNN on a graph is a sheaf on a 1-dimensional CW complex (only nodes and edges). Moving to a 2-dimensional simplicial complex (adding triangles) is not just an architectural detail — it adds a new cohomology group H² that measures "how many independent 3-way interactions exist that cannot be explained by pairwise ones." Each new dimension adds expressive power that is provably beyond what graph-level message passing can capture.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A standard GNN on a graph is a sheaf on a 1-dimensional CW complex (only nodes and edges). Moving to a 2-dimensional simplicial complex (adding triangles) is not just an architectural detail, it adds a new cohomology group H² that measures "how many independent 3-way interactions exist that cannot be explained by pairwise ones." Each new dimension adds expressive power that is provably beyond what graph-level message passing can capture.</div>
 
 <style>
 @keyframes triPulse {
@@ -86,7 +86,7 @@ A **simplicial complex** adds cells for these interactions: triangles for 3-way,
   <text x="330" y="162" text-anchor="middle" font-size="9" fill="#374151">nodes + edges + triangle</text>
   <text x="330" y="175" text-anchor="middle" font-size="9" fill="#374151">C⁰ → C¹ → C²  (3 levels)</text>
 </svg>
-<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Left: a graph has only node and edge stalks (two cochain levels). Right: a simplicial complex adds a triangle stalk (pulsing purple fill) and a second coboundary δ₁ connecting C¹ to C². This enables H² — a new cohomology group measuring triangle-level topological structure.</figcaption>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Left: a graph has only node and edge stalks (two cochain levels). Right: a simplicial complex adds a triangle stalk (pulsing purple fill) and a second coboundary δ₁ connecting C¹ to C². This enables H², a new cohomology group measuring triangle-level topological structure.</figcaption>
 </figure></div>
 
 ## From Graphs to Simplicial Complexes
@@ -117,10 +117,10 @@ The **sheaf cochain complex** is:
 </div>
 
 where:
-- C^k(K, F) = ∏_{σ ∈ K, dim σ = k} F(σ) — k-cochains (signals on k-simplices)
-- δ_k : C^k → C^{k+1} — coboundary, encoding disagreement between k-simplex data and (k+1)-simplex structure
+- C^k(K, F) = ∏_{σ ∈ K, dim σ = k} F(σ), k-cochains (signals on k-simplices)
+- δ_k : C^k → C^{k+1}, coboundary, encoding disagreement between k-simplex data and (k+1)-simplex structure
 
-The coboundary maps must satisfy δ_{k+1} ∘ δ_k = 0 — the chain complex condition.
+The coboundary maps must satisfy δ_{k+1} ∘ δ_k = 0, the chain complex condition.
 
 ## The Sheaf Hodge Laplacians
 
@@ -132,7 +132,7 @@ At each level k, the **sheaf Hodge Laplacian** is:
 
 (setting δ_{-1} = 0 and δ_{dim K + 1} = 0 at the boundaries).
 
-For k=0: Δ⁰_F = δ₀ᵀ δ₀ = Δ_F (the Sheaf Laplacian on nodes — the same as before)
+For k=0: Δ⁰_F = δ₀ᵀ δ₀ = Δ_F (the Sheaf Laplacian on nodes, the same as before)
 
 For k=1: Δ¹_F = δ₀ δ₀ᵀ + δ₁ᵀ δ₁ (combines node-adjacency and triangle contributions for edges)
 
@@ -143,11 +143,11 @@ For k=2: Δ²_F = δ₁ δ₁ᵀ + δ₂ᵀ δ₂ (combines edge-adjacency and t
 H^k(K, F) = ker(δ_k) / im(δ_{k-1})
 </div>
 
-This generalises H⁰ (global sections) to all dimensions — measuring topological "holes" at every level.
+This generalises H⁰ (global sections) to all dimensions, measuring topological "holes" at every level.
 
 ## Message Passing Simplicial Networks (MPSN)
 
-Bodnar et al. (2021) introduced MPSN — message passing on simplicial complexes. At each level k, messages pass:
+Bodnar et al. (2021) introduced MPSN, message passing on simplicial complexes. At each level k, messages pass:
 - **Down:** from k-simplices to their (k-1)-simplex faces
 - **Up:** from k-simplices to their (k+1)-simplex cofaces
 
@@ -165,14 +165,14 @@ where τ ≺ σ means τ is a face of σ and τ ≻ σ means τ is a coface of �
 - The message is the coboundary applied to the stalk assignment
 
 <div class="insight-box">
-<strong>Why simplicial structure matters for node classification:</strong> Two graphs with the same edges but different triangle structure can have different MPSN representations — even if they are 1-WL equivalent. The triangle-level information (which edges form triangles) provides additional expressiveness that graph-only GNNs miss. Sheaves on simplicial complexes carry all this structure plus per-simplex relational geometry.
+<strong>Why simplicial structure matters for node classification:</strong> Two graphs with the same edges but different triangle structure can have different MPSN representations, even if they are 1-WL equivalent. The triangle-level information (which edges form triangles) provides additional expressiveness that graph-only GNNs miss. Sheaves on simplicial complexes carry all this structure plus per-simplex relational geometry.
 </div>
 
 ## CW Networks: Going Beyond Simplicial Complexes
 
-Bodnar et al. (2021b) introduced CW Networks — message passing on CW complexes (a more general class than simplicial complexes, where cells need not be simplices):
+Bodnar et al. (2021b) introduced CW Networks, message passing on CW complexes (a more general class than simplicial complexes, where cells need not be simplices):
 
-**CW complex cells:** 0-cells (nodes), 1-cells (edges, possibly with loops), 2-cells (faces, not necessarily triangular — could be hexagons, arbitrary polygons), k-cells (k-dimensional cells).
+**CW complex cells:** 0-cells (nodes), 1-cells (edges, possibly with loops), 2-cells (faces, not necessarily triangular, could be hexagons, arbitrary polygons), k-cells (k-dimensional cells).
 
 **Why CW complexes?** Many natural domains have non-triangular higher-order structure:
 - Molecular rings: 6-cycles (benzene) are 2-cells that are not triangulable
@@ -199,13 +199,13 @@ This unifies:
 | Sheaf GNN (NSD) | Graph (1D CW) + sheaf | Level 0 with stalks |
 | Simplicial Sheaf GNN | Simplicial complex + sheaf | All levels with stalks |
 
-Full TDL = sheaf GNN on CW complex — the most general setting.
+Full TDL = sheaf GNN on CW complex, the most general setting.
 
 ## Practical Implementation
 
 Computing Δ^k_F for k > 0 requires:
-1. **Constructing the complex:** finding triangles (k=2) requires triangle enumeration — O(E·d_max) for sparse graphs
-2. **Assembling coboundary maps:** δ₁ has size |T| × |E| (triangles × edges) — sparse, computable in O(T·d²)
+1. **Constructing the complex:** finding triangles (k=2) requires triangle enumeration, O(E·d_max) for sparse graphs
+2. **Assembling coboundary maps:** δ₁ has size |T| × |E| (triangles × edges), sparse, computable in O(T·d²)
 3. **Message passing:** using Δ^k_F is analogous to using Δ_F but for edge/triangle signals
 
 **Current limitation:** Constructing simplicial complexes from real-world graphs (clique complexes, Rips complexes, Vietoris-Rips) can be expensive for dense graphs. For sparse graphs (social networks, citation graphs), clique complex construction is manageable.
@@ -219,6 +219,6 @@ Computing Δ^k_F for k > 0 requires:
 
 ## References
 
-- Bodnar, C., Frasca, F., Wang, Y. G., Otter, N., Montufar, G. F., Liò, P., & Bronstein, M. M. (2021). [Weisfeiler and Lehman Go Topological: Message Passing Simplicial Networks](https://arxiv.org/abs/2103.03212). *ICML 2021* (MPSN: the foundational work on message passing on simplicial complexes — precursor to sheaves on complexes).
+- Bodnar, C., Frasca, F., Wang, Y. G., Otter, N., Montufar, G. F., Liò, P., & Bronstein, M. M. (2021). [Weisfeiler and Lehman Go Topological: Message Passing Simplicial Networks](https://arxiv.org/abs/2103.03212). *ICML 2021* (MPSN: the foundational work on message passing on simplicial complexes, precursor to sheaves on complexes).
 - Bodnar, C., Frasca, F., Otter, N., Wang, Y. G., Liò, P., Montufar, G. F., & Bronstein, M. M. (2021). [Weisfeiler and Lehman Go Cellular: CW Networks](https://arxiv.org/abs/2106.12575). *NeurIPS 2021* (CW-Net: message passing on general CW complexes, subsuming simplicial complexes and graphs).
-- Giusti, G., Battiloro, C., Testa, L., Di Lorenzo, P., Sardellitti, S., & Barbarossa, S. (2023). [Cell Attention Networks](https://arxiv.org/abs/2209.08179). *arXiv 2023* (CAN: attention on cellular complexes — sheaf attention extended to higher-order cells).
+- Giusti, G., Battiloro, C., Testa, L., Di Lorenzo, P., Sardellitti, S., & Barbarossa, S. (2023). [Cell Attention Networks](https://arxiv.org/abs/2209.08179). *arXiv 2023* (CAN: attention on cellular complexes, sheaf attention extended to higher-order cells).

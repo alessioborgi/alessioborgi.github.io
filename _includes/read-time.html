@@ -56,7 +56,7 @@
 
   {% comment %}
     Display maths. MathJax delimiters survive into the HTML as literal \[ ... \]
-    text, so the LaTeX source was being counted word by word — which inflated
+    text, so the LaTeX source was being counted word by word, which inflated
     every post as its pseudo-maths was converted to real LaTeX.
   {% endcomment %}
   {% assign rt_chunks = rt_clean | split: '\[' %}

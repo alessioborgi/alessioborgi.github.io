@@ -25,11 +25,11 @@ toc_label: "Contents"
 
 ## The Traffic Forecasting Task
 
-**Intuition First:** Traffic networks are like dominoes: a slowdown at one sensor topples the next. An ARIMA model at each sensor sees its own history but is blind to the upstream jam that caused its own slowdown — it only "learns" the pattern once the slowdown arrives. A GNN-augmented model receives advance warning: neighbouring sensors upstream are already slowing, so the spatial signal arrives before the temporal consequence does. That advance warning is the whole reason graph structure helps here, and the benefit grows with the forecasting horizon — at 5 minutes ahead your own history is nearly sufficient, at an hour ahead it is not.
+**Intuition First:** Traffic networks are like dominoes: a slowdown at one sensor topples the next. An ARIMA model at each sensor sees its own history but is blind to the upstream jam that caused its own slowdown, it only "learns" the pattern once the slowdown arrives. A GNN-augmented model receives advance warning: neighbouring sensors upstream are already slowing, so the spatial signal arrives before the temporal consequence does. That advance warning is the whole reason graph structure helps here, and the benefit grows with the forecasting horizon, at 5 minutes ahead your own history is nearly sufficient, at an hour ahead it is not.
 
-**Input:** $$X \in \mathbb{R}^{N \times T \times d}$$ — readings from $$N$$ sensors over $$T$$ past timesteps, each with $$d$$ features (speed, volume, occupancy)
+**Input:** $$X \in \mathbb{R}^{N \times T \times d}$$, readings from $$N$$ sensors over $$T$$ past timesteps, each with $$d$$ features (speed, volume, occupancy)
 
-**Output:** $$\hat{X} \in \mathbb{R}^{N \times H \times d}$$ — predictions for $$H$$ future timesteps
+**Output:** $$\hat{X} \in \mathbb{R}^{N \times H \times d}$$, predictions for $$H$$ future timesteps
 
 **Graph:** $$G = (V, E, W)$$ where $$V$$ is the sensor set, $$E$$ the road segments connecting them, and $$W$$ the edge weights (road distance, travel time, or measured correlation)
 
@@ -41,9 +41,9 @@ Typical forecasting horizons: 15 min (3 steps), 30 min (6 steps), 60 min (12 ste
 
 ## Why Graphs Improve over ARIMA and LSTM
 
-**ARIMA / LSTM (per-sensor):** each sensor is modelled independently. Cannot capture spatial correlations — "upstream congestion causes downstream slowdown" is invisible.
+**ARIMA / LSTM (per-sensor):** each sensor is modelled independently. Cannot capture spatial correlations, "upstream congestion causes downstream slowdown" is invisible.
 
-**CNN on grid:** grids work for regular spatial layouts (weather stations on a regular grid). Traffic networks are irregular — sensors follow road geometry, not a grid.
+**CNN on grid:** grids work for regular spatial layouts (weather stations on a regular grid). Traffic networks are irregular, sensors follow road geometry, not a grid.
 
 **GNN + temporal model:** captures both spatial (road network structure) and temporal (recurrent patterns) dependencies.
 
@@ -67,10 +67,10 @@ where $$D_O$$ and $$D_I$$ are the out-degree and in-degree matrices, so $$D_O^{-
 
 **Encoder-decoder:** DCRNN encodes the $$T$$ past steps with a diffusion-GRU encoder and decodes $$H$$ future steps, using scheduled sampling to reduce exposure bias.
 
-**Result on METR-LA:** DCRNN lowers MAE against both statistical baselines (ARIMA, VAR) and temporal-only neural ones (FC-LSTM) at every horizon reported in the paper, and the margin over the graph-free baselines widens as the horizon lengthens — which is exactly what the "advance warning" story predicts.
+**Result on METR-LA:** DCRNN lowers MAE against both statistical baselines (ARIMA, VAR) and temporal-only neural ones (FC-LSTM) at every horizon reported in the paper, and the margin over the graph-free baselines widens as the horizon lengthens, which is exactly what the "advance warning" story predicts.
 
 <div class="insight-box">
-<strong>Why diffusion, not a standard GCN?</strong> Traffic is a directed flow: a jam at sensor \(A\) propagates to the sensors downstream of it, and only weakly and with different dynamics to those upstream. A standard GCN symmetrises the adjacency, which throws that asymmetry away — it would send the identical message in both directions along a one-way road. Diffusion convolution keeps the directed transition matrix \(D_O^{-1} A\) and learns separate forward and backward weights, so the two directions are modelled as the distinct physical phenomena they are.
+<strong>Why diffusion, not a standard GCN?</strong> Traffic is a directed flow: a jam at sensor \(A\) propagates to the sensors downstream of it, and only weakly and with different dynamics to those upstream. A standard GCN symmetrises the adjacency, which throws that asymmetry away, it would send the identical message in both directions along a one-way road. Diffusion convolution keeps the directed transition matrix \(D_O^{-1} A\) and learns separate forward and backward weights, so the two directions are modelled as the distinct physical phenomena they are.
 </div>
 
 ## STGCN (Spatio-Temporal Graph Convolutional Network)
@@ -104,17 +104,17 @@ Adds an **adaptive adjacency matrix** learned from data rather than read off the
 \]
 </div>
 
-$$E_1$$ and $$E_2$$ are learnable node embeddings, so the model discovers which sensors influence each other instead of assuming that road adjacency is the only channel. The ReLU zeroes out negative affinities to keep $$\tilde{A}$$ sparse, and the row-wise softmax normalises it into a transition matrix. This picks up non-geographic correlations — sensors that are far apart yet behave alike, such as parallel highways carrying the same commute.
+$$E_1$$ and $$E_2$$ are learnable node embeddings, so the model discovers which sensors influence each other instead of assuming that road adjacency is the only channel. The ReLU zeroes out negative affinities to keep $$\tilde{A}$$ sparse, and the row-wise softmax normalises it into a transition matrix. This picks up non-geographic correlations, sensors that are far apart yet behave alike, such as parallel highways carrying the same commute.
 
-Also uses **dilated causal convolutions** (like WaveNet) for temporal modelling — wider receptive field than standard 1D conv without more parameters.
+Also uses **dilated causal convolutions** (like WaveNet) for temporal modelling, wider receptive field than standard 1D conv without more parameters.
 
 ## Worked Example: Spatial vs Temporal Signal
 
-This is an illustrative toy scenario, not measured data — the point is the mechanism, not the digits.
+This is an illustrative toy scenario, not measured data, the point is the mechanism, not the digits.
 
 **Setup:** three sensors in a chain, $$A \to B \to C$$. At $$t=0$$ all three read 60 mph. An incident hits $$A$$, so at $$t=1$$ we observe $$A = 20$$, $$B = 55$$, $$C = 60$$ mph.
 
-**LSTM (per-sensor, no graph):** sensor $$B$$'s history is $$[60, 55]$$ — a mild slowdown, extrapolating to roughly 52 mph at $$t=2$$. But the jam is about to arrive, and $$B$$'s own history contains no trace of it yet.
+**LSTM (per-sensor, no graph):** sensor $$B$$'s history is $$[60, 55]$$, a mild slowdown, extrapolating to roughly 52 mph at $$t=2$$. But the jam is about to arrive, and $$B$$'s own history contains no trace of it yet.
 
 **DCRNN (graph-aware):** the edge $$A \to B$$ delivers $$A$$'s reading to $$B$$ at $$t=1$$. With diffusion weights of, say, 0.6 on the upstream neighbour and 0.4 on $$B$$ itself, the spatial term is
 
@@ -126,11 +126,11 @@ This is an illustrative toy scenario, not measured data — the point is the mec
 
 which drags the prediction down towards the incoming jam instead of extrapolating $$B$$'s own gentle decline.
 
-**The gain:** the graph gives $$B$$ advance warning that its own temporal history cannot contain yet, because the information physically has not reached $$B$$'s sensor. This is why the advantage of graph-based models over temporal-only ones grows with the forecast horizon — the further ahead you predict, the more of the answer is currently sitting at some *other* node.
+**The gain:** the graph gives $$B$$ advance warning that its own temporal history cannot contain yet, because the information physically has not reached $$B$$'s sensor. This is why the advantage of graph-based models over temporal-only ones grows with the forecast horizon, the further ahead you predict, the more of the answer is currently sitting at some *other* node.
 
 ## Industrial Deployment
 
-The best-documented deployment is Google Maps. Derrow-Pinion et al. (2021) describe the GNN ETA model that went into production there, and the mechanism is a direct application of everything above: the road network is partitioned into *supersegments* — sequences of connected road segments corresponding to plausible routes — and each supersegment becomes a graph whose nodes are segments and whose edges are their connections. A GNN over that graph predicts travel time, with the graph structure supplying exactly the upstream/downstream context a per-segment model would miss. The authors report substantial reductions in negative ETA outcomes across several metropolitan areas relative to the previous production baseline.
+The best-documented deployment is Google Maps. Derrow-Pinion et al. (2021) describe the GNN ETA model that went into production there, and the mechanism is a direct application of everything above: the road network is partitioned into *supersegments*, sequences of connected road segments corresponding to plausible routes, and each supersegment becomes a graph whose nodes are segments and whose edges are their connections. A GNN over that graph predicts travel time, with the graph structure supplying exactly the upstream/downstream context a per-segment model would miss. The authors report substantial reductions in negative ETA outcomes across several metropolitan areas relative to the previous production baseline.
 
 ## Summary
 
@@ -142,7 +142,7 @@ The best-documented deployment is Google Maps. Derrow-Pinion et al. (2021) descr
 | STGCN | ChebNet | Gated 1D conv | Fast (parallel) |
 | Graph Wave Net | Adaptive adjacency | Dilated causal conv | Fast |
 
-Traffic forecasting is the canonical spatio-temporal GNN application — a clean problem definition, public benchmarks, and at least one thoroughly documented production deployment. The mechanism worth carrying away is narrow and concrete: because congestion physically travels along roads, the information needed to predict a sensor's near future is currently located at its upstream neighbours, and a GNN is simply the machinery for reading it from there.
+Traffic forecasting is the canonical spatio-temporal GNN application, a clean problem definition, public benchmarks, and at least one thoroughly documented production deployment. The mechanism worth carrying away is narrow and concrete: because congestion physically travels along roads, the information needed to predict a sensor's near future is currently located at its upstream neighbours, and a GNN is simply the machinery for reading it from there.
 
 ## References
 

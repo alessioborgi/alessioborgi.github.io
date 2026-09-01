@@ -6,7 +6,7 @@ book: tdl
 subsection: foundations
 tags: [relative-homology, excision, long-exact-sequence, mayer-vietoris]
 published: false
-excerpt: "Relative homology H_n(X, A) measures topology in X modulo the subspace A — essential for local feature detection and for proving the fundamental theorems (excision, Mayer-Vietoris) that underpin computational topology."
+excerpt: "Relative homology H_n(X, A) measures topology in X modulo the subspace A, essential for local feature detection and for proving the fundamental theorems (excision, Mayer-Vietoris) that underpin computational topology."
 author_profile: true
 read_time: true
 icon: "📐"
@@ -24,9 +24,9 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Relative homology H_n(X, A) treats the subspace A as "collapsed to a point" — cycles in A become trivial and only topology that "escapes" A is counted. The long exact sequence of a pair connects H_n(A), H_n(X), and H_n(X,A), enabling powerful decomposition arguments. Extended persistence uses relative homology to capture topology that would otherwise be missed.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Relative homology H_n(X, A) treats the subspace A as "collapsed to a point", cycles in A become trivial and only topology that "escapes" A is counted. The long exact sequence of a pair connects H_n(A), H_n(X), and H_n(X,A), enabling powerful decomposition arguments. Extended persistence uses relative homology to capture topology that would otherwise be missed.</div>
 
-**Intuition First.** Relative homology $$H_n(X, A)$$ is the homology of $$X$$ with $$A$$ "collapsed to a point." Any loop that stays entirely inside $$A$$ becomes trivial — we don't count it. Only topology that "escapes" $$A$$ and ventures into $$X \setminus A$$ is measured. Think of $$A$$ as a known, understood subspace that you want to factor out, and $$H_n(X,A)$$ as the extra topology that $$X$$ adds on top of $$A$$.
+**Intuition First.** Relative homology $$H_n(X, A)$$ is the homology of $$X$$ with $$A$$ "collapsed to a point." Any loop that stays entirely inside $$A$$ becomes trivial, we don't count it. Only topology that "escapes" $$A$$ and ventures into $$X \setminus A$$ is measured. Think of $$A$$ as a known, understood subspace that you want to factor out, and $$H_n(X,A)$$ as the extra topology that $$X$$ adds on top of $$A$$.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 440 145" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:440px;font-family:sans-serif;">
@@ -55,7 +55,7 @@ toc_label: "Contents"
   <text x="400" y="59" font-size="13" fill="#94a3b8" text-anchor="middle">⋯</text>
   <!-- Exactness note -->
   <text x="220" y="100" font-size="11" fill="#475569" text-anchor="middle">Exactness: im(each map) = ker(next map)</text>
-  <text x="220" y="118" font-size="10" fill="#94a3b8" text-anchor="middle">The connecting homomorphism ∂* lowers degree by 1 — it links relative and absolute topology</text>
+  <text x="220" y="118" font-size="10" fill="#94a3b8" text-anchor="middle">The connecting homomorphism ∂* lowers degree by 1, it links relative and absolute topology</text>
 </svg>
 <figcaption>The long exact sequence of a pair (K, L). The connecting homomorphism ∂* is the key: it extracts a (n−1)-cycle in L from a relative n-cycle in (K,L), linking the three levels of topology.</figcaption>
 </figure></div>
@@ -66,13 +66,13 @@ Given a simplicial pair $$(K, L)$$ with $$L \subseteq K$$, the **relative chain 
 
 <div class="math-box">$$C_n(K, L) = C_n(K) / C_n(L)$$</div>
 
-Chains in $$L$$ are set to zero — we ignore simplices entirely inside $$L$$. The boundary map on $$K$$ descends to a well-defined boundary map on the quotient, giving a **relative chain complex** and hence **relative homology groups** $$H_n(K, L)$$.
+Chains in $$L$$ are set to zero, we ignore simplices entirely inside $$L$$. The boundary map on $$K$$ descends to a well-defined boundary map on the quotient, giving a **relative chain complex** and hence **relative homology groups** $$H_n(K, L)$$.
 
 Intuitively: $$H_n(K, L)$$ detects $$n$$-dimensional holes in $$K$$ that are not already present in $$L$$.
 
 ## The Long Exact Sequence of a Pair
 
-The short exact sequence $$0 \to C_*(L) \to C_*(K) \to C_*(K,L) \to 0$$ induces the fundamental tool of algebraic topology — the **long exact sequence**:
+The short exact sequence $$0 \to C_*(L) \to C_*(K) \to C_*(K,L) \to 0$$ induces the fundamental tool of algebraic topology, the **long exact sequence**:
 
 $$\cdots \to H_n(L) \xrightarrow{i_*} H_n(K) \xrightarrow{j_*} H_n(K,L) \xrightarrow{\partial_*} H_{n-1}(L) \to \cdots$$
 
@@ -99,10 +99,10 @@ This is the main tool for computing homology of spaces built from simpler pieces
 **Extended persistence** (Cohen-Steiner, Edelsbrunner, Harer 2009) augments the standard filtration with a dual: after growing the complex from $$\emptyset$$ to $$K$$, one shrinks it back. The result is a pairing that includes:
 
 - **Ordinary pairs**: born in $$H_n(K^i)$$, die entering $$H_n(K^j)$$ (standard persistence).
-- **Relative pairs**: born in $$H_n(K^i, \partial K)$$, die in $$H_n(K^j, \partial K)$$ — using relative homology.
+- **Relative pairs**: born in $$H_n(K^i, \partial K)$$, die in $$H_n(K^j, \partial K)$$, using relative homology.
 - **Extended pairs**: one class from homology, one from relative homology.
 
-Extended persistence captures features that would have infinite persistence in the standard setting — particularly useful for manifold-valued data where the "top" class never dies.
+Extended persistence captures features that would have infinite persistence in the standard setting, particularly useful for manifold-valued data where the "top" class never dies.
 
 <div class="insight-box"><strong>Key Insight:</strong> The Mayer-Vietoris sequence is the algebraic engine behind the Čech nerve theorem: if a cover $$\mathcal{U}$$ of $$X$$ has contractible intersections, the nerve of $$\mathcal{U}$$ is homotopy equivalent to $$X$$. This justifies approximating the topology of point clouds with Vietoris-Rips and Čech complexes.</div>
 
@@ -112,7 +112,7 @@ Let $$K$$ be a filled 2-simplex (disk) and $$L = \partial K$$ its boundary circl
 
 $$0 \to H_2(K,L) \to H_1(L) \to H_1(K) \to H_1(K,L) \to H_0(L) \to H_0(K) \to H_0(K,L) \to 0$$
 
-We know $$H_1(K) = 0$$ (disk is contractible), $$H_1(L) = \mathbb{Z}$$ (the boundary circle), $$H_0(L) = H_0(K) = \mathbb{Z}$$ (both connected). Exactness forces $$H_2(K,L) \cong \mathbb{Z}$$ — the relative homology "sees" the disk as a 2-cell filling in the boundary, i.e., a 2-sphere's top half. This is why relative homology is central to computing the homology of CW complexes: each cell contributes exactly one relative class.
+We know $$H_1(K) = 0$$ (disk is contractible), $$H_1(L) = \mathbb{Z}$$ (the boundary circle), $$H_0(L) = H_0(K) = \mathbb{Z}$$ (both connected). Exactness forces $$H_2(K,L) \cong \mathbb{Z}$$, the relative homology "sees" the disk as a 2-cell filling in the boundary, i.e., a 2-sphere's top half. This is why relative homology is central to computing the homology of CW complexes: each cell contributes exactly one relative class.
 
 ## References
 

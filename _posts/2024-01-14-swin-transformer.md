@@ -30,14 +30,14 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Swin Transformer (Liu et al., Microsoft, 2021) constrains self-attention to non-overlapping local windows of patches, then <em>shifts</em> those windows each layer to allow connections across boundaries. Hierarchical feature maps (like a CNN) make it ideal for detection and segmentation — not just classification.
+  <strong>TL;DR:</strong> Swin Transformer (Liu et al., Microsoft, 2021) constrains self-attention to non-overlapping local windows of patches, then <em>shifts</em> those windows each layer to allow connections across boundaries. Hierarchical feature maps (like a CNN) make it ideal for detection and segmentation, not just classification.
 </div>
 {% include figure image_path="/images/blog/transformers/liu2021_swin.png" alt="Swin Transformer hierarchical design" caption="Swin Transformer: hierarchical shifted-window architecture (Liu et al., 2021)" %}
 
 
 ## ViT's Limitation
 
-ViT computes full self-attention across all 196 patches. This is O(n²) in the number of patches — manageable at 224×224 but breaks down for high-resolution images (e.g., 1024×1024 for detection).
+ViT computes full self-attention across all 196 patches. This is O(n²) in the number of patches, manageable at 224×224 but breaks down for high-resolution images (e.g., 1024×1024 for detection).
 
 CNNs build **hierarchical feature maps**: early layers capture fine details (many small feature maps), later layers capture coarse semantics (fewer, larger feature maps). ViT has no such hierarchy.
 
@@ -49,7 +49,7 @@ Swin Transformer fixes both problems.
 
 Instead of attending over the whole image, Swin divides the patch grid into **non-overlapping local windows** of M×M patches (M=7 by default).
 
-Self-attention runs within each window independently. If the image has n patches and windows have M² patches, complexity drops from O(n²) to O(n·M²) — linear in image size.
+Self-attention runs within each window independently. If the image has n patches and windows have M² patches, complexity drops from O(n²) to O(n·M²), linear in image size.
 
 <div class="blog-figure">
 <figure>
@@ -102,9 +102,9 @@ Self-attention runs within each window independently. If the image has n patches
   <!-- Hierarchical stages note -->
   <rect x="20" y="238" width="460" height="36" rx="8" fill="#ecfdf5" stroke="#059669"/>
   <text x="250" y="253" text-anchor="middle" font-size="10" font-weight="700" fill="#065f46">Hierarchical stages: Stage 1 (H/4) → Stage 2 (H/8) → Stage 3 (H/16) → Stage 4 (H/32)</text>
-  <text x="250" y="267" text-anchor="middle" font-size="9" fill="#374151">Patch merging doubles channels, halves spatial size — like a strided conv. Produces FPN-compatible features.</text>
+  <text x="250" y="267" text-anchor="middle" font-size="9" fill="#374151">Patch merging doubles channels, halves spatial size, like a strided conv. Produces FPN-compatible features.</text>
 </svg>
-<figcaption>Figure 1: Layer L uses regular windows (no cross-window attention). Layer L+1 shifts the windows by (M/2, M/2), creating new windows that cross the original boundaries — enabling cross-window information flow.</figcaption>
+<figcaption>Figure 1: Layer L uses regular windows (no cross-window attention). Layer L+1 shifts the windows by (M/2, M/2), creating new windows that cross the original boundaries, enabling cross-window information flow.</figcaption>
 </figure>
 </div>
 
@@ -118,7 +118,7 @@ To handle patches at the edges that don't fill a full window, cyclic shift and a
 
 ## Hierarchical Feature Maps
 
-After each stage, **patch merging** concatenates 2×2 neighbouring patches and projects them to 2×d dimensions. This halves spatial resolution and doubles channel width — mimicking CNN downsampling.
+After each stage, **patch merging** concatenates 2×2 neighbouring patches and projects them to 2×d dimensions. This halves spatial resolution and doubles channel width, mimicking CNN downsampling.
 
 | Stage | Spatial size | Channels |
 |---|---|---|
@@ -128,7 +128,7 @@ After each stage, **patch merging** concatenates 2×2 neighbouring patches and p
 | After Stage 3 | H/16 × W/16 | 384 |
 | After Stage 4 | H/32 × W/32 | 768 |
 
-These multi-scale features plug directly into standard detection heads (FPN, DETR) and segmentation decoders — something ViT cannot easily do.
+These multi-scale features plug directly into standard detection heads (FPN, DETR) and segmentation decoders, something ViT cannot easily do.
 
 ## Complexity Worked Example
 
@@ -143,7 +143,7 @@ Consider a 224×224 image divided into 4×4 patches → 56×56 = 3136 patches.
 That is a **63× reduction** in attention complexity. For 1024×1024 images (dense prediction), the gap grows to ~1000×.
 
 <div class="insight-box">
-<strong>Why this matters for detection:</strong> object detection models need features at multiple scales — small for fine details, large for whole-object context. Swin's hierarchical stages produce exactly those scales as a natural output, while ViT produces only one scale and needs an external FPN to recover them.
+<strong>Why this matters for detection:</strong> object detection models need features at multiple scales, small for fine details, large for whole-object context. Swin's hierarchical stages produce exactly those scales as a natural output, while ViT produces only one scale and needs an external FPN to recover them.
 </div>
 
 ## Where Swin Wins
@@ -153,7 +153,7 @@ Swin won COCO object detection and ADE20K segmentation upon release. Its hierarc
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>Swin uses <strong>local window attention</strong> (O(n·M²)) instead of global attention (O(n²)) — linear in image size.</li>
+  <li>Swin uses <strong>local window attention</strong> (O(n·M²)) instead of global attention (O(n²)), linear in image size.</li>
   <li><strong>Shifted windows</strong> alternate each layer, allowing cross-window connections without extra cost.</li>
   <li><strong>Hierarchical stages</strong> produce multi-scale features, making Swin compatible with detection and segmentation heads.</li>
   <li>Won multiple leaderboards in 2021 and remains a top backbone for dense visual tasks.</li>

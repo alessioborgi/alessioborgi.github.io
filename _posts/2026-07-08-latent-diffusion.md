@@ -6,7 +6,7 @@ categories: [diffusion]
 book: diffusion
 subsection: efficiency
 tags: [diffusion, latent-diffusion, autoencoder, stable-diffusion]
-excerpt: "Most of the bits in a photograph encode texture no one can see. Latent diffusion throws them away first with an autoencoder, then runs the entire diffusion process in a space roughly forty-eight times smaller — which is how Stable Diffusion fits on a consumer GPU."
+excerpt: "Most of the bits in a photograph encode texture no one can see. Latent diffusion throws them away first with an autoencoder, then runs the entire diffusion process in a space roughly forty-eight times smaller, which is how Stable Diffusion fits on a consumer GPU."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Pixel-space diffusion spends most of its capacity and nearly all of its compute modelling high-frequency detail that contributes almost nothing perceptually. Latent diffusion splits the problem in two: train an autoencoder once to strip that detail, then run diffusion on its compact latent code. At a downsampling factor of 8, a \(512\times512\times3\) image becomes a \(64\times64\times4\) latent — exactly 48× fewer dimensions, and 4096× cheaper for a full self-attention layer. Conditioning enters through cross-attention. The price is a hard reconstruction ceiling you can never sample your way past.
+  <strong>TL;DR:</strong> Pixel-space diffusion spends most of its capacity and nearly all of its compute modelling high-frequency detail that contributes almost nothing perceptually. Latent diffusion splits the problem in two: train an autoencoder once to strip that detail, then run diffusion on its compact latent code. At a downsampling factor of 8, a \(512\times512\times3\) image becomes a \(64\times64\times4\) latent, exactly 48× fewer dimensions, and 4096× cheaper for a full self-attention layer. Conditioning enters through cross-attention. The price is a hard reconstruction ceiling you can never sample your way past.
 </div>
 
 ## Where the compute goes
@@ -29,7 +29,7 @@ Squeezing this out matters because the cost is not linear in the pixel count. Th
 
 ## Stage one: the autoencoder
 
-Train an encoder \\(\mathcal{E}\\) and decoder \\(\mathcal{D}\\) on images so that \\(\mathcal{D}(\mathcal{E}(\mathbf{x})) \approx \mathbf{x}\\), with a downsampling factor \\(f\\): an \\(H\times W\times 3\\) image maps to \\(\tfrac{H}{f}\times\tfrac{W}{f}\times c\\). The reconstruction objective is not plain L2 — that produces blur — but a combination of a perceptual (LPIPS) loss and a patch discriminator, which is what keeps texture crisp at high compression.
+Train an encoder \\(\mathcal{E}\\) and decoder \\(\mathcal{D}\\) on images so that \\(\mathcal{D}(\mathcal{E}(\mathbf{x})) \approx \mathbf{x}\\), with a downsampling factor \\(f\\): an \\(H\times W\times 3\\) image maps to \\(\tfrac{H}{f}\times\tfrac{W}{f}\times c\\). The reconstruction objective is not plain L2, that produces blur, but a combination of a perceptual (LPIPS) loss and a patch discriminator, which is what keeps texture crisp at high compression.
 
 The latent also needs a regulariser, or its scale drifts and the diffusion model's noise schedule stops making sense. Two choices are used: a very weak KL penalty towards a standard Gaussian (the "KL-f8" autoencoder in Stable Diffusion) or a vector-quantisation layer. In practice the KL variant is also rescaled by a fixed constant so the latents have roughly unit variance before diffusion sees them.
 
@@ -37,9 +37,9 @@ The latent also needs a regulariser, or its scale drifts and the diffusion model
 |---|---|---|
 | Tensor shape | \\(512\times512\times3\\) | \\(64\times64\times4\\) |
 | Dimensions | 786,432 | 16,384 |
-| Ratio | — | **48× fewer** |
+| Ratio |, | **48× fewer** |
 | Spatial tokens for attention | 262,144 | 4,096 |
-| Cost of one full self-attention | — | **4096× cheaper** (\\(64^2\\)) |
+| Cost of one full self-attention |, | **4096× cheaper** (\\(64^2\\)) |
 
 Rombach et al. swept \\(f\\) and found the useful window to be roughly 4 to 8. Below that, too little is compressed and diffusion still wastes capacity on texture; above it, the autoencoder starts discarding structure the diffusion model would have needed, and sample quality falls no matter how long you train.
 
@@ -55,7 +55,7 @@ Nothing about the diffusion maths changes. Freeze the autoencoder, encode the da
 \]
 </div>
 
-with \\(y\\) the conditioning input (a caption, a layout, a class) and $$\tau_\theta$$ a domain-specific encoder — for text, a frozen CLIP or T5 text encoder. Sampling runs the reverse chain in latent space and decodes once at the end: one call to \\(\mathcal{D}\\) per image, not per step.
+with \\(y\\) the conditioning input (a caption, a layout, a class) and $$\tau_\theta$$ a domain-specific encoder, for text, a frozen CLIP or T5 text encoder. Sampling runs the reverse chain in latent space and decodes once at the end: one call to \\(\mathcal{D}\\) per image, not per step.
 
 <div class="blog-figure">
 <figure>
@@ -118,17 +118,17 @@ V = W_V\,\tau_\theta(y)
 \]
 </div>
 
-Queries come from the image, keys and values from the condition. Changing modality means changing only $$\tau_\theta$$; the U-Net is untouched. This is also why per-token attention maps are inspectable, and why so much downstream editing work — attention re-weighting, prompt-to-prompt edits, region control — hooks into exactly this layer.
+Queries come from the image, keys and values from the condition. Changing modality means changing only $$\tau_\theta$$; the U-Net is untouched. This is also why per-token attention maps are inspectable, and why so much downstream editing work, attention re-weighting, prompt-to-prompt edits, region control, hooks into exactly this layer.
 
 <div class="insight-box">
-  <strong>Key Insight — the split is a division of labour, not just a speed-up:</strong> the autoencoder is trained once, on a reconstruction objective, and reused across every model trained on top of it. The diffusion model then never has to allocate parameters to reproducing plausible texture, because the decoder supplies it unconditionally. That is why a latent model with far fewer effective degrees of freedom can match a pixel model: it is solving a strictly easier problem, and the hard-but-cheap half has been amortised.
+  <strong>Key Insight, the split is a division of labour, not just a speed-up:</strong> the autoencoder is trained once, on a reconstruction objective, and reused across every model trained on top of it. The diffusion model then never has to allocate parameters to reproducing plausible texture, because the decoder supplies it unconditionally. That is why a latent model with far fewer effective degrees of freedom can match a pixel model: it is solving a strictly easier problem, and the hard-but-cheap half has been amortised.
 </div>
 
 ## What the autoencoder costs you
 
 The reconstruction is a ceiling. Whatever \\(\mathcal{D}(\mathcal{E}(\mathbf{x}))\\) loses is unreachable by any amount of sampling, because the diffusion model has never seen it. At \\(f = 8\\) this shows up in the well-known failure modes: small faces, fine lettering, regular high-frequency patterns that pick up moiré or smearing. Encode a photograph of printed text and decode it, with no diffusion involved at all, and you will see the limit directly.
 
-There are second-order costs too. Errors in latent space do not map uniformly to pixel error, so the L2 loss on \\(\mathbf{z}\\) implies a strange, decoder-dependent metric on images. Compounding is real: autoencoder artefacts and diffusion artefacts interact rather than adding. And the frozen decoder is a fixed component of every model built on it, so improving it means retraining downstream — which is why later releases ship refreshed VAEs with more latent channels rather than sticking with the original.
+There are second-order costs too. Errors in latent space do not map uniformly to pixel error, so the L2 loss on \\(\mathbf{z}\\) implies a strange, decoder-dependent metric on images. Compounding is real: autoencoder artefacts and diffusion artefacts interact rather than adding. And the frozen decoder is a fixed component of every model built on it, so improving it means retraining downstream, which is why later releases ship refreshed VAEs with more latent channels rather than sticking with the original.
 
 <div class="warning-box">
   <strong>The trap:</strong> latent diffusion is often described as "diffusion on a compressed image". It is diffusion on the autoencoder's <em>distribution</em>, which is not the image distribution. Anything the encoder cannot represent has probability zero under the model, and this is a modelling limitation, not a sampling one.

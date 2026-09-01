@@ -20,11 +20,11 @@ permalink: /blog/persistent-homology/tda-biology/
 
 Biology generates data with **intrinsic shape**: a cell's gene expression profile sits on a low-dimensional manifold in high-dimensional space; a protein's backbone traces a curve in 3D; tumour cells cluster into subpopulations with complex topological relationships.
 
-Standard dimensionality reduction (PCA, UMAP) shows you a *projection* of this shape — but projections can introduce false topology (apparent loops that are artefacts of the projection) or destroy real topology (two distinct manifolds collapsed onto one). TDA works directly on the high-dimensional shape without committing to a projection.
+Standard dimensionality reduction (PCA, UMAP) shows you a *projection* of this shape, but projections can introduce false topology (apparent loops that are artefacts of the projection) or destroy real topology (two distinct manifolds collapsed onto one). TDA works directly on the high-dimensional shape without committing to a projection.
 
 The two most impactful TDA tools in biology are:
-- **Mapper** — a topological "skeleton" algorithm for exploring manifold structure and cell trajectories.
-- **Persistent homology** — for quantifying loops (e.g., circadian gene expression cycles), voids (e.g., hollow regions in cell state space), and connectivity.
+- **Mapper**, a topological "skeleton" algorithm for exploring manifold structure and cell trajectories.
+- **Persistent homology**, for quantifying loops (e.g., circadian gene expression cycles), voids (e.g., hollow regions in cell state space), and connectivity.
 
 ---
 
@@ -32,30 +32,30 @@ The two most impactful TDA tools in biology are:
 
 Mapper (Singh, Memoli, Carlsson, 2007) builds a graph-level summary of a high-dimensional dataset:
 
-1. **Filter function** $$f : X \to \mathbb{R}$$ — assign a scalar to each data point (e.g., first PCA component, pseudotime estimate, density).
+1. **Filter function** $$f : X \to \mathbb{R}$$, assign a scalar to each data point (e.g., first PCA component, pseudotime estimate, density).
 2. **Cover** the range of $$f$$ with overlapping intervals $$\{U_i\}$$.
-3. **Cluster** the preimage $$f^{-1}(U_i)$$ in the original space — each cluster becomes a node in the Mapper graph.
+3. **Cluster** the preimage $$f^{-1}(U_i)$$ in the original space, each cluster becomes a node in the Mapper graph.
 4. **Connect** nodes whose corresponding clusters share data points (from overlapping intervals).
 
-The result is a **topological skeleton** — a graph that captures the rough shape of the data manifold without fixing a coordinate system.
+The result is a **topological skeleton**, a graph that captures the rough shape of the data manifold without fixing a coordinate system.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Mapper vs UMAP:</strong> UMAP gives you a 2D embedding you can visualise directly. Mapper gives you a graph-skeleton that is <em>resolution-independent</em> and can detect branching points (cell fate decisions) and loops (cyclic processes) that UMAP might smooth away. The two tools are complementary: use UMAP for a first visual impression, Mapper for principled topological analysis.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, Mapper vs UMAP:</strong> UMAP gives you a 2D embedding you can visualise directly. Mapper gives you a graph-skeleton that is <em>resolution-independent</em> and can detect branching points (cell fate decisions) and loops (cyclic processes) that UMAP might smooth away. The two tools are complementary: use UMAP for a first visual impression, Mapper for principled topological analysis.</div>
 
 ---
 
 ## Application 1: Single-Cell RNA-seq Trajectory Inference
 
-Single-cell RNA sequencing measures gene expression in thousands of individual cells simultaneously. The cells lie along **differentiation trajectories** — continuous paths from stem cells to specialised cell types.
+Single-cell RNA sequencing measures gene expression in thousands of individual cells simultaneously. The cells lie along **differentiation trajectories**, continuous paths from stem cells to specialised cell types.
 
 **TDA pipeline:**
 1. Compute a \(k\)-NN graph on the high-dimensional expression matrix.
 2. Apply Mapper with a density-based or diffusion pseudotime filter.
 3. Read off the topology of the resulting skeleton:
    - Linear path: a simple differentiation trajectory.
-   - Branching point (Y-shape): a bifurcation — cells can become either cell type A or B.
+   - Branching point (Y-shape): a bifurcation, cells can become either cell type A or B.
    - Loop: a cyclic process (e.g., cell cycle, circadian rhythm).
 
-**Key result (Lum et al., 2013):** Mapper applied to blood gene expression data revealed a triangular topology with three distinct subpopulations at the vertices — impossible to detect with standard clustering or PCA.
+**Key result (Lum et al., 2013):** Mapper applied to blood gene expression data revealed a triangular topology with three distinct subpopulations at the vertices, impossible to detect with standard clustering or PCA.
 
 **Tools:** `KeplerMapper` (Python), `Dynamo` (single-cell trajectory TDA), `PAGA` (combines graph abstraction with TDA ideas).
 
@@ -68,19 +68,19 @@ Proteins are chains of amino acids that fold into 3D structures. The shape of th
 **PH fingerprinting pipeline:**
 1. Represent the protein backbone as a point cloud in \(\mathbb{R}^3\) (one point per C\(\alpha\) atom).
 2. Compute the Vietoris-Rips or alpha complex filtration on this point cloud.
-3. Extract the persistence diagram — particularly \(H_0\) (connectivity of backbone segments) and \(H_1\) (loops and cavities in the folded structure).
+3. Extract the persistence diagram, particularly \(H_0\) (connectivity of backbone segments) and \(H_1\) (loops and cavities in the folded structure).
 
 **Key result (Xia & Wei, 2014):** Persistent homology features computed from protein structures outperform classical structural descriptors (secondary structure counts, solvent accessibility) for predicting protein-ligand binding affinity.
 
-**Protein comparison:** Two proteins can be compared by computing the Wasserstein distance between their persistence diagrams — a topology-based structural similarity measure that is rotation and translation invariant.
+**Protein comparison:** Two proteins can be compared by computing the Wasserstein distance between their persistence diagrams, a topology-based structural similarity measure that is rotation and translation invariant.
 
 ---
 
 ## Application 3: Cancer Genomics
 
-Tumours are heterogeneous — a single tumour contains multiple subpopulations of cells with distinct mutation profiles. This **intra-tumour heterogeneity** is topologically complex.
+Tumours are heterogeneous, a single tumour contains multiple subpopulations of cells with distinct mutation profiles. This **intra-tumour heterogeneity** is topologically complex.
 
-**TDA approach (Nicolau et al., 2011):** Applied Mapper to breast cancer gene expression data. Discovered a subgroup of oestrogen receptor-positive tumours with a distinct gene expression profile and 100% survival rate — a subgroup invisible to standard clustering, revealed as a "flare" in the Mapper graph.
+**TDA approach (Nicolau et al., 2011):** Applied Mapper to breast cancer gene expression data. Discovered a subgroup of oestrogen receptor-positive tumours with a distinct gene expression profile and 100% survival rate, a subgroup invisible to standard clustering, revealed as a "flare" in the Mapper graph.
 
 **PH for copy number variation:** Persistence diagrams computed from genomic copy-number profiles encode the topological complexity of chromosomal rearrangements. Higher total persistence correlates with more aggressive tumour phenotypes.
 
@@ -175,7 +175,7 @@ Tumours are heterogeneous — a single tumour contains multiple subpopulations o
   <text x="300" y="178" font-size="9" fill="#7c3aed">↑ branch point:</text>
   <text x="300" y="190" font-size="9" fill="#7c3aed">2 sub-populations</text>
 </svg>
-<figcaption>Mapper construction. The filter value partitions data into overlapping bins (coloured bands). Clustering within each bin produces nodes; shared points between overlapping bins create edges. The branching Y-shape reveals a bifurcation — two distinct subpopulations within the purple cover interval.</figcaption>
+<figcaption>Mapper construction. The filter value partitions data into overlapping bins (coloured bands). Clustering within each bin produces nodes; shared points between overlapping bins create edges. The branching Y-shape reveals a bifurcation, two distinct subpopulations within the purple cover interval.</figcaption>
 </figure>
 </div>
 
@@ -188,13 +188,13 @@ Tumours are heterogeneous — a single tumour contains multiple subpopulations o
 **TDA analysis:**
 1. Reduce to top 50 PCs to remove noise.
 2. Compute Vietoris-Rips persistence up to dimension 1.
-3. **Expected result:** One very persistent $$H_1$$ bar spanning most of the filtration range — corresponding to the circular topology of the 24-hour cycle.
+3. **Expected result:** One very persistent $$H_1$$ bar spanning most of the filtration range, corresponding to the circular topology of the 24-hour cycle.
 
-**Verification:** The birth time of the $$H_1$$ bar corresponds to the scale at which the 24 time points form a connected loop. The persistence (death - birth) is large because the loop is geometrically prominent — the gene expression trajectory genuinely circles back on itself.
+**Verification:** The birth time of the $$H_1$$ bar corresponds to the scale at which the 24 time points form a connected loop. The persistence (death - birth) is large because the loop is geometrically prominent, the gene expression trajectory genuinely circles back on itself.
 
 **Control:** Shuffle the time labels randomly. The $$H_1$$ bar disappears (or becomes short and noisy) because the circular structure is destroyed.
 
-This is a rigorous topological proof that circadian gene expression forms a cycle — not just a correlation-based claim.
+This is a rigorous topological proof that circadian gene expression forms a cycle, not just a correlation-based claim.
 
 ---
 

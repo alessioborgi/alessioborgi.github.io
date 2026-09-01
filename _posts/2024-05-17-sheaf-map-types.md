@@ -25,9 +25,9 @@ toc_label: "Contents"
 
 ## The Design Space of Restriction Maps
 
-**Intuition First:** Think of the four map types as four ways to describe the relationship between two people's views of the same object. A scalar map says "person B sees things three times more intensely than person A — and possibly with the opposite sign." A diagonal map says "person B weights each channel differently." An orthogonal map says "person B is looking from a rotated angle — same information, different frame." A general map says "person B's perception is an arbitrary linear combination of person A's." The richer the class, the more relationships the sheaf can represent — and the more numbers the predictor must output per edge.
+**Intuition First:** Think of the four map types as four ways to describe the relationship between two people's views of the same object. A scalar map says "person B sees things three times more intensely than person A, and possibly with the opposite sign." A diagonal map says "person B weights each channel differently." An orthogonal map says "person B is looking from a rotated angle, same information, different frame." A general map says "person B's perception is an arbitrary linear combination of person A's." The richer the class, the more relationships the sheaf can represent, and the more numbers the predictor must output per edge.
 
-In Neural Sheaf Diffusion the predictor $$\Phi$$ outputs a restriction map $$\mathcal{F}_{v \trianglelefteq e}$$ for each *incidence* (node, incident edge) — so two maps per undirected edge. The counts below are the degrees of freedom of the matrix $$\Phi$$ must produce, which fixes its output width; they are not free parameters stored per edge.
+In Neural Sheaf Diffusion the predictor $$\Phi$$ outputs a restriction map $$\mathcal{F}_{v \trianglelefteq e}$$ for each *incidence* (node, incident edge), so two maps per undirected edge. The counts below are the degrees of freedom of the matrix $$\Phi$$ must produce, which fixes its output width; they are not free parameters stored per edge.
 
 ## Scalar Maps ($$d = 1$$)
 
@@ -47,9 +47,9 @@ In Neural Sheaf Diffusion the predictor $$\Phi$$ outputs a restriction map $$\ma
 \]
 </div>
 
-so the transport along the edge is $$\mathcal{F}_{v \trianglelefteq e}\mathcal{F}_{u \trianglelefteq e}$$ — positive for "these should agree", negative for "these should be opposite".
+so the transport along the edge is $$\mathcal{F}_{v \trianglelefteq e}\mathcal{F}_{u \trianglelefteq e}$$, positive for "these should agree", negative for "these should be opposite".
 
-**Connection to existing models:** if the two endpoint maps are forced to be *equal*, the resulting operators are exactly the positively-weighted graph Laplacians — the family GCN and ChebNet already use. Allowing them to differ in sign is what buys anything new, and it recovers signed-attention models such as FAGCN rather than GAT (whose softmax weights cannot be negative).
+**Connection to existing models:** if the two endpoint maps are forced to be *equal*, the resulting operators are exactly the positively-weighted graph Laplacians, the family GCN and ChebNet already use. Allowing them to differ in sign is what buys anything new, and it recovers signed-attention models such as FAGCN rather than GAT (whose softmax weights cannot be negative).
 
 **Limitation:** the harmonic space of a $$d = 1$$ sheaf is at most one-dimensional, so no scalar sheaf can linearly separate three or more classes in the diffusion limit, no matter how the signs are chosen. That is the argument for widening the stalks.
 
@@ -62,13 +62,13 @@ so the transport along the edge is $$\mathcal{F}_{v \trianglelefteq e}\mathcal{F
 \]
 </div>
 
-**What it represents:** per-coordinate scaling and sign flipping — a set of $$d$$ independent scalar sheaves stacked into one.
+**What it represents:** per-coordinate scaling and sign flipping, a set of $$d$$ independent scalar sheaves stacked into one.
 
 **Sheaf Laplacian block:** $$(L_{\mathcal{F}})_{vu} = -\operatorname{diag}(f^v_1 f^u_1, \dots, f^v_d f^u_d)$$, itself diagonal. The Laplacian therefore decouples across the $$d$$ stalk coordinates: they interact only through the left multiplication by $$W_1$$ in the NSD layer.
 
 **Advantage:** $$O(d)$$ outputs per incidence instead of $$O(d^2)$$, diagonal blocks, and cheaper sparse products.
 
-**Separation capacity:** since a diagonal sheaf is $$d$$ independent scalar sheaves, a one-vs-all construction shows that $$d \ge C$$ suffices to linearly separate $$C$$ classes — expressive, but only by spending stalk width.
+**Separation capacity:** since a diagonal sheaf is $$d$$ independent scalar sheaves, a one-vs-all construction shows that $$d \ge C$$ suffices to linearly separate $$C$$ classes, expressive, but only by spending stalk width.
 
 **Limitation:** no coupling between stalk coordinates inside the operator. What node $$u$$ means by coordinate 1 is what node $$v$$ means by coordinate 1; only magnitudes and signs differ, not directions.
 
@@ -82,7 +82,7 @@ so the transport along the edge is $$\mathcal{F}_{v \trianglelefteq e}\mathcal{F
 
 **Degrees of freedom per incidence:** $$d(d-1)/2$$, the dimension of the Lie group $$O(d)$$. In NSD these are realised as a composition of Householder reflections.
 
-**What it represents:** rotations and reflections — a rigid change of frame.
+**What it represents:** rotations and reflections, a rigid change of frame.
 
 **Key property:** $$\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e} = I_d$$, so the diagonal blocks collapse:
 
@@ -92,15 +92,15 @@ so the transport along the edge is $$\mathcal{F}_{v \trianglelefteq e}\mathcal{F
 \]
 </div>
 
-This makes the normalisation $$D^{-1/2}$$ trivial — $$D$$ is just the degrees — whereas for general maps it requires the inverse square root of a genuine positive semi-definite block matrix.
+This makes the normalisation $$D^{-1/2}$$ trivial, $$D$$ is just the degrees, whereas for general maps it requires the inverse square root of a genuine positive semi-definite block matrix.
 
 <div class="insight-box">
-<strong>Why orthogonal maps are special:</strong> with orthogonal restriction maps the off-diagonal block is \((L_{\mathcal{F}})_{vu} = -Q_v^{\top} Q_u\), itself an orthogonal matrix (a rotation or a reflection, depending on the determinants). It expresses how much the feature frames of \(u\) and \(v\) are rotated relative to one another. Sheaf diffusion with orthogonal maps is diffusion on a graph where each node carries its own coordinate frame and each edge specifies the frame change — the discrete analogue of a connection Laplacian in differential geometry.
+<strong>Why orthogonal maps are special:</strong> with orthogonal restriction maps the off-diagonal block is \((L_{\mathcal{F}})_{vu} = -Q_v^{\top} Q_u\), itself an orthogonal matrix (a rotation or a reflection, depending on the determinants). It expresses how much the feature frames of \(u\) and \(v\) are rotated relative to one another. Sheaf diffusion with orthogonal maps is diffusion on a graph where each node carries its own coordinate frame and each edge specifies the frame change, the discrete analogue of a connection Laplacian in differential geometry.
 </div>
 
 **Separation capacity:** orthogonal maps use the available stalk space more efficiently than diagonal ones. Bodnar et al. show that $$C \le 2d$$ classes can be separated with $$O(d)$$-bundles (proved for $$d \in \{2, 4\}$$), against $$d \ge C$$ for diagonal maps.
 
-**Connection geometry:** a sheaf with orthogonal restriction maps is a **discrete $$O(d)$$-bundle** — a discrete analogue of a vector bundle with orthogonal structure group, where the maps play the role of parallel transport. It is *flat* only when the holonomy around every cycle is the identity; that is a property a given sheaf may or may not have, not part of the definition. This is what gives orthogonal sheaf GNNs a foothold in differential geometry, and it is developed further in the post on equivariant sheaf GNNs.
+**Connection geometry:** a sheaf with orthogonal restriction maps is a **discrete $$O(d)$$-bundle**, a discrete analogue of a vector bundle with orthogonal structure group, where the maps play the role of parallel transport. It is *flat* only when the holonomy around every cycle is the identity; that is a property a given sheaf may or may not have, not part of the definition. This is what gives orthogonal sheaf GNNs a foothold in differential geometry, and it is developed further in the post on equivariant sheaf GNNs.
 
 ## General Linear Maps
 
@@ -112,9 +112,9 @@ This makes the normalisation $$D^{-1/2}$$ trivial — $$D$$ is just the degrees 
 
 **Degrees of freedom per incidence:** $$d^2$$ for square $$d \times d$$ maps.
 
-**What it represents:** arbitrary linear transformations — mixing, scaling, rotating, and projecting features. Any linear relationship between the two endpoint stalks is representable.
+**What it represents:** arbitrary linear transformations, mixing, scaling, rotating, and projecting features. Any linear relationship between the two endpoint stalks is representable.
 
-**Costs:** $$O(d^2)$$ outputs per incidence, dense blocks, $$O(\lvert E \rvert d^2)$$ storage for the Laplacian — and, more awkwardly, the normalisation requires computing $$D^{-1/2}$$ for a positive semi-definite block matrix rather than reading off degrees. Maximal flexibility also brings the highest risk of overfitting, which is why the most general class is not automatically the best-performing one.
+**Costs:** $$O(d^2)$$ outputs per incidence, dense blocks, $$O(\lvert E \rvert d^2)$$ storage for the Laplacian, and, more awkwardly, the normalisation requires computing $$D^{-1/2}$$ for a positive semi-definite block matrix rather than reading off degrees. Maximal flexibility also brings the highest risk of overfitting, which is why the most general class is not automatically the best-performing one.
 
 ## Summary Comparison
 
@@ -123,7 +123,7 @@ This makes the normalisation $$D^{-1/2}$$ trivial — $$D$$ is just the degrees 
 | Scalar ($$d=1$$) | 1 | n/a | Signed edge weight | $$\le 2$$ |
 | Diagonal | $$d$$ | None (only via $$W_1$$) | Per-coordinate scaling and sign | $$C \le d$$ |
 | Orthogonal | $$d(d-1)/2$$ | Full | Frame rotation / reflection | $$C \le 2d$$ |
-| General | $$d^2$$ | Full | Arbitrary linear | — |
+| General | $$d^2$$ | Full | Arbitrary linear |, |
 
 ## Practical Recommendations
 

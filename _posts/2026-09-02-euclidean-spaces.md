@@ -18,12 +18,12 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Everything in Euclidean geometry descends from the inner product. The norm is \(\lVert x\rVert=\sqrt{\langle x,x\rangle}\), the angle is defined by \(\cos\theta = \langle x,y\rangle/(\lVert x\rVert\lVert y\rVert)\), and orthogonality is \(\langle x,y\rangle = 0\). Projecting \(x\) onto a direction \(u\) means choosing the coefficient that minimises the residual, which gives \(\langle x,u\rangle u/\lVert u\rVert^2\) and leaves a residual orthogonal to \(u\). Apply that to a hyperplane \(\mathbf{w}^\top x + b = 0\) and the distance from any point is \(\lvert \mathbf{w}^\top x_0 + b\rvert / \lVert \mathbf{w}\rVert\) — which is the quantity an SVM maximises.
+  <strong>TL;DR:</strong> Everything in Euclidean geometry descends from the inner product. The norm is \(\lVert x\rVert=\sqrt{\langle x,x\rangle}\), the angle is defined by \(\cos\theta = \langle x,y\rangle/(\lVert x\rVert\lVert y\rVert)\), and orthogonality is \(\langle x,y\rangle = 0\). Projecting \(x\) onto a direction \(u\) means choosing the coefficient that minimises the residual, which gives \(\langle x,u\rangle u/\lVert u\rVert^2\) and leaves a residual orthogonal to \(u\). Apply that to a hyperplane \(\mathbf{w}^\top x + b = 0\) and the distance from any point is \(\lvert \mathbf{w}^\top x_0 + b\rvert / \lVert \mathbf{w}\rVert\), which is the quantity an SVM maximises.
 </div>
 
 ## The one structure everything else comes from
 
-A vector space on its own has no lengths and no angles; it only knows about addition and scaling. Add an inner product $$\langle \cdot,\cdot\rangle$$ — bilinear, symmetric, and positive definite ($$\langle x,x\rangle > 0$$ for $$x \neq 0$$) — and geometry appears. In $$\mathbb{R}^n$$ the standard choice is $$\langle x,y\rangle = x^\top y$$, and the norm it induces is
+A vector space on its own has no lengths and no angles; it only knows about addition and scaling. Add an inner product $$\langle \cdot,\cdot\rangle$$, bilinear, symmetric, and positive definite ($$\langle x,x\rangle > 0$$ for $$x \neq 0$$), and geometry appears. In $$\mathbb{R}^n$$ the standard choice is $$\langle x,y\rangle = x^\top y$$, and the norm it induces is
 
 <div class="formula-box">
 \[
@@ -83,7 +83,7 @@ So $$\alpha^\star = \langle x,u\rangle/\lVert u\rVert^2$$ and the projection is 
     <text x="46" y="34">x₂</text>
   </g>
 </svg>
-<figcaption>Notice that the projection is the unique point on the line whose residual is perpendicular to it — that orthogonality <em>is</em> the optimality condition, not a coincidence of the picture.</figcaption>
+<figcaption>Notice that the projection is the unique point on the line whose residual is perpendicular to it, that orthogonality <em>is</em> the optimality condition, not a coincidence of the picture.</figcaption>
 </figure>
 </div>
 
@@ -115,7 +115,7 @@ d(x_0, H) = \frac{\lvert \mathbf{w}^\top x_0 + b\rvert}{\lVert \mathbf{w}\rVert}
 Take $$\mathbf{w} = (2,1)$$, $$b = -4$$ and $$x_0 = (3,3)$$: the numerator is $$\lvert 6 + 3 - 4\rvert = 5$$ and $$\lVert\mathbf{w}\rVert = \sqrt 5$$, so the distance is exactly $$\sqrt 5 \approx 2.236$$.
 
 <div class="insight-box">
-  <strong>Key Insight — where the SVM's \(2/\lVert \mathbf{w}\rVert\) comes from:</strong> the pair \((\mathbf{w}, b)\) is over-parameterised, since scaling both by \(c>0\) leaves the hyperplane unchanged. The hard-margin SVM removes that freedom by <em>fixing the scale</em> with the constraints \(y_i(\mathbf{w}^\top x_i + b)\ge 1\), so the closest points sit at \(\lvert \mathbf{w}^\top x + b\rvert = 1\). By the distance formula they are \(1/\lVert\mathbf{w}\rVert\) away, the two margins are \(2/\lVert\mathbf{w}\rVert\) apart, and maximising the margin becomes minimising \(\lVert\mathbf{w}\rVert^2\). The quadratic objective is not a modelling choice — it is the distance formula in disguise.
+  <strong>Key Insight, where the SVM's \(2/\lVert \mathbf{w}\rVert\) comes from:</strong> the pair \((\mathbf{w}, b)\) is over-parameterised, since scaling both by \(c>0\) leaves the hyperplane unchanged. The hard-margin SVM removes that freedom by <em>fixing the scale</em> with the constraints \(y_i(\mathbf{w}^\top x_i + b)\ge 1\), so the closest points sit at \(\lvert \mathbf{w}^\top x + b\rvert = 1\). By the distance formula they are \(1/\lVert\mathbf{w}\rVert\) away, the two margins are \(2/\lVert\mathbf{w}\rVert\) apart, and maximising the margin becomes minimising \(\lVert\mathbf{w}\rVert^2\). The quadratic objective is not a modelling choice, it is the distance formula in disguise.
 </div>
 
 ## What this means for a trained classifier
@@ -123,7 +123,7 @@ Take $$\mathbf{w} = (2,1)$$, $$b = -4$$ and $$x_0 = (3,3)$$: the numerator is $$
 The last layer of a neural classifier is a set of hyperplanes, one per class in the binary-versus-rest reading. The logit $$\mathbf{w}_c^\top h + b_c$$ is a *signed*, unnormalised distance from the penultimate feature $$h$$ to class $$c$$'s boundary; dividing by $$\lVert \mathbf{w}_c\rVert$$ turns it into an actual distance. This is why logit magnitudes are not comparable across classes with differently scaled weight vectors, and why weight normalisation and cosine-softmax variants exist at all.
 
 <div class="warning-box">
-  <strong>Interview trap:</strong> the formula \(\lvert\mathbf{w}^\top x_0 + b\rvert/\lVert\mathbf{w}\rVert\) is a distance only in the norm induced by the inner product you used. Under a different metric — a Mahalanobis inner product \(\langle x,y\rangle_A = x^\top A y\) with \(A \succ 0\), say — orthogonality, angles and the closest point on \(H\) all change. "Perpendicular" is a statement about a chosen inner product, never about the coordinates on the page.
+  <strong>Interview trap:</strong> the formula \(\lvert\mathbf{w}^\top x_0 + b\rvert/\lVert\mathbf{w}\rVert\) is a distance only in the norm induced by the inner product you used. Under a different metric, a Mahalanobis inner product \(\langle x,y\rangle_A = x^\top A y\) with \(A \succ 0\), say, orthogonality, angles and the closest point on \(H\) all change. "Perpendicular" is a statement about a chosen inner product, never about the coordinates on the page.
 </div>
 
 <div class="key-takeaways">
@@ -136,7 +136,7 @@ The last layer of a neural classifier is a set of hyperplanes, one per class in 
   </ul>
 </div>
 
-Next: what happens when you *move* these vectors around — see [linear transformations](/blog/geometry-basics/linear-transformations/).
+Next: what happens when you *move* these vectors around, see [linear transformations](/blog/geometry-basics/linear-transformations/).
 
 ## References
 

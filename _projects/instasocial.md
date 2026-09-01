@@ -3,7 +3,7 @@ title: "InstaSocial: Photo-Sharing Social Platform"
 collection: projects
 layout: single
 permalink: /projects/instasocial/
-excerpt: "A full-stack Instagram-like photo sharing app — upload, explore, like, and comment — built with Vue.js frontend, Go REST API, and Docker deployment."
+excerpt: "A full-stack Instagram-like photo sharing app, upload, explore, like, and comment, built with Vue.js frontend, Go REST API, and Docker deployment."
 author_profile: true
 github: "https://github.com/alessioborgi/InstaSocial"
 tags:
@@ -15,7 +15,7 @@ tags:
   - Social Media
 ---
 
-InstaSocial (WASA Photo) is a full-stack social photo-sharing platform offering an Instagram-like experience. Users can upload photos, browse a community feed, interact via likes and comments, and manage their profile — all served through a responsive Vue.js SPA backed by a Go REST API.
+InstaSocial (WASA Photo) is a full-stack social photo-sharing platform offering an Instagram-like experience. Users can upload photos, browse a community feed, interact via likes and comments, and manage their profile, all served through a responsive Vue.js SPA backed by a Go REST API.
 
 ## Features
 
@@ -29,7 +29,7 @@ InstaSocial (WASA Photo) is a full-stack social photo-sharing platform offering 
 ## Architecture
 
 - **Frontend:** Vue.js SPA with Axios for API calls; responsive CSS layout.
-- **Backend:** Go REST API following the OpenAPI specification — clean, versioned endpoints.
+- **Backend:** Go REST API following the OpenAPI specification, clean, versioned endpoints.
 - **API contract:** OpenAPI 3.0 spec defines the full interface, enabling frontend/backend to evolve independently.
 - **Containerisation:** Docker Compose orchestrates frontend, API, and storage containers for reproducible local and production deployment.
 

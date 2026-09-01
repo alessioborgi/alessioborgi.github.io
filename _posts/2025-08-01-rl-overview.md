@@ -27,7 +27,7 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Reinforcement Learning trains agents to maximise cumulative reward through trial-and-error interaction with an environment. Unlike supervised learning, there are no labelled examples — only a scalar reward signal that may be sparse and delayed. This book covers foundational theory through state-of-the-art algorithms.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Reinforcement Learning trains agents to maximise cumulative reward through trial-and-error interaction with an environment. Unlike supervised learning, there are no labelled examples, only a scalar reward signal that may be sparse and delayed. This book covers foundational theory through state-of-the-art algorithms.</div>
 {% include figure image_path="/images/blog/rl/ouyang2022_rlhf.png" alt="RL overview and RLHF pipeline" caption="The RL training loop and RLHF pipeline (Ouyang et al., 2022)" %}
 
 
@@ -48,7 +48,7 @@ What distinguishes RL from other machine learning paradigms:
 - **Delayed credit**: a reward at step $$t$$ may result from actions taken many steps earlier.
 - **Non-stationarity**: the agent's own learning changes the data distribution it encounters.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Think of RL like learning to ride a bike: no one tells you the exact muscle adjustments to make — you just try, fall, and use the pain/balance signal to improve. The reward is delayed (you feel stable only after a sequence of correct micro-adjustments) and the "supervisor" is purely the outcome, not a labelled correction.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Think of RL like learning to ride a bike: no one tells you the exact muscle adjustments to make, you just try, fall, and use the pain/balance signal to improve. The reward is delayed (you feel stable only after a sequence of correct micro-adjustments) and the "supervisor" is purely the outcome, not a labelled correction.</div>
 
 ## The RL Pipeline
 
@@ -84,7 +84,7 @@ Every RL system follows the same fundamental loop:
 <figcaption>The agent-environment loop: the agent sends actions, the environment returns the next state and a reward signal.</figcaption>
 </figure></div>
 
-This loop is mathematically formalised as a **Markov Decision Process** (MDP), covered in the next post. The Markov property — that $$s_{t+1}$$ depends only on $$(s_t, a_t)$$, not on full history — is the key simplifying assumption.
+This loop is mathematically formalised as a **Markov Decision Process** (MDP), covered in the next post. The Markov property, that $$s_{t+1}$$ depends only on $$(s_t, a_t)$$, not on full history, is the key simplifying assumption.
 
 <div class="insight-box"><strong>Key Insight:</strong> RL is fundamentally different from supervised learning because the agent must explore the environment to generate its own training data. This creates the <em>exploration-exploitation dilemma</em>: should the agent try known good actions (exploit) or try new ones to gather information (explore)?</div>
 

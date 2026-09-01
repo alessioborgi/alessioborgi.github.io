@@ -28,7 +28,7 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Imagine training a network to segment blood vessels in a retinal scan. Cross-entropy loss rewards getting each pixel right — but it is perfectly happy with a segmentation that has 12 disconnected vessel fragments instead of one connected tree, as long as pixel accuracy is high. That is a topologically wrong answer. Topological regularisation adds a soft penalty: "the segmentation should have the same number of connected components and holes as the ground truth." It does not replace the pixel loss — it complements it, acting as a topological tie-breaker.
+Imagine training a network to segment blood vessels in a retinal scan. Cross-entropy loss rewards getting each pixel right, but it is perfectly happy with a segmentation that has 12 disconnected vessel fragments instead of one connected tree, as long as pixel accuracy is high. That is a topologically wrong answer. Topological regularisation adds a soft penalty: "the segmentation should have the same number of connected components and holes as the ground truth." It does not replace the pixel loss, it complements it, acting as a topological tie-breaker.
 
 ## Motivation: When L2 Is Not Enough
 
@@ -77,13 +77,13 @@ Suppose a 5×5 binary segmentation mask predicts two disconnected blobs where th
 
 After cubical persistence:
 - \(\mathrm{dgm}(Y^*)\): one \(H_0\) bar \((0, \infty)\).
-- \(\mathrm{dgm}(Y)\): two \(H_0\) bars — \((0, \infty)\) for the larger component, \((0, 0.3)\) for the smaller (born at 0, dies at probability threshold 0.3 before they merge).
+- \(\mathrm{dgm}(Y)\): two \(H_0\) bars, \((0, \infty)\) for the larger component, \((0, 0.3)\) for the smaller (born at 0, dies at probability threshold 0.3 before they merge).
 
 Wasserstein matching: the extra bar \((0, 0.3)\) in \(\mathrm{dgm}(Y)\) is matched to the diagonal (the closest point on the diagonal is \((0.15, 0.15)\)), contributing distance \(\|(0, 0.3) - (0.15, 0.15)\|_2 \approx 0.21\).
 
 \(\mathcal{L}_{topo} = 0.21^2 \approx 0.044\)
 
-The gradient of this loss w.r.t. the predicted probabilities pushes the "gap pixels" between the two blobs to increase their probability — merging the components and reducing \(\beta_0\) to 1.
+The gradient of this loss w.r.t. the predicted probabilities pushes the "gap pixels" between the two blobs to increase their probability, merging the components and reducing \(\beta_0\) to 1.
 
 <style>
 @keyframes topo-fill {
@@ -122,7 +122,7 @@ The gradient of this loss w.r.t. the predicted probabilities pushes the "gap pix
   <text x="250" y="14" text-anchor="middle" font-size="10" fill="#991b1b" font-weight="bold">Prediction (β₀=2)</text>
   <rect x="175" y="20" width="22" height="22" rx="3" fill="#86efac"/>
   <rect x="199" y="20" width="22" height="22" rx="3" fill="#86efac"/>
-  <!-- gap pixel — pulsing -->
+  <!-- gap pixel, pulsing -->
   <rect x="223" y="20" width="22" height="22" rx="3" fill="#fca5a5">
     <animate attributeName="fill" values="#fca5a5;#fb923c;#fca5a5" dur="1.5s" repeatCount="indefinite"/>
   </rect>
@@ -136,7 +136,7 @@ The gradient of this loss w.r.t. the predicted probabilities pushes the "gap pix
   </rect>
   <rect x="247" y="44" width="22" height="22" rx="3" fill="#86efac"/>
   <rect x="271" y="44" width="22" height="22" rx="3" fill="#86efac"/>
-  <text x="250" y="90" text-anchor="middle" font-size="8" fill="#991b1b">2 components — topo loss</text>
+  <text x="250" y="90" text-anchor="middle" font-size="8" fill="#991b1b">2 components, topo loss</text>
   <text x="250" y="102" text-anchor="middle" font-size="8" fill="#991b1b">pushes gap pixels ↑</text>
 
   <!-- After merge arrow -->
@@ -164,7 +164,7 @@ The main overhead is computing persistence diagrams during training. For:
 - **Cubical persistence** (images): $$O(n \log n)$$ per image, feasible in mini-batch training.
 - **Rips persistence** (point clouds/graphs): $$O(n^3)$$ worst case, often amortised using sparse filtrations.
 
-<div class="insight-box"><strong>Key Insight:</strong> The most important insight from topological regularisation practice is that a small λ (weight on the topological term) is usually sufficient — the standard loss (cross-entropy, MSE) handles most of the work, and the topological term acts as a "tie-breaker" among solutions with similar pixel-wise accuracy. The result is that training time increases by only ~20–50% while topological correctness improves dramatically on structured domains (medical images, graphs).</div>
+<div class="insight-box"><strong>Key Insight:</strong> The most important insight from topological regularisation practice is that a small λ (weight on the topological term) is usually sufficient, the standard loss (cross-entropy, MSE) handles most of the work, and the topological term acts as a "tie-breaker" among solutions with similar pixel-wise accuracy. The result is that training time increases by only ~20–50% while topological correctness improves dramatically on structured domains (medical images, graphs).</div>
 
 ## References
 

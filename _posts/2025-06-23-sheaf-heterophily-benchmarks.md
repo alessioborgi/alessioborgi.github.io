@@ -6,7 +6,7 @@ book: sheaf
 subsection: applications
 tags: [heterophily, benchmark, Chameleon, Squirrel, Cornell, Texas, node-classification, empirical]
 published: false
-excerpt: "A systematic comparison of sheaf GNNs against baselines on standard heterophilic node classification benchmarks. Which datasets benefit most from sheaf structure? How does stalk dimension d affect performance? When do sheaves win — and when don't they?"
+excerpt: "A systematic comparison of sheaf GNNs against baselines on standard heterophilic node classification benchmarks. Which datasets benefit most from sheaf structure? How does stalk dimension d affect performance? When do sheaves win, and when don't they?"
 author_profile: true
 read_time: true
 is_overview: false
@@ -49,7 +49,7 @@ The standard heterophilic node classification benchmarks (from Pei et al., 2020 
 | Roman-Empire | 22,662 | 65,854 | 18 | 0.05 | Wikipedia Roman Empire article |
 | Amazon-Ratings | 24,492 | 186,100 | 5 | 0.38 | Amazon product ratings |
 
-Homophily ratio h = |{(u,v): y_u=y_v}| / |E| — lower means more heterophilic.
+Homophily ratio h = |{(u,v): y_u=y_v}| / |E|, lower means more heterophilic.
 
 ## Comprehensive Results: All Methods on All Datasets
 
@@ -89,7 +89,7 @@ Results from NSD (Bodnar et al., 2022) and PolyNSD (Borgi et al., 2025):
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;width:100%;font-family:sans-serif;">
-  <text x="260" y="16" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">Accuracy (%) — GCN vs NSD vs PNSD</text>
+  <text x="260" y="16" text-anchor="middle" font-size="13" fill="#374151" font-weight="bold">Accuracy (%), GCN vs NSD vs PNSD</text>
   <!-- Y-axis labels -->
   <text x="38" y="190" text-anchor="end" font-size="9" fill="#6b7280">0</text>
   <text x="38" y="150" text-anchor="end" font-size="9" fill="#6b7280">40</text>
@@ -197,19 +197,19 @@ Results from NSD (Bodnar et al., 2022) and PolyNSD (Borgi et al., 2025):
 <figcaption>Animated bar chart: GCN (gray) vs NSD (teal) vs PNSD (orange) accuracy (%) on four heterophilic benchmarks. Bars animate from zero to final values. The largest absolute gains are on Cornell and Texas (h=0.11), where sheaf's null-space adaptation matters most.</figcaption>
 </figure></div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why sheaves win on heterophily (3 mechanisms):</strong>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, why sheaves win on heterophily (3 mechanisms):</strong>
 <ol style="margin:.5rem 0 0 1rem;padding:0;">
   <li><strong>Learned null-space adaptation:</strong> NSD learns restriction maps that push task-relevant features into ker(Δ_F). On Cornell/Texas (h=0.11), this means the model learns anti-alignment maps (F ≈ −I) for heterophilic edges, so cross-class signals cancel rather than pollute each node's representation.</li>
-  <li><strong>Spectral flexibility via PNSD:</strong> PNSD learns arbitrary polynomial filters on the sheaf Laplacian — including high-pass filters that amplify the high-frequency components separating different classes. Standard GCN's fixed low-pass filter cannot achieve this on heterophilic graphs.</li>
+  <li><strong>Spectral flexibility via PNSD:</strong> PNSD learns arbitrary polynomial filters on the sheaf Laplacian, including high-pass filters that amplify the high-frequency components separating different classes. Standard GCN's fixed low-pass filter cannot achieve this on heterophilic graphs.</li>
   <li><strong>Stalk dimension enriches representation:</strong> Each node has a d-dimensional stalk rather than a scalar. This gives the model d orthogonal channels to encode class-relevant geometry independently, avoiding the averaging collapse that harms standard GCN on heterophilic graphs.</li>
 </ol>
 </div>
 
 ## What Drives the Performance Gains?
 
-**1. Null space adaptation:** NSD learns maps that make the task-optimal features lie in ker(Δ_F). For Cornell and Texas (h=0.11), this requires strong anti-alignment maps (F_{v▷e} ≈ −I) for heterophilic edges — the model learns these automatically.
+**1. Null space adaptation:** NSD learns maps that make the task-optimal features lie in ker(Δ_F). For Cornell and Texas (h=0.11), this requires strong anti-alignment maps (F_{v▷e} ≈ −I) for heterophilic edges, the model learns these automatically.
 
-**2. Spectral flexibility (PNSD):** On Chameleon and Squirrel, PNSD learns high-pass filters — amplifying the high-frequency components that differentiate between classes. This cannot be achieved by NSD's fixed (I−Δ_F) filter.
+**2. Spectral flexibility (PNSD):** On Chameleon and Squirrel, PNSD learns high-pass filters, amplifying the high-frequency components that differentiate between classes. This cannot be achieved by NSD's fixed (I−Δ_F) filter.
 
 **3. Stalk dimension:** Larger d → richer null space → better representations. But d>5 often overfits on small datasets (Cornell has only 183 nodes).
 
@@ -225,7 +225,7 @@ On Cornell, varying stalk dimension d:
 | 4 | 83.4 | 84.7 |
 | 8 | 82.1 | 83.8 |
 
-Peak at d=2 or d=3 — larger d brings diminishing returns and higher overfitting risk for small graphs.
+Peak at d=2 or d=3, larger d brings diminishing returns and higher overfitting risk for small graphs.
 
 **On larger datasets (Chameleon, Squirrel):** Peak d is higher (d=4 or d=5) because the larger training set supports higher-capacity models.
 
@@ -257,7 +257,7 @@ Sheaf GNNs outperform all non-sheaf methods when:
 ## When Do Sheaves Not Help?
 
 Sheaf GNNs offer small or no benefit when:
-1. **High homophily (h > 0.6):** Cora, Citeseer, Pubmed — standard GCN already works well
+1. **High homophily (h > 0.6):** Cora, Citeseer, Pubmed, standard GCN already works well
 2. **Very small graphs (N < 100):** insufficient training data for map learning
 3. **Very large graphs (N > 100K):** sheaf map prediction over all edges is expensive; approximate methods needed
 4. **No edge features or node features:** the sheaf predictor MLP needs input features to learn meaningful maps
@@ -290,9 +290,9 @@ Before running a sheaf model on a new dataset, answer these three questions:
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;">
 <strong>3-Question Pre-Flight Check:</strong>
 <ol style="margin:.5rem 0 0 1rem;padding:0;">
-  <li><strong>Is h(G) &lt; 0.4?</strong> — Compute the edge homophily ratio. If yes, heterophily is real and sheaf maps can adapt to it. If h &gt; 0.6, GCN probably works fine.</li>
-  <li><strong>Is N &gt; 200?</strong> — The sheaf predictor MLP needs enough node pairs to learn meaningful per-edge maps. Very small graphs (N &lt; 100) tend to overfit; medium graphs (N = 200–10K) are the sweet spot.</li>
-  <li><strong>Do nodes have initial features?</strong> — The sheaf predictor uses node features as input. If nodes have no features (only structural information), the predictor degrades to a function of degrees — much less expressive.</li>
+  <li><strong>Is h(G) &lt; 0.4?</strong>, Compute the edge homophily ratio. If yes, heterophily is real and sheaf maps can adapt to it. If h &gt; 0.6, GCN probably works fine.</li>
+  <li><strong>Is N &gt; 200?</strong>, The sheaf predictor MLP needs enough node pairs to learn meaningful per-edge maps. Very small graphs (N &lt; 100) tend to overfit; medium graphs (N = 200–10K) are the sweet spot.</li>
+  <li><strong>Do nodes have initial features?</strong>, The sheaf predictor uses node features as input. If nodes have no features (only structural information), the predictor degrades to a function of degrees, much less expressive.</li>
 </ol>
 If all three answers are <strong>yes</strong>, a sheaf GNN is very likely worth trying. Start with d=2, diagonal maps, 2 layers, and the checklist above before tuning further.
 </div>
@@ -300,5 +300,5 @@ If all three answers are <strong>yes</strong>, a sheaf GNN is very likely worth 
 ## References
 
 - Bodnar, C., Giovanni, F. D., Chamberlain, B. P., Liò, P., & Bronstein, M. M. (2022). [Neural Sheaf Diffusion](https://arxiv.org/abs/2202.04579). *NeurIPS 2022* (primary benchmark source for NSD results on Cornell, Texas, Wisconsin, Actor, Chameleon, Squirrel).
-- Lim, D., Li, X., Hohne, F., & Lim, S.-N. (2021). [New Benchmarks for Learning on Non-Homophilous Graphs](https://arxiv.org/abs/2104.01404). *arXiv 2021* (introduces Roman-Empire and Amazon-Ratings — larger, more reliable heterophilic benchmarks).
+- Lim, D., Li, X., Hohne, F., & Lim, S.-N. (2021). [New Benchmarks for Learning on Non-Homophilous Graphs](https://arxiv.org/abs/2104.01404). *arXiv 2021* (introduces Roman-Empire and Amazon-Ratings, larger, more reliable heterophilic benchmarks).
 - Zhu, M., Wang, X., Shi, C., Ji, H., & Cui, P. (2020). [Beyond Homophily in Graph Neural Networks: Current Limitations and Effective Designs](https://arxiv.org/abs/2006.11468). *NeurIPS 2020* (H2GCN: the non-sheaf baseline that NSD surpasses on all heterophilic benchmarks).

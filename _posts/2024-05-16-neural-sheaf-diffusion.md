@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> NSD (Bodnar et al., 2022) jointly learns the restriction maps \(\mathcal{F}_{v \trianglelefteq e}\) — via a parametric function of the two endpoint features — and diffuses with the resulting sheaf Laplacian. At each layer: (1) predict the restriction maps from the current features; (2) build \(\Delta_{\mathcal{F}}\); (3) take one residual diffusion step. The operator is not fixed, and that is the whole point: what makes NSD more than a hand-designed propagation matrix is that the geometry itself is learned.
+<strong>TL;DR:</strong> NSD (Bodnar et al., 2022) jointly learns the restriction maps \(\mathcal{F}_{v \trianglelefteq e}\), via a parametric function of the two endpoint features, and diffuses with the resulting sheaf Laplacian. At each layer: (1) predict the restriction maps from the current features; (2) build \(\Delta_{\mathcal{F}}\); (3) take one residual diffusion step. The operator is not fixed, and that is the whole point: what makes NSD more than a hand-designed propagation matrix is that the geometry itself is learned.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="NSD architecture" caption="Neural Sheaf Diffusion: learned restriction maps on the graph (Bodnar et al., 2022)" %}
 
 
 ## The NSD Architecture
 
-**Intuition First:** NSD is diffusion where the "wiring" is re-learned at every layer. In a standard GCN the aggregation weights are fixed (degree-based, or attention scores). In NSD, the entire $$d \times d$$ linear map telling "in what frame node $$u$$ should be read from node $$v$$'s point of view" is predicted from the two endpoints' features. That means the model can learn to say: "for this particular heterophilic edge, negate $$u$$'s contribution before adding it to $$v$$" — the flip that prevents diffusion from collapsing across class boundaries.
+**Intuition First:** NSD is diffusion where the "wiring" is re-learned at every layer. In a standard GCN the aggregation weights are fixed (degree-based, or attention scores). In NSD, the entire $$d \times d$$ linear map telling "in what frame node $$u$$ should be read from node $$v$$'s point of view" is predicted from the two endpoints' features. That means the model can learn to say: "for this particular heterophilic edge, negate $$u$$'s contribution before adding it to $$v$$", the flip that prevents diffusion from collapsing across class boundaries.
 
 NSD has two interleaved components.
 
@@ -84,23 +84,23 @@ which expands to a self-term $$\big(I - \sum_{e} \mathcal{F}_{v \trianglelefteq 
 \]
 </div>
 
-Each neighbour's features are pushed into the shared edge stalk by $$\mathcal{F}_{u \trianglelefteq e}$$ and pulled back into $$v$$'s stalk by $$\mathcal{F}_{v \trianglelefteq e}^{\top}$$. The key difference from standard GCN: this transformation is per-edge and learned, not shared across all edges — and its diagonal counterpart $$\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e}$$ is what makes the operator a Laplacian rather than an arbitrary propagation matrix.
+Each neighbour's features are pushed into the shared edge stalk by $$\mathcal{F}_{u \trianglelefteq e}$$ and pulled back into $$v$$'s stalk by $$\mathcal{F}_{v \trianglelefteq e}^{\top}$$. The key difference from standard GCN: this transformation is per-edge and learned, not shared across all edges, and its diagonal counterpart $$\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e}$$ is what makes the operator a Laplacian rather than an arbitrary propagation matrix.
 
 ## Why NSD Handles Heterophily
 
 On homophilic graphs the predictor can learn $$\mathcal{F}_{v \trianglelefteq e} \approx I$$ everywhere, and NSD behaves like a residual GCN.
 
-On heterophilic graphs it can learn maps whose transport $$\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{u \trianglelefteq e}$$ is *negative* (or, in higher dimensions, a rotation). The agreement condition $$\mathcal{F}_{v \trianglelefteq e} x_v = \mathcal{F}_{u \trianglelefteq e} x_u$$ can then be satisfied with $$x_v \ne x_u$$ — the maps accommodate difference rather than punishing it.
+On heterophilic graphs it can learn maps whose transport $$\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{u \trianglelefteq e}$$ is *negative* (or, in higher dimensions, a rotation). The agreement condition $$\mathcal{F}_{v \trianglelefteq e} x_v = \mathcal{F}_{u \trianglelefteq e} x_u$$ can then be satisfied with $$x_v \ne x_u$$, the maps accommodate difference rather than punishing it.
 
 The precise statement in Bodnar et al. concerns what diffusion can achieve *in the time limit*. Sheaf diffusion projects each feature channel onto $$\ker \Delta_{\mathcal{F}}$$, so everything hinges on what that kernel contains. Their results say (Propositions 8–13):
 
-- The $$d = 1$$ **symmetric** class — the one whose Laplacians are exactly the positively-weighted graph Laplacians, which includes GCN's — separates two classes when each class contains at least one internal edge, but provably *cannot* separate the two sides of a connected bipartite graph with equal parts, for any initial condition.
+- The $$d = 1$$ **symmetric** class, the one whose Laplacians are exactly the positively-weighted graph Laplacians, which includes GCN's, separates two classes when each class contains at least one internal edge, but provably *cannot* separate the two sides of a connected bipartite graph with equal parts, for any initial condition.
 - Dropping symmetry at $$d = 1$$ (allowing signed maps) is enough for two classes on *any* connected graph.
-- No $$d = 1$$ sheaf can separate $$C \ge 3$$ classes, because the harmonic space is at most one-dimensional. Stalk width $$d$$ — not the number of feature channels $$f$$ — is what buys multi-class capacity.
+- No $$d = 1$$ sheaf can separate $$C \ge 3$$ classes, because the harmonic space is at most one-dimensional. Stalk width $$d$$, not the number of feature channels $$f$$, is what buys multi-class capacity.
 - Diagonal maps with $$d \ge C$$ suffice for $$C$$ classes; orthogonal maps do it more economically, handling up to $$2d$$ classes.
 
 <div class="insight-box">
-<strong>Heterophily resolution:</strong> the trivial sheaf gives \(L \otimes I_d\), whose kernel is the constants — so diffusion has nowhere to go except a single value per component. That is oversmoothing. A learned sheaf can have a kernel that is <em>not</em> the constants: with signed or rotated transport, the harmonic space can itself carry class information, so the diffusion limit is class-discriminative rather than class-averaging. The extra structure does not "fight" diffusion — it changes what diffusion converges to.
+<strong>Heterophily resolution:</strong> the trivial sheaf gives \(L \otimes I_d\), whose kernel is the constants, so diffusion has nowhere to go except a single value per component. That is oversmoothing. A learned sheaf can have a kernel that is <em>not</em> the constants: with signed or rotated transport, the harmonic space can itself carry class information, so the diffusion limit is class-discriminative rather than class-averaging. The extra structure does not "fight" diffusion, it changes what diffusion converges to.
 </div>
 
 ## Worked Example: NSD vs GCN on a Heterophilic Edge
@@ -117,7 +117,7 @@ x_B \leftarrow \tfrac12 (x_A + x_B) = [0.5,\, 0.5].
 \]
 </div>
 
-The two nodes are now identical — classification is impossible, and further layers cannot undo it.
+The two nodes are now identical, classification is impossible, and further layers cannot undo it.
 
 **NSD update.** Suppose the predictor learns $$\mathcal{F}_{A \trianglelefteq e} = \alpha$$ and $$\mathcal{F}_{B \trianglelefteq e} = -\alpha$$ with $$\alpha > 0$$ (this is exactly the construction in Bodnar et al.'s two-class result). The coboundary is
 
@@ -127,7 +127,7 @@ The two nodes are now identical — classification is impossible, and further la
 \]
 </div>
 
-so the harmonic space is $$\{x_A = -x_B\}$$ — *not* the constants. Diffusion projects onto it:
+so the harmonic space is $$\{x_A = -x_B\}$$, *not* the constants. Diffusion projects onto it:
 
 <div class="formula-box">
 \[
@@ -137,9 +137,9 @@ x_B \longrightarrow -\tfrac12 (x_A - x_B) = [-0.5,\, 0.5].
 \]
 </div>
 
-The limit is still a fixed point of diffusion — but it is a fixed point that keeps the two classes apart.
+The limit is still a fixed point of diffusion, but it is a fixed point that keeps the two classes apart.
 
-<div class="insight-box"><strong>Key Insight:</strong> NSD learns the sign (and, at higher stalk dimension, the direction) of each edge's agreement rule. On homophilic edges it can learn identity maps and behave like a GCN; on heterophilic edges it can learn negation or rotation, which moves the class-discriminative signal <em>into</em> the kernel of the operator instead of out of it. One architecture covers both cases — no heuristic switch needed.</div>
+<div class="insight-box"><strong>Key Insight:</strong> NSD learns the sign (and, at higher stalk dimension, the direction) of each edge's agreement rule. On homophilic edges it can learn identity maps and behave like a GCN; on heterophilic edges it can learn negation or rotation, which moves the class-discriminative signal <em>into</em> the kernel of the operator instead of out of it. One architecture covers both cases, no heuristic switch needed.</div>
 
 ## Connection to Other Architectures
 
@@ -157,17 +157,17 @@ The limit is still a fixed point of diffusion — but it is a fixed point that k
 
 Sheaf diffusion always converges to $$\ker \Delta_{\mathcal{F}}$$; whether that constitutes "oversmoothing" depends entirely on what lives there. For the trivial sheaf the kernel is the constants, so the limit is uninformative. For a learned non-symmetric sheaf it need not be.
 
-Bodnar et al. sharpen this for the *convolutional* variant: for sheaves in the symmetric families the Dirichlet energy is contracted by every layer, so representations fall into the kernel exponentially fast and inherit its limitations. Outside those families, however, an arbitrarily small $$W_1$$ can *increase* the sheaf Dirichlet energy — so a sheaf convolution is not forced to smooth at all. That extra degree of control over the asymptotic behaviour is the formal sense in which sheaf models escape oversmoothing.
+Bodnar et al. sharpen this for the *convolutional* variant: for sheaves in the symmetric families the Dirichlet energy is contracted by every layer, so representations fall into the kernel exponentially fast and inherit its limitations. Outside those families, however, an arbitrarily small $$W_1$$ can *increase* the sheaf Dirichlet energy, so a sheaf convolution is not forced to smooth at all. That extra degree of control over the asymptotic behaviour is the formal sense in which sheaf models escape oversmoothing.
 
 ## Computational Cost
 
 Let $$n$$ be the number of nodes, $$\lvert E \rvert$$ the number of edges, $$d$$ the **stalk dimension**, and $$f$$ the number of feature channels. Per layer:
 
-- Restriction map prediction: one call to $$\Phi$$ per directed edge, producing $$d \times d$$ output — $$O(\lvert E \rvert\, d^2)$$ plus the cost of $$\Phi$$ itself
+- Restriction map prediction: one call to $$\Phi$$ per directed edge, producing $$d \times d$$ output, $$O(\lvert E \rvert\, d^2)$$ plus the cost of $$\Phi$$ itself
 - Sheaf Laplacian assembly: $$O(\lvert E \rvert\, d^2)$$
 - Diffusion step: $$O(\lvert E \rvert\, d^2 f)$$ for the sparse block matrix product, plus $$O(n d^2 f)$$ for the $$W_1$$ multiplication
 
-The $$d^2$$ factor is the price of the sheaf. It is important not to confuse $$d$$ with the network width: $$d$$ is the stalk dimension and is small in practice (typically a handful — 2 to 6 in the NSD experiments), while the channel count $$f$$ plays the role that hidden width plays in a GCN. The overhead is therefore a modest constant, not a factor of the hidden dimension. The real cost is that the Laplacian must be rebuilt at every layer.
+The $$d^2$$ factor is the price of the sheaf. It is important not to confuse $$d$$ with the network width: $$d$$ is the stalk dimension and is small in practice (typically a handful, 2 to 6 in the NSD experiments), while the channel count $$f$$ plays the role that hidden width plays in a GCN. The overhead is therefore a modest constant, not a factor of the hidden dimension. The real cost is that the Laplacian must be rebuilt at every layer.
 
 ## Summary
 
@@ -178,7 +178,7 @@ The $$d^2$$ factor is the price of the sheaf. It is important not to confuse $$d
 | Diffusion | $$X \leftarrow X - \sigma\big(\Delta_{\mathcal{F}}(I \otimes W_1) X W_2\big)$$ | Feature propagation with sheaf structure |
 | Readout | Linear layer on $$x_v$$ | Node classification |
 
-NSD provides a principled connection between algebraic topology (cellular sheaves) and graph neural networks — offering a theoretical explanation for why standard GNNs fail on heterophilic graphs and a mathematically grounded fix.
+NSD provides a principled connection between algebraic topology (cellular sheaves) and graph neural networks, offering a theoretical explanation for why standard GNNs fail on heterophilic graphs and a mathematically grounded fix.
 
 ## References
 

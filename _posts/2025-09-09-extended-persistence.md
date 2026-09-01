@@ -6,7 +6,7 @@ book: tdl
 subsection: core
 tags: [extended-persistence, relative-homology, poincare-duality, long-bars]
 published: false
-excerpt: "Standard persistence misses features that never die within a finite filtration — typically the top-dimensional class of a closed manifold. Extended persistence augments the filtration with its dual to capture all features, using relative homology and Poincaré duality to produce complete pairings."
+excerpt: "Standard persistence misses features that never die within a finite filtration, typically the top-dimensional class of a closed manifold. Extended persistence augments the filtration with its dual to capture all features, using relative homology and Poincaré duality to produce complete pairings."
 author_profile: true
 read_time: true
 icon: "↔️"
@@ -24,9 +24,9 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> In a sub-level set filtration on a compact manifold, the top homological class is born but never dies — it has infinite persistence. Extended persistence fixes this by concatenating the ascending filtration with a descending one (using relative homology). Every birth is now paired with a death, yielding a finite complete descriptor. Proved stable under the same bottleneck distance.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> In a sub-level set filtration on a compact manifold, the top homological class is born but never dies, it has infinite persistence. Extended persistence fixes this by concatenating the ascending filtration with a descending one (using relative homology). Every birth is now paired with a death, yielding a finite complete descriptor. Proved stable under the same bottleneck distance.</div>
 
-**Intuition First.** Imagine hiking up a mountain and recording when you first see each topological feature. Standard persistence tracks features that are born as you ascend and die as you keep ascending. But the mountain's overall shape — the fact that you started at the bottom and reached the top — creates a feature that is born but never dies within the ascent alone. Extended persistence fixes this by continuing the journey back down the other side. Features that survived the whole ascent get paired with events on the descent, so every birth has a death and the diagram is complete.
+**Intuition First.** Imagine hiking up a mountain and recording when you first see each topological feature. Standard persistence tracks features that are born as you ascend and die as you keep ascending. But the mountain's overall shape, the fact that you started at the bottom and reached the top, creates a feature that is born but never dies within the ascent alone. Extended persistence fixes this by continuing the journey back down the other side. Features that survived the whole ascent get paired with events on the descent, so every birth has a death and the diagram is complete.
 
 <style>
 @keyframes extended-fill {
@@ -74,13 +74,13 @@ toc_label: "Contents"
   <line x1="330" y1="130" x2="348" y2="130" stroke="#94a3b8" stroke-width="2"/>
   <line x1="330" y1="143" x2="342" y2="143" stroke="#94a3b8" stroke-width="2"/>
 </svg>
-<figcaption>Standard persistence (top bar): the top homological class is born during the ascent but never dies — giving an infinite bar. Extended persistence (middle bar): the descending phase pairs this feature with a death event, giving a finite bar. All features are now paired.</figcaption>
+<figcaption>Standard persistence (top bar): the top homological class is born during the ascent but never dies, giving an infinite bar. Extended persistence (middle bar): the descending phase pairs this feature with a death event, giving a finite bar. All features are now paired.</figcaption>
 </figure></div>
 
 ## The Problem with Infinite Bars
 
 Consider a height function $$f: M \to \mathbb{R}$$ on a compact manifold $$M$$. In the sub-level set filtration $$M^a = f^{-1}((-\infty, a])$$:
-- When $$a$$ passes the global maximum, the full $$M$$ becomes connected — but the top fundamental class $$[M] \in H_d(M)$$ was born earlier and **never dies**: there is no higher simplex to kill it.
+- When $$a$$ passes the global maximum, the full $$M$$ becomes connected, but the top fundamental class $$[M] \in H_d(M)$$ was born earlier and **never dies**: there is no higher simplex to kill it.
 - Standard persistence gives it an interval $$[b, \infty)$$.
 
 This infinite bar makes comparison between functions awkward and wastes information about when and how the global feature was created.

@@ -6,7 +6,7 @@ book: gnn
 subsection: sheaf
 tags: [polynomial-sheaf-diffusion, PNSD, spectral, polynomial-filter, sheaf]
 published: true
-excerpt: "Polynomial Neural Sheaf Diffusion (PNSD) replaces the fixed diffusion operator (I - Δ_F) with a learnable polynomial of the Sheaf Laplacian. This gives the model spectral flexibility — it can learn to amplify or suppress different frequency components of the sheaf signal."
+excerpt: "Polynomial Neural Sheaf Diffusion (PNSD) replaces the fixed diffusion operator (I - Δ_F) with a learnable polynomial of the Sheaf Laplacian. This gives the model spectral flexibility, it can learn to amplify or suppress different frequency components of the sheaf signal."
 author_profile: true
 read_time: true
 is_overview: false
@@ -20,12 +20,12 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> NSD's propagation is the fixed degree-1 filter \(h(\lambda) = 1 - \lambda\) applied to the normalised sheaf Laplacian. Polynomial Neural Sheaf Diffusion (PolyNSD) replaces it with a learnable degree-\(K\) polynomial \(p_\theta(\Delta_{\mathcal{F}})\), evaluated by a three-term Chebyshev recurrence on a spectrally rescaled operator. One layer then has an explicit \(K\)-hop receptive field, and the frequency response is learned rather than assumed.
 </div>
-{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Neural Sheaf Diffusion, from Bodnar et al. (2022)" caption="Background: Neural Sheaf Diffusion (Bodnar et al., 2022) — the sheaf structure and fixed diffusion step that PolyNSD builds on. The polynomial spectral filters discussed in this post are not part of this work; they are the later contribution described below." %}
+{% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Neural Sheaf Diffusion, from Bodnar et al. (2022)" caption="Background: Neural Sheaf Diffusion (Bodnar et al., 2022), the sheaf structure and fixed diffusion step that PolyNSD builds on. The polynomial spectral filters discussed in this post are not part of this work; they are the later contribution described below." %}
 
 
 ## From Fixed Diffusion to Polynomial Filters
 
-**Intuition First:** The fixed NSD filter $$h(\lambda) = 1 - \lambda$$ is an audio equaliser with a single preset: bass boost, attenuating everything high. For homophilic graphs that is right — the class information lives in the smooth, low-frequency part of the signal. For heterophilic graphs you often want the opposite. PolyNSD gives you a programmable equaliser, learned from data: the $$K+1$$ coefficients define the frequency response curve, and gradient descent picks the curve for the task.
+**Intuition First:** The fixed NSD filter $$h(\lambda) = 1 - \lambda$$ is an audio equaliser with a single preset: bass boost, attenuating everything high. For homophilic graphs that is right, the class information lives in the smooth, low-frequency part of the signal. For heterophilic graphs you often want the opposite. PolyNSD gives you a programmable equaliser, learned from data: the $$K+1$$ coefficients define the frequency response curve, and gradient descent picks the curve for the task.
 
 **NSD's diffusion step** (dropping the weights and non-linearity) is
 
@@ -35,9 +35,9 @@ X \;\longleftarrow\; (I - \Delta_{\mathcal{F}})\, X ,
 \]
 </div>
 
-a first-order polynomial in $$\Delta_{\mathcal{F}}$$ with fixed coefficients. Spectrally it applies $$h(\lambda) = 1 - \lambda$$ to each eigenvalue of $$\Delta_{\mathcal{F}} \in [0,2]$$ — a low-pass filter.
+a first-order polynomial in $$\Delta_{\mathcal{F}}$$ with fixed coefficients. Spectrally it applies $$h(\lambda) = 1 - \lambda$$ to each eigenvalue of $$\Delta_{\mathcal{F}} \in [0,2]$$, a low-pass filter.
 
-For homophilic graphs low-pass filtering is appropriate. For heterophilic graphs the class-discriminative content often sits at high $$\lambda$$, where a fixed low-pass filter attenuates it. Note, though, that the sheaf already does part of this job: a learned sheaf can move a discriminative signal *into* the low-frequency end of $$\Delta_{\mathcal{F}}$$'s spectrum. The polynomial filter is the complementary lever — it decides what to do with the spectrum once the sheaf has shaped it.
+For homophilic graphs low-pass filtering is appropriate. For heterophilic graphs the class-discriminative content often sits at high $$\lambda$$, where a fixed low-pass filter attenuates it. Note, though, that the sheaf already does part of this job: a learned sheaf can move a discriminative signal *into* the low-frequency end of $$\Delta_{\mathcal{F}}$$'s spectrum. The polynomial filter is the complementary lever, it decides what to do with the spectrum once the sheaf has shaped it.
 
 ## The Polynomial Filter
 
@@ -63,9 +63,9 @@ Two design choices make this work in practice.
 \]
 </div>
 
-For the normalised sheaf Laplacian $$\lambda_{\max} = 2$$ is known a priori, so the rescaling is simply $$\widetilde{\Delta}_{\mathcal{F}} = \Delta_{\mathcal{F}} - I$$ — no eigendecomposition and no power iteration needed.
+For the normalised sheaf Laplacian $$\lambda_{\max} = 2$$ is known a priori, so the rescaling is simply $$\widetilde{\Delta}_{\mathcal{F}} = \Delta_{\mathcal{F}} - I$$, no eigendecomposition and no power iteration needed.
 
-**Bounded coefficients.** PolyNSD uses first-kind Chebyshev polynomials $$B_k = T_k$$, which satisfy $$\lvert T_k(\xi) \rvert \le 1$$ on $$[-1,1]$$, and parametrises the coefficients as a convex mixture, $$\theta = \operatorname{softmax}(\eta)$$. Since $$\sum_k \theta_k = 1$$ and $$\theta_k \ge 0$$, the whole response satisfies $$\lvert p_\theta(\xi) \rvert \le 1$$ — the filter cannot blow up, whatever the network learns. Residual and gated paths around the filter supply the remaining flexibility. (The paper reports that other orthogonal bases — Legendre, Gegenbauer, Jacobi — perform comparably, so the stability comes from the construction rather than from Chebyshev specifically.)
+**Bounded coefficients.** PolyNSD uses first-kind Chebyshev polynomials $$B_k = T_k$$, which satisfy $$\lvert T_k(\xi) \rvert \le 1$$ on $$[-1,1]$$, and parametrises the coefficients as a convex mixture, $$\theta = \operatorname{softmax}(\eta)$$. Since $$\sum_k \theta_k = 1$$ and $$\theta_k \ge 0$$, the whole response satisfies $$\lvert p_\theta(\xi) \rvert \le 1$$, the filter cannot blow up, whatever the network learns. Residual and gated paths around the filter supply the remaining flexibility. (The paper reports that other orthogonal bases, Legendre, Gegenbauer, Jacobi, perform comparably, so the stability comes from the construction rather than from Chebyshev specifically.)
 
 ## Computing the Polynomial
 
@@ -85,7 +85,7 @@ X^{\mathrm{out}} \;=\; \sum_{k=0}^{K} \theta_k\, Z^{(k)} .
 \]
 </div>
 
-Each step is one sparse–dense product. A degree-$$K$$ layer therefore costs $$O\big(K \cdot \mathrm{nnz}(\Delta_{\mathcal{F}}) \cdot f\big)$$ for $$f$$ feature channels — the same order as $$K$$ stacked first-order sheaf layers, but with the sheaf predicted and the Laplacian assembled **once** instead of $$K$$ times. That is where the practical speedup comes from: a $$K$$-hop receptive field in a single layer, decoupled from network depth.
+Each step is one sparse–dense product. A degree-$$K$$ layer therefore costs $$O\big(K \cdot \mathrm{nnz}(\Delta_{\mathcal{F}}) \cdot f\big)$$ for $$f$$ feature channels, the same order as $$K$$ stacked first-order sheaf layers, but with the sheaf predicted and the Laplacian assembled **once** instead of $$K$$ times. That is where the practical speedup comes from: a $$K$$-hop receptive field in a single layer, decoupled from network depth.
 
 The recurrence is also numerically better behaved than accumulating powers: because $$\lvert T_k \rvert \le 1$$ on the rescaled spectrum, the intermediate $$Z^{(k)}$$ do not grow.
 
@@ -102,10 +102,10 @@ Polynomial filters unify a large part of the GNN literature. Writing $$\lambda$$
 | NSD | $$1 - \lambda$$ | Sheaf $$\Delta_{\mathcal{F}}$$ | Fixed, degree 1 |
 | PolyNSD | $$\sum_k \theta_k T_k(\lambda - 1)$$ | Sheaf $$\Delta_{\mathcal{F}}$$ | Degree $$K$$, learnable |
 
-Read across the bottom two rows: PolyNSD is to NSD what ChebNet/GPRGNN are to GCN — with the crucial difference that the operator being filtered is a *learned* sheaf Laplacian rather than a fixed graph one.
+Read across the bottom two rows: PolyNSD is to NSD what ChebNet/GPRGNN are to GCN, with the crucial difference that the operator being filtered is a *learned* sheaf Laplacian rather than a fixed graph one.
 
 <div class="insight-box">
-<strong>Why sheaf and polynomial together?</strong> The sheaf decides <em>what</em> the low-frequency subspace is — with learned restriction maps, \(\ker \Delta_{\mathcal{F}}\) need not be the constants, which is what makes heterophily tractable at all. The polynomial decides <em>how much</em> of each frequency to keep. Neither substitutes for the other: a polynomial filter on the ordinary graph Laplacian is still stuck with a constant kernel, and a sheaf with a fixed degree-1 low-pass filter still has only one hop of reach per layer.
+<strong>Why sheaf and polynomial together?</strong> The sheaf decides <em>what</em> the low-frequency subspace is, with learned restriction maps, \(\ker \Delta_{\mathcal{F}}\) need not be the constants, which is what makes heterophily tractable at all. The polynomial decides <em>how much</em> of each frequency to keep. Neither substitutes for the other: a polynomial filter on the ordinary graph Laplacian is still stuck with a constant kernel, and a sheaf with a fixed degree-1 low-pass filter still has only one hop of reach per layer.
 </div>
 
 ## Worked Example: Shaping the Frequency Response
@@ -126,7 +126,7 @@ Magnitude decreases and then grows again with a sign flip; the "keep" region is 
 |---|---|---|---|---|---|
 | $$h(\lambda)$$ | −1.0 | −0.75 | 0.0 | 1.25 | 3.0 |
 
-Now the near-harmonic components are suppressed and the high-frequency ones amplified — a response the fixed degree-1 filter simply cannot produce, whatever scaling is applied to it. Note also that this particular $$h$$ exceeds 1 in magnitude at $$\lambda = 2$$; the softmax-over-Chebyshev parametrisation is precisely the device that rules such unbounded responses out while retaining the shape freedom.
+Now the near-harmonic components are suppressed and the high-frequency ones amplified, a response the fixed degree-1 filter simply cannot produce, whatever scaling is applied to it. Note also that this particular $$h$$ exceeds 1 in magnitude at $$\lambda = 2$$; the softmax-over-Chebyshev parametrisation is precisely the device that rules such unbounded responses out while retaining the shape freedom.
 
 ## Training and Practical Notes
 
@@ -147,7 +147,7 @@ Now the near-harmonic components are suppressed and the high-frequency ones ampl
 | Extra parameters | None | $$K+1$$ mixture logits per layer |
 | Stability | Step-size dependent | Bounded by construction ($$\lvert p_\theta \rvert \le 1$$) |
 
-PolyNSD combines the topological richness of cellular sheaves with the spectral flexibility of polynomial graph filters, addressing heterophily from both the structural and the spectral side at once — and, in doing so, removes much of the computational pressure that made earlier sheaf models expensive.
+PolyNSD combines the topological richness of cellular sheaves with the spectral flexibility of polynomial graph filters, addressing heterophily from both the structural and the spectral side at once, and, in doing so, removes much of the computational pressure that made earlier sheaf models expensive.
 
 ## References
 

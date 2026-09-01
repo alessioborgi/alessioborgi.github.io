@@ -6,7 +6,7 @@ book: persistent-homology
 subsection: ml-integration
 tags: [graph-TDA, Weisfeiler-Lehman-filtration, graph-homology, PHom-GNN, extended-persistence]
 published: false
-excerpt: "Persistent homology can be applied directly to graphs by defining filtrations on nodes or edges (e.g., by WL colours, degree, or learned scalars). The resulting persistence diagrams encode global graph topology — connectivity, cycles, cliques — beyond what standard 1-WL GNNs can detect. This post covers WL-filtrations, extended persistence on graphs, and hybrid GNN+PH architectures."
+excerpt: "Persistent homology can be applied directly to graphs by defining filtrations on nodes or edges (e.g., by WL colours, degree, or learned scalars). The resulting persistence diagrams encode global graph topology, connectivity, cycles, cliques, beyond what standard 1-WL GNNs can detect. This post covers WL-filtrations, extended persistence on graphs, and hybrid GNN+PH architectures."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,9 +18,9 @@ permalink: /blog/persistent-homology/tda-graphs/
 
 ## Intuition First
 
-Message-passing GNNs (like GCN, GraphSAGE, GIN) are provably limited by the 1-Weisfeiler-Lehman (1-WL) graph isomorphism test. Two graphs that 1-WL cannot distinguish will produce identical node embeddings — no matter how many layers you stack. A classic example: a cycle graph and a different regular graph of the same size are often 1-WL equivalent.
+Message-passing GNNs (like GCN, GraphSAGE, GIN) are provably limited by the 1-Weisfeiler-Lehman (1-WL) graph isomorphism test. Two graphs that 1-WL cannot distinguish will produce identical node embeddings, no matter how many layers you stack. A classic example: a cycle graph and a different regular graph of the same size are often 1-WL equivalent.
 
-Persistent homology sees past this barrier. A cycle of length 6 has a prominent $$H_1$$ bar (one loop), whereas a tree with 6 nodes has no $$H_1$$ bars. PH directly encodes global structural properties — loops, cliques, connectivity patterns — that local message-passing cannot detect.
+Persistent homology sees past this barrier. A cycle of length 6 has a prominent $$H_1$$ bar (one loop), whereas a tree with 6 nodes has no $$H_1$$ bars. PH directly encodes global structural properties, loops, cliques, connectivity patterns, that local message-passing cannot detect.
 
 Combining PH with GNNs therefore gives you **local + global** topology: the GNN captures neighbourhood patterns, while PH captures large-scale cycles and connectivity structure.
 
@@ -30,13 +30,13 @@ Combining PH with GNNs therefore gives you **local + global** topology: the GNN 
 
 A graph $$G = (V, E)$$ has no intrinsic geometry, so we need to assign filtration values to its simplices (vertices and edges) from some meaningful function.
 
-**Option 1 — Degree filtration.** Assign $$f(v) = \deg(v)$$ to each vertex, $$f(e_{uv}) = \max(\deg(u), \deg(v))$$ to each edge. Persistence tracks how the graph's connectivity evolves as we include increasingly high-degree nodes.
+**Option 1, Degree filtration.** Assign $$f(v) = \deg(v)$$ to each vertex, $$f(e_{uv}) = \max(\deg(u), \deg(v))$$ to each edge. Persistence tracks how the graph's connectivity evolves as we include increasingly high-degree nodes.
 
-**Option 2 — WL (Weisfeiler-Lehman) filtration** (Rieck et al., 2019). Run $$k$$ rounds of WL colour refinement on the graph. Assign to each vertex the first round at which its colour stabilises (or changes). This encodes the graph's local structure at multiple scales simultaneously.
+**Option 2, WL (Weisfeiler-Lehman) filtration** (Rieck et al., 2019). Run $$k$$ rounds of WL colour refinement on the graph. Assign to each vertex the first round at which its colour stabilises (or changes). This encodes the graph's local structure at multiple scales simultaneously.
 
-**Option 3 — Learned filtration** (Carriere et al., 2020; Zhao et al., 2020). Let a GNN assign a scalar $$f_\theta(v)$$ to each vertex and $$f_\theta(e)$$ to each edge. The filtration — and hence the persistence diagram — is then differentiable with respect to the GNN weights.
+**Option 3, Learned filtration** (Carriere et al., 2020; Zhao et al., 2020). Let a GNN assign a scalar $$f_\theta(v)$$ to each vertex and $$f_\theta(e)$$ to each edge. The filtration, and hence the persistence diagram, is then differentiable with respect to the GNN weights.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The choice of filtration determines what topology you are measuring. A degree filtration reveals hub-and-spoke structure. A WL filtration reveals structural equivalence classes. A learned filtration lets the network discover which topological features are most predictive for the downstream task. There is no single "right" filtration — it is a design choice analogous to choosing a kernel in kernel methods.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The choice of filtration determines what topology you are measuring. A degree filtration reveals hub-and-spoke structure. A WL filtration reveals structural equivalence classes. A learned filtration lets the network discover which topological features are most predictive for the downstream task. There is no single "right" filtration, it is a design choice analogous to choosing a kernel in kernel methods.</div>
 
 ---
 
@@ -53,7 +53,7 @@ Standard PH on a graph (with a vertex-valued filtration) only captures \(H_0\) f
 | Extended+ | Born in ascending, dies in descending |
 | Extended− | Born in descending, dies in ascending |
 
-For graphs, extended persistence detects \(H_1\) features (cycles) even with only a vertex-valued filtration — bypassing the need to define edge values separately.
+For graphs, extended persistence detects \(H_1\) features (cycles) even with only a vertex-valued filtration, bypassing the need to define edge values separately.
 
 ---
 
@@ -134,7 +134,7 @@ For graphs, extended persistence detects \(H_1\) features (cycles) even with onl
   <text x="264" y="58" text-anchor="end" font-size="9" fill="#1e40af">H₀</text>
   <text x="452" y="58" font-size="9" fill="#64748b">∞</text>
 
-  <!-- H0 bar 2: born 2, dies 2 (merge immediately — same degree batch) -->
+  <!-- H0 bar 2: born 2, dies 2 (merge immediately, same degree batch) -->
   <rect x="268" y="68" width="3"   height="10" rx="2" fill="#93c5fd" opacity="0.8"/>
   <text x="264" y="76" text-anchor="end" font-size="9" fill="#1e40af">H₀</text>
 
@@ -174,8 +174,8 @@ Both have 6 vertices of degree 2. A GNN using only local message passing for 2 r
 
 **PH with edge-weight filtration (edge added at filtration value 1):**
 
-- $$G_1$$ (hexagon): $$H_0 = \{(0, \infty)\}$$, $$H_1 = \{(1, \infty)\}$$ — one connected component, one 6-cycle loop.
-- $$G_2$$ (two triangles): $$H_0 = \{(0, 1), (0, \infty)\}$$, $$H_1 = \{(1, \infty), (1, \infty)\}$$ — two components at filtration 0, then merging; two triangle loops.
+- $$G_1$$ (hexagon): $$H_0 = \{(0, \infty)\}$$, $$H_1 = \{(1, \infty)\}$$, one connected component, one 6-cycle loop.
+- $$G_2$$ (two triangles): $$H_0 = \{(0, 1), (0, \infty)\}$$, $$H_1 = \{(1, \infty), (1, \infty)\}$$, two components at filtration 0, then merging; two triangle loops.
 
 The persistence diagrams are **different**: $$G_1$$ has one $$H_1$$ bar and one $$H_0$$ bar; $$G_2$$ has two $$H_1$$ bars and two $$H_0$$ bars. Persistent homology successfully distinguishes the two graphs.
 

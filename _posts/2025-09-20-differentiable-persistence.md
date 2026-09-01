@@ -24,11 +24,11 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Given filtration values f = (f₁, ..., fₙ) on simplices, the persistence diagram dgm(f) is a piecewise-linear function of f — each birth and death is a specific fᵢ value. The gradient ∂ℒ/∂f of a loss ℒ(dgm(f)) can be computed by chain rule, with the Jacobian of dgm having a sparse structure: each persistence pair (b, d) = (fᵢ, fⱼ) contributes gradients ±1 to positions i and j.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Given filtration values f = (f₁, ..., fₙ) on simplices, the persistence diagram dgm(f) is a piecewise-linear function of f, each birth and death is a specific fᵢ value. The gradient ∂ℒ/∂f of a loss ℒ(dgm(f)) can be computed by chain rule, with the Jacobian of dgm having a sparse structure: each persistence pair (b, d) = (fᵢ, fⱼ) contributes gradients ±1 to positions i and j.</div>
 
 ## Intuition First
 
-Think of a persistence diagram as a **scoreboard** where each row is a topological feature with its birth and death times. Those birth/death values are just specific entries in the filtration vector \(f\). So when you ask "how does the loss change if I nudge \(f_i\)?", the answer is simple: look at every feature that was born or died at \(f_i\), and propagate the loss gradient through those coordinates. The diagram is piecewise-linear in \(f\) — only the combinatorial pairing (which simplex kills which) can change, and that happens on a set of measure zero.
+Think of a persistence diagram as a **scoreboard** where each row is a topological feature with its birth and death times. Those birth/death values are just specific entries in the filtration vector \(f\). So when you ask "how does the loss change if I nudge \(f_i\)?", the answer is simple: look at every feature that was born or died at \(f_i\), and propagate the loss gradient through those coordinates. The diagram is piecewise-linear in \(f\), only the combinatorial pairing (which simplex kills which) can change, and that happens on a set of measure zero.
 
 ## Filtration Values and Diagrams
 
@@ -67,12 +67,12 @@ Consider a triangle with 3 vertices \(v_1, v_2, v_3\), 3 edges \(e_{12}, e_{13},
 \(f = (f_{v_1}, f_{v_2}, f_{v_3}, f_{e_{12}}, f_{e_{13}}, f_{e_{23}}) = (0.1, 0.4, 0.7, 0.5, 0.8, 0.9)\)
 
 Running persistence on \(H_0\):
-- At \(t=0.1\): \(v_1\) born — component A starts.
-- At \(t=0.4\): \(v_2\) born — component B starts.
+- At \(t=0.1\): \(v_1\) born, component A starts.
+- At \(t=0.4\): \(v_2\) born, component B starts.
 - At \(t=0.5\): \(e_{12}\) merges A and B. Pair: \((b,d) = (f_{v_2}, f_{e_{12}}) = (0.4, 0.5)\). Persistence = 0.1.
-- At \(t=0.7\): \(v_3\) born — component C starts.
+- At \(t=0.7\): \(v_3\) born, component C starts.
 - At \(t=0.8\): \(e_{13}\) merges C into A. Pair: \((b,d) = (f_{v_3}, f_{e_{13}}) = (0.7, 0.8)\). Persistence = 0.1.
-- \(v_1\) lives forever (the elder rule — born first, never killed).
+- \(v_1\) lives forever (the elder rule, born first, never killed).
 
 Suppose loss \(\mathcal{L} = \sum (d-b)^2 = (0.1)^2 + (0.1)^2 = 0.02\).
 
@@ -80,7 +80,7 @@ Gradients via chain rule:
 \(\frac{\partial \mathcal{L}}{\partial f_{v_2}} = \frac{\partial \mathcal{L}}{\partial b_1} = -2(d_1 - b_1) = -0.2 \quad \text{(increasing birth shortens lifetime)}\)
 \(\frac{\partial \mathcal{L}}{\partial f_{e_{12}}} = +2(d_1 - b_1) = +0.2 \quad \text{(increasing death lengthens lifetime)}\)
 
-Minimising \(\mathcal{L}\) pushes \(f_{v_2}\) up and \(f_{e_{12}}\) down — making that component die faster (killing short-lived noise).
+Minimising \(\mathcal{L}\) pushes \(f_{v_2}\) up and \(f_{e_{12}}\) down, making that component die faster (killing short-lived noise).
 
 <style>
 @keyframes dp-sweep {

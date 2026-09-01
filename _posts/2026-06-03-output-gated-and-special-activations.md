@@ -6,7 +6,7 @@ categories: [basics]
 book: basics
 subsection: activation-functions
 tags: [softmax, sparsemax, glu, swiglu, siren]
-excerpt: "The last activation in your network is not a modelling preference — it is a contract with your loss function. Break it and training stops meaning anything. Here is the contract, and what changes when the activation itself becomes learned."
+excerpt: "The last activation in your network is not a modelling preference, it is a contract with your loss function. Break it and training stops meaning anything. Here is the contract, and what changes when the activation itself becomes learned."
 author_profile: true
 read_time: true
 is_overview: false
@@ -59,7 +59,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The activation on your final layer is fixed by the loss you chose, not by taste. The commonest bug in the whole topic follows from that: <code>CrossEntropyLoss</code> already applies log-softmax, so calling softmax before it applies the normalisation twice and flattens your gradients. Inside the network the logic inverts — there the activation is a free design choice, and the modern answer is to make part of it learned.
+  <strong>TL;DR:</strong> The activation on your final layer is fixed by the loss you chose, not by taste. The commonest bug in the whole topic follows from that: <code>CrossEntropyLoss</code> already applies log-softmax, so calling softmax before it applies the normalisation twice and flattens your gradients. Inside the network the logic inverts, there the activation is a free design choice, and the modern answer is to make part of it learned.
 </div>
 
 <p><em>Part 3 of 3. <a href="/blog/basics/activation-functions/">Part 1</a> covers what activations do; <a href="/blog/basics/modern-activation-functions/">Part 2</a> covers ReLU, GELU and SiLU. This page assumes you have met those.</em></p>
@@ -93,7 +93,7 @@ The subscript sits on the *output*: softmax maps a whole vector to a whole vecto
 | Sum | 7.389 + 2.718 + 1.105 | **11.212** |
 | Normalise | each divided by 11.212 | **0.659, 0.242, 0.099** |
 
-These are *normalised*, not *calibrated* — trained networks are usually over-confident, which is why temperature scaling exists. Note 0.659 / 0.242 = 2.72: one unit of logit advantage multiplies the odds by \\(e\\).
+These are *normalised*, not *calibrated*, trained networks are usually over-confident, which is why temperature scaling exists. Note 0.659 / 0.242 = 2.72: one unit of logit advantage multiplies the odds by \\(e\\).
 
 Dividing logits by a temperature \\(T\\) before exponentiating rescales that sharpness. Drag the slider:
 
@@ -159,7 +159,7 @@ Dividing logits by a temperature \\(T\\) before exponentiating rescales that sha
 
 ### When you need exact zeros: sparsemax
 
-Softmax never returns a zero — every class keeps some mass. **Sparsemax** instead takes the logit vector and finds the *nearest* valid probability vector to it in ordinary Euclidean distance. Because the nearest point often lies on an edge or corner of the simplex, entries genuinely hit zero:
+Softmax never returns a zero, every class keeps some mass. **Sparsemax** instead takes the logit vector and finds the *nearest* valid probability vector to it in ordinary Euclidean distance. Because the nearest point often lies on an edge or corner of the simplex, entries genuinely hit zero:
 
 <div class="formula-box">
 \[
@@ -212,7 +212,7 @@ The threshold \\(\tau\\) is set so the clipped values sum to one. (**Entmax** in
   </g>
   <text x="230" y="161" text-anchor="middle" font-size="9.5" fill="#475569">logits z = [3, 2.4, 0, −1, −2]</text>
 </svg>
-<figcaption>Softmax leaves C3–C5 holding 3.1%, 1.1% and 0.4% — small, but never zero. Sparsemax zeroes them exactly, which is what sparse attention needs when some tokens must receive no weight. The trade-off: classes outside the support receive no gradient.</figcaption>
+<figcaption>Softmax leaves C3–C5 holding 3.1%, 1.1% and 0.4%, small, but never zero. Sparsemax zeroes them exactly, which is what sparse attention needs when some tokens must receive no weight. The trade-off: classes outside the support receive no gradient.</figcaption>
 </figure>
 </div>
 
@@ -220,7 +220,7 @@ Sparsemax is often filed beside the elementwise *shrinkage* maps (SoftShrink, Ha
 
 ## Gating: when part of the activation is learned
 
-A ReLU asks one question per unit: *should this value pass?* A gated activation asks two projections to collaborate — one produces content, the other a per-channel gate that scales it:
+A ReLU asks one question per unit: *should this value pass?* A gated activation asks two projections to collaborate, one produces content, the other a per-channel gate that scales it:
 
 <div class="formula-box">
 \[
@@ -236,20 +236,20 @@ Here \\(\odot\\) is the elementwise product. Swapping the gate nonlinearity give
 
 | Step | GLU | Plain linear |
 |---|---|---|
-| Gate | \\(\sigma(\mathbf{b}) = [0.89,\ 0.18,\ 0.57]\\) | — |
+| Gate | \\(\sigma(\mathbf{b}) = [0.89,\ 0.18,\ 0.57]\\) |, |
 | Output | \\(\mathbf{a} \odot \sigma(\mathbf{b}) = [1.07,\ -0.07,\ 0.46]\\) | \\([1.2,\ -0.4,\ 0.8]\\) |
 
-The second channel drops from −0.4 to −0.07 because its gate value is 0.18. Since \\(\mathbf{b}\\) is learned from the input, that suppression varies per example — a decision no plain linear layer can make.
+The second channel drops from −0.4 to −0.07 because its gate value is 0.18. Since \\(\mathbf{b}\\) is learned from the input, that suppression varies per example, a decision no plain linear layer can make.
 
 <div class="insight-box">
-  <strong>Key Insight — the parameter budget:</strong> A GLU block needs <em>three</em> matrices (\(W_1\), \(W_2\), and the down-projection) where a plain MLP needs two, so a like-for-like comparison has to shrink the hidden width to \(\tfrac{2}{3}\) of \(4d_{\text{model}}\). At \(d_{\text{model}} = 4096\) that is LLaMA's width of 11008, which brings SwiGLU back to ≈135M parameters against the GELU MLP's ≈134M — without the correction it would be ≈201M. The reported gains are real but modest, and Shazeer offers no theory for <em>why</em> Swish beats GELU as the gate.
+  <strong>Key Insight, the parameter budget:</strong> A GLU block needs <em>three</em> matrices (\(W_1\), \(W_2\), and the down-projection) where a plain MLP needs two, so a like-for-like comparison has to shrink the hidden width to \(\tfrac{2}{3}\) of \(4d_{\text{model}}\). At \(d_{\text{model}} = 4096\) that is LLaMA's width of 11008, which brings SwiGLU back to ≈135M parameters against the GELU MLP's ≈134M, without the correction it would be ≈201M. The reported gains are real but modest, and Shazeer offers no theory for <em>why</em> Swish beats GELU as the gate.
 </div>
 
 Only the original sigmoid gate is bounded in \\((0,1)\\); SwiGLU, GeGLU and ReGLU gates are unbounded above, so they can amplify a channel, not just attenuate it. LLaMA, Mistral and Qwen use SwiGLU; Gemma uses GeGLU.
 
 ## SIREN: when you need derivatives, not just values
 
-Inside the network the activation is a free choice, and sometimes the task dictates it just as firmly as a loss does. To store an image or 3-D shape *as a function* from coordinates to values — an implicit neural representation — a ReLU network is a poor fit: it is piecewise linear, so its second derivative is zero almost everywhere. If you need the field's curvature, that is fatal. **SIREN** uses a sine, whose derivatives are again sines:
+Inside the network the activation is a free choice, and sometimes the task dictates it just as firmly as a loss does. To store an image or 3-D shape *as a function* from coordinates to values, an implicit neural representation, a ReLU network is a poor fit: it is piecewise linear, so its second derivative is zero almost everywhere. If you need the field's curvature, that is fatal. **SIREN** uses a sine, whose derivatives are again sines:
 
 <div class="formula-box">
 \[
@@ -257,14 +257,14 @@ Inside the network the activation is a free choice, and sometimes the task dicta
 \]
 </div>
 
-The \\(\omega_0\\) factor is not cosmetic, and neither is its initialisation: hidden-layer weights are drawn from $$\mathcal{U}\!\left(-\sqrt{6/n}/\omega_0,\ +\sqrt{6/n}/\omega_0\right)$$ for fan-in \\(n\\) (the first layer uses \\(\mathcal{U}(-1/n,\ 1/n)\\) instead). That keeps the pre-activation distribution stable with depth. Sine activations predate SIREN; this initialisation is what made deep ones trainable — implement \\(\sin(\omega x)\\) without it and the network will not converge.
+The \\(\omega_0\\) factor is not cosmetic, and neither is its initialisation: hidden-layer weights are drawn from $$\mathcal{U}\!\left(-\sqrt{6/n}/\omega_0,\ +\sqrt{6/n}/\omega_0\right)$$ for fan-in \\(n\\) (the first layer uses \\(\mathcal{U}(-1/n,\ 1/n)\\) instead). That keeps the pre-activation distribution stable with depth. Sine activations predate SIREN; this initialisation is what made deep ones trainable, implement \\(\sin(\omega x)\\) without it and the network will not converge.
 
 ## Common mistakes
 
 <div class="warning-box">
   <strong>Three that show up constantly:</strong>
   <ol>
-    <li><strong>Applying softmax before <code>CrossEntropyLoss</code>.</strong> That loss already applies log-softmax internally — hand it raw logits.</li>
+    <li><strong>Applying softmax before <code>CrossEntropyLoss</code>.</strong> That loss already applies log-softmax internally, hand it raw logits.</li>
     <li><strong>Using sigmoid for mutually exclusive classes.</strong> Independent per-class probabilities will not sum to one; use softmax.</li>
     <li><strong>Treating gate variants as drop-in swaps.</strong> Moving from SwiGLU to GeGLU changes optimisation behaviour, and changing the hidden width changes the parameter count.</li>
   </ol>

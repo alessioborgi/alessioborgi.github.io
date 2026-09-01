@@ -247,7 +247,7 @@ author_profile: true
         <div class="pt-dot pt-dot--purple"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--purple">July – August 2026</div>
-          <div class="pt-title"><a href="https://www.eeml.eu/" target="_blank" rel="noopener">EEML 2026 — Eastern European Machine Learning Summer School</a></div>
+          <div class="pt-title"><a href="https://www.eeml.eu/" target="_blank" rel="noopener">EEML 2026, Eastern European Machine Learning Summer School</a></div>
           <div class="pt-org">🇲🇪 Cetinje, Montenegro &nbsp;·&nbsp; EEML / MAIA</div>
           <div class="pt-body">
             <p>Participated in EEML 2026, held from <strong>July 27 to August 1, 2026</strong> in Cetinje, Montenegro, joining lectures and tutorials on contemporary machine learning research and presenting a poster on <strong>Equivariant Sheaf Neural Networks</strong>, a unifying framework combining the anisotropic transport of sheaf neural networks with the \(E(n)\)-equivariance of geometric GNNs.</p>
@@ -285,7 +285,7 @@ author_profile: true
         <div class="pt-dot pt-dot--blue"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--blue">July 2026</div>
-          <div class="pt-title"><a href="https://www.ellis.eng.cam.ac.uk/summer-school/" target="_blank" rel="noopener">Cambridge ELLIS Unit Summer School 2026 — Probabilistic Machine Learning</a></div>
+          <div class="pt-title"><a href="https://www.ellis.eng.cam.ac.uk/summer-school/" target="_blank" rel="noopener">Cambridge ELLIS Unit Summer School 2026, Probabilistic Machine Learning</a></div>
           <div class="pt-org">🇬🇧 Cambridge, United Kingdom &nbsp;·&nbsp; Cambridge ELLIS Unit, University of Cambridge</div>
           <div class="pt-body">
             <p>Participated in the Cambridge ELLIS Unit Summer School on <strong>Probabilistic Machine Learning</strong>, held from <strong>July 13–17, 2026</strong>, covering probabilistic modelling, uncertainty quantification, generative models, decision-making under uncertainty, and probabilistic methods in the sciences, and presenting a poster on <strong>Equivariant Sheaf Neural Networks</strong>.</p>
@@ -305,7 +305,7 @@ author_profile: true
         <div class="pt-dot pt-dot--purple"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--purple">June 2026</div>
-          <div class="pt-title"><a href="https://log-meetup.github.io/" target="_blank" rel="noopener">LoG Italian Meetup 2026 — Learning on Graphs</a></div>
+          <div class="pt-title"><a href="https://log-meetup.github.io/" target="_blank" rel="noopener">LoG Italian Meetup 2026, Learning on Graphs</a></div>
           <div class="pt-org">🇮🇹 Pisa, Italy &nbsp;·&nbsp; University of Pisa</div>
           <div class="pt-body">
             <p>Participated in the LoG Italian Meetup 2026, held on <strong>June 9-11, 2026</strong> at the University of Pisa, presenting work on Polynomial Neural Sheaf Diffusion.</p>
@@ -324,7 +324,7 @@ author_profile: true
         <div class="pt-dot pt-dot--blue"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--blue">March 2026</div>
-          <div class="pt-title"><a href="https://neurmad.github.io/" target="_blank" rel="noopener">NEUREASON'26 — Neural Reasoning for Scientific and Mathematical Discovery</a></div>
+          <div class="pt-title"><a href="https://neurmad.github.io/" target="_blank" rel="noopener">NEUREASON'26, Neural Reasoning for Scientific and Mathematical Discovery</a></div>
           <div class="pt-org">🇬🇧 Cambridge, United Kingdom &nbsp;·&nbsp; Department of Computer Science and Technology, University of Cambridge</div>
           <div class="pt-body">
             <p>Participated in the 2026 workshop on neural reasoning for scientific and mathematical discovery, held on <strong>March 23-24, 2026</strong> at the University of Cambridge.</p>
@@ -362,7 +362,7 @@ author_profile: true
         <div class="pt-dot pt-dot--purple"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--purple">November 2025</div>
-          <div class="pt-title"><a href="https://workshops.eeml.eu/" target="_blank" rel="noopener">MMLW 2025 — Montenegrin Machine Learning Workshop</a></div>
+          <div class="pt-title"><a href="https://workshops.eeml.eu/" target="_blank" rel="noopener">MMLW 2025, Montenegrin Machine Learning Workshop</a></div>
           <div class="pt-org">🇲🇪 Podgorica, Montenegro &nbsp;·&nbsp; EEML Workshops / MAIA</div>
           <div class="pt-body">
             <p>Participated in the one-day Montenegrin Machine Learning Workshop, a satellite event of the EEML summer school series focused on bringing top-tier AI talks and community building to Eastern Europe.</p>
@@ -380,7 +380,7 @@ author_profile: true
         <div class="pt-dot pt-dot--purple"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--purple">Summer 2025</div>
-          <div class="pt-title">OxML Summer School — Oxford Machine Learning</div>
+          <div class="pt-title">OxML Summer School, Oxford Machine Learning</div>
           <div class="pt-org">🇬🇧 London / Oxford, United Kingdom &nbsp;·&nbsp; AI for Global Goals</div>
           <div class="pt-body">
             <p>Selective programme covering deep learning theory, geometric deep learning, probabilistic ML, NLP, computer vision, and ML for social impact.</p>
@@ -398,7 +398,7 @@ author_profile: true
         <div class="pt-dot pt-dot--amber"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--amber">July 2025</div>
-          <div class="pt-title"><a href="https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591" target="_blank" rel="noopener">TESP 2025 — Tohoku Engineering Summer Program</a></div>
+          <div class="pt-title"><a href="https://ivy-raisin-5ba.notion.site/TESP-2025-1845e564ed5580c0b197d35fc598a591" target="_blank" rel="noopener">TESP 2025, Tohoku Engineering Summer Program</a></div>
           <div class="pt-org">🇯🇵 Sendai, Japan &nbsp;·&nbsp; Tohoku University</div>
           <div class="pt-body">
             <p>Participated in the 16-day international summer program at Tohoku University, following the Robotics Course through lectures, laboratory activities, cultural events, and an oral presentation component equivalent to 4 ECTS.</p>
@@ -417,7 +417,7 @@ author_profile: true
         <div class="pt-dot pt-dot--amber"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--amber">Spring 2025</div>
-          <div class="pt-title">DL 2025 — Deep Learning School</div>
+          <div class="pt-title">DL 2025, Deep Learning School</div>
           <div class="pt-org">🇮🇹 Rome, Italy</div>
           <div class="pt-body">
             <p>Intensive deep learning school covering modern architectures, optimisation theory, generative models, and applications in vision and language.</p>
@@ -434,7 +434,7 @@ author_profile: true
         <div class="pt-dot pt-dot--gold"><span></span></div>
         <div class="pt-content">
           <div class="pt-period">September 2024</div>
-          <div class="pt-title"><a href="https://www.m2lschool.org/past-editions/m2l-2024-italy" target="_blank" rel="noopener">M2L 2024 — Mediterranean Machine Learning Summer School</a></div>
+          <div class="pt-title"><a href="https://www.m2lschool.org/past-editions/m2l-2024-italy" target="_blank" rel="noopener">M2L 2024, Mediterranean Machine Learning Summer School</a></div>
           <div class="pt-org">🇮🇹 Milan, Italy &nbsp;·&nbsp; Universita di Milano-Bicocca</div>
           <div class="pt-body">
             <p>Participated in the 9-13 September 2024 edition of M2L, covering current machine learning topics through lectures, poster sessions, and interactions with researchers across the Mediterranean ML community.</p>
@@ -454,7 +454,7 @@ author_profile: true
         <div class="pt-dot pt-dot--purple"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--purple">August – September 2024</div>
-          <div class="pt-title"><a href="https://it-u.at/en/programs/summer-school-2024/projects/care-connect/" target="_blank" rel="noopener">IT:U Summer School 2024 — Care Connect</a></div>
+          <div class="pt-title"><a href="https://it-u.at/en/programs/summer-school-2024/projects/care-connect/" target="_blank" rel="noopener">IT:U Summer School 2024, Care Connect</a></div>
           <div class="pt-org">🇦🇹 Linz, Austria &nbsp;·&nbsp; Interdisciplinary Transformation University Austria</div>
           <div class="pt-body">
             <p>Selected for IT:U’s two-week Summer School 2024 and contributed to <strong>Care Connect</strong>, an AI-powered assistant platform for hospital staff that monitors environmental variables such as air quality, temperature, and humidity through a database-informed LLM and an interactive robotic component.</p>
@@ -473,7 +473,7 @@ author_profile: true
         <div class="pt-dot pt-dot--blue"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--blue">Summer 2023</div>
-          <div class="pt-title">Google BUCA Summer School — ML &amp; Cloud</div>
+          <div class="pt-title">Google BUCA Summer School, ML &amp; Cloud</div>
           <div class="pt-org">🇮🇹 Como, Italy &nbsp;·&nbsp; Google</div>
           <div class="pt-body">
             <p>Google-hosted summer school focused on machine learning at scale, cloud infrastructure (Google Cloud Platform), and responsible AI principles. Covered topics including distributed training, MLOps, and production ML pipelines.</p>
@@ -527,7 +527,7 @@ author_profile: true
         <div class="pt-dot pt-dot--purple"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--purple">June 2025</div>
-          <div class="pt-title"><a href="https://cvpr.thecvf.com/Conferences/2025" target="_blank" rel="noopener">CVPR 2025 — IEEE/CVF Conference on Computer Vision and Pattern Recognition</a></div>
+          <div class="pt-title"><a href="https://cvpr.thecvf.com/Conferences/2025" target="_blank" rel="noopener">CVPR 2025, IEEE/CVF Conference on Computer Vision and Pattern Recognition</a></div>
           <div class="pt-org">🇺🇸 Nashville, Tennessee, United States &nbsp;·&nbsp; Music City Center</div>
           <div class="pt-body">
             <p>Attended <strong>CVPR 2025</strong>, one of the leading international conferences in computer vision and machine learning.</p>
@@ -563,7 +563,7 @@ author_profile: true
         <div class="pt-dot"><span></span></div>
         <div class="pt-content">
           <div class="pt-period">October 2019</div>
-          <div class="pt-title">Maker Faire Rome — The European Edition</div>
+          <div class="pt-title">Maker Faire Rome, The European Edition</div>
           <div class="pt-org">🇮🇹 Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
           <div class="pt-body">
             <p>Exhibited a hardware robotics project at one of Europe's largest innovation fairs, showcasing maker culture and open-source engineering to a broad public audience.</p>
@@ -580,7 +580,7 @@ author_profile: true
         <div class="pt-dot pt-dot--amber"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--amber">October 2018</div>
-          <div class="pt-title">Maker Faire Rome — The European Edition</div>
+          <div class="pt-title">Maker Faire Rome, The European Edition</div>
           <div class="pt-org">🇮🇹 Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
           <div class="pt-body">
             <p>Returned as exhibitor with an updated project iteration, engaging with the international maker community and receiving feedback from engineers and innovators.</p>
@@ -597,7 +597,7 @@ author_profile: true
         <div class="pt-dot pt-dot--purple"><span></span></div>
         <div class="pt-content">
           <div class="pt-period pt-period--purple">October 2017</div>
-          <div class="pt-title">Maker Faire Rome — The European Edition</div>
+          <div class="pt-title">Maker Faire Rome, The European Edition</div>
           <div class="pt-org">🇮🇹 Rome, Italy &nbsp;·&nbsp; Maker Faire Rome</div>
           <div class="pt-body">
             <p>First participation as a young maker, presenting an electronics and embedded systems project and sparking a long-standing passion for building things.</p>

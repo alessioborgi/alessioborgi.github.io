@@ -99,7 +99,7 @@ jobs:
               "description": r.get("description") or "",
               "stars": r.get("stargazers_count", 0),
               "forks": r.get("forks_count", 0),
-              "language": r.get("language") or "—",
+              "language": r.get("language") or "Unknown",
           } for r in top]
 
           out = {

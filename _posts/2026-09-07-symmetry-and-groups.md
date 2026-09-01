@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A group acting on a space partitions it into orbits. A function is <em>invariant</em> when \(f(g\cdot x) = f(x)\) — constant on orbits. It is <em>equivariant</em> when \(f(g\cdot x) = \rho(g)\, f(x)\), where \(\rho\) is how the same group acts on the output space; invariance is the case \(\rho(g) = \mathrm{id}\). Convolution is translation equivariant, message passing is permutation equivariant, and a molecular energy model should be \(SE(3)\) invariant while its force predictions are \(SE(3)\) equivariant. Building the symmetry into the architecture makes it hold exactly and everywhere; augmentation only approximates it, near the data you have.
+  <strong>TL;DR:</strong> A group acting on a space partitions it into orbits. A function is <em>invariant</em> when \(f(g\cdot x) = f(x)\), constant on orbits. It is <em>equivariant</em> when \(f(g\cdot x) = \rho(g)\, f(x)\), where \(\rho\) is how the same group acts on the output space; invariance is the case \(\rho(g) = \mathrm{id}\). Convolution is translation equivariant, message passing is permutation equivariant, and a molecular energy model should be \(SE(3)\) invariant while its force predictions are \(SE(3)\) equivariant. Building the symmetry into the architecture makes it hold exactly and everywhere; augmentation only approximates it, near the data you have.
 </div>
 
 ## Groups, actions, orbits
 
-A **group** $$(G,\cdot)$$ is a set with an associative operation, an identity $$e$$, and inverses. An **action** of $$G$$ on a set $$X$$ is a map $$G\times X\to X$$ with $$e\cdot x = x$$ and $$(gh)\cdot x = g\cdot(h\cdot x)$$ — the group's structure is faithfully reflected in how it moves points.
+A **group** $$(G,\cdot)$$ is a set with an associative operation, an identity $$e$$, and inverses. An **action** of $$G$$ on a set $$X$$ is a map $$G\times X\to X$$ with $$e\cdot x = x$$ and $$(gh)\cdot x = g\cdot(h\cdot x)$$, the group's structure is faithfully reflected in how it moves points.
 
-The **orbit** of $$x$$ is $$\mathcal{O}_x = \{g\cdot x : g\in G\}$$: everything reachable from $$x$$ by a symmetry. Orbits partition $$X$$, which gives the cleanest description of invariance — an invariant function is one that is constant on every orbit, i.e. a function on the quotient $$X/G$$ rather than on $$X$$.
+The **orbit** of $$x$$ is $$\mathcal{O}_x = \{g\cdot x : g\in G\}$$: everything reachable from $$x$$ by a symmetry. Orbits partition $$X$$, which gives the cleanest description of invariance, an invariant function is one that is constant on every orbit, i.e. a function on the quotient $$X/G$$ rather than on $$X$$.
 
 The three groups worth knowing cold:
 
@@ -77,7 +77,7 @@ where $$\rho$$ is the action (a representation, when $$Y$$ is a vector space) of
   </g>
   <text x="60" y="118" font-size="11" font-weight="700" fill="#c2410c" text-anchor="middle">act with g</text>
   <text x="382" y="118" font-size="11" font-weight="700" fill="#c2410c">ρ(g)</text>
-  <text x="235" y="228" font-size="10.5" fill="#475569" text-anchor="middle">invariance is this square with ρ(g) = id — the right-hand arrow does nothing</text>
+  <text x="235" y="228" font-size="10.5" fill="#475569" text-anchor="middle">invariance is this square with ρ(g) = id, the right-hand arrow does nothing</text>
 </svg>
 <figcaption>Notice that equivariance needs <em>two</em> actions, one per space. Saying a model "is equivariant" without naming the output action is an incomplete statement.</figcaption>
 </figure>
@@ -85,7 +85,7 @@ where $$\rho$$ is the action (a representation, when $$Y$$ is a vector space) of
 
 ## The three cases that come up
 
-**Translation in CNNs.** For a signal $$x:\mathbb{Z}^2\to\mathbb{R}$$ and shift $$(T_v x)(u) = x(u-v)$$, cross-correlation with a kernel $$\psi$$ satisfies $$(T_v x)\star\psi = T_v(x\star\psi)$$. A convolution layer is translation *equivariant*: shift the input and the feature map shifts identically. Invariance appears only when you collapse the spatial axes — global pooling, or in practice the classifier head. In real networks the equivariance is approximate: striding and pooling alias, so it holds exactly only for shifts that are multiples of the stride, and padding breaks it at the borders.
+**Translation in CNNs.** For a signal $$x:\mathbb{Z}^2\to\mathbb{R}$$ and shift $$(T_v x)(u) = x(u-v)$$, cross-correlation with a kernel $$\psi$$ satisfies $$(T_v x)\star\psi = T_v(x\star\psi)$$. A convolution layer is translation *equivariant*: shift the input and the feature map shifts identically. Invariance appears only when you collapse the spatial axes, global pooling, or in practice the classifier head. In real networks the equivariance is approximate: striding and pooling alias, so it holds exactly only for shifts that are multiples of the stride, and padding breaks it at the borders.
 
 **Permutation in GNNs and set models.** With node features $$X\in\mathbb{R}^{n\times d}$$, adjacency $$A$$, and a permutation matrix $$P$$, a message-passing layer $$F$$ satisfies
 
@@ -98,18 +98,18 @@ F\!\left(PX,\, PAP^\top\right) = P\,F(X, A)
 \]
 </div>
 
-Node-level predictions must be equivariant — relabel the nodes and the predictions come along. Graph-level predictions must be invariant, which is what the sum/mean/max readout provides. The same split governs Deep Sets and set transformers.
+Node-level predictions must be equivariant, relabel the nodes and the predictions come along. Graph-level predictions must be invariant, which is what the sum/mean/max readout provides. The same split governs Deep Sets and set transformers.
 
-**$$SE(3)$$ in molecular models.** A potential energy is invariant, $$E(Rx+t) = E(x)$$, while forces are equivariant, $$F(Rx+t) = R\,F(x)$$ — a rotated molecule feels rotated forces. There is a neat consistency here: since $$F = -\nabla_x E$$, the gradient of an $$SE(3)$$-invariant scalar is automatically equivariant, so getting the energy right gets the forces right by construction. See the GNN book's posts on [equivariance](/blog/gnn/equivariance/), [EGNN](/blog/gnn/egnn/) and [SE(3) transformers](/blog/gnn/se3-transformers/) for the architectures.
+**$$SE(3)$$ in molecular models.** A potential energy is invariant, $$E(Rx+t) = E(x)$$, while forces are equivariant, $$F(Rx+t) = R\,F(x)$$, a rotated molecule feels rotated forces. There is a neat consistency here: since $$F = -\nabla_x E$$, the gradient of an $$SE(3)$$-invariant scalar is automatically equivariant, so getting the energy right gets the forces right by construction. See the GNN book's posts on [equivariance](/blog/gnn/equivariance/), [EGNN](/blog/gnn/egnn/) and [SE(3) transformers](/blog/gnn/se3-transformers/) for the architectures.
 
 <div class="insight-box">
-  <strong>Key Insight — why constraints beat augmentation:</strong> an invariant model does not learn a function on \(X\), it learns one on the quotient \(X/G\). For a finite group acting freely that shrinks the effective input space by a factor of \(\lvert G\rvert\); for \(SE(3)\) it removes a six-dimensional family of variation per example. Augmentation attacks the same problem from the other side — it asks the model to <em>discover</em> the symmetry from samples, so the constraint holds only near the data, costs capacity that is spent memorising the group, and gives nothing on inputs far from the training distribution. Elesedy and Zaidi (2021) make the gap precise for linear models and group-averaged predictors: the equivariant model has strictly lower generalisation error, and the size of the improvement grows with the group.
+  <strong>Key Insight, why constraints beat augmentation:</strong> an invariant model does not learn a function on \(X\), it learns one on the quotient \(X/G\). For a finite group acting freely that shrinks the effective input space by a factor of \(\lvert G\rvert\); for \(SE(3)\) it removes a six-dimensional family of variation per example. Augmentation attacks the same problem from the other side, it asks the model to <em>discover</em> the symmetry from samples, so the constraint holds only near the data, costs capacity that is spent memorising the group, and gives nothing on inputs far from the training distribution. Elesedy and Zaidi (2021) make the gap precise for linear models and group-averaged predictors: the equivariant model has strictly lower generalisation error, and the size of the improvement grows with the group.
 </div>
 
-The counter-argument is real too. A symmetry that is only approximately true in the data — near-symmetry, or a symmetry broken by context, like gravity breaking full rotational symmetry for a robot — is expensive to hard-code and can hurt. Constraints are priors: correct ones help, wrong ones bite.
+The counter-argument is real too. A symmetry that is only approximately true in the data, near-symmetry, or a symmetry broken by context, like gravity breaking full rotational symmetry for a robot, is expensive to hard-code and can hurt. Constraints are priors: correct ones help, wrong ones bite.
 
 <div class="warning-box">
-  <strong>Interview trap:</strong> two mistakes, both common. (1) Calling a convolution layer translation <em>invariant</em>. It is equivariant; invariance comes from pooling. (2) Making a network invariant too early. A segmentation head must be equivariant — an invariant intermediate representation has thrown away the position information the task needs. Ask what the output <em>should</em> do under the group before deciding which property you want.
+  <strong>Interview trap:</strong> two mistakes, both common. (1) Calling a convolution layer translation <em>invariant</em>. It is equivariant; invariance comes from pooling. (2) Making a network invariant too early. A segmentation head must be equivariant, an invariant intermediate representation has thrown away the position information the task needs. Ask what the output <em>should</em> do under the group before deciding which property you want.
 </div>
 
 <div class="key-takeaways">
@@ -123,7 +123,7 @@ The counter-argument is real too. A symmetry that is only approximately true in 
   </ul>
 </div>
 
-That closes the book — back to the [overview](/blog/geometry-basics/overview/) for the map of all seven posts.
+That closes the book, back to the [overview](/blog/geometry-basics/overview/) for the map of all seven posts.
 
 ## References
 

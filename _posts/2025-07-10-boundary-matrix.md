@@ -6,7 +6,7 @@ book: persistent-homology
 subsection: computation
 tags: [boundary-matrix, reduction-algorithm, persistence-pairs, left-to-right-reduction, Gaussian-elimination]
 published: false
-excerpt: "Persistent homology computation reduces to column operations on the boundary matrix ∂ — a sparse binary matrix encoding which simplices bound which. The standard reduction algorithm applies left-to-right column elimination (analogous to Gaussian elimination over GF(2)) to reveal all persistence pairs. This post explains the algorithm step by step with a worked example."
+excerpt: "Persistent homology computation reduces to column operations on the boundary matrix ∂, a sparse binary matrix encoding which simplices bound which. The standard reduction algorithm applies left-to-right column elimination (analogous to Gaussian elimination over GF(2)) to reveal all persistence pairs. This post explains the algorithm step by step with a worked example."
 author_profile: true
 read_time: true
 is_overview: false
@@ -22,7 +22,7 @@ Think of the boundary matrix as a checklist: for each "higher-dimensional piece"
 
 Reducing this matrix is like performing Gaussian elimination, but over **GF(2)** (arithmetic mod 2, so $$1 + 1 = 0$$). Each column that cannot be fully eliminated creates a **cycle** that lives forever (a generator of homology). Each column that does get eliminated by an earlier column creates a **persistence pair**: the earlier column "kills" the cycle that the later column "created."
 
-Reading off birth–death pairs from the reduced matrix gives you the complete persistence diagram — no geometry needed beyond the order in which simplices enter the filtration.
+Reading off birth–death pairs from the reduced matrix gives you the complete persistence diagram, no geometry needed beyond the order in which simplices enter the filtration.
 
 ---
 
@@ -90,7 +90,7 @@ New pivot of column 6 = row 2. Column 4 has pivot 2. Add column 4 to column 6:
 
 \(R[6] \leftarrow (1,1,0,\ldots) + (1,1,0,\ldots) = (0,0,0,\ldots)\)
 
-Column 6 becomes zero! So \(e_{02}\) **creates** a 1-cycle. But wait — we now check column 7 (\(T_{012}\)), which has pivot = row 6. No other column has pivot 6, so column 7 stays. The pair \((e_{02}, T_{012})\) gives birth=5, death=6.
+Column 6 becomes zero! So \(e_{02}\) **creates** a 1-cycle. But wait, we now check column 7 (\(T_{012}\)), which has pivot = row 6. No other column has pivot 6, so column 7 stays. The pair \((e_{02}, T_{012})\) gives birth=5, death=6.
 
 **Reading off the diagram:**
 - \((v_0)\): birth=0, never dies → \((0, \infty)\) in \(H_0\)
@@ -123,7 +123,7 @@ Column 6 becomes zero! So \(e_{02}\) **creates** a 1-cycle. But wait — we now 
 <figure>
 <svg viewBox="0 0 460 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:auto;">
   <!-- Title -->
-  <text x="230" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Column Reduction — Step: add col 5 into col 6</text>
+  <text x="230" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Column Reduction, Step: add col 5 into col 6</text>
 
   <!-- Column headers -->
   <text x="80"  y="38" text-anchor="middle" font-size="10" fill="#64748b">col 4</text>
@@ -203,7 +203,7 @@ The naive algorithm runs in $$O(m^3)$$ over GF(2). Several improvements exist:
 |-----------|------|---------|
 | **Clearing lemma** | If $$\sigma_j$$ pairs with $$\sigma_i$$, all faces of $$\sigma_j$$ can be cleared | Major in practice |
 | **Cohomological** | Transpose the matrix; cohomological pairs are dual | Used in Ripser |
-| **Apparent pairs** | Simplex/coface pairs computable in $$O(1)$$ — no column ops needed | Dominant in Rips |
+| **Apparent pairs** | Simplex/coface pairs computable in $$O(1)$$, no column ops needed | Dominant in Rips |
 | **Sparse representation** | Store only nonzero entries | Memory savings |
 
 The clearing lemma alone reduces the number of columns requiring reduction by often more than 90% on real datasets.

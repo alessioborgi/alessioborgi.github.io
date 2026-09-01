@@ -6,7 +6,7 @@ book: tdl
 subsection: core
 tags: [interleaving-distance, stability, persistence-module, algebraic-stability]
 published: false
-excerpt: "The interleaving distance measures how similar two persistence modules are at the algebraic level — generalising the bottleneck distance to arbitrary modules. The algebraic stability theorem states that the interleaving distance between modules equals the bottleneck distance between their diagrams, unifying all stability results in TDA."
+excerpt: "The interleaving distance measures how similar two persistence modules are at the algebraic level, generalising the bottleneck distance to arbitrary modules. The algebraic stability theorem states that the interleaving distance between modules equals the bottleneck distance between their diagrams, unifying all stability results in TDA."
 author_profile: true
 read_time: true
 icon: "🔗"
@@ -24,11 +24,11 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Two persistence modules M and N are ε-interleaved if there exist module maps φ: M → N(ε) and ψ: N → M(ε) that compose to the canonical shift map. The interleaving distance d_I(M,N) is the infimum of ε for which such an interleaving exists. The isometry theorem (Bauer & Lesnick) proves d_I = d_B — matching the bottleneck distance.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Two persistence modules M and N are ε-interleaved if there exist module maps φ: M → N(ε) and ψ: N → M(ε) that compose to the canonical shift map. The interleaving distance d_I(M,N) is the infimum of ε for which such an interleaving exists. The isometry theorem (Bauer & Lesnick) proves d_I = d_B, matching the bottleneck distance.</div>
 
 ## Intuition First
 
-Imagine two persistence barcodes. You want to know "how different" they are. One approach — the bottleneck distance — matches diagram points and measures the worst mismatch. But what does that mean algebraically? The **interleaving distance** answers this: two modules are close if one can be "translated" into the other by shifting the parameter axis by ε. The isometry theorem says these two perspectives give exactly the same number.
+Imagine two persistence barcodes. You want to know "how different" they are. One approach, the bottleneck distance, matches diagram points and measures the worst mismatch. But what does that mean algebraically? The **interleaving distance** answers this: two modules are close if one can be "translated" into the other by shifting the parameter axis by ε. The isometry theorem says these two perspectives give exactly the same number.
 
 <style>
 @keyframes shiftRight {
@@ -115,7 +115,7 @@ Consider the simplest case: two interval modules $$M = \mathbb{k}_{[1,4]}$$ and 
 
 Both compositions $$\psi_{0.5} \circ \varphi$$ and $$\varphi_{0.5} \circ \psi$$ equal the canonical 1-shift maps on $$M$$ and $$N$$ respectively. So $$d_I(M, N) \leq 0.5$$. In fact the bottleneck distance also equals 0.5 (the diagram points $$(1,4)$$ and $$(1.5,4.5)$$ are matched with cost 0.5), confirming the isometry.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> For interval modules (single bars), the interleaving distance equals half the Hausdorff distance between the intervals' endpoints — a direct, geometric interpretation. The isometry theorem extends this geometric intuition to arbitrary decomposable persistence modules.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> For interval modules (single bars), the interleaving distance equals half the Hausdorff distance between the intervals' endpoints, a direct, geometric interpretation. The isometry theorem extends this geometric intuition to arbitrary decomposable persistence modules.</div>
 
 ## The Isometry Theorem
 

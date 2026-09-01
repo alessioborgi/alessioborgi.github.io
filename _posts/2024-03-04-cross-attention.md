@@ -92,7 +92,7 @@ That is cross-attention:
 - **Output** = a blend of English information, weighted by relevance to the current French word
 
 <div class="insight-box">
-<strong>Key insight:</strong> The encoder runs once and produces a fixed set of key-value pairs. The decoder queries these repeatedly — once per output token — through cross-attention. The encoder is essentially a differentiable, soft-addressable memory.
+<strong>Key insight:</strong> The encoder runs once and produces a fixed set of key-value pairs. The decoder queries these repeatedly, once per output token, through cross-attention. The encoder is essentially a differentiable, soft-addressable memory.
 </div>
 
 ## Where Cross-Attention Appears
@@ -118,11 +118,11 @@ The cross-attention layer is what connects the two towers. Remove it, and the de
 - **Decoder:** the UNet denoising network
 - **Cross-attention:** each spatial location in the noisy image queries the text tokens to determine what to generate there
 
-This is why changing a single word in a prompt changes the relevant regions of the generated image — cross-attention routes each spatial location to the relevant text signal.
+This is why changing a single word in a prompt changes the relevant regions of the generated image, cross-attention routes each spatial location to the relevant text signal.
 
 ### 4. Multimodal Models (Flamingo, BLIP-2)
 
-Cross-attention allows visual tokens to query language tokens and vice versa — the fundamental mechanism for grounding language in images.
+Cross-attention allows visual tokens to query language tokens and vice versa, the fundamental mechanism for grounding language in images.
 
 ## Worked Example: 3-Token Translation
 
@@ -143,10 +143,10 @@ scores = Q_dec · K_enc^T = [s_The, s_cat, s_sat]
 output = 0.10·v_The + 0.85·v_cat + 0.05·v_sat
 ```
 
-"chat" attends mostly to "cat" — the cross-attention map recovers the word alignment without any explicit supervision.
+"chat" attends mostly to "cat", the cross-attention map recovers the word alignment without any explicit supervision.
 
 <div class="insight-box">
-<strong>The encoder is a soft memory:</strong> it computes K and V once and caches them. The decoder queries this cache once per output token — the same encoded English representation is read repeatedly, from different query angles, as each French word is generated.
+<strong>The encoder is a soft memory:</strong> it computes K and V once and caches them. The decoder queries this cache once per output token, the same encoded English representation is read repeatedly, from different query angles, as each French word is generated.
 </div>
 
 ## The Attention Map Has a New Shape
@@ -155,7 +155,7 @@ In self-attention on a sequence of length $$N$$, the attention matrix is $$N \ti
 
 In cross-attention, if the query sequence has length $$M$$ (decoder) and the key-value sequence has length $$N$$ (encoder), the attention matrix is $$M \times N$$.
 
-Each of the $$M$$ output positions independently attends over all $$N$$ input positions. The output tensor is $$M \times d_v$$ — same length as the query sequence, same value dimension.
+Each of the $$M$$ output positions independently attends over all $$N$$ input positions. The output tensor is $$M \times d_v$$, same length as the query sequence, same value dimension.
 
 ## Cross-Attention Visualised
 
@@ -169,7 +169,7 @@ s'est       0.1   0.05  0.85  →  "s'est" attends mostly to "sat"
 assis       0.05  0.1   0.85  →  "assis" attends mostly to "sat"
 ```
 
-The attention pattern learned by a well-trained translation model tends to align source and target words — a property that emerged from training, not from any explicit alignment supervision.
+The attention pattern learned by a well-trained translation model tends to align source and target words, a property that emerged from training, not from any explicit alignment supervision.
 
 ## Summary
 
@@ -181,7 +181,7 @@ The attention pattern learned by a well-trained translation model tends to align
 | Attention shape | $$N \times N$$ | $$M \times N$$ |
 | Role | Contextualise within sequence | Bridge two sequences |
 
-Cross-attention is the fundamental building block for any model that needs to condition generation on a separate encoded representation — translation, captioning, diffusion, and multimodal understanding all rely on it.
+Cross-attention is the fundamental building block for any model that needs to condition generation on a separate encoded representation, translation, captioning, diffusion, and multimodal understanding all rely on it.
 
 ## References
 

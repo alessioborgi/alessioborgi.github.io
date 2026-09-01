@@ -6,7 +6,7 @@ categories: [diffusion]
 book: diffusion
 subsection: efficiency
 tags: [diffusion, samplers, ode-solvers, dpm-solver]
-excerpt: "Once you see the reverse process as an ODE, the thousand-step sampling loop stops being a fact of life and becomes what it really is — a first-order solver with a terrible step size. Everything after that is numerical analysis."
+excerpt: "Once you see the reverse process as an ODE, the thousand-step sampling loop stops being a fact of life and becomes what it really is, a first-order solver with a terrible step size. Everything after that is numerical analysis."
 author_profile: true
 read_time: true
 is_overview: false
@@ -83,7 +83,7 @@ Heun's method corrects this. Take the Euler step to a provisional point, evaluat
   </g>
   <text x="320" y="26" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">One step of the probability-flow ODE</text>
 </svg>
-<figcaption>Notice that the extra cost of Heun buys accuracy only because the trajectory is curved. On a nearly straight path — the goal of rectified flow — the two coincide and the second evaluation is wasted.</figcaption>
+<figcaption>Notice that the extra cost of Heun buys accuracy only because the trajectory is curved. On a nearly straight path, the goal of rectified flow, the two coincide and the second evaluation is wasted.</figcaption>
 </figure>
 </div>
 
@@ -98,12 +98,12 @@ The diffusion ODE is not a generic black box. Written in terms of \\(\alpha_t\\)
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — where the speed-up comes from:</strong> a general-purpose solver like Euler discretises the whole right-hand side, so it accumulates error from the stiff linear term as well as from the network. The exponential-integrator view moves that term out of the discretisation entirely — it is integrated exactly — so the only approximation left is a low-order Taylor expansion of \(\hat{\boldsymbol{\epsilon}}_\theta\) in \(\lambda\), which is a smooth, slowly varying function. Truncating it at first order recovers DDIM exactly; at second and third order you get DPM-Solver-2 and -3.
+  <strong>Key Insight, where the speed-up comes from:</strong> a general-purpose solver like Euler discretises the whole right-hand side, so it accumulates error from the stiff linear term as well as from the network. The exponential-integrator view moves that term out of the discretisation entirely, it is integrated exactly, so the only approximation left is a low-order Taylor expansion of \(\hat{\boldsymbol{\epsilon}}_\theta\) in \(\lambda\), which is a smooth, slowly varying function. Truncating it at first order recovers DDIM exactly; at second and third order you get DPM-Solver-2 and -3.
 </div>
 
 ## Ancestral or deterministic
 
-Integrating the SDE means adding fresh noise at every step; integrating the ODE means not. The stochastic variants (DDPM ancestral, "Euler a", DPM++ SDE) have a genuine benefit Karras et al. identified: injected noise acts as error correction, dragging the sample back towards the correct marginal after solver drift. The cost is that the seed no longer determines the image — change the step count and you get a different picture — and at high step counts the churn can erase fine detail.
+Integrating the SDE means adding fresh noise at every step; integrating the ODE means not. The stochastic variants (DDPM ancestral, "Euler a", DPM++ SDE) have a genuine benefit Karras et al. identified: injected noise acts as error correction, dragging the sample back towards the correct marginal after solver drift. The cost is that the seed no longer determines the image, change the step count and you get a different picture, and at high step counts the churn can erase fine detail.
 
 Deterministic samplers give a fixed, invertible-ish map from noise to image, which is what makes latent interpolation, inversion and reproducible seeds work at all.
 
@@ -133,10 +133,10 @@ A sampler needs a list of noise levels, and spacing them uniformly in \\(t\\) is
 which concentrates steps at low noise. At 50 steps the choice barely registers; at 10 it can dominate the choice of solver.
 
 <div class="warning-box">
-  <strong>Where it breaks:</strong> solver order assumes a smooth right-hand side, and high <a href="/blog/diffusion/classifier-free-guidance/">classifier-free guidance</a> makes the effective field stiff — a second-order solver at 10 steps and guidance 12 can be worse than first order. Also, a model trained on 1000 discrete timesteps has only been asked about those inputs; a continuous-\(\sigma\) solver silently interpolates, which is fine near the training grid and not guaranteed away from it.
+  <strong>Where it breaks:</strong> solver order assumes a smooth right-hand side, and high <a href="/blog/diffusion/classifier-free-guidance/">classifier-free guidance</a> makes the effective field stiff, a second-order solver at 10 steps and guidance 12 can be worse than first order. Also, a model trained on 1000 discrete timesteps has only been asked about those inputs; a continuous-\(\sigma\) solver silently interpolates, which is fine near the training grid and not guaranteed away from it.
 </div>
 
-Solvers get you to roughly 10–20 evaluations. Below that, no integrator helps, because the trajectory genuinely is curved — you have to change the model, which is what [distillation and consistency models](/blog/diffusion/distillation-consistency/) do.
+Solvers get you to roughly 10–20 evaluations. Below that, no integrator helps, because the trajectory genuinely is curved, you have to change the model, which is what [distillation and consistency models](/blog/diffusion/distillation-consistency/) do.
 
 ## References
 

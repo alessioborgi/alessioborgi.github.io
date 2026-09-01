@@ -59,7 +59,7 @@ toc_label: "Contents"
 
 ## Intuition First: The Highway Analogy
 
-Picture a motorway with 96 exits in sequence. Without residual connections, information must travel through every exit in order — if one exit is blocked (saturated gradient), everything behind it grinds to a halt.
+Picture a motorway with 96 exits in sequence. Without residual connections, information must travel through every exit in order, if one exit is blocked (saturated gradient), everything behind it grinds to a halt.
 
 A residual connection adds a **parallel express lane** that bypasses each exit entirely. Traffic (gradients) can always reach the start of the motorway via the express lane, regardless of congestion at any individual exit.
 
@@ -127,7 +127,7 @@ Stacking many layers allows a model to learn increasingly abstract representatio
 
 During backpropagation, gradients are computed by repeated multiplication through the chain rule. In a network with L layers, the gradient of the loss with respect to early-layer weights involves multiplying L Jacobians together. If each Jacobian has singular values less than 1 (common for standard activations), the gradient shrinks exponentially. Early layers learn almost nothing.
 
-This is why naive deep networks (without tricks) perform worse than shallower ones — a counter-intuitive result that motivated residual connections.
+This is why naive deep networks (without tricks) perform worse than shallower ones, a counter-intuitive result that motivated residual connections.
 
 ## The Residual Fix
 
@@ -141,7 +141,7 @@ y = x + f(x)
 
 Where x is the input, f(x) is whatever the sub-layer computes (attention, FFN, etc.), and y is the output.
 
-This changes what the sub-layer must learn. Instead of learning a full transformation from x to the desired output, it only needs to learn the **residual** — the difference between x and the desired output. If no change is needed, f(x) = 0 works perfectly (identity function).
+This changes what the sub-layer must learn. Instead of learning a full transformation from x to the desired output, it only needs to learn the **residual**, the difference between x and the desired output. If no change is needed, f(x) = 0 works perfectly (identity function).
 
 ## Why Gradients Flow Better
 
@@ -157,7 +157,7 @@ In a standard deep network, the gradient of the loss L with respect to an early 
 \]
 </div>
 
-This is a product of L Jacobians — exponentially small or large.
+This is a product of L Jacobians, exponentially small or large.
 
 With residual connections, y_l = x_l + f(x_l), so:
 
@@ -169,7 +169,7 @@ With residual connections, y_l = x_l + f(x_l), so:
 \]
 </div>
 
-The gradient always includes the **1** term — a direct, unattenuated path from output to input. Even if $$\partial f / \partial x_l \approx 0$$ (a saturated or poorly-conditioned sub-layer), the gradient still flows back as 1.
+The gradient always includes the **1** term, a direct, unattenuated path from output to input. Even if $$\partial f / \partial x_l \approx 0$$ (a saturated or poorly-conditioned sub-layer), the gradient still flows back as 1.
 
 Summing over all paths: gradients reach early layers directly via the skip connections. Deep networks become trainable.
 
@@ -181,9 +181,9 @@ Summing over all paths: gradients reach early layers directly via the skip conne
 
 The residual formulation $$y = x + f(x)$$ has another interpretation: **each layer proposes a small correction to the current representation**.
 
-If $$f$$ is initialised near zero (which happens naturally with small random weights), then at the start of training $$y \approx x$$. The network begins as a near-identity function — a useful initialisation since the untrained network does not corrupt the signal.
+If $$f$$ is initialised near zero (which happens naturally with small random weights), then at the start of training $$y \approx x$$. The network begins as a near-identity function, a useful initialisation since the untrained network does not corrupt the signal.
 
-As training progresses, each layer learns to add increasingly meaningful corrections. This is why Transformers initialise stably even at 96 layers — no single layer needs to do anything dramatic from the start.
+As training progresses, each layer learns to add increasingly meaningful corrections. This is why Transformers initialise stably even at 96 layers, no single layer needs to do anything dramatic from the start.
 
 ## In Transformers: Two Residuals per Block
 
@@ -205,7 +205,7 @@ GPT-3's 96 layers means 192 residual additions. At every single one, there is a 
 
 ## The Residual Stream View
 
-A useful mental model: think of the Transformer as a **residual stream** — a single high-dimensional vector that persists across all layers. Each attention head and FFN block reads from this stream and writes back to it via residual addition.
+A useful mental model: think of the Transformer as a **residual stream**, a single high-dimensional vector that persists across all layers. Each attention head and FFN block reads from this stream and writes back to it via residual addition.
 
 This view, popularised by mechanistic interpretability research (Elhage et al., 2021), makes it clear that:
 - Information is preserved across layers (it stays in the stream)
@@ -216,18 +216,18 @@ This view, popularised by mechanistic interpretability research (Elhage et al., 
 
 Consider a toy 3-layer network, each layer applying a transformation with Jacobian magnitude 0.5:
 
-**Without residuals:**  
-Gradient reaching layer 1 $$= 1 \times 0.5 \times 0.5 \times 0.5 = \mathbf{0.125}$$  
-After 10 layers: $$1 \times 0.5^{10} \approx \mathbf{0.001}$$ — essentially vanished.
+**Without residuals:**
+Gradient reaching layer 1 $$= 1 \times 0.5 \times 0.5 \times 0.5 = \mathbf{0.125}$$
+After 10 layers: $$1 \times 0.5^{10} \approx \mathbf{0.001}$$, essentially vanished.
 
-**With residuals** (each Jacobian is now $$1 + 0.5 = 1.5$$ at best, but more importantly the identity term always contributes 1):  
-Even if $$\partial f / \partial x \approx 0$$ at every layer, gradient at layer 1 $$= \mathbf{1.0}$$ (via the skip path).  
+**With residuals** (each Jacobian is now $$1 + 0.5 = 1.5$$ at best, but more importantly the identity term always contributes 1):
+Even if $$\partial f / \partial x \approx 0$$ at every layer, gradient at layer 1 $$= \mathbf{1.0}$$ (via the skip path).
 In practice the Jacobian is (1 + small correction), so even 96 layers multiply out to a value near 1 rather than near zero.
 
 This is the key: the "1" in $$(1 + \partial f / \partial x)$$ acts as a floor that prevents gradient collapse.
 
 <div class="insight-box">
-<strong>Near-zero initialisation is intentional:</strong> At the start of training, \(f(x) \approx 0\) (small random weights), so \(y \approx x\). The 96-layer GPT-3 starts as a near-identity function. This is not an accident — it means no single layer corrupts the signal from the start, and learning proceeds incrementally.
+<strong>Near-zero initialisation is intentional:</strong> At the start of training, \(f(x) \approx 0\) (small random weights), so \(y \approx x\). The 96-layer GPT-3 starts as a near-identity function. This is not an accident, it means no single layer corrupts the signal from the start, and learning proceeds incrementally.
 </div>
 
 ## What Happens Without Residuals?
@@ -237,7 +237,7 @@ Ablation studies confirm: removing residual connections from deep Transformers c
 - Significantly worse final performance
 - Requirement for much more careful learning rate tuning
 
-Adding them back is cheap — it is a single addition with no parameters — but the effect is profound.
+Adding them back is cheap, it is a single addition with no parameters, but the effect is profound.
 
 ## Summary
 

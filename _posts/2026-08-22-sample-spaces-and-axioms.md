@@ -6,7 +6,7 @@ categories: [prob-basics]
 book: prob-basics
 subsection: foundations
 tags: [probability, axioms, measure, counting]
-excerpt: "Probability is not defined as a long-run frequency or a degree of belief. It is defined as a function on sets that obeys three rules — and the third rule, countable additivity, is the one doing all the work."
+excerpt: "Probability is not defined as a long-run frequency or a degree of belief. It is defined as a function on sets that obeys three rules, and the third rule, countable additivity, is the one doing all the work."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A probability space is a triple \((\Omega, \mathcal{F}, P)\): a set of outcomes, a collection of measurable events, and a function assigning each event a number. The three Kolmogorov axioms are non-negativity, \(P(\Omega)=1\), and countable additivity for disjoint events. Everything else — complements, monotonicity, inclusion–exclusion, the union bound — is a consequence. The subtlety is that \(\mathcal{F}\) usually cannot be all subsets of \(\Omega\).
+  <strong>TL;DR:</strong> A probability space is a triple \((\Omega, \mathcal{F}, P)\): a set of outcomes, a collection of measurable events, and a function assigning each event a number. The three Kolmogorov axioms are non-negativity, \(P(\Omega)=1\), and countable additivity for disjoint events. Everything else, complements, monotonicity, inclusion–exclusion, the union bound, is a consequence. The subtlety is that \(\mathcal{F}\) usually cannot be all subsets of \(\Omega\).
 </div>
 
 ## The three objects
 
 Start with the **sample space** $$\Omega$$: the set of every outcome the experiment could produce, with exactly one occurring. Two dice give $$\Omega = \{1,\dots,6\}^2$$, so $$\lvert \Omega\rvert = 36$$. A real-valued measurement gives $$\Omega = \mathbb{R}$$.
 
-An **event** is a subset of $$\Omega$$ — "the sum is 7" is the six-element set $$\{(1,6),(2,5),\dots,(6,1)\}$$. Events are sets, which is why probability inherits the algebra of sets: "and" is intersection, "or" is union, "not" is complement. The collection of admissible events is $$\mathcal{F}$$, closed under complement and countable union.
+An **event** is a subset of $$\Omega$$, "the sum is 7" is the six-element set $$\{(1,6),(2,5),\dots,(6,1)\}$$. Events are sets, which is why probability inherits the algebra of sets: "and" is intersection, "or" is union, "not" is complement. The collection of admissible events is $$\mathcal{F}$$, closed under complement and countable union.
 
 **Probability** is a function $$P:\mathcal{F}\to[0,1]$$ obeying three axioms:
 
@@ -50,9 +50,9 @@ P(\text{some head}) = \sum_{i=1}^{\infty} 2^{-i} = 1 .
 \]
 </div>
 
-The same axiom gives *continuity*: if $$A_1 \subseteq A_2 \subseteq \cdots$$ then $$P(\bigcup_i A_i) = \lim_{n} P(A_n)$$. Every limiting argument in probability — the law of large numbers, almost-sure convergence, the behaviour of a Markov chain as $$t\to\infty$$ — runs through that exchange of limit and probability, and it is countable additivity that permits it.
+The same axiom gives *continuity*: if $$A_1 \subseteq A_2 \subseteq \cdots$$ then $$P(\bigcup_i A_i) = \lim_{n} P(A_n)$$. Every limiting argument in probability, the law of large numbers, almost-sure convergence, the behaviour of a Markov chain as $$t\to\infty$$, runs through that exchange of limit and probability, and it is countable additivity that permits it.
 
-The other restriction is subtler. You might hope $$\mathcal{F} = 2^{\Omega}$$, every subset. For a countable $$\Omega$$ it can be. For $$\Omega = [0,1]$$ with the uniform distribution it cannot: Vitali showed in 1905 that one can construct a set whose translates tile $$[0,1]$$ in a way incompatible with any translation-invariant, countably additive assignment of length. Assigning it any value at all — zero, positive, anything — contradicts the axioms. The fix is to shrink $$\mathcal{F}$$ to the Borel sets: the smallest $$\sigma$$-algebra containing the intervals. Every set you will meet in practice is Borel, which is why the restriction is invisible in applications. A **random variable** is then just a function $$X:\Omega\to\mathbb{R}$$ for which $$\{X \le t\}$$ lies in $$\mathcal{F}$$ for all $$t$$ — "measurable" means "you are allowed to ask for its probability".
+The other restriction is subtler. You might hope $$\mathcal{F} = 2^{\Omega}$$, every subset. For a countable $$\Omega$$ it can be. For $$\Omega = [0,1]$$ with the uniform distribution it cannot: Vitali showed in 1905 that one can construct a set whose translates tile $$[0,1]$$ in a way incompatible with any translation-invariant, countably additive assignment of length. Assigning it any value at all, zero, positive, anything, contradicts the axioms. The fix is to shrink $$\mathcal{F}$$ to the Borel sets: the smallest $$\sigma$$-algebra containing the intervals. Every set you will meet in practice is Borel, which is why the restriction is invisible in applications. A **random variable** is then just a function $$X:\Omega\to\mathbb{R}$$ for which $$\{X \le t\}$$ lies in $$\mathcal{F}$$ for all $$t$$, "measurable" means "you are allowed to ask for its probability".
 
 ## Consequences you use constantly
 
@@ -87,26 +87,26 @@ Let $$A_d$$ be "divisible by $$d$$", so $$\lvert A_d\rvert = \lfloor 100/d \rflo
 | triple | $$A_{30}$$ | $$+3$$ |
 | **total** | | **74** |
 
-So $$P = 74/100 = 0.74$$. Naively adding the singles would have given $$1.03$$ — impossible, and a clean diagnostic that overlaps were double-counted. The union bound here says only $$P \le 1.03$$, which is true and useless: bounds get loose exactly when events overlap heavily.
+So $$P = 74/100 = 0.74$$. Naively adding the singles would have given $$1.03$$, impossible, and a clean diagnostic that overlaps were double-counted. The union bound here says only $$P \le 1.03$$, which is true and useless: bounds get loose exactly when events overlap heavily.
 
 <div class="insight-box">
-  <strong>Key Insight — the axioms are about sets, not about beliefs:</strong> \(P\) is a normalised measure, mathematically the same kind of object as area or mass. That is why "probability" and "expected proportion" share every algebraic identity, and why disputes about frequentist versus Bayesian interpretation change none of the mathematics — both camps use the same three axioms and disagree only about what \(\Omega\) is allowed to contain.
+  <strong>Key Insight, the axioms are about sets, not about beliefs:</strong> \(P\) is a normalised measure, mathematically the same kind of object as area or mass. That is why "probability" and "expected proportion" share every algebraic identity, and why disputes about frequentist versus Bayesian interpretation change none of the mathematics, both camps use the same three axioms and disagree only about what \(\Omega\) is allowed to contain.
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — "probability zero means impossible":</strong> false on continuous spaces. Drawing exactly \(0.5\) from a uniform on \([0,1]\) has probability zero, yet some value is drawn. The correct phrase is <em>almost surely</em>: an event of probability 1 need not be all of \(\Omega\). This distinction is what "almost sure convergence" in the <a href="/blog/prob-basics/limit-theorems/">limit theorems</a> is named after.
+  <strong>Interview trap, "probability zero means impossible":</strong> false on continuous spaces. Drawing exactly \(0.5\) from a uniform on \([0,1]\) has probability zero, yet some value is drawn. The correct phrase is <em>almost surely</em>: an event of probability 1 need not be all of \(\Omega\). This distinction is what "almost sure convergence" in the <a href="/blog/prob-basics/limit-theorems/">limit theorems</a> is named after.
 </div>
 
 ## Where this goes next
 
-Once $$P$$ exists, conditioning restricts it to a sub-event and renormalises — that is [conditional probability and Bayes](/blog/prob-basics/conditional-probability-and-bayes/). Pushing $$P$$ forward through a measurable function gives a distribution on $$\mathbb{R}$$, which is what [random variables](/blog/prob-basics/random-variables/) are about.
+Once $$P$$ exists, conditioning restricts it to a sub-event and renormalises, that is [conditional probability and Bayes](/blog/prob-basics/conditional-probability-and-bayes/). Pushing $$P$$ forward through a measurable function gives a distribution on $$\mathbb{R}$$, which is what [random variables](/blog/prob-basics/random-variables/) are about.
 
 <div class="key-takeaways">
   <h3>Recap</h3>
   <ul>
     <li>A probability space is \((\Omega,\mathcal{F},P)\); the axioms are non-negativity, \(P(\Omega)=1\), and countable additivity.</li>
     <li>Countable additivity gives continuity of \(P\), which every limit theorem depends on.</li>
-    <li>\(\mathcal{F}\) cannot be all subsets of \([0,1]\) — non-measurable sets exist — so events are restricted to a \(\sigma\)-algebra.</li>
+    <li>\(\mathcal{F}\) cannot be all subsets of \([0,1]\), non-measurable sets exist, so events are restricted to a \(\sigma\)-algebra.</li>
     <li>Inclusion–exclusion alternates signs over intersections; truncating it after one term gives the union bound.</li>
     <li>Probability zero means "almost never", not "impossible".</li>
   </ul>

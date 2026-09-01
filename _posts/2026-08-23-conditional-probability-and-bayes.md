@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Conditioning restricts the sample space and renormalises: \(P(A\mid B) = P(A\cap B)/P(B)\). From that one definition come the chain rule, the law of total probability and Bayes' theorem. The famous failure mode is ignoring the prior: with a 1% base rate, a test with 99% sensitivity and 95% specificity gives a positive predictive value of exactly 1/6. Independence and conditional independence are logically unrelated — neither implies the other.
+  <strong>TL;DR:</strong> Conditioning restricts the sample space and renormalises: \(P(A\mid B) = P(A\cap B)/P(B)\). From that one definition come the chain rule, the law of total probability and Bayes' theorem. The famous failure mode is ignoring the prior: with a 1% base rate, a test with 99% sensitivity and 95% specificity gives a positive predictive value of exactly 1/6. Independence and conditional independence are logically unrelated, neither implies the other.
 </div>
 
 ## Conditioning is renormalisation
@@ -31,7 +31,7 @@ P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \qquad P(B) > 0 .
 \]
 </div>
 
-$$P(\cdot \mid B)$$ is a genuine probability measure on the smaller space — it satisfies all three [Kolmogorov axioms](/blog/prob-basics/sample-spaces-and-axioms/) — so every identity you know still holds inside a conditional.
+$$P(\cdot \mid B)$$ is a genuine probability measure on the smaller space, it satisfies all three [Kolmogorov axioms](/blog/prob-basics/sample-spaces-and-axioms/), so every identity you know still holds inside a conditional.
 
 Rearranging gives the **chain rule**, $$P(A\cap B) = P(A\mid B)P(B)$$, which iterates to any number of variables:
 
@@ -43,7 +43,7 @@ P(x_1, \dots, x_n) = \prod_{t=1}^{n} P(x_t \mid x_1,\dots,x_{t-1}).
 
 That factorisation is exact, requires no assumptions, and is the entire justification for autoregressive language models: predicting the next token given the prefix is not an approximation to the joint distribution, it *is* the joint distribution.
 
-If $$\{B_1,\dots,B_k\}$$ partitions $$\Omega$$, the **law of total probability** reassembles a marginal from conditionals, $$P(A) = \sum_i P(A\mid B_i)P(B_i)$$ — averaging over cases, weighted by how often each case arises.
+If $$\{B_1,\dots,B_k\}$$ partitions $$\Omega$$, the **law of total probability** reassembles a marginal from conditionals, $$P(A) = \sum_i P(A\mid B_i)P(B_i)$$, averaging over cases, weighted by how often each case arises.
 
 ## Bayes' theorem
 
@@ -86,7 +86,7 @@ Counting bodies makes it obvious. Screen 100,000 people:
 | Healthy | 99,000 | 4,950 |
 | **All positives** | | **5,940** |
 
-Of 5,940 positive results, 990 are genuine: $$990/5940 = 1/6$$. The false positives outnumber the true ones five to one purely because the healthy group is 99 times larger. Raise the base rate to 10% — testing a symptomatic group rather than screening everyone — and the same test gives $$0.099/0.144 = 68.75\%$$. The test did not change; the prior did.
+Of 5,940 positive results, 990 are genuine: $$990/5940 = 1/6$$. The false positives outnumber the true ones five to one purely because the healthy group is 99 times larger. Raise the base rate to 10%, testing a symptomatic group rather than screening everyone, and the same test gives $$0.099/0.144 = 68.75\%$$. The test did not change; the prior did.
 
 <div class="blog-figure">
 <figure>
@@ -122,24 +122,24 @@ Of 5,940 positive results, 990 are genuine: $$990/5940 = 1/6$$. The false positi
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap — base-rate neglect:</strong> asked this question, most people answer "about 99%", or "about 95%". Both confuse \(P(+\mid D)\) with \(P(D\mid +)\). Whenever a conditional probability is quoted, ask which way round it runs and what the base rate is. Presenting the problem in counts rather than percentages, as in the table above, reliably fixes the intuition — a finding replicated by Gigerenzer and Hoffrage (1995).
+  <strong>Interview trap, base-rate neglect:</strong> asked this question, most people answer "about 99%", or "about 95%". Both confuse \(P(+\mid D)\) with \(P(D\mid +)\). Whenever a conditional probability is quoted, ask which way round it runs and what the base rate is. Presenting the problem in counts rather than percentages, as in the table above, reliably fixes the intuition, a finding replicated by Gigerenzer and Hoffrage (1995).
 </div>
 
 ## Independence is not conditional independence
 
 $$A$$ and $$B$$ are **independent** when $$P(A\cap B) = P(A)P(B)$$, equivalently $$P(A\mid B) = P(A)$$: $$B$$ carries no information about $$A$$. They are **conditionally independent given $$C$$** when $$P(A\cap B\mid C) = P(A\mid C)P(B\mid C)$$. Neither condition implies the other.
 
-**Independent, but not conditionally independent.** Flip two fair coins, $$X$$ and $$Y$$, and let $$Z = X \oplus Y$$ be their parity. $$X$$ and $$Y$$ are independent. Condition on $$Z=1$$: now $$X=1$$ forces $$Y=0$$, so given $$Z$$ they are perfectly dependent. Conditioning on a common *effect* creates dependence between its causes — the mechanism behind Berkson's paradox and behind collider bias in observational data.
+**Independent, but not conditionally independent.** Flip two fair coins, $$X$$ and $$Y$$, and let $$Z = X \oplus Y$$ be their parity. $$X$$ and $$Y$$ are independent. Condition on $$Z=1$$: now $$X=1$$ forces $$Y=0$$, so given $$Z$$ they are perfectly dependent. Conditioning on a common *effect* creates dependence between its causes, the mechanism behind Berkson's paradox and behind collider bias in observational data.
 
-**Conditionally independent, but not independent.** Pick one of two coins at random, $$Z$$: coin A lands heads with probability 0.9, coin B with probability 0.1. Flip the chosen coin twice, giving $$X$$ and $$Y$$. Given $$Z$$, the flips are independent by construction. Marginally they are not: $$P(X=1)=P(Y=1)=0.5$$, but $$P(X=1,Y=1) = \tfrac12(0.81) + \tfrac12(0.01) = 0.41 \ne 0.25$$. Seeing heads tells you which coin you are holding, which tells you about the second flip. This is exactly the structure of a latent-variable model — conditioning on the latent decouples the observations.
+**Conditionally independent, but not independent.** Pick one of two coins at random, $$Z$$: coin A lands heads with probability 0.9, coin B with probability 0.1. Flip the chosen coin twice, giving $$X$$ and $$Y$$. Given $$Z$$, the flips are independent by construction. Marginally they are not: $$P(X=1)=P(Y=1)=0.5$$, but $$P(X=1,Y=1) = \tfrac12(0.81) + \tfrac12(0.01) = 0.41 \ne 0.25$$. Seeing heads tells you which coin you are holding, which tells you about the second flip. This is exactly the structure of a latent-variable model, conditioning on the latent decouples the observations.
 
 <div class="insight-box">
-  <strong>Key Insight — conditioning both creates and destroys dependence:</strong> conditioning on a common <em>cause</em> removes dependence between its effects; conditioning on a common <em>effect</em> creates dependence between its causes. Which one happens is a property of the graph, not of the numbers, which is why probabilistic graphical models draw arrows before they write any probabilities.
+  <strong>Key Insight, conditioning both creates and destroys dependence:</strong> conditioning on a common <em>cause</em> removes dependence between its effects; conditioning on a common <em>effect</em> creates dependence between its causes. Which one happens is a property of the graph, not of the numbers, which is why probabilistic graphical models draw arrows before they write any probabilities.
 </div>
 
 ## Where this goes next
 
-Bayes with continuous quantities needs densities rather than point masses — see [random variables](/blog/prob-basics/random-variables/). The estimation view of the same machinery, priors and posteriors as inference procedures, is in [statistics basics](/blog/stats-basics/overview/).
+Bayes with continuous quantities needs densities rather than point masses, see [random variables](/blog/prob-basics/random-variables/). The estimation view of the same machinery, priors and posteriors as inference procedures, is in [statistics basics](/blog/stats-basics/overview/).
 
 <div class="key-takeaways">
   <h3>Recap</h3>

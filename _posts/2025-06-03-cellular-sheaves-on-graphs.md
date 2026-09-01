@@ -6,7 +6,7 @@ book: sheaf
 subsection: foundations
 tags: [cellular-sheaf, coboundary, cochain, section, sheaf-Laplacian]
 published: false
-excerpt: "Cellular sheaves give a precise algebraic structure to the idea of 'consistent data on a graph'. This post builds the full construction from scratch — stalks, cochains, coboundary operators, the Sheaf Laplacian — with worked examples at each step."
+excerpt: "Cellular sheaves give a precise algebraic structure to the idea of 'consistent data on a graph'. This post builds the full construction from scratch, stalks, cochains, coboundary operators, the Sheaf Laplacian, with worked examples at each step."
 author_profile: true
 read_time: true
 is_overview: false
@@ -34,9 +34,9 @@ toc_label: "Contents"
 
 ## Intuition First: What Is a Cellular Sheaf?
 
-Imagine you have a social network where each person (node) holds a 2D opinion vector — one dimension for economics, one for social policy. When two people talk (an edge), they don't necessarily agree: their opinions are "compared" through a linear map that translates one person's coordinate frame into the other's. A **cellular sheaf** formalises this: each node gets a local vector space (its *stalk*), each edge gets a stalk too, and *restriction maps* say how a node's data projects onto an adjacent edge's perspective.
+Imagine you have a social network where each person (node) holds a 2D opinion vector, one dimension for economics, one for social policy. When two people talk (an edge), they don't necessarily agree: their opinions are "compared" through a linear map that translates one person's coordinate frame into the other's. A **cellular sheaf** formalises this: each node gets a local vector space (its *stalk*), each edge gets a stalk too, and *restriction maps* say how a node's data projects onto an adjacent edge's perspective.
 
-A **global section** is an assignment of vectors to every node such that *all* adjacent pairs are already in agreement after applying their restriction maps — nobody is "wrong" relative to their neighbours. The space of global sections is the oversmoothing attractor of sheaf diffusion.
+A **global section** is an assignment of vectors to every node such that *all* adjacent pairs are already in agreement after applying their restriction maps, nobody is "wrong" relative to their neighbours. The space of global sections is the oversmoothing attractor of sheaf diffusion.
 
 <style>
 @keyframes restrictPulse {
@@ -94,7 +94,7 @@ A **global section** is an assignment of vectors to every node such that *all* a
 <figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Path graph with three node stalks (coloured circles), two edge stalks (amber diamonds), and four restriction maps (animated dashed purple arrows). A global section requires both pairs of restrictions to agree.</figcaption>
 </figure></div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The restriction map is not a constraint imposed on the data — it is a <em>lens</em> through which node v sees its own data as it would look from the edge's perspective. Two nodes that look the same under their respective lenses are in agreement. The sheaf Laplacian measures the total disagreement across all edges simultaneously.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The restriction map is not a constraint imposed on the data, it is a <em>lens</em> through which node v sees its own data as it would look from the edge's perspective. Two nodes that look the same under their respective lenses are in agreement. The sheaf Laplacian measures the total disagreement across all edges simultaneously.</div>
 
 ## Setup: A Worked Example
 
@@ -128,9 +128,9 @@ In the uniform-stalk case (all stalks ℝ^d), the restriction maps are d×d real
 
 ## The Cochain Complex
 
-**0-cochains** C⁰(G, F) = ∏_{v∈V} F(v) ≅ ℝ^{Nd} — all possible node assignments.
+**0-cochains** C⁰(G, F) = ∏_{v∈V} F(v) ≅ ℝ^{Nd}, all possible node assignments.
 
-**1-cochains** C¹(G, F) = ∏_{e∈E} F(e) ≅ ℝ^{Ed} — all possible edge assignments.
+**1-cochains** C¹(G, F) = ∏_{e∈E} F(e) ≅ ℝ^{Ed}, all possible edge assignments.
 
 The **coboundary operator** δ₀ : C⁰ → C¹ is the matrix:
 
@@ -144,7 +144,7 @@ Concretely, for a chosen orientation of each edge e = (u→v):
 [δ₀]_{e,u} = −F_{u▷e}  ,  [δ₀]_{e,v} = +F_{v▷e}
 </div>
 
-This makes δ₀ an (Ed) × (Nd) matrix. The choice of orientation is arbitrary — the Sheaf Laplacian Δ_F = δ₀ᵀδ₀ is orientation-independent.
+This makes δ₀ an (Ed) × (Nd) matrix. The choice of orientation is arbitrary, the Sheaf Laplacian Δ_F = δ₀ᵀδ₀ is orientation-independent.
 
 ## The Sheaf Laplacian: Block Structure
 
@@ -204,12 +204,12 @@ F_{u▷e} x_u = F_{v▷e} x_v  ∀(u,v,e)
 
 **Standard case (identity maps):** global sections = constant functions (all x_v equal). Dimension = d.
 
-**Orthogonal maps (F_{v▷e} ∈ O(d)):** global sections = "parallel transported" signals. These can vary nontrivially — a node's value is the result of composing rotations along a path from a reference node. Dimension of ker = d for connected graphs with consistent holonomy; can be higher when holonomy has non-trivial kernel.
+**Orthogonal maps (F_{v▷e} ∈ O(d)):** global sections = "parallel transported" signals. These can vary nontrivially, a node's value is the result of composing rotations along a path from a reference node. Dimension of ker = d for connected graphs with consistent holonomy; can be higher when holonomy has non-trivial kernel.
 
 **Learned maps (NSD):** global sections depend on the learned maps and can have any structure. The dimension of ker(Δ_F) is data-dependent.
 
 <div class="insight-box">
-<strong>Why the null space matters for oversmoothing:</strong> In standard GCN, iterating the diffusion h ← (I − αL)h converges to the d-dimensional space of constants. Any information orthogonal to constants is destroyed. In sheaf diffusion, the attractor is the space of global sections — which can be d·c-dimensional for a c-component sheaf, carrying much richer information. This is why sheaf diffusion avoids oversmoothing even at large depth.
+<strong>Why the null space matters for oversmoothing:</strong> In standard GCN, iterating the diffusion h ← (I − αL)h converges to the d-dimensional space of constants. Any information orthogonal to constants is destroyed. In sheaf diffusion, the attractor is the space of global sections, which can be d·c-dimensional for a c-component sheaf, carrying much richer information. This is why sheaf diffusion avoids oversmoothing even at large depth.
 </div>
 
 ## The Sheaf Dirichlet Energy
@@ -226,7 +226,7 @@ This measures total inconsistency: how far the signal x deviates from the space 
 dX/dt = −Δ_F X   →   X(t) = exp(−Δ_F t) X(0)
 </div>
 
-as t → ∞, X(t) projects onto ker(Δ_F). The equilibrium is not a constant but a global section — a signal that satisfies all pairwise restrictions.
+as t → ∞, X(t) projects onto ker(Δ_F). The equilibrium is not a constant but a global section, a signal that satisfies all pairwise restrictions.
 
 ## Concrete Numerical Example: 3-Node Path with Explicit Matrices
 
@@ -243,7 +243,7 @@ B₃ = F_{3▷e₂₃} = [[1, 0],[0, 1]]  (identity)
 - A₁ x₁ = A₂ x₂  →  [x₁₁, x₁₂] = [x₂₁, -x₂₂]  →  x₁₁=x₂₁, x₁₂=-x₂₂
 - B₂ x₂ = B₃ x₃  →  [x₂₂, x₂₁] = [x₃₁, x₃₂]   →  x₃₁=x₂₂, x₃₂=x₂₁
 
-Setting x₂ = (a, b): x₁ = (a, -b), x₃ = (b, a). The null space is span{[(a,-b), (a,b), (b,a)] : a,b∈ℝ} — a 2-dimensional family. Even though the maps are non-identity, we still have dim ker(Δ_F) = 2 = d for this connected path graph, confirming the theory. The global section with a=1,b=0 gives x₁=(1,0), x₂=(1,0), x₃=(0,1) — nodes 1 and 2 carry the same first component while node 3 carries a rotated version.
+Setting x₂ = (a, b): x₁ = (a, -b), x₃ = (b, a). The null space is span{[(a,-b), (a,b), (b,a)] : a,b∈ℝ}, a 2-dimensional family. Even though the maps are non-identity, we still have dim ker(Δ_F) = 2 = d for this connected path graph, confirming the theory. The global section with a=1,b=0 gives x₁=(1,0), x₂=(1,0), x₃=(0,1), nodes 1 and 2 carry the same first component while node 3 carries a rotated version.
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The restriction maps encode a <em>translation dictionary</em> between adjacent stalks. When A₁x₁ = A₂x₂ is satisfied, we say x₁ and x₂ are "in agreement as seen from edge e₁₂." This is different from x₁ = x₂ (which is what a standard GCN requires). Sheaf diffusion converges to this structured agreement, not to a boring constant.</div>
 
@@ -255,7 +255,7 @@ The raw Δ_F is not normalised. In NSD, the normalised Sheaf Laplacian is used:
 Δ_F^{norm} = D_F^{-1/2} Δ_F D_F^{-1/2}
 </div>
 
-where D_F is the block-diagonal matrix of diagonal blocks of Δ_F: [D_F]_{vv} = [Δ_F]_{vv}. The eigenvalues of Δ_F^{norm} lie in [0, 2] — analogous to the normalised graph Laplacian L^{norm} = D^{-1/2}LD^{1/2}.
+where D_F is the block-diagonal matrix of diagonal blocks of Δ_F: [D_F]_{vv} = [Δ_F]_{vv}. The eigenvalues of Δ_F^{norm} lie in [0, 2], analogous to the normalised graph Laplacian L^{norm} = D^{-1/2}LD^{1/2}.
 
 ## Summary
 

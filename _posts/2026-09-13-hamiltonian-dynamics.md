@@ -6,7 +6,7 @@ categories: [physics-basics]
 book: physics-basics
 subsection: mechanics
 tags: [mechanics, hamiltonian, mcmc, symplectic]
-excerpt: "Hamiltonian Monte Carlo is not a heuristic that happens to move well. It is exact because Hamiltonian flow preserves phase-space volume and is reversible — which is what makes the Metropolis acceptance ratio collapse to a difference of energies."
+excerpt: "Hamiltonian Monte Carlo is not a heuristic that happens to move well. It is exact because Hamiltonian flow preserves phase-space volume and is reversible, which is what makes the Metropolis acceptance ratio collapse to a difference of energies."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A Legendre transform swaps velocity for momentum and turns one second-order equation into two first-order ones on phase space. The resulting flow conserves energy and — by Liouville's theorem — conserves volume. HMC borrows exactly those two properties: volume preservation makes the proposal Jacobian equal to 1 and reversibility makes the proposal symmetric, so the Metropolis ratio reduces to \(e^{-\Delta H}\). A symplectic integrator such as leapfrog keeps both properties exactly; an Euler step keeps neither and the energy diverges.
+  <strong>TL;DR:</strong> A Legendre transform swaps velocity for momentum and turns one second-order equation into two first-order ones on phase space. The resulting flow conserves energy and, by Liouville's theorem, conserves volume. HMC borrows exactly those two properties: volume preservation makes the proposal Jacobian equal to 1 and reversibility makes the proposal symmetric, so the Metropolis ratio reduces to \(e^{-\Delta H}\). A symplectic integrator such as leapfrog keeps both properties exactly; an Euler step keeps neither and the energy diverges.
 </div>
 
 ## From velocities to momenta
@@ -75,7 +75,7 @@ The marginal in $$q$$ is the target, so any correct sampler for the joint gives 
 - **Volume preservation** $$\Rightarrow$$ the Jacobian determinant of the proposal map is exactly 1, so no correction term.
 - **Reversibility** (the flow with the momentum flipped retraces the path) $$\Rightarrow$$ the proposal is symmetric, so the density ratio cancels.
 
-What survives is $$\min\!\left(1,\ e^{-H(q^{\ast},p^{\ast})+H(q,p)}\right)$$. If the dynamics were simulated exactly, $$H$$ would be conserved and every proposal accepted, however far it travelled. Discretisation error is the *only* source of rejection — which is why the integrator matters so much (Neal, 2011).
+What survives is $$\min\!\left(1,\ e^{-H(q^{\ast},p^{\ast})+H(q,p)}\right)$$. If the dynamics were simulated exactly, $$H$$ would be conserved and every proposal accepted, however far it travelled. Discretisation error is the *only* source of rejection, which is why the integrator matters so much (Neal, 2011).
 
 ## Leapfrog versus Euler, with numbers
 
@@ -89,7 +89,7 @@ p_{t+\epsilon} = p_{t+\frac{\epsilon}{2}} - \tfrac{\epsilon}{2}\nabla U(q_{t+\ep
 \]
 </div>
 
-Test both on the harmonic oscillator $$H = \tfrac12(q^2+p^2)$$, so $$\nabla U(q)=q$$ and $$M=1$$. Explicit Euler gives $$q' = q+\epsilon p$$, $$p' = p - \epsilon q$$, whose Jacobian determinant is $$1+\epsilon^2 > 1$$. Worse, the energy obeys $$q'^2+p'^2 = (1+\epsilon^2)(q^2+p^2)$$ exactly — it multiplies by $$1+\epsilon^2$$ every single step. With $$\epsilon = 0.1$$ over 1000 steps the energy grows by a factor of $$1.01^{1000} \approx 2.1\times10^4$$. Every proposal is rejected.
+Test both on the harmonic oscillator $$H = \tfrac12(q^2+p^2)$$, so $$\nabla U(q)=q$$ and $$M=1$$. Explicit Euler gives $$q' = q+\epsilon p$$, $$p' = p - \epsilon q$$, whose Jacobian determinant is $$1+\epsilon^2 > 1$$. Worse, the energy obeys $$q'^2+p'^2 = (1+\epsilon^2)(q^2+p^2)$$ exactly, it multiplies by $$1+\epsilon^2$$ every single step. With $$\epsilon = 0.1$$ over 1000 steps the energy grows by a factor of $$1.01^{1000} \approx 2.1\times10^4$$. Every proposal is rejected.
 
 Composing the three leapfrog lines instead gives the linear map with matrix
 
@@ -112,34 +112,34 @@ The $$\epsilon^4$$ terms cancel and the determinant is exactly 1, for any step s
   <text x="170" y="198" font-size="9.5" fill="#475569" text-anchor="middle">q</text>
   <text x="160" y="16" font-size="9.5" fill="#475569">p</text>
   <g font-size="11" >
-    <rect x="345" y="40" width="18" height="4" fill="#0e7490"/><text x="372" y="47" fill="#334155">leapfrog — radius 0.989 to 1.000</text>
-    <rect x="345" y="70" width="18" height="4" fill="#c2410c"/><text x="372" y="77" fill="#334155">explicit Euler — radius grows to 2.58</text>
+    <rect x="345" y="40" width="18" height="4" fill="#0e7490"/><text x="372" y="47" fill="#334155">leapfrog, radius 0.989 to 1.000</text>
+    <rect x="345" y="70" width="18" height="4" fill="#c2410c"/><text x="372" y="77" fill="#334155">explicit Euler, radius grows to 2.58</text>
   </g>
   <text x="345" y="112" font-size="10.5" fill="#475569">step size ε = 0.3, 22 steps, H = (q²+p²)/2</text>
   <text x="345" y="134" font-size="10.5" fill="#475569">Euler energy multiplies by (1+ε²) each step;</text>
   <text x="345" y="152" font-size="10.5" fill="#475569">leapfrog Jacobian determinant is exactly 1.</text>
 </svg>
-<figcaption>Notice that leapfrog does not conserve energy exactly — its radius wobbles by about 1% — but the error oscillates instead of accumulating. Euler's error compounds multiplicatively, which is what destroys the acceptance rate.</figcaption>
+<figcaption>Notice that leapfrog does not conserve energy exactly, its radius wobbles by about 1%, but the error oscillates instead of accumulating. Euler's error compounds multiplicatively, which is what destroys the acceptance rate.</figcaption>
 </figure>
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — bounded, not small:</strong> the virtue of a symplectic integrator is not higher accuracy per step. It is that leapfrog exactly conserves a nearby "shadow" Hamiltonian, so its energy error oscillates within a bounded band over arbitrarily long trajectories rather than drifting. HMC needs long trajectories to decorrelate; an integrator whose energy error grows with path length is useless no matter how small its local truncation error is.
+  <strong>Key Insight, bounded, not small:</strong> the virtue of a symplectic integrator is not higher accuracy per step. It is that leapfrog exactly conserves a nearby "shadow" Hamiltonian, so its energy error oscillates within a bounded band over arbitrarily long trajectories rather than drifting. HMC needs long trajectories to decorrelate; an integrator whose energy error grows with path length is useless no matter how small its local truncation error is.
 </div>
 
 ## Practical consequences
 
-Tuning HMC is tuning $$\epsilon$$ and the number of leapfrog steps $$L$$. Too large an $$\epsilon$$ and the shadow Hamiltonian argument fails — the integrator becomes unstable and acceptance collapses to near zero, sharply rather than gradually. Too small and you pay gradient evaluations for nothing. The mass matrix $$M$$ acts as a preconditioner: setting $$M^{-1}$$ to the target's covariance equalises the timescales, exactly as in the [Boltzmann picture](/blog/physics-basics/statistical-mechanics/) where the momenta thermalise independently. Momentum resampling between trajectories is what makes the chain ergodic — pure Hamiltonian flow would stay on one energy level set forever.
+Tuning HMC is tuning $$\epsilon$$ and the number of leapfrog steps $$L$$. Too large an $$\epsilon$$ and the shadow Hamiltonian argument fails, the integrator becomes unstable and acceptance collapses to near zero, sharply rather than gradually. Too small and you pay gradient evaluations for nothing. The mass matrix $$M$$ acts as a preconditioner: setting $$M^{-1}$$ to the target's covariance equalises the timescales, exactly as in the [Boltzmann picture](/blog/physics-basics/statistical-mechanics/) where the momenta thermalise independently. Momentum resampling between trajectories is what makes the chain ergodic, pure Hamiltonian flow would stay on one energy level set forever.
 
 <div class="warning-box">
-  <strong>Interview trap:</strong> "leapfrog is used because it is more accurate" is the wrong answer. It is second-order accurate, which is unremarkable; Runge–Kutta 4 is far more accurate per step and still ruins HMC, because it is not volume-preserving and its energy drifts. The properties that matter are exact volume preservation (Jacobian determinant 1, no correction in the acceptance ratio) and reversibility (symmetric proposal). Also note that HMC does <em>not</em> require exact energy conservation — the Metropolis step corrects whatever error remains.
+  <strong>Interview trap:</strong> "leapfrog is used because it is more accurate" is the wrong answer. It is second-order accurate, which is unremarkable; Runge–Kutta 4 is far more accurate per step and still ruins HMC, because it is not volume-preserving and its energy drifts. The properties that matter are exact volume preservation (Jacobian determinant 1, no correction in the acceptance ratio) and reversibility (symmetric proposal). Also note that HMC does <em>not</em> require exact energy conservation, the Metropolis step corrects whatever error remains.
 </div>
 
 <div class="key-takeaways">
 <h3>Recap</h3>
 <ul>
   <li>Legendre transform: \(p = \partial L/\partial\dot q\), \(H = p\dot q - L\); for \(L = \tfrac12 m\dot q^2 - V\) this gives \(H = p^2/2m + V\), the energy.</li>
-  <li>Hamilton's equations are \(\dot q = \partial H/\partial p\) and \(\dot p = -\partial H/\partial q\) — the minus is on the momentum equation.</li>
+  <li>Hamilton's equations are \(\dot q = \partial H/\partial p\) and \(\dot p = -\partial H/\partial q\), the minus is on the momentum equation.</li>
   <li>The phase-space flow is divergence-free, so volume is conserved (Liouville), and \(dH/dt = 0\) for time-independent \(H\).</li>
   <li>HMC's acceptance ratio reduces to \(e^{-\Delta H}\) precisely because volume preservation kills the Jacobian and reversibility kills the proposal ratio.</li>
   <li>Leapfrog has determinant exactly 1 and bounded energy error; explicit Euler multiplies energy by \(1+\epsilon^2\) per step and rejects everything.</li>

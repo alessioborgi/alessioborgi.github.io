@@ -23,7 +23,7 @@
   lat: 41.3874
   lng: 2.1686
   date: "2025, 2026"
-  note: "Universitat Pompeu Fabra, Barcelona, Spain 🇪🇸 — 2025: precise methods for vehicle routing and logistics. 2026: high-performance computing, AI, and quantum computing."
+  note: "Universitat Pompeu Fabra, Barcelona, Spain 🇪🇸, 2025: precise methods for vehicle routing and logistics. 2026: high-performance computing, AI, and quantum computing."
 
 - name: "Cambridge"
   subtitle: "PhD Long Visiting in Graph Neural Networks and Generative AI"
@@ -82,12 +82,12 @@
   note: "CVPR 2025, Nashville, TN, USA 🇺🇸"
 
 - name: "Pisa"
-  subtitle: "LoG Italian Meetup 2026 — Learning on Graphs"
+  subtitle: "LoG Italian Meetup 2026, Learning on Graphs"
   type: "study"
   lat: 43.7228
   lng: 10.4017
   date: "2026"
-  note: "University of Pisa, Pisa, Italy 🇮🇹 — The Leaning Tower is actually VERY crooked, way more than I was expecting up close! 🗼"
+  note: "University of Pisa, Pisa, Italy 🇮🇹, The Leaning Tower is actually VERY crooked, way more than I was expecting up close! 🗼"
 
 - name: "Milan"
   subtitle: "M2L - Mediterranean Machine Learning Summer School"
@@ -111,15 +111,15 @@
   lat: 51.3758
   lng: -2.3599
   date: "August 5–7, 2026"
-  note: "University of Bath, Bath, United Kingdom 🇬🇧 — ODEs & SDEs in machine learning, probabilistic and Bayesian methods, self-supervised learning, and world models."
+  note: "University of Bath, Bath, United Kingdom 🇬🇧, ODEs & SDEs in machine learning, probabilistic and Bayesian methods, self-supervised learning, and world models."
 
 - name: "Cetinje"
-  subtitle: "EEML 2026 — Eastern European Machine Learning Summer School"
+  subtitle: "EEML 2026, Eastern European Machine Learning Summer School"
   type: "study"
   lat: 42.3906
   lng: 18.9142
   date: "July 27–August 1, 2026"
-  note: "EEML / MAIA, Cetinje, Montenegro 🇲🇪 — Presented a poster on Equivariant Sheaf Neural Networks."
+  note: "EEML / MAIA, Cetinje, Montenegro 🇲🇪, Presented a poster on Equivariant Sheaf Neural Networks."
 
 
 ################################ LEISURE ################################
@@ -247,7 +247,7 @@
   date: "2018, 2020, 2026"
   radius: 5
   zoom_min: 6
-  note: "Palazzo Reale and the Egyptian Museum are highlights — the best Egyptian Museum outside Egypt!"
+  note: "Palazzo Reale and the Egyptian Museum are highlights, the best Egyptian Museum outside Egypt!"
 
 - name: "Como"
   subtitle: "Holiday"

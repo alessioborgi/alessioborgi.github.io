@@ -3,7 +3,7 @@ title: "PC-Performance-Monitoring: Statistical Analysis & ML for System Metrics"
 collection: projects
 layout: single
 permalink: /projects/pc-performance-monitoring/
-excerpt: "Collects, analyses, and visualises PC performance metrics — then applies ML clustering to detect anomalies and performance degradation patterns."
+excerpt: "Collects, analyses, and visualises PC performance metrics, then applies ML clustering to detect anomalies and performance degradation patterns."
 author_profile: true
 github: "https://github.com/alessioborgi/PC-Performance-Monitoring"
 tags:

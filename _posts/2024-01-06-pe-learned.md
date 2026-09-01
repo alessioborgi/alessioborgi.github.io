@@ -5,7 +5,7 @@ date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [positional-encoding, learned]
-excerpt: "Instead of a fixed formula, why not just train position embeddings from scratch — like word embeddings? That's exactly what BERT and GPT-1 do. Here's how and when it works."
+excerpt: "Instead of a fixed formula, why not just train position embeddings from scratch, like word embeddings? That's exactly what BERT and GPT-1 do. Here's how and when it works."
 author_profile: true
 read_time: true
 is_overview: false
@@ -38,7 +38,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Learned PE keeps a trainable embedding matrix where row <em>i</em> is the position vector for position <em>i</em>. It's flexible and often slightly outperforms sinusoidal PE on benchmark tasks — but it can't generalise to sequences longer than seen during training.
+  <strong>TL;DR:</strong> Learned PE keeps a trainable embedding matrix where row <em>i</em> is the position vector for position <em>i</em>. It's flexible and often slightly outperforms sinusoidal PE on benchmark tasks, but it can't generalise to sequences longer than seen during training.
 </div>
 
 <div class="insight-box">
@@ -49,7 +49,7 @@ toc_label: "Contents"
 
 Think of each position index as a separate "token" in its own mini-vocabulary. Just as a word embedding table has one row per word, a position embedding table has one row per position slot. During training, gradient descent shapes those rows into whatever vectors are most useful for the task.
 
-The result may look nothing like sinusoidal waves — the model is free to encode position however it finds helpful, including non-monotonic patterns.
+The result may look nothing like sinusoidal waves, the model is free to encode position however it finds helpful, including non-monotonic patterns.
 
 ## The Simplest Possible Idea
 
@@ -61,7 +61,7 @@ You create an embedding matrix `E` of shape `[max_length × d_model]`. During tr
 input[pos] = word_embedding(token[pos]) + E[pos]
 ```
 
-That's it. No formula, no frequencies — just a trainable lookup table.
+That's it. No formula, no frequencies, just a trainable lookup table.
 
 <div class="blog-figure">
 <figure>
@@ -135,7 +135,7 @@ That's it. No formula, no frequencies — just a trainable lookup table.
 <div class="col pros">
 <h4>✅ Advantages</h4>
 <ul>
-<li>Flexible — learns what works best for the data</li>
+<li>Flexible, learns what works best for the data</li>
 <li>Simple to implement (one embedding layer)</li>
 <li>Often matches or slightly beats sinusoidal on standard benchmarks</li>
 <li>The model can shape position representations to the task</li>
@@ -164,7 +164,7 @@ Modern large-scale LLMs abandoned both in favour of RoPE or ALiBi, which combine
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li>Learned PE is a <strong>trainable embedding table</strong>: one row per position, trained end-to-end.</li>
-  <li>Used in BERT, GPT-1/2, and early ViT — simple and effective for bounded-length tasks.</li>
+  <li>Used in BERT, GPT-1/2, and early ViT, simple and effective for bounded-length tasks.</li>
   <li>The main weakness: <strong>no generalisation beyond the maximum training length</strong>.</li>
   <li>Slightly more expressive than sinusoidal, but modern LLMs prefer RoPE or ALiBi for long contexts.</li>
 </ul>

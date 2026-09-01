@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Learning is a loop with two halves. <em>Gradient descent</em> asks "which way is downhill, and how far do I dare walk?" — the answer is \( \theta \leftarrow \theta - \eta \nabla_\theta L \), and the learning rate \( \eta \) is the one number that can turn the whole thing into noise. On the quadratic \( L = \tfrac12 a\theta^2 \) the iteration is stable <em>exactly</em> when \( \eta < 2/a \); nothing about the deep-learning case makes that ceiling go away. <em>Backpropagation</em> answers the "which way" half. It is not a special neural-network algorithm — it is the chain rule evaluated right-to-left, and that ordering is why you get millions of partial derivatives for roughly the cost of one forward pass instead of millions of forward passes.
+  <strong>TL;DR:</strong> Learning is a loop with two halves. <em>Gradient descent</em> asks "which way is downhill, and how far do I dare walk?", the answer is \( \theta \leftarrow \theta - \eta \nabla_\theta L \), and the learning rate \( \eta \) is the one number that can turn the whole thing into noise. On the quadratic \( L = \tfrac12 a\theta^2 \) the iteration is stable <em>exactly</em> when \( \eta < 2/a \); nothing about the deep-learning case makes that ceiling go away. <em>Backpropagation</em> answers the "which way" half. It is not a special neural-network algorithm, it is the chain rule evaluated right-to-left, and that ordering is why you get millions of partial derivatives for roughly the cost of one forward pass instead of millions of forward passes.
 </div>
 
 ## The loop, before any mathematics
@@ -51,10 +51,10 @@ You want this as negative as possible. By Cauchy–Schwarz, $$\nabla_\theta L \c
 \[ u \;=\; -\,\frac{\nabla_\theta L}{\lVert \nabla_\theta L \rVert}. \]
 </div>
 
-So the negative gradient is not merely *a* downhill direction — among all directions of a fixed length it is the one that buys the most loss reduction per unit of movement. That is the whole justification, and it takes two lines.
+So the negative gradient is not merely *a* downhill direction, among all directions of a fixed length it is the one that buys the most loss reduction per unit of movement. That is the whole justification, and it takes two lines.
 
 <div class="insight-box">
-  <strong>The fine print nobody mentions:</strong> "of a fixed length" means <em>measured in the Euclidean norm</em>. Steepest descent is norm-dependent. Change what you mean by "a step of size one" — weight some parameters more than others — and a different direction becomes steepest. That is not a technicality; it is precisely the loophole that Adam, RMSProp and natural-gradient methods exploit. They are all still doing steepest descent, just in a metric of their own choosing.
+  <strong>The fine print nobody mentions:</strong> "of a fixed length" means <em>measured in the Euclidean norm</em>. Steepest descent is norm-dependent. Change what you mean by "a step of size one", weight some parameters more than others, and a different direction becomes steepest. That is not a technicality; it is precisely the loophole that Adam, RMSProp and natural-gradient methods exploit. They are all still doing steepest descent, just in a metric of their own choosing.
 </div>
 
 Note also the word *approximately*. The formula above is a first-order Taylor expansion, valid for small $$\epsilon$$. The gradient tells you the direction. It tells you nothing reliable about how far you can walk before the linear approximation stops being true. That is the learning rate's job, and it is where things break.
@@ -87,19 +87,19 @@ Three lines and you have the complete answer.
 \[ \boxed{\;\eta \;<\; \frac{2}{a}\;} \]
 </div>
 
-Done. And it is not an approximation or a sufficient condition — it is exact, and it is sharp. Read off the four regimes:
+Done. And it is not an approximation or a sufficient condition, it is exact, and it is sharp. Read off the four regimes:
 
 <div class="summary-box">
   <ul>
-    <li>\( 0 < \eta < 1/a \) — the ratio \( 1-\eta a \) lies in \( (0,1) \). Monotone approach from one side. Slow but never overshoots.</li>
-    <li>\( \eta = 1/a \) — the ratio is exactly \( 0 \). One step lands on the minimum. This is Newton's method: \( 1/a \) is the inverse second derivative.</li>
-    <li>\( 1/a < \eta < 2/a \) — the ratio is in \( (-1,0) \). You overshoot every step and land alternately on either side, but the magnitude still shrinks. Converges, oscillating.</li>
-    <li>\( \eta \ge 2/a \) — the ratio has magnitude at least \( 1 \). At exactly \( 2/a \) you orbit forever between \( \theta_0 \) and \( -\theta_0 \); above it you diverge geometrically.</li>
+    <li>\( 0 < \eta < 1/a \), the ratio \( 1-\eta a \) lies in \( (0,1) \). Monotone approach from one side. Slow but never overshoots.</li>
+    <li>\( \eta = 1/a \), the ratio is exactly \( 0 \). One step lands on the minimum. This is Newton's method: \( 1/a \) is the inverse second derivative.</li>
+    <li>\( 1/a < \eta < 2/a \), the ratio is in \( (-1,0) \). You overshoot every step and land alternately on either side, but the magnitude still shrinks. Converges, oscillating.</li>
+    <li>\( \eta \ge 2/a \), the ratio has magnitude at least \( 1 \). At exactly \( 2/a \) you orbit forever between \( \theta_0 \) and \( -\theta_0 \); above it you diverge geometrically.</li>
   </ul>
 </div>
 
 <div class="warning-box">
-  <strong>What divergence looks like in practice.</strong> With \( a = 4 \) the ceiling is \( 2/a = 0.5 \). Starting from \( \theta_0 = 1 \) and running 40 steps: \( \eta = 0.20 \) gives \( \theta_{40} \approx 1.1 \times 10^{-28} \); \( \eta = 0.49 \) gives \( 0.96^{40} = 0.1954 \) — still converging, but so slowly it looks stuck; \( \eta = 0.50 \) gives exactly \( \lvert \theta_{40} \rvert = 1 \), no progress at all, forever; \( \eta = 0.51 \) gives \( 1.04^{40} = 4.80 \) and climbing. A 4% increase in the learning rate is the entire difference between "training" and "diverging". Every one of those numbers is just \( (1-\eta a)^{40} \) — check them yourself.
+  <strong>What divergence looks like in practice.</strong> With \( a = 4 \) the ceiling is \( 2/a = 0.5 \). Starting from \( \theta_0 = 1 \) and running 40 steps: \( \eta = 0.20 \) gives \( \theta_{40} \approx 1.1 \times 10^{-28} \); \( \eta = 0.49 \) gives \( 0.96^{40} = 0.1954 \), still converging, but so slowly it looks stuck; \( \eta = 0.50 \) gives exactly \( \lvert \theta_{40} \rvert = 1 \), no progress at all, forever; \( \eta = 0.51 \) gives \( 1.04^{40} = 4.80 \) and climbing. A 4% increase in the learning rate is the entire difference between "training" and "diverging". Every one of those numbers is just \( (1-\eta a)^{40} \), check them yourself.
 </div>
 
 The multivariable version is the same statement wearing a hat. For $$L(\theta) = \tfrac12 \theta^\top H \theta$$ with $$H$$ symmetric positive definite, diagonalise: in the eigenbasis of $$H$$ the problem splits into independent one-dimensional problems, one per eigenvalue $$\lambda_i$$, each contracting by $$1 - \eta\lambda_i$$. Stability therefore requires *every* one of them to be well behaved:
@@ -108,7 +108,7 @@ The multivariable version is the same statement wearing a hat. For $$L(\theta) =
 \[ \eta \;<\; \frac{2}{\lambda_{\max}} . \]
 </div>
 
-The *sharpest* direction sets the speed limit for all the others. Hold that thought — it is the entire content of the next section.
+The *sharpest* direction sets the speed limit for all the others. Hold that thought, it is the entire content of the next section.
 
 ## Batch, stochastic, and mini-batch
 
@@ -122,13 +122,13 @@ Gradients are linear, so $$\nabla_\theta L$$ is the average of the per-example g
 
 <div class="summary-box">
   <ul>
-    <li><strong>Batch (full) gradient descent</strong> — use all \( N \). The gradient is exact; the loss decreases monotonically if \( \eta \) is small enough. One update costs a full pass over the data, so with a million examples you get one step per epoch. Almost nobody does this.</li>
-    <li><strong>Stochastic gradient descent (SGD)</strong> — use one example. The gradient is an unbiased but extremely noisy estimate. Updates are cheap and frequent; hardware utilisation is terrible.</li>
-    <li><strong>Mini-batch</strong> — use \( B \) examples, typically 32 to 4096. This is what everyone means by "SGD" in practice. It is the only one of the three that matches how GPUs work: a batch of 256 costs far less than 256 times a batch of one.</li>
+    <li><strong>Batch (full) gradient descent</strong>, use all \( N \). The gradient is exact; the loss decreases monotonically if \( \eta \) is small enough. One update costs a full pass over the data, so with a million examples you get one step per epoch. Almost nobody does this.</li>
+    <li><strong>Stochastic gradient descent (SGD)</strong>, use one example. The gradient is an unbiased but extremely noisy estimate. Updates are cheap and frequent; hardware utilisation is terrible.</li>
+    <li><strong>Mini-batch</strong>, use \( B \) examples, typically 32 to 4096. This is what everyone means by "SGD" in practice. It is the only one of the three that matches how GPUs work: a batch of 256 costs far less than 256 times a batch of one.</li>
   </ul>
 </div>
 
-For independent samples the standard error of the mini-batch gradient falls as $$1/\sqrt{B}$$. Quadrupling the batch size halves the noise — a poor return, which is exactly why nobody pushes batch sizes to infinity even when memory allows.
+For independent samples the standard error of the mini-batch gradient falls as $$1/\sqrt{B}$$. Quadrupling the batch size halves the noise, a poor return, which is exactly why nobody pushes batch sizes to infinity even when memory allows.
 
 ### What the noise actually does
 
@@ -141,7 +141,7 @@ What is genuinely true is that the mini-batch gradient is an *unbiased* estimato
 - **Noise scale is coupled to $$\eta/B$$, not to $$\eta$$ or $$B$$ alone.** This is why doubling the batch size and doubling the learning rate together often reproduces the original training curve almost exactly. It is a rule of thumb that holds well in a useful regime and breaks at large batch sizes.
 
 <div class="warning-box">
-  <strong>What SGD noise does <em>not</em> buy you.</strong> "SGD noise finds flat minima which generalise better" is a plausible story, not an established fact — every clause in it is contested, including whether flatness is even well defined (you can reparameterise a network to change the flatness of a minimum without changing the function it computes). Treat gradient noise as an unavoidable cost of cheap updates that sometimes helps, not as a regulariser you are deliberately deploying. If you want regularisation, use a regulariser.
+  <strong>What SGD noise does <em>not</em> buy you.</strong> "SGD noise finds flat minima which generalise better" is a plausible story, not an established fact, every clause in it is contested, including whether flatness is even well defined (you can reparameterise a network to change the flatness of a minimum without changing the function it computes). Treat gradient noise as an unavoidable cost of cheap updates that sometimes helps, not as a regulariser you are deliberately deploying. If you want regularisation, use a regulariser.
 </div>
 
 ## Conditioning: why plain gradient descent zig-zags
@@ -154,7 +154,7 @@ Consider $$L(\theta) = \tfrac12(\theta_1^2 + 10\,\theta_2^2)$$. The curvatures a
 \[ \kappa \;=\; \frac{\lambda_{\max}}{\lambda_{\min}} \;=\; 10 . \]
 </div>
 
-The contours are ellipses ten times more curved across the valley than along it. The gradient at any off-axis point is dominated by the steep direction, so it points mostly *across* the valley rather than *along* it — and the single scalar $$\eta$$ has to serve both directions at once. Stability caps it at $$2/\lambda_{\max} = 0.2$$, which is far too small for the $$\lambda_{\min}=1$$ direction, where you would happily have used $$\eta = 1$$.
+The contours are ellipses ten times more curved across the valley than along it. The gradient at any off-axis point is dominated by the steep direction, so it points mostly *across* the valley rather than *along* it, and the single scalar $$\eta$$ has to serve both directions at once. Stability caps it at $$2/\lambda_{\max} = 0.2$$, which is far too small for the $$\lambda_{\min}=1$$ direction, where you would happily have used $$\eta = 1$$.
 
 The classically optimal choice balances the two:
 
@@ -225,7 +225,7 @@ At this $$\eta$$, the two contraction factors are $$1 - \eta^\star \lambda_{\min
     <text x="160" y="200" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b">6 steps, essentially arrived</text>
   </g>
 </svg>
-<figcaption>Both panels use the same starting point \( (9,\,2) \), the same pixels-per-unit scale, and true contours of their respective losses. Left: \( L = \tfrac12(\theta_1^2 + 10\theta_2^2) \) at the optimal \( \eta^\star = 2/11 \). Every step multiplies \( \theta_1 \) by \( 9/11 \) and \( \theta_2 \) by \( -9/11 \), so the path crosses the valley on every single iteration while creeping along it — after seven steps \( \theta_1 \) has only fallen from \( 9 \) to \( 2.21 \). Right: \( L = \tfrac12(\theta_1^2 + \theta_2^2) \) at \( \eta = 0.5 \). The negative gradient points straight at the minimum from everywhere, and six halvings land you at \( (0.14,\,0.03) \).</figcaption>
+<figcaption>Both panels use the same starting point \( (9,\,2) \), the same pixels-per-unit scale, and true contours of their respective losses. Left: \( L = \tfrac12(\theta_1^2 + 10\theta_2^2) \) at the optimal \( \eta^\star = 2/11 \). Every step multiplies \( \theta_1 \) by \( 9/11 \) and \( \theta_2 \) by \( -9/11 \), so the path crosses the valley on every single iteration while creeping along it, after seven steps \( \theta_1 \) has only fallen from \( 9 \) to \( 2.21 \). Right: \( L = \tfrac12(\theta_1^2 + \theta_2^2) \) at \( \eta = 0.5 \). The negative gradient points straight at the minimum from everywhere, and six halvings land you at \( (0.14,\,0.03) \).</figcaption>
 </figure>
 
 The general result: with the optimal $$\eta$$, plain gradient descent on a quadratic contracts the error by a factor of
@@ -234,7 +234,7 @@ The general result: with the optimal $$\eta$$, plain gradient descent on a quadr
 \[ \frac{\kappa - 1}{\kappa + 1} \quad\text{per step.} \]
 </div>
 
-For $$\kappa = 10$$ that is $$9/11 = 0.818$$, so reducing the error by a factor of $$10^{6}$$ needs about $$\ln(10^{-6})/\ln(0.818) \approx 69$$ iterations — and running the iteration confirms 69. For $$\kappa = 1000$$, $$(\kappa-1)/(\kappa+1) = 0.998$$ and you need about 6900. Iteration count scales roughly *linearly in* $$\kappa$$, which is the reason real training problems — where $$\kappa$$ can be enormous — are slow.
+For $$\kappa = 10$$ that is $$9/11 = 0.818$$, so reducing the error by a factor of $$10^{6}$$ needs about $$\ln(10^{-6})/\ln(0.818) \approx 69$$ iterations, and running the iteration confirms 69. For $$\kappa = 1000$$, $$(\kappa-1)/(\kappa+1) = 0.998$$ and you need about 6900. Iteration count scales roughly *linearly in* $$\kappa$$, which is the reason real training problems, where $$\kappa$$ can be enormous, are slow.
 
 ## Momentum
 
@@ -252,7 +252,7 @@ The payoff on a quadratic is a genuine improvement in the exponent. With the opt
 \[ \mu^{\star} = \left(\frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1}\right)^{2}, \qquad \eta^{\star} = \frac{4}{\left(\sqrt{\lambda_{\min}}+\sqrt{\lambda_{\max}}\right)^{2}}, \]
 </div>
 
-the contraction factor becomes $$(\sqrt{\kappa}-1)/(\sqrt{\kappa}+1)$$ rather than $$(\kappa-1)/(\kappa+1)$$ — dependence on $$\sqrt{\kappa}$$ instead of $$\kappa$$. On our $$\kappa = 10$$ problem that is $$0.519$$ against $$0.818$$, and running both to a $$10^{-6}$$ relative error gives **26 iterations with momentum against 69 without**. For $$\kappa = 1000$$ the same formulas predict roughly 6900 against roughly 220.
+the contraction factor becomes $$(\sqrt{\kappa}-1)/(\sqrt{\kappa}+1)$$ rather than $$(\kappa-1)/(\kappa+1)$$, dependence on $$\sqrt{\kappa}$$ instead of $$\kappa$$. On our $$\kappa = 10$$ problem that is $$0.519$$ against $$0.818$$, and running both to a $$10^{-6}$$ relative error gives **26 iterations with momentum against 69 without**. For $$\kappa = 1000$$ the same formulas predict roughly 6900 against roughly 220.
 
 <div class="insight-box">
   <strong>Momentum buys you a better exponent, not a different problem.</strong> \( \sqrt{\kappa} \) is still unbounded. And the ball-with-mass intuition has a real cost: with a large \( \mu \) the iterate can overshoot the minimum and take several steps to come back, so momentum makes the loss curve less monotone, not more. If your loss is bouncing, momentum is a suspect before the learning rate is.
@@ -260,7 +260,7 @@ the contraction factor becomes $$(\sqrt{\kappa}-1)/(\sqrt{\kappa}+1)$$ rather th
 
 ## Adam
 
-Adam keeps two exponential moving averages per parameter — a first moment (the mean gradient) and a second moment (the mean squared gradient) — and uses the second to rescale the first.
+Adam keeps two exponential moving averages per parameter, a first moment (the mean gradient) and a second moment (the mean squared gradient), and uses the second to rescale the first.
 
 <div class="formula-box">
 \[
@@ -283,10 +283,10 @@ Defaults are $$\beta_1 = 0.9$$, $$\beta_2 = 0.999$$, $$\epsilon = 10^{-8}$$.
 \[ m_t = (1-\beta_1)\sum_{i=1}^{t}\beta_1^{\,t-i} g \;=\; g\left(1 - \beta_1^{\,t}\right), \]
 </div>
 
-which is exactly the factor $$\hat m_t$$ divides out. Concretely at $$t=1$$: $$m_1 = 0.1\,g$$ — a tenth of the true gradient — and $$v_1 = 0.001\,g^2$$. Without correction the first update direction would be $$0.1g / \sqrt{0.001 g^2} = \sqrt{10} \approx 3.16$$ times its intended size, in the *wrong* direction of error (the first moment is under-estimated by ten, but the square root of the second moment is under-estimated by 31.6, and the smaller denominator wins). Bias correction makes the ratio exactly $$1$$ from the first step. This is the reason Adam without correction needs a warm-up and Adam with it usually does not.
+which is exactly the factor $$\hat m_t$$ divides out. Concretely at $$t=1$$: $$m_1 = 0.1\,g$$, a tenth of the true gradient, and $$v_1 = 0.001\,g^2$$. Without correction the first update direction would be $$0.1g / \sqrt{0.001 g^2} = \sqrt{10} \approx 3.16$$ times its intended size, in the *wrong* direction of error (the first moment is under-estimated by ten, but the square root of the second moment is under-estimated by 31.6, and the smaller denominator wins). Bias correction makes the ratio exactly $$1$$ from the first step. This is the reason Adam without correction needs a warm-up and Adam with it usually does not.
 
 <div class="warning-box">
-  <strong>Adam is not universally better.</strong> It is close to mandatory for transformer language models, where gradient scales differ enormously across layers and well-tuned plain SGD is genuinely hard to make work. It is far less clear-cut on convolutional vision models, where SGD with momentum and a good schedule remains fully competitive and sometimes preferable. Adam also costs two extra full-size state tensors — three times the optimiser memory of plain SGD, which is a real constraint at scale — and its default \( \epsilon \) and \( \beta_2 \) are load-bearing rather than arbitrary. "Use Adam" is a sensible starting default. It is not a theorem, and there is no published result that establishes Adam as superior in general.
+  <strong>Adam is not universally better.</strong> It is close to mandatory for transformer language models, where gradient scales differ enormously across layers and well-tuned plain SGD is genuinely hard to make work. It is far less clear-cut on convolutional vision models, where SGD with momentum and a good schedule remains fully competitive and sometimes preferable. Adam also costs two extra full-size state tensors, three times the optimiser memory of plain SGD, which is a real constraint at scale, and its default \( \epsilon \) and \( \beta_2 \) are load-bearing rather than arbitrary. "Use Adam" is a sensible starting default. It is not a theorem, and there is no published result that establishes Adam as superior in general.
 </div>
 
 ## Backpropagation is the chain rule, ordered correctly
@@ -315,8 +315,8 @@ Matrix multiplication is associative, so you may bracket that product however yo
 
 <div class="summary-box">
   <ul>
-    <li><strong>Forward mode</strong> brackets right-to-left and applies the product to a vector on the right: \( J v = J_k(J_{k-1}(\cdots(J_1 v))) \). Every operation is a matrix-times-vector, never matrix-times-matrix. One sweep, running <em>alongside</em> the forward computation, produces one <em>column</em> of \( J \) (take \( v = e_i \)) — that is, the sensitivity of <em>all outputs</em> to <em>one input</em>. Cost per sweep: about one forward pass. Cost of the full Jacobian: \( n \) sweeps.</li>
-    <li><strong>Reverse mode</strong> brackets left-to-right and applies the product to a row vector on the left: \( u^{\top} J = ((u^{\top} J_k) J_{k-1}) \cdots J_1 \). Again only matrix-times-vector. One sweep produces one <em>row</em> of \( J \) — the sensitivity of <em>one output</em> to <em>all inputs</em>. Cost per sweep: about one forward pass. Cost of the full Jacobian: \( m \) sweeps.</li>
+    <li><strong>Forward mode</strong> brackets right-to-left and applies the product to a vector on the right: \( J v = J_k(J_{k-1}(\cdots(J_1 v))) \). Every operation is a matrix-times-vector, never matrix-times-matrix. One sweep, running <em>alongside</em> the forward computation, produces one <em>column</em> of \( J \) (take \( v = e_i \)), that is, the sensitivity of <em>all outputs</em> to <em>one input</em>. Cost per sweep: about one forward pass. Cost of the full Jacobian: \( n \) sweeps.</li>
+    <li><strong>Reverse mode</strong> brackets left-to-right and applies the product to a row vector on the left: \( u^{\top} J = ((u^{\top} J_k) J_{k-1}) \cdots J_1 \). Again only matrix-times-vector. One sweep produces one <em>row</em> of \( J \), the sensitivity of <em>one output</em> to <em>all inputs</em>. Cost per sweep: about one forward pass. Cost of the full Jacobian: \( m \) sweeps.</li>
   </ul>
 </div>
 
@@ -329,7 +329,7 @@ Backpropagation is reverse-mode automatic differentiation, specialised to a neur
 <div class="insight-box">
   <strong>What reverse mode costs you.</strong> Nothing is free. To multiply by \( J_t \) on the way back you need the intermediate values from the forward pass, so reverse mode must <em>store every activation</em> until the backward sweep reaches it. Memory grows with depth times batch size, whereas forward mode needs essentially none. That is the trade being unwound when you enable gradient (activation) checkpointing: throw activations away, recompute them during the backward pass, spend roughly 30% more time to cut activation memory dramatically.
   <br><br>
-  And forward mode is not obsolete. When \( n \) is small and \( m \) is large — sensitivity to a handful of hyperparameters, or the Jacobian of a network's outputs with respect to a low-dimensional input — forward mode wins by the same argument, reversed. Hessian-vector products \( Hv \) are computed as forward-over-reverse: one forward-mode sweep through the reverse-mode gradient, for the price of a few forward passes and no \( n \times n \) matrix anywhere.
+  And forward mode is not obsolete. When \( n \) is small and \( m \) is large, sensitivity to a handful of hyperparameters, or the Jacobian of a network's outputs with respect to a low-dimensional input, forward mode wins by the same argument, reversed. Hessian-vector products \( Hv \) are computed as forward-over-reverse: one forward-mode sweep through the reverse-mode gradient, for the price of a few forward passes and no \( n \times n \) matrix anywhere.
 </div>
 
 ## Backprop by hand on a network small enough to check
@@ -360,7 +360,7 @@ L   &= \tfrac12 (1.3662318183 - 0.5)^{2} = 0.3751787816
 \]
 </div>
 
-Now backwards, one link of the chain at a time. Each line uses only the line above it and one local derivative — that is the whole algorithm.
+Now backwards, one link of the chain at a time. Each line uses only the line above it and one local derivative, that is the whole algorithm.
 
 **Start at the loss.**
 
@@ -400,7 +400,7 @@ Now backwards, one link of the chain at a time. Each line uses only the line abo
 \]
 </div>
 
-Notice the shape of the computation. Everything flowed through two scalars, $$\delta_2$$ and $$\delta_1$$. Each parameter's gradient is then just "the delta arriving at my layer, times my local input". In a real network the deltas are vectors and the local products become outer products, but the structure is identical, and the total work is one multiply-add per weight — the same order as the forward pass.
+Notice the shape of the computation. Everything flowed through two scalars, $$\delta_2$$ and $$\delta_1$$. Each parameter's gradient is then just "the delta arriving at my layer, times my local input". In a real network the deltas are vectors and the local products become outer products, but the structure is identical, and the total work is one multiply-add per weight, the same order as the forward pass.
 
 ### The numerical check
 
@@ -445,10 +445,10 @@ Running it:
 
 Largest absolute discrepancy $$9.27 \times 10^{-11}$$; largest relative discrepancy $$1.41 \times 10^{-10}$$.
 
-That agreement is not merely "good" — it is as good as double precision permits. Central differences carry two error terms: a truncation error of order $$\epsilon^{2} L'''$$ (about $$10^{-12}$$ here) and a round-off error of order $$\varepsilon_{\text{machine}}/\epsilon \approx 10^{-16}/10^{-6} = 10^{-10}$$. The observed $$10^{-10}$$ is the round-off floor. The backprop derivation is exact; the finite difference is the approximate one.
+That agreement is not merely "good", it is as good as double precision permits. Central differences carry two error terms: a truncation error of order $$\epsilon^{2} L'''$$ (about $$10^{-12}$$ here) and a round-off error of order $$\varepsilon_{\text{machine}}/\epsilon \approx 10^{-16}/10^{-6} = 10^{-10}$$. The observed $$10^{-10}$$ is the round-off floor. The backprop derivation is exact; the finite difference is the approximate one.
 
 <div class="insight-box">
-  <strong>Do this yourself when you write a custom layer.</strong> A gradient check that agrees to \( 10^{-10} \) means your backward pass is right. Agreement to \( 10^{-2} \) means it is wrong and you have been misled by a loss that still went down. Relative error is the thing to look at, and note that \( \epsilon \) has a sweet spot — shrinking it below about \( 10^{-7} \) makes the check <em>worse</em>, because round-off grows as \( \epsilon \) shrinks.
+  <strong>Do this yourself when you write a custom layer.</strong> A gradient check that agrees to \( 10^{-10} \) means your backward pass is right. Agreement to \( 10^{-2} \) means it is wrong and you have been misled by a loss that still went down. Relative error is the thing to look at, and note that \( \epsilon \) has a sweet spot, shrinking it below about \( 10^{-7} \) makes the check <em>worse</em>, because round-off grows as \( \epsilon \) shrinks.
 </div>
 
 ## Vanishing and exploding gradients
@@ -483,7 +483,7 @@ This single product is the reason for three things you will meet later:
 
 <div class="summary-box">
   <ul>
-    <li><strong>Careful initialisation.</strong> He and Xavier initialisation choose the weight variance precisely so that \( \lVert J_t \rVert \) starts near \( 1 \), buying \( \sigma \approx 1 \) at step zero. This is a strong start, not a guarantee — the weights move during training.</li>
+    <li><strong>Careful initialisation.</strong> He and Xavier initialisation choose the weight variance precisely so that \( \lVert J_t \rVert \) starts near \( 1 \), buying \( \sigma \approx 1 \) at step zero. This is a strong start, not a guarantee, the weights move during training.</li>
     <li><strong>Residual connections.</strong> With \( h_t = h_{t-1} + F(h_{t-1}) \) the Jacobian is \( J_t = I + \partial F/\partial h \). The product then expands around the identity instead of around a small number, so a gradient path of length zero exists from the loss to every layer. This is the structural fix, and it is why networks went from tens of layers to hundreds.</li>
     <li><strong>Normalisation layers</strong> (batch, layer, RMS), which re-standardise activations and so keep the local Jacobians from drifting away from unit scale as training proceeds.</li>
     <li><strong>Gradient clipping</strong>, which is a blunt patch for the exploding half only: rescale the gradient if its norm exceeds a threshold. It prevents a single catastrophic step. It does nothing whatsoever for vanishing.</li>
@@ -494,8 +494,8 @@ This single product is the reason for three things you will meet later:
 
 <div class="summary-box">
   <ul>
-    <li><strong>If the loss goes to NaN, the learning rate is the first suspect</strong>, before the data and before the architecture. The \( \eta < 2/a \) analysis says divergence is geometric — once you are past the ceiling, a handful of steps is enough to reach infinity. Halve \( \eta \) and try again.</li>
-    <li><strong>If the loss is flat, the learning rate is also the first suspect.</strong> \( \eta = 0.49 \) against a ceiling of \( 0.5 \) converges at \( 0.96 \) per step; that is genuinely converging and it looks exactly like a bug. Sweep \( \eta \) logarithmically, not linearly — the useful range spans orders of magnitude.</li>
+    <li><strong>If the loss goes to NaN, the learning rate is the first suspect</strong>, before the data and before the architecture. The \( \eta < 2/a \) analysis says divergence is geometric, once you are past the ceiling, a handful of steps is enough to reach infinity. Halve \( \eta \) and try again.</li>
+    <li><strong>If the loss is flat, the learning rate is also the first suspect.</strong> \( \eta = 0.49 \) against a ceiling of \( 0.5 \) converges at \( 0.96 \) per step; that is genuinely converging and it looks exactly like a bug. Sweep \( \eta \) logarithmically, not linearly, the useful range spans orders of magnitude.</li>
     <li><strong>Warm-up exists because the curvature changes.</strong> The stable \( \eta \) depends on \( \lambda_{\max} \), and \( \lambda_{\max} \) is not constant during training. A short linear warm-up is cheap insurance against a large early step at a badly conditioned starting point.</li>
     <li><strong>Gradient-check any layer you write by hand.</strong> Ten lines of finite differences, agreement to \( 10^{-10} \), and you never wonder again.</li>
     <li><strong>A loss that decreases is not proof the gradient is correct.</strong> A gradient with the right sign and the wrong magnitude still decreases the loss, just slower and to a worse place. This is the single most common silent bug in custom training code.</li>
@@ -505,13 +505,13 @@ This single product is the reason for three things you will meet later:
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>The update is \( \theta \leftarrow \theta - \eta \nabla_\theta L \). The negative gradient is the steepest-descent direction by Cauchy–Schwarz — but only with respect to the Euclidean norm, which is the loophole every adaptive optimiser exploits.</li>
+  <li>The update is \( \theta \leftarrow \theta - \eta \nabla_\theta L \). The negative gradient is the steepest-descent direction by Cauchy–Schwarz, but only with respect to the Euclidean norm, which is the loophole every adaptive optimiser exploits.</li>
   <li>On \( L = \tfrac12 a\theta^2 \) the iteration is \( \theta_k = (1-\eta a)^k\theta_0 \), so it converges if and only if \( \lvert 1-\eta a \rvert < 1 \), that is \( \eta < 2/a \). In many dimensions the ceiling is \( 2/\lambda_{\max} \): the sharpest direction sets the speed limit for every other direction.</li>
   <li>Mini-batching is a compute decision first. Gradient noise falls as \( 1/\sqrt{B} \) and scales with \( \eta/B \); it sometimes helps generalisation, but "SGD noise is a regulariser" is folklore, not a result.</li>
-  <li>Ill conditioning is the core difficulty. With the optimal \( \eta \), plain gradient descent contracts by \( (\kappa-1)/(\kappa+1) \) per step and zig-zags across the valley even when perfectly tuned. Momentum improves that to \( (\sqrt{\kappa}-1)/(\sqrt{\kappa}+1) \) — on \( \kappa=10 \), 26 iterations against 69 for the same accuracy.</li>
+  <li>Ill conditioning is the core difficulty. With the optimal \( \eta \), plain gradient descent contracts by \( (\kappa-1)/(\kappa+1) \) per step and zig-zags across the valley even when perfectly tuned. Momentum improves that to \( (\sqrt{\kappa}-1)/(\sqrt{\kappa}+1) \), on \( \kappa=10 \), 26 iterations against 69 for the same accuracy.</li>
   <li>Adam rescales the first moment by the square root of the second, giving every parameter a step of roughly \( \eta \) regardless of gradient scale; bias correction matters because without it the very first step is \( \sqrt{10} \approx 3.16 \) times too large. Adam is a good default, not a universally superior method, and it triples optimiser memory.</li>
-  <li>Backpropagation is reverse-mode automatic differentiation: the same associative Jacobian product as forward mode, bracketed from the other end. Forward mode costs one sweep per <em>input</em>; reverse mode costs one sweep per <em>output</em>. A scalar loss has one output and billions of inputs, so reverse mode wins by a factor of the parameter count — at the price of storing every activation.</li>
-  <li>The hand derivation on a two-layer scalar network matched central differences to \( 9.3\times10^{-11} \) absolute, \( 1.4\times10^{-10} \) relative — the double-precision round-off floor for \( \epsilon = 10^{-6} \), which is to say: exact.</li>
-  <li>Gradients through depth are a product of Jacobians, so they behave like \( \sigma^T \): \( 0.9^{100} = 2.7\times10^{-5} \) vanishes, \( 1.1^{100} = 1.4\times10^{4} \) explodes. Careful initialisation, normalisation and — decisively — residual connections exist to hold \( \sigma \) near one.</li>
+  <li>Backpropagation is reverse-mode automatic differentiation: the same associative Jacobian product as forward mode, bracketed from the other end. Forward mode costs one sweep per <em>input</em>; reverse mode costs one sweep per <em>output</em>. A scalar loss has one output and billions of inputs, so reverse mode wins by a factor of the parameter count, at the price of storing every activation.</li>
+  <li>The hand derivation on a two-layer scalar network matched central differences to \( 9.3\times10^{-11} \) absolute, \( 1.4\times10^{-10} \) relative, the double-precision round-off floor for \( \epsilon = 10^{-6} \), which is to say: exact.</li>
+  <li>Gradients through depth are a product of Jacobians, so they behave like \( \sigma^T \): \( 0.9^{100} = 2.7\times10^{-5} \) vanishes, \( 1.1^{100} = 1.4\times10^{4} \) explodes. Careful initialisation, normalisation and, decisively, residual connections exist to hold \( \sigma \) near one.</li>
 </ul>
 </div>

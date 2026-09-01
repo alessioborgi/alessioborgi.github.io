@@ -6,7 +6,7 @@ categories: [diffusion]
 book: diffusion
 subsection: efficiency
 tags: [diffusion, distillation, consistency-models, fast-sampling]
-excerpt: "Better ODE solvers bottom out around ten evaluations because the trajectory is genuinely curved. To go lower you have to change the model — either teach a student to take two teacher steps at once, or train a network that jumps to the end of the trajectory from anywhere on it."
+excerpt: "Better ODE solvers bottom out around ten evaluations because the trajectory is genuinely curved. To go lower you have to change the model, either teach a student to take two teacher steps at once, or train a network that jumps to the end of the trajectory from anywhere on it."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Progressive distillation repeatedly trains a student to reproduce two of its teacher's sampling steps in one, halving the step count per round — eight rounds take 1024 steps down to 4. Consistency models go further by enforcing a property rather than imitating a solver: every point on a probability-flow trajectory must map to that trajectory's origin, so a single evaluation from pure noise is already a sample. Both can be trained with or without a teacher. What you lose is diversity, fine detail, and the freedom to change the guidance scale after the fact.
+  <strong>TL;DR:</strong> Progressive distillation repeatedly trains a student to reproduce two of its teacher's sampling steps in one, halving the step count per round, eight rounds take 1024 steps down to 4. Consistency models go further by enforcing a property rather than imitating a solver: every point on a probability-flow trajectory must map to that trajectory's origin, so a single evaluation from pure noise is already a sample. Both can be trained with or without a teacher. What you lose is diversity, fine detail, and the freedom to change the guidance scale after the fact.
 </div>
 
 ## Why solvers stop helping
@@ -29,7 +29,7 @@ The alternative is to stop treating the network as a fixed right-hand side to be
 
 ## Progressive distillation: halve, repeat
 
-Salimans and Ho's construction is deliberately modest. Start from a trained teacher sampled with a deterministic DDIM solver at \\(N\\) steps. Train a student, initialised from the teacher's weights, so that one student step from $$\mathbf{z}_t$$ lands where two teacher steps land. The student's regression target is not the original noise but the teacher's two-step output — a target the student can hit exactly, since two DDIM steps from $$\mathbf{z}_t$$ are a deterministic function of $$\mathbf{z}_t$$.
+Salimans and Ho's construction is deliberately modest. Start from a trained teacher sampled with a deterministic DDIM solver at \\(N\\) steps. Train a student, initialised from the teacher's weights, so that one student step from $$\mathbf{z}_t$$ lands where two teacher steps land. The student's regression target is not the original noise but the teacher's two-step output, a target the student can hit exactly, since two DDIM steps from $$\mathbf{z}_t$$ are a deterministic function of $$\mathbf{z}_t$$.
 
 Then make the student the new teacher and repeat.
 
@@ -94,7 +94,7 @@ for any two points on the same trajectory. That is the *self-consistency* proper
   <text x="300" y="118" font-size="10.5" fill="#0e7490">f_θ(x_t, t) = x_ε for every t on this trajectory</text>
   <text x="320" y="26" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">The self-consistency constraint</text>
 </svg>
-<figcaption>Notice that the constraint says nothing about intermediate outputs — only that all points sharing a trajectory agree. That is what makes one evaluation from pure noise a complete sampler, and also why two trajectories that pass near each other are the hard case.</figcaption>
+<figcaption>Notice that the constraint says nothing about intermediate outputs, only that all points sharing a trajectory agree. That is what makes one evaluation from pure noise a complete sampler, and also why two trajectories that pass near each other are the hard case.</figcaption>
 </figure>
 </div>
 
@@ -121,17 +121,17 @@ with \\(d\\) a distance (L2 or LPIPS) and \\(\theta^-\\) a stop-gradient target 
 so replacing the oracle step with a pair of noisy views of the same $$\mathbf{x}_0$$ using the same \\(\mathbf{z}\\) is unbiased in the limit of small step spacing. Consistency models therefore stand alone as a generative family, not merely as a compression of diffusion.
 
 <div class="insight-box">
-  <strong>Key Insight — why multi-step sampling still works:</strong> a consistency model can be sampled in more than one step without any extra training. Jump to the origin, then re-noise the estimate to some smaller \(t\) and jump again. Each round replaces the model's guess with a fresh sample that is guaranteed to lie on <em>some</em> valid trajectory, so errors do not compound the way solver errors do. This is why 2 to 4 steps buys a visible quality gain over 1 while 4 to 8 buys much less.
+  <strong>Key Insight, why multi-step sampling still works:</strong> a consistency model can be sampled in more than one step without any extra training. Jump to the origin, then re-noise the estimate to some smaller \(t\) and jump again. Each round replaces the model's guess with a fresh sample that is guaranteed to lie on <em>some</em> valid trajectory, so errors do not compound the way solver errors do. This is why 2 to 4 steps buys a visible quality gain over 1 while 4 to 8 buys much less.
 </div>
 
 ## What you give up
 
-One-step generation is a many-to-one map from noise onto the data manifold, trained with a pointwise regression loss. That loss is minimised by conditional averages, so where trajectories crowd together the model hedges — the characteristic result is slightly softer texture and reduced variety, most visible in backgrounds and crowds.
+One-step generation is a many-to-one map from noise onto the data manifold, trained with a pointwise regression loss. That loss is minimised by conditional averages, so where trajectories crowd together the model hedges, the characteristic result is slightly softer texture and reduced variety, most visible in backgrounds and crowds.
 
 Three practical costs follow. Distilled students inherit the teacher's errors and cannot exceed it. Guidance is usually baked in at a fixed weight during distillation, so the guidance dial is gone unless the student is explicitly conditioned on \\(w\\). And distillation is per-checkpoint work: fine-tune the base model and the fast student is stale. LCM-LoRA partially addresses the last point by distilling into a low-rank adapter that transfers across fine-tunes of the same base.
 
 <div class="warning-box">
-  <strong>The trap:</strong> few-step samples often look <em>better</em> on first inspection — cleaner, more contrasted, more "finished" — because averaging removes noise and idiosyncrasy. Diversity loss does not show up in single images. Compare grids from the same prompt, not individual samples.
+  <strong>The trap:</strong> few-step samples often look <em>better</em> on first inspection, cleaner, more contrasted, more "finished", because averaging removes noise and idiosyncrasy. Diversity loss does not show up in single images. Compare grids from the same prompt, not individual samples.
 </div>
 
 ## References

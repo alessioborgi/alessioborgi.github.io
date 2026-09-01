@@ -3,7 +3,7 @@ title: "QRCodeGenerator: Custom Static QR Code Generator"
 collection: projects
 layout: single
 permalink: /projects/qrcodegenerator/
-excerpt: "Generate static, unlimited-use QR codes with custom styles, embedded icons, and optional captions — entirely in Python."
+excerpt: "Generate static, unlimited-use QR codes with custom styles, embedded icons, and optional captions, entirely in Python."
 author_profile: true
 github: "https://github.com/alessioborgi/QRCodeGenerator"
 tags:
@@ -32,4 +32,4 @@ QRCodeGenerator (QRStaticCode) is a Python tool for generating static QR codes w
 
 ## Technology
 
-Built with the `qrcode` and `Pillow` Python libraries. No external API calls — everything runs locally, keeping your data private.
+Built with the `qrcode` and `Pillow` Python libraries. No external API calls, everything runs locally, keeping your data private.

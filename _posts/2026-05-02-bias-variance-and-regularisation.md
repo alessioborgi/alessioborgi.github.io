@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Expected squared test error splits into three pieces: \(\text{bias}^2\) — error because the model is too rigid to represent the truth; \(\text{variance}\) — error because the fit moves when the training sample changes; and \(\sigma^2\) — noise you cannot remove no matter what you do. Almost every technique in this book is a way of trading the first against the second, and the third is the reminder that perfect accuracy was never available.
+<strong>TL;DR:</strong> Expected squared test error splits into three pieces: \(\text{bias}^2\), error because the model is too rigid to represent the truth; \(\text{variance}\), error because the fit moves when the training sample changes; and \(\sigma^2\), noise you cannot remove no matter what you do. Almost every technique in this book is a way of trading the first against the second, and the third is the reminder that perfect accuracy was never available.
 </div>
 
 ## The decomposition, derived
@@ -43,10 +43,10 @@ Add and subtract the average prediction $$\bar{f}(x) = \mathbb{E}[\hat{f}(x)]$$:
 The cross term disappears because $$\bar{f}(x) - f(x)$$ is a constant with respect to the randomness in $$\hat{f}$$, so it factors out of an expectation that is zero: $$\mathbb{E}[\hat{f}(x) - \bar{f}(x)] = 0$$. The noise term separates because $$\varepsilon$$ is independent of the training sample.
 
 <div class="insight-box">
-<strong>Read the three terms operationally.</strong> <strong>Bias</strong> asks: if I had infinite data, would this model class still be wrong? <strong>Variance</strong> asks: if I redrew the training set, how much would my predictions move? <strong>Noise</strong> asks nothing — it is the floor. A reported error below \(\sigma\) on held-out data means you have leaked, not succeeded.
+<strong>Read the three terms operationally.</strong> <strong>Bias</strong> asks: if I had infinite data, would this model class still be wrong? <strong>Variance</strong> asks: if I redrew the training set, how much would my predictions move? <strong>Noise</strong> asks nothing, it is the floor. A reported error below \(\sigma\) on held-out data means you have leaked, not succeeded.
 </div>
 
-The two extremes make it concrete. A model that always predicts the constant $$0$$ has zero variance — resampling changes nothing — and enormous bias. A 1-nearest-neighbour fit has almost no bias, since it can represent any function given enough points, and large variance, since moving one training point changes its predictions wholesale.
+The two extremes make it concrete. A model that always predicts the constant $$0$$ has zero variance, resampling changes nothing, and enormous bias. A 1-nearest-neighbour fit has almost no bias, since it can represent any function given enough points, and large variance, since moving one training point changes its predictions wholesale.
 
 ## Measured, not asserted
 
@@ -89,7 +89,7 @@ Fit polynomials of increasing degree to ten noisy samples of a smooth function, 
   <text x="446" y="148" font-size="9" font-weight="700" fill="#ea580c">validation</text>
   <text x="260" y="252" text-anchor="middle" font-size="8.5" fill="#475569">Plotted from the measured RMSE values in the table above.</text>
 </svg>
-<figcaption>Training error decreases monotonically with capacity — it must, since a higher-degree polynomial can reproduce anything a lower one can. Validation error bottoms out at degree 5 and climbs thereafter. At degree 9 the fit interpolates all ten training points perfectly and is 37% worse than the best model on held-out data.</figcaption>
+<figcaption>Training error decreases monotonically with capacity, it must, since a higher-degree polynomial can reproduce anything a lower one can. Validation error bottoms out at degree 5 and climbs thereafter. At degree 9 the fit interpolates all ten training points perfectly and is 37% worse than the best model on held-out data.</figcaption>
 </figure>
 </div>
 
@@ -105,10 +105,10 @@ The identity holds to every digit shown, and the pattern is exactly as advertise
 
 ## Train, validation, test
 
-Three splits, three jobs. **Training** fits parameters. **Validation** chooses hyperparameters — degree, $$\lambda$$, depth, learning rate. **Test** estimates generalisation, once.
+Three splits, three jobs. **Training** fits parameters. **Validation** chooses hyperparameters, degree, $$\lambda$$, depth, learning rate. **Test** estimates generalisation, once.
 
 <div class="warning-box">
-<strong>A test set you have looked at repeatedly is a validation set.</strong> Every time you check test performance and change something in response, you leak a little information about it into your model, and the estimate drifts optimistic. This is not a rule of etiquette — it is the same overfitting mechanism operating on your decisions rather than on your weights. If you have tuned against it twenty times, the number it gives you is no longer an unbiased estimate of anything.
+<strong>A test set you have looked at repeatedly is a validation set.</strong> Every time you check test performance and change something in response, you leak a little information about it into your model, and the estimate drifts optimistic. This is not a rule of etiquette, it is the same overfitting mechanism operating on your decisions rather than on your weights. If you have tuned against it twenty times, the number it gives you is no longer an unbiased estimate of anything.
 </div>
 
 **Cross-validation** gets more out of limited data. Split into $$k$$ folds, train on $$k-1$$ and validate on the remaining one, rotate, average. Every point is used for validation exactly once, so the estimate is far less sensitive to an unlucky split than a single hold-out, at $$k$$ times the compute.
@@ -123,23 +123,23 @@ Every technique below deliberately introduces bias because the variance reductio
 
 **Dropout** randomly zeroes units during training, so no unit can rely on any particular other one being present.
 
-**Data augmentation** is the odd one out, and the most effective when it applies. Instead of restricting the model, it enlarges the data with transformations that should not change the label. That reduces variance without adding bias — provided your invariance claim is true. Rotating handwritten digits by 180° is not label-preserving; a 6 becomes a 9.
+**Data augmentation** is the odd one out, and the most effective when it applies. Instead of restricting the model, it enlarges the data with transformations that should not change the label. That reduces variance without adding bias, provided your invariance claim is true. Rotating handwritten digits by 180° is not label-preserving; a 6 becomes a 9.
 
 <div class="insight-box">
-<strong>The unifying view:</strong> regularisation shrinks the effective size of the hypothesis space. A smaller space means fewer ways for the fit to move when the data changes — less variance — and a greater chance the truth is not in it — more bias. \(\lambda\) is the dial, and validation tells you where to set it.
+<strong>The unifying view:</strong> regularisation shrinks the effective size of the hypothesis space. A smaller space means fewer ways for the fit to move when the data changes, less variance, and a greater chance the truth is not in it, more bias. \(\lambda\) is the dial, and validation tells you where to set it.
 </div>
 
 ## Where the classical picture stops
 
 The U-shaped validation curve above is real and reproduces reliably at this scale. It is not the complete story.
 
-For very heavily over-parameterised models, test error often *falls again* after the point where the model has enough capacity to interpolate the training set — the phenomenon usually called **double descent**. The classical account predicts monotone deterioration past the interpolation threshold, and that is not what is observed for large neural networks.
+For very heavily over-parameterised models, test error often *falls again* after the point where the model has enough capacity to interpolate the training set, the phenomenon usually called **double descent**. The classical account predicts monotone deterioration past the interpolation threshold, and that is not what is observed for large neural networks.
 
 <div class="warning-box">
 <strong>Treat this as an observation, not a resolved theory.</strong> Double descent is well documented empirically, and there are partial explanations involving implicit regularisation from the optimiser and the geometry of over-parameterised solutions. There is no settled account. The practical consequence is narrow but real: "my model has more parameters than data points, so it must overfit" is not a sound argument, and you should look at a validation curve rather than assume the shape of one.
 </div>
 
-The bias–variance decomposition itself remains exactly true — it is an algebraic identity, not an empirical claim. What double descent complicates is the assumption that variance rises monotonically with parameter count.
+The bias–variance decomposition itself remains exactly true, it is an algebraic identity, not an empirical claim. What double descent complicates is the assumption that variance rises monotonically with parameter count.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
@@ -148,8 +148,8 @@ The bias–variance decomposition itself remains exactly true — it is an algeb
   <li>\(\sigma^2\) is irreducible. A held-out error below the noise level is evidence of leakage, not of a good model.</li>
   <li>Measured on real fits: degree 0 gives bias² 0.350 and variance 0.004; degree 9 gives bias² 0.00004 and variance 0.029. Same total error budget, opposite causes.</li>
   <li>Training error falls monotonically with capacity and therefore carries no information about generalisation. Only held-out error does.</li>
-  <li>A test set consulted repeatedly stops being one — the leakage is through your decisions, not your weights.</li>
-  <li>Ridge, lasso, early stopping and dropout all buy variance reduction with bias. Data augmentation is the exception, reducing variance for free — if the invariance you assume is genuinely true.</li>
+  <li>A test set consulted repeatedly stops being one, the leakage is through your decisions, not your weights.</li>
+  <li>Ridge, lasso, early stopping and dropout all buy variance reduction with bias. Data augmentation is the exception, reducing variance for free, if the invariance you assume is genuinely true.</li>
   <li>Double descent means "more parameters than data" does not by itself imply overfitting. Look at the curve.</li>
 </ul>
 </div>

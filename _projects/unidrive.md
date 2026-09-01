@@ -3,7 +3,7 @@ title: "UniDrive: University Carpooling App"
 collection: projects
 layout: single
 permalink: /projects/unidrive/
-excerpt: "A Flutter/Dart mobile app that connects university students for ride-sharing — schedule, match, and split commutes within the campus community."
+excerpt: "A Flutter/Dart mobile app that connects university students for ride-sharing, schedule, match, and split commutes within the campus community."
 author_profile: true
 github: "https://github.com/alessioborgi/UniDrive"
 tags:
@@ -14,7 +14,7 @@ tags:
   - Carpooling
 ---
 
-UniDrive is a carpooling application built for university students. It connects commuters heading in the same direction, allowing them to coordinate rides, reduce transport costs, and lower their environmental footprint — all within a trusted campus community.
+UniDrive is a carpooling application built for university students. It connects commuters heading in the same direction, allowing them to coordinate rides, reduce transport costs, and lower their environmental footprint, all within a trusted campus community.
 
 ## Features
 
@@ -28,9 +28,9 @@ UniDrive is a carpooling application built for university students. It connects 
 ## Architecture
 
 - **Frontend:** Flutter (Dart) for a cross-platform iOS/Android UI designed in Figma.
-- **Backend:** Go (Golang) REST API — lightweight, fast, and easy to deploy.
+- **Backend:** Go (Golang) REST API, lightweight, fast, and easy to deploy.
 - **Auth:** university email verification to restrict access to enrolled students.
 
 ## Design
 
-The UI was prototyped in Figma with a focus on minimal friction — a student should be able to find and book a ride in under 30 seconds from app launch.
+The UI was prototyped in Figma with a focus on minimal friction, a student should be able to find and book a ride in under 30 seconds from app launch.

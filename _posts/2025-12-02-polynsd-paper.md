@@ -81,7 +81,7 @@ toc_label: "Contents"
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/polynsd-paper.png" alt="First page of the Polynomial Neural Sheaf Diffusion paper" caption="Paper preview — Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves (Borgi et al., 2025)." %}
+{% include figure image_path="/images/blog/papers/polynsd-paper.png" alt="First page of the Polynomial Neural Sheaf Diffusion paper" caption="Paper preview, Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves (Borgi et al., 2025)." %}
 </div>
 
 ## Why This Paper Exists
@@ -94,7 +94,7 @@ This paper asks a sharper question: can we keep the geometric benefits of sheaf 
 
 A **Sheaf Neural Network** enriches a graph with a cellular sheaf: each node and edge gets a vector space (a *stalk*), and each endpoint of each edge gets a *restriction map* encoding how node signals relate to edge signals. The **sheaf Laplacian** encodes this relational geometry and replaces the standard graph Laplacian in the diffusion operator.
 
-**Neural Sheaf Diffusion (NSD)** — the dominant sheaf GNN approach — learns restriction maps end-to-end and runs diffusion on the sheaf Laplacian. It handles heterophily well and resists oversmoothing, but has three practical problems:
+**Neural Sheaf Diffusion (NSD)**, the dominant sheaf GNN approach, learns restriction maps end-to-end and runs diffusion on the sheaf Laplacian. It handles heterophily well and resists oversmoothing, but has three practical problems:
 
 1. **SVD-based normalisation**: requires expensive SVD decomposition of the sheaf Laplacian at every layer, making Laplacian rebuilds slow.
 2. **Dense restriction maps**: one $$d \times d$$ matrix per node-edge pair, scaling quadratically with stalk dimension $$d$$.
@@ -167,7 +167,7 @@ A **Sheaf Neural Network** enriches a graph with a cellular sheaf: each node and
   <text x="350" y="190" font-size="9" fill="#374151" class="cheby-label" style="animation-delay:3.4s">α₀=0.1  α₁=-0.4  α₂=0.5  α₃=0.3  (example learned weights)</text>
   <text x="350" y="202" font-size="9" fill="#6b7280" class="cheby-label" style="animation-delay:3.6s">Constrained: Σαₖ=1 (convex mixture → stable training)</text>
 </svg>
-<figcaption>Left: the first four Chebyshev polynomials \(T_0\) (flat, blue), \(T_1\) (linear, teal), \(T_2\) (parabola, amber), \(T_3\) (cubic, purple), each drawn with a CSS animation. Right: the PolyNSD filter is a learned convex combination of these basis polynomials — the orange curve shows an example high-pass shape (emphasising high-frequency, heterophily-relevant components). The coefficients sum to 1 for stability.</figcaption>
+<figcaption>Left: the first four Chebyshev polynomials \(T_0\) (flat, blue), \(T_1\) (linear, teal), \(T_2\) (parabola, amber), \(T_3\) (cubic, purple), each drawn with a CSS animation. Right: the PolyNSD filter is a learned convex combination of these basis polynomials, the orange curve shows an example high-pass shape (emphasising high-frequency, heterophily-relevant components). The coefficients sum to 1 for stability.</figcaption>
 </figure></div>
 
 ## The Main Design Choice
@@ -180,14 +180,14 @@ PolyNSD replaces the NSD propagation operator with a **degree-$$K$$ polynomial**
 
 This gives:
 - **Explicit $$K$$-hop receptive field** in a single layer (independently of the stalk dimension $$d$$).
-- **Trainable spectral response** as a convex mixture of $$K+1$$ orthogonal polynomial basis responses — the model learns which frequency components to amplify or suppress.
+- **Trainable spectral response** as a convex mixture of $$K+1$$ orthogonal polynomial basis responses, the model learns which frequency components to amplify or suppress.
 - **No SVD** needed: the recurrence only requires sparse matrix-vector products.
 - **Stability** via convex mixtures (coefficients sum to 1) + spectral rescaling to $$[-1, 1]$$ + residual/gated paths.
 
 <div class="blog-figure blog-figure--stacked">
 <figure>
 <img src="/images/blog/papers/polynsd-architecture.png" alt="PolyNSD architecture showing lifting, sheaf Laplacian construction, spectral rescaling, Chebyshev polynomial evaluation, and gated residual update">
-<figcaption>Figure 1 — The PolyNSD pipeline starts by lifting node features into stalk spaces, learns restriction maps to build the sheaf Laplacian, rescales the spectrum to a stable range, and then applies a Chebyshev polynomial filter with a gated residual correction. The important point is that diffusion is no longer a fragile repeated operator: it becomes a controlled spectral module with explicit receptive field and better numerical behaviour.</figcaption>
+<figcaption>Figure 1, The PolyNSD pipeline starts by lifting node features into stalk spaces, learns restriction maps to build the sheaf Laplacian, rescales the spectrum to a stable range, and then applies a Chebyshev polynomial filter with a gated residual correction. The important point is that diffusion is no longer a fragile repeated operator: it becomes a controlled spectral module with explicit receptive field and better numerical behaviour.</figcaption>
 </figure>
 </div>
 
@@ -203,7 +203,7 @@ The key parameter-reduction insight: **diagonal restriction maps** (a vector of 
 
 This is where the paper becomes especially useful. Many sheaf models implicitly suggest that more expressive geometry requires larger dense restriction maps. PolyNSD shows that this is often the wrong tradeoff. If the spectral filter is doing the right global work, the local maps can stay lightweight and still capture the anisotropic behavior that matters.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why diagonal maps are sufficient once the polynomial filter is strong:</strong> There is a natural division of labour in PolyNSD. The polynomial filter on the sheaf Laplacian handles <em>global spectral shaping</em> — deciding which frequency components of the graph signal to amplify or suppress across the entire graph. The restriction maps handle <em>local relational structure</em> — encoding how each node's features relate to each adjacent edge. Once the polynomial filter does the global work, the local maps only need to encode directionality and sign, not full rotational geometry. Diagonal maps (a vector of \(d\) scalars per node-edge pair) capture directional anisotropy without needing a full \(d \times d\) matrix. The polynomial handles the global; the diagonal map handles the local. Splitting the task this way reduces parameters from \(O(d^2)\) to \(O(d)\) per edge with negligible accuracy loss.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, why diagonal maps are sufficient once the polynomial filter is strong:</strong> There is a natural division of labour in PolyNSD. The polynomial filter on the sheaf Laplacian handles <em>global spectral shaping</em>, deciding which frequency components of the graph signal to amplify or suppress across the entire graph. The restriction maps handle <em>local relational structure</em>, encoding how each node's features relate to each adjacent edge. Once the polynomial filter does the global work, the local maps only need to encode directionality and sign, not full rotational geometry. Diagonal maps (a vector of \(d\) scalars per node-edge pair) capture directional anisotropy without needing a full \(d \times d\) matrix. The polynomial handles the global; the diagonal map handles the local. Splitting the task this way reduces parameters from \(O(d^2)\) to \(O(d)\) per edge with negligible accuracy loss.</div>
 
 ## Why Diagonal Maps Are Enough
 
@@ -213,7 +213,7 @@ This is one of the paper's most useful empirical findings. Earlier sheaf models 
 
 Consider a path graph A–B–C with $$d = 1$$ stalks (scalar features) and diagonal restriction maps. Let $$\mathcal{F}_{A \trianglelefteq e_{AB}} = \operatorname{diag}(1) = 1$$, $$\mathcal{F}_{B \trianglelefteq e_{AB}} = \operatorname{diag}(-1) = -1$$ on edge $$AB$$, and $$\mathcal{F}_{B \trianglelefteq e_{BC}} = \operatorname{diag}(1) = 1$$, $$\mathcal{F}_{C \trianglelefteq e_{BC}} = \operatorname{diag}(1) = 1$$ on edge $$BC$$. Initial node features: $$x = [\,x_A,\ x_B,\ x_C\,]^{\top}$$.
 
-**Step 1 — Build the sheaf Laplacian block.** For a path A–B–C with these maps, the (unnormalised) sheaf Laplacian is:
+**Step 1, Build the sheaf Laplacian block.** For a path A–B–C with these maps, the (unnormalised) sheaf Laplacian is:
 
 <div class="formula-box">
 \[
@@ -232,51 +232,51 @@ Consider a path graph A–B–C with $$d = 1$$ stalks (scalar features) and diag
 
 After spectral rescaling to $$[-1, 1]$$ (dividing by the largest eigenvalue ~3 and shifting), we get the normalised $$\tilde{\Delta}_{\mathcal{F}}$$.
 
-**Step 2 — Chebyshev recurrence with $$K = 2$$.** The three Chebyshev basis evaluations are:
+**Step 2, Chebyshev recurrence with $$K = 2$$.** The three Chebyshev basis evaluations are:
 
 <div class="formula-box">
 \[
 \begin{aligned}
 T_0(\tilde{\Delta}_{\mathcal{F}})\, x &= x = [\,x_A,\ x_B,\ x_C\,]^{\top}
-&&\text{(identity — 0-hop, each node only sees itself)} \\[6pt]
+&&\text{(identity, 0-hop, each node only sees itself)} \\[6pt]
 T_1(\tilde{\Delta}_{\mathcal{F}})\, x &= \tilde{\Delta}_{\mathcal{F}}\, x \approx [\,x_A + x_B,\ \ x_A + 2x_B - x_C,\ \ -x_B + x_C\,]^{\top}
-&&\text{(1-hop — each node sees direct neighbours)} \\[6pt]
+&&\text{(1-hop, each node sees direct neighbours)} \\[6pt]
 T_2(\tilde{\Delta}_{\mathcal{F}})\, x &= 2 \cdot \tilde{\Delta}_{\mathcal{F}} \cdot T_1(\tilde{\Delta}_{\mathcal{F}})\, x - T_0(\tilde{\Delta}_{\mathcal{F}})\, x
-&&\text{(2-hop — each node sees 2-hop neighbourhood)}
+&&\text{(2-hop, each node sees 2-hop neighbourhood)}
 \end{aligned}
 \]
 </div>
 
-**Step 3 — 3-hop receptive field "for free".** The $$T_2$$ term gives node A access to information from node C (2 hops away) in a single PolyNSD layer with $$K = 2$$. In NSD, reaching C from A requires 2 separate message-passing layers (A→B in layer 1, B→C in layer 2). PolyNSD achieves the same 2-hop receptive field in one layer — because the Chebyshev recurrence computes multi-hop aggregations algebraically without stacking layers. For $$K = 3$$, node A would see 3 hops with a single filter evaluation. This is the key efficiency gain: $$K$$ polynomial terms in one layer = $$K$$ separate NSD layers, but with only one set of learned parameters and one set of map computations.
+**Step 3, 3-hop receptive field "for free".** The $$T_2$$ term gives node A access to information from node C (2 hops away) in a single PolyNSD layer with $$K = 2$$. In NSD, reaching C from A requires 2 separate message-passing layers (A→B in layer 1, B→C in layer 2). PolyNSD achieves the same 2-hop receptive field in one layer, because the Chebyshev recurrence computes multi-hop aggregations algebraically without stacking layers. For $$K = 3$$, node A would see 3 hops with a single filter evaluation. This is the key efficiency gain: $$K$$ polynomial terms in one layer = $$K$$ separate NSD layers, but with only one set of learned parameters and one set of map computations.
 
-**Learned weights example.** With $$K = 2$$, PolyNSD learns weights $$[\alpha_0, \alpha_1, \alpha_2]$$ (convex mixture summing to 1). For a homophilic graph, the model might learn $$[0.6, 0.3, 0.1]$$ (low-pass, dominated by $$T_0$$). For a heterophilic graph like Cornell, it might learn $$[0.1, -0.3, 0.6]$$ (high-pass, dominated by $$T_2$$ which oscillates — amplifying differences between nodes). This spectral flexibility is what makes PolyNSD work well on both homophilic and heterophilic benchmarks with a single architecture.
+**Learned weights example.** With $$K = 2$$, PolyNSD learns weights $$[\alpha_0, \alpha_1, \alpha_2]$$ (convex mixture summing to 1). For a homophilic graph, the model might learn $$[0.6, 0.3, 0.1]$$ (low-pass, dominated by $$T_0$$). For a heterophilic graph like Cornell, it might learn $$[0.1, -0.3, 0.6]$$ (high-pass, dominated by $$T_2$$ which oscillates, amplifying differences between nodes). This spectral flexibility is what makes PolyNSD work well on both homophilic and heterophilic benchmarks with a single architecture.
 
 ## Results
 
 <div class="blog-figure blog-figure--compact">
 <figure>
 <img src="/images/blog/papers/polynsd-minesweeper-influence.jpg" alt="Influence decay versus hop distance on Minesweeper comparing NSD and PolyNSD variants">
-<figcaption>Figure 2 — On Minesweeper, the influence-decay plot shows the mechanism behind PolyNSD’s stability: polynomial variants retain meaningful medium-range signal for longer, while the standard NSD curves collapse much faster as hop distance grows. This is exactly what you want from a sheaf model that should mix information beyond the immediate neighbourhood without becoming numerically brittle.</figcaption>
+<figcaption>Figure 2, On Minesweeper, the influence-decay plot shows the mechanism behind PolyNSD’s stability: polynomial variants retain meaningful medium-range signal for longer, while the standard NSD curves collapse much faster as hop distance grows. This is exactly what you want from a sheaf model that should mix information beyond the immediate neighbourhood without becoming numerically brittle.</figcaption>
 </figure>
 </div>
 
 <div class="blog-figure blog-figure--compact">
 <figure>
 <img src="/images/blog/papers/polynsd-roman-empire-influence.jpg" alt="Influence decay versus hop distance on Roman Empire comparing NSD and PolyNSD variants">
-<figcaption>Figure 3 — The Roman Empire benchmark tells a similar story in a heterophilic regime: PolyNSD keeps the long-range influence profile substantially flatter, which means information can still travel across structurally distant but label-relevant nodes. That matters because heterophily is exactly where overly local message passing tends to fail.</figcaption>
+<figcaption>Figure 3, The Roman Empire benchmark tells a similar story in a heterophilic regime: PolyNSD keeps the long-range influence profile substantially flatter, which means information can still travel across structurally distant but label-relevant nodes. That matters because heterophily is exactly where overly local message passing tends to fail.</figcaption>
 </figure>
 </div>
 
 <div class="blog-figure blog-figure--compact">
 <figure>
 <img src="/images/blog/papers/polynsd-amazon-ratings-influence.jpg" alt="Influence decay versus hop distance on Amazon Ratings comparing NSD and PolyNSD variants">
-<figcaption>Figure 4 — On Amazon Ratings, the polynomial filters again preserve signal over larger hop distances than their NSD counterparts. Read these curves as a frequency-domain sanity check: the learned filter is not just more accurate, it is shaping propagation in a way that better matches the graph’s long-range structure.</figcaption>
+<figcaption>Figure 4, On Amazon Ratings, the polynomial filters again preserve signal over larger hop distances than their NSD counterparts. Read these curves as a frequency-domain sanity check: the learned filter is not just more accurate, it is shaping propagation in a way that better matches the graph’s long-range structure.</figcaption>
 </figure>
 </div>
 
 Key results vs. NSD and spectral GNN baselines:
 
-- **New SOTA** on both homophilic (Cora, CiteSeer, PubMed) and heterophilic (Texas, Film, Wisconsin) benchmarks — inverting the NSD trend that required large stalk dimensions for heterophilic gains.
+- **New SOTA** on both homophilic (Cora, CiteSeer, PubMed) and heterophilic (Texas, Film, Wisconsin) benchmarks, inverting the NSD trend that required large stalk dimensions for heterophilic gains.
 - **Diagonal maps + small *d*** match or exceed NSD with dense maps + large *d*.
 - **Lower runtime and memory**: no SVD, sparse recurrence, small stalk dimensions.
 - Spectral filter shape is interpretable: the model learns when to apply low-pass (homophilic) vs. high-pass (heterophilic) filters.
@@ -293,7 +293,7 @@ PolyNSD is important because it makes sheaf GNNs more usable. It preserves the g
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li>PolyNSD replaces the NSD diffusion operator with a degree-\(K\) Chebyshev polynomial in the normalised sheaf Laplacian, evaluated via a stable three-term recurrence.</li>
-  <li>Diagonal restriction maps are sufficient — decoupling performance from stalk dimension and reducing parameters from \(O(d^2)\) to \(O(d)\) per edge.</li>
+  <li>Diagonal restriction maps are sufficient, decoupling performance from stalk dimension and reducing parameters from \(O(d^2)\) to \(O(d)\) per edge.</li>
   <li>Stable by design: convex mixture coefficients + spectral rescaling + residual paths prevent gradient collapse.</li>
   <li>SOTA on homo- and heterophilic benchmarks with lower runtime and memory than NSD.</li>
 </ul>

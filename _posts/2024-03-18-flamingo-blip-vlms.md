@@ -6,7 +6,7 @@ book: transformers
 subsection: vision
 tags: [Flamingo, BLIP, LLaVA, VLM, multimodal, vision-language]
 published: false
-excerpt: "From Flamingo's frozen LLM + cross-attention vision interface, to BLIP's bootstrapped captioning, to LLaVA's minimalist projector — three generations of vision-language model design, each with a distinct philosophy."
+excerpt: "From Flamingo's frozen LLM + cross-attention vision interface, to BLIP's bootstrapped captioning, to LLaVA's minimalist projector, three generations of vision-language model design, each with a distinct philosophy."
 author_profile: true
 read_time: true
 is_overview: false
@@ -47,18 +47,18 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Flamingo (DeepMind, 2022) froze a powerful LLM and added cross-attention to visual features — few-shot VQA at scale. BLIP (Salesforce, 2022) bootstrapped better captions with a filter-generator loop. LLaVA (2023) showed that a linear projection from CLIP ViT into LLaMA is sufficient — matching Flamingo with 1% of the parameters. Modern VLMs follow LLaVA's recipe.
+<strong>TL;DR:</strong> Flamingo (DeepMind, 2022) froze a powerful LLM and added cross-attention to visual features, few-shot VQA at scale. BLIP (Salesforce, 2022) bootstrapped better captions with a filter-generator loop. LLaVA (2023) showed that a linear projection from CLIP ViT into LLaMA is sufficient, matching Flamingo with 1% of the parameters. Modern VLMs follow LLaVA's recipe.
 </div>
 
 ## Intuition First: Three Philosophies for Connecting Vision and Language
 
 Think of the problem as bridging two experts: a **vision expert** (trained to understand images) and a **language expert** (trained to generate text). You want them to collaborate on visual question answering. Three different philosophies emerged:
 
-**Flamingo's philosophy:** Keep both experts frozen — their skills are precious and easily destroyed. Build a translation layer (gated cross-attention) that lets the language expert consult the vision expert on demand.
+**Flamingo's philosophy:** Keep both experts frozen, their skills are precious and easily destroyed. Build a translation layer (gated cross-attention) that lets the language expert consult the vision expert on demand.
 
 **BLIP's philosophy:** The bottleneck is noisy training data. Fix the data first (bootstrapped captions), then train a unified model that can do both understanding and generation.
 
-**LLaVA's philosophy:** The experts are already so powerful that the bridge can be minimal — a single linear layer is enough to map vision features into the language expert's coordinate system, and it learns the rest.
+**LLaVA's philosophy:** The experts are already so powerful that the bridge can be minimal, a single linear layer is enough to map vision features into the language expert's coordinate system, and it learns the rest.
 
 <div class="blog-figure">
 <figure>
@@ -121,15 +121,15 @@ Think of the problem as bridging two experts: a **vision expert** (trained to un
   <text x="370" y="143" font-size="9" fill="#64748b">Key insight: the richer the pre-trained components,</text>
   <text x="370" y="157" font-size="9" fill="#64748b">the simpler the bridge needs to be.</text>
 </svg>
-<figcaption>Three VLM architectures compared. Flamingo inserts trainable Perceiver Resampler + Gated Cross-Attention layers between frozen components (~10B trainable params). BLIP-2 uses a lightweight Q-Former (~188M). LLaVA uses a single linear projection (~35M) — the simplest possible bridge. All three freeze the vision encoder; they differ in how much of the LLM they touch.</figcaption>
+<figcaption>Three VLM architectures compared. Flamingo inserts trainable Perceiver Resampler + Gated Cross-Attention layers between frozen components (~10B trainable params). BLIP-2 uses a lightweight Q-Former (~188M). LLaVA uses a single linear projection (~35M), the simplest possible bridge. All three freeze the vision encoder; they differ in how much of the LLM they touch.</figcaption>
 </figure>
 </div>
 
 ## The Vision-Language Model Problem
 
-CLIP gives a shared embedding space for images and text. But it does not generate text — it classifies and retrieves. The next step: combine a vision encoder with a language model to produce a model that can *describe*, *reason about*, and *answer questions* about images.
+CLIP gives a shared embedding space for images and text. But it does not generate text, it classifies and retrieves. The next step: combine a vision encoder with a language model to produce a model that can *describe*, *reason about*, and *answer questions* about images.
 
-Three landmark models — Flamingo, BLIP, and LLaVA — each solved this differently.
+Three landmark models, Flamingo, BLIP, and LLaVA, each solved this differently.
 
 ## Flamingo (DeepMind, 2022)
 
@@ -139,7 +139,7 @@ Flamingo freezes a large pre-trained language model (Chinchilla 70B) and a CLIP-
 
 1. **Perceiver Resampler:** pools the vision encoder's patch features (hundreds of tokens) into a fixed number of visual tokens (64). This decouples the visual sequence length from the LLM context.
 
-2. **Gated Cross-Attention layers:** inserted between frozen LLM layers. The text tokens attend to the visual tokens via cross-attention. A learned tanh gate controls how much visual information flows in (initialised to 0 — at start, the LLM behaves as if no images are present).
+2. **Gated Cross-Attention layers:** inserted between frozen LLM layers. The text tokens attend to the visual tokens via cross-attention. A learned tanh gate controls how much visual information flows in (initialised to 0, at start, the LLM behaves as if no images are present).
 
 ```
 Frozen LLM layer N
@@ -152,12 +152,12 @@ Frozen LLM layer N+1
 ### Key Properties
 
 - **Frozen LLM:** language capabilities are preserved exactly. Visual information is injected without catastrophic forgetting.
-- **Interleaved image-text input:** Flamingo can handle sequences like [image, text, image, text, ...] naturally — each image conditions the subsequent text.
-- **Few-shot learning:** by prepending example (image, answer) pairs in context, Flamingo achieves strong few-shot VQA — a first for large vision-language models.
+- **Interleaved image-text input:** Flamingo can handle sequences like [image, text, image, text, ...] naturally, each image conditions the subsequent text.
+- **Few-shot learning:** by prepending example (image, answer) pairs in context, Flamingo achieves strong few-shot VQA, a first for large vision-language models.
 
 ### Flamingo's result
 
-At 80B parameters (Flamingo-80B), state-of-the-art on VQA, COCO captioning, and other benchmarks — without any task-specific fine-tuning in most settings.
+At 80B parameters (Flamingo-80B), state-of-the-art on VQA, COCO captioning, and other benchmarks, without any task-specific fine-tuning in most settings.
 
 ## BLIP (Salesforce, 2022)
 
@@ -170,7 +170,7 @@ Web-scraped image-text pairs (like CLIP's WIT) are noisy. BLIP addresses this wi
 3. **Generate** synthetic captions using the model's captioner
 4. **Retrain** on filtered + synthetic data
 
-This self-improvement loop yields cleaner training data, which yields a better model, which yields cleaner data — bootstrapped caption quality.
+This self-improvement loop yields cleaner training data, which yields a better model, which yields cleaner data, bootstrapped caption quality.
 
 ### BLIP Architecture: Unified Encoder-Decoder
 
@@ -209,7 +209,7 @@ CLIP ViT-L/14 → Linear projection W → LLaMA token space
 The CLIP encoder extracts visual features (256 patch tokens). A **single linear layer** projects them into LLaMA's embedding space. These projected visual tokens are prepended to the text token sequence as if they were language tokens. No cross-attention, no Q-Former, no Perceiver.
 
 <div class="insight-box">
-<strong>Why does a linear projection suffice?</strong> CLIP features are already semantically rich — the linear layer just needs to change the coordinate system (from CLIP's d-dimensional space to LLaMA's d-dimensional space). The LLM then processes everything jointly via its own self-attention layers.
+<strong>Why does a linear projection suffice?</strong> CLIP features are already semantically rich, the linear layer just needs to change the coordinate system (from CLIP's d-dimensional space to LLaMA's d-dimensional space). The LLM then processes everything jointly via its own self-attention layers.
 </div>
 
 ### Instruction Tuning Data
@@ -220,7 +220,7 @@ Fine-tuned on LLaMA-13B with this data (plus some open VQA datasets), LLaVA achi
 
 ### LLaVA-Next and Successors
 
-LLaVA-1.5 replaces the linear projection with a 2-layer MLP — a small improvement. LLaVA-Next adds dynamic high-resolution processing. The LLaVA family has spawned countless open-source VLMs (InternVL, Idefics, Qwen-VL, ...) all following the same pattern:
+LLaVA-1.5 replaces the linear projection with a 2-layer MLP, a small improvement. LLaVA-Next adds dynamic high-resolution processing. The LLaVA family has spawned countless open-source VLMs (InternVL, Idefics, Qwen-VL, ...) all following the same pattern:
 
 ```
 Frozen vision encoder → projection → LLM (partially or fully fine-tuned)
@@ -234,7 +234,7 @@ Frozen vision encoder → projection → LLM (partially or fully fine-tuned)
 | BLIP-2 | ViT-G | Q-Former | FlanT5-XL | ~188M |
 | **LLaVA-13B** | CLIP ViT-L | **Linear** | LLaMA-13B | **~35M** |
 
-LLaVA's key insight: the vision encoder (CLIP) and LLM are already powerful enough — the bridge can be minimal.
+LLaVA's key insight: the vision encoder (CLIP) and LLM are already powerful enough, the bridge can be minimal.
 
 ## The Modern VLM Recipe
 
@@ -254,7 +254,7 @@ Current state-of-the-art VLMs (GPT-4V, Gemini, Claude's vision, Qwen-VL) follow 
 | BLIP-2 | Q-Former for parameter-efficient alignment |
 | LLaVA | Linear projection suffices; visual instruction tuning |
 
-The evolution shows a clear trend: **less architectural complexity, more training data quality**. The modern VLM is a CLIP encoder, a small projection, and an LLM — the intelligence comes from scale and data, not from elaborate fusion mechanisms.
+The evolution shows a clear trend: **less architectural complexity, more training data quality**. The modern VLM is a CLIP encoder, a small projection, and an LLM, the intelligence comes from scale and data, not from elaborate fusion mechanisms.
 
 ## References
 

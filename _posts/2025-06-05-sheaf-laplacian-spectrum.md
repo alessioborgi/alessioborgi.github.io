@@ -6,7 +6,7 @@ book: sheaf
 subsection: foundations
 tags: [sheaf-Laplacian, spectrum, eigenvalue, Hodge, diffusion, Cheeger]
 published: false
-excerpt: "The Sheaf Laplacian Δ_F is the central operator of sheaf-based graph learning. This post analyses its eigenvalue structure, the Hodge decomposition it induces on node signals, its spectral gap, and the continuous-time diffusion it drives — showing how each property shapes the behaviour of sheaf GNNs."
+excerpt: "The Sheaf Laplacian Δ_F is the central operator of sheaf-based graph learning. This post analyses its eigenvalue structure, the Hodge decomposition it induces on node signals, its spectral gap, and the continuous-time diffusion it drives, showing how each property shapes the behaviour of sheaf GNNs."
 author_profile: true
 read_time: true
 is_overview: false
@@ -32,7 +32,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Δ_F is an (Nd)×(Nd) positive semidefinite matrix with eigenvalues 0 ≤ λ₁ ≤ ... ≤ λ_{Nd}. The zero eigenspace = global sections = H⁰. The spectral gap λ_{dim(H⁰)+1} controls mixing speed. For normalised Δ_F, eigenvalues lie in [0, 2]. Sheaf diffusion X(t) = exp(−Δ_F t)X(0) converges to the projection onto H⁰ — not to a constant, but to the space of globally consistent signals. Learned restriction maps reshape this spectrum to fit the task.
+<strong>TL;DR:</strong> Δ_F is an (Nd)×(Nd) positive semidefinite matrix with eigenvalues 0 ≤ λ₁ ≤ ... ≤ λ_{Nd}. The zero eigenspace = global sections = H⁰. The spectral gap λ_{dim(H⁰)+1} controls mixing speed. For normalised Δ_F, eigenvalues lie in [0, 2]. Sheaf diffusion X(t) = exp(−Δ_F t)X(0) converges to the projection onto H⁰, not to a constant, but to the space of globally consistent signals. Learned restriction maps reshape this spectrum to fit the task.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_laplacian.png" alt="Sheaf Laplacian spectrum" caption="Spectrum of the Sheaf Laplacian and diffusion dynamics (Bodnar et al., 2022)" %}
 
@@ -141,10 +141,10 @@ It controls how quickly sheaf diffusion converges to H⁰:
 
 Large spectral gap → fast convergence → information from the initial condition is quickly forgotten (rapid mixing, but potential loss of discriminative power). Small spectral gap → slow convergence → the model retains initial features for many diffusion steps before projecting onto H⁰.
 
-For standard GCN: λ_gap = λ₂(L) (the algebraic connectivity / Fiedler value of the graph). For sheaf GNNs, the spectral gap of Δ_F depends on both the graph topology **and** the learned restriction maps — the model can effectively increase or decrease its own mixing rate.
+For standard GCN: λ_gap = λ₂(L) (the algebraic connectivity / Fiedler value of the graph). For sheaf GNNs, the spectral gap of Δ_F depends on both the graph topology **and** the learned restriction maps, the model can effectively increase or decrease its own mixing rate.
 
 <div class="insight-box">
-<strong>Implication for depth:</strong> A larger spectral gap means fewer diffusion steps are needed to reach the equilibrium H⁰. This is why deep sheaf GNNs (many layers) tend to converge to the global section space quickly — and why oversmoothing is replaced by "over-projection onto H⁰". Since H⁰ is task-relevant (the model learned the maps to make it so), this projection is useful rather than destructive.
+<strong>Implication for depth:</strong> A larger spectral gap means fewer diffusion steps are needed to reach the equilibrium H⁰. This is why deep sheaf GNNs (many layers) tend to converge to the global section space quickly, and why oversmoothing is replaced by "over-projection onto H⁰". Since H⁰ is task-relevant (the model learned the maps to make it so), this projection is useful rather than destructive.
 </div>
 
 ## The Hodge Decomposition on Node Space
@@ -170,9 +170,9 @@ where x_harm ∈ ker(Δ_F) (the harmonic / global-section component) and x_grad 
 - x_harm is unchanged (in ker(Δ_F))
 - x_grad decays: at time t, the gradient component is exp(−Δ_F t) x_grad → 0
 
-So diffusion retains the harmonic component and attenuates the gradient component. This is the sheaf analogue of low-pass filtering — but "low" means "in ker(Δ_F)", not "in span{1}".
+So diffusion retains the harmonic component and attenuates the gradient component. This is the sheaf analogue of low-pass filtering, but "low" means "in ker(Δ_F)", not "in span{1}".
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The harmonic component — the global sections — is precisely what survives indefinite sheaf diffusion. It is not an arbitrary constant; it is the subspace of signals that are everywhere consistent with the restriction maps. This means the long-time limit of sheaf diffusion is not a trivial collapse to uniform values, but a projection onto a geometrically meaningful subspace that the model itself defines by learning the maps. Designing better restriction maps is equivalent to designing a better target for the diffusion.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The harmonic component, the global sections, is precisely what survives indefinite sheaf diffusion. It is not an arbitrary constant; it is the subspace of signals that are everywhere consistent with the restriction maps. This means the long-time limit of sheaf diffusion is not a trivial collapse to uniform values, but a projection onto a geometrically meaningful subspace that the model itself defines by learning the maps. Designing better restriction maps is equivalent to designing a better target for the diffusion.</div>
 
 <div class="insight-box">
 <strong>This is the practical payoff:</strong> in a vanilla GCN, deep diffusion pushes everything toward constants. In a sheaf model, deep diffusion pushes signals toward whatever the learned restrictions define as globally compatible. That is a much better target when the graph is heterophilic or direction-sensitive.
@@ -216,7 +216,7 @@ Polynomial Neural Sheaf Diffusion (PNSD) learns the coefficients a_k to fit the 
 
 Consider the simplest non-trivial graph: a triangle with nodes {1, 2, 3}, edges {e₁₂, e₂₃, e₁₃}, stalk dimension d = 1, and all restriction maps equal to 1 (the trivial sheaf, which recovers the ordinary graph Laplacian).
 
-**Step 1 — coboundary matrix δ₀ (edges × nodes, with orientation e₁₂: 1→2, e₂₃: 2→3, e₁₃: 1→3):**
+**Step 1, coboundary matrix δ₀ (edges × nodes, with orientation e₁₂: 1→2, e₂₃: 2→3, e₁₃: 1→3):**
 
 <div class="math-box">
 δ₀ = [F_{2▷e₁₂} | −F_{1▷e₁₂} | 0       ]   =   [1  −1   0]
@@ -224,7 +224,7 @@ Consider the simplest non-trivial graph: a triangle with nodes {1, 2, 3}, edges 
      [F_{3▷e₁₃} | 0         | −F_{1▷e₁₃}]       [1   0  −1]
 </div>
 
-**Step 2 — Sheaf Laplacian Δ_F = δ₀ᵀδ₀:**
+**Step 2, Sheaf Laplacian Δ_F = δ₀ᵀδ₀:**
 
 <div class="math-box">
 Δ_F = δ₀ᵀδ₀ = [ 2  −1  −1]
@@ -234,13 +234,13 @@ Consider the simplest non-trivial graph: a triangle with nodes {1, 2, 3}, edges 
 
 This is exactly the combinatorial graph Laplacian L of the triangle (as expected for the trivial sheaf).
 
-**Step 3 — Eigenvalues.** The characteristic polynomial is det(Δ_F − λI) = 0. One eigenvalue is always λ₁ = 0 (null space = global sections). The remaining two eigenvalues of L for the complete graph K₃ are both λ = 3:
+**Step 3, Eigenvalues.** The characteristic polynomial is det(Δ_F − λI) = 0. One eigenvalue is always λ₁ = 0 (null space = global sections). The remaining two eigenvalues of L for the complete graph K₃ are both λ = 3:
 
 <div class="math-box">
 λ₁ = 0,   λ₂ = 3,   λ₃ = 3
 </div>
 
-**Step 4 — Null space.** The null eigenvector satisfies Δ_F x = 0:
+**Step 4, Null space.** The null eigenvector satisfies Δ_F x = 0:
 
 <div class="math-box">
 x* = (1/√3) · (1, 1, 1)ᵀ
@@ -248,7 +248,7 @@ x* = (1/√3) · (1, 1, 1)ᵀ
 
 This is the only global section: the unique (up to scale) assignment of values to nodes that is consistent across all edges (since F_{u▷e} = F_{v▷e} = 1 means consistency = equality).
 
-**Step 5 — One step of normalised diffusion.** The normalised Laplacian is Δ_F^{norm} = D^{−1/2}LD^{1/2} = (1/2)L (since each node has degree 2). Eigenvalues of Δ_F^{norm}: 0, 3/2, 3/2 — within [0, 2] as expected.
+**Step 5, One step of normalised diffusion.** The normalised Laplacian is Δ_F^{norm} = D^{−1/2}LD^{1/2} = (1/2)L (since each node has degree 2). Eigenvalues of Δ_F^{norm}: 0, 3/2, 3/2, within [0, 2] as expected.
 
 Starting from x₀ = (1, 0, 0)ᵀ (all signal at node 1):
 
@@ -263,7 +263,7 @@ x₁ = (1,0,0)ᵀ − (1/2)(2,−1,−1)ᵀ = (0, 0.5, 0.5)ᵀ
 
 After one step the signal has moved halfway toward the global section (1/√3)(1,1,1)ᵀ. The harmonic component of x₀ in the direction of x* is (1/√3)(1/√3)(1,1,1)ᵀ = (1/3)(1,1,1)ᵀ. That component is preserved exactly; the gradient component has been partially attenuated.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> For the trivial sheaf (all maps = 1), the Sheaf Laplacian reduces exactly to the graph Laplacian and the global section is the constant vector. As soon as maps are non-trivial, the "global section" changes — it is no longer constants but the space of signals that satisfy all the map-consistency conditions. The eigenvalue structure (and therefore the mixing rate) changes accordingly.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> For the trivial sheaf (all maps = 1), the Sheaf Laplacian reduces exactly to the graph Laplacian and the global section is the constant vector. As soon as maps are non-trivial, the "global section" changes, it is no longer constants but the space of signals that satisfy all the map-consistency conditions. The eigenvalue structure (and therefore the mixing rate) changes accordingly.</div>
 
 ## Sheaf Cheeger Inequality
 
@@ -279,7 +279,7 @@ An analogous inequality holds for the Sheaf Laplacian. Define the **sheaf Cheege
 h(G, F) = min_{S ⊂ V} ||δ₀ 1_S|| / min(vol(S), vol(V\S))
 </div>
 
-where 1_S is the indicator vector of S (in the sheaf sense — an indicator in each stalk). Then:
+where 1_S is the indicator vector of S (in the sheaf sense, an indicator in each stalk). Then:
 
 <div class="math-box">
 h(G, F)² / 2 ≤ λ_{gap}(Δ_F) ≤ 2 · h(G, F)
@@ -311,9 +311,9 @@ The full NSD layer: X ← (I − Δ_F^{norm}) X W, where W ∈ ℝ^{d×d} is a t
 
 ## Spectral Interpretation of Oversmoothing
 
-Standard GCN oversmoothing: applying (I − L)^K x repeatedly drives x toward ker(L) = span{1_N}. This is a rank-N collapse to a d-dimensional space — devastating for node classification.
+Standard GCN oversmoothing: applying (I − L)^K x repeatedly drives x toward ker(L) = span{1_N}. This is a rank-N collapse to a d-dimensional space, devastating for node classification.
 
-Sheaf diffusion: applying (I − Δ_F^{norm})^K x drives x toward ker(Δ_F) = H⁰(G, F). This is a collapse to an m-dimensional space where m = dim H⁰. Since m can be >> d (and is determined by the learned restriction maps), this collapse is far less destructive — and can be tuned to preserve task-relevant features.
+Sheaf diffusion: applying (I − Δ_F^{norm})^K x drives x toward ker(Δ_F) = H⁰(G, F). This is a collapse to an m-dimensional space where m = dim H⁰. Since m can be >> d (and is determined by the learned restriction maps), this collapse is far less destructive, and can be tuned to preserve task-relevant features.
 
 In the limit, as the restriction maps are learned end-to-end, the model can implicitly choose m to balance expressiveness and smoothness.
 

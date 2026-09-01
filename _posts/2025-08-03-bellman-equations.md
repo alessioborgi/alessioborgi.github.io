@@ -27,13 +27,13 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> The Bellman optimality equations define V* and Q* as the unique fixed points of the optimal Bellman operator — proven via the contraction mapping theorem. Dynamic programming algorithms (policy evaluation, policy improvement, value iteration) exploit this recursive structure to compute optimal policies exactly when the MDP model is known.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> The Bellman optimality equations define V* and Q* as the unique fixed points of the optimal Bellman operator, proven via the contraction mapping theorem. Dynamic programming algorithms (policy evaluation, policy improvement, value iteration) exploit this recursive structure to compute optimal policies exactly when the MDP model is known.</div>
 {% include figure image_path="/images/blog/rl/mnih2016_a3c.png" alt="Bellman equations and value functions" caption="Value function architecture (Mnih et al., 2016)" %}
 
 
 ## Intuition First
 
-Imagine you are lost in a maze and want to estimate how good each room is. You start with a guess — say, everything is worth 0. Then you look at a room's neighbours: if stepping into the next room plus the current reward is higher than your current estimate, you update upward. You keep doing this pass after pass until estimates stop changing. That iterative refinement *is* the Bellman operator in action. Convergence is guaranteed because each pass brings every room's estimate closer to reality — by exactly the factor \(\gamma\).
+Imagine you are lost in a maze and want to estimate how good each room is. You start with a guess, say, everything is worth 0. Then you look at a room's neighbours: if stepping into the next room plus the current reward is higher than your current estimate, you update upward. You keep doing this pass after pass until estimates stop changing. That iterative refinement *is* the Bellman operator in action. Convergence is guaranteed because each pass brings every room's estimate closer to reality, by exactly the factor \(\gamma\).
 
 ## Bellman Expectation vs. Bellman Optimality
 
@@ -98,7 +98,7 @@ Convergence in just 2 iterations! The error after k iterations is bounded by $$\
 
 When the MDP model $$(P, R)$$ is known, dynamic programming (DP) provides exact solutions.
 
-**Policy Evaluation** — compute $$V^\pi$$ for a fixed policy by iterating the Bellman expectation operator until convergence:
+**Policy Evaluation**, compute $$V^\pi$$ for a fixed policy by iterating the Bellman expectation operator until convergence:
 
 ```
 V ← 0 (arbitrary initialisation)
@@ -108,13 +108,13 @@ repeat:
 until max_s |ΔV(s)| < ε
 ```
 
-**Policy Improvement** — given $$V^\pi$$, construct a strictly better policy by acting greedily:
+**Policy Improvement**, given $$V^\pi$$, construct a strictly better policy by acting greedily:
 
 $$\pi'(s) = \arg\max_a \sum_{s'} P(s' \mid s, a)\!\left[R(s,a,s') + \gamma V^\pi(s')\right]$$
 
 The **Policy Improvement Theorem** guarantees $$V^{\pi'} \geq V^\pi$$ everywhere. Alternating evaluation and improvement until the policy is stable gives **policy iteration**, which converges to $$\pi^*$$ in a finite number of steps (for finite MDPs).
 
-**Value Iteration** — merges evaluation and improvement into a single sweep by applying $$\mathcal{T}^*$$ directly, avoiding the inner loop of policy evaluation. It converges to $$V^*$$ asymptotically, with the optimal policy recovered by taking the greedy action with respect to the converged $$V^*$$.
+**Value Iteration**, merges evaluation and improvement into a single sweep by applying $$\mathcal{T}^*$$ directly, avoiding the inner loop of policy evaluation. It converges to $$V^*$$ asymptotically, with the optimal policy recovered by taking the greedy action with respect to the converged $$V^*$$.
 
 ## Bellman Backup Tree (Visual)
 
@@ -151,14 +151,14 @@ The **Policy Improvement Theorem** guarantees $$V^{\pi'} \geq V^\pi$$ everywhere
   <text x="245" y="168" font-size="9" fill="#7c3aed">V*(s')</text>
   <text x="170" y="198" text-anchor="middle" font-size="10" fill="#0d9488">max over actions → V*(s)</text>
 </svg>
-<figcaption>Bellman backup tree: the optimal value V*(s) is computed by looking one step ahead — taking the max over actions, then averaging over stochastic next states weighted by their probabilities.</figcaption>
+<figcaption>Bellman backup tree: the optimal value V*(s) is computed by looking one step ahead, taking the max over actions, then averaging over stochastic next states weighted by their probabilities.</figcaption>
 </figure></div>
 
 ## Limitations of DP
 
 DP requires:
 1. **Full knowledge** of the model $$P$$ and $$R$$.
-2. **Tabular representation** — infeasible when $$|\mathcal{S}|$$ is astronomical (e.g., Go has ~$$10^{170}$$ states).
+2. **Tabular representation**, infeasible when $$|\mathcal{S}|$$ is astronomical (e.g., Go has ~$$10^{170}$$ states).
 
 RL algorithms (Q-learning, DQN, TD) can be understood as *sample-based*, *model-free* approximations to DP: they estimate the Bellman operator from experience rather than computing it exactly from the model.
 

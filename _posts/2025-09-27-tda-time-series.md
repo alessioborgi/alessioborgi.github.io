@@ -28,7 +28,7 @@ toc_label: "Contents"
 
 ## Intuition First
 
-A pure sinusoid traces a perfect circle when you plot \(x(t)\) against \(x(t + T/4)\) — the delayed version. That circle is topologically a loop (\(H_1\)). A noisy or aperiodic signal traces a jumbled cloud instead — no loop. The sliding window embedding generalises this idea to higher dimensions: it wraps the time series into a point cloud in \(\mathbb{R}^d\), and persistent homology asks "is there a robust loop here?" A long-lived \(H_1\) bar means yes — the signal is periodic. TDA has thus converted a signal analysis question into a shape recognition question.
+A pure sinusoid traces a perfect circle when you plot \(x(t)\) against \(x(t + T/4)\), the delayed version. That circle is topologically a loop (\(H_1\)). A noisy or aperiodic signal traces a jumbled cloud instead, no loop. The sliding window embedding generalises this idea to higher dimensions: it wraps the time series into a point cloud in \(\mathbb{R}^d\), and persistent homology asks "is there a robust loop here?" A long-lived \(H_1\) bar means yes, the signal is periodic. TDA has thus converted a signal analysis question into a shape recognition question.
 
 ## Sliding Window Embeddings
 
@@ -161,20 +161,20 @@ The optimal parameters \(d, \tau\) can be estimated from the autocorrelation of 
 
 Take $$x(t) = \sin(2\pi t / 10)$$ sampled at $$t = 0, 1, \ldots, 49$$ (50 points, period $$T_0=10$$).
 
-**Sliding window**: $$d=3$$, $$\tau=2$$ gives vectors $$(x(t), x(t+2), x(t+4))$$ — 46 points in $$\mathbb{R}^3$$ tracing an ellipse.
+**Sliding window**: $$d=3$$, $$\tau=2$$ gives vectors $$(x(t), x(t+2), x(t+4))$$, 46 points in $$\mathbb{R}^3$$ tracing an ellipse.
 
 **Rips persistence on $$P$$**:
-- $$H_0$$: one bar $$(0, \infty)$$ — all points form one component quickly.
+- $$H_0$$: one bar $$(0, \infty)$$, all points form one component quickly.
 - $$H_1$$: one long bar $$(b, d) \approx (0.8, 3.2)$$, persistence $$= 2.4$$.
 - Diameter of $$P \approx 3.0$$.
 
-**Periodicity score**: $$\mathrm{PS} = 2.4 / 3.0 \approx 0.80$$ — high, confirming clear periodicity.
+**Periodicity score**: $$\mathrm{PS} = 2.4 / 3.0 \approx 0.80$$, high, confirming clear periodicity.
 
-For white noise with same length: max $$H_1$$ persistence $$\approx 0.3$$, diameter $$\approx 3.5$$, $$\mathrm{PS} \approx 0.09$$ — near zero, confirming aperiodicity.
+For white noise with same length: max $$H_1$$ persistence $$\approx 0.3$$, diameter $$\approx 3.5$$, $$\mathrm{PS} \approx 0.09$$, near zero, confirming aperiodicity.
 
 ## Applications
 
-**EEG analysis**: Persistent $$H_1$$ of sliding window embeddings detects epileptic seizure onset — the irregular burst activity has a different topological signature than normal brain rhythms.
+**EEG analysis**: Persistent $$H_1$$ of sliding window embeddings detects epileptic seizure onset, the irregular burst activity has a different topological signature than normal brain rhythms.
 
 **ECG analysis**: Heartbeat irregularities (atrial fibrillation) disrupt the regular $$S^1$$ loop of normal heartbeat embeddings, producing topological changes detectable by persistence.
 

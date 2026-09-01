@@ -6,7 +6,7 @@ book: gnn
 subsection: expressivity
 tags: [expressivity, WL-test, regular-graphs, indistinguishability, GNN-limits]
 published: true
-excerpt: "Certain graph structures are invisible to message-passing GNNs — not because of bad training, but because of fundamental mathematical limits. Two structurally distinct graphs can produce identical embeddings in any MPNN."
+excerpt: "Certain graph structures are invisible to message-passing GNNs, not because of bad training, but because of fundamental mathematical limits. Two structurally distinct graphs can produce identical embeddings in any MPNN."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,18 +18,18 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Two non-isomorphic graphs can fool every MPNN into assigning identical graph-level embeddings. This is not a training failure — it is a mathematical limit inherited from 1-WL. The canonical examples are \(k\)-regular graphs (a 6-cycle vs. two disjoint triangles, two different 3-regular graphs on 10 nodes) and engineered families such as CSL. The caveat throughout: these are worst cases for <em>uniform</em> node features; informative features break many of the ties. Understanding which structures fool GNNs is what motivates beyond-1-WL architectures.
+<strong>TL;DR:</strong> Two non-isomorphic graphs can fool every MPNN into assigning identical graph-level embeddings. This is not a training failure, it is a mathematical limit inherited from 1-WL. The canonical examples are \(k\)-regular graphs (a 6-cycle vs. two disjoint triangles, two different 3-regular graphs on 10 nodes) and engineered families such as CSL. The caveat throughout: these are worst cases for <em>uniform</em> node features; informative features break many of the ties. Understanding which structures fool GNNs is what motivates beyond-1-WL architectures.
 </div>
 {% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Non-isomorphic graphs that fool GNNs" caption="Non-isomorphic graphs indistinguishable by 1-WL / standard MPNNs (Xu et al., 2019)" %}
 
 
 ## Intuition First
 
-The 1-WL test gives every node a "colour" based on the multiset of its neighbours' colours, then iteratively refines. Two nodes carry the same colour after $$K$$ rounds precisely when their **unrolled computation trees** to depth $$K$$ — the tree of neighbours, then their neighbours, and so on — are identical.
+The 1-WL test gives every node a "colour" based on the multiset of its neighbours' colours, then iteratively refines. Two nodes carry the same colour after $$K$$ rounds precisely when their **unrolled computation trees** to depth $$K$$, the tree of neighbours, then their neighbours, and so on, are identical.
 
 The catch: a tree records no cycles. Unrolling revisits the same node along different branches without ever noticing it is the same node, so a triangle and a path of the same local degrees produce the same tree. Since a message-passing GNN can only distinguish what 1-WL distinguishes, **MPNNs cannot count cycles as a node-level feature**.
 
-One qualification, since "GNNs are cycle-blind" is often stated too strongly: 1-WL *can* separate many graphs that happen to differ in cycle structure, because differing cycles usually also perturb the degree sequence and hence the colours. What it cannot do is compute a node's triangle or cycle count as a function it could rely on — and on regular graphs, where the degrees give nothing away, it fails completely.
+One qualification, since "GNNs are cycle-blind" is often stated too strongly: 1-WL *can* separate many graphs that happen to differ in cycle structure, because differing cycles usually also perturb the degree sequence and hence the colours. What it cannot do is compute a node's triangle or cycle count as a function it could rely on, and on regular graphs, where the degrees give nothing away, it fails completely.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 480 155" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:auto">
@@ -78,12 +78,12 @@ One qualification, since "GNNs are cycle-blind" is often stated too strongly: 1-
   <!-- same label -->
   <text x="240" y="148" class="wl-same">1-WL gives both the same histogram → any MPNN predicts identically</text>
 </svg>
-<figcaption>A 6-cycle and two disjoint 3-cycles both have 6 nodes, 6 edges, and every node of degree 2, so 1-WL (and hence any MPNN) cannot tell them apart. Yet the 6-cycle is connected and triangle-free, while the pair of triangles is disconnected and contains two triangles — differences no amount of message passing can surface.</figcaption>
+<figcaption>A 6-cycle and two disjoint 3-cycles both have 6 nodes, 6 edges, and every node of degree 2, so 1-WL (and hence any MPNN) cannot tell them apart. Yet the 6-cycle is connected and triangle-free, while the pair of triangles is disconnected and contains two triangles, differences no amount of message passing can surface.</figcaption>
 </figure></div>
 
 ## The Expressivity Ceiling
 
-The Weisfeiler-Lehman (1-WL) test is the exact expressivity ceiling for message-passing GNNs. Two graphs that 1-WL cannot distinguish cannot be distinguished by any MPNN — including GCN, GAT and GIN.
+The Weisfeiler-Lehman (1-WL) test is the exact expressivity ceiling for message-passing GNNs. Two graphs that 1-WL cannot distinguish cannot be distinguished by any MPNN, including GCN, GAT and GIN.
 
 This is not a theorem about bad architectures. Even the most expressive MPNN (GIN, given injective aggregation) is bounded by 1-WL. The question becomes: what does 1-WL fail to distinguish?
 
@@ -93,7 +93,7 @@ Throughout this section assume **uniform initial node features**. Informative fe
 
 A **$$k$$-regular graph** is one in which every node has degree $$k$$. With uniform initial features, all nodes start with the same colour; after one iteration every node sees the multiset of $$k$$ identical colours, so every node again receives the same colour. By induction the colouring never refines.
 
-**Consequence:** any two $$k$$-regular graphs on the same number of nodes $$N$$ (which forces the same edge count $$Nk/2$$) produce identical 1-WL histograms — and hence identical graph-level embeddings in any MPNN.
+**Consequence:** any two $$k$$-regular graphs on the same number of nodes $$N$$ (which forces the same edge count $$Nk/2$$) produce identical 1-WL histograms, and hence identical graph-level embeddings in any MPNN.
 
 ```
 Graph A: Triangle (3 nodes, 3 edges, 2-regular)
@@ -109,7 +109,7 @@ For molecular graphs, where degree tracks atom valence, this means two chemicall
 
 ## Case 2: Cycle Counting Blindness
 
-1-WL cannot count cycles. Be careful with the examples, though — degree differences often rescue the test, and only the truly regular cases are genuinely hard.
+1-WL cannot count cycles. Be careful with the examples, though, degree differences often rescue the test, and only the truly regular cases are genuinely hard.
 
 Consider first a pair that is *not* a counterexample:
 
@@ -135,15 +135,15 @@ Both are 2-regular on 6 nodes with 6 edges, so 1-WL assigns identical histograms
 
 The **Circular Skip Link (CSL) graphs** $$\mathrm{CSL}(N, k)$$ have $$N$$ nodes arranged in a cycle plus an extra "skip" edge from each node to the one $$k$$ positions away. Every node has degree 4, so each such graph is 4-regular and 1-WL sees nothing but "$$N$$ nodes, all degree 4". The version used as a benchmark fixes $$N = 41$$ and varies the skip length $$k$$ to produce a family of non-isomorphic graphs.
 
-Because the graphs differ only in their skip pattern — invisible to a 4-regular colouring — a classification task over this family is solved at chance level by any MPNN. CSL is consequently a standard probe for beyond-1-WL expressiveness.
+Because the graphs differ only in their skip pattern, invisible to a 4-regular colouring, a classification task over this family is solved at chance level by any MPNN. CSL is consequently a standard probe for beyond-1-WL expressiveness.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The 1-WL bound is tight — GIN achieves it. So if you need to go beyond 1-WL, no amount of tuning GIN will help. You need a fundamentally different architecture: subgraph GNNs, higher-order WL, or structural encodings (RWPE, LapPE) that break the symmetry 1-WL cannot break.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The 1-WL bound is tight, GIN achieves it. So if you need to go beyond 1-WL, no amount of tuning GIN will help. You need a fundamentally different architecture: subgraph GNNs, higher-order WL, or structural encodings (RWPE, LapPE) that break the symmetry 1-WL cannot break.</div>
 
 ## Concrete Failure: Molecule Classification
 
 Take the carbon skeletons of two structures, each with 6 carbons and each carbon bonded to exactly 2 others. One is benzene, a single 6-ring and aromatic. The other is two separate cyclopropane rings, two disjoint 3-rings and not aromatic. Both skeletons are 2-regular on 6 nodes, so both have the same 1-WL colour histogram.
 
-A GNN given only this connectivity will assign the two the same graph-level embedding — and therefore the same prediction — even though only benzene is aromatic. This is not a data issue; it is an architectural limit. (In practice, real molecular GNNs also receive atom and bond features, which is precisely why they are not this helpless; the point is that the *topology alone* is not enough.)
+A GNN given only this connectivity will assign the two the same graph-level embedding, and therefore the same prediction, even though only benzene is aromatic. This is not a data issue; it is an architectural limit. (In practice, real molecular GNNs also receive atom and bond features, which is precisely why they are not this helpless; the point is that the *topology alone* is not enough.)
 
 The fix: add ring-membership or structural features, or use subgraph GNNs that explicitly detect cycles. Random-walk positional encodings (RWPE) are the standard cheap option. With $$P = D^{-1}A$$ the random-walk transition matrix, give each node its vector of return probabilities:
 
@@ -153,7 +153,7 @@ The fix: add ring-membership or structural features, or use subgraph GNNs that e
 \]
 </div>
 
-The entry $$(P^{k})_{vv}$$ is the probability that a walk started at $$v$$ is back at $$v$$ after $$k$$ steps, which is positive exactly when $$v$$ lies on a closed walk of length $$k$$. In particular $$(P^{3})_{vv} > 0$$ if and only if $$v$$ lies on a triangle. RWPE therefore hands the network precisely the cycle information that colour refinement can never derive for itself — and it separates the two carbon skeletons above, since the cyclopropane rings have $$(P^{3})_{vv} > 0$$ while benzene has $$(P^{3})_{vv} = 0$$.
+The entry $$(P^{k})_{vv}$$ is the probability that a walk started at $$v$$ is back at $$v$$ after $$k$$ steps, which is positive exactly when $$v$$ lies on a closed walk of length $$k$$. In particular $$(P^{3})_{vv} > 0$$ if and only if $$v$$ lies on a triangle. RWPE therefore hands the network precisely the cycle information that colour refinement can never derive for itself, and it separates the two carbon skeletons above, since the cyclopropane rings have $$(P^{3})_{vv} > 0$$ while benzene has $$(P^{3})_{vv} = 0$$.
 
 ## Why This Matters in Practice
 
@@ -172,23 +172,23 @@ For **link prediction** on a regular graph with uniform features:
 
 With uniform initial features, 1-WL cannot compute:
 
-- **Cycle lengths** — is $$v$$ on a 4-cycle or a 6-cycle?
-- **Triangle counts** — how many triangles contain $$v$$?
-- **Clique membership** — is $$v$$ inside a clique?
-- **Global structural roles** — is $$v$$ a cut vertex? is it peripheral?
-- **Non-local symmetries** — two nodes with identical local neighbourhoods but different global positions
+- **Cycle lengths**, is $$v$$ on a 4-cycle or a 6-cycle?
+- **Triangle counts**, how many triangles contain $$v$$?
+- **Clique membership**, is $$v$$ inside a clique?
+- **Global structural roles**, is $$v$$ a cut vertex? is it peripheral?
+- **Non-local symmetries**, two nodes with identical local neighbourhoods but different global positions
 
 ## Solutions
 
 | Problem | Solution |
 |---------|----------|
-| Regular-graph indistinguishability | Structural encodings (RWPE, LapPE) — break the symmetry |
-| Cycle blindness | Subgraph GNNs — explicitly count substructures |
+| Regular-graph indistinguishability | Structural encodings (RWPE, LapPE), break the symmetry |
+| Cycle blindness | Subgraph GNNs, explicitly count substructures |
 | Triangle detection | $$k$$-WL, or explicit triangle-count features |
 | Global structural roles | Distance encodings, shortest-path features |
 | Graph-level indistinguishability | Higher-order WL, Graph Transformers |
 
-**Structural and positional encodings** — random-walk PE built from the diagonal of $$P^{k}$$ with $$P = D^{-1}A$$, or Laplacian PE built from the eigenvectors $$u_i$$ of $$L_{\mathrm{sym}}$$ — inject node-level structural identity that 1-WL cannot derive on its own. They come with their own difficulty: eigenvectors are defined only up to sign, and up to an arbitrary basis within any eigenspace of repeated $$\lambda_i$$, so the encoding is not unique and must be made sign- or basis-invariant.
+**Structural and positional encodings**, random-walk PE built from the diagonal of $$P^{k}$$ with $$P = D^{-1}A$$, or Laplacian PE built from the eigenvectors $$u_i$$ of $$L_{\mathrm{sym}}$$, inject node-level structural identity that 1-WL cannot derive on its own. They come with their own difficulty: eigenvectors are defined only up to sign, and up to an arbitrary basis within any eigenspace of repeated $$\lambda_i$$, so the encoding is not unique and must be made sign- or basis-invariant.
 
 **Subgraph GNNs** run a GNN on a collection of subgraphs (typically one per node) and pool the results. They are strictly more expressive than 1-WL and bounded above by 3-WL, at a cost of roughly $$N$$ times a plain MPNN pass.
 
@@ -201,7 +201,7 @@ With uniform initial features, 1-WL cannot compute:
 | Graphs differing only in cycle structure | 1-WL cannot count cycles | Molecular property prediction |
 | CSL graphs | 4-regular by construction; differ only in skip length | Benchmark for beyond-1-WL expressivity |
 
-Knowing which graphs fool GNNs is not just academic — it directly predicts where standard GNNs will fail on real tasks, and which architectural upgrades are needed.
+Knowing which graphs fool GNNs is not just academic, it directly predicts where standard GNNs will fail on real tasks, and which architectural upgrades are needed.
 
 ## References
 

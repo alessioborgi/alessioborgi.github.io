@@ -6,7 +6,7 @@ categories: [transformers]
 book: transformers
 subsection: positional-encodings
 tags: [RoPE, NTK, context-length, positional-encoding, interpolation]
-excerpt: "NTK-Aware Scaling extends the context window of RoPE-based models by rescaling frequencies using Neural Tangent Kernel theory — with no fine-tuning required."
+excerpt: "NTK-Aware Scaling extends the context window of RoPE-based models by rescaling frequencies using Neural Tangent Kernel theory, with no fine-tuning required."
 author_profile: true
 read_time: true
 is_overview: false
@@ -57,7 +57,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> RoPE encodes position through rotation frequencies \(\theta_i\). When you extend context beyond training length, high-frequency dimensions fail (they have seen all their cycles). NTK-Aware Scaling replaces the base (10000) with a larger value, spreading frequencies out so all dimensions remain useful at longer contexts — often with no additional training.
+<strong>TL;DR:</strong> RoPE encodes position through rotation frequencies \(\theta_i\). When you extend context beyond training length, high-frequency dimensions fail (they have seen all their cycles). NTK-Aware Scaling replaces the base (10000) with a larger value, spreading frequencies out so all dimensions remain useful at longer contexts, often with no additional training.
 </div>
 
 <div class="paper-meta">
@@ -68,14 +68,14 @@ toc_label: "Contents"
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/ntk-scaling-paper.png" alt="First page of the NTK scaling paper" caption="Paper preview — Scaling Laws of RoPE-based Extrapolation (Liu et al., 2024)." %}
+{% include figure image_path="/images/blog/papers/ntk-scaling-paper.png" alt="First page of the NTK scaling paper" caption="Paper preview, Scaling Laws of RoPE-based Extrapolation (Liu et al., 2024)." %}
 </div>
 
 ## The Context Extension Problem
 
-RoPE (Rotary Position Embedding) encodes the position of each token by rotating query and key vectors at dimension-specific frequencies. A model trained with RoPE on sequences up to length $$L$$ learns to use those frequencies — but when you try to run it on sequences longer than $$L$$, the model sees rotation angles it has never encountered.
+RoPE (Rotary Position Embedding) encodes the position of each token by rotating query and key vectors at dimension-specific frequencies. A model trained with RoPE on sequences up to length $$L$$ learns to use those frequencies, but when you try to run it on sequences longer than $$L$$, the model sees rotation angles it has never encountered.
 
-**Naïve position interpolation** (scaling positions linearly: $$\mathrm{pos} \to \mathrm{pos} \times L/L'$$) works but degrades high-frequency dimensions catastrophically — they change too fast across the rescaled positions, destroying local structure.
+**Naïve position interpolation** (scaling positions linearly: $$\mathrm{pos} \to \mathrm{pos} \times L/L'$$) works but degrades high-frequency dimensions catastrophically, they change too fast across the rescaled positions, destroying local structure.
 
 ## RoPE Frequencies: A Quick Recap
 
@@ -114,12 +114,12 @@ High-frequency dimensions complete many rotation cycles within a short context w
   <text x="370" y="205" text-anchor="middle" font-size="11" fill="#64748b">RoPE dimension index (low freq → high freq)</text>
   <text x="20"  y="115" text-anchor="middle" font-size="11" fill="#64748b" transform="rotate(-90,20,115)">rotation cycles at context length</text>
 
-  <!-- Training length curve (low values — within budget) -->
+  <!-- Training length curve (low values, within budget) -->
   <path d="M60,175 C150,173 250,165 370,140 S560,90 680,45" fill="none" stroke="#0d9488" stroke-width="3"
         stroke-dasharray="400" style="animation:freq-sweep 2s ease-out forwards"/>
   <text x="560" y="80" font-size="11" fill="#0d9488" font-weight="700">original L=2k context</text>
 
-  <!-- 4× extended curve (high-freq dims overflow — shown in red) -->
+  <!-- 4× extended curve (high-freq dims overflow, shown in red) -->
   <path d="M60,175 C150,170 250,155 370,120 S490,68 600,35" fill="none" stroke="#ef4444" stroke-width="3"
         stroke-dasharray="400" style="animation:freq-sweep 2s 0.5s ease-out forwards"/>
   <!-- overflow zone highlight -->
@@ -141,7 +141,7 @@ High-frequency dimensions complete many rotation cycles within a short context w
   <rect x="490" y="210" width="14" height="4" fill="#7c3aed" rx="2"/>
   <text x="510" y="218" font-size="10" fill="#334155">NTK scaling (stretches all dims proportionally)</text>
 </svg>
-<figcaption>At 4× context extension without NTK scaling (red), high-frequency RoPE dimensions complete far more cycles than during training — their rotation angles enter unseen regimes (red zone). NTK scaling (purple dashed) raises the base value so all dimensions are stretched proportionally, keeping every dimension within a familiar regime.</figcaption>
+<figcaption>At 4× context extension without NTK scaling (red), high-frequency RoPE dimensions complete far more cycles than during training, their rotation angles enter unseen regimes (red zone). NTK scaling (purple dashed) raises the base value so all dimensions are stretched proportionally, keeping every dimension within a familiar regime.</figcaption>
 </figure>
 </div>
 
@@ -149,9 +149,9 @@ High-frequency dimensions complete many rotation cycles within a short context w
 
 When context length exceeds training length, two problems arise:
 
-1. **High-frequency dimensions have seen all their cycles** — they wrap around and lose uniqueness. Two distant positions may map to nearly the same rotation angle.
+1. **High-frequency dimensions have seen all their cycles**, they wrap around and lose uniqueness. Two distant positions may map to nearly the same rotation angle.
 
-2. **Attention patterns based on relative angles** degrade — the model's learned sense of "close" vs "far" tokens breaks down.
+2. **Attention patterns based on relative angles** degrade, the model's learned sense of "close" vs "far" tokens breaks down.
 
 ## The NTK-Aware Scaling Insight
 
@@ -176,10 +176,10 @@ For example, extending LLaMA (trained at $$L = 2048$$) to $$L' = 8192$$:
 \]
 </div>
 
-This larger base stretches all frequencies proportionally. High-frequency dimensions that previously completed a full cycle within $$L$$ tokens now complete their cycle within $$L'$$ tokens — no dimension becomes "saturated" at the new length.
+This larger base stretches all frequencies proportionally. High-frequency dimensions that previously completed a full cycle within $$L$$ tokens now complete their cycle within $$L'$$ tokens, no dimension becomes "saturated" at the new length.
 
 <div class="insight-box">
-<strong>Why NTK?</strong> The NTK connection comes from viewing the Transformer as a kernel machine in function space. When you change context length, you are effectively changing the kernel's support. The frequency scaling ensures the kernel remains well-conditioned — similar in spirit to how NTK theory analyzes function space behaviour under parameter changes.
+<strong>Why NTK?</strong> The NTK connection comes from viewing the Transformer as a kernel machine in function space. When you change context length, you are effectively changing the kernel's support. The frequency scaling ensures the kernel remains well-conditioned, similar in spirit to how NTK theory analyzes function space behaviour under parameter changes.
 </div>
 
 {% include figure image_path="/images/blog/transformers/su2021_rope.png" alt="RoPE as the basis that NTK scaling modifies" caption="NTK-aware scaling is a way to retune RoPE so its frequency spectrum remains useful at longer context lengths." %}
@@ -191,7 +191,7 @@ This larger base stretches all frequencies proportionally. High-frequency dimens
 | Linear interpolation | Severely degraded | Good | Often needed |
 | NTK scaling | Preserved | Good | Usually not needed |
 
-Linear interpolation scales positions but keeps frequencies fixed — the high-frequency dimensions see too many cycles per unit position. NTK scaling changes the frequencies to match the new scale.
+Linear interpolation scales positions but keeps frequencies fixed, the high-frequency dimensions see too many cycles per unit position. NTK scaling changes the frequencies to match the new scale.
 
 ## Worked Example: Computing the NTK Base
 
@@ -214,14 +214,14 @@ Model: LLaMA-2 7B, trained at $$L = 4096$$, head dimension $$d = 128$$, original
 The new base of ~83,600 means every RoPE frequency $$\theta_i = 1/\mathrm{base}^{2i/d}$$ is reduced by a factor of ~8×, spreading cycles proportionally over 8× more tokens.
 
 **For dimension $$i = 0$$** (lowest frequency):
-- Original: $$\theta_0 = 1/10{,}000^{0} = 1.0$$ (full rotation per token — highest freq)
-- After NTK: $$\theta_0 = 1/83{,}600^{0} = 1.0$$ (unchanged — already handles short range fine)
+- Original: $$\theta_0 = 1/10{,}000^{0} = 1.0$$ (full rotation per token, highest freq)
+- After NTK: $$\theta_0 = 1/83{,}600^{0} = 1.0$$ (unchanged, already handles short range fine)
 
 **For dimension $$i = 63$$** (highest frequency of the pair, near $$d/2$$):
 - Original: $$\theta_{63} = 1/10{,}000^{126/128} \approx 1/7{,}244 \approx 0.000138$$
 - After NTK: $$\theta_{63} = 1/83{,}600^{126/128} \approx 1/60{,}600 \approx 0.0000165$$
 
-The highest-frequency dimension now completes its cycle every ~60,600 tokens instead of ~7,244 — scaled with the 8× target extension.
+The highest-frequency dimension now completes its cycle every ~60,600 tokens instead of ~7,244, scaled with the 8× target extension.
 
 ## Dynamic NTK Scaling
 
@@ -241,7 +241,7 @@ This is zero-cost for short sequences and automatically extends context for long
 
 - NTK scaling degrades gradually as $$L'/L$$ increases. At 8× extension (e.g., 2k → 16k), quality noticeably drops without at least a small amount of fine-tuning.
 - It is a post-hoc fix, not a principled training strategy. For best long-context performance, fine-tuning with the new scale (or using YaRN) is recommended.
-- It does not address the **attention sink** problem — very long sequences still have attention pattern degradation.
+- It does not address the **attention sink** problem, very long sequences still have attention pattern degradation.
 
 ## Summary
 
@@ -251,7 +251,7 @@ This is zero-cost for short sequences and automatically extends context for long
 | Fine-tuning | Not required for moderate extension (2-4×) |
 | Quality at 8× | Degrades; short fine-tune recommended |
 | Implementation | Single hyperparameter change (new base value) |
-| Relation to linear interpolation | Complementary — fixes what interpolation breaks |
+| Relation to linear interpolation | Complementary, fixes what interpolation breaks |
 
 NTK-Aware Scaling is the simplest way to extend the context of an existing RoPE model. For more sophisticated extension, see YaRN.
 
@@ -259,4 +259,4 @@ NTK-Aware Scaling is the simplest way to extend the context of an existing RoPE 
 
 - Su, J., Lu, Y., Pan, S., Murtadha, A., Wen, B., & Liu, Y. (2021). [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864). *arXiv 2021* (RoPE: rotary position embeddings that encode relative positions; the basis for NTK-Aware Scaling).
 - Bloc97 (2023). [NTK-Aware Scaled RoPE allows LLaMA models to have extended (8k+) context size without any fine-tuning and minimal perplexity degradation](https://www.reddit.com/r/LocalLLaMA/comments/14lz7j5/ntkaware_scaled_rope_allows_llama_models_to_have/). *Reddit r/LocalLLaMA 2023* (original NTK-Aware Scaling proposal: rescales RoPE base to preserve high-frequency information during context extension).
-- Chen, S., Wong, S., Luo, L., & Tian, Y. (2023). [Extending Context Window of Large Language Models via Positional Interpolation](https://arxiv.org/abs/2306.15595). *arXiv 2023* (Position Interpolation: the alternative to NTK scaling that linearly rescales positions — requires fine-tuning but more stable).
+- Chen, S., Wong, S., Luo, L., & Tian, Y. (2023). [Extending Context Window of Large Language Models via Positional Interpolation](https://arxiv.org/abs/2306.15595). *arXiv 2023* (Position Interpolation: the alternative to NTK scaling that linearly rescales positions, requires fine-tuning but more stable).

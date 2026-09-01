@@ -6,7 +6,7 @@ book: rl
 subsection: value-based
 tags: [q-learning, off-policy, td-control, sarsa, tabular-rl]
 published: false
-excerpt: "Q-learning is a model-free, off-policy TD algorithm that directly learns the optimal action-value function Q* without requiring a model of the environment — the algorithm underlying DQN and much of modern RL."
+excerpt: "Q-learning is a model-free, off-policy TD algorithm that directly learns the optimal action-value function Q* without requiring a model of the environment, the algorithm underlying DQN and much of modern RL."
 author_profile: true
 read_time: true
 is_overview: false
@@ -27,7 +27,7 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Q-learning updates action-value estimates using the max over next-state Q-values as a bootstrap target, making it off-policy — it converges to Q* regardless of the exploration strategy used to collect data. Combined with neural networks, Q-learning becomes DQN, which achieved human-level performance on Atari games.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Q-learning updates action-value estimates using the max over next-state Q-values as a bootstrap target, making it off-policy, it converges to Q* regardless of the exploration strategy used to collect data. Combined with neural networks, Q-learning becomes DQN, which achieved human-level performance on Atari games.</div>
 {% include figure image_path="/images/blog/rl/mnih2015_dqn.png" alt="Q-learning and DQN architecture" caption="Q-network architecture for Atari (Mnih et al., 2015)" %}
 
 
@@ -58,7 +58,7 @@ for each episode:
 
 Q-learning is **off-policy**: the policy used to select actions (the **behaviour policy** $$\mu$$, typically ε-greedy) is different from the policy being learned (the **target policy**, which is greedy with respect to Q).
 
-This is a major practical advantage: Q-learning can learn from any data — replayed experience, data from a different policy, or even expert demonstrations — as long as every state-action pair is visited sufficiently often.
+This is a major practical advantage: Q-learning can learn from any data, replayed experience, data from a different policy, or even expert demonstrations, as long as every state-action pair is visited sufficiently often.
 
 Compare with **SARSA** (on-policy TD control):
 
@@ -66,7 +66,7 @@ Compare with **SARSA** (on-policy TD control):
 \(Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \left[r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t)\right]\)
 </div>
 
-SARSA uses the actual next action $$a_{t+1}$$ (sampled from the behaviour policy) rather than the max. As a result, SARSA learns the Q-function of the behaviour policy — which is safer in settings where exploration is risky (cliffs, dangerous states), because SARSA accounts for the exploration noise in its value estimates.
+SARSA uses the actual next action $$a_{t+1}$$ (sampled from the behaviour policy) rather than the max. As a result, SARSA learns the Q-function of the behaviour policy, which is safer in settings where exploration is risky (cliffs, dangerous states), because SARSA accounts for the exploration noise in its value estimates.
 
 <div class="insight-box"><strong>Key Insight:</strong> The off-policy property of Q-learning is why experience replay works: past transitions, even from an old policy, can still teach the agent about Q*. SARSA cannot safely use experience replay because old transitions reflect an outdated behaviour policy.</div>
 
@@ -79,11 +79,11 @@ SARSA uses the actual next action $$a_{t+1}$$ (sampled from the behaviour policy
 
 The proof uses the theory of stochastic approximation (Robbins-Monro). The key step shows that the Q-learning update is an instance of a contraction applied in expectation, guaranteeing convergence to the unique fixed point $$Q^*$$.
 
-Note that convergence is **not guaranteed** with function approximation (neural networks). The combination of off-policy learning, bootstrapping, and function approximation is called the **deadly triad** — addressed by DQN's experience replay and target networks.
+Note that convergence is **not guaranteed** with function approximation (neural networks). The combination of off-policy learning, bootstrapping, and function approximation is called the **deadly triad**, addressed by DQN's experience replay and target networks.
 
 ## Intuition First: Why Max Instead of Average?
 
-SARSA updates Q(s,a) toward what the agent *actually* did next. Q-learning updates toward what the agent *could* do best next — ignoring the exploration noise. Think of it this way: SARSA is like rating a restaurant based on what you ordered (including bad choices), while Q-learning always rates it as if you ordered the best dish. Q-learning therefore learns the optimal Q-function regardless of how erratically it explores.
+SARSA updates Q(s,a) toward what the agent *actually* did next. Q-learning updates toward what the agent *could* do best next, ignoring the exploration noise. Think of it this way: SARSA is like rating a restaurant based on what you ordered (including bad choices), while Q-learning always rates it as if you ordered the best dish. Q-learning therefore learns the optimal Q-function regardless of how erratically it explores.
 
 ## Manual Q-Table Update Walkthrough
 
@@ -94,7 +94,7 @@ A 3×3 gridworld: start at (0,0), goal at (2,2) with reward +1, wall at (1,1). $
 $$Q((0,0), \text{RIGHT}) \leftarrow 0 + 0.1 \times [0 + 0.9 \times \max_{a'} Q((0,1), a') - 0]$$
 $$= 0 + 0.1 \times [0 + 0.9 \times 0 - 0] = \mathbf{0.000}$$
 
-*(No signal yet — reward is only at goal.)*
+*(No signal yet, reward is only at goal.)*
 
 **Later**: from (1,2) take action RIGHT → land at (2,2)=Goal, receive r=+1.
 

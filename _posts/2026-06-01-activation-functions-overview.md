@@ -102,7 +102,7 @@ toc_label: "Contents"
 ## Why Activation Functions Exist
 
 <div class="insight-box">
-<strong>Intuition First:</strong> Imagine stacking transparent overlays on a map, each one a straight line across the city — however many you stack, the result still only describes straight-line logic. Activation functions let each layer <em>bend</em> its overlay into a curve; without them, ten layers of computation are exactly equivalent to one.
+<strong>Intuition First:</strong> Imagine stacking transparent overlays on a map, each one a straight line across the city, however many you stack, the result still only describes straight-line logic. Activation functions let each layer <em>bend</em> its overlay into a curve; without them, ten layers of computation are exactly equivalent to one.
 </div>
 
 The core equation of a hidden layer is simple:
@@ -113,7 +113,7 @@ h = \sigma(Wx + b)
 \]
 </div>
 
-The matrix multiplication `Wx + b` is only an affine transformation — stacking ten of them still collapses into one, giving more parameters but no more expressive shape.
+The matrix multiplication `Wx + b` is only an affine transformation, stacking ten of them still collapses into one, giving more parameters but no more expressive shape.
 
 Activation functions break that collapse: they inject **non-linearity**, letting the network carve curved decision boundaries, represent thresholds, and model interactions a linear model cannot.
 
@@ -265,14 +265,14 @@ That tiny local choice changes the global behavior of the whole network.
   <line x1="505" y1="25"  x2="505" y2="155" class="ax"/>
   <path d="M455,90 H505 L558,38" class="fn fn4"/>
 </svg>
-<figcaption>Step is a hard binary flip; Sigmoid and Tanh are smooth S-curves that flatten in the tails; ReLU is a half-rectification — zero on the left, identity on the right.</figcaption>
+<figcaption>Step is a hard binary flip; Sigmoid and Tanh are smooth S-curves that flatten in the tails; ReLU is a half-rectification, zero on the left, identity on the right.</figcaption>
 </figure>
 </div>
 
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/basics/activation-signal-flow.svg" alt="Diagram showing a neuron computing a linear score and then passing it through different kinds of activation gates">
-<figcaption>Figure 1 — The same linear score becomes very different behaviour depending on the activation: a hard threshold, a soft probability gate, or a one-way valve like ReLU.</figcaption>
+<figcaption>Figure 1, The same linear score becomes very different behaviour depending on the activation: a hard threshold, a soft probability gate, or a one-way valve like ReLU.</figcaption>
 </figure>
 </div>
 
@@ -332,7 +332,7 @@ They are attractive because they are smooth and easy to differentiate. Their mai
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The sigmoid derivative peaks at exactly 0.25 when \(x=0\). That means even at its best, it cuts the gradient in half compared to passing it unchanged. Stack 10 sigmoid layers and the best-case gradient shrinks to \(0.25^{10} \approx 0.000001\). That is the vanishing gradient problem in one number.</div>
 
-**Concrete numerical example — sigmoid saturation:**
+**Concrete numerical example, sigmoid saturation:**
 
 | Input $$x$$ | $$\sigma(x)$$ | $$\sigma'(x) = \sigma(x)(1-\sigma(x))$$ |
 |---|---|---|
@@ -342,7 +342,7 @@ They are attractive because they are smooth and easy to differentiate. Their mai
 | 6 | 0.998 | 0.002 |
 | 8 | 0.9997 | 0.0002 |
 
-Each row shows why neurons that receive large-magnitude inputs essentially stop learning — the gradient through them is nearly zero.
+Each row shows why neurons that receive large-magnitude inputs essentially stop learning, the gradient through them is nearly zero.
 
 ### C. Piecewise-Linear Functions
 
@@ -397,7 +397,7 @@ ReLU passes the gradient through unchanged on the positive side. Stacked over ma
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/basics/activation-foundations-grid.svg" alt="Grid of classical activation functions including linear, step, sigmoid, tanh, ReLU, Leaky ReLU, PReLU, RReLU, Softplus, Softsign, ReLU6, and Thresholded ReLU">
-<figcaption>Figure 2 — Squashing activations saturate, ReLU-like activations keep a strong positive branch, and clipped variants trade expressivity for stability or efficiency.</figcaption>
+<figcaption>Figure 2, Squashing activations saturate, ReLU-like activations keep a strong positive branch, and clipped variants trade expressivity for stability or efficiency.</figcaption>
 </figure>
 </div>
 
@@ -417,7 +417,7 @@ So activation functions are not just output transformations. They are also **gra
 
 ## Gradient Perspective
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Backpropagation is the chain rule applied repeatedly: each activation contributes a multiplier. Multipliers consistently below 1 shrink the product toward zero on the way back — vanishing gradients; consistently above 1, it explodes. The ideal multiplier is 1 on the active side, exactly what ReLU achieves.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Backpropagation is the chain rule applied repeatedly: each activation contributes a multiplier. Multipliers consistently below 1 shrink the product toward zero on the way back, vanishing gradients; consistently above 1, it explodes. The ideal multiplier is 1 on the active side, exactly what ReLU achieves.</div>
 
 <div class="summary-box">
   <h3>The four recurring problems</h3>
@@ -449,7 +449,7 @@ So activation functions are not just output transformations. They are also **gra
   </table>
 </div>
 
-<!-- Animated: dead neuron — weight freezing visualization -->
+<!-- Animated: dead neuron, weight freezing visualization -->
 <style>
 @keyframes freeze {
   0%   { stroke:#16a34a; fill:#dcfce7; }
@@ -523,14 +523,14 @@ So activation functions are not just output transformations. They are also **gra
   <text x="467" y="150" text-anchor="middle" class="wlabel">output = 0, gradient = 0</text>
   <text x="467" y="163" text-anchor="middle" class="wlabel">weights never update again</text>
 </svg>
-<figcaption>A neuron that receives a large negative weight update flips to \(z \lt 0\). ReLU clips its output to zero, so no gradient flows back (\(\partial \operatorname{ReLU} / \partial z = 0\)), and the weights are frozen permanently — the neuron is dead.</figcaption>
+<figcaption>A neuron that receives a large negative weight update flips to \(z \lt 0\). ReLU clips its output to zero, so no gradient flows back (\(\partial \operatorname{ReLU} / \partial z = 0\)), and the weights are frozen permanently, the neuron is dead.</figcaption>
 </figure>
 </div>
 
 <div class="blog-figure">
 <figure>
 <img src="/images/blog/basics/activation-gradient-problems.svg" alt="Diagram contrasting vanishing gradients, dead neurons, and healthy gradient flow across common activations">
-<figcaption>Figure 3 — Sigmoid and tanh can flatten into tiny derivatives, ReLU can kill units on the negative side; smoother modern activations preserve more gradient flow near zero.</figcaption>
+<figcaption>Figure 3, Sigmoid and tanh can flatten into tiny derivatives, ReLU can kill units on the negative side; smoother modern activations preserve more gradient flow near zero.</figcaption>
 </figure>
 </div>
 
@@ -624,7 +624,7 @@ Later chapters cover the smoother modern and output-layer functions in more deta
   <text x="38" y="200" class="leg-txt" fill="#0891b2">f(x)</text>
   <line x1="70" y1="197" x2="90" y2="197" stroke="#7dd3e8" stroke-width="2"/>
   <text x="93" y="200" class="leg-txt" fill="#7dd3e8">f′(x)</text>
-  <text x="94" y="211" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#ef4444">max f′=0.25 — saturates!</text>
+  <text x="94" y="211" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#ef4444">max f′=0.25, saturates!</text>
 
   <!-- TANH panel -->
   <rect x="200" y="5" width="178" height="210" rx="9" fill="#fff7ed" stroke="#fed7aa"/>
@@ -656,13 +656,13 @@ Later chapters cover the smoother modern and output-layer functions in more deta
   <text x="483" y="200" class="leg-txt" fill="#86efac">f′(x)</text>
   <text x="484" y="211" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#16a34a">f′=1 always (positive side)</text>
 </svg>
-<figcaption>Solid lines are the function, dashed the derivative. Sigmoid and Tanh derivatives flatten to near-zero in the tails — vanishing-gradient territory. ReLU's derivative is exactly 1 on the positive side, so gradients pass through undistorted.</figcaption>
+<figcaption>Solid lines are the function, dashed the derivative. Sigmoid and Tanh derivatives flatten to near-zero in the tails, vanishing-gradient territory. ReLU's derivative is exactly 1 on the positive side, so gradients pass through undistorted.</figcaption>
 </figure>
 </div>
 
 <div class="takeaways">
   <h3>Main Takeaway</h3>
-  <p>Activation functions determine what signal a neuron emits and how gradients travel backward — which is why the story runs <strong>step → sigmoid/tanh → ReLU → modern smooth and gated activations</strong>.</p>
+  <p>Activation functions determine what signal a neuron emits and how gradients travel backward, which is why the story runs <strong>step → sigmoid/tanh → ReLU → modern smooth and gated activations</strong>.</p>
 </div>
 
 ## References

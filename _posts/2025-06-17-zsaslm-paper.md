@@ -71,18 +71,18 @@ toc_label: "Contents"
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/zsaslm-paper.png" alt="First page of the Z-SASLM paper" caption="Paper preview — Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation (Borgi et al., 2025)." %}
+{% include figure image_path="/images/blog/papers/zsaslm-paper.png" alt="First page of the Z-SASLM paper" caption="Paper preview, Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation (Borgi et al., 2025)." %}
 </div>
 
 ## The Problem: Linear Blending in a Non-Linear Space
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Imagine you are standing at the North Pole and want to navigate to a point halfway between London and Tokyo. The "average" of their GPS coordinates on a flat map gives you a point somewhere in Russia — correct-ish on a flat projection, but geometrically wrong on a sphere. The true midpoint on the Earth's surface follows the great circle arc between them. Diffusion latent spaces are spherical in the same sense: the meaningful paths between style representations are arcs, not straight lines. LERP takes the shortcut through the interior; SLERP follows the surface.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Imagine you are standing at the North Pole and want to navigate to a point halfway between London and Tokyo. The "average" of their GPS coordinates on a flat map gives you a point somewhere in Russia, correct-ish on a flat projection, but geometrically wrong on a sphere. The true midpoint on the Earth's surface follows the great circle arc between them. Diffusion latent spaces are spherical in the same sense: the meaningful paths between style representations are arcs, not straight lines. LERP takes the shortcut through the interior; SLERP follows the surface.</div>
 
 Latent diffusion models (like Stable Diffusion) encode styles as vectors in a high-dimensional latent space. When you want a generated image that combines *two or more reference styles*, the intuitive approach is to take a weighted average: $$\text{blend} = \alpha \cdot \text{style}_1 + \beta \cdot \text{style}_2 + \dots$$
 
-This is **linear interpolation (LERP)**, and it has a fundamental flaw: it assumes the latent space is Euclidean — that style representations live on a flat plane and midpoints are simply averages. But latent spaces of diffusion models are curved; style representations live on (or near) a hypersphere.
+This is **linear interpolation (LERP)**, and it has a fundamental flaw: it assumes the latent space is Euclidean, that style representations live on a flat plane and midpoints are simply averages. But latent spaces of diffusion models are curved; style representations live on (or near) a hypersphere.
 
-Linear blending of unit vectors produces a result that is *shorter* than the originals — it falls *inside* the sphere, into a low-density region of the latent space. The result: blended styles lose structure, introduce artifacts, and fail to faithfully combine the reference styles.
+Linear blending of unit vectors produces a result that is *shorter* than the originals, it falls *inside* the sphere, into a low-density region of the latent space. The result: blended styles lose structure, introduce artifacts, and fail to faithfully combine the reference styles.
 
 <!-- Animated: LERP falls inside sphere, SLERP stays on surface -->
 <style>
@@ -128,7 +128,7 @@ Linear blending of unit vectors produces a result that is *shorter* than the ori
   <rect x="1" y="1" width="518" height="228" rx="10" fill="#f8fafc" stroke="#dbe7f5"/>
 
   <!-- Left panel: LERP -->
-  <text x="130" y="18" text-anchor="middle" class="sph-ttl" fill="#be123c">LERP — falls inside sphere</text>
+  <text x="130" y="18" text-anchor="middle" class="sph-ttl" fill="#be123c">LERP, falls inside sphere</text>
   <!-- sphere outline -->
   <circle cx="130" cy="120" r="90" class="sph-circle"/>
   <!-- high-density ring on surface -->
@@ -144,13 +144,13 @@ Linear blending of unit vectors produces a result that is *shorter* than the ori
   <text x="200" y="50"  class="sph-lbl" fill="#1e3a5f">style₂</text>
   <!-- chord (LERP path) -->
   <line x1="68" y1="52" x2="205" y2="60" class="sph-chord"/>
-  <!-- LERP midpoint — falls inside -->
+  <!-- LERP midpoint, falls inside -->
   <circle cx="137" cy="56" r="7" class="sph-dot-in"/>
   <text x="130" y="48" text-anchor="middle" class="sph-lbl" fill="#be123c">LERP midpoint</text>
-  <text x="130" y="200" text-anchor="middle" class="sph-lbl" fill="#be123c">‖blend‖ &lt; 1 — off the manifold</text>
+  <text x="130" y="200" text-anchor="middle" class="sph-lbl" fill="#be123c">‖blend‖ &lt; 1, off the manifold</text>
 
   <!-- Right panel: SLERP -->
-  <text x="385" y="18" text-anchor="middle" class="sph-ttl" fill="#0c4a6e">SLERP — stays on surface</text>
+  <text x="385" y="18" text-anchor="middle" class="sph-ttl" fill="#0c4a6e">SLERP, stays on surface</text>
   <circle cx="385" cy="120" r="90" class="sph-circle"/>
   <circle cx="385" cy="120" r="90" class="density-ring"/>
   <circle cx="385" cy="120" r="60" class="low-dens"/>
@@ -161,12 +161,12 @@ Linear blending of unit vectors produces a result that is *shorter* than the ori
   <text x="453" y="50"  class="sph-lbl" fill="#1e3a5f">style₂</text>
   <!-- great-circle arc (SLERP path) -->
   <path d="M323,52 Q385,22 460,60" class="sph-arc"/>
-  <!-- SLERP midpoint — on sphere surface -->
+  <!-- SLERP midpoint, on sphere surface -->
   <circle cx="390" cy="32" r="7" class="sph-dot-on"/>
   <text x="385" y="22" text-anchor="middle" class="sph-lbl" fill="#0891b2">SLERP midpoint</text>
-  <text x="385" y="200" text-anchor="middle" class="sph-lbl" fill="#0891b2">‖blend‖ = 1 — stays on the manifold</text>
+  <text x="385" y="200" text-anchor="middle" class="sph-lbl" fill="#0891b2">‖blend‖ = 1, stays on the manifold</text>
 </svg>
-<figcaption>Animated LERP vs SLERP on the hypersphere. LERP (left, red) draws a straight chord between the two style vectors — the midpoint falls inside the sphere into a low-density region with weak semantic support. SLERP (right, blue) follows the great-circle arc — the midpoint stays on the sphere's surface, where the diffusion model's learned distribution is concentrated.</figcaption>
+<figcaption>Animated LERP vs SLERP on the hypersphere. LERP (left, red) draws a straight chord between the two style vectors, the midpoint falls inside the sphere into a low-density region with weak semantic support. SLERP (right, blue) follows the great-circle arc, the midpoint stays on the sphere's surface, where the diffusion model's learned distribution is concentrated.</figcaption>
 </figure>
 </div>
 
@@ -182,7 +182,7 @@ $$\text{SLERP}(\mathbf{u}, \mathbf{v}; t) = \frac{\sin((1-t)\Omega)}{\sin\Omega}
 
 where $$\Omega$$ is the angle between $$\mathbf{u}$$ and $$\mathbf{v}$$. The result stays on the sphere, preserving the norm and intrinsic geometry of the latent space.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why sines instead of weights:</strong> In LERP, the interpolation weights \(\alpha\) and \((1-\alpha)\) add to 1. In SLERP, the weights are \(\sin((1-t)\Omega)/\sin\Omega\) and \(\sin(t\Omega)/\sin\Omega\) — also summing to 1, but curved along the arc. When \(t=0.5\) and \(\Omega\) is large (the vectors are very different styles), the SLERP weights diverge significantly from 0.5/0.5, compensating for the sphere's curvature. For small angles (similar styles), SLERP degenerates gracefully to LERP. This graceful degradation means SLERP is always at least as good as LERP, and strictly better when the styles are geometrically distant.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, why sines instead of weights:</strong> In LERP, the interpolation weights \(\alpha\) and \((1-\alpha)\) add to 1. In SLERP, the weights are \(\sin((1-t)\Omega)/\sin\Omega\) and \(\sin(t\Omega)/\sin\Omega\), also summing to 1, but curved along the arc. When \(t=0.5\) and \(\Omega\) is large (the vectors are very different styles), the SLERP weights diverge significantly from 0.5/0.5, compensating for the sphere's curvature. For small angles (similar styles), SLERP degenerates gracefully to LERP. This graceful degradation means SLERP is always at least as good as LERP, and strictly better when the styles are geometrically distant.</div>
 
 **Step-by-step: SLERP for two style vectors at** $$t = 0.5$$
 
@@ -198,7 +198,7 @@ Suppose $$\text{style}_1$$ and $$\text{style}_2$$ are unit vectors with angle $$
 | Weight for $$\mathbf{v}$$ | 0.500 / 0.866 = **0.577** |
 | LERP weights at $$t=0.5$$ | 0.500 / 0.500 (flat) |
 
-Both SLERP weights are 0.577, and the result vector has norm $$\approx 1$$ (stays on the sphere). LERP would give weights 0.5/0.5 but the resulting vector has norm $$\cos(30^\circ) \approx$$ **0.866** — 13% shorter than it should be, pushed inside the sphere.
+Both SLERP weights are 0.577, and the result vector has norm $$\approx 1$$ (stays on the sphere). LERP would give weights 0.5/0.5 but the resulting vector has norm $$\cos(30^\circ) \approx$$ **0.866**, 13% shorter than it should be, pushed inside the sphere.
 
 For **multiple styles**, Z-SASLM extends SLERP iteratively: blend $$\text{style}_1$$ and $$\text{style}_2$$ to get an intermediate representation, then blend that with $$\text{style}_3$$, and so on. Weights are applied at each step to control the contribution of each style.
 
@@ -293,14 +293,14 @@ For **multiple styles**, Z-SASLM extends SLERP iteratively: blend $$\text{style}
     <text x="496" y="114" text-anchor="middle" class="sf-lbl" fill="#92400e">style ₁₂₃</text>
   </g>
 </svg>
-<figcaption>Iterative SLERP chaining for 3 styles. \(\text{Style}_1\) and \(\text{Style}_2\) are first blended geodesically (with weights 0.4 and 0.35). The intermediate result \(\text{blend}_{12}\) is then SLERP'd with \(\text{Style}_3\) (weight 0.25) to produce the final fused style vector. At each step the result stays on the hypersphere — no norm shrinkage accumulates across the chain.</figcaption>
+<figcaption>Iterative SLERP chaining for 3 styles. \(\text{Style}_1\) and \(\text{Style}_2\) are first blended geodesically (with weights 0.4 and 0.35). The intermediate result \(\text{blend}_{12}\) is then SLERP'd with \(\text{Style}_3\) (weight 0.25) to produce the final fused style vector. At each step the result stays on the hypersphere, no norm shrinkage accumulates across the chain.</figcaption>
 </figure>
 </div>
 
 <div class="blog-figure">
 <figure>
 <img src="https://ar5iv.labs.arxiv.org/html/2503.23234/assets/figures/3_Method_Overview/SLERP.png" alt="SLERP vs. linear interpolation in latent space">
-<figcaption>Figure 1 — SLERP vs. linear interpolation. Linear blending (dashed) falls inside the hypersphere, into a low-density region. SLERP (arc) stays on the sphere's surface, preserving the intrinsic latent structure throughout the blend.</figcaption>
+<figcaption>Figure 1, SLERP vs. linear interpolation. Linear blending (dashed) falls inside the hypersphere, into a low-density region. SLERP (arc) stays on the sphere's surface, preserving the intrinsic latent structure throughout the blend.</figcaption>
 </figure>
 </div>
 
@@ -309,13 +309,13 @@ For **multiple styles**, Z-SASLM extends SLERP iteratively: blend $$\text{style}
 <div class="blog-figure">
 <figure>
 <img src="https://ar5iv.labs.arxiv.org/html/2503.23234/assets/figures/3_Method_Overview/architecture.png" alt="Z-SASLM full pipeline architecture">
-<figcaption>Figure 2 — The Z-SASLM pipeline. Style reference images are encoded into the diffusion latent space; their representations are combined via iterative SLERP blending with user-specified weights; the blended style vector is then used to guide generation via StyleAligned attention injection. No fine-tuning required.</figcaption>
+<figcaption>Figure 2, The Z-SASLM pipeline. Style reference images are encoded into the diffusion latent space; their representations are combined via iterative SLERP blending with user-specified weights; the blended style vector is then used to guide generation via StyleAligned attention injection. No fine-tuning required.</figcaption>
 </figure>
 </div>
 
 The pipeline leverages **StyleAligned** attention sharing for style injection: at generation time, the blended style vector influences the self-attention maps of the UNet decoder, imprinting the fused style onto the generated image without retraining.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — how StyleAligned attention injection works:</strong> In a standard diffusion UNet, each image in a batch attends only to its own self-attention keys and values. StyleAligned modifies this: the style reference image and the target image are denoised together, and the target's self-attention queries attend to the <em>style reference's</em> keys and values — sharing appearance statistics across the attention layers. Z-SASLM computes the blended SLERP style vector <em>once</em> before denoising begins, then uses it as the single shared style reference throughout the entire diffusion trajectory. This means the geometry fix (SLERP vs LERP) happens upstream of the attention mechanism — it changes what the model is shown, not how attention is computed.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, how StyleAligned attention injection works:</strong> In a standard diffusion UNet, each image in a batch attends only to its own self-attention keys and values. StyleAligned modifies this: the style reference image and the target image are denoised together, and the target's self-attention queries attend to the <em>style reference's</em> keys and values, sharing appearance statistics across the attention layers. Z-SASLM computes the blended SLERP style vector <em>once</em> before denoising begins, then uses it as the single shared style reference throughout the entire diffusion trajectory. This means the geometry fix (SLERP vs LERP) happens upstream of the attention mechanism, it changes what the model is shown, not how attention is computed.</div>
 
 ## What Actually Makes Z-SASLM Practical
 
@@ -335,7 +335,7 @@ That combination makes the method usable as an actual generation workflow rather
 <div class="blog-figure">
 <figure>
 <img src="https://ar5iv.labs.arxiv.org/html/2503.23234/assets/figures/4_Evaluations_and_Experiments/SLERP_2_Styles_Blending_MedCub.png" alt="Z-SASLM 2-style SLI blending: Medieval-Cubism result">
-<figcaption>Figure 3 — Two-style blend (Medieval + Cubism) with Z-SASLM. The generated image faithfully captures both the ornate structure of medieval art and the geometric fragmentation of Cubism, without artifacts or style dominance.</figcaption>
+<figcaption>Figure 3, Two-style blend (Medieval + Cubism) with Z-SASLM. The generated image faithfully captures both the ornate structure of medieval art and the geometric fragmentation of Cubism, without artifacts or style dominance.</figcaption>
 </figure>
 </div>
 
@@ -344,7 +344,7 @@ That combination makes the method usable as an actual generation workflow rather
 <div class="blog-figure">
 <figure>
 <img src="https://ar5iv.labs.arxiv.org/html/2503.23234/assets/figures/4_Evaluations_and_Experiments/Linear_Artifacts_3Styles.png" alt="Linear vs. SLERP blending with 3 styles: artifact comparison">
-<figcaption>Figure 4 — Three-style blend comparison. Linear blending (left) produces artifacts and style collapse in the blended region; Z-SASLM's SLERP blending (right) maintains coherent style fusion across all three references.</figcaption>
+<figcaption>Figure 4, Three-style blend comparison. Linear blending (left) produces artifacts and style collapse in the blended region; Z-SASLM's SLERP blending (right) maintains coherent style fusion across all three references.</figcaption>
 </figure>
 </div>
 
@@ -354,9 +354,9 @@ Standard style-transfer metrics (CLIP score, DINO similarity) evaluate similarit
 
 Z-SASLM introduces **Weighted Multi-Style DINO VIT-B/8 (WMS-DINO)**: a weighted average of pairwise DINO similarities between the generated image and each style reference, using the same weights as the blend. This metric quantitatively captures whether all input styles are faithfully represented in the output.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — why existing metrics fail for multi-style:</strong> CLIP similarity and standard DINO similarity both measure how close a generated image is to <em>one</em> reference. If you have three styles and compute three separate scores, you can declare success if any one of them is high — but that masks style collapse, where the output locks onto the dominant style and ignores the others. WMS-DINO solves this by aggregating all style scores with the same weights used in the blend. A high WMS-DINO score means <em>all</em> styles are proportionally visible — not just the winner.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, why existing metrics fail for multi-style:</strong> CLIP similarity and standard DINO similarity both measure how close a generated image is to <em>one</em> reference. If you have three styles and compute three separate scores, you can declare success if any one of them is high, but that masks style collapse, where the output locks onto the dominant style and ignores the others. WMS-DINO solves this by aggregating all style scores with the same weights used in the blend. A high WMS-DINO score means <em>all</em> styles are proportionally visible, not just the winner.</div>
 
-**Worked example — WMS-DINO calculation for 3 styles:**
+**Worked example, WMS-DINO calculation for 3 styles:**
 
 Blend weights: $$w_1 = 0.4$$, $$w_2 = 0.35$$, $$w_3 = 0.25$$. DINO similarities of the generated image to each reference:
 
@@ -365,7 +365,7 @@ Blend weights: $$w_1 = 0.4$$, $$w_2 = 0.35$$, $$w_3 = 0.25$$. DINO similarities 
 | LERP result | 0.72 | 0.45 | 0.31 | $$0.4 \times 0.72 + 0.35 \times 0.45 + 0.25 \times 0.31 =$$ **0.523** |
 | SLERP result | 0.68 | 0.63 | 0.58 | $$0.4 \times 0.68 + 0.35 \times 0.63 + 0.25 \times 0.58 =$$ **0.639** |
 
-The LERP result scores higher on $$\text{Style}_1$$ alone (0.72 vs 0.68) — it dominated. But the balanced WMS-DINO score is lower because Styles 2 and 3 were suppressed. The SLERP result trades a fraction of $$\text{Style}_1$$ fidelity for substantially better balance across all three.
+The LERP result scores higher on $$\text{Style}_1$$ alone (0.72 vs 0.68), it dominated. But the balanced WMS-DINO score is lower because Styles 2 and 3 were suppressed. The SLERP result trades a fraction of $$\text{Style}_1$$ fidelity for substantially better balance across all three.
 
 ## The Core Takeaway
 
@@ -374,7 +374,7 @@ Z-SASLM is a paper about respecting representation geometry. If the latent space
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>Linear blending of latent style vectors is geometrically incorrect — the latent space is curved, not flat.</li>
+  <li>Linear blending of latent style vectors is geometrically incorrect, the latent space is curved, not flat.</li>
   <li>Z-SASLM replaces LERP with iterative SLERP along the geodesic of the hypersphere, preserving latent manifold structure.</li>
   <li>Zero-shot and fine-tuning-free: works with any pre-trained latent diffusion model via StyleAligned attention injection.</li>
   <li>Introduces WMS-DINO, a new evaluation metric for multi-style consistency.</li>

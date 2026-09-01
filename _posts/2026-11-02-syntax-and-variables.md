@@ -6,7 +6,7 @@ categories: [python-primer]
 book: python-primer
 subsection: foundations
 tags: [python, variables, types, floats]
-excerpt: "A Python variable is not a container that holds a value — it is a label stuck onto an object that lives somewhere else. Almost every early surprise, from shared lists to `0.1 + 0.2`, follows from taking that sentence literally."
+excerpt: "A Python variable is not a container that holds a value, it is a label stuck onto an object that lives somewhere else. Almost every early surprise, from shared lists to `0.1 + 0.2`, follows from taking that sentence literally."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Indentation is syntax, not style. Assignment binds a <em>name</em> to an <em>object</em>; <code>b = a</code> copies the label, never the object, which you can verify with <code>id()</code>. Types belong to objects, not to names, so a name can be rebound to anything. The five types you meet first are <code>int</code> (arbitrary precision), <code>float</code> (binary, and therefore lossy — <code>0.1 + 0.2 != 0.3</code>), <code>bool</code> (a subclass of <code>int</code>), <code>str</code> and <code>None</code>.
+  <strong>TL;DR:</strong> Indentation is syntax, not style. Assignment binds a <em>name</em> to an <em>object</em>; <code>b = a</code> copies the label, never the object, which you can verify with <code>id()</code>. Types belong to objects, not to names, so a name can be rebound to anything. The five types you meet first are <code>int</code> (arbitrary precision), <code>float</code> (binary, and therefore lossy, <code>0.1 + 0.2 != 0.3</code>), <code>bool</code> (a subclass of <code>int</code>), <code>str</code> and <code>None</code>.
 </div>
 
 ## Whitespace is the grammar
@@ -39,11 +39,11 @@ print(classify(0))    # -> zero
 
 The rules: a colon opens a block, everything in that block is indented by the same amount, and dedenting closes it. Four spaces per level is the convention from [PEP 8](https://peps.python.org/pep-0008/); never mix tabs and spaces in one file, because Python 3 rejects the mixture outright with `TabError`. Blank lines and comments are ignored for indentation purposes.
 
-Comments start with `#` and run to the end of the line. There is no block-comment syntax — a triple-quoted string that is not assigned to anything is sometimes abused as one, but it is really just a string expression that gets built and discarded.
+Comments start with `#` and run to the end of the line. There is no block-comment syntax, a triple-quoted string that is not assigned to anything is sometimes abused as one, but it is really just a string expression that gets built and discarded.
 
 ## Statements against expressions
 
-An **expression** produces a value: `2 + 2`, `len(xs)`, `f(x)`, `[i for i in range(3)]`. A **statement** does something: `x = 1`, `if ...:`, `return`, `import os`. Every expression can be used as a statement (its value is thrown away), but a statement cannot be used where a value is expected — which is why `if x = 5:` is a syntax error rather than the silent bug it is in C.
+An **expression** produces a value: `2 + 2`, `len(xs)`, `f(x)`, `[i for i in range(3)]`. A **statement** does something: `x = 1`, `if ...:`, `return`, `import os`. Every expression can be used as a statement (its value is thrown away), but a statement cannot be used where a value is expected, which is why `if x = 5:` is a syntax error rather than the silent bug it is in C.
 
 The one deliberate crossover is the walrus operator `:=` ([PEP 572](https://peps.python.org/pep-0572/), Python 3.8+), an assignment that *is* an expression:
 
@@ -54,7 +54,7 @@ if (n := len("hello")) > 3:
 
 ## Variables are names bound to objects
 
-This is the sentence to take literally. `x = 42` does not put 42 into a box called `x`. It creates (or reuses) an integer object and makes the name `x` refer to it. `id()` returns an object's identity — in CPython, its memory address — so you can watch bindings directly:
+This is the sentence to take literally. `x = 42` does not put 42 into a box called `x`. It creates (or reuses) an integer object and makes the name `x` refer to it. `id()` returns an object's identity, in CPython, its memory address, so you can watch bindings directly:
 
 ```python
 a = [1, 2, 3]
@@ -118,7 +118,7 @@ print(True + True)          # -> 2
 print(sum([True, False, True]))   # -> 2   handy for counting
 ```
 
-`None` is a singleton — there is exactly one of it — so test for it with `is`, never `==`. A function with no `return` statement returns it implicitly.
+`None` is a singleton, there is exactly one of it, so test for it with `is`, never `==`. A function with no `return` statement returns it implicitly.
 
 ## Numbers behave in two surprising ways
 
@@ -165,7 +165,7 @@ import math
 print(math.isclose(0.1 + 0.2, 0.3))   # -> True
 ```
 
-For money and anything else where the decimal digits are the ground truth, use `decimal.Decimal` — constructed from a *string*, since `Decimal(0.1)` would faithfully copy the error you were trying to avoid:
+For money and anything else where the decimal digits are the ground truth, use `decimal.Decimal`, constructed from a *string*, since `Decimal(0.1)` would faithfully copy the error you were trying to avoid:
 
 ```python
 from decimal import Decimal
@@ -173,11 +173,11 @@ print(Decimal("0.1") + Decimal("0.2"))   # -> 0.3
 ```
 
 <div class="insight-box">
-  <strong>Key Insight — <code>round</code> does not round half up:</strong> Python uses banker's rounding (round-half-to-even) as specified by IEEE-754, so <code>round(2.5)</code> is <code>2</code> while <code>round(3.5)</code> is <code>4</code>, and <code>round(-0.5)</code> is <code>0</code>. This is not a bug; rounding halves consistently upwards introduces a positive bias when you sum many rounded values, and going to the nearest even value cancels it. If you need the school rule, be explicit about it with <code>math.floor(x + 0.5)</code> or a <code>Decimal</code> with an explicit rounding mode.
+  <strong>Key Insight, <code>round</code> does not round half up:</strong> Python uses banker's rounding (round-half-to-even) as specified by IEEE-754, so <code>round(2.5)</code> is <code>2</code> while <code>round(3.5)</code> is <code>4</code>, and <code>round(-0.5)</code> is <code>0</code>. This is not a bug; rounding halves consistently upwards introduces a positive bias when you sum many rounded values, and going to the nearest even value cancels it. If you need the school rule, be explicit about it with <code>math.floor(x + 0.5)</code> or a <code>Decimal</code> with an explicit rounding mode.
 </div>
 
 <div class="warning-box">
-  <strong>The classic trap — assignment never copies.</strong> <code>b = a</code> gives you a second name for one object, so <code>b.append(4)</code> mutates what <code>a</code> sees. The same applies when you pass a list to a function or store it in two places in a data structure. If you want an independent object, say so: <code>b = a[:]</code> or <code>b = list(a)</code> for a <em>shallow</em> copy, and <code>copy.deepcopy(a)</code> when the elements are themselves mutable. Shallow copies are the subtler hazard: <code>b = a[:]</code> on a list of lists gives a new outer list whose elements are still the <em>same</em> inner lists.
+  <strong>The classic trap, assignment never copies.</strong> <code>b = a</code> gives you a second name for one object, so <code>b.append(4)</code> mutates what <code>a</code> sees. The same applies when you pass a list to a function or store it in two places in a data structure. If you want an independent object, say so: <code>b = a[:]</code> or <code>b = list(a)</code> for a <em>shallow</em> copy, and <code>copy.deepcopy(a)</code> when the elements are themselves mutable. Shallow copies are the subtler hazard: <code>b = a[:]</code> on a list of lists gives a new outer list whose elements are still the <em>same</em> inner lists.
 </div>
 
 The next post takes these building blocks and combines them: [operators and control flow](/blog/python-primer/operators-and-control-flow/), where `==` and `is` part company for good.
@@ -199,7 +199,7 @@ The next post takes these building blocks and combines them: [operators and cont
 1. Python Software Foundation. [The Python Tutorial: an informal introduction](https://docs.python.org/3/tutorial/introduction.html).
 2. Python Software Foundation. [Built-in Types](https://docs.python.org/3/library/stdtypes.html).
 3. Python Software Foundation. [Floating-Point Arithmetic: Issues and Limitations](https://docs.python.org/3/tutorial/floatingpoint.html).
-4. Python Software Foundation. [`decimal` — Decimal fixed-point and floating-point arithmetic](https://docs.python.org/3/library/decimal.html).
-5. van Rossum, G., Warsaw, B., & Coghlan, N. [PEP 8 — Style Guide for Python Code](https://peps.python.org/pep-0008/).
-6. Angelico, C., Peters, T., & van Rossum, G. [PEP 572 — Assignment Expressions](https://peps.python.org/pep-0572/).
+4. Python Software Foundation. [`decimal`, Decimal fixed-point and floating-point arithmetic](https://docs.python.org/3/library/decimal.html).
+5. van Rossum, G., Warsaw, B., & Coghlan, N. [PEP 8, Style Guide for Python Code](https://peps.python.org/pep-0008/).
+6. Angelico, C., Peters, T., & van Rossum, G. [PEP 572, Assignment Expressions](https://peps.python.org/pep-0572/).
 7. Goldberg, D. [What Every Computer Scientist Should Know About Floating-Point Arithmetic](https://doi.org/10.1145/103162.103163). *ACM Computing Surveys* 23(1), 5–48, 1991.

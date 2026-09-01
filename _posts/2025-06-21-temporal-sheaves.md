@@ -28,7 +28,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A temporal sheaf F_t assigns stalks and restriction maps that vary continuously with time t. The sheaf Laplacian Δ_{F_t} is itself time-dependent — encoding the evolving relational geometry of the graph. The natural dynamics are given by a sheaf ODE: dH/dt = −Δ_{F_t} H, where both H (node states) and F_t (restriction maps) evolve. This subsumes both standard graph neural ODEs (when F_t = I) and TGN (when maps are updated by a memory module).
+<strong>TL;DR:</strong> A temporal sheaf F_t assigns stalks and restriction maps that vary continuously with time t. The sheaf Laplacian Δ_{F_t} is itself time-dependent, encoding the evolving relational geometry of the graph. The natural dynamics are given by a sheaf ODE: dH/dt = −Δ_{F_t} H, where both H (node states) and F_t (restriction maps) evolve. This subsumes both standard graph neural ODEs (when F_t = I) and TGN (when maps are updated by a memory module).
 </div>
 {% include figure image_path="/images/blog/gnn/rossi2020_tgn.png" alt="Temporal sheaf evolution" caption="Time-varying sheaf structure on a dynamic graph (Rossi et al., 2020)" %}
 
@@ -121,7 +121,7 @@ toc_label: "Contents"
   <text x="332" y="132" font-size="9" fill="#7c3aed" font-family="monospace">[.2,.8]</text>
   <text x="362" y="182" font-size="9" fill="#7c3aed" font-family="monospace">[.9,.9]</text>
 
-  <!-- restriction map edges (rotated — maps drifted) -->
+  <!-- restriction map edges (rotated, maps drifted) -->
   <line class="ts-map-ab" x1="310" y1="110" x2="340" y2="110" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="6,4"/>
   <line class="ts-map-bc" x1="356" y1="118" x2="374" y2="152" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="6,4"/>
 
@@ -192,7 +192,7 @@ A temporal sheaf models two sources of dynamics:
 
 ## The Temporal Sheaf Framework
 
-**Intuition First.** Imagine filming a group of people having a conversation. At any single frame the photo captures who is next to whom (the graph topology) and what each person is saying (the stalk signal). But the *relationship* between two adjacent people — how much one's words influence the other's understanding — is captured by the restriction map on their shared edge. In a temporal sheaf, all three of these change with time: new people walk in (topology changes), individuals update their views (stalk signals evolve), and the mutual influence between neighbours shifts as relationships deepen or weaken (restriction maps drift). The Sheaf Laplacian at any instant is just the summary of all those bilateral influence coefficients — so when the relationships change, the Laplacian changes with them, and the diffusion dynamics follow.
+**Intuition First.** Imagine filming a group of people having a conversation. At any single frame the photo captures who is next to whom (the graph topology) and what each person is saying (the stalk signal). But the *relationship* between two adjacent people, how much one's words influence the other's understanding, is captured by the restriction map on their shared edge. In a temporal sheaf, all three of these change with time: new people walk in (topology changes), individuals update their views (stalk signals evolve), and the mutual influence between neighbours shifts as relationships deepen or weaken (restriction maps drift). The Sheaf Laplacian at any instant is just the summary of all those bilateral influence coefficients, so when the relationships change, the Laplacian changes with them, and the diffusion dynamics follow.
 
 A **temporal sheaf** over time T = [0, ∞) assigns:
 - For each t ∈ T: a graph G_t = (V_t, E_t)
@@ -208,13 +208,13 @@ The **time-dependent Sheaf Laplacian** Δ_{F_t} is built from the maps at time t
 
 ## Worked Example: A 3-Node Path Graph Across 3 Timesteps
 
-To make the framework concrete, consider the path graph **v₁ — v₂ — v₃** with 2-dimensional stalks at each node and on each edge.
+To make the framework concrete, consider the path graph **v₁, v₂, v₃** with 2-dimensional stalks at each node and on each edge.
 
 **Setup.** Each stalk is ℝ², and each restriction map is a 2×2 matrix. We track two edges: e₁₂ = (v₁, v₂) and e₂₃ = (v₂, v₃).
 
 ---
 
-**t = 0 — initial configuration**
+**t = 0, initial configuration**
 
 Node stalks (signals):
 
@@ -230,17 +230,17 @@ $$F_{0,\,v_1 \triangleright e_{12}} = \begin{bmatrix}1 & 0\\0 & 1\end{bmatrix}, 
 
 $$F_{0,\,v_2 \triangleright e_{23}} = \begin{bmatrix}1 & 0\\0 & 1\end{bmatrix}, \quad F_{0,\,v_3 \triangleright e_{23}} = \begin{bmatrix}1 & 0\\0 & 1\end{bmatrix}$$
 
-The coboundary matrix δ₀ encodes these maps, and Δ_{F₀} = δ₀ᵀ δ₀ is a 6×6 block Laplacian (two 2×2 blocks per node). Since all maps are identity, this reduces to twice the standard graph Laplacian ⊗ I₂ — no heterophily yet.
+The coboundary matrix δ₀ encodes these maps, and Δ_{F₀} = δ₀ᵀ δ₀ is a 6×6 block Laplacian (two 2×2 blocks per node). Since all maps are identity, this reduces to twice the standard graph Laplacian ⊗ I₂, no heterophily yet.
 
 ---
 
-**t = 1 — relationship rotates on edge e₁₂**
+**t = 1, relationship rotates on edge e₁₂**
 
 A social event causes the v₁–v₂ relationship to rotate: v₁'s feature space is now seen from a 45° rotated perspective by the edge. The restriction maps become:
 
 $$F_{1,\,v_1 \triangleright e_{12}} = \begin{bmatrix}\tfrac{1}{\sqrt{2}} & -\tfrac{1}{\sqrt{2}}\\[4pt]\tfrac{1}{\sqrt{2}} & \tfrac{1}{\sqrt{2}}\end{bmatrix}, \quad F_{1,\,v_2 \triangleright e_{12}} = \begin{bmatrix}1 & 0\\0 & 1\end{bmatrix}$$
 
-Now Δ_{F₁} differs from Δ_{F₀}: the (v₁, v₂) cross-block is no longer the identity, so diffusion across e₁₂ mixes the two feature dimensions. The **consistency defect** — how much h(v₁) and h(v₂) disagree after projection — is:
+Now Δ_{F₁} differs from Δ_{F₀}: the (v₁, v₂) cross-block is no longer the identity, so diffusion across e₁₂ mixes the two feature dimensions. The **consistency defect**, how much h(v₁) and h(v₂) disagree after projection, is:
 
 $$\lVert F_{1,v_1 \triangleright e_{12}}\, h(v_1,1) - F_{1,v_2 \triangleright e_{12}}\, h(v_2,1) \rVert$$
 
@@ -250,7 +250,7 @@ $$\lVert F_{1,v_1 \triangleright e_{12}}\, h(v_1,1) - F_{1,v_2 \triangleright e_
 
 ---
 
-**t = 2 — diffusion step brings signals closer to agreement**
+**t = 2, diffusion step brings signals closer to agreement**
 
 One Euler step of the sheaf heat equation dH/dt = −Δ_{F₁} H with step size α = 0.3 pushes signals toward consistency. The updated v₁ stalk becomes:
 
@@ -258,7 +258,7 @@ $$h(v_1, 2) = h(v_1,1) - 0.3 \cdot [\Delta_{F_1} H]_{v_1} \approx [0.79,\; 0.21]
 
 and h(v₂, 2) drifts toward [0.14, 0.86]ᵀ. The consistency defect drops further. This is precisely the **sheaf diffusion pulling signals into the global section** of F₁.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The restriction maps determine <em>what counts as agreement</em> between neighbouring nodes. When F_{t,v▷e} = I for all v, e, you recover ordinary graph diffusion — nodes agree when their feature vectors are equal. When maps are non-identity (or non-orthogonal), agreement is rotated, scaled, or projected: two nodes can have completely different raw feature vectors yet be in perfect sheaf-theoretic agreement. This is exactly why temporal sheaves handle heterophilic dynamic graphs that standard GNNs struggle with.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The restriction maps determine <em>what counts as agreement</em> between neighbouring nodes. When F_{t,v▷e} = I for all v, e, you recover ordinary graph diffusion, nodes agree when their feature vectors are equal. When maps are non-identity (or non-orthogonal), agreement is rotated, scaled, or projected: two nodes can have completely different raw feature vectors yet be in perfect sheaf-theoretic agreement. This is exactly why temporal sheaves handle heterophilic dynamic graphs that standard GNNs struggle with.</div>
 
 ---
 
@@ -272,7 +272,7 @@ dH(t)/dt = −Δ_{F_t} H(t)   ,   H(0) = X₀
 
 where H(t) ∈ ℝ^{Nd} is the time-varying node stalk signal and Δ_{F_t} is the time-varying Sheaf Laplacian.
 
-This is a **time-varying linear ODE** — the coefficient matrix changes with time. Unlike the static case (constant Δ_F), the solution is not simply exp(−Δ_F t)X₀. Instead, it is given by the **time-ordered exponential** (Magnus expansion):
+This is a **time-varying linear ODE**, the coefficient matrix changes with time. Unlike the static case (constant Δ_F), the solution is not simply exp(−Δ_F t)X₀. Instead, it is given by the **time-ordered exponential** (Magnus expansion):
 
 <div class="math-box">
 H(t) = T{exp(−∫₀^t Δ_{F_s} ds)} H(0)
@@ -289,7 +289,7 @@ dH(t)/dt = −Δ_{F_t} H(t)    (state diffuses along sheaf)
 dF_t/dt  = g(H(t), F_t)      (maps evolve based on current state)
 </div>
 
-This is a **coupled ODE system** — the maps drive the diffusion, and the diffusion updates the states that drive the map updates.
+This is a **coupled ODE system**, the maps drive the diffusion, and the diffusion updates the states that drive the map updates.
 
 In practice, this is implemented as an alternating scheme:
 1. Given H^{(k)} and F^{(k)}, compute Δ_{F^{(k)}} and update H^{(k+1)} via one diffusion step
@@ -298,7 +298,7 @@ In practice, this is implemented as an alternating scheme:
 This is equivalent to a recurrent sheaf architecture where the restriction maps are re-predicted at each timestep.
 
 <div class="insight-box">
-<strong>Connection to TGN:</strong> In Temporal Graph Networks (Rossi et al., 2020), a memory module s_v(t) encodes the interaction history of each node, and an embedding module uses s_v(t) to compute node representations. The temporal sheaf framework provides a principled interpretation: s_v(t) is the node stalk state H_v(t), and the memory update is the sheaf ODE. The TGN "message" from u to v at time t corresponds to F_{t,u▷e}ᵀ F_{t,v▷e} H_u(t) — the transported stalk from u to v via the current restriction maps.
+<strong>Connection to TGN:</strong> In Temporal Graph Networks (Rossi et al., 2020), a memory module s_v(t) encodes the interaction history of each node, and an embedding module uses s_v(t) to compute node representations. The temporal sheaf framework provides a principled interpretation: s_v(t) is the node stalk state H_v(t), and the memory update is the sheaf ODE. The TGN "message" from u to v at time t corresponds to F_{t,u▷e}ᵀ F_{t,v▷e} H_u(t), the transported stalk from u to v via the current restriction maps.
 </div>
 
 ## Event-Driven Sheaf Updates
@@ -307,7 +307,7 @@ For **continuous-time dynamic graphs (CTDG)** where interactions happen at discr
 
 At event (u, r, v, t):
 1. Update restriction map: F_{t,u▷e} and F_{t,v▷e} are recomputed via MLP(H_u(t), H_v(t))
-2. Update Δ_{F_t}: only the blocks involving edge e change — O(d²) local update
+2. Update Δ_{F_t}: only the blocks involving edge e change, O(d²) local update
 3. Update states: run a brief ODE integration step (or single Euler step) to propagate the event's effect
 
 This event-driven scheme is analogous to TGN's message-passing update but with sheaf structure.
@@ -320,7 +320,7 @@ Define a **snapshot sheaf** as a sequence (F₁, F₂, ..., F_T) of static sheav
 - Per-snapshot sheaf diffusion: H^{(k)}_{t+1} = (I − Δ_{F_t}^{norm}) H^{(k)}_t W^{(k)}_t
 - Cross-snapshot recurrence: H^{(0)}_{t+1} = GRU(H^{(K)}_t, H^{(0)}_t) or LSTM update
 
-This is exactly DCRNN or STGCN with the graph Laplacian replaced by the Sheaf Laplacian — a natural generalisation for heterophilic dynamic graphs.
+This is exactly DCRNN or STGCN with the graph Laplacian replaced by the Sheaf Laplacian, a natural generalisation for heterophilic dynamic graphs.
 
 ## Temporal Restriction Maps: What They Capture
 
@@ -331,9 +331,9 @@ In a temporal sheaf, the restriction maps F_{t,v▷e} change with time. What doe
 - A protein interaction changing affinity with cellular context
 - A financial transaction pattern evolving with market conditions
 
-**Map volatility:** High-frequency oscillations in F_t can represent oscillatory relational patterns — seasonal effects, periodic interactions.
+**Map volatility:** High-frequency oscillations in F_t can represent oscillatory relational patterns, seasonal effects, periodic interactions.
 
-**Map discontinuities:** Sudden jumps in F_t at events represent abrupt relational changes — a breakup of a social connection, a company merger.
+**Map discontinuities:** Sudden jumps in F_t at events represent abrupt relational changes, a breakup of a social connection, a company merger.
 
 ## Temporal Sheaf Benchmarks
 
@@ -349,11 +349,11 @@ These benchmarks test link prediction under the CTDG setting. Temporal sheaf GNN
 ## Open Questions
 
 1. **Map memory:** Should the restriction maps themselves be stored in the memory module? This would give maps that evolve with the interaction history, not just the current features.
-2. **Temporal H⁰:** The global section space H⁰(G_t, F_t) evolves with time — tracking its evolution provides a topological time series of the graph's relational structure.
+2. **Temporal H⁰:** The global section space H⁰(G_t, F_t) evolves with time, tracking its evolution provides a topological time series of the graph's relational structure.
 3. **Temporal sheaf Laplacian spectrum:** How do eigenvalues of Δ_{F_t} evolve? Do they exhibit phase transitions at critical graph changes?
 
 ## References
 
-- Rossi, E., Chamberlain, B., Frasca, F., Eynard, D., Monti, F., & Bronstein, M. (2020). [Temporal Graph Networks for Deep Learning on Dynamic Graphs](https://arxiv.org/abs/2006.10637). *ICML GRL+ Workshop 2020* (TGN: memory-based continuous-time GNN — the architecture that temporal sheaves generalise).
-- Poli, M., Massaroli, S., Park, J., Yamashita, A., Asama, H., & Park, J. (2019). [Graph Neural Ordinary Differential Equations](https://arxiv.org/abs/1911.07532). *arXiv 2019* (Graph Neural ODE: continuous-time graph dynamics — the ODE framework that sheaf ODEs extend with sheaf structure).
-- Chen, R. T. Q., Rubanova, Y., Bettencourt, J., & Duvenaud, D. (2018). [Neural Ordinary Differential Equations](https://arxiv.org/abs/1806.07366). *NeurIPS 2018* (Neural ODEs: the adjoint method for continuous ODE systems — foundation for sheaf ODE training).
+- Rossi, E., Chamberlain, B., Frasca, F., Eynard, D., Monti, F., & Bronstein, M. (2020). [Temporal Graph Networks for Deep Learning on Dynamic Graphs](https://arxiv.org/abs/2006.10637). *ICML GRL+ Workshop 2020* (TGN: memory-based continuous-time GNN, the architecture that temporal sheaves generalise).
+- Poli, M., Massaroli, S., Park, J., Yamashita, A., Asama, H., & Park, J. (2019). [Graph Neural Ordinary Differential Equations](https://arxiv.org/abs/1911.07532). *arXiv 2019* (Graph Neural ODE: continuous-time graph dynamics, the ODE framework that sheaf ODEs extend with sheaf structure).
+- Chen, R. T. Q., Rubanova, Y., Bettencourt, J., & Duvenaud, D. (2018). [Neural Ordinary Differential Equations](https://arxiv.org/abs/1806.07366). *NeurIPS 2018* (Neural ODEs: the adjoint method for continuous ODE systems, foundation for sheaf ODE training).

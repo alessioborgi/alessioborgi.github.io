@@ -6,7 +6,7 @@ book: persistent-homology
 subsection: ml-integration
 tags: [persistence-landscape, Banach-space, mean-landscape, central-limit-theorem, Bubenik]
 published: false
-excerpt: "Persistence landscapes (Bubenik, 2015) map a persistence diagram into a sequence of piecewise-linear functions, forming a Banach space representation. This enables averaging, variance computation, and hypothesis testing directly on persistence diagrams — the statistical machinery needed for TDA-based inference. They also admit an exact central limit theorem, making them the right representation for statistical TDA."
+excerpt: "Persistence landscapes (Bubenik, 2015) map a persistence diagram into a sequence of piecewise-linear functions, forming a Banach space representation. This enables averaging, variance computation, and hypothesis testing directly on persistence diagrams, the statistical machinery needed for TDA-based inference. They also admit an exact central limit theorem, making them the right representation for statistical TDA."
 author_profile: true
 read_time: true
 is_overview: false
@@ -20,9 +20,9 @@ permalink: /blog/persistent-homology/persistence-landscapes/
 
 Suppose you have 50 brain scans from healthy subjects and 50 from patients with a neurological condition. You compute a persistence diagram for each scan. Now you want to ask: "Is there a statistically significant topological difference between the two groups?"
 
-To do this, you need to **average** persistence diagrams and compute **confidence intervals**. But persistence diagrams are multisets — you cannot add two multisets and divide by two in any meaningful way. You need a representation that lives in a vector space.
+To do this, you need to **average** persistence diagrams and compute **confidence intervals**. But persistence diagrams are multisets, you cannot add two multisets and divide by two in any meaningful way. You need a representation that lives in a vector space.
 
-Persistence landscapes solve this by converting each diagram into a **sequence of tent functions** — piecewise-linear curves stacked on top of each other. These curves live in an $$L^p$$ function space, where averaging, variance, and the central limit theorem all apply. The first landscape function captures the most prominent topological features; subsequent ones capture the next layer down, and so on.
+Persistence landscapes solve this by converting each diagram into a **sequence of tent functions**, piecewise-linear curves stacked on top of each other. These curves live in an $$L^p$$ function space, where averaging, variance, and the central limit theorem all apply. The first landscape function captures the most prominent topological features; subsequent ones capture the next layer down, and so on.
 
 ---
 
@@ -46,7 +46,7 @@ where $$\text{kmax}$$ denotes the $$k$$-th largest value. So $$\lambda_1$$ is th
 
 The **persistence landscape** is the sequence $$\lambda = (\lambda_1, \lambda_2, \ldots)$$, typically truncated at some $$K$$.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Each landscape function \(\lambda_k\) is piecewise-linear and lives in \(L^p(\mathbb{R})\) for any \(p \geq 1\). The full landscape lives in \(\bigoplus_k L^p(\mathbb{R})\), a Banach space. This is why you can average landscapes: the mean landscape \(\bar{\lambda}_k(t) = \frac{1}{n}\sum_{j=1}^n \lambda_k^{(j)}(t)\) is simply the pointwise average of functions — perfectly well-defined.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Each landscape function \(\lambda_k\) is piecewise-linear and lives in \(L^p(\mathbb{R})\) for any \(p \geq 1\). The full landscape lives in \(\bigoplus_k L^p(\mathbb{R})\), a Banach space. This is why you can average landscapes: the mean landscape \(\bar{\lambda}_k(t) = \frac{1}{n}\sum_{j=1}^n \lambda_k^{(j)}(t)\) is simply the pointwise average of functions, perfectly well-defined.</div>
 
 ---
 
@@ -80,15 +80,15 @@ The **persistence landscape** is the sequence $$\lambda = (\lambda_1, \lambda_2,
   <text x="20" y="196" font-size="8" fill="#94a3b8">0</text>
   <text x="195" y="196" font-size="8" fill="#94a3b8">10</text>
 
-  <!-- Bar 1: [1, 9] — long, prominent -->
+  <!-- Bar 1: [1, 9], long, prominent -->
   <line x1="37" y1="70" x2="183" y2="70" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
   <text x="110" y="65" text-anchor="middle" font-size="9" fill="#1d4ed8">[1, 9]</text>
 
-  <!-- Bar 2: [2, 6] — medium -->
+  <!-- Bar 2: [2, 6], medium -->
   <line x1="55" y1="110" x2="128" y2="110" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
   <text x="92" y="105" text-anchor="middle" font-size="9" fill="#5b21b6">[2, 6]</text>
 
-  <!-- Bar 3: [3, 5] — short -->
+  <!-- Bar 3: [3, 5], short -->
   <line x1="73" y1="145" x2="100" y2="145" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
   <text x="87" y="140" text-anchor="middle" font-size="9" fill="#065f46">[3, 5]</text>
 
@@ -148,7 +148,7 @@ The **persistence landscape** is the sequence $$\lambda = (\lambda_1, \lambda_2,
   <line x1="400" y1="208" x2="415" y2="208" stroke="#f97316" stroke-width="2.5" stroke-dasharray="5,2"/>
   <text x="418" y="211" font-size="8" fill="#1e293b">λ₁</text>
 </svg>
-<figcaption>Three persistence bars generate three tent functions. The first landscape λ₁ (orange dashed) is their upper envelope — here dominated by the long bar [1,9].</figcaption>
+<figcaption>Three persistence bars generate three tent functions. The first landscape λ₁ (orange dashed) is their upper envelope, here dominated by the long bar [1,9].</figcaption>
 </figure>
 </div>
 

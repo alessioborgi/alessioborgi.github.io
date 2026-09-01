@@ -27,17 +27,17 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Long-horizon robot tasks — "tidy the kitchen", "assemble a circuit board" — are too complex for flat RL policies. Hierarchical approaches decompose tasks into reusable skills or primitives: the options framework formalises this mathematically; skill discovery methods extract skills from data; SPiRL accelerates RL using pre-trained skill priors; and SayCan grounds language instructions to physical skill execution.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Long-horizon robot tasks, "tidy the kitchen", "assemble a circuit board", are too complex for flat RL policies. Hierarchical approaches decompose tasks into reusable skills or primitives: the options framework formalises this mathematically; skill discovery methods extract skills from data; SPiRL accelerates RL using pre-trained skill priors; and SayCan grounds language instructions to physical skill execution.</div>
 {% include figure image_path="/images/blog/robotics/ahn2022_saycan.png" alt="SayCan skill learning" caption="SayCan: grounding language in robot skill primitives (Ahn et al., 2022)" %}
 
 
 ## The Long-Horizon Problem
 
-**Intuition first.** When you make a cup of tea, you do not plan every individual muscle contraction. Your brain operates at multiple levels simultaneously: a high level decides "boil water then steep the bag", a mid level sequences "walk to kettle, pick up kettle, fill kettle", and the low level handles the precise finger forces and wrist angles. This hierarchy is exactly what hierarchical robot learning tries to replicate — the high-level policy picks which *skill* to execute, and the low-level policy handles the motor details.
+**Intuition first.** When you make a cup of tea, you do not plan every individual muscle contraction. Your brain operates at multiple levels simultaneously: a high level decides "boil water then steep the bag", a mid level sequences "walk to kettle, pick up kettle, fill kettle", and the low level handles the precise finger forces and wrist angles. This hierarchy is exactly what hierarchical robot learning tries to replicate, the high-level policy picks which *skill* to execute, and the low-level policy handles the motor details.
 
-Flat RL policies struggle with tasks that require many sequential decisions over long time horizons. Reward signals become extremely sparse — the robot might take thousands of actions before receiving any feedback — and the policy must simultaneously solve the exploration problem (finding a viable action sequence) and the optimisation problem (learning to execute it well).
+Flat RL policies struggle with tasks that require many sequential decisions over long time horizons. Reward signals become extremely sparse, the robot might take thousands of actions before receiving any feedback, and the policy must simultaneously solve the exploration problem (finding a viable action sequence) and the optimisation problem (learning to execute it well).
 
-Humans tackle this through hierarchical decomposition: we think of "making coffee" as a sequence of skills — "boil water", "grind beans", "pour" — each of which is itself a sub-plan. Robots benefit from the same structure.
+Humans tackle this through hierarchical decomposition: we think of "making coffee" as a sequence of skills, "boil water", "grind beans", "pour", each of which is itself a sub-plan. Robots benefit from the same structure.
 
 ## The Options Framework
 
@@ -105,7 +105,7 @@ Rather than hand-designing options, **skill discovery** methods automatically ex
 
 ## SPiRL: Skill Prior RL
 
-**SPiRL** (Pertsch et al. 2021) pre-trains a skill encoder and decoder on offline datasets of robot behaviour, learning a compact latent skill space. During downstream RL, the high-level policy selects skill latents rather than primitive actions, and the decoder executes them as multi-step motor commands. A **skill prior** — the distribution of skills likely to be useful in a given state — regularises the high-level policy, dramatically accelerating learning:
+**SPiRL** (Pertsch et al. 2021) pre-trains a skill encoder and decoder on offline datasets of robot behaviour, learning a compact latent skill space. During downstream RL, the high-level policy selects skill latents rather than primitive actions, and the decoder executes them as multi-step motor commands. A **skill prior**, the distribution of skills likely to be useful in a given state, regularises the high-level policy, dramatically accelerating learning:
 
 <div class="math-box">
 J(pi) = E[sum r_t] - alpha * KL(pi(z|s) || p(z|s))

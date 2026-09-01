@@ -32,7 +32,7 @@ print(5 & 3, 5 | 3, 5 ^ 3)     # -> 1 7 6
 print(5 << 1, 5 >> 1, ~5)      # -> 10 2 -6
 ```
 
-Comparisons are `== != < <= > >=`, and they **chain** — a genuine convenience most languages lack:
+Comparisons are `== != < <= > >=`, and they **chain**, a genuine convenience most languages lack:
 
 ```python
 print(3 < 5 < 10)      # -> True
@@ -71,10 +71,10 @@ print(int("1000") == int("1000"))   # -> True
 print(int("1000") is int("1000"))   # -> False
 ```
 
-Short strings behave the same way — identifier-like literals are interned, arbitrary ones are not. The rule is simple: **use `is` only for `None`, `True`, `False`, and sentinel objects you created yourself.** For everything else, `==`.
+Short strings behave the same way, identifier-like literals are interned, arbitrary ones are not. The rule is simple: **use `is` only for `None`, `True`, `False`, and sentinel objects you created yourself.** For everything else, `==`.
 
 <div class="warning-box">
-  <strong>The classic trap — <code>if x is 0:</code> or <code>if s is "yes":</code>.</strong> These work on your machine, pass your tests, and then fail on a value that happens to fall outside the small-integer cache or the string-interning rules. CPython 3.8 and later emit a <code>SyntaxWarning: "is" with 'int' literal. Did you mean "=="?</code>, which you should treat as an error. The one comparison where <code>is</code> is not merely acceptable but <em>correct</em> is <code>x is None</code>: <code>None</code> is a singleton, and <code>x == None</code> can be subverted by a class that overrides <code>__eq__</code>.
+  <strong>The classic trap, <code>if x is 0:</code> or <code>if s is "yes":</code>.</strong> These work on your machine, pass your tests, and then fail on a value that happens to fall outside the small-integer cache or the string-interning rules. CPython 3.8 and later emit a <code>SyntaxWarning: "is" with 'int' literal. Did you mean "=="?</code>, which you should treat as an error. The one comparison where <code>is</code> is not merely acceptable but <em>correct</em> is <code>x is None</code>: <code>None</code> is a singleton, and <code>x == None</code> can be subverted by a class that overrides <code>__eq__</code>.
 </div>
 
 ## Truthiness
@@ -88,7 +88,7 @@ print(bool([0]), bool(" "))                                  # -> True True
 
 `[0]` is truthy because it has one element, and `" "` is truthy because a space is a character. So write `if xs:` rather than `if len(xs) > 0:`; it is idiomatic and works for any container.
 
-`and` and `or` short-circuit, and — unlike in C — they return **one of the operands**, not a boolean:
+`and` and `or` short-circuit, and, unlike in C, they return **one of the operands**, not a boolean:
 
 ```python
 print("a" or "b")     # -> a      first truthy operand
@@ -125,7 +125,7 @@ print(label)   # -> empty
 
 ## Loops
 
-`for` iterates over an **iterable** — a list, string, dict, file, generator, anything implementing the [iterator protocol](/blog/python-primer/comprehensions-and-generators/). There is no C-style three-clause `for`.
+`for` iterates over an **iterable**, a list, string, dict, file, generator, anything implementing the [iterator protocol](/blog/python-primer/comprehensions-and-generators/). There is no C-style three-clause `for`.
 
 ```python
 for ch in "abc":
@@ -150,7 +150,7 @@ for i, name in enumerate(["ann", "bob"], start=1):
 # -> 2 bob
 ```
 
-`while` repeats until its condition goes falsy. Use it when the number of iterations is not known up front — reading until end of input, converging an iteration, retrying a request.
+`while` repeats until its condition goes falsy. Use it when the number of iterations is not known up front, reading until end of input, converging an iteration, retrying a request.
 
 `break` leaves the innermost loop immediately; `continue` skips to the next iteration. Neither affects an enclosing loop, so breaking out of nested loops needs a flag, a `return`, or an exception.
 
@@ -175,7 +175,7 @@ Read it as "no break". It removes the `found = False` flag that search loops oth
 
 ## `match`: structural pattern matching
 
-Python 3.10 added `match` ([PEP 634](https://peps.python.org/pep-0634/)). It is not a switch statement — the cases are *patterns* that destructure the subject, not just constants to compare against.
+Python 3.10 added `match` ([PEP 634](https://peps.python.org/pep-0634/)). It is not a switch statement, the cases are *patterns* that destructure the subject, not just constants to compare against.
 
 ```python
 def http(status):
@@ -214,17 +214,17 @@ print(where((0, 0)), where((3, 0)), where((1, 2)))
 ```
 
 <div class="insight-box">
-  <strong>Key Insight — a bare name in a <code>case</code> always binds, never compares:</strong> <code>case ORIGIN:</code> does not test whether the subject equals a constant named <code>ORIGIN</code>; it matches anything and rebinds <code>ORIGIN</code> to it, shadowing your constant and swallowing every later case. To compare against a named constant you must use a dotted name — <code>case Colours.RED:</code> — or a literal. This is the one rule that makes <code>match</code> behave unlike every switch you have used before.
+  <strong>Key Insight, a bare name in a <code>case</code> always binds, never compares:</strong> <code>case ORIGIN:</code> does not test whether the subject equals a constant named <code>ORIGIN</code>; it matches anything and rebinds <code>ORIGIN</code> to it, shadowing your constant and swallowing every later case. To compare against a named constant you must use a dotted name, <code>case Colours.RED:</code>, or a literal. This is the one rule that makes <code>match</code> behave unlike every switch you have used before.
 </div>
 
 <div class="warning-box">
-  <strong>The other classic trap — mutating a list while iterating it.</strong> The <code>for</code> loop walks the list by an internal index. Removing an element shifts everything after it down by one, so the loop skips the next item:
+  <strong>The other classic trap, mutating a list while iterating it.</strong> The <code>for</code> loop walks the list by an internal index. Removing an element shifts everything after it down by one, so the loop skips the next item:
   <pre><code>xs = [1, 2, 2, 3, 4]
 for x in xs:
     if x % 2 == 0:
         xs.remove(x)
 print(xs)   # -> [1, 2, 3]   one 2 survived</code></pre>
-  Build a new list instead — <code>[y for y in xs if y % 2]</code> gives the correct <code>[1, 3]</code> — or iterate over a copy with <code>for x in xs[:]</code>. Dictionaries and sets are stricter: changing their size mid-loop raises <code>RuntimeError: dictionary changed size during iteration</code> rather than silently skipping.
+  Build a new list instead, <code>[y for y in xs if y % 2]</code> gives the correct <code>[1, 3]</code>, or iterate over a copy with <code>for x in xs[:]</code>. Dictionaries and sets are stricter: changing their size mid-loop raises <code>RuntimeError: dictionary changed size during iteration</code> rather than silently skipping.
 </div>
 
 Next: [lists and tuples](/blog/python-primer/lists-and-tuples/), the sequences you will spend most of your Python life iterating over.
@@ -236,7 +236,7 @@ Next: [lists and tuples](/blog/python-primer/lists-and-tuples/), the sequences y
     <li>Comparisons chain: <code>lo &lt;= x &lt;= hi</code> evaluates <code>x</code> once.</li>
     <li>Empty containers, zeros and <code>None</code> are falsy; <code>and</code>/<code>or</code> short-circuit and return an operand rather than a bool.</li>
     <li><code>range</code> is lazy and excludes its stop value; use <code>enumerate</code> and <code>zip</code> instead of <code>range(len(xs))</code>.</li>
-    <li><code>for...else</code> runs its <code>else</code> only when no <code>break</code> executed — read it as "no break".</li>
+    <li><code>for...else</code> runs its <code>else</code> only when no <code>break</code> executed, read it as "no break".</li>
     <li><code>match</code> (3.10+) destructures rather than compares, and a bare name in a case pattern binds instead of matching.</li>
   </ul>
 </div>
@@ -246,6 +246,6 @@ Next: [lists and tuples](/blog/python-primer/lists-and-tuples/), the sequences y
 1. Python Software Foundation. [More Control Flow Tools](https://docs.python.org/3/tutorial/controlflow.html).
 2. Python Software Foundation. [Expressions: comparisons and boolean operations](https://docs.python.org/3/reference/expressions.html#comparisons).
 3. Python Software Foundation. [Truth Value Testing](https://docs.python.org/3/library/stdtypes.html#truth-value-testing).
-4. Bucher, B., van Rossum, G., et al. [PEP 634 — Structural Pattern Matching: Specification](https://peps.python.org/pep-0634/).
-5. Kohn, T., van Rossum, G., et al. [PEP 636 — Structural Pattern Matching: Tutorial](https://peps.python.org/pep-0636/).
+4. Bucher, B., van Rossum, G., et al. [PEP 634, Structural Pattern Matching: Specification](https://peps.python.org/pep-0634/).
+5. Kohn, T., van Rossum, G., et al. [PEP 636, Structural Pattern Matching: Tutorial](https://peps.python.org/pep-0636/).
 6. Python Software Foundation. [`match` statement reference](https://docs.python.org/3/reference/compound_stmts.html#the-match-statement).

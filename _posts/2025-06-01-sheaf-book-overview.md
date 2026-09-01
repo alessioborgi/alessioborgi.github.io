@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 <style>
 /* Page-specific only. Shared callout, figure and formula classes live in
-   _sass/layout/_blog-components.scss — do not re-declare them here. */
+   _sass/layout/_blog-components.scss, do not re-declare them here. */
 .chapter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -74,7 +74,7 @@ html[data-theme="dark"] .sheaf-card p  { color: #cbd5e1 !important; }
 </style>
 
 <div class="tldr-box">
-<strong>What this book covers:</strong> Standard GNNs average a node with its neighbours, which quietly assumes every node measures the world in the same units. Sheaf Neural Networks drop that assumption: each node gets its own vector space, each edge gets a learned linear map between them, and comparison happens only <em>after</em> transport. One operator — the sheaf Laplacian — then covers heterophily, directional structure, and a principled account of oversmoothing.
+<strong>What this book covers:</strong> Standard GNNs average a node with its neighbours, which quietly assumes every node measures the world in the same units. Sheaf Neural Networks drop that assumption: each node gets its own vector space, each edge gets a learned linear map between them, and comparison happens only <em>after</em> transport. One operator, the sheaf Laplacian, then covers heterophily, directional structure, and a principled account of oversmoothing.
 </div>
 
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="Two nodes v and u, each with a vector-space stalk, connected through a shared edge stalk by restriction maps and their transposes" caption="The whole object in one picture: nodes v and u carry stalks F(v) and F(u), the edge carries F(e), and the restriction maps F(v◁e) and F(u◁e) transport vectors into the shared edge space. Φ is the learned function that produces those maps from node features (Bodnar et al., 2022)." %}
@@ -96,12 +96,12 @@ html[data-theme="dark"] .sheaf-card p  { color: #cbd5e1 !important; }
 
 ## The problem, stated precisely
 
-A GCN layer propagates with $$\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$$, which is an averaging operator. Averaging has a fixed point, and repeated averaging converges to it: features collapse towards a single degree-scaled direction. That is **oversmoothing**, and it is not a bug in the implementation — it is what averaging does.
+A GCN layer propagates with $$\hat{A} = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}$$, which is an averaging operator. Averaging has a fixed point, and repeated averaging converges to it: features collapse towards a single degree-scaled direction. That is **oversmoothing**, and it is not a bug in the implementation, it is what averaging does.
 
 It also encodes an assumption. Adding $$h_u$$ to $$h_v$$ only means something if the two vectors are expressed in the same basis. On a **heterophilic** graph, where an edge signals *difference* rather than similarity, that assumption is actively wrong.
 
 <div class="insight-box">
-<strong>Intuition first — the weather-station analogy.</strong> Picture a network of weather stations. Each measures temperature, but in its own units: some Celsius, some Fahrenheit, some a proprietary scale. Knowing that two adjacent stations read \(22\) and \(71\) tells you nothing until you know the conversion between them. That conversion is the <strong>restriction map</strong>. A <strong>global section</strong> is an assignment of readings — one per station — on which every adjacent pair agrees <em>after</em> conversion. The sheaf Laplacian is the penalty for disagreement measured in those converted units. Sheaf neural networks learn the conversions from data. That is the entire conceptual leap.
+<strong>Intuition first, the weather-station analogy.</strong> Picture a network of weather stations. Each measures temperature, but in its own units: some Celsius, some Fahrenheit, some a proprietary scale. Knowing that two adjacent stations read \(22\) and \(71\) tells you nothing until you know the conversion between them. That conversion is the <strong>restriction map</strong>. A <strong>global section</strong> is an assignment of readings, one per station, on which every adjacent pair agrees <em>after</em> conversion. The sheaf Laplacian is the penalty for disagreement measured in those converted units. Sheaf neural networks learn the conversions from data. That is the entire conceptual leap.
 </div>
 
 <div class="blog-figure">
@@ -132,7 +132,7 @@ It also encodes an assumption. Adding $$h_u$$ to $$h_v$$ only means something if
   <polygon points="345,107 336,112 345,117" fill="#64748b"/>
   <text x="403" y="102" text-anchor="middle" font-size="10" fill="#334155">transport from v</text>
 
-  <text x="280" y="166" text-anchor="middle" font-size="9.5" fill="#475569">The readings look nothing alike — 22 against 71.6 — yet they are the same temperature.</text>
+  <text x="280" y="166" text-anchor="middle" font-size="9.5" fill="#475569">The readings look nothing alike, 22 against 71.6, yet they are the same temperature.</text>
   <text x="280" y="182" text-anchor="middle" font-size="9.5" fill="#475569">Agreement is checked in the shared space, never in the local units.</text>
 </svg>
 <figcaption>Two stations disagree numerically and agree physically. A sheaf makes that distinction first-class: the restriction maps are the conversions, and the sheaf Laplacian measures disagreement only after they have been applied. Sheaf GNNs learn the conversions.</figcaption>
@@ -175,7 +175,7 @@ Because it is built as $$\delta_0^{\top}\delta_0$$, it is symmetric and positive
 \]
 </div>
 
-So the graph Laplacian is the sheaf Laplacian of the *trivial* sheaf. Everything a GCN does, a sheaf GNN can do by choosing identity maps — and it has $$d \times d$$ more room per edge when identity is the wrong choice.
+So the graph Laplacian is the sheaf Laplacian of the *trivial* sheaf. Everything a GCN does, a sheaf GNN can do by choosing identity maps, and it has $$d \times d$$ more room per edge when identity is the wrong choice.
 
 <div class="insight-box">
 <strong>The mental shift:</strong> a sheaf GNN never asks whether neighbours are <em>similar</em>. It asks how one neighbour should be transported into another's frame before comparison at all. Keep that sentence and the rest of the book follows.
@@ -300,7 +300,7 @@ Every number above is checkable. With $$\mathcal{F}_{u \trianglelefteq e} = I$$ 
 \]
 </div>
 
-The resulting $$\Delta_{\mathcal{F}}$$ has eigenvalues $$\{0, 0, 2, 2\}$$, so its kernel is two-dimensional: on this graph there is a whole plane of assignments the sheaf considers globally consistent. A graph Laplacian on two connected nodes has a one-dimensional kernel — the constants. That gap is the extra room sheaf diffusion has to work in.
+The resulting $$\Delta_{\mathcal{F}}$$ has eigenvalues $$\{0, 0, 2, 2\}$$, so its kernel is two-dimensional: on this graph there is a whole plane of assignments the sheaf considers globally consistent. A graph Laplacian on two connected nodes has a one-dimensional kernel, the constants. That gap is the extra room sheaf diffusion has to work in.
 
 ## What changes, concretely
 
@@ -325,11 +325,11 @@ The paper chapters are published; the foundations and theory chapters are still 
 <div class="roadmap-box">
 <h3>Suggested reading order</h3>
 <ol>
-  <li><strong><a href="/blog/sheaf/polynsd-paper/" style="color:#99f6e4">PolyNSD</a></strong> — replaces the fixed diffusion step with a Chebyshev polynomial in \(\Delta_{\mathcal{F}}\). The clearest entry point to what the operator actually does.</li>
-  <li><strong><a href="/blog/sheaf/dnsd-paper/" style="color:#99f6e4">DNSD</a></strong> — why sheaf diffusion stalls at depth, and what it costs to fix. Read this second: it is the sharpest critique of the framework from inside it.</li>
-  <li><strong><a href="/blog/sheaf/hetsheaf-paper/" style="color:#99f6e4">HetSheaf</a></strong> — sheaves on heterogeneous graphs, where node and edge <em>types</em> condition the restriction maps.</li>
-  <li><strong><a href="/blog/sheaf/sheafpool/" style="color:#99f6e4">SheafPool</a></strong> — graph-level readout that respects the sheaf's basis ambiguity.</li>
-  <li><strong><a href="/blog/sheaf/braindyn-paper/" style="color:#99f6e4">BrainDyn</a></strong> — sheaves inside a neural ODE, applied to brain dynamics. The most different thing in the book.</li>
+  <li><strong><a href="/blog/sheaf/polynsd-paper/" style="color:#99f6e4">PolyNSD</a></strong>, replaces the fixed diffusion step with a Chebyshev polynomial in \(\Delta_{\mathcal{F}}\). The clearest entry point to what the operator actually does.</li>
+  <li><strong><a href="/blog/sheaf/dnsd-paper/" style="color:#99f6e4">DNSD</a></strong>, why sheaf diffusion stalls at depth, and what it costs to fix. Read this second: it is the sharpest critique of the framework from inside it.</li>
+  <li><strong><a href="/blog/sheaf/hetsheaf-paper/" style="color:#99f6e4">HetSheaf</a></strong>, sheaves on heterogeneous graphs, where node and edge <em>types</em> condition the restriction maps.</li>
+  <li><strong><a href="/blog/sheaf/sheafpool/" style="color:#99f6e4">SheafPool</a></strong>, graph-level readout that respects the sheaf's basis ambiguity.</li>
+  <li><strong><a href="/blog/sheaf/braindyn-paper/" style="color:#99f6e4">BrainDyn</a></strong>, sheaves inside a neural ODE, applied to brain dynamics. The most different thing in the book.</li>
 </ol>
 </div>
 
@@ -338,23 +338,23 @@ Still to come: the foundations run (what a sheaf is, cellular sheaves on graphs,
 ## Key papers at a glance
 
 <div class="paper-box">
-<strong>Hansen &amp; Gebhart (2020)</strong> — <em>Sheaf Neural Networks.</em> The first sheaf GNN. Restriction maps are fixed by hand rather than learned, which makes it the cleanest illustration of what the operator does on its own.
+<strong>Hansen &amp; Gebhart (2020)</strong>, <em>Sheaf Neural Networks.</em> The first sheaf GNN. Restriction maps are fixed by hand rather than learned, which makes it the cleanest illustration of what the operator does on its own.
 </div>
 
 <div class="paper-box">
-<strong>Bodnar et al. (2022)</strong> — <em>Neural Sheaf Diffusion.</em> NeurIPS 2022. Learns the restriction maps from node features, and proves the null-space result that makes sheaves a genuine answer to heterophily and oversmoothing rather than a heuristic.
+<strong>Bodnar et al. (2022)</strong>, <em>Neural Sheaf Diffusion.</em> NeurIPS 2022. Learns the restriction maps from node features, and proves the null-space result that makes sheaves a genuine answer to heterophily and oversmoothing rather than a heuristic.
 </div>
 
 <div class="paper-box">
-<strong>Barbero et al. (2022)</strong> — <em>Sheaf Attention Networks.</em> NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations. Combines restriction maps with attention-weighted aggregation.
+<strong>Barbero et al. (2022)</strong>, <em>Sheaf Attention Networks.</em> NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations. Combines restriction maps with attention-weighted aggregation.
 </div>
 
 <div class="paper-box">
-<strong>Borgi, Silvestri &amp; Liò (2025)</strong> — <em>Polynomial Neural Sheaf Diffusion.</em> A degree-\(K\) Chebyshev polynomial in the normalised sheaf Laplacian, with diagonal restriction maps sufficing.
+<strong>Borgi, Silvestri &amp; Liò (2025)</strong>, <em>Polynomial Neural Sheaf Diffusion.</em> A degree-\(K\) Chebyshev polynomial in the normalised sheaf Laplacian, with diagonal restriction maps sufficing.
 </div>
 
 <div class="paper-box">
-<strong>Bourgerie, Girdzijauskas &amp; Fodor (2026)</strong> — <em>Deep Neural Sheaf Diffusion.</em> Diagnoses why the Laplacian's signal vanishes with depth and replaces it with a sheaf adjacency operator.
+<strong>Bourgerie, Girdzijauskas &amp; Fodor (2026)</strong>, <em>Deep Neural Sheaf Diffusion.</em> Diagnoses why the Laplacian's signal vanishes with depth and replaces it with a sheaf adjacency operator.
 </div>
 
 <div class="warning-box">

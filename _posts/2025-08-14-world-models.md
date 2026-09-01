@@ -27,13 +27,13 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Ha and Schmidhuber's World Models (2018) decompose the agent into three components: a VAE that compresses observations into a compact latent code, an MDN-RNN that predicts future latent states from past experience, and a small linear controller trained with CMA-ES. The agent can "dream" — training entirely inside the learned model — and still perform competitively on real environments.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Ha and Schmidhuber's World Models (2018) decompose the agent into three components: a VAE that compresses observations into a compact latent code, an MDN-RNN that predicts future latent states from past experience, and a small linear controller trained with CMA-ES. The agent can "dream", training entirely inside the learned model, and still perform competitively on real environments.</div>
 {% include figure image_path="/images/blog/rl/ha2018_world_models.png" alt="World Models architecture" caption="World Models: vision, memory, and controller components (Ha & Schmidhuber, 2018)" %}
 
 
 ## Intuition First: The Dreaming Brain
 
-The brain doesn't replay raw video footage when you sleep — it replays compressed highlights. World Models does the same computationally: a VAE compresses 64×64 pixel frames into a 32-dimensional vector (the "highlight"), an MDN-RNN predicts how those highlights evolve over time (the "dream"), and a tiny controller picks actions based on these compressed memories. The key insight is that you can train the controller *entirely inside the dream*, then deploy it in reality — because the dream is accurate enough to capture the relevant dynamics.
+The brain doesn't replay raw video footage when you sleep, it replays compressed highlights. World Models does the same computationally: a VAE compresses 64×64 pixel frames into a 32-dimensional vector (the "highlight"), an MDN-RNN predicts how those highlights evolve over time (the "dream"), and a tiny controller picks actions based on these compressed memories. The key insight is that you can train the controller *entirely inside the dream*, then deploy it in reality, because the dream is accurate enough to capture the relevant dynamics.
 
 ## The Biological Inspiration
 
@@ -105,7 +105,7 @@ The controller is a single linear layer:
 
 <div class="math-box">a_t = W_c [z_t, h_t] + b_c</div>
 
-Its input is the concatenation of the VAE latent code and the RNN hidden state — a rich summary of both the current frame and the history. Despite its simplicity, this controller achieves strong performance because all the representational heavy lifting is done by the vision and memory modules.
+Its input is the concatenation of the VAE latent code and the RNN hidden state, a rich summary of both the current frame and the history. Despite its simplicity, this controller achieves strong performance because all the representational heavy lifting is done by the vision and memory modules.
 
 The controller is trained with **CMA-ES** (Covariance Matrix Adaptation Evolution Strategy), a black-box optimisation algorithm. Because the controller has very few parameters (no gradients needed through the environment), CMA-ES is efficient.
 
@@ -117,7 +117,7 @@ Agents trained in the dream achieve competitive performance on the real environm
 
 ## Legacy: From World Models to Dreamer
 
-World Models directly inspired the Dreamer family (Hafner et al. 2019, 2020, 2023), which replaces CMA-ES with differentiable policy learning through the world model using reparameterised gradients. DreamerV3 achieves human-level performance across a diverse suite of tasks — including Minecraft diamond collection — with a single set of hyperparameters.
+World Models directly inspired the Dreamer family (Hafner et al. 2019, 2020, 2023), which replaces CMA-ES with differentiable policy learning through the world model using reparameterised gradients. DreamerV3 achieves human-level performance across a diverse suite of tasks, including Minecraft diamond collection, with a single set of hyperparameters.
 
 ## References
 

@@ -6,7 +6,7 @@ book: tdl
 subsection: foundations
 tags: [filtration, sublevel-set, scale-parameter, Vietoris-Rips, Čech-complex]
 published: false
-excerpt: "A filtration is a nested sequence of topological spaces indexed by a scale parameter. As the parameter grows, new simplices appear and topological features are born and die. Persistent homology tracks exactly this evolution — turning a one-shot snapshot into a multi-scale portrait of shape."
+excerpt: "A filtration is a nested sequence of topological spaces indexed by a scale parameter. As the parameter grows, new simplices appear and topological features are born and die. Persistent homology tracks exactly this evolution, turning a one-shot snapshot into a multi-scale portrait of shape."
 author_profile: true
 read_time: true
 is_overview: false
@@ -25,11 +25,11 @@ permalink: /blog/persistent-homology/filtrations/
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> A filtration is a nested sequence of simplicial complexes indexed by a real parameter: as the parameter increases, simplices are added monotonically. As the complex grows, topological features appear (birth) and disappear (death). Persistent homology records these birth–death events, producing a complete multi-scale summary of shape. The persistence of a feature — its death minus birth time — measures its significance.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> A filtration is a nested sequence of simplicial complexes indexed by a real parameter: as the parameter increases, simplices are added monotonically. As the complex grows, topological features appear (birth) and disappear (death). Persistent homology records these birth–death events, producing a complete multi-scale summary of shape. The persistence of a feature, its death minus birth time, measures its significance.</div>
 {% include figure image_path="/images/blog/tdl/carriere2020_perslay.png" alt="Filtration and PersLay" caption="PersLay persistence diagram vectorisation (Carrière et al., 2020)" %}
 
 
-**Intuition First.** Imagine slowly inflating a balloon around each data point simultaneously. At radius \(\varepsilon = 0\) the balloons are just the points themselves. As \(\varepsilon\) grows, neighboring balloons touch and merge — their union changes shape. A filtration is the mathematical record of this growing process: at each scale \(\varepsilon\) you get a snapshot of the combined shape, and topology (holes, loops, components) can appear and disappear across snapshots. Persistent homology reads off which features last long enough to be real.
+**Intuition First.** Imagine slowly inflating a balloon around each data point simultaneously. At radius \(\varepsilon = 0\) the balloons are just the points themselves. As \(\varepsilon\) grows, neighboring balloons touch and merge, their union changes shape. A filtration is the mathematical record of this growing process: at each scale \(\varepsilon\) you get a snapshot of the combined shape, and topology (holes, loops, components) can appear and disappear across snapshots. Persistent homology reads off which features last long enough to be real.
 
 <style>
 @keyframes ball-grow {
@@ -100,7 +100,7 @@ permalink: /blog/persistent-homology/filtrations/
   <text x="485" y="100" font-size="9" fill="#64748b">birth</text>
   <text x="525" y="100" font-size="9" fill="#64748b">death</text>
 </svg>
-<figcaption>A Vietoris-Rips filtration on 3 points. At ε=0: 3 isolated components. As ε grows edges appear — a loop is born (β₁=1). When the triangle is filled the loop dies. The barcode records this birth–death interval.</figcaption>
+<figcaption>A Vietoris-Rips filtration on 3 points. At ε=0: 3 isolated components. As ε grows edges appear, a loop is born (β₁=1). When the triangle is filled the loop dies. The barcode records this birth–death interval.</figcaption>
 </figure></div>
 
 ## What is a Filtration?
@@ -123,7 +123,7 @@ The most natural filtration arises from a scalar function on a topological space
 \(X_\varepsilon = f^{-1}((-\infty, \varepsilon]) = \{x \in X : f(x) \leq \varepsilon\}\)
 </div>
 
-As $$\varepsilon$$ increases, $$X_\varepsilon$$ grows monotonically. Topological features of $$X_\varepsilon$$ — components, loops, voids — appear and disappear as $$\varepsilon$$ crosses critical values of $$f$$. For a Morse function, these critical values correspond exactly to the birth and death of homology classes (Morse theory).
+As $$\varepsilon$$ increases, $$X_\varepsilon$$ grows monotonically. Topological features of $$X_\varepsilon$$, components, loops, voids, appear and disappear as $$\varepsilon$$ crosses critical values of $$f$$. For a Morse function, these critical values correspond exactly to the birth and death of homology classes (Morse theory).
 
 **Example**: Let $$f(x,y) = x^2 + y^2$$ on $$\mathbb{R}^2$$. Then $$X_\varepsilon$$ is a disk of radius $$\sqrt{\varepsilon}$$. For $$\varepsilon < 0$$ the set is empty; at $$\varepsilon = 0$$ a single component is born; $$H_0$$ has rank 1 for all $$\varepsilon > 0$$. No loops are ever born.
 
@@ -149,9 +149,9 @@ A topological feature (a homology class $$\gamma \in H_k$$) is **born** at $$\va
 
 The **elder rule** (or seniority): when two features merge, the younger one (born more recently) dies; the older one (born earlier) survives. This ensures unique birth–death pairing.
 
-**Persistence** is $$d - b \geq 0$$. Features with large persistence survive many scales and are considered genuine structural features of the data. Features with very small persistence — near-diagonal points in the persistence diagram — are considered noise, consistent with the stability theorem.
+**Persistence** is $$d - b \geq 0$$. Features with large persistence survive many scales and are considered genuine structural features of the data. Features with very small persistence, near-diagonal points in the persistence diagram, are considered noise, consistent with the stability theorem.
 
-<div class="insight-box"><strong>Key Insight:</strong> The filtration is the core insight of TDA. Instead of asking "what is the topology at scale $$\varepsilon$$?" — which gives a different answer for every $$\varepsilon$$ — we ask all questions simultaneously and record how the answer changes. The persistence diagram is the complete answer: a scale-invariant, noise-robust summary of all topological features across all scales.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The filtration is the core insight of TDA. Instead of asking "what is the topology at scale $$\varepsilon$$?", which gives a different answer for every $$\varepsilon$$, we ask all questions simultaneously and record how the answer changes. The persistence diagram is the complete answer: a scale-invariant, noise-robust summary of all topological features across all scales.</div>
 
 ## Concrete Step-by-Step: Sublevel-Set Filtration
 
@@ -159,12 +159,12 @@ Let $$f: \mathbb{R} \to \mathbb{R}$$ be $$f(x) = x^2 - 1$$ and discretise to fiv
 
 | $$\varepsilon$$ | $$X_\varepsilon$$ | $$\beta_0$$ | Event |
 |---|---|---|---|
-| $$< -1$$ | $$\emptyset$$ | 0 | — |
+| $$< -1$$ | $$\emptyset$$ | 0 |, |
 | $$-1$$ | $$\{x=0\}$$ | 1 | component born at $$x=0$$ |
 | $$0$$ | $$\{x=-1,0,1\}$$ | 1 | two more points join same component |
 | $$3$$ | all five points | 1 | outer points join |
 
-No loops ever form (the function is convex), so $$\beta_1 = 0$$ throughout. The persistence diagram for $$H_0$$ has one point at $$(−1,\infty)$$ — one connected component born at the global minimum, never dying.
+No loops ever form (the function is convex), so $$\beta_1 = 0$$ throughout. The persistence diagram for $$H_0$$ has one point at $$(−1,\infty)$$, one connected component born at the global minimum, never dying.
 
 ## References
 

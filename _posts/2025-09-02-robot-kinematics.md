@@ -6,7 +6,7 @@ book: robotics
 subsection: foundations
 tags: [kinematics, DH-parameters, jacobian, inverse-kinematics, singularities]
 published: false
-excerpt: "Forward kinematics maps joint angles to end-effector pose via DH parameters, while inverse kinematics — and its learning-based variants — solves the harder reverse problem."
+excerpt: "Forward kinematics maps joint angles to end-effector pose via DH parameters, while inverse kinematics, and its learning-based variants, solves the harder reverse problem."
 author_profile: true
 read_time: true
 is_overview: false
@@ -27,13 +27,13 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Kinematics describes robot motion without considering forces. Forward kinematics maps joint angles to end-effector pose using chained homogeneous transformations. Inverse kinematics reverses this map and is in general non-unique and difficult — motivating numerical and learning-based solvers. The Jacobian bridges joint velocities and Cartesian velocities.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Kinematics describes robot motion without considering forces. Forward kinematics maps joint angles to end-effector pose using chained homogeneous transformations. Inverse kinematics reverses this map and is in general non-unique and difficult, motivating numerical and learning-based solvers. The Jacobian bridges joint velocities and Cartesian velocities.</div>
 {% include figure image_path="/images/blog/robotics/brohan2022_rt1.png" alt="Robot arm kinematics" caption="Learning-based robot control building on kinematic foundations (Brohan et al., 2022)" %}
 
 
 ## Forward Kinematics: From Joint Angles to Pose
 
-**Intuition first.** Imagine your own arm: shoulder at the origin, elbow 30 cm away, wrist 25 cm beyond that. If you rotate your shoulder by 45° and your elbow by −30°, your fingertip ends up at a specific point in space — no guesswork needed. Forward kinematics is just this calculation made precise for any number of links and joints.
+**Intuition first.** Imagine your own arm: shoulder at the origin, elbow 30 cm away, wrist 25 cm beyond that. If you rotate your shoulder by 45° and your elbow by −30°, your fingertip ends up at a specific point in space, no guesswork needed. Forward kinematics is just this calculation made precise for any number of links and joints.
 
 <style>
 @keyframes joint1-rotate { 0%{transform-origin:80px 80px; transform:rotate(0deg)} 50%{transform-origin:80px 80px; transform:rotate(40deg)} 100%{transform-origin:80px 80px; transform:rotate(0deg)} }
@@ -88,7 +88,7 @@ Each $${}^{i-1}T_i$$ is a $$4 \times 4$$ homogeneous transformation matrix param
 \({}^{i-1}T_i = \begin{pmatrix} c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\ s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\ 0 & s\alpha_i & c\alpha_i & d_i \\ 0 & 0 & 0 & 1 \end{pmatrix}\)
 </div>
 
-FK is straightforward to compute — it is a simple chain of matrix multiplications — and always has a unique solution. This makes it useful for simulation, collision checking, and rendering.
+FK is straightforward to compute, it is a simple chain of matrix multiplications, and always has a unique solution. This makes it useful for simulation, collision checking, and rendering.
 
 ### Worked Example: 2-Link Planar Arm
 
@@ -106,7 +106,7 @@ Plugging in numbers:
 - $$x = 1.0 \cdot \cos 45° + 0.8 \cdot \cos 15° = 0.707 + 0.773 = 1.480\,\text{m}$$
 - $$y = 1.0 \cdot \sin 45° + 0.8 \cdot \sin 15° = 0.707 + 0.207 = 0.914\,\text{m}$$
 
-So the gripper tip reaches **(1.48 m, 0.91 m)** — purely by chaining two rotation matrices. No iteration, no solver needed.
+So the gripper tip reaches **(1.48 m, 0.91 m)**, purely by chaining two rotation matrices. No iteration, no solver needed.
 
 ## The Jacobian: Velocity Kinematics
 
@@ -138,15 +138,15 @@ where $$\mathbf{z}_{i-1}$$ is the joint axis and $$\mathbf{p}_n - \mathbf{p}_{i-
 
 This minimises $$\|\dot{\mathbf{q}}\|$$ subject to achieving $$\dot{\mathbf{x}}$$. Damped least squares ($$J^+ = J^T(JJ^T + \lambda^2 I)^{-1}$$) avoids numerical blow-up near singularities. **Learning-based IK** trains a neural network $$q = f_\theta(x)$$ on large datasets of FK evaluations, providing fast inference at the cost of exactness.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The pseudoinverse IK solution <em>minimises joint velocity norm</em>, not joint displacement. This means it naturally spreads motion across all joints, avoiding situations where one joint takes all the work — important for motor health and avoiding joint limits in practice.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The pseudoinverse IK solution <em>minimises joint velocity norm</em>, not joint displacement. This means it naturally spreads motion across all joints, avoiding situations where one joint takes all the work, important for motor health and avoiding joint limits in practice.</div>
 
 ## Singularities and Redundancy
 
-A **singularity** occurs when $$\det(J(\mathbf{q})) = 0$$ (for square Jacobians) or when $$J$$ loses rank. At singularities, the robot loses one or more degrees of freedom in Cartesian space — certain directions become instantaneously unreachable. Common singularities include wrist singularities (axes align) and shoulder singularities (arm fully extended or retracted).
+A **singularity** occurs when $$\det(J(\mathbf{q})) = 0$$ (for square Jacobians) or when $$J$$ loses rank. At singularities, the robot loses one or more degrees of freedom in Cartesian space, certain directions become instantaneously unreachable. Common singularities include wrist singularities (axes align) and shoulder singularities (arm fully extended or retracted).
 
 **Redundancy** arises when the robot has more DOF than the task requires (e.g., a 7-DOF arm for a 6-DOF task). The extra DOF live in the **null space** of the Jacobian: motions $$\dot{\mathbf{q}} = (I - J^+J)\mathbf{z}$$ for any $$\mathbf{z}$$ do not affect the end-effector. Null-space motions can be used for secondary objectives: obstacle avoidance, joint limit avoidance, or manipulability maximisation.
 
-<div class="insight-box"><strong>Key Insight:</strong> Learning-based IK solvers are increasingly competitive with numerical methods. A network trained on millions of FK evaluations can map poses to joint angles in microseconds — far faster than iterative solvers — and can be trained to handle joint limits and preferred configurations naturally through the training distribution.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Learning-based IK solvers are increasingly competitive with numerical methods. A network trained on millions of FK evaluations can map poses to joint angles in microseconds, far faster than iterative solvers, and can be trained to handle joint limits and preferred configurations naturally through the training distribution.</div>
 
 ## References
 

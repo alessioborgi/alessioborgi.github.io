@@ -6,7 +6,7 @@ book: gnn
 subsection: dynamic
 tags: [neural-ODE, continuous-time, graph-dynamics, latent-ODE, CGODE]
 published: true
-excerpt: "Neural ODEs replace discrete layer-by-layer computation with continuous dynamics governed by a differential equation. Graph Neural ODEs apply this to graph data — treating node embeddings as a dynamical system evolving in continuous time."
+excerpt: "Neural ODEs replace discrete layer-by-layer computation with continuous dynamics governed by a differential equation. Graph Neural ODEs apply this to graph data, treating node embeddings as a dynamical system evolving in continuous time."
 author_profile: true
 read_time: true
 is_overview: false
@@ -20,7 +20,7 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> A GNN with \(K\) discrete layers applies \(K\) rounds of message passing. A Graph Neural ODE replaces this with a differential equation \(\frac{dH(t)}{dt} = f(H(t), A, t)\). The solution \(H(T)\) after integration from \(t=0\) to \(T\) is the output. This allows irregular timesteps, a solver-chosen number of function evaluations, and principled modelling of continuous graph dynamics.
 </div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A discrete GNN with K layers is like a staircase — you take exactly K steps regardless of the terrain. A Graph Neural ODE is like a smooth ramp — the solver takes small steps where the dynamics are steep and large steps where they are flat, and you can evaluate the state at any point on the ramp rather than only at the treads. What is adaptive is the solver's effort, not the model's capacity: how far you walk is set by the integration horizon \(T\), and that is the real analogue of depth.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> A discrete GNN with K layers is like a staircase, you take exactly K steps regardless of the terrain. A Graph Neural ODE is like a smooth ramp, the solver takes small steps where the dynamics are steep and large steps where they are flat, and you can evaluate the state at any point on the ramp rather than only at the treads. What is adaptive is the solver's effort, not the model's capacity: how far you walk is set by the integration horizon \(T\), and that is the real analogue of depth.</div>
 
 ## Neural ODEs: A Quick Refresher
 
@@ -64,30 +64,30 @@ where $$A$$ is the graph adjacency (fixed or time-varying) and $$f_\theta$$ is a
 \]
 </div>
 
-This is the continuous analogue of a GCN layer. Two things are worth separating carefully here. The **integration horizon** $$T$$ controls how far information propagates and is the real analogue of depth. The **number of solver steps** is a numerical-accuracy decision: taking more steps to integrate to the same $$T$$ approximates the same function more precisely — it does not make the model more expressive. Claims of the form "$$K$$ solver steps equal a $$K$$-layer GCN" conflate the two.
+This is the continuous analogue of a GCN layer. Two things are worth separating carefully here. The **integration horizon** $$T$$ controls how far information propagates and is the real analogue of depth. The **number of solver steps** is a numerical-accuracy decision: taking more steps to integrate to the same $$T$$ approximates the same function more precisely, it does not make the model more expressive. Claims of the form "$$K$$ solver steps equal a $$K$$-layer GCN" conflate the two.
 
 ### Latent Graph ODE
 
 For trajectory prediction:
 1. **Encoder:** observe partial trajectories $$\{x_i(t)\}$$ for $$t \in [t_0, t_{\text{obs}}]$$; encode to an initial latent state $$z_0$$
-2. **GNN-ODE dynamics:** $$\frac{dz}{dt} = \mathrm{GNN}(z, A)$$ — latent dynamics coupled by graph structure
+2. **GNN-ODE dynamics:** $$\frac{dz}{dt} = \mathrm{GNN}(z, A)$$, latent dynamics coupled by graph structure
 3. **Decoder:** decode $$z(t)$$ for $$t > t_{\text{obs}}$$ to predict future trajectories
 
 This models physically-coupled systems (particle dynamics, multi-agent trajectories) where entities interact through the graph structure.
 
 <div class="insight-box">
-<strong>The physics connection:</strong> Many physical systems are naturally described by differential equations over interaction graphs — Newton's laws for particle systems, diffusion equations on networks, epidemic spreading on contact graphs. Graph Neural ODEs provide a learnable version of these dynamics, useful when the exact equations are unknown but the graph structure (who interacts with whom) is known.
+<strong>The physics connection:</strong> Many physical systems are naturally described by differential equations over interaction graphs, Newton's laws for particle systems, diffusion equations on networks, epidemic spreading on contact graphs. Graph Neural ODEs provide a learnable version of these dynamics, useful when the exact equations are unknown but the graph structure (who interacts with whom) is known.
 </div>
 
 ## Worked Example: Graph Neural ODE vs Discrete GCN
 
-Consider a path graph with 3 nodes, A — B — C, each with a scalar feature, and $$H(0) = [1, 0, 0]^{\!\top}$$ (only A is active). Degrees are $$1, 2, 1$$, so the symmetrically normalised adjacency $$\hat{A} = D^{-1/2} A D^{-1/2}$$ has $$\hat{A}_{AB} = \hat{A}_{BC} = 1/\sqrt{2} \approx 0.71$$, with eigenvalues $$\{1, 0, -1\}$$.
+Consider a path graph with 3 nodes, A, B, C, each with a scalar feature, and $$H(0) = [1, 0, 0]^{\!\top}$$ (only A is active). Degrees are $$1, 2, 1$$, so the symmetrically normalised adjacency $$\hat{A} = D^{-1/2} A D^{-1/2}$$ has $$\hat{A}_{AB} = \hat{A}_{BC} = 1/\sqrt{2} \approx 0.71$$, with eigenvalues $$\{1, 0, -1\}$$.
 
 **Discrete propagation, $$H^{(k+1)} = \hat{A} H^{(k)}$$:**
-- Layer 1: $$H^{(1)} = [0,\ 0.71,\ 0]^{\!\top}$$ — the signal has reached B and left A entirely
-- Layer 2: $$H^{(2)} = [0.5,\ 0,\ 0.5]^{\!\top}$$ — it reaches C, and bounces back to A
+- Layer 1: $$H^{(1)} = [0,\ 0.71,\ 0]^{\!\top}$$, the signal has reached B and left A entirely
+- Layer 2: $$H^{(2)} = [0.5,\ 0,\ 0.5]^{\!\top}$$, it reaches C, and bounces back to A
 
-The signal reaches C exactly at layer 2. To reach further you must add more layers — the depth is a hard hyperparameter.
+The signal reaches C exactly at layer 2. To reach further you must add more layers, the depth is a hard hyperparameter.
 
 **Graph Neural ODE (integrate from $$t = 0$$ to $$T$$):**
 
@@ -107,12 +107,12 @@ h_C(t) = \tfrac{1}{4} - \tfrac{1}{2} e^{-t} + \tfrac{1}{4} e^{-2t}
 \]
 </div>
 
-- At $$t = 0.5$$: $$h_C \approx 0.04$$ — signal just starting to reach C
+- At $$t = 0.5$$: $$h_C \approx 0.04$$, signal just starting to reach C
 - At $$t = 1.0$$: $$h_C \approx 0.10$$
 - At $$t = 2.0$$: $$h_C \approx 0.19$$
 - As $$t \to \infty$$: $$h_C \to 0.25$$, and the whole state converges to the $$\hat{L}$$-null eigenvector $$\propto (1, \sqrt{2}, 1)$$
 
-That limit is oversmoothing, stated exactly: integrate too far and every node converges to the same degree-scaled constant, and the initial condition is forgotten. Choosing $$T$$ is choosing how much smoothing you want — the continuous version of choosing depth, but on a real-valued dial.
+That limit is oversmoothing, stated exactly: integrate too far and every node converges to the same degree-scaled constant, and the initial condition is forgotten. Choosing $$T$$ is choosing how much smoothing you want, the continuous version of choosing depth, but on a real-valued dial.
 
 <style>
 @keyframes flow-wave {
@@ -187,7 +187,7 @@ That limit is oversmoothing, stated exactly: integrate too far and every node co
   <line x1="315" y1="155" x2="332" y2="155" stroke="#10b981" stroke-width="2"/>
   <text x="335" y="159" font-size="8" fill="#64748b">C</text>
 </svg>
-<figcaption>Left: discrete GCN propagates signal in integer layer steps — C only receives signal at layer 2. Right: Graph Neural ODE diffuses signal continuously — you read off the state at any time T, and the solver adapts its step size to the local dynamics.</figcaption>
+<figcaption>Left: discrete GCN propagates signal in integer layer steps, C only receives signal at layer 2. Right: Graph Neural ODE diffuses signal continuously, you read off the state at any time T, and the solver adapts its step size to the local dynamics.</figcaption>
 </figure></div>
 
 ## Continuous-Time Graph Learning (CTDG Perspective)
@@ -197,7 +197,7 @@ For continuous-time dynamic graphs where events arrive at irregular times, Graph
 1. Between events: node states evolve according to $$\frac{dh_v}{dt} = f(h_v)$$
 2. At event $$(u, v, t)$$: apply a discrete jump to $$h_u$$ and $$h_v$$ based on the interaction
 
-This "flow, then jump" pattern is the ODE counterpart of TGN's memory: the ODE handles smooth evolution between events, the jump handles the discrete update. It respects causality for free — the state at $$t$$ is an integral over $$[0, t]$$, so future events cannot enter.
+This "flow, then jump" pattern is the ODE counterpart of TGN's memory: the ODE handles smooth evolution between events, the jump handles the discrete update. It respects causality for free, the state at $$t$$ is an integral over $$[0, t]$$, so future events cannot enter.
 
 ## Advantages of the ODE Formulation
 
@@ -205,15 +205,15 @@ This "flow, then jump" pattern is the ODE counterpart of TGN's memory: the ODE h
 
 **Solver-chosen work:** adaptive solvers spend more function evaluations where the trajectory is hard to integrate. Note what this does and does not buy: it adapts *numerical effort*, not model capacity. The function being computed is fixed by $$f_\theta$$ and $$T$$.
 
-**Physical interpretability:** ODE dynamics have clear physical analogues — diffusion, oscillation, predator-prey dynamics.
+**Physical interpretability:** ODE dynamics have clear physical analogues, diffusion, oscillation, predator-prey dynamics.
 
-**Memory efficiency:** the adjoint method computes gradients with memory constant in the number of solver steps, against $$O(K)$$ for storing $$K$$ layers' activations — at the cost of a second backward integration and some gradient error.
+**Memory efficiency:** the adjoint method computes gradients with memory constant in the number of solver steps, against $$O(K)$$ for storing $$K$$ layers' activations, at the cost of a second backward integration and some gradient error.
 
 ## Limitations
 
 **Speed:** numerical ODE solvers are slower than fixed matrix multiplications, and the cost of a forward pass varies with the input because the solver's step count does.
 
-**Stiffness:** some graph dynamics are "stiff" — components evolving on very different timescales — forcing explicit solvers into very small step sizes.
+**Stiffness:** some graph dynamics are "stiff", components evolving on very different timescales, forcing explicit solvers into very small step sizes.
 
 **Expressiveness:** the continuous dynamics $$f$$ must be chosen carefully. A GCN-like $$f(H, A)$$ integrated for time $$T$$ is not more expressive than message passing; it is the same function class reached by a different route. There is also a structural constraint: for an autonomous ODE with a unique solution, trajectories cannot cross, so the flow map $$H(0) \mapsto H(T)$$ is a homeomorphism. Functions that must "fold" the input space are therefore not representable without augmenting the state.
 
@@ -235,10 +235,10 @@ This "flow, then jump" pattern is the ODE counterpart of TGN's memory: the ODE h
 | Time handling | Discrete snapshots | Native continuous-time |
 | Physical interpretation | Message passing | Coupled dynamical systems |
 
-Graph Neural ODEs are not universally better than discrete GNNs — they are a more natural fit for physical and temporal systems where dynamics are inherently continuous. For standard graph classification or node classification on static graphs, discrete GNNs remain preferred.
+Graph Neural ODEs are not universally better than discrete GNNs, they are a more natural fit for physical and temporal systems where dynamics are inherently continuous. For standard graph classification or node classification on static graphs, discrete GNNs remain preferred.
 
 ## References
 
 - Chen, R. T. Q., Rubanova, Y., Bettencourt, J., & Duvenaud, D. (2018). [Neural Ordinary Differential Equations](https://arxiv.org/abs/1806.07366). *NeurIPS 2018* (Neural ODEs: replacing discrete residual layers with continuous ODE solvers via the adjoint method).
 - Poli, M., Massaroli, S., Park, J., Yamashita, A., Asama, H., & Park, J. (2019). [Graph Neural Ordinary Differential Equations](https://arxiv.org/abs/1911.07532). *arXiv 2019* (Graph Neural ODEs: combining ODE dynamics with GNN spatial aggregation for continuous-time graphs).
-- Rubanova, Y., Chen, R. T. Q., & Duvenaud, D. (2019). [Latent ODEs for Irregularly-Sampled Time Series](https://arxiv.org/abs/1907.03907). *NeurIPS 2019* (Latent ODEs handling irregular observation times — foundational for temporal graph ODEs).
+- Rubanova, Y., Chen, R. T. Q., & Duvenaud, D. (2019). [Latent ODEs for Irregularly-Sampled Time Series](https://arxiv.org/abs/1907.03907). *NeurIPS 2019* (Latent ODEs handling irregular observation times, foundational for temporal graph ODEs).

@@ -6,7 +6,7 @@ book: gnn
 subsection: fundamentals
 tags: [graph-types, directed, heterogeneous, weighted, multigraph]
 published: true
-excerpt: "Not all graphs are equal. Directed edges, edge weights, multiple node/edge types — each variant requires different GNN design choices."
+excerpt: "Not all graphs are equal. Directed edges, edge weights, multiple node/edge types, each variant requires different GNN design choices."
 author_profile: true
 read_time: true
 is_overview: false
@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## Undirected Graphs
 
-In an **undirected graph**, edges have no direction — $$(u,v) \in E$$ implies $$(v,u) \in E$$. The adjacency matrix is symmetric: $$A = A^{\top}$$.
+In an **undirected graph**, edges have no direction, $$(u,v) \in E$$ implies $$(v,u) \in E$$. The adjacency matrix is symmetric: $$A = A^{\top}$$.
 
 **Real examples:** molecular bonds (a bond between C and O is mutual), social friendships (Facebook), co-authorship networks.
 
@@ -47,7 +47,7 @@ In a **weighted graph**, each edge carries a scalar weight $$w_{uv} \in \mathbb{
 
 ## Bipartite Graphs
 
-A **bipartite graph** partitions the node set into two disjoint parts, $$V = U \sqcup W$$, with every edge joining a node in $$U$$ to a node in $$W$$ — never two nodes within the same part. Equivalently, a graph is bipartite exactly when it contains no odd-length cycle.
+A **bipartite graph** partitions the node set into two disjoint parts, $$V = U \sqcup W$$, with every edge joining a node in $$U$$ to a node in $$W$$, never two nodes within the same part. Equivalently, a graph is bipartite exactly when it contains no odd-length cycle.
 
 **Real examples:** user-item graphs (recommendation), author-paper graphs (authorship), drug-protein interaction graphs.
 
@@ -55,7 +55,7 @@ A **bipartite graph** partitions the node set into two disjoint parts, $$V = U \
 
 ## Multigraphs
 
-A **multigraph** allows more than one edge between the same ordered pair of nodes (**parallel edges**), and often self-loops $$(v,v)$$ as well. The edge set is therefore a multiset rather than a subset of $$V \times V$$, and a single 0/1 adjacency matrix can no longer represent the graph — you either store integer edge counts in $$A$$ or keep an explicit edge list.
+A **multigraph** allows more than one edge between the same ordered pair of nodes (**parallel edges**), and often self-loops $$(v,v)$$ as well. The edge set is therefore a multiset rather than a subset of $$V \times V$$, and a single 0/1 adjacency matrix can no longer represent the graph, you either store integer edge counts in $$A$$ or keep an explicit edge list.
 
 **Real examples:** flight networks (several distinct flights between the same two airports), transaction networks (repeated payments between the same two accounts), road networks with parallel carriageways.
 
@@ -85,10 +85,10 @@ Edge types: {Author→Paper: wrote, Paper→Venue: published_at, Paper→Paper: 
 **GNN implication:** nodes of different types have different feature spaces and semantics. You cannot apply the same weight matrix to messages from a Paper and a Venue. Heterogeneous GNNs (HAN, HGT, RGCN) maintain type-specific transformations.
 
 <div class="insight-box">
-<strong>Homogeneous vs Heterogeneous:</strong> Most classical GNN papers (GCN, GAT, GIN, GraphSAGE) assume homogeneous graphs — one node type, one edge type. Real-world graphs are almost never homogeneous. Understanding the type structure of your data is the first step in choosing an appropriate GNN.
+<strong>Homogeneous vs Heterogeneous:</strong> Most classical GNN papers (GCN, GAT, GIN, GraphSAGE) assume homogeneous graphs, one node type, one edge type. Real-world graphs are almost never homogeneous. Understanding the type structure of your data is the first step in choosing an appropriate GNN.
 </div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight: Choosing the Wrong Graph Type Is Costly.</strong> Treating a directed citation graph as undirected loses the "A cites B but B doesn't cite A" signal — which matters when predicting paper influence. Treating a heterogeneous academic graph (papers, authors, venues) as homogeneous forces the same weight matrix on fundamentally incompatible node types. Always identify your graph type before designing the GNN.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight: Choosing the Wrong Graph Type Is Costly.</strong> Treating a directed citation graph as undirected loses the "A cites B but B doesn't cite A" signal, which matters when predicting paper influence. Treating a heterogeneous academic graph (papers, authors, venues) as homogeneous forces the same weight matrix on fundamentally incompatible node types. Always identify your graph type before designing the GNN.</div>
 
 ## Hypergraphs
 

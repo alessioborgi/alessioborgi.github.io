@@ -6,7 +6,7 @@ book: tdl
 subsection: ml-integration
 tags: [mapper, topological-data-analysis, simplicial-complex, high-dimensional-data, clustering]
 published: false
-excerpt: "The Mapper algorithm (Singh, Mémoli & Carlsson 2007) converts a point cloud into a simplicial complex (graph) that summarises its topological structure. It applies a filter function, clusters the preimages, and connects clusters that share points — producing an interpretable 1-complex that reveals loops, flares, and branching structure."
+excerpt: "The Mapper algorithm (Singh, Mémoli & Carlsson 2007) converts a point cloud into a simplicial complex (graph) that summarises its topological structure. It applies a filter function, clusters the preimages, and connects clusters that share points, producing an interpretable 1-complex that reveals loops, flares, and branching structure."
 author_profile: true
 read_time: true
 icon: "🗺️"
@@ -24,11 +24,11 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Mapper: (1) apply a filter function f: X → ℝ (e.g., PCA projection, density estimate), (2) cover the range [min f, max f] with overlapping intervals, (3) cluster the preimage f⁻¹(interval) within the data for each interval, (4) connect two clusters with an edge if they share a point (from overlapping intervals). The result is a graph that approximates the Reeb graph of f on X — a topological skeleton of the data.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Mapper: (1) apply a filter function f: X → ℝ (e.g., PCA projection, density estimate), (2) cover the range [min f, max f] with overlapping intervals, (3) cluster the preimage f⁻¹(interval) within the data for each interval, (4) connect two clusters with an edge if they share a point (from overlapping intervals). The result is a graph that approximates the Reeb graph of f on X, a topological skeleton of the data.</div>
 
 ## Intuition First
 
-Standard clustering gives you a flat partition: every point belongs to exactly one group. But real data has shape — flares, loops, branching trees — that a partition cannot describe. Mapper is like taking a long hike along a mountain range and drawing a graph: each camp you pitch is a node, and two camps are connected if you carried your tent between them (points in common). The resulting trail map is a topological skeleton of the landscape, not a mere partition.
+Standard clustering gives you a flat partition: every point belongs to exactly one group. But real data has shape, flares, loops, branching trees, that a partition cannot describe. Mapper is like taking a long hike along a mountain range and drawing a graph: each camp you pitch is a node, and two camps are connected if you carried your tent between them (points in common). The resulting trail map is a topological skeleton of the landscape, not a mere partition.
 
 ## The Core Idea
 
@@ -68,7 +68,7 @@ The **Reeb graph** of \(f: M \to \mathbb{R}\) on a manifold \(M\) is the quotien
 
 ## Landmark Applications
 
-**Cancer genomics** (Nicolau et al. 2011): Mapper on breast cancer gene expression data (with density filter) revealed a previously unknown subgroup of patients with 100% survival rate — a "flare" in the data shape invisible to clustering.
+**Cancer genomics** (Nicolau et al. 2011): Mapper on breast cancer gene expression data (with density filter) revealed a previously unknown subgroup of patients with 100% survival rate, a "flare" in the data shape invisible to clustering.
 
 **Neural network analysis**: Mapper on activation patterns across layers reveals branching structure that corresponds to decision boundaries.
 
@@ -80,19 +80,19 @@ Take 8 points along a horseshoe (U-shape) with a height filter \(f\) = vertical 
 
 \(P = \{A(0,0), B(1,0), C(2,0), D(3,0), E(3,2), F(2,2), G(1,2), H(0,2)\}\)
 
-**Step 1 — Cover**: divide \(f\)-range \([0, 2]\) into 3 overlapping intervals:
+**Step 1, Cover**: divide \(f\)-range \([0, 2]\) into 3 overlapping intervals:
 - \(U_1 = [0, 0.9]\), \(U_2 = [0.7, 1.5]\), \(U_3 = [1.3, 2]\)
 
-**Step 2 — Preimages**:
+**Step 2, Preimages**:
 - \(f^{-1}(U_1) = \{A, B, C, D\}\)
 - \(f^{-1}(U_2) = \{\}\) (no points at height 0.7–1.5 in this dataset)
 - \(f^{-1}(U_3) = \{E, F, G, H\}\)
 
-**Step 3 — Cluster**: \(\{A,B,C,D\}\) clusters into two groups by position: \(\{A,B\}\) (left arm) and \(\{C,D\}\) (right arm). Same for the top: \(\{E,F\}\) and \(\{G,H\}\).
+**Step 3, Cluster**: \(\{A,B,C,D\}\) clusters into two groups by position: \(\{A,B\}\) (left arm) and \(\{C,D\}\) (right arm). Same for the top: \(\{E,F\}\) and \(\{G,H\}\).
 
-**Step 4 — Connect**: nodes \(\{A,B\} \leftrightarrow \{G,H\}\) share no points, but after refining the cover with sufficient overlap, the connectivity reflects the U-shape — two branches joined at the top. The resulting Mapper graph is a path, not a loop — correctly capturing the horseshoe topology (no closed cycle).
+**Step 4, Connect**: nodes \(\{A,B\} \leftrightarrow \{G,H\}\) share no points, but after refining the cover with sufficient overlap, the connectivity reflects the U-shape, two branches joined at the top. The resulting Mapper graph is a path, not a loop, correctly capturing the horseshoe topology (no closed cycle).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mapper reveals the horseshoe as a connected path (one connected component, zero loops) rather than a single cluster. A standard k-means with k=2 would only tell you "two groups" — missing the fact that the two groups are connected arms of a single U-shaped manifold.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Mapper reveals the horseshoe as a connected path (one connected component, zero loops) rather than a single cluster. A standard k-means with k=2 would only tell you "two groups", missing the fact that the two groups are connected arms of a single U-shaped manifold.</div>
 
 <style>
 @keyframes mapper-build {
@@ -159,10 +159,10 @@ Take 8 points along a horseshoe (U-shape) with a height filter \(f\) = vertical 
     <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.5s" fill="freeze"/>
   </line>
   <!-- label: U-shape = path graph -->
-  <text x="290" y="200" text-anchor="middle" font-size="8" fill="#64748b">Path graph — U-shape topology</text>
+  <text x="290" y="200" text-anchor="middle" font-size="8" fill="#64748b">Path graph, U-shape topology</text>
   <text x="290" y="212" text-anchor="middle" font-size="8" fill="#64748b">β₀=1, β₁=0 (no loops)</text>
 </svg>
-<figcaption>Mapper converts the horseshoe point cloud into a path graph with 4 nodes. The topology (one connected component, no cycles) correctly reflects the U-shape — a flat clustering would only see two disconnected groups.</figcaption>
+<figcaption>Mapper converts the horseshoe point cloud into a path graph with 4 nodes. The topology (one connected component, no cycles) correctly reflects the U-shape, a flat clustering would only see two disconnected groups.</figcaption>
 </figure>
 </div>
 
@@ -174,7 +174,7 @@ Mapper has three parameters: filter $$f$$, cover resolution $$r$$ (number of int
 - **Overlap**: higher overlap = more edges = more topological features detected.
 - **Stability**: small changes in $$f$$ produce bounded changes in the Mapper graph (in an appropriate metric), provided the clustering is stable.
 
-<div class="insight-box"><strong>Key Insight:</strong> Mapper's power comes from the interplay between the filter (a global property) and the clustering (a local property). No single global clustering can reveal both the high-density core AND the low-density tail of a distribution simultaneously. But Mapper's local clustering within filter preimages captures local structure, while the global connections between clusters capture global shape. This is what made Mapper the tool that discovered the new cancer subgroup — standard clustering algorithms had looked at the same data for years and missed it.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Mapper's power comes from the interplay between the filter (a global property) and the clustering (a local property). No single global clustering can reveal both the high-density core AND the low-density tail of a distribution simultaneously. But Mapper's local clustering within filter preimages captures local structure, while the global connections between clusters capture global shape. This is what made Mapper the tool that discovered the new cancer subgroup, standard clustering algorithms had looked at the same data for years and missed it.</div>
 
 ## References
 

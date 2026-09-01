@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> For a plane curve, curvature is \(\kappa = 1/r\) where \(r\) is the radius of the best-fitting circle — a circle of radius \(r\) has curvature \(1/r\) everywhere, a straight line has curvature \(0\). On a surface there are two principal curvatures \(\kappa_1,\kappa_2\); their product \(K = \kappa_1\kappa_2\) is the Gaussian curvature and their average \(H = (\kappa_1+\kappa_2)/2\) is the mean curvature. Gauss's Theorema Egregium says \(K\) is <em>intrinsic</em>: an ant confined to the surface could measure it, and it is unchanged by any bending that does not stretch. \(H\) is not. That single asymmetry is why a cylinder can be rolled from flat paper and a sphere cannot, and why every world map distorts.
+  <strong>TL;DR:</strong> For a plane curve, curvature is \(\kappa = 1/r\) where \(r\) is the radius of the best-fitting circle, a circle of radius \(r\) has curvature \(1/r\) everywhere, a straight line has curvature \(0\). On a surface there are two principal curvatures \(\kappa_1,\kappa_2\); their product \(K = \kappa_1\kappa_2\) is the Gaussian curvature and their average \(H = (\kappa_1+\kappa_2)/2\) is the mean curvature. Gauss's Theorema Egregium says \(K\) is <em>intrinsic</em>: an ant confined to the surface could measure it, and it is unchanged by any bending that does not stretch. \(H\) is not. That single asymmetry is why a cylinder can be rolled from flat paper and a sphere cannot, and why every world map distorts.
 </div>
 
 ## Curves, arc length, tangents
@@ -31,7 +31,7 @@ s(t) = \int_a^t \lVert \gamma'(\tau)\rVert\, d\tau .
 \]
 </div>
 
-Parameterisation is a choice, arc length is not — traverse the same track twice as fast and $$\gamma'$$ doubles while $$s$$ is unchanged. Reparameterising by arc length gives unit speed, $$\lVert\gamma'(s)\rVert = 1$$, and then the tangent $$T = \gamma'$$ only rotates, never lengthens. Curvature is exactly the rate of that rotation:
+Parameterisation is a choice, arc length is not, traverse the same track twice as fast and $$\gamma'$$ doubles while $$s$$ is unchanged. Reparameterising by arc length gives unit speed, $$\lVert\gamma'(s)\rVert = 1$$, and then the tangent $$T = \gamma'$$ only rotates, never lengthens. Curvature is exactly the rate of that rotation:
 
 <div class="formula-box">
 \[
@@ -74,7 +74,7 @@ Check it on a circle of radius $$r$$: with $$\gamma(t) = (r\cos t, r\sin t)$$ th
 
 ## Surfaces and the first fundamental form
 
-Parameterise a surface as $$\mathbf{r}(u,v)$$. The tangent plane at a point is spanned by $$\mathbf{r}_u$$ and $$\mathbf{r}_v$$, and all *intrinsic* measurement — lengths of curves drawn on the surface, angles between them, areas — is governed by three functions:
+Parameterise a surface as $$\mathbf{r}(u,v)$$. The tangent plane at a point is spanned by $$\mathbf{r}_u$$ and $$\mathbf{r}_v$$, and all *intrinsic* measurement, lengths of curves drawn on the surface, angles between them, areas, is governed by three functions:
 
 <div class="formula-box">
 \[
@@ -88,7 +88,7 @@ ds^2 = E\,du^2 + 2F\,du\,dv + G\,dv^2 .
 
 This is the first fundamental form: the inner product of the ambient space, restricted to the tangent plane and written in the $$(u,v)$$ coordinates. It is precisely what the surface-dwelling ant can measure with a ruler and a protractor, without ever leaving the surface.
 
-The *second* fundamental form, by contrast, involves the unit normal and records how the surface bends away from its tangent plane — information about the embedding, invisible from inside. Its eigenvalues are the principal curvatures $$\kappa_1, \kappa_2$$: the maximum and minimum curvature over all normal slices through the point.
+The *second* fundamental form, by contrast, involves the unit normal and records how the surface bends away from its tangent plane, information about the embedding, invisible from inside. Its eigenvalues are the principal curvatures $$\kappa_1, \kappa_2$$: the maximum and minimum curvature over all normal slices through the point.
 
 ## Gaussian versus mean curvature
 
@@ -106,20 +106,20 @@ H = \tfrac{1}{2}(\kappa_1 + \kappa_2) \qquad\text{(mean)}.
 | Sphere, radius $$R$$ | $$1/R$$ | $$1/R$$ | $$1/R^2$$ | $$1/R$$ |
 | Saddle | $$>0$$ | $$<0$$ | $$<0$$ | depends |
 
-The cylinder is the row that carries the argument. It obviously looks curved, and $$H \neq 0$$ confirms that — but $$K = 0$$, the same as a flat plane. And indeed you can roll a flat sheet of paper into a cylinder without stretching or tearing it. Bending is free; stretching is not.
+The cylinder is the row that carries the argument. It obviously looks curved, and $$H \neq 0$$ confirms that, but $$K = 0$$, the same as a flat plane. And indeed you can roll a flat sheet of paper into a cylinder without stretching or tearing it. Bending is free; stretching is not.
 
 ## Theorema Egregium, stated plainly
 
-**Gauss's Theorema Egregium (1827).** The Gaussian curvature $$K$$ of a surface is determined entirely by the first fundamental form — by $$E$$, $$F$$, $$G$$ and their first and second derivatives. Consequently $$K$$ is preserved by any local isometry: if two surfaces are locally isometric, corresponding points have equal Gaussian curvature.
+**Gauss's Theorema Egregium (1827).** The Gaussian curvature $$K$$ of a surface is determined entirely by the first fundamental form, by $$E$$, $$F$$, $$G$$ and their first and second derivatives. Consequently $$K$$ is preserved by any local isometry: if two surfaces are locally isometric, corresponding points have equal Gaussian curvature.
 
-"Remarkable" was Gauss's own word, and the surprise is genuine: $$K$$ was *defined* as a product of two extrinsic quantities, yet it turns out to be measurable from inside. The ant can determine $$K$$ without knowing the surface is embedded in anything at all — for instance by comparing the circumference of a small geodesic circle of radius $$\rho$$ against $$2\pi\rho$$, which comes up short on a sphere and long on a saddle.
+"Remarkable" was Gauss's own word, and the surprise is genuine: $$K$$ was *defined* as a product of two extrinsic quantities, yet it turns out to be measurable from inside. The ant can determine $$K$$ without knowing the surface is embedded in anything at all, for instance by comparing the circumference of a small geodesic circle of radius $$\rho$$ against $$2\pi\rho$$, which comes up short on a sphere and long on a saddle.
 
 <div class="insight-box">
-  <strong>Key Insight — why every world map distorts:</strong> a sphere of radius \(R\) has \(K = 1/R^2 > 0\) everywhere; a sheet of paper has \(K = 0\) everywhere. A map projection that preserved all distances would be a local isometry, and by the Theorema Egregium a local isometry must preserve \(K\). Since \(1/R^2 \neq 0\), no such projection exists — not because cartographers have not tried hard enough, but as a theorem. Every projection therefore picks what to sacrifice: Mercator preserves angles and wrecks areas, which is why Greenland (2.17 million km²) looks comparable to Africa (30.4 million km², about fourteen times larger).
+  <strong>Key Insight, why every world map distorts:</strong> a sphere of radius \(R\) has \(K = 1/R^2 > 0\) everywhere; a sheet of paper has \(K = 0\) everywhere. A map projection that preserved all distances would be a local isometry, and by the Theorema Egregium a local isometry must preserve \(K\). Since \(1/R^2 \neq 0\), no such projection exists, not because cartographers have not tried hard enough, but as a theorem. Every projection therefore picks what to sacrifice: Mercator preserves angles and wrecks areas, which is why Greenland (2.17 million km²) looks comparable to Africa (30.4 million km², about fourteen times larger).
 </div>
 
 <div class="warning-box">
-  <strong>Interview trap:</strong> do not treat "curved" as one property. Mean curvature is extrinsic — it changes when you bend the surface in space and it depends on the choice of normal direction, so its sign flips if you flip the normal. Gaussian curvature is intrinsic and sign-unambiguous. A cylinder has \(H \neq 0\) but \(K = 0\), and any statement that "a cylinder is curved" needs to say which curvature is meant.
+  <strong>Interview trap:</strong> do not treat "curved" as one property. Mean curvature is extrinsic, it changes when you bend the surface in space and it depends on the choice of normal direction, so its sign flips if you flip the normal. Gaussian curvature is intrinsic and sign-unambiguous. A cylinder has \(H \neq 0\) but \(K = 0\), and any statement that "a cylinder is curved" needs to say which curvature is meant.
 </div>
 
 <div class="key-takeaways">

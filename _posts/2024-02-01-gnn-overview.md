@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 tags: [graph, neural-network, overview]
 published: true
-excerpt: "Graphs are everywhere — molecules, social networks, road maps, knowledge bases. Graph Neural Networks learn from this relational structure by propagating information between connected nodes. Here's the complete picture."
+excerpt: "Graphs are everywhere, molecules, social networks, road maps, knowledge bases. Graph Neural Networks learn from this relational structure by propagating information between connected nodes. Here's the complete picture."
 author_profile: true
 read_time: true
 is_overview: true
@@ -23,7 +23,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> GNNs learn vector representations for nodes (and graphs) by iteratively aggregating information from neighbourhoods, producing \(h_v^{(k)}\) after \(k\) rounds. Because the relational structure is built into the model rather than learned from scratch, they are a natural fit for data that is inherently relational — molecules, social graphs, knowledge graphs, road networks, and more.
+  <strong>TL;DR:</strong> GNNs learn vector representations for nodes (and graphs) by iteratively aggregating information from neighbourhoods, producing \(h_v^{(k)}\) after \(k\) rounds. Because the relational structure is built into the model rather than learned from scratch, they are a natural fit for data that is inherently relational, molecules, social graphs, knowledge graphs, road networks, and more.
 </div>
 
 > **Series note:** This Graph Neural Networks track is organised as short, self-contained 3-5 minute posts. The fundamentals are aligned with the presentation in William L. Hamilton's *Graph Representation Learning*, which is the main background reference for the basic graph concepts used throughout the series.
@@ -31,8 +31,8 @@ toc_label: "Contents"
 ## Graphs Are Everywhere
 
 A **graph** $$G = (V, E)$$ consists of:
-- **Nodes** $$V$$: entities — atoms, people, papers, intersections. We write $$N = \lvert V \rvert$$.
-- **Edges** $$E$$: relationships — bonds, friendships, citations, roads, collected in an adjacency matrix $$A$$.
+- **Nodes** $$V$$: entities, atoms, people, papers, intersections. We write $$N = \lvert V \rvert$$.
+- **Edges** $$E$$: relationships, bonds, friendships, citations, roads, collected in an adjacency matrix $$A$$.
 - **Features** on nodes and/or edges: atom type, age, year, speed limit. Node features are stacked into $$X \in \mathbb{R}^{N \times d}$$.
 
 Real-world data that's naturally a graph:
@@ -45,9 +45,9 @@ Real-world data that's naturally a graph:
 ## Why Not Just Use Standard Neural Networks?
 
 A standard MLP takes a fixed-size vector as input. Graphs have:
-- **Variable size** — different graphs have different numbers of nodes and edges.
-- **No canonical ordering** — there's no "first" node; permuting nodes shouldn't change predictions.
-- **Relational structure** — the patterns live in the connections, not just the individual features.
+- **Variable size**, different graphs have different numbers of nodes and edges.
+- **No canonical ordering**, there's no "first" node; permuting nodes shouldn't change predictions.
+- **Relational structure**, the patterns live in the connections, not just the individual features.
 
 GNNs are designed to respect all three of these properties.
 
@@ -105,13 +105,13 @@ GNNs are designed to respect all three of these properties.
   <text x="398" y="233" text-anchor="middle" font-size="9" font-weight="700" fill="#78350f">Downstream tasks:</text>
   <text x="398" y="247" text-anchor="middle" font-size="8" fill="#374151">Node classification · Link prediction · Graph classification</text>
 </svg>
-<figcaption>Figure 1: A GNN takes a graph with node features (atom types) and produces one embedding per node — four nodes in, four embeddings out — each capturing local and global structure. These embeddings support downstream tasks.</figcaption>
+<figcaption>Figure 1: A GNN takes a graph with node features (atom types) and produces one embedding per node, four nodes in, four embeddings out, each capturing local and global structure. These embeddings support downstream tasks.</figcaption>
 </figure>
 </div>
 
 ## The Core Idea: Aggregate from Neighbours
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Imagine rumours spreading in a social network. After one round, each person knows what their direct friends heard. After two rounds, they know what their friends' friends heard. A GNN works exactly like this — each "layer" is one round of information spreading, and after \(k\) layers every node has gathered news from up to \(k\) hops away.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Intuition First:</strong> Imagine rumours spreading in a social network. After one round, each person knows what their direct friends heard. After two rounds, they know what their friends' friends heard. A GNN works exactly like this, each "layer" is one round of information spreading, and after \(k\) layers every node has gathered news from up to \(k\) hops away.</div>
 
 Every GNN follows the same fundamental principle, called **message passing**. Writing $$h_v^{(k)}$$ for the representation of node $$v$$ after $$k$$ rounds and $$\mathcal{N}(v)$$ for its neighbourhood:
 
@@ -125,7 +125,7 @@ h_v^{(k)} = \mathrm{UPDATE}^{(k)}\!\left(
 \]
 </div>
 
-In words: each node's new representation is a learned function of its own current representation together with a permutation-invariant summary of its neighbours' representations. After $$k$$ iterations, $$h_v^{(k)}$$ captures information from all nodes up to $$k$$ hops away — its $$k$$-hop neighbourhood.
+In words: each node's new representation is a learned function of its own current representation together with a permutation-invariant summary of its neighbours' representations. After $$k$$ iterations, $$h_v^{(k)}$$ captures information from all nodes up to $$k$$ hops away, its $$k$$-hop neighbourhood.
 
 This is elegant because:
 - Nearby nodes influence each other (just like in the real world).
@@ -140,7 +140,7 @@ h_A^{(1)} = \frac{[1,0] + [0,1] + [1,1]}{3} = \frac{[2,2]}{3} \approx [0.67,\, 0
 \]
 </div>
 
-After a second layer, $$h_A^{(2)}$$ also absorbs the updated representations of $$B$$ and $$C$$ — which already summarise *their* neighbours — so $$A$$ ends up seeing its 2-hop neighbourhood.
+After a second layer, $$h_A^{(2)}$$ also absorbs the updated representations of $$B$$ and $$C$$, which already summarise *their* neighbours, so $$A$$ ends up seeing its 2-hop neighbourhood.
 
 ## Animated Information Flow
 
@@ -208,7 +208,7 @@ After a second layer, $$h_A^{(2)}$$ also absorbs the updated representations of 
   <line x1="408" y1="70" x2="418" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
   <text x="390" y="150" text-anchor="middle" font-size="8" fill="#059669">A knows 2-hop nbhd</text>
 </svg>
-<figcaption>Figure 2: Animated message flow. Pulsing orange dots represent messages travelling along edges each layer. After layer 1, A knows about B and C directly. After layer 2, A's embedding captures B's and C's own neighbourhoods — a 2-hop view.</figcaption>
+<figcaption>Figure 2: Animated message flow. Pulsing orange dots represent messages travelling along edges each layer. After layer 1, A knows about B and C directly. After layer 2, A's embedding captures B's and C's own neighbourhoods, a 2-hop view.</figcaption>
 </figure>
 </div>
 
@@ -239,9 +239,9 @@ A second, orthogonal distinction is whether the graph you are evaluated on was v
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>Graphs model relational data: atoms, users, papers, intersections — any entities with relationships.</li>
+  <li>Graphs model relational data: atoms, users, papers, intersections, any entities with relationships.</li>
   <li>GNNs learn by <strong>iterative neighbourhood aggregation</strong>: after \(k\) layers, \(h_v^{(k)}\) summarises the \(k\)-hop neighbourhood of \(v\).</li>
-  <li>The same model works on graphs of any size and any node ordering — node-level outputs are permutation equivariant, graph-level outputs permutation invariant.</li>
+  <li>The same model works on graphs of any size and any node ordering, node-level outputs are permutation equivariant, graph-level outputs permutation invariant.</li>
   <li>Supports node-, edge-, and graph-level predictions from the same backbone; only the output head changes, with readout pooling for graph-level tasks.</li>
   <li>Evaluation splits into <strong>transductive</strong> (one fixed graph, labels withheld) and <strong>inductive</strong> (unseen nodes or graphs at test time).</li>
 </ul>

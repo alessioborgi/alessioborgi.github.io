@@ -65,11 +65,11 @@ pre.mask-grid .block  { color: #f87171; }
 
 Raw scaled dot-product attention lets every token attend to every other token. Sometimes that is exactly what you want. But often you need to restrict this:
 
-- **Language modelling:** token 5 must not see token 6 — that would be cheating during training
+- **Language modelling:** token 5 must not see token 6, that would be cheating during training
 - **Batching:** sentences padded to equal length should not attend to the padding
 - **Encoder-decoder:** the decoder needs restricted attention but the encoder does not
 
-Masks solve all of these. They are applied to the raw attention scores *before* softmax — typically by adding $$-\infty$$ to masked positions, which softmax converts to 0 weight.
+Masks solve all of these. They are applied to the raw attention scores *before* softmax, typically by adding $$-\infty$$ to masked positions, which softmax converts to 0 weight.
 
 <div class="formula-box">
 \[
@@ -103,9 +103,9 @@ mat  [ ✓   ✓    ✓    ✓    ✓    ✓ ]
 
 Every cell is open. Each token's representation is built from the entire sequence simultaneously.
 
-**Used by:** BERT, RoBERTa, DeBERTa, any encoder-only model.  
-**Good for:** classification, NER, question answering — tasks where you read the whole input before deciding.  
-**Cannot do:** autoregressive generation — you cannot generate token 6 if token 5 already sees token 6.
+**Used by:** BERT, RoBERTa, DeBERTa, any encoder-only model.
+**Good for:** classification, NER, question answering, tasks where you read the whole input before deciding.
+**Cannot do:** autoregressive generation, you cannot generate token 6 if token 5 already sees token 6.
 
 ## 2. Causal Mask (GPT-style)
 
@@ -123,12 +123,12 @@ mat  [ ✓   ✓    ✓    ✓    ✓    ✓ ]
 
 The attention matrix is lower-triangular. The diagonal is always visible (self-attention). Everything above the diagonal is $$-\infty$$.
 
-**Used by:** GPT, GPT-2, GPT-3, GPT-4, LLaMA, Mistral, all decoder-only models.  
-**Good for:** language generation — at each step, the model predicts the next token from all previous tokens.  
+**Used by:** GPT, GPT-2, GPT-3, GPT-4, LLaMA, Mistral, all decoder-only models.
+**Good for:** language generation, at each step, the model predicts the next token from all previous tokens.
 **Key property:** during training, all positions can be processed in parallel (the mask handles causality). During inference, tokens are generated one at a time.
 
 <div class="insight-box">
-<strong>Why causal masking enables parallel training:</strong> Without it, you would need to run the model N times to predict each token sequentially. With the causal mask, all N predictions happen in one forward pass — each row of the attention matrix uses only the visible positions.
+<strong>Why causal masking enables parallel training:</strong> Without it, you would need to run the model N times to predict each token sequentially. With the causal mask, all N predictions happen in one forward pass, each row of the attention matrix uses only the visible positions.
 </div>
 
 ## 3. Padding Mask
@@ -163,16 +163,16 @@ In practice, masks are combined additively. A decoder in an encoder-decoder mode
 
 | Model | Self-attention | Cross-attention |
 |-------|---------------|-----------------|
-| BERT (encoder) | Bidirectional | — |
-| GPT (decoder) | Causal | — |
-| T5 encoder | Bidirectional | — |
+| BERT (encoder) | Bidirectional |, |
+| GPT (decoder) | Causal |, |
+| T5 encoder | Bidirectional |, |
 | T5 decoder | Causal | Full (to encoder) |
 
 ## Why $$-\infty$$ Rather Than 0?
 
 A natural question: why set masked positions to $$-\infty$$ instead of $$0$$?
 
-After softmax, a score of $$0$$ becomes $$e^{0}/(e^{0} + \text{others}) > 0$$ — the token still gets *some* attention weight. Setting to $$-\infty$$ gives $$e^{-\infty} = 0$$ exactly, so masked positions contribute precisely zero to the weighted value sum. This is essential for causal masking — even a tiny weight on a future token would leak information.
+After softmax, a score of $$0$$ becomes $$e^{0}/(e^{0} + \text{others}) > 0$$, the token still gets *some* attention weight. Setting to $$-\infty$$ gives $$e^{-\infty} = 0$$ exactly, so masked positions contribute precisely zero to the weighted value sum. This is essential for causal masking, even a tiny weight on a future token would leak information.
 
 <div class="insight-box">
 <strong>In practice:</strong> modern implementations use <code>float('-inf')</code> rather than a very large negative number like \(-1\mathrm{e}9\), because on some hardware \(-1\mathrm{e}9\) divided by a large \(d_k\) can produce NaN gradients. True \(-\infty\) is numerically safe.
@@ -189,7 +189,7 @@ scores = scores.masked_fill(mask, float('-inf'))
 attn_weights = torch.softmax(scores, dim=-1)
 ```
 
-The `masked_fill` replaces masked positions with $$-\infty$$. After softmax, those positions become exactly $$0$$ — contributing nothing to the weighted value sum.
+The `masked_fill` replaces masked positions with $$-\infty$$. After softmax, those positions become exactly $$0$$, contributing nothing to the weighted value sum.
 
 ## Summary
 

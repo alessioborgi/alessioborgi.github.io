@@ -5,7 +5,7 @@ date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [architecture, deep-learning, nlp]
-excerpt: "A self-contained guide to the Transformer — the engine behind GPT, BERT, and modern AI. Learn how attention replaces recurrence and why every major AI system uses it."
+excerpt: "A self-contained guide to the Transformer, the engine behind GPT, BERT, and modern AI. Learn how attention replaces recurrence and why every major AI system uses it."
 author_profile: true
 read_time: true
 is_overview: true
@@ -116,7 +116,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> The Transformer dropped sequential processing in favour of parallel attention over all tokens at once. This simple shift unlocked GPT, BERT, Whisper, AlphaFold, ViT — essentially all of modern AI.
+  <strong>TL;DR:</strong> The Transformer dropped sequential processing in favour of parallel attention over all tokens at once. This simple shift unlocked GPT, BERT, Whisper, AlphaFold, ViT, essentially all of modern AI.
 </div>
 
 <div class="paper-meta">
@@ -127,13 +127,13 @@ toc_label: "Contents"
 </div>
 
 <div class="paper-preview">
-{% include figure image_path="/images/blog/papers/vaswani2017-paper.png" alt="First page of the Attention Is All You Need paper" caption="Paper preview — Attention Is All You Need (Vaswani et al., 2017)." %}
+{% include figure image_path="/images/blog/papers/vaswani2017-paper.png" alt="First page of the Attention Is All You Need paper" caption="Paper preview, Attention Is All You Need (Vaswani et al., 2017)." %}
 </div>
 
 <div class="blog-figure blog-figure--tiny blog-figure--figure1">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_transformer_architecture.png" alt="Original Transformer encoder-decoder architecture from Attention Is All You Need">
-<figcaption>Figure 1 — The original Transformer diagram is still the best high-level map of the architecture: token embeddings and positional information enter stacked encoder and decoder blocks, while masked self-attention and cross-attention let generation stay autoregressive without losing access to the encoded source sequence. Source: [1].</figcaption>
+<figcaption>Figure 1, The original Transformer diagram is still the best high-level map of the architecture: token embeddings and positional information enter stacked encoder and decoder blocks, while masked self-attention and cross-attention let generation stay autoregressive without losing access to the encoded source sequence. Source: [1].</figcaption>
 </figure>
 </div>
 
@@ -154,7 +154,7 @@ toc_label: "Contents"
 
 ## The Problem with the Old Way
 
-Before 2017, the go-to model for text was the **Recurrent Neural Network (RNN)**. It worked like a conveyor belt: read one word, update a hidden state, pass it to the next word. The trouble is that by the time you reach the end of a long sentence, the beginning is already fading — the network forgets.
+Before 2017, the go-to model for text was the **Recurrent Neural Network (RNN)**. It worked like a conveyor belt: read one word, update a hidden state, pass it to the next word. The trouble is that by the time you reach the end of a long sentence, the beginning is already fading, the network forgets.
 
 This is the **vanishing gradient problem**: information from far-back positions barely influences the model. Researchers patched it with LSTMs and GRUs, but the fundamental bottleneck remained: you can't parallelise a sequential process. Training was slow, and long-range dependencies were hard to capture.
 
@@ -201,7 +201,7 @@ This is the **vanishing gradient problem**: information from far-back positions 
   <text x="395" y="90" text-anchor="middle" font-size="8" fill="#fca5a5">weak</text>
   <text x="505" y="90" text-anchor="middle" font-size="8" fill="#fecaca">lost?</text>
   <!-- Bottom label: "it" resolves to "animal" but signal is gone -->
-  <text x="290" y="120" text-anchor="middle" font-size="10" fill="#6b7280">"it" should resolve to "animal" — but by the time the RNN reaches "it", that signal has faded.</text>
+  <text x="290" y="120" text-anchor="middle" font-size="10" fill="#6b7280">"it" should resolve to "animal", but by the time the RNN reaches "it", that signal has faded.</text>
   <text x="290" y="136" text-anchor="middle" font-size="10" fill="#6b7280">Transformers attend directly: "it" → "animal" in one step.</text>
 </svg>
 <figcaption>Animated: information from "animal" fades as the RNN processes each subsequent step. Transformers solve this by attending to every token directly.</figcaption>
@@ -216,12 +216,12 @@ This is the **vanishing gradient problem**: information from far-back positions 
 
 The 2017 paper *Attention Is All You Need* (Vaswani et al.) asked: what if you let every word look directly at every other word, with no middle layers in between?
 
-That's **self-attention**. Each token computes a score with every other token, learns which ones are relevant, and mixes their information together — in one parallel step. No sequential dependency. No forgetting.
+That's **self-attention**. Each token computes a score with every other token, learns which ones are relevant, and mixes their information together, in one parallel step. No sequential dependency. No forgetting.
 
 <div class="blog-figure blog-figure--tiny blog-figure--figure2">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention pipeline from Attention Is All You Need">
-<figcaption>Figure 2 — Scaled dot-product attention is the core computation inside the Transformer: queries score keys, scaling keeps those scores numerically well behaved, softmax turns them into weights, and values are mixed accordingly. Source: [1].</figcaption>
+<figcaption>Figure 2, Scaled dot-product attention is the core computation inside the Transformer: queries score keys, scaling keeps those scores numerically well behaved, softmax turns them into weights, and values are mixed accordingly. Source: [1].</figcaption>
 </figure>
 </div>
 
@@ -284,18 +284,18 @@ That recipe is simple enough to reuse across domains, which is why the same core
 A Transformer encoder consists of these building blocks, stacked N times:
 
 ### 1. Token Embedding
-Each word (or subword token) is mapped to a dense vector — a point in high-dimensional space where similar words land close together.
+Each word (or subword token) is mapped to a dense vector, a point in high-dimensional space where similar words land close together.
 
 ### 2. Positional Encoding
 Because attention sees all tokens simultaneously, the model would otherwise have no idea which word comes first. Positional encodings inject position information into each token's vector before it enters the attention layers. (<a href="/blog/transformers/positional-encodings/">See the dedicated PE posts for all the variants.</a>)
 
 ### 3. Multi-Head Self-Attention
-This is the heart of the Transformer. Each token computes three vectors — a **Query** (what I'm looking for), a **Key** (what I offer), and a **Value** (what I'll contribute). The model computes pairwise relevance scores, normalises them with a softmax, then mixes the value vectors accordingly. Running this process in parallel across *h* heads lets the model capture different types of relationships simultaneously.
+This is the heart of the Transformer. Each token computes three vectors, a **Query** (what I'm looking for), a **Key** (what I offer), and a **Value** (what I'll contribute). The model computes pairwise relevance scores, normalises them with a softmax, then mixes the value vectors accordingly. Running this process in parallel across *h* heads lets the model capture different types of relationships simultaneously.
 
 <div class="blog-figure blog-figure--tiny blog-figure--figure3">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_multi_head_attention.png" alt="Multi-head attention architecture from Attention Is All You Need">
-<figcaption>Figure 3 — Multi-head attention repeats the same attention computation in parallel with different learned projections. Afterward, the heads are concatenated and remixed through one final linear layer, which lets the model combine several relational views of the same sequence at once. Source: [1].</figcaption>
+<figcaption>Figure 3, Multi-head attention repeats the same attention computation in parallel with different learned projections. Afterward, the heads are concatenated and remixed through one final linear layer, which lets the model combine several relational views of the same sequence at once. Source: [1].</figcaption>
 </figure>
 </div>
 
@@ -346,7 +346,7 @@ That combination made Transformers less like a one-off NLP model and more like a
 <div class="blog-figure blog-figure--tiny blog-figure--figure4">
 <figure>
 <img src="/images/blog/transformers/vaswani2017_attention_complexity_table.png" alt="Comparison table of self-attention, recurrent, and convolutional layers from Attention Is All You Need">
-<figcaption>Figure 4 — This comparison table captures why the design scaled so well in practice: self-attention keeps the path length between any two tokens at O(1), and unlike recurrent layers it avoids sequential dependence during the main computation. That combination is exactly what made long-range reasoning easier and GPU training far more efficient. Source: [1].</figcaption>
+<figcaption>Figure 4, This comparison table captures why the design scaled so well in practice: self-attention keeps the path length between any two tokens at O(1), and unlike recurrent layers it avoids sequential dependence during the main computation. That combination is exactly what made long-range reasoning easier and GPU training far more efficient. Source: [1].</figcaption>
 </figure>
 </div>
 

@@ -27,7 +27,7 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> A robot is an embodied agent that senses its environment, plans actions, and physically changes the world. Modern learning-based robotics replaces hand-crafted rules with data-driven models that generalise across diverse situations. This book covers the full stack — from kinematics and sensors through deep RL and foundation models.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> A robot is an embodied agent that senses its environment, plans actions, and physically changes the world. Modern learning-based robotics replaces hand-crafted rules with data-driven models that generalise across diverse situations. This book covers the full stack, from kinematics and sensors through deep RL and foundation models.</div>
 {% include figure image_path="/images/blog/robotics/brohan2022_rt1.png" alt="RT-1 robot learning overview" caption="RT-1: scaling robot learning from 130k demonstrations (Brohan et al., 2022)" %}
 
 
@@ -82,12 +82,12 @@ Classical robotics treated these as separate, modular blocks with clean interfac
     <marker id="arr2" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="#64748b"/></marker>
   </defs>
 </svg>
-<figcaption>The sense-plan-act loop runs at multiple timescales simultaneously. Nodes pulse in phase order — sensing leads, acting trails.</figcaption>
+<figcaption>The sense-plan-act loop runs at multiple timescales simultaneously. Nodes pulse in phase order, sensing leads, acting trails.</figcaption>
 </figure></div>
 
 ## The Learning Revolution in Robotics
 
-**Intuition first.** Think of classical robotics as writing an instruction manual for every possible situation. If the manual has a gap — an object the engineer never anticipated — the robot stops. Learning-based robotics is more like an apprentice who has watched thousands of tasks and builds an internal model of "what tends to work". Gaps in training become interpolation challenges rather than hard failures.
+**Intuition first.** Think of classical robotics as writing an instruction manual for every possible situation. If the manual has a gap, an object the engineer never anticipated, the robot stops. Learning-based robotics is more like an apprentice who has watched thousands of tasks and builds an internal model of "what tends to work". Gaps in training become interpolation challenges rather than hard failures.
 
 Before deep learning, robot behaviours were programmed explicitly. A manipulation policy might consist of thousands of hand-crafted rules covering every anticipated scenario. This approach is brittle: the world is too complex and variable for exhaustive enumeration.
 
@@ -98,13 +98,13 @@ The turning point came with the application of deep neural networks to perceptio
 - **2022**: RT-1 trains a Transformer on 130,000 real robot episodes and generalises to novel tasks.
 - **2023**: Diffusion Policy and RT-2 demonstrate that expressive generative models can represent rich, multi-modal action distributions.
 
-<div class="insight-box"><strong>Key Insight:</strong> The core promise of learning-based robotics is <em>generalisation</em>. A hand-crafted controller for picking red cubes fails on blue cubes of a different size. A learned policy trained on diverse data can interpolate and extrapolate to novel configurations — just as a pre-trained vision model generalises across images.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The core promise of learning-based robotics is <em>generalisation</em>. A hand-crafted controller for picking red cubes fails on blue cubes of a different size. A learned policy trained on diverse data can interpolate and extrapolate to novel configurations, just as a pre-trained vision model generalises across images.</div>
 
 ## Key Challenges
 
 Despite rapid progress, several fundamental obstacles remain:
 
-**Safety and reliability.** Robots operate in the physical world where failures have real consequences — a dropped object, a collision with a human, or an uncontrolled fall. Standard RL maximises expected reward with no formal safety guarantees. Constrained MDPs, barrier functions, and safe exploration algorithms address this but remain research frontiers.
+**Safety and reliability.** Robots operate in the physical world where failures have real consequences, a dropped object, a collision with a human, or an uncontrolled fall. Standard RL maximises expected reward with no formal safety guarantees. Constrained MDPs, barrier functions, and safe exploration algorithms address this but remain research frontiers.
 
 **Sample efficiency.** Real-robot experiments are slow (1× real-time), expensive (wear and hardware failures), and hard to parallelise. A simulated game environment provides millions of steps per second; a physical robot provides thousands per day. Sim-to-real transfer, offline RL, and data-efficient learning are active mitigation strategies.
 
@@ -118,11 +118,11 @@ Despite rapid progress, several fundamental obstacles remain:
 
 This book is organised into five thematic sections:
 
-1. **Foundations**: kinematics, sensors, and control — the classical building blocks every roboticist must know.
-2. **Perception**: 3D vision, object detection, pose estimation — how robots understand their environment.
-3. **Planning**: SLAM, path planning, task and motion planning — how robots decide what to do.
-4. **Learning**: imitation learning, deep RL for manipulation and locomotion, sim-to-real, hierarchical RL — data-driven approaches to behaviour.
-5. **Frontier**: diffusion policy, foundation models, language-conditioned robots, safety, and open problems — where the field is heading.
+1. **Foundations**: kinematics, sensors, and control, the classical building blocks every roboticist must know.
+2. **Perception**: 3D vision, object detection, pose estimation, how robots understand their environment.
+3. **Planning**: SLAM, path planning, task and motion planning, how robots decide what to do.
+4. **Learning**: imitation learning, deep RL for manipulation and locomotion, sim-to-real, hierarchical RL, data-driven approaches to behaviour.
+5. **Frontier**: diffusion policy, foundation models, language-conditioned robots, safety, and open problems, where the field is heading.
 
 ## References
 

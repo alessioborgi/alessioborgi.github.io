@@ -31,25 +31,25 @@ Transformers rely on **attention** mechanisms. Though originating in NLP, they e
 ## AdaViT
 
 ### Base ViT Model
-- Patching + linear embedding + positional embedding + CLS token.  
-- Pre-norm transformer blocks (Norm → MHSA → Residual, then Norm → MLP → Residual).  
+- Patching + linear embedding + positional embedding + CLS token.
+- Pre-norm transformer blocks (Norm → MHSA → Residual, then Norm → MLP → Residual).
 - Classification MLP on CLS token.
 
 ![1_tA7xE2dQA_dfzA0Bub5TVw](https://github.com/alessioborgi/AdaViT/assets/83078138/06e7b2c9-5068-41f0-8d6f-e6b9037efc1d)
 
 ### Halting Method
-- Add a **halting probability** per token at a layer; accumulate importance and halt tokens when the cumulative score passes a **threshold** (hyperparameter).  
-- Halting score stored in the first embedding dimension—no new parameters or structural changes.  
-- Halted tokens are zeroed; their attention is blocked.  
+- Add a **halting probability** per token at a layer; accumulate importance and halt tokens when the cumulative score passes a **threshold** (hyperparameter).
+- Halting score stored in the first embedding dimension, no new parameters or structural changes.
+- Halted tokens are zeroed; their attention is blocked.
 - Losses: classification loss + **Ponder Loss** (accuracy-efficiency trade-off) + **Distribution Loss** (regularize exits around a target depth).
 
 ### Our Novelties
-1. Positional embeddings: RoPE vs. Sinusoidal.  
-2. Normalization: LayerNorm vs. InstanceNorm.  
-3. Attention: dot-product vs. cosine similarity.  
-4. Transformer block variants: classic MHSA vs. MLP Mixer blocks.  
+1. Positional embeddings: RoPE vs. Sinusoidal.
+2. Normalization: LayerNorm vs. InstanceNorm.
+3. Attention: dot-product vs. cosine similarity.
+4. Transformer block variants: classic MHSA vs. MLP Mixer blocks.
 
 These tweaks yielded notable results (see notebook).
 
 ## Conclusions
-Hands-on ViT classification with adaptive halting and architectural experiments, proposing improvements to the halting loss and observing gains in accuracy/efficiency. 
+Hands-on ViT classification with adaptive halting and architectural experiments, proposing improvements to the halting loss and observing gains in accuracy/efficiency.

@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Build a confidence interval by inverting a pivot: find a quantity whose distribution you know regardless of the unknown parameter, bracket it between two quantiles, and rearrange. The 95% refers to the long-run success rate of the <em>procedure</em> across repeated samples — the endpoints are the random objects, the parameter is a fixed unknown constant. Width shrinks as \(1/\sqrt{n}\), so buying half the uncertainty costs four times the data.
+  <strong>TL;DR:</strong> Build a confidence interval by inverting a pivot: find a quantity whose distribution you know regardless of the unknown parameter, bracket it between two quantiles, and rearrange. The 95% refers to the long-run success rate of the <em>procedure</em> across repeated samples, the endpoints are the random objects, the parameter is a fixed unknown constant. Width shrinks as \(1/\sqrt{n}\), so buying half the uncertainty costs four times the data.
 </div>
 
 ## The sampling distribution and the standard error
@@ -35,7 +35,7 @@ Two things separate the standard error from the sample standard deviation \\(s\\
 
 ## Constructing the interval
 
-For Gaussian data the standardised mean has a known distribution that does not depend on \\(\mu\\) or \\(\sigma\\) — a **pivot**:
+For Gaussian data the standardised mean has a known distribution that does not depend on \\(\mu\\) or \\(\sigma\\), a **pivot**:
 
 <div class="formula-box">
 \[
@@ -58,14 +58,14 @@ The probability statement was made *before* the data arrived, about the random v
 ## What the 95% attaches to
 
 <div class="warning-box">
-  <strong>Interview trap — the misinterpretation:</strong> "there is a 95% probability that \(\mu\) lies in [93.81, 106.19]" is <em>wrong</em>. Once the data are in, the endpoints are two specific numbers and \(\mu\) is a specific unknown constant; either it is in there or it is not, and there is no randomness left to carry a probability. What is 95% is the <em>coverage of the procedure</em>: if you repeated the whole experiment many times, 95% of the intervals so constructed would contain \(\mu\). The interval is random; the parameter is not. If you want "95% probability that the parameter is in this range", you want a <a href="/blog/stats-basics/bayesian-vs-frequentist/">credible interval</a>, which requires a prior.
+  <strong>Interview trap, the misinterpretation:</strong> "there is a 95% probability that \(\mu\) lies in [93.81, 106.19]" is <em>wrong</em>. Once the data are in, the endpoints are two specific numbers and \(\mu\) is a specific unknown constant; either it is in there or it is not, and there is no randomness left to carry a probability. What is 95% is the <em>coverage of the procedure</em>: if you repeated the whole experiment many times, 95% of the intervals so constructed would contain \(\mu\). The interval is random; the parameter is not. If you want "95% probability that the parameter is in this range", you want a <a href="/blog/stats-basics/bayesian-vs-frequentist/">credible interval</a>, which requires a prior.
 </div>
 
 <div class="blog-figure">
 <figure>
 <svg role="img" aria-labelledby="ci-title ci-desc" viewBox="0 0 640 200" style="max-width:640px;width:100%;height:auto">
   <title id="ci-title">Twenty simulated 95% confidence intervals against a fixed true mean</title>
-  <desc id="ci-desc">Twenty horizontal intervals, each from a simulated sample of 25 draws from a Normal distribution with mean 100 and standard deviation 15. A dashed vertical line marks the true mean of 100. Eighteen intervals, drawn in teal, cross the line. Two, drawn in orange — the seventeenth and the twentieth — fall entirely to one side and miss it. The true mean never moves; only the intervals do.</desc>
+  <desc id="ci-desc">Twenty horizontal intervals, each from a simulated sample of 25 draws from a Normal distribution with mean 100 and standard deviation 15. A dashed vertical line marks the true mean of 100. Eighteen intervals, drawn in teal, cross the line. Two, drawn in orange, the seventeenth and the twentieth, fall entirely to one side and miss it. The true mean never moves; only the intervals do.</desc>
   <rect x="1" y="1" width="638" height="198" rx="9" fill="#f8fafc" stroke="#cbd5e1"/>
   <line x1="330" y1="18" x2="330" y2="172" stroke="#334155" stroke-width="1.4" stroke-dasharray="4 3"/>
   <line x1="223" y1="26" x2="393" y2="26" stroke="#0e7490" stroke-width="2.2"/><circle cx="308" cy="26" r="1.8" fill="#0e7490"/>
@@ -94,13 +94,13 @@ The probability statement was made *before* the data arrived, about the random v
   <text x="330" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">true μ = 100 (fixed)</text>
   <text x="600" y="163" text-anchor="end" font-size="9.5" font-weight="700" fill="#c2410c">2 of 20 miss</text>
 </svg>
-<figcaption>Notice which object moves. The dashed line is fixed; the intervals jump around it. Two of these twenty miss — over 20,000 replications of the same simulation the coverage was 94.8%, as advertised.</figcaption>
+<figcaption>Notice which object moves. The dashed line is fixed; the intervals jump around it. Two of these twenty miss, over 20,000 replications of the same simulation the coverage was 94.8%, as advertised.</figcaption>
 </figure>
 </div>
 
 ## \\(t\\) or \\(z\\)
 
-Use \\(z = 1.96\\) when \\(\sigma\\) is known; use $$t_{n-1}$$ when you estimated it from the same data. Estimating \\(\sigma\\) injects extra variability — sometimes \\(s\\) comes out too small, which would make a \\(z\\)-interval too narrow — and the heavier tails of \\(t\\) pay for exactly that.
+Use \\(z = 1.96\\) when \\(\sigma\\) is known; use $$t_{n-1}$$ when you estimated it from the same data. Estimating \\(\sigma\\) injects extra variability, sometimes \\(s\\) comes out too small, which would make a \\(z\\)-interval too narrow, and the heavier tails of \\(t\\) pay for exactly that.
 
 | \\(n\\) | multiplier | half-width (\\(s=15\\)) | interval |
 |---|---|---|---|
@@ -108,21 +108,21 @@ Use \\(z = 1.96\\) when \\(\sigma\\) is known; use $$t_{n-1}$$ when you estimate
 | 25 (\\(z\\), wrong here) | 1.9600 | 5.88 | [94.12, 105.88] |
 | 100 ($$t_{99}$$) | 1.9842 | 2.98 | [97.02, 102.98] |
 
-At \\(n=25\\) the correction is about 5%; by \\(n=100\\) it is under 2% and the distinction stops mattering in practice. What does *not* stop mattering is the assumption behind the pivot: \\(T\\) is exactly $$t_{n-1}$$ only for Gaussian data. For other distributions the interval is justified by the central limit theorem, which needs \\(n\\) large enough for \\(\bar{x}\\) to be near-Gaussian — and heavy tails or strong skew can make "large enough" run into the hundreds. When in doubt, use [the bootstrap](/blog/stats-basics/bootstrap-and-resampling/).
+At \\(n=25\\) the correction is about 5%; by \\(n=100\\) it is under 2% and the distinction stops mattering in practice. What does *not* stop mattering is the assumption behind the pivot: \\(T\\) is exactly $$t_{n-1}$$ only for Gaussian data. For other distributions the interval is justified by the central limit theorem, which needs \\(n\\) large enough for \\(\bar{x}\\) to be near-Gaussian, and heavy tails or strong skew can make "large enough" run into the hundreds. When in doubt, use [the bootstrap](/blog/stats-basics/bootstrap-and-resampling/).
 
 ## The \\(1/\sqrt{n}\\) tax
 
-Half-width is \\(t^\star s/\sqrt{n}\\), so it falls as \\(1/\sqrt{n}\\). Going from \\(n=25\\) to \\(n=100\\) took the half-width from 6.19 to 2.98 — a factor of 2.08, the extra fraction coming from \\(t^\star\\) shrinking towards 1.96 as well. Quadrupling data halves uncertainty; a further tenfold reduction would need 10,000 samples.
+Half-width is \\(t^\star s/\sqrt{n}\\), so it falls as \\(1/\sqrt{n}\\). Going from \\(n=25\\) to \\(n=100\\) took the half-width from 6.19 to 2.98, a factor of 2.08, the extra fraction coming from \\(t^\star\\) shrinking towards 1.96 as well. Quadrupling data halves uncertainty; a further tenfold reduction would need 10,000 samples.
 
 <div class="insight-box">
-  <strong>Key Insight — why the square root, and what it costs:</strong> \(\mathrm{Var}(\bar x) = \sigma^2/n\) because variances of independent terms add while the \(1/n\) scaling squares, so the standard deviation keeps only \(1/\sqrt{n}\). The consequence for reported model accuracies is uncomfortable. Correctness on one example is Bernoulli, so at 90% accuracy the per-example standard deviation is \(\sqrt{0.9 \times 0.1} = 0.3\). Getting a 95% interval of ±1 percentage point therefore needs \(n = (1.96 \times 0.3 / 0.01)^2 \approx 3{,}460\) test examples, and ±0.5 points needs four times that, about 13,800. A great many published gaps are smaller than the interval of the test set they were measured on.
+  <strong>Key Insight, why the square root, and what it costs:</strong> \(\mathrm{Var}(\bar x) = \sigma^2/n\) because variances of independent terms add while the \(1/n\) scaling squares, so the standard deviation keeps only \(1/\sqrt{n}\). The consequence for reported model accuracies is uncomfortable. Correctness on one example is Bernoulli, so at 90% accuracy the per-example standard deviation is \(\sqrt{0.9 \times 0.1} = 0.3\). Getting a 95% interval of ±1 percentage point therefore needs \(n = (1.96 \times 0.3 / 0.01)^2 \approx 3{,}460\) test examples, and ±0.5 points needs four times that, about 13,800. A great many published gaps are smaller than the interval of the test set they were measured on.
 </div>
 
 <div class="key-takeaways">
   <h3>Recap</h3>
   <ul>
     <li>Standard error \(s/\sqrt{n}\) is the spread of the <em>estimate</em>; \(s\) is the spread of the <em>observations</em> and does not shrink with \(n\).</li>
-    <li>A CI comes from inverting a pivot — a quantity whose distribution is free of the unknown parameter.</li>
+    <li>A CI comes from inverting a pivot, a quantity whose distribution is free of the unknown parameter.</li>
     <li>95% is the coverage of the procedure over repeated samples. The endpoints are random; \(\mu\) is a fixed constant.</li>
     <li>Use \(t_{n-1}\) when \(\sigma\) is estimated: 2.064 at \(n=25\) versus 1.96, a 5% widening that fades by \(n \approx 100\).</li>
     <li>Width scales as \(1/\sqrt{n}\): four times the data for half the width.</li>

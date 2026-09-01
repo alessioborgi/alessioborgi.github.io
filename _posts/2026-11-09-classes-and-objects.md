@@ -6,7 +6,7 @@ categories: [python-primer]
 book: python-primer
 subsection: oop
 tags: [classes, oop, dataclasses, inheritance]
-excerpt: "A Python class is a factory for namespaces, not a sealed blueprint. Once you see where an attribute actually lives — on the instance or on the class — the mutable-default trap, the point of self, and the reason composition usually beats inheritance all fall out of the same rule."
+excerpt: "A Python class is a factory for namespaces, not a sealed blueprint. Once you see where an attribute actually lives, on the instance or on the class, the mutable-default trap, the point of self, and the reason composition usually beats inheritance all fall out of the same rule."
 author_profile: true
 read_time: true
 is_overview: false
@@ -23,7 +23,7 @@ toc_label: "Contents"
 
 ## A class is a factory for namespaces
 
-An object in Python is, at bottom, a dictionary of attributes plus a pointer to its class. The class supplies the shared parts — the methods — and the instance supplies what varies.
+An object in Python is, at bottom, a dictionary of attributes plus a pointer to its class. The class supplies the shared parts, the methods, and the instance supplies what varies.
 
 ```python
 class Vector:
@@ -39,7 +39,7 @@ print(v.norm())     # -> 5.0
 print(v.__dict__)   # -> {'x': 3, 'y': 4}
 ```
 
-`Vector(3, 4)` does two things: it calls `Vector.__new__` to allocate a blank object, then calls `__init__` on it to populate the fields. That is why `__init__` returns `None` — the object already exists by the time it runs. You never call `__init__` yourself.
+`Vector(3, 4)` does two things: it calls `Vector.__new__` to allocate a blank object, then calls `__init__` on it to populate the fields. That is why `__init__` returns `None`, the object already exists by the time it runs. You never call `__init__` yourself.
 
 ## Why `self` is explicit
 
@@ -50,7 +50,7 @@ print(Vector.norm(v))   # -> 5.0
 print(v.norm)           # -> <bound method Vector.norm of <...Vector object at 0x...>>
 ```
 
-Looking up `v.norm` finds a plain function on the class and wraps it in a *bound method* that remembers `v`. Calling it inserts `v` as the first positional argument. Nothing magical happens; there is no implicit `this` scope. The cost is one extra parameter in every signature, and the benefit is that you can always tell an attribute (`x`) from a local (`x`) by eye — which matters far more than the keystrokes. The name `self` is a convention, not a keyword, but breaking it will make every reader distrust your code.
+Looking up `v.norm` finds a plain function on the class and wraps it in a *bound method* that remembers `v`. Calling it inserts `v` as the first positional argument. Nothing magical happens; there is no implicit `this` scope. The cost is one extra parameter in every signature, and the benefit is that you can always tell an attribute (`x`) from a local (`x`) by eye, which matters far more than the keystrokes. The name `self` is a convention, not a keyword, but breaking it will make every reader distrust your code.
 
 ## Instance attributes versus class attributes
 
@@ -72,7 +72,7 @@ print(a.__dict__)                        # -> {'count': 1}
 The first `a.bump()` reads `Counter.count` (0), adds one, and *creates* `a.count = 1`, shadowing the class attribute. `b` never touched it, so `b.count` still resolves upward to the class. Class attributes are therefore fine for genuine constants and defaults, and a trap the moment they are mutable.
 
 <div class="warning-box">
-  <strong>Classic trap — a mutable class attribute is shared by every instance.</strong> Rebinding (<code>self.count += 1</code>) writes to the instance, but <em>mutating</em> (<code>self.items.append(...)</code>) does not: it reaches the one shared object through the class and modifies it in place. Every instance, past and future, sees the change.
+  <strong>Classic trap, a mutable class attribute is shared by every instance.</strong> Rebinding (<code>self.count += 1</code>) writes to the instance, but <em>mutating</em> (<code>self.items.append(...)</code>) does not: it reaches the one shared object through the class and modifies it in place. Every instance, past and future, sees the change.
 
 <pre><code class="language-python">class Basket:
     items = []                  # WRONG: one list for the whole class
@@ -123,7 +123,7 @@ print(t._kelvin)                     # -> 373.15
 print(Temperature.is_physical(-5))   # -> False
 ```
 
-`@property` is the reason Python has no culture of writing `get_x()`/`set_x()`: start with a public attribute, and if you later need validation or a computed value, convert it to a property and *no caller changes*. `@classmethod` receives the class rather than the instance, so `cls(...)` still does the right thing in a subclass — that is what makes it the correct way to write `from_json`, `from_csv`, `zeros`, and friends. `@staticmethod` receives nothing and is simply a function you have chosen to file under a class.
+`@property` is the reason Python has no culture of writing `get_x()`/`set_x()`: start with a public attribute, and if you later need validation or a computed value, convert it to a property and *no caller changes*. `@classmethod` receives the class rather than the instance, so `cls(...)` still does the right thing in a subclass, that is what makes it the correct way to write `from_json`, `from_csv`, `zeros`, and friends. `@staticmethod` receives nothing and is simply a function you have chosen to file under a class.
 
 ## Inheritance, `super()`, and the MRO
 
@@ -151,7 +151,7 @@ print(d.describe())            # -> Rex says woof
 print(isinstance(d, Animal))   # -> True
 ```
 
-`describe` is defined on `Animal` but calls `self.speak()`, which resolves to `Dog.speak` — that dispatch is the whole point of inheritance. `super()` does *not* mean "my parent"; it means "the next class after me in the method resolution order", which is why it composes correctly under multiple inheritance.
+`describe` is defined on `Animal` but calls `self.speak()`, which resolves to `Dog.speak`, that dispatch is the whole point of inheritance. `super()` does *not* mean "my parent"; it means "the next class after me in the method resolution order", which is why it composes correctly under multiple inheritance.
 
 The **MRO** is the fixed, linear order in which Python searches classes for an attribute. It is computed once per class by the C3 algorithm, and you can simply read it:
 
@@ -168,7 +168,7 @@ print([cls.__name__ for cls in D.__mro__])
 Note that `A` comes after *both* `B` and `C`: a class always appears before its bases, and left-to-right order is preserved. If no such consistent order exists, the `class` statement itself raises `TypeError` at definition time.
 
 <div class="insight-box">
-  <strong>Key Insight — inheritance is coupling, not reuse:</strong> a subclass depends on which methods its parent calls internally, so a harmless-looking refactor of the parent can break it silently. Reserve inheritance for genuine <em>is-a</em> substitutability (a <code>Dog</code> can be used anywhere an <code>Animal</code> is expected) and use composition — holding an object and delegating to it — for everything else.
+  <strong>Key Insight, inheritance is coupling, not reuse:</strong> a subclass depends on which methods its parent calls internally, so a harmless-looking refactor of the parent can break it silently. Reserve inheritance for genuine <em>is-a</em> substitutability (a <code>Dog</code> can be used anywhere an <code>Animal</code> is expected) and use composition, holding an object and delegating to it, for everything else.
 </div>
 
 ```python
@@ -207,7 +207,7 @@ print(p == Point(1.0, 2.0))    # -> True
 print(hash(p) == hash(Point(1.0, 2.0)))   # -> True
 ```
 
-`frozen=True` makes instances immutable and hashable, so they can go in a `set` or serve as `dict` keys — see [dicts and sets](/blog/python-primer/dicts-and-sets/) for why hashability requires immutability. The class also refuses to repeat the shared-mutable mistake:
+`frozen=True` makes instances immutable and hashable, so they can go in a `set` or serve as `dict` keys, see [dicts and sets](/blog/python-primer/dicts-and-sets/) for why hashability requires immutability. The class also refuses to repeat the shared-mutable mistake:
 
 ```python
 @dataclass
@@ -215,7 +215,7 @@ class Cart:
     items: list = field(default_factory=list)   # a fresh list per instance
 ```
 
-Writing `items: list = []` instead raises `ValueError` at class-definition time — the dataclass machinery checks for exactly the trap above. Annotations are not enforced at runtime; they document intent and feed [type checkers](/blog/python-primer/standard-library-tour/).
+Writing `items: list = []` instead raises `ValueError` at class-definition time, the dataclass machinery checks for exactly the trap above. Annotations are not enforced at runtime; they document intent and feed [type checkers](/blog/python-primer/standard-library-tour/).
 
 <div class="key-takeaways">
   <h3>Recap</h3>
@@ -232,8 +232,8 @@ Next: [dunder methods](/blog/python-primer/dunder-methods/), the protocols that 
 
 ## References
 
-1. Python documentation. [Classes — the Python Tutorial, chapter 9](https://docs.python.org/3/tutorial/classes.html).
-2. Python documentation. [`dataclasses` — Data Classes](https://docs.python.org/3/library/dataclasses.html).
-3. Simionato, M. [The Python 2.3 Method Resolution Order](https://docs.python.org/3/howto/mro.html) — the C3 linearisation, still the algorithm in use.
-4. Smith, E. V. [PEP 557 — Data Classes](https://peps.python.org/pep-0557/), 2017.
+1. Python documentation. [Classes, the Python Tutorial, chapter 9](https://docs.python.org/3/tutorial/classes.html).
+2. Python documentation. [`dataclasses`, Data Classes](https://docs.python.org/3/library/dataclasses.html).
+3. Simionato, M. [The Python 2.3 Method Resolution Order](https://docs.python.org/3/howto/mro.html), the C3 linearisation, still the algorithm in use.
+4. Smith, E. V. [PEP 557, Data Classes](https://peps.python.org/pep-0557/), 2017.
 5. Python documentation. [Built-in functions: `super()`](https://docs.python.org/3/library/functions.html#super) and [`property()`](https://docs.python.org/3/library/functions.html#property).

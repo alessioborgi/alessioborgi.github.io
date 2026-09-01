@@ -3,7 +3,7 @@ title: "MLPipelineOptimizationStudy: End-to-End ML Pipeline Exploration"
 collection: projects
 layout: single
 permalink: /projects/ml-pipeline-optimization/
-excerpt: "A systematic exploration of ML pipeline optimisation — covering preprocessing, feature engineering, model selection, and hyperparameter tuning across multiple algorithms."
+excerpt: "A systematic exploration of ML pipeline optimisation, covering preprocessing, feature engineering, model selection, and hyperparameter tuning across multiple algorithms."
 author_profile: true
 github: "https://github.com/alessioborgi/MLPipelineOptimizationStudy"
 tags:
@@ -13,7 +13,7 @@ tags:
   - Hyperparameter Tuning
 ---
 
-MLPipelineOptimizationStudy is a rigorous, reproducible investigation into the art of building high-performance machine learning pipelines. Each stage of the pipeline — from raw data to final predictions — is analysed independently and in combination to understand where gains are achieved.
+MLPipelineOptimizationStudy is a rigorous, reproducible investigation into the art of building high-performance machine learning pipelines. Each stage of the pipeline, from raw data to final predictions, is analysed independently and in combination to understand where gains are achieved.
 
 ## Pipeline Stages Covered
 

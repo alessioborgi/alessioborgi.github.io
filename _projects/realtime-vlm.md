@@ -3,7 +3,7 @@ title: "RealTime-VLM: Real-Time Vision-Language Model Inference in the Browser"
 collection: projects
 layout: single
 permalink: /projects/realtime-vlm/
-excerpt: "Browser-based real-time VLM inference — continuously captures webcam frames and feeds them to any OpenAI-compatible vision API with sub-second latency."
+excerpt: "Browser-based real-time VLM inference, continuously captures webcam frames and feeds them to any OpenAI-compatible vision API with sub-second latency."
 author_profile: true
 github: "https://github.com/alessioborgi/RealTime-VLM"
 tags:
@@ -13,7 +13,7 @@ tags:
   - JavaScript
 ---
 
-RealTime-VLM brings real-time vision-language model inference directly to the browser. It continuously captures webcam frames, encodes them, and sends an image+text prompt to any OpenAI-compatible API endpoint — displaying model responses with sub-second latency. No server-side relay is needed: the browser communicates with the VLM endpoint directly.
+RealTime-VLM brings real-time vision-language model inference directly to the browser. It continuously captures webcam frames, encodes them, and sends an image+text prompt to any OpenAI-compatible API endpoint, displaying model responses with sub-second latency. No server-side relay is needed: the browser communicates with the VLM endpoint directly.
 
 ## Features
 

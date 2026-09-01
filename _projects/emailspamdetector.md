@@ -3,7 +3,7 @@ title: "EmailSpamDetector: Spam Detection with Bidirectional LSTMs"
 collection: projects
 layout: single
 permalink: /projects/emailspamdetector/
-excerpt: "Classifies spam and ham emails using a Bidirectional LSTM — capturing both forward and backward temporal context in email text for high-accuracy filtering."
+excerpt: "Classifies spam and ham emails using a Bidirectional LSTM, capturing both forward and backward temporal context in email text for high-accuracy filtering."
 author_profile: true
 github: "https://github.com/alessioborgi/EmailSpamDetector"
 tags:
@@ -14,7 +14,7 @@ tags:
   - Keras
 ---
 
-EmailSpamDetector uses a **Bidirectional LSTM** network to classify emails as spam or legitimate (ham). By processing email text in both forward and backward directions simultaneously, the model captures richer contextual signals than a unidirectional LSTM — improving detection of obfuscated spam patterns.
+EmailSpamDetector uses a **Bidirectional LSTM** network to classify emails as spam or legitimate (ham). By processing email text in both forward and backward directions simultaneously, the model captures richer contextual signals than a unidirectional LSTM, improving detection of obfuscated spam patterns.
 
 ## Why Bidirectional LSTMs?
 

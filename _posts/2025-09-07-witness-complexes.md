@@ -24,9 +24,9 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> The witness complex (de Silva & Carlsson, 2004) uses a small set of landmarks L ⊂ P and lets all other data points "witness" the inclusion of simplices between landmarks. A simplex on landmarks is included if it has a witness — a data point closer to those landmarks than to any others. This keeps the complex size O(|L|^k) rather than O(|P|^k), enabling TDA on millions of points.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> The witness complex (de Silva & Carlsson, 2004) uses a small set of landmarks L ⊂ P and lets all other data points "witness" the inclusion of simplices between landmarks. A simplex on landmarks is included if it has a witness, a data point closer to those landmarks than to any others. This keeps the complex size O(|L|^k) rather than O(|P|^k), enabling TDA on millions of points.</div>
 
-**Intuition First.** Imagine you want to map the shape of a city from satellite photos. You don't need every pixel — a representative set of landmarks (key intersections, parks, buildings) is enough if all other pixels "vouch" for how the landmarks are connected. Witness complexes formalise this: landmarks define the complex's vertices, and every other data point acts as a "witness" that votes to include simplices between nearby landmarks. The topology of the full dataset is captured by the landmark complex.
+**Intuition First.** Imagine you want to map the shape of a city from satellite photos. You don't need every pixel, a representative set of landmarks (key intersections, parks, buildings) is enough if all other pixels "vouch" for how the landmarks are connected. Witness complexes formalise this: landmarks define the complex's vertices, and every other data point acts as a "witness" that votes to include simplices between nearby landmarks. The topology of the full dataset is captured by the landmark complex.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 460 155" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;font-family:sans-serif;">
@@ -66,12 +66,12 @@ toc_label: "Contents"
   <text x="347" y="116" font-size="10" fill="#0d9488" text-anchor="middle">~200³ / 6 ≈ 1.3M triangles</text>
   <text x="347" y="131" font-size="10" fill="#94a3b8" text-anchor="middle">75× smaller complex</text>
 </svg>
-<figcaption>Left: landmark points (large, blue) define the complex vertices; witness points (small, grey) vote to include simplices between landmarks. Right: complexity comparison — witness complexes are dramatically smaller than Vietoris-Rips at the same scale.</figcaption>
+<figcaption>Left: landmark points (large, blue) define the complex vertices; witness points (small, grey) vote to include simplices between landmarks. Right: complexity comparison, witness complexes are dramatically smaller than Vietoris-Rips at the same scale.</figcaption>
 </figure></div>
 
 ## Motivation: Scalability of Vietoris-Rips
 
-The Vietoris-Rips complex on $$n$$ points has up to $$O(n^k)$$ simplices of dimension $$k$$. For $$n = 10^5$$ and $$k = 2$$, this is $$10^{10}$$ triangles — computationally infeasible. We need a way to capture the same topology with fewer simplices.
+The Vietoris-Rips complex on $$n$$ points has up to $$O(n^k)$$ simplices of dimension $$k$$. For $$n = 10^5$$ and $$k = 2$$, this is $$10^{10}$$ triangles, computationally infeasible. We need a way to capture the same topology with fewer simplices.
 
 The key insight: most data points carry redundant topological information. If we pick a small representative set of **landmarks** $$L \subset P$$ ($$|L| \ll |P|$$), we can define a complex on $$L$$ that captures the topology of $$P$$ by using the remaining points as **witnesses**.
 
@@ -90,7 +90,7 @@ As $$\nu$$ increases from 0 to ∞, we get the **witness filtration**, whose per
 The choice of landmarks affects the quality of the approximation. Common strategies:
 
 - **Random selection**: simple, works for large $$n$$.
-- **Maxmin sequential**: iteratively select the point farthest from all currently selected landmarks — provides a $$\varepsilon$$-net guarantee.
+- **Maxmin sequential**: iteratively select the point farthest from all currently selected landmarks, provides a $$\varepsilon$$-net guarantee.
 - **k-means centroids**: landmarks represent cluster centres.
 
 The number of landmarks $$m$$ typically ranges from $$\sqrt{n}$$ to $$n/10$$. With $$m = 300$$ landmarks, a complex with millions of points becomes tractable.

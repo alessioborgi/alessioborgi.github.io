@@ -36,7 +36,7 @@
     into my own research! \U0001F680\n\n#MachineLearning #DeepLearning #ArtificialIntelligence
     #DiffusionModels #FlowMatching #WorldModels #ComputerVision #PINNs #Research #BathMLSummerSchool"
   gallery: "/images/linkedin/bath-machine-learning-summer-school-2026/"
-- title: EEML 2026 — Eastern European Machine Learning Summer School
+- title: EEML 2026, Eastern European Machine Learning Summer School
   subtitle: Diffusion Models, Representational Alignment and Geometric Deep Learning
   date: '2026-08-01'
   place: "Cetinje, Montenegro \U0001F1F2\U0001F1EA"
@@ -71,7 +71,7 @@
     to learn from the best of the best.\n\n#EEML #EEML2026 #MachineLearning #ArtificialIntelligence
     #DeepLearning #Research #SummerSchool #Cetinje"
   gallery: "/images/linkedin/eeml-2026-eastern-european-machine-learning-summer-school/"
-- title: ACM Europe Summer School 2026 — HPC Computer Architectures for AI and Dedicated
+- title: ACM Europe Summer School 2026, HPC Computer Architectures for AI and Dedicated
     Applications
   date: '2026-07-24'
   place: "Barcelona, Spain \U0001F1EA\U0001F1F8"
@@ -93,7 +93,7 @@
     speakers who made this experience possible!\n\n#ACMSummerSchool #HPC #HighPerformanceComputing
     #ArtificialIntelligence #QuantumComputing #Supercomputing #Barcelona #BSC #Research"
   gallery: "/images/linkedin/acm-europe-summer-school-2026-hpc-computer-architectures-for/"
-- title: Cambridge ELLIS Unit Summer School 2026 — Probabilistic Machine Learning
+- title: Cambridge ELLIS Unit Summer School 2026, Probabilistic Machine Learning
   subtitle: Equivariant Sheaf Neural Networks
   date: '2026-07-19'
   place: "University of Cambridge, United Kingdom \U0001F1EC\U0001F1E7"
@@ -112,7 +112,7 @@
     to the organizers, speakers, and everyone who made this such a valuable experience!\n#MachineLearning
     #ProbabilisticMachineLearning #ELLIS #Cambridge #AI #Research"
   gallery: "/images/linkedin/cambridge-ellis-unit-summer-school-2026-probabilistic-machin/"
-- title: LoG Italian Meetup 2026 — Learning on Graphs, Pisa
+- title: LoG Italian Meetup 2026, Learning on Graphs, Pisa
   date: '2026-06-11'
   place: "University of Pisa, Pisa, Italy \U0001F1EE\U0001F1F9"
   url: https://www.linkedin.com/posts/alessio-borgi_log-learningongraphs-graphmachinelearning-ugcPost-7470813349153345536-LFfm/
@@ -130,7 +130,7 @@
     and workshops!\n\n#LoG #LearningOnGraphs #GraphMachineLearning #GraphNeuralNetworks
     #GraphDiffusion #GeometricDeepLearning #SheafNeuralNetworks #Research #AI"
   gallery: "/images/linkedin/log-italian-meetup-2026-learning-on-graphs-pisa/"
-- title: Sheaf Neural Networks as Message Passing — New Repository Release
+- title: Sheaf Neural Networks as Message Passing, New Repository Release
   subtitle: sheaf-mpnn
   date: '2026-05-27'
   place: ''
@@ -182,7 +182,7 @@
     spuriously related to the query. We call this **positional hallucination**: a
     critical issue for **retrieval**, where models must suppress background noise
     while preserving the few distant tokens that matter.\n\n\U0001F4A1 **Our idea**\nWe
-    introduce **GAPE** — **G**ated **A**daptive **P**ositional **E**ncoding, a drop-in
+    introduce **GAPE**, **G**ated **A**daptive **P**ositional **E**ncoding, a drop-in
     augmentation for positional encodings that improves long-context robustness in
     Transformers.\nThe core idea is simple:\n\U0001F539 RoPE preserves local geometry,
     but can suffer from long-range phase hallucinations beyond the training context.\n\U0001F539
@@ -203,7 +203,7 @@
     #DeepLearning #Transformers #LongContext #Attention #PositionalEncoding #RoPE
     #PE #ArtificialIntelligence"
   gallery: "/images/linkedin/remember-to-forget-gated-adaptive-positional-encoding-new-pr/"
-- title: HetSheaf — New Preprint Version
+- title: HetSheaf, New Preprint Version
   subtitle: Heterogeneous Sheaf Neural Networks
   date: '2026-04-20'
   place: ''
@@ -514,14 +514,14 @@
     efficiency. By integrating the power of **LangChain**, we enabled natural language
     queries that interact with real-time environmental data in hospital rooms. This
     allows healthcare staff to monitor and control hospital conditions effortlessly
-    through a user-friendly interface—just by asking questions! \n\nThe system also
+    through a user-friendly interface, just by asking questions! \n\nThe system also
     **generates real**-**time generated graphs**, that provide insights from the data
     and can even **self**-**explain** by suggesting actions based on the visualizations.
     One of the most exciting features is the ability to trigger the movement of a
     **robot arm**, which can automatically perform tasks like opening or closing windows
     based on environmental conditions.\n\nIndeed, one of the most exciting aspects
     of the project was the **integration of robotics**. Using a robot arm, the system
-    can trigger physical actions—like automatically opening or closing windows based
+    can trigger physical actions, like automatically opening or closing windows based
     on environmental data. \n\nI’m incredibly grateful to my talented teammates Oliver
     Guy Simone Redl, Amina Tucaković and Hamed Kshiem. A huge thanks to Alexander
     Steinmaurer and Gala Dojcinovic for the opportunity. A big thanks also to the

@@ -8,7 +8,7 @@ subsection: core-papers
 tags: [sheaf-neural-networks, deep-gnns, oversmoothing, heterophily, graph-neural-networks]
 published: true
 is_overview: false
-excerpt: "Neural Sheaf Diffusion has a theoretical guarantee against representation collapse that does not survive contact with depth. DNSD diagnoses why — the Laplacian's disagreement signal vanishes as diffusion succeeds — and replaces the operator rather than patching around it."
+excerpt: "Neural Sheaf Diffusion has a theoretical guarantee against representation collapse that does not survive contact with depth. DNSD diagnoses why, the Laplacian's disagreement signal vanishes as diffusion succeeds, and replaces the operator rather than patching around it."
 author_profile: true
 read_time: true
 icon: "🏗️"
@@ -19,18 +19,18 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Neural Sheaf Diffusion is built on the sheaf Laplacian, which measures <em>disagreement</em> between neighbouring stalks. Diffusion reduces disagreement — so the deeper the network, the smaller the signal each layer has to work with. The guarantee that motivated NSD turns into the mechanism that starves it. DNSD swaps the Laplacian \(\Delta_{\mathcal{F}}\) for a sheaf <em>adjacency</em> operator \(A_{\mathcal{F}}\), which aggregates dependency instead of measuring difference, and adds layer normalisation, an odd activation, and per-stalk gating. It reaches its best accuracy at 12–16 layers where NSD plateaus at 2–8.
+<strong>TL;DR:</strong> Neural Sheaf Diffusion is built on the sheaf Laplacian, which measures <em>disagreement</em> between neighbouring stalks. Diffusion reduces disagreement, so the deeper the network, the smaller the signal each layer has to work with. The guarantee that motivated NSD turns into the mechanism that starves it. DNSD swaps the Laplacian \(\Delta_{\mathcal{F}}\) for a sheaf <em>adjacency</em> operator \(A_{\mathcal{F}}\), which aggregates dependency instead of measuring difference, and adds layer normalisation, an odd activation, and per-stalk gating. It reaches its best accuracy at 12–16 layers where NSD plateaus at 2–8.
 </div>
 
 <div class="paper-box">
 <strong>Paper:</strong> Deep Neural Sheaf Diffusion<br>
-<strong>Authors:</strong> Rémi Bourgerie, Šarūnas Girdzijauskas, Viktoria Fodor — KTH Royal Institute of Technology, Stockholm<br>
+<strong>Authors:</strong> Rémi Bourgerie, Šarūnas Girdzijauskas, Viktoria Fodor, KTH Royal Institute of Technology, Stockholm<br>
 <strong>Preprint:</strong> <a href="https://arxiv.org/abs/2605.19021">arXiv:2605.19021</a>, May 2026
 </div>
 
 ## The guarantee that eats itself
 
-[Neural Sheaf Diffusion](/blog/sheaf/neural-sheaf-diffusion/) came with a genuinely strong theoretical result. Given an appropriate sheaf, linear sheaf diffusion converges to $$\ker(\Delta_{\mathcal{F}})$$ — the space of global sections — and that limit is rich enough to separate almost any label assignment. Where a GCN collapses every node onto a single degree-scaled vector, sheaf diffusion collapses onto a space that can still tell classes apart. That is the whole argument for sheaves as a cure for oversmoothing.
+[Neural Sheaf Diffusion](/blog/sheaf/neural-sheaf-diffusion/) came with a genuinely strong theoretical result. Given an appropriate sheaf, linear sheaf diffusion converges to $$\ker(\Delta_{\mathcal{F}})$$, the space of global sections, and that limit is rich enough to separate almost any label assignment. Where a GCN collapses every node onto a single degree-scaled vector, sheaf diffusion collapses onto a space that can still tell classes apart. That is the whole argument for sheaves as a cure for oversmoothing.
 
 The trouble is what "converges" means for a network built by stacking diffusion steps as layers.
 
@@ -49,7 +49,7 @@ and with $$\Delta_{\mathcal{F}} = D_{\mathcal{F}}^{-1/2} L_{\mathcal{F}} D_{\mat
 Now read that operator as a *signal generator* rather than as a *limit theorem*. $$\Delta_{\mathcal{F}}X$$ is a disagreement measure: it is large when neighbouring stalks, after transport through their restriction maps, point in different directions. Diffusion's job is to make that quantity small. It succeeds. And every layer's update is driven by exactly that quantity.
 
 <div class="insight-box">
-<strong>The core diagnosis:</strong> in NSD the update at each layer is a function of \(\Delta_{\mathcal{F}}X\), and the diffusion process drives \(\Delta_{\mathcal{F}}X \to 0\). A deep NSD is a stack of layers each fed a smaller input than the last. The convergence result is not wrong — it is the reason the architecture starves.
+<strong>The core diagnosis:</strong> in NSD the update at each layer is a function of \(\Delta_{\mathcal{F}}X\), and the diffusion process drives \(\Delta_{\mathcal{F}}X \to 0\). A deep NSD is a stack of layers each fed a smaller input than the last. The convergence result is not wrong, it is the reason the architecture starves.
 </div>
 
 There is a second-order version of the same problem at initialisation. Randomly initialised restriction maps produce a disagreement signal that is both small and mostly noise, so the deeper layers begin training with little to learn from.
@@ -89,7 +89,7 @@ Compare the two. $$L_{\mathcal{F}}$$ subtracts the neighbour's transported stalk
 This is the change that carries the paper. In the ablations, variants with the adjacency operator gain 20–30 percentage points over NSD at mid-heterophily on the synthetic benchmark, and variants without it sit near the baseline regardless of what else is turned on.
 
 <div class="warning-box">
-<strong>What the name no longer describes.</strong> With the Laplacian gone, DNSD is not performing diffusion. The paper says so — it calls the result a "sheaf convolution" — and it credits Bodnar et al. with having written this operator down as an intermediate step before discarding it. But it is worth being explicit that the "D" in DNSD buys depth by giving up the dynamical-systems reading that made sheaf <em>diffusion</em> interesting in the first place. The convergence-to-\(\ker(\Delta_{\mathcal{F}})\) theorem no longer applies to the architecture, because the architecture no longer contains \(\Delta_{\mathcal{F}}\).
+<strong>What the name no longer describes.</strong> With the Laplacian gone, DNSD is not performing diffusion. The paper says so, it calls the result a "sheaf convolution", and it credits Bodnar et al. with having written this operator down as an intermediate step before discarding it. But it is worth being explicit that the "D" in DNSD buys depth by giving up the dynamical-systems reading that made sheaf <em>diffusion</em> interesting in the first place. The convergence-to-\(\ker(\Delta_{\mathcal{F}})\) theorem no longer applies to the architecture, because the architecture no longer contains \(\Delta_{\mathcal{F}}\).
 </div>
 
 The appendix makes the break sharper than the main text does. In the general formulation the per-edge coboundary for stalk $$s$$ is $$\delta^{(s,l)}_e = [\mathcal{F}_{\mathrm{src},e}]_{s,:} X^{(l)}_u - [\mathcal{F}_{\mathrm{tgt},e}]_{s,:} X^{(l)}_v$$. With the adjacency flag set, only the target term is retained. A coboundary with one term is not a coboundary; it is a projection. The cochain-complex scaffolding is genuinely gone, not merely rearranged.
@@ -104,7 +104,7 @@ Applied per stalk, normalising across the feature dimension $$f$$:
 \]
 </div>
 
-with $$\mu_u, \sigma_u \in \mathbb{R}^d$$ computed per stalk and $$\gamma^{(l)}, \beta^{(l)} \in \mathbb{R}^f$$ shared across nodes and stalks. Note the granularity: each stalk is normalised independently, so the operation does not wash out differences *between* stalks of the same node — which would defeat the point of having $$d$$ of them.
+with $$\mu_u, \sigma_u \in \mathbb{R}^d$$ computed per stalk and $$\gamma^{(l)}, \beta^{(l)} \in \mathbb{R}^f$$ shared across nodes and stalks. Note the granularity: each stalk is normalised independently, so the operation does not wash out differences *between* stalks of the same node, which would defeat the point of having $$d$$ of them.
 
 ### 3. An odd, bounded activation
 
@@ -132,7 +132,7 @@ Section 4 reframes all three architectures along three axes, and it is the clear
 | **NSD** | difference (Laplacian) | matrix-valued linear map | operator (degree) | vanishing signal |
 | **DNSD** | dependency (adjacency) | matrix-valued linear map | operator + representations | signal maintained |
 
-Read the middle column and the sheaf idea lands in one line: attention weights a neighbour by a *scalar*, a sheaf transforms it by a *matrix*. Read the last two columns and the two failure modes separate cleanly. Attention normalises the coefficients with a softmax, which forces a convex combination — the aggregation is an average, and averages collapse. NSD normalises the operator but computes differences, which vanish. DNSD does neither: it aggregates without a softmax, so the combination need not be convex, and normalises the representations afterwards instead.
+Read the middle column and the sheaf idea lands in one line: attention weights a neighbour by a *scalar*, a sheaf transforms it by a *matrix*. Read the last two columns and the two failure modes separate cleanly. Attention normalises the coefficients with a softmax, which forces a convex combination, the aggregation is an average, and averages collapse. NSD normalises the operator but computes differences, which vanish. DNSD does neither: it aggregates without a softmax, so the combination need not be convex, and normalises the representations afterwards instead.
 
 That framing explains why the two fixes are not interchangeable. You cannot rescue GAT by adding LayerNorm, because the convexity is imposed by the softmax upstream of it.
 
@@ -148,7 +148,7 @@ On the real-world heterophilic suite, the largest gains are on Roman Empire and 
 | Tolokers | 81.5 ± 0.2 (L8) | 82.0 ± 0.2 (L8) | +0.5 |
 | Questions | 97.1 ± 0.0 (L2) | 97.1 ± 0.0 (L2) | 0.0 |
 
-Note the depth column as much as the accuracy: NSD's best Penn94 configuration is two layers, DNSD's is eight. That is the paper's actual claim — not that sheaves win, but that sheaves can now be made deep.
+Note the depth column as much as the accuracy: NSD's best Penn94 configuration is two layers, DNSD's is eight. That is the paper's actual claim, not that sheaves win, but that sheaves can now be made deep.
 
 <div class="warning-box">
 <strong>Read the appendix table before you cite the headline.</strong> The main text's results table shows six datasets. The appendix shows nine. The three that appear only in the appendix are the three where DNSD loses:
@@ -159,33 +159,33 @@ Note the depth column as much as the accuracy: NSD's best Penn94 configuration i
   <li><strong>Actor:</strong> NSD diag 36.2, best DNSD 36.4, plain MLP <strong>37.0</strong></li>
 </ul>
 
-On the two small filtered datasets DNSD is worse than the NSD baseline it improves on elsewhere, and both are beaten by an ordinary MPNN by 6–10 points. On Actor nothing beats a feature-only MLP, which is the usual sign that the graph carries little signal. The paper's prose is honest — it claims best-or-second-best on "5 out of 9" — but the table a skimming reader sees contains only the favourable six.
+On the two small filtered datasets DNSD is worse than the NSD baseline it improves on elsewhere, and both are beaten by an ordinary MPNN by 6–10 points. On Actor nothing beats a feature-only MLP, which is the usual sign that the graph carries little signal. The paper's prose is honest, it claims best-or-second-best on "5 out of 9", but the table a skimming reader sees contains only the favourable six.
 </div>
 
-The synthetic benchmark deserves the same scrutiny. It runs eleven perturbation levels from G0 (homophilic) to G10 (fully heterophilic), and the interesting result is in the middle. At the endpoints the task is easy or degenerate: at G10 an ordinary MPNN reaches 94.7 and everything clusters around 95–97, while at G0 DNSD is the *worst* method tested — 45.7 ± 10.1 against 53.0 for NSD and 67.2 for GAT. Dropping the Laplacian costs you the homophilic case. That is a coherent trade, but it is a trade.
+The synthetic benchmark deserves the same scrutiny. It runs eleven perturbation levels from G0 (homophilic) to G10 (fully heterophilic), and the interesting result is in the middle. At the endpoints the task is easy or degenerate: at G10 an ordinary MPNN reaches 94.7 and everything clusters around 95–97, while at G0 DNSD is the *worst* method tested, 45.7 ± 10.1 against 53.0 for NSD and 67.2 for GAT. Dropping the Laplacian costs you the homophilic case. That is a coherent trade, but it is a trade.
 
 ## Two details worth carrying forward
 
-**Diagonal maps keep winning.** Across datasets, diagonal restriction maps match or beat full ones despite having $$O(d)$$ parameters per edge instead of $$O(d^2)$$. This is now the third independent paper to report it, and the authors explicitly connect their finding to [PolyNSD](/blog/sheaf/polynsd-paper/). Whatever expressive power full $$d \times d$$ maps have in principle, it is not the power these benchmarks reward. Orthogonal maps were excluded because they "were found to be difficult to train robustly at depth" — an honest negative result that is easy to miss.
+**Diagonal maps keep winning.** Across datasets, diagonal restriction maps match or beat full ones despite having $$O(d)$$ parameters per edge instead of $$O(d^2)$$. This is now the third independent paper to report it, and the authors explicitly connect their finding to [PolyNSD](/blog/sheaf/polynsd-paper/). Whatever expressive power full $$d \times d$$ maps have in principle, it is not the power these benchmarks reward. Orthogonal maps were excluded because they "were found to be difficult to train robustly at depth", an honest negative result that is easy to miss.
 
 **The parameter count is not free.** At sixteen layers on the synthetic benchmark, DNSD-diag has 5,007 parameters against NSD-diag's 2,655. Roughly $$1.9\times$$, on top of running four times deeper. The comparison is depth-matched in the tables but not parameter-matched anywhere.
 
 ## What I would want next
 
-The paper's own limitations section names the right things — node classification only, medium-scale graphs, and a benchmark landscape that does not isolate depth. I would add two:
+The paper's own limitations section names the right things, node classification only, medium-scale graphs, and a benchmark landscape that does not isolate depth. I would add two:
 
 1. **A theory for $$A_{\mathcal{F}}$$.** The Laplacian came with a spectral story: PSD, kernel equals global sections, diffusion converges. $$A_{\mathcal{F}}$$ has none of that yet. It is not symmetric PSD in general, its spectrum is unconstrained, and there is no analogue of the separability theorem. The empirical case is made; the mathematical one is open.
-2. **Why 12–16 and not more.** Every reported best sits at the top of the searched grid $$\{2,4,8,12,16\}$$. A method whose headline claim is depth scaling should be pushed until it breaks — otherwise the result reads as "we did not find the ceiling" rather than "the ceiling is here".
+2. **Why 12–16 and not more.** Every reported best sits at the top of the searched grid $$\{2,4,8,12,16\}$$. A method whose headline claim is depth scaling should be pushed until it breaks, otherwise the result reads as "we did not find the ceiling" rather than "the ceiling is here".
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li>NSD's depth problem is structural, not incidental: the update is driven by \(\Delta_{\mathcal{F}}X\), and diffusion drives that quantity to zero. Succeeding at the objective starves the network.</li>
-  <li>DNSD replaces the Laplacian with the sheaf adjacency \((A_{\mathcal{F}})_{uv} = \mathcal{F}_{u \trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e}\) — dependency rather than difference. This single change accounts for most of the gain; LayerNorm, \(\tanh\), and gating are stabilisers.</li>
+  <li>DNSD replaces the Laplacian with the sheaf adjacency \((A_{\mathcal{F}})_{uv} = \mathcal{F}_{u \trianglelefteq e}^{\top}\mathcal{F}_{v \trianglelefteq e}\), dependency rather than difference. This single change accounts for most of the gain; LayerNorm, \(\tanh\), and gating are stabilisers.</li>
   <li>The cost is theoretical: no Laplacian means no convergence-to-global-sections guarantee, and the coboundary loses a term, so the cochain structure is gone rather than generalised.</li>
   <li>The three-axis comparison with attention (difference vs dependency; scalar vs matrix edge functions; normalising scores vs normalising representations) is the most portable idea in the paper.</li>
   <li>Check the appendix: DNSD is beaten by a plain MPNN on Chameleon and Squirrel by 6–10 points, and those datasets appear only there.</li>
-  <li>Diagonal restriction maps match or beat full ones again — consistent with PolyNSD, and increasingly hard to dismiss as a quirk.</li>
+  <li>Diagonal restriction maps match or beat full ones again, consistent with PolyNSD, and increasingly hard to dismiss as a quirk.</li>
 </ul>
 </div>
 

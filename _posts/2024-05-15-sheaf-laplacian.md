@@ -25,7 +25,7 @@ toc_label: "Contents"
 
 ## Constructing the Sheaf Laplacian
 
-**Intuition First:** The standard graph Laplacian penalises adjacent nodes for being *different* (it is the gradient flow of $$\sum (x_u - x_v)^2$$). The sheaf Laplacian instead penalises adjacent nodes for being *inconsistent after transformation* (the flow of $$\sum \lVert \mathcal{F}_{v \trianglelefteq e} x_v - \mathcal{F}_{u \trianglelefteq e} x_u \rVert^2$$). With identity maps, these are the same. With learned maps, "consistent" can mean "opposite in a structured way" — which is exactly what heterophilic graphs need.
+**Intuition First:** The standard graph Laplacian penalises adjacent nodes for being *different* (it is the gradient flow of $$\sum (x_u - x_v)^2$$). The sheaf Laplacian instead penalises adjacent nodes for being *inconsistent after transformation* (the flow of $$\sum \lVert \mathcal{F}_{v \trianglelefteq e} x_v - \mathcal{F}_{u \trianglelefteq e} x_u \rVert^2$$). With identity maps, these are the same. With learned maps, "consistent" can mean "opposite in a structured way", which is exactly what heterophilic graphs need.
 
 Given a cellular sheaf $$\mathcal{F}$$ on a graph $$G$$ with coboundary $$\delta$$, the **sheaf Laplacian** is
 
@@ -95,17 +95,17 @@ E_{\mathcal{F}}(x) \;=\; x^{\top} L_{\mathcal{F}}\, x \;=\; \lVert \delta x \rVe
 \]
 </div>
 
-measures the total **sheaf disagreement** over the graph — how much the restriction maps disagree across all edges when applied to the signal $$x$$.
+measures the total **sheaf disagreement** over the graph, how much the restriction maps disagree across all edges when applied to the signal $$x$$.
 
 - $$E_{\mathcal{F}}(x) = 0 \iff x \in H^0(G;\mathcal{F})$$ (perfect consistency)
 - $$E_{\mathcal{F}}(x)$$ large $$\iff x$$ has large disagreement at many edges
 
 (The same quantity is usually written with the normalised Laplacian, $$E_{\mathcal{F}}(x) = x^{\top}\Delta_{\mathcal{F}} x$$, which inserts a $$D_v^{-1/2}$$ factor at each endpoint; the characterisation of the zero set is unchanged.)
 
-**Spectral view:** eigenvectors of $$L_{\mathcal{F}}$$ with small eigenvalues correspond to signals with low sheaf Dirichlet energy — near-consistent signals. Diffusion with $$L_{\mathcal{F}}$$ drives signals toward its kernel.
+**Spectral view:** eigenvectors of $$L_{\mathcal{F}}$$ with small eigenvalues correspond to signals with low sheaf Dirichlet energy, near-consistent signals. Diffusion with $$L_{\mathcal{F}}$$ drives signals toward its kernel.
 
 <div class="insight-box">
-<strong>The key difference from the standard Laplacian:</strong> the graph Laplacian minimises \(\sum \lVert x_u - x_v \rVert^2\) — it pushes adjacent nodes to have equal features. The sheaf Laplacian minimises \(\sum \lVert \mathcal{F}_{v \trianglelefteq e} x_v - \mathcal{F}_{u \trianglelefteq e} x_u \rVert^2\) — it pushes adjacent nodes to have features that agree <em>after transformation</em>. With identity maps this reduces to equality. With learned maps, adjacent nodes can remain different while satisfying a structural relationship — exactly what heterophilic graphs need.
+<strong>The key difference from the standard Laplacian:</strong> the graph Laplacian minimises \(\sum \lVert x_u - x_v \rVert^2\), it pushes adjacent nodes to have equal features. The sheaf Laplacian minimises \(\sum \lVert \mathcal{F}_{v \trianglelefteq e} x_v - \mathcal{F}_{u \trianglelefteq e} x_u \rVert^2\), it pushes adjacent nodes to have features that agree <em>after transformation</em>. With identity maps this reduces to equality. With learned maps, adjacent nodes can remain different while satisfying a structural relationship, exactly what heterophilic graphs need.
 </div>
 
 ## Sheaf Diffusion
@@ -126,7 +126,7 @@ X(t+1) \;=\; X(t) - L_{\mathcal{F}} X(t) \;=\; (I - L_{\mathcal{F}})\, X(t).
 \]
 </div>
 
-This is **sheaf diffusion** — the generalisation of graph heat diffusion. At each step, each node's features are updated using the sheaf-weighted contributions of its neighbours.
+This is **sheaf diffusion**, the generalisation of graph heat diffusion. At each step, each node's features are updated using the sheaf-weighted contributions of its neighbours.
 
 In practice one uses the **normalised sheaf Laplacian**, whose spectrum is bounded:
 
@@ -187,7 +187,7 @@ H^0(G;\mathcal{F}) = \left\{ (R x_v,\, x_v) \;:\; x_v \in \mathbb{R}^2 \right\},
 \]
 </div>
 
-The kernel is *not* trivial — and it could not be. A single edge is a tree, so there are no cycles around which transport could fail to close, and for an $$O(d)$$-bundle over a connected graph one has $$\dim H^0 \le d$$ with equality exactly when transport is path-independent (Bodnar et al., 2022, Lemma 6). To get a trivial harmonic space you need a cycle whose holonomy has no fixed vector — as in the triangle example of the previous post.
+The kernel is *not* trivial, and it could not be. A single edge is a tree, so there are no cycles around which transport could fail to close, and for an $$O(d)$$-bundle over a connected graph one has $$\dim H^0 \le d$$ with equality exactly when transport is path-independent (Bodnar et al., 2022, Lemma 6). To get a trivial harmonic space you need a cycle whose holonomy has no fixed vector, as in the triangle example of the previous post.
 
 <div class="insight-box"><strong>Key Insight:</strong> The non-trivial off-diagonal block \(-\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{u \trianglelefteq e}\) is the core difference from the standard Laplacian (which would have \(-I\)). Diffusion with this sheaf Laplacian does not try to make \(x_u = x_v\); it tries to make \(x_u = R\, x_v\). That geometric twist in the operator is what allows sheaf GNNs to handle structured disagreement between neighbouring nodes.</div>
 
@@ -205,7 +205,7 @@ and the number of zero eigenvalues equals the dimension of the space of global s
 
 For the trivial sheaf with $$\mathbb{R}^d$$ stalks on a graph with $$c$$ connected components, $$\dim \ker L_{\mathcal{F}} = c\,d$$: one $$d$$-dimensional constant per component. With $$d = 1$$ this is the familiar "one constant per component" of the graph Laplacian.
 
-For a non-trivial sheaf the kernel can be smaller, and — this is the whole point — it can consist of signals that are *not* constant. For an $$O(d)$$-bundle the ceiling is $$\dim H^0 \le d$$, reached exactly when the transport around every cycle is the identity.
+For a non-trivial sheaf the kernel can be smaller, and, this is the whole point, it can consist of signals that are *not* constant. For an $$O(d)$$-bundle the ceiling is $$\dim H^0 \le d$$, reached exactly when the transport around every cycle is the identity.
 
 **Spectral gap:** the smallest non-zero eigenvalue of $$L_{\mathcal{F}}$$ determines how fast sheaf diffusion converges to the harmonic space. For $$O(d)$$-bundles this gap is controlled by how far the transport maps are from being path-independent.
 
@@ -228,7 +228,7 @@ This is the same range as the standard normalised Laplacian. The difference: wit
 | Harmonic space | $$\ker L_{\mathcal{F}} = H^0(G;\mathcal{F})$$ | Global sections (consistent signals) |
 | Diffusion step | $$X \leftarrow (I - \Delta_{\mathcal{F}}) X$$ | Reduces inconsistency; generalises GCN |
 
-The sheaf Laplacian is the central object for sheaf-based graph learning. It generalises the standard graph Laplacian by incorporating edge-level structure — making it possible to define diffusion that respects per-edge feature transformations rather than forcing raw feature equality.
+The sheaf Laplacian is the central object for sheaf-based graph learning. It generalises the standard graph Laplacian by incorporating edge-level structure, making it possible to define diffusion that respects per-edge feature transformations rather than forcing raw feature equality.
 
 ## References
 

@@ -111,13 +111,13 @@ toc_label: "Contents"
 
 ## The Data Bottleneck
 
-**Intuition First.** Imagine learning to cook only by watching one hundred YouTube videos of the same dish prepared in the same kitchen. You would likely struggle the moment the pot, stove, or lighting changed. Now imagine a robot that has seen a million manipulation demonstrations — that sounds like a lot, but a language model has absorbed a trillion tokens of text. The mismatch is six orders of magnitude. That ratio is a useful mental anchor for everything that follows: robot learning is perpetually starved of the rich, varied experience it needs to generalise.
+**Intuition First.** Imagine learning to cook only by watching one hundred YouTube videos of the same dish prepared in the same kitchen. You would likely struggle the moment the pot, stove, or lighting changed. Now imagine a robot that has seen a million manipulation demonstrations, that sounds like a lot, but a language model has absorbed a trillion tokens of text. The mismatch is six orders of magnitude. That ratio is a useful mental anchor for everything that follows: robot learning is perpetually starved of the rich, varied experience it needs to generalise.
 
-Language models trained on the internet saw roughly a trillion tokens of text. The largest robot dataset (Open X-Embodiment) contains about a million demonstrations — six orders of magnitude smaller. This data gap is not just a matter of compute: robot data is expensive to collect because it requires physical hardware, teleoperation, and human time.
+Language models trained on the internet saw roughly a trillion tokens of text. The largest robot dataset (Open X-Embodiment) contains about a million demonstrations, six orders of magnitude smaller. This data gap is not just a matter of compute: robot data is expensive to collect because it requires physical hardware, teleoperation, and human time.
 
 The consequences are severe: robot policies generalise poorly to novel objects, lighting conditions, and spatial configurations. A model that sees 100 demonstrations of picking mugs will fail on the 101st if it has an unusual shape.
 
-**Worked example — mug grasping and sample efficiency.** Consider a robot trained to pick up mugs. With 50 demonstrations all using the same white cylindrical mug, a policy can reach ~90% success on that exact mug. Introduce a wide, low-handled espresso cup: success typically drops below 20%, because the handle geometry and grasp angle fall outside the training distribution. To recover generalisation, empirical work (Mandlekar et al., 2021; Robosuite benchmarks) suggests roughly 10× more demonstrations are needed each time a qualitatively new object class is introduced. The upshot: without active data augmentation or stronger inductive biases, sample requirements scale roughly linearly with the diversity of the task space — a brutal bottleneck when each demonstration costs human operator time.
+**Worked example, mug grasping and sample efficiency.** Consider a robot trained to pick up mugs. With 50 demonstrations all using the same white cylindrical mug, a policy can reach ~90% success on that exact mug. Introduce a wide, low-handled espresso cup: success typically drops below 20%, because the handle geometry and grasp angle fall outside the training distribution. To recover generalisation, empirical work (Mandlekar et al., 2021; Robosuite benchmarks) suggests roughly 10× more demonstrations are needed each time a qualitatively new object class is introduced. The upshot: without active data augmentation or stronger inductive biases, sample requirements scale roughly linearly with the diversity of the task space, a brutal bottleneck when each demonstration costs human operator time.
 
 Proposed solutions include:
 
@@ -126,21 +126,21 @@ Proposed solutions include:
 - **Cross-embodiment transfer**: train on data from many different robot types and fine-tune to the target embodiment (Open X-Embodiment approach).
 - **Simulation scale-up**: generate unlimited synthetic demonstrations in simulation with automatic domain randomisation.
 
-None of these fully resolves the data problem — each comes with its own limitations and failure modes.
+None of these fully resolves the data problem, each comes with its own limitations and failure modes.
 
 ## Generalisation vs. Specialisation
 
 There is a fundamental tension in robot learning between **generalisation** (a single policy that handles diverse tasks and environments) and **specialisation** (a dedicated policy that handles one task extremely well). Foundation model robots (RT-2, Octo) optimise for generalisation but typically underperform task-specific models on any individual task. Industrial robots are supremely specialised but cannot handle novel scenarios.
 
-Human dexterity achieves both: a chef can perform hundreds of fine-grained manipulation tasks with a single set of hands and a shared neural substrate. Understanding how to reconcile generalisation and specialisation — through efficient multi-task learning, meta-learning, or architectural priors — remains an open research question.
+Human dexterity achieves both: a chef can perform hundreds of fine-grained manipulation tasks with a single set of hands and a shared neural substrate. Understanding how to reconcile generalisation and specialisation, through efficient multi-task learning, meta-learning, or architectural priors, remains an open research question.
 
-<div class="insight-box"><strong>Key Insight:</strong> The generalisation-specialisation tradeoff may be a false dichotomy. Human neuroscience suggests that general motor primitives (muscle synergies, movement patterns) are reused and composed for specialised tasks. Hierarchical robot learning — learning general primitives and task-specific compositions — may offer a principled path to both.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The generalisation-specialisation tradeoff may be a false dichotomy. Human neuroscience suggests that general motor primitives (muscle synergies, movement patterns) are reused and composed for specialised tasks. Hierarchical robot learning, learning general primitives and task-specific compositions, may offer a principled path to both.</div>
 
 ## Tactile Sensing
 
 Humans manipulate objects with rich tactile feedback: texture, temperature, compliance, slip detection. Most robot manipulation research relies entirely on vision and proprioception, ignoring touch. This limits manipulation to relatively rigid, visually distinctive objects in well-lit environments.
 
-Tactile sensors — from resistive arrays to GelSight optical tactile sensors — can provide rich contact information but introduce new challenges:
+Tactile sensors, from resistive arrays to GelSight optical tactile sensors, can provide rich contact information but introduce new challenges:
 
 - **High dimensionality**: a GelSight sensor provides a full image of the contact surface.
 - **Sim-to-real gap**: tactile signals are notoriously hard to simulate accurately.
@@ -161,13 +161,13 @@ Hierarchical learning, model-based planning, and neuro-symbolic integration are 
 
 ## Embodied AI and Internet-Scale Pre-training
 
-**Embodied AI** is the broader research programme of building agents that learn through physical interaction with the world — not just from text or images. The central open question: how much can internet-scale pre-training substitute for embodied experience?
+**Embodied AI** is the broader research programme of building agents that learn through physical interaction with the world, not just from text or images. The central open question: how much can internet-scale pre-training substitute for embodied experience?
 
-Large language and vision models clearly provide useful semantic knowledge for robots (demonstrated by SayCan, RT-2, etc.). But they lack **physical intuition** — intuitive physics, haptic knowledge, the feel of how objects behave under manipulation. This physical knowledge may only be learnable through embodied experience, not observation.
+Large language and vision models clearly provide useful semantic knowledge for robots (demonstrated by SayCan, RT-2, etc.). But they lack **physical intuition**, intuitive physics, haptic knowledge, the feel of how objects behave under manipulation. This physical knowledge may only be learnable through embodied experience, not observation.
 
 Bommasani et al. (2021) highlighted this as a fundamental open question for foundation models: can models that have never touched the world develop robust understanding of it?
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Internet-scale pre-training gives robots semantic knowledge — they understand what a mug is, what it is used for, and how humans typically grasp it. What it cannot give them is <em>haptic priors</em>: the felt sense of a handle's weight, the way a slippery surface demands grip adjustment, or the compliance of a deformable object. This distinction matters practically: robots with strong language-vision backbones still fail at contact-rich tasks at rates that embarrass their semantic fluency. Embodied experience and observational pre-training are complements, not substitutes.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Internet-scale pre-training gives robots semantic knowledge, they understand what a mug is, what it is used for, and how humans typically grasp it. What it cannot give them is <em>haptic priors</em>: the felt sense of a handle's weight, the way a slippery surface demands grip adjustment, or the compliance of a deformable object. This distinction matters practically: robots with strong language-vision backbones still fail at contact-rich tasks at rates that embarrass their semantic fluency. Embodied experience and observational pre-training are complements, not substitutes.</div>
 
 ## Other Frontier Problems
 
@@ -180,7 +180,7 @@ Bommasani et al. (2021) highlighted this as a fundamental open question for foun
 
 Robot learning has transformed from carefully hand-engineered motion controllers to end-to-end learned policies that can follow language instructions and transfer across embodiments. The remaining challenges are deep but tractable. Progress will likely come from: larger and more diverse datasets, better integration of physical structure and learned representations, multi-modal sensing, and hybrid architectures that combine the reliability of classical robotics with the flexibility of learned policies.
 
-The robot that can reliably help with daily life — in homes, hospitals, and disaster zones — remains the field's north star.
+The robot that can reliably help with daily life, in homes, hospitals, and disaster zones, remains the field's north star.
 
 ## References
 

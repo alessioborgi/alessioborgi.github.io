@@ -3,7 +3,7 @@ title: "AutoDriveCarSimulator: Autonomous Driving with CNNs"
 collection: projects
 layout: single
 permalink: /projects/autodrive-simulator/
-excerpt: "A simulation platform for developing and testing autonomous driving algorithms — using CNNs to map raw camera frames to steering and throttle commands."
+excerpt: "A simulation platform for developing and testing autonomous driving algorithms, using CNNs to map raw camera frames to steering and throttle commands."
 author_profile: true
 github: "https://github.com/alessioborgi/AutoDriveCarSimulator"
 tags:
@@ -14,7 +14,7 @@ tags:
   - Simulation
 ---
 
-AutoDriveCarSimulator is a virtual testbed for autonomous vehicle algorithms. A convolutional neural network learns an end-to-end driving policy — mapping raw camera images directly to vehicle control commands (steering angle, throttle) — within a simulated driving environment.
+AutoDriveCarSimulator is a virtual testbed for autonomous vehicle algorithms. A convolutional neural network learns an end-to-end driving policy, mapping raw camera images directly to vehicle control commands (steering angle, throttle), within a simulated driving environment.
 
 ## Approach: End-to-End Learning
 

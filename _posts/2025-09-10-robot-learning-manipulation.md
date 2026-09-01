@@ -27,15 +27,15 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Robot manipulation — grasping and in-hand control — is one of the hardest open problems in robotics. Classical grasp quality analysis gives theoretical grounding; deep learning methods like GQ-CNN and GraspNet predict 6-DOF grasps from point clouds; and reinforcement learning enables dexterous multi-fingered manipulation that approaches human-level dexterity.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Robot manipulation, grasping and in-hand control, is one of the hardest open problems in robotics. Classical grasp quality analysis gives theoretical grounding; deep learning methods like GQ-CNN and GraspNet predict 6-DOF grasps from point clouds; and reinforcement learning enables dexterous multi-fingered manipulation that approaches human-level dexterity.</div>
 {% include figure image_path="/images/blog/robotics/brohan2022_rt1.png" alt="Robot manipulation learning" caption="Large-scale robot manipulation learning (Brohan et al., 2022)" %}
 
 
 ## The Manipulation Problem
 
-**Intuition first.** Picking up a coffee mug seems trivial, yet it requires solving three deeply coupled problems simultaneously: figuring out where the mug is in 3D space (perception), deciding where to place your fingers so the grasp is stable (planning), and applying just enough force — not too little to drop it, not too much to crush it (control). Humans solve all three in under a second using a lifetime of embodied experience. Robots need explicit algorithms for each.
+**Intuition first.** Picking up a coffee mug seems trivial, yet it requires solving three deeply coupled problems simultaneously: figuring out where the mug is in 3D space (perception), deciding where to place your fingers so the grasp is stable (planning), and applying just enough force, not too little to drop it, not too much to crush it (control). Humans solve all three in under a second using a lifetime of embodied experience. Robots need explicit algorithms for each.
 
-Human hands can pick up a mug, thread a needle, and play piano — all with the same hardware. Robot manipulation remains far harder than locomotion because it requires precise force control, rich contact models, and the ability to handle the enormous diversity of object shapes, weights, and surface properties encountered in the real world.
+Human hands can pick up a mug, thread a needle, and play piano, all with the same hardware. Robot manipulation remains far harder than locomotion because it requires precise force control, rich contact models, and the ability to handle the enormous diversity of object shapes, weights, and surface properties encountered in the real world.
 
 The manipulation pipeline typically involves: perceiving the scene (detecting and localising objects), planning a grasp, executing the grasp, and potentially performing in-hand manipulation to reorient the object for downstream tasks.
 
@@ -49,7 +49,7 @@ The **grasp wrench space** is spanned by primitive contact wrenches at each cont
 0 ∈ Conv({w_1, w_2, ..., w_n})
 </div>
 
-The **epsilon metric** (Yoshikawa 1985) measures how far the origin is from the boundary of the wrench space — a larger value indicates a more robust grasp. These analytical metrics require known object geometry and contact locations, making them useful for planning but not directly applicable to real-world noisy perception.
+The **epsilon metric** (Yoshikawa 1985) measures how far the origin is from the boundary of the wrench space, a larger value indicates a more robust grasp. These analytical metrics require known object geometry and contact locations, making them useful for planning but not directly applicable to real-world noisy perception.
 
 ## Worked Example: Force Closure Check
 
@@ -57,9 +57,9 @@ Consider a cylindrical mug (radius 3 cm) grasped by a parallel-jaw gripper. Two 
 
 **Check force closure:**
 1. Normal at contact A points in the +x direction; normal at contact B points in the −x direction.
-2. The line connecting A to B passes through the cylinder's axis — it lies inside both friction cones.
+2. The line connecting A to B passes through the cylinder's axis, it lies inside both friction cones.
 3. The convex hull of the 4 contact wrenches (2 contacts × 2 extreme friction-cone edges each) contains the origin.
-4. **Conclusion:** this is a valid force-closure grasp. The epsilon quality metric (distance from origin to wrench-space boundary) is approximately 0.18 N·m for a 100 g mug — robust to 0.18 N·m of external disturbance.
+4. **Conclusion:** this is a valid force-closure grasp. The epsilon quality metric (distance from origin to wrench-space boundary) is approximately 0.18 N·m for a 100 g mug, robust to 0.18 N·m of external disturbance.
 
 ## Antipodal Grasps
 
@@ -135,7 +135,7 @@ RL for manipulation faces several challenges: sparse rewards (a grasp either suc
 
 ## Dexterous Multi-Fingered Manipulation
 
-Multi-fingered hands can perform in-hand manipulation — re-grasping, pivoting, rolling objects — that parallel-jaw grippers cannot. The contact-rich dynamics are difficult to model analytically, making RL the primary approach. Key challenges include:
+Multi-fingered hands can perform in-hand manipulation, re-grasping, pivoting, rolling objects, that parallel-jaw grippers cannot. The contact-rich dynamics are difficult to model analytically, making RL the primary approach. Key challenges include:
 
 - Contact switching: fingers must lift and reposition while maintaining object stability
 - High-dimensional observation spaces: 24+ joint angles plus fingertip force sensors

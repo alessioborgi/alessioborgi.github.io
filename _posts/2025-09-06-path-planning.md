@@ -33,7 +33,7 @@ toc_label: "Contents"
 
 ## The Path Planning Problem
 
-**Intuition first.** Path planning is the robot equivalent of finding your way through a maze. The maze walls are obstacles; the free corridors are C-space free. A* is like exploring the maze with a compass — always trying the passage that points most directly toward the exit. RRT is like randomly throwing a rope into the maze and growing it outward until a strand happens to touch the exit.
+**Intuition first.** Path planning is the robot equivalent of finding your way through a maze. The maze walls are obstacles; the free corridors are C-space free. A* is like exploring the maze with a compass, always trying the passage that points most directly toward the exit. RRT is like randomly throwing a rope into the maze and growing it outward until a strand happens to touch the exit.
 
 <style>
 @keyframes frontier-pulse { 0%,100%{opacity:.3;r:5} 50%{opacity:1;r:7} }
@@ -115,7 +115,7 @@ f(n) = g(n) + h(n)
 
 where $$g(n)$$ is the true cost from start to node $$n$$ and $$h(n)$$ is the heuristic estimate to the goal. When $$h$$ is **admissible** (never overestimates the true remaining cost), A* is guaranteed to find the optimal path. The Euclidean distance to goal is a common admissible heuristic for geometric planning.
 
-A* remains the workhorse of discrete path planning — it underlies navigation stacks in autonomous vehicles and robot operating systems alike. Its limitation is the need to discretise the C-space into a graph, which becomes memory-intensive in high dimensions.
+A* remains the workhorse of discrete path planning, it underlies navigation stacks in autonomous vehicles and robot operating systems alike. Its limitation is the need to discretise the C-space into a graph, which becomes memory-intensive in high dimensions.
 
 ## Sampling-Based Planning: RRT and RRT*
 
@@ -127,7 +127,7 @@ Sampling-based planners avoid explicit graph discretisation by randomly sampling
 q_new = q_near + δ · (q_rand − q_near) / ‖q_rand − q_near‖
 </div>
 
-RRT is probabilistically complete — it will eventually find a path if one exists — but paths are rarely optimal and tend to be jagged.
+RRT is probabilistically complete, it will eventually find a path if one exists, but paths are rarely optimal and tend to be jagged.
 
 **RRT\*** (Karaman & Frazzoli 2011) adds two key operations: **rewiring** the tree to connect new nodes via lower-cost parents, and **steering** existing nodes through the new node if it reduces their cost. RRT* is asymptotically optimal: as the number of samples grows, the solution converges to the optimal path.
 
@@ -141,7 +141,7 @@ Classical planners recompute from scratch for each new query. **MPNet** (Motion 
 
 MPNet encodes the obstacle point cloud into a latent representation and conditions a path-generation network on this embedding plus the start and goal. At inference, it runs in milliseconds rather than seconds, with classical replanning used as a fallback for hard cases.
 
-Learned planners shine in scenarios with repetitive structure — manipulation tasks in similar kitchen layouts, for example — where amortising planning cost over many queries is worthwhile.
+Learned planners shine in scenarios with repetitive structure, manipulation tasks in similar kitchen layouts, for example, where amortising planning cost over many queries is worthwhile.
 
 ## Practical Considerations
 

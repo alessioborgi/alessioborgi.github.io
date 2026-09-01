@@ -6,7 +6,7 @@ book: tdl
 subsection: core
 tags: [circular-coordinates, persistent-cohomology, harmonic-cocycles, periodic-data]
 published: false
-excerpt: "When persistent H¹ detects a long-lived loop in data, cohomology lets us build an explicit map from the data to a circle — a circular coordinate. This gives a continuous parameterisation of periodic structure without assumptions on the data's geometry or distribution."
+excerpt: "When persistent H¹ detects a long-lived loop in data, cohomology lets us build an explicit map from the data to a circle, a circular coordinate. This gives a continuous parameterisation of periodic structure without assumptions on the data's geometry or distribution."
 author_profile: true
 read_time: true
 icon: "🔄"
@@ -26,7 +26,7 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> Persistent H¹ detects loops in data. Circular coordinates (de Silva, Vejdemo-Johansson & Carlsson, 2011) upgrade this from a binary "loop exists" to a quantitative map f: P → S¹. A persistent 1-cocycle is smoothed (made harmonic) then integrated to a circle-valued function. Applications include gait parameterisation, gene expression cycles, and neural place-cell topology.</div>
 
-**Intuition First.** Persistent H₁ tells you "this data has a loop." Circular coordinates tell you *where in that loop* each data point sits. Think of a gait cycle: your body repeats the same motion every stride. Persistent H₁ detects the loop in the motion capture data. A circular coordinate then assigns each frame a phase angle in [0°, 360°) — a clean, data-driven parameterisation of the cycle with no manual alignment required.
+**Intuition First.** Persistent H₁ tells you "this data has a loop." Circular coordinates tell you *where in that loop* each data point sits. Think of a gait cycle: your body repeats the same motion every stride. Persistent H₁ detects the loop in the motion capture data. A circular coordinate then assigns each frame a phase angle in [0°, 360°), a clean, data-driven parameterisation of the cycle with no manual alignment required.
 
 <style>
 @keyframes rotate-phase {
@@ -92,7 +92,7 @@ toc_label: "Contents"
 
 ## From Detection to Parameterisation
 
-Standard TDA asks: "does the data have a loop?" But for a point cloud living near a circle — e.g., motion capture data in a gait cycle — we want more: a continuous function $$f: P \to S^1$$ that assigns each data point a phase in the cycle.
+Standard TDA asks: "does the data have a loop?" But for a point cloud living near a circle, e.g., motion capture data in a gait cycle, we want more: a continuous function $$f: P \to S^1$$ that assigns each data point a phase in the cycle.
 
 This requires:
 1. Detecting the loop via persistent $$H_1$$ (a long-lived bar).
@@ -122,7 +122,7 @@ Fix $$f(p_0) = 0$$ and propagate consistently around any spanning tree. The map 
 
 ## Concrete Example: Gait Cycle Parameterisation
 
-Consider 500 frames of motion capture data (joint angles) from a walking human. Each frame is a point in $$\mathbb{R}^{72}$$ (24 joints × 3 angles). The persistent H₁ of the Rips filtration on this point cloud shows one prominent bar — the gait cycle. The corresponding 1-cocycle $$\varphi$$ assigns a real number to each edge in the Rips complex. After harmonic smoothing, integrating $$\varphi$$ gives $$f: \{500 \text{ frames}\} \to S^1$$. Plotting $$f$$ against time reveals a smooth, monotone phase — the circular coordinate perfectly tracks the stride cycle, with frame 0 and frame ~100 (one stride later) mapping to nearly the same phase. No manual labelling of "start of stride" needed.
+Consider 500 frames of motion capture data (joint angles) from a walking human. Each frame is a point in $$\mathbb{R}^{72}$$ (24 joints × 3 angles). The persistent H₁ of the Rips filtration on this point cloud shows one prominent bar, the gait cycle. The corresponding 1-cocycle $$\varphi$$ assigns a real number to each edge in the Rips complex. After harmonic smoothing, integrating $$\varphi$$ gives $$f: \{500 \text{ frames}\} \to S^1$$. Plotting $$f$$ against time reveals a smooth, monotone phase, the circular coordinate perfectly tracks the stride cycle, with frame 0 and frame ~100 (one stride later) mapping to nearly the same phase. No manual labelling of "start of stride" needed.
 
 ## Applications
 
@@ -130,7 +130,7 @@ Consider 500 frames of motion capture data (joint angles) from a walking human. 
 - **Gene expression cycles**: circadian or cell-cycle data. Singh et al. (2008) found $$S^1$$ structure in human primary visual cortex data.
 - **Neural data**: place cells in the hippocampus encode spatial position; their joint firing patterns have the topology of a torus $$T^2 = S^1 \times S^1$$. Circular coordinates on each $$S^1$$ factor give spatial coordinates.
 
-<div class="insight-box"><strong>Key Insight:</strong> Circular coordinates are a completely data-driven parameterisation of periodicity — they require no prior knowledge of the cycle length, no phase alignment, and no embedding. The TDA-derived map is guaranteed to be consistent (a well-defined map to S¹) whenever the underlying H¹ class is non-trivial. This is strictly stronger than what PCA or manifold learning methods can provide.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Circular coordinates are a completely data-driven parameterisation of periodicity, they require no prior knowledge of the cycle length, no phase alignment, and no embedding. The TDA-derived map is guaranteed to be consistent (a well-defined map to S¹) whenever the underlying H¹ class is non-trivial. This is strictly stronger than what PCA or manifold learning methods can provide.</div>
 
 ## References
 

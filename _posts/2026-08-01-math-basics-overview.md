@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A trained network is a composition of linear maps and pointwise nonlinearities, fitted by following gradients. That single sentence determines the syllabus. You need linear algebra to understand what the linear maps do, and multivariable calculus to understand how the gradients are computed. Norms and convexity round it out because they tell you when the fitting converges. Measure theory, topology and real analysis are not what you will be asked about — and this book says so rather than padding itself with them.
+  <strong>TL;DR:</strong> A trained network is a composition of linear maps and pointwise nonlinearities, fitted by following gradients. That single sentence determines the syllabus. You need linear algebra to understand what the linear maps do, and multivariable calculus to understand how the gradients are computed. Norms and convexity round it out because they tell you when the fitting converges. Measure theory, topology and real analysis are not what you will be asked about, and this book says so rather than padding itself with them.
 </div>
 
 ## The syllabus is determined by one sentence
@@ -37,12 +37,12 @@ The nonlinearity is the only piece that is not mathematically interesting, which
 
 Interview mathematics is overwhelmingly linear algebra and calculus. Rank, eigenvectors, SVD, gradients, Jacobians, and a sanity check on convexity account for the large majority of questions actually asked. Probability and statistics form their own body of material and are treated separately from this book.
 
-What almost never appears: epsilon-delta arguments, Lebesgue integration, compactness, Banach spaces. If a role genuinely needs those — theory positions, some optimisation research — the interview will say so in advance. Revising analysis instead of practising a Jacobian derivation is a bad trade.
+What almost never appears: epsilon-delta arguments, Lebesgue integration, compactness, Banach spaces. If a role genuinely needs those, theory positions, some optimisation research, the interview will say so in advance. Revising analysis instead of practising a Jacobian derivation is a bad trade.
 
 What does appear, and catches people out, is not hard material. It is material people once knew and then stopped using: the difference between eigenvalues and singular values, why the gradient of $$x^\top A x$$ is $$(A + A^\top)x$$ and not $$Ax$$, why $$L^1$$ produces sparsity and $$L^2$$ does not.
 
 <div class="warning-box">
-  <strong>The three traps this book keeps returning to:</strong> (1) treating eigenvalues and singular values as the same object — they agree only for symmetric positive semi-definite matrices, and the general relationship is that the singular values of \(A\) are the square roots of the eigenvalues of \(A^\top A\); (2) getting matrix-calculus layout wrong, which produces an answer that is right up to a transpose and therefore wrong; (3) claiming a stationary point is a minimum without checking curvature.
+  <strong>The three traps this book keeps returning to:</strong> (1) treating eigenvalues and singular values as the same object, they agree only for symmetric positive semi-definite matrices, and the general relationship is that the singular values of \(A\) are the square roots of the eigenvalues of \(A^\top A\); (2) getting matrix-calculus layout wrong, which produces an answer that is right up to a transpose and therefore wrong; (3) claiming a stationary point is a minimum without checking curvature.
 </div>
 
 ## The map
@@ -51,22 +51,22 @@ The seven remaining posts, in the order they build on one another.
 
 **Linear algebra**
 
-1. [Vectors and matrices](/blog/math-basics/vectors-and-matrices/) — span, basis, rank; matrix multiplication read as composition of maps and as a change of basis; column space against null space, and rank–nullity as the conservation law that connects them.
-2. [Eigenvalues, the spectral theorem and SVD](/blog/math-basics/eigen-and-svd/) — invariant directions, when diagonalisation fails, why the SVD always exists, and low-rank approximation with a worked $$2\times2$$ example carried through exactly.
+1. [Vectors and matrices](/blog/math-basics/vectors-and-matrices/), span, basis, rank; matrix multiplication read as composition of maps and as a change of basis; column space against null space, and rank–nullity as the conservation law that connects them.
+2. [Eigenvalues, the spectral theorem and SVD](/blog/math-basics/eigen-and-svd/), invariant directions, when diagonalisation fails, why the SVD always exists, and low-rank approximation with a worked $$2\times2$$ example carried through exactly.
 
 **Calculus**
 
-3. [Derivatives and gradients](/blog/math-basics/derivatives-and-gradients/) — the derivative as the best linear approximation, the gradient as a covector, and why reverse-mode differentiation is cheap precisely when there is one scalar output.
-4. [Jacobians and Hessians](/blog/math-basics/jacobian-and-hessian/) — change of variables and the log-determinant term in normalising flows; curvature, second-order optimality, and why Newton's method loses at scale.
-5. [Matrix calculus](/blog/math-basics/matrix-calculus/) — the dozen identities worth memorising, one derivation done slowly, and the layout convention that causes most sign errors.
+3. [Derivatives and gradients](/blog/math-basics/derivatives-and-gradients/), the derivative as the best linear approximation, the gradient as a covector, and why reverse-mode differentiation is cheap precisely when there is one scalar output.
+4. [Jacobians and Hessians](/blog/math-basics/jacobian-and-hessian/), change of variables and the log-determinant term in normalising flows; curvature, second-order optimality, and why Newton's method loses at scale.
+5. [Matrix calculus](/blog/math-basics/matrix-calculus/), the dozen identities worth memorising, one derivation done slowly, and the layout convention that causes most sign errors.
 
 **Analysis and optimisation**
 
-6. [Norms and distances](/blog/math-basics/norms-and-distances/) — $$L^1$$, $$L^2$$, $$L^\infty$$, operator and Frobenius norms; the geometry behind $$L^1$$ sparsity; cosine similarity against Euclidean distance.
-7. [Convexity and optimisation](/blog/math-basics/convexity-and-optimisation/) — what convexity guarantees, how the condition number sets the convergence rate, KKT conditions, and the honest position on non-convex deep learning.
+6. [Norms and distances](/blog/math-basics/norms-and-distances/), $$L^1$$, $$L^2$$, $$L^\infty$$, operator and Frobenius norms; the geometry behind $$L^1$$ sparsity; cosine similarity against Euclidean distance.
+7. [Convexity and optimisation](/blog/math-basics/convexity-and-optimisation/), what convexity guarantees, how the condition number sets the convergence rate, KKT conditions, and the honest position on non-convex deep learning.
 
 <div class="insight-box">
-  <strong>Key Insight — the two views that unify the book:</strong> almost every result here is one of two statements in disguise. Either <em>"this matrix is a map, so ask what it does to space"</em> — which gives you rank, eigenvectors, SVD, operator norms and conditioning — or <em>"this function is locally linear, so approximate it"</em> — which gives you gradients, Jacobians, Hessians, Newton steps and convergence rates. If you can place a question in one of those two frames, you can usually reconstruct the answer instead of recalling it.
+  <strong>Key Insight, the two views that unify the book:</strong> almost every result here is one of two statements in disguise. Either <em>"this matrix is a map, so ask what it does to space"</em>, which gives you rank, eigenvectors, SVD, operator norms and conditioning, or <em>"this function is locally linear, so approximate it"</em>, which gives you gradients, Jacobians, Hessians, Newton steps and convergence rates. If you can place a question in one of those two frames, you can usually reconstruct the answer instead of recalling it.
 </div>
 
 ## How to use this for revision

@@ -6,7 +6,7 @@ book: gnn
 subsection: expressivity
 tags: [oversmoothing, depth, GNN, Laplacian, convergence]
 published: true
-excerpt: "Stack enough GNN layers and all node embeddings converge to the same vector — making the model useless. Oversmoothing is not a training problem; it is a mathematical inevitability of iterated averaging."
+excerpt: "Stack enough GNN layers and all node embeddings converge to the same vector, making the model useless. Oversmoothing is not a training problem; it is a mathematical inevitability of iterated averaging."
 author_profile: true
 read_time: true
 is_overview: false
@@ -25,9 +25,9 @@ toc_label: "Contents"
 
 ## Intuition First: The Averaging Trap
 
-Think of oversmoothing as a rumour spreading through a network. Each round, every person replaces their belief with the average of their friends' beliefs. After a few rounds everyone in a tightly connected community converges to the same average opinion — individual information is destroyed. The more rounds, the more uniform the beliefs. A GNN doing neighbourhood averaging suffers exactly the same fate.
+Think of oversmoothing as a rumour spreading through a network. Each round, every person replaces their belief with the average of their friends' beliefs. After a few rounds everyone in a tightly connected community converges to the same average opinion, individual information is destroyed. The more rounds, the more uniform the beliefs. A GNN doing neighbourhood averaging suffers exactly the same fate.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing is not a training bug. It is a <em>mathematical inevitability</em>: the propagation matrix \(\hat{A}\) has spectral radius exactly 1, attained by a single eigenvector, so repeated application shrinks every other eigen-direction to zero. No amount of regularisation or learning-rate tuning will fix it — the architecture must change.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Oversmoothing is not a training bug. It is a <em>mathematical inevitability</em>: the propagation matrix \(\hat{A}\) has spectral radius exactly 1, attained by a single eigenvector, so repeated application shrinks every other eigen-direction to zero. No amount of regularisation or learning-rate tuning will fix it, the architecture must change.</div>
 
 <style>
 @keyframes smooth-fade {
@@ -89,12 +89,12 @@ Think of oversmoothing as a rumour spreading through a network. Each round, ever
   <rect x="342" y="50" width="18" height="50" fill="url(#g3)" rx="3"/>
   <text x="340" y="118" font-size="9" font-family="sans-serif" fill="#dc2626" text-anchor="middle">Layer K→∞</text>
 </svg>
-<figcaption>As depth increases, node embeddings (bars) lose diversity and converge to a uniform vector — oversmoothing.</figcaption>
+<figcaption>As depth increases, node embeddings (bars) lose diversity and converge to a uniform vector, oversmoothing.</figcaption>
 </figure></div>
 
 ## The Problem: Deep GNNs Fail
 
-Empirically, a plain GCN with 2 layers works well; accuracy drops sharply as layers are added, and at very large depth performance degrades towards chance. This is not overfitting — validation loss degrades too. It is oversmoothing.
+Empirically, a plain GCN with 2 layers works well; accuracy drops sharply as layers are added, and at very large depth performance degrades towards chance. This is not overfitting, validation loss degrades too. It is oversmoothing.
 
 Why do deeper networks hurt in GNNs when they help in CNNs and Transformers? Because graph convolution is fundamentally a **smoothing operation**: it mixes each node's features with its neighbours'. Repeat this enough times, and all features converge.
 
@@ -138,7 +138,7 @@ Every eigen-direction except $$u_1$$ is annihilated, and the limit is the rank-o
 </div>
 
 <div class="insight-box">
-<strong>A correction worth stating precisely:</strong> the limiting embeddings are <em>not</em> all equal. Row \(v\) of \(u_1u_1^{\top}H^{(0)}\) equals \(u_1[v]\cdot(u_1^{\top}H^{(0)})\), and \(u_1[v] \propto \sqrt{\tilde{d}_v}\). So every node's embedding becomes the <em>same vector scaled by the square root of its degree</em> — all embeddings lie on one line through the origin. They coincide only on a regular graph, where all \(\tilde{d}_v\) are equal. Either way the representation carries one number per node (its degree) plus a global summary, so all discriminative structure is gone.
+<strong>A correction worth stating precisely:</strong> the limiting embeddings are <em>not</em> all equal. Row \(v\) of \(u_1u_1^{\top}H^{(0)}\) equals \(u_1[v]\cdot(u_1^{\top}H^{(0)})\), and \(u_1[v] \propto \sqrt{\tilde{d}_v}\). So every node's embedding becomes the <em>same vector scaled by the square root of its degree</em>, all embeddings lie on one line through the origin. They coincide only on a regular graph, where all \(\tilde{d}_v\) are equal. Either way the representation carries one number per node (its degree) plus a global summary, so all discriminative structure is gone.
 </div>
 
 ## Spectral Interpretation
@@ -151,7 +151,7 @@ h(\tilde\lambda) = 1 - \tilde\lambda, \qquad \tilde\lambda \in [0, 2),
 \]
 </div>
 
-so $$K$$ steps apply $$h(\tilde\lambda)^K = (1-\tilde\lambda)^K$$. This equals $$1$$ at $$\tilde\lambda = 0$$ and decays geometrically everywhere else. After many layers only the $$\tilde\lambda = 0$$ component survives — the degree-weighted global mean.
+so $$K$$ steps apply $$h(\tilde\lambda)^K = (1-\tilde\lambda)^K$$. This equals $$1$$ at $$\tilde\lambda = 0$$ and decays geometrically everywhere else. After many layers only the $$\tilde\lambda = 0$$ component survives, the degree-weighted global mean.
 
 The graph signal becomes as smooth as the operator allows: $$h_u^{(K)}/\sqrt{\tilde{d}_u} \approx h_v^{(K)}/\sqrt{\tilde{d}_v}$$ for adjacent $$u, v$$. For node classification, where you need to distinguish adjacent nodes (which often have different classes in heterophilic graphs), this is catastrophic.
 
@@ -167,8 +167,8 @@ The convergence rate is governed by the **second-largest eigenvalue in magnitude
 
 because the component of $$H^{(0)}$$ orthogonal to $$u_1$$ decays like $$\mu^{K}$$. The **spectral gap** $$1 - \mu$$ therefore determines the speed:
 
-- Large spectral gap ($$\mu$$ small — dense, well-connected, expander-like graph): fast oversmoothing, few layers needed to destroy information
-- Small spectral gap ($$\mu$$ close to 1 — sparse, weakly connected, high-diameter graph): slower oversmoothing
+- Large spectral gap ($$\mu$$ small, dense, well-connected, expander-like graph): fast oversmoothing, few layers needed to destroy information
+- Small spectral gap ($$\mu$$ close to 1, sparse, weakly connected, high-diameter graph): slower oversmoothing
 
 At the extreme, on a complete graph with self-loops $$\hat{A} = \tfrac{1}{N}\mathbf{1}\mathbf{1}^{\top}$$ is *already* rank one, so oversmoothing is complete after a single step ($$\mu = 0$$). On a long path graph $$\mu$$ is close to 1 and the collapse takes many steps. Sparse citation graphs sit closer to the slow end, which is one reason the accuracy cliff there appears at a handful of layers rather than immediately.
 
@@ -178,7 +178,7 @@ At the extreme, on a complete graph with self-loops $$\hat{A} = \tfrac{1}{N}\mat
 
 ## Concrete Worked Example: Dirichlet Energy Collapse
 
-Consider the path graph on 4 nodes, 1–2–3–4, with initial features $$h^{(0)} = (1, 0, 1, 0)^{\top}$$ (alternating — a maximally rough signal). The degrees are $$(1,2,2,1)$$, so with self-loops $$\tilde{d} = (2,3,3,2)$$ and
+Consider the path graph on 4 nodes, 1–2–3–4, with initial features $$h^{(0)} = (1, 0, 1, 0)^{\top}$$ (alternating, a maximally rough signal). The degrees are $$(1,2,2,1)$$, so with self-loops $$\tilde{d} = (2,3,3,2)$$ and
 
 <div class="formula-box">
 \[
@@ -220,7 +220,7 @@ which is zero exactly on $$\mathrm{span}(u_1)$$. Iterating $$h^{(k+1)} = \hat{A}
 | 8 | $$(0.458,\ 0.552,\ 0.538,\ 0.432)$$ | 0.00013 |
 | $$\infty$$ | $$(0.445,\ 0.545,\ 0.545,\ 0.445)$$ | 0 |
 
-The limit is $$\propto(\sqrt{2},\sqrt{3},\sqrt{3},\sqrt{2})$$ — proportional to $$\sqrt{\tilde{d}_v}$$, exactly as the theory predicts, and *not* a constant vector. The energy falls by roughly the factor $$\mu^2 \approx 0.53$$ per layer once the transient has passed.
+The limit is $$\propto(\sqrt{2},\sqrt{3},\sqrt{3},\sqrt{2})$$, proportional to $$\sqrt{\tilde{d}_v}$$, exactly as the theory predicts, and *not* a constant vector. The energy falls by roughly the factor $$\mu^2 \approx 0.53$$ per layer once the transient has passed.
 
 The Dirichlet energy tracks the collapse precisely. Monitoring it across layers during training tells you how many layers you can stack before representations become useless.
 
@@ -267,7 +267,7 @@ Monitoring the energy across layers reveals exactly when and how fast oversmooth
 
 ## Summary
 
-Oversmoothing is not a bug in implementation — it is a mathematical property of iterated graph averaging:
+Oversmoothing is not a bug in implementation, it is a mathematical property of iterated graph averaging:
 
 1. **Spectral view:** repeated low-pass filtering, $$h(\tilde\lambda)^K = (1-\tilde\lambda)^K$$ → only the $$\tilde\lambda = 0$$ component survives
 2. **Power-iteration view:** $$\hat{A}^K \to u_1u_1^{\top}$$, a rank-one projection → all node embeddings become collinear, each scaled by $$\sqrt{\tilde{d}_v}$$ (identical only on regular graphs)
@@ -275,11 +275,11 @@ Oversmoothing is not a bug in implementation — it is a mathematical property o
 4. **Practical consequence:** plain GCN/GAT stacks past a few layers typically lose accuracy on standard node-classification benchmarks
 5. **Fix:** prevent repeated pure averaging (residuals, separate propagation) or use global attention (Graph Transformers)
 
-Understanding oversmoothing is the first step to understanding why GNN depth scaling is fundamentally different from Transformer depth scaling — and why simply adding more layers is not the solution.
+Understanding oversmoothing is the first step to understanding why GNN depth scaling is fundamentally different from Transformer depth scaling, and why simply adding more layers is not the solution.
 
 ## References
 
 - Li, Q., Han, Z., & Wu, X.-M. (2018). [Deeper Insights Into Graph Convolutional Networks for Semi-Supervised Classification](https://arxiv.org/abs/1801.07606). *AAAI 2018*.
 - Oono, K., & Suzuki, T. (2020). [Graph Neural Networks Exponentially Lose Expressive Power for Node Classification](https://arxiv.org/abs/1905.10947). *ICLR 2020*.
-- Chen, M., Wei, Z., Huang, Z., Ding, B., & Li, Y. (2020). [Simple and Deep Graph Convolutional Networks](https://arxiv.org/abs/2007.02133). *ICML 2020* (GCNII — addresses oversmoothing).
+- Chen, M., Wei, Z., Huang, Z., Ding, B., & Li, Y. (2020). [Simple and Deep Graph Convolutional Networks](https://arxiv.org/abs/2007.02133). *ICML 2020* (GCNII, addresses oversmoothing).
 - Zhao, L., & Akoglu, L. (2020). [PairNorm: Tackling Oversmoothing in GNNs](https://arxiv.org/abs/1909.12223). *ICLR 2020*.

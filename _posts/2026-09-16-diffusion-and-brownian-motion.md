@@ -6,7 +6,7 @@ categories: [physics-basics]
 book: physics-basics
 subsection: stochastic
 tags: [brownian-motion, langevin, fokker-planck, score-based-models]
-excerpt: "A Langevin step is a gradient step plus noise. Change the potential to the negative log-density and it samples from that density instead of minimising it — which is the entire sampler behind score-based generative models."
+excerpt: "A Langevin step is a gradient step plus noise. Change the potential to the negative log-density and it samples from that density instead of minimising it, which is the entire sampler behind score-based generative models."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Brownian motion spreads as \(\sqrt{t}\), not \(t\). Fick's law plus conservation gives the diffusion equation; adding a drift gives the Langevin equation \(dx = -\nabla U\,dt + \sqrt{2D}\,dW\), whose density obeys the Fokker–Planck equation and settles to \(p_\infty \propto e^{-U/D}\). Choose \(U = -\log p_{\text{data}}\) and the stationary distribution is the data distribution — the drift term is then the score, and you have the sampler used by score-based generative models.
+  <strong>TL;DR:</strong> Brownian motion spreads as \(\sqrt{t}\), not \(t\). Fick's law plus conservation gives the diffusion equation; adding a drift gives the Langevin equation \(dx = -\nabla U\,dt + \sqrt{2D}\,dW\), whose density obeys the Fokker–Planck equation and settles to \(p_\infty \propto e^{-U/D}\). Choose \(U = -\log p_{\text{data}}\) and the stationary distribution is the data distribution, the drift term is then the score, and you have the sampler used by score-based generative models.
 </div>
 
 ## The Wiener process
 
 Einstein's 1905 account of Brownian motion explained the jitter of pollen grains as the accumulated effect of molecular collisions. Its mathematical idealisation is the Wiener process $$W_t$$: $$W_0 = 0$$, independent increments, $$W_t - W_s \sim \mathcal N(0, t-s)$$ for $$t>s$$, and continuous sample paths.
 
-The defining scaling is $$\mathbb E[W_t^2] = t$$, so typical displacement grows like $$\sqrt t$$. Over an interval $$\Delta t$$ the increment has size $$\sqrt{\Delta t}$$, which dwarfs $$\Delta t$$ as $$\Delta t\to 0$$ — this is why Wiener paths are nowhere differentiable and why stochastic calculus needs its own rules rather than the ordinary chain rule.
+The defining scaling is $$\mathbb E[W_t^2] = t$$, so typical displacement grows like $$\sqrt t$$. Over an interval $$\Delta t$$ the increment has size $$\sqrt{\Delta t}$$, which dwarfs $$\Delta t$$ as $$\Delta t\to 0$$, this is why Wiener paths are nowhere differentiable and why stochastic calculus needs its own rules rather than the ordinary chain rule.
 
 Concretely, a 1 µm-diameter bead in water at 20 °C has $$D = kT/(6\pi\eta a) \approx 0.43\ \mathrm{µm^2\,s^{-1}}$$. Its root-mean-square displacement along one axis is $$\sqrt{2Dt}$$:
 
@@ -39,7 +39,7 @@ A hundredfold increase in time buys only a tenfold increase in distance. Diffusi
 
 ## Fick's law and the diffusion equation
 
-Particles flow from crowded regions to empty ones, at a rate proportional to the concentration gradient — Fick's first law, $$\mathbf J = -D\nabla\rho$$, with $$\mathbf J$$ the flux and $$\rho$$ the density. Combine it with conservation, $$\partial_t\rho + \nabla\cdot\mathbf J = 0$$, and the diffusion equation follows:
+Particles flow from crowded regions to empty ones, at a rate proportional to the concentration gradient, Fick's first law, $$\mathbf J = -D\nabla\rho$$, with $$\mathbf J$$ the flux and $$\rho$$ the density. Combine it with conservation, $$\partial_t\rho + \nabla\cdot\mathbf J = 0$$, and the diffusion equation follows:
 
 <div class="formula-box">
 \[
@@ -47,7 +47,7 @@ Particles flow from crowded regions to empty ones, at a rate proportional to the
 \]
 </div>
 
-Started from a point source in one dimension, the solution is a Gaussian $$\rho(x,t) = (4\pi D t)^{-1/2}\exp\!\left(-x^2/4Dt\right)$$ of variance $$2Dt$$ — the same $$\sqrt t$$ spreading, now as a statement about the whole density rather than one path.
+Started from a point source in one dimension, the solution is a Gaussian $$\rho(x,t) = (4\pi D t)^{-1/2}\exp\!\left(-x^2/4Dt\right)$$ of variance $$2Dt$$, the same $$\sqrt t$$ spreading, now as a statement about the whole density rather than one path.
 
 <div class="blog-figure">
 <figure>
@@ -65,7 +65,7 @@ Started from a point source in one dimension, the solution is a Gaussian $$\rho(
     <text x="398" y="88">t = 4, σ = 2</text>
     <text x="466" y="109">t = 9, σ = 3</text>
   </g>
-  <text x="320" y="176" text-anchor="middle" font-size="10.5" fill="#475569">position x — width σ = √(2Dt), peak height ∝ 1/√t</text>
+  <text x="320" y="176" text-anchor="middle" font-size="10.5" fill="#475569">position x, width σ = √(2Dt), peak height ∝ 1/√t</text>
 </svg>
 <figcaption>Notice that quadrupling the time only doubles the width. The area under each curve is the same; the density does not vanish, it flattens.</figcaption>
 </figure>
@@ -81,7 +81,7 @@ dx \;=\; -\frac{1}{\gamma}\nabla V(x)\,dt \;+\; \sqrt{\tfrac{2kT}{\gamma}}\;dW .
 \]
 </div>
 
-Two terms, two roles: the **drift** $$-\nabla V/\gamma$$ pulls downhill, the **noise** kicks in random directions with a strength set by temperature. Their ratio is fixed by the fluctuation–dissipation relation, not free to choose — the same collisions that cause friction cause the kicks. The **Einstein relation** $$D = \mu kT$$, with mobility $$\mu = 1/\gamma$$, is exactly that statement.
+Two terms, two roles: the **drift** $$-\nabla V/\gamma$$ pulls downhill, the **noise** kicks in random directions with a strength set by temperature. Their ratio is fixed by the fluctuation–dissipation relation, not free to choose, the same collisions that cause friction cause the kicks. The **Einstein relation** $$D = \mu kT$$, with mobility $$\mu = 1/\gamma$$, is exactly that statement.
 
 ## Fokker–Planck: what the density does
 
@@ -94,7 +94,7 @@ Track the density instead of the path. For $$dx = f(x)\,dt + \sqrt{2D}\,dW$$ the
 \]
 </div>
 
-The first term transports probability along the drift; the second smooths it. Setting $$f = -\nabla U$$ and trying $$p_\infty \propto e^{-U/D}$$ gives $$D\nabla p_\infty = -\nabla U\,p_\infty = f p_\infty$$, so the current $$J$$ vanishes identically. The stationary state is not merely stationary but has zero flux — detailed balance. With $$U = V$$ and $$D = kT/\gamma$$ this reproduces the [Boltzmann distribution](/blog/physics-basics/statistical-mechanics/) $$p_\infty \propto e^{-V/kT}$$: equilibrium statistical mechanics falls out of a stochastic differential equation.
+The first term transports probability along the drift; the second smooths it. Setting $$f = -\nabla U$$ and trying $$p_\infty \propto e^{-U/D}$$ gives $$D\nabla p_\infty = -\nabla U\,p_\infty = f p_\infty$$, so the current $$J$$ vanishes identically. The stationary state is not merely stationary but has zero flux, detailed balance. With $$U = V$$ and $$D = kT/\gamma$$ this reproduces the [Boltzmann distribution](/blog/physics-basics/statistical-mechanics/) $$p_\infty \propto e^{-V/kT}$$: equilibrium statistical mechanics falls out of a stochastic differential equation.
 
 ## The line to score-based generative models
 
@@ -108,14 +108,14 @@ p_\infty = p_{\text{data}} .
 \]
 </div>
 
-Discretised with step $$\eta$$, this is $$x_{k+1} = x_k + \tfrac{\eta}{2}\nabla_x\log p(x_k) + \sqrt{\eta}\,z_k$$ with $$z_k\sim\mathcal N(0,I)$$ — unadjusted Langevin. The only thing needed is the score $$\nabla_x\log p$$, which is free of the intractable normaliser, and that is precisely what a score network is trained to estimate. Song & Ermon (2019) run this at a ladder of noise levels, annealing from large to small; the continuous-time generalisation and its reverse-time SDE are covered in [score-based SDEs](/blog/diffusion/score-based-sde/).
+Discretised with step $$\eta$$, this is $$x_{k+1} = x_k + \tfrac{\eta}{2}\nabla_x\log p(x_k) + \sqrt{\eta}\,z_k$$ with $$z_k\sim\mathcal N(0,I)$$, unadjusted Langevin. The only thing needed is the score $$\nabla_x\log p$$, which is free of the intractable normaliser, and that is precisely what a score network is trained to estimate. Song & Ermon (2019) run this at a ladder of noise levels, annealing from large to small; the continuous-time generalisation and its reverse-time SDE are covered in [score-based SDEs](/blog/diffusion/score-based-sde/).
 
 <div class="warning-box">
-  <strong>Interview trap:</strong> the noise is not an implementation detail or a regulariser. Delete it and the update is plain gradient ascent on \(\log p\), which converges to a single mode — a point mass, not a sample. The noise term is what makes the stationary distribution \(p\) itself, and the fluctuation–dissipation ratio between drift and noise is what fixes <em>which</em> distribution you get. A second frequent slip: plain Langevin also struggles because the score is badly estimated where the data density is tiny, which is the motivation for annealing over noise scales rather than any property of the sampler itself.
+  <strong>Interview trap:</strong> the noise is not an implementation detail or a regulariser. Delete it and the update is plain gradient ascent on \(\log p\), which converges to a single mode, a point mass, not a sample. The noise term is what makes the stationary distribution \(p\) itself, and the fluctuation–dissipation ratio between drift and noise is what fixes <em>which</em> distribution you get. A second frequent slip: plain Langevin also struggles because the score is badly estimated where the data density is tiny, which is the motivation for annealing over noise scales rather than any property of the sampler itself.
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — optimisation and sampling are one algorithm:</strong> \(x \leftarrow x + \tfrac{\eta}{2}\nabla\log p(x)\) is gradient ascent; add \(\sqrt{\eta}\,z\) and it is a sampler. Cooling the noise to zero interpolates continuously between them, which is why simulated annealing, stochastic gradient Langevin dynamics and annealed score-based sampling are the same object at different noise schedules.
+  <strong>Key Insight, optimisation and sampling are one algorithm:</strong> \(x \leftarrow x + \tfrac{\eta}{2}\nabla\log p(x)\) is gradient ascent; add \(\sqrt{\eta}\,z\) and it is a sampler. Cooling the noise to zero interpolates continuously between them, which is why simulated annealing, stochastic gradient Langevin dynamics and annealed score-based sampling are the same object at different noise schedules.
 </div>
 
 <div class="key-takeaways">
@@ -125,7 +125,7 @@ Discretised with step $$\eta$$, this is $$x_{k+1} = x_k + \tfrac{\eta}{2}\nabla_
   <li>Fick's law \(J=-D\nabla\rho\) plus conservation gives \(\partial_t\rho = D\nabla^2\rho\), with point-source variance \(2Dt\).</li>
   <li>Langevin combines drift and noise, tied together by fluctuation–dissipation; the Einstein relation is \(D=\mu kT\).</li>
   <li>Fokker–Planck governs the density; for \(f=-\nabla U\) the zero-current stationary state is \(p_\infty\propto e^{-U/D}\).</li>
-  <li>Setting \(U=-\log p_{\text{data}}\) makes Langevin a sampler for the data distribution driven only by the score — the basis of score-based generative models.</li>
+  <li>Setting \(U=-\log p_{\text{data}}\) makes Langevin a sampler for the data distribution driven only by the score, the basis of score-based generative models.</li>
 </ul>
 </div>
 

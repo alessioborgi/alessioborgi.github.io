@@ -6,7 +6,7 @@ book: gnn
 subsection: applications
 tags: [recommender-systems, collaborative-filtering, PinSage, LightGCN, bipartite-graph]
 published: true
-excerpt: "Recommendation is naturally a graph problem: users and items are nodes, interactions are edges. GNNs on bipartite user-item graphs capture higher-order collaborative filtering signals — friends of friends liked this — that matrix factorisation cannot represent."
+excerpt: "Recommendation is naturally a graph problem: users and items are nodes, interactions are edges. GNNs on bipartite user-item graphs capture higher-order collaborative filtering signals, friends of friends liked this, that matrix factorisation cannot represent."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,20 +18,20 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> The user-item interaction graph is bipartite: users on one side, items on the other, with edges representing clicks, purchases or ratings. GCN-style propagation on this graph captures multi-hop collaborative signals — "users who liked what you liked also liked X." LightGCN strips the layer down to pure normalised propagation, dropping both the weight matrix and the non-linearity, and reports better accuracy <em>and</em> fewer parameters than the NGCF design it ablates.
+<strong>TL;DR:</strong> The user-item interaction graph is bipartite: users on one side, items on the other, with edges representing clicks, purchases or ratings. GCN-style propagation on this graph captures multi-hop collaborative signals, "users who liked what you liked also liked X." LightGCN strips the layer down to pure normalised propagation, dropping both the weight matrix and the non-linearity, and reports better accuracy <em>and</em> fewer parameters than the NGCF design it ablates.
 </div>
 {% include figure image_path="/images/blog/gnn/ying2018_pinsage.png" alt="PinSage recommendation GNN" caption="PinSage: graph convolutional network for web-scale recommender systems (Ying et al., 2018)" %}
 
 
 ## Recommendation as a Graph Problem
 
-**Intuition First:** Matrix factorisation is like learning that "Alice likes comedies" and "this film is a comedy" and multiplying those two vectors. It captures direct user–item similarity but cannot represent the chain: "Alice liked this film, Bob also liked it, Bob also liked that other film, so Alice might like that other film too." GNNs capture this multi-hop chain by propagating information along the bipartite graph — 2-hop neighbours of Alice (items liked by users who liked Alice's items) are exactly the collaborative filtering signal that matrix factorisation misses.
+**Intuition First:** Matrix factorisation is like learning that "Alice likes comedies" and "this film is a comedy" and multiplying those two vectors. It captures direct user–item similarity but cannot represent the chain: "Alice liked this film, Bob also liked it, Bob also liked that other film, so Alice might like that other film too." GNNs capture this multi-hop chain by propagating information along the bipartite graph, 2-hop neighbours of Alice (items liked by users who liked Alice's items) are exactly the collaborative filtering signal that matrix factorisation misses.
 
 **Traditional collaborative filtering:** learn a user embedding $$e_u$$ and an item embedding $$e_i$$, then predict the score as $$\hat{y}_{ui} = e_u^{\top} e_i$$. This captures pairwise similarity but not higher-order structure.
 
 **GNN approach:** build a bipartite graph in which user $$u$$ is joined to item $$i$$ whenever $$u$$ interacted with $$i$$. Run a GNN to produce embeddings that capture multi-hop neighbourhood structure:
 - 1-hop: items $$u$$ has interacted with (or users who interacted with $$i$$)
-- 2-hop: items interacted with by users who also interacted with $$u$$'s items — the collaborative filtering signal
+- 2-hop: items interacted with by users who also interacted with $$u$$'s items, the collaborative filtering signal
 - 3-hop: transitive similarities
 
 ## The Bipartite User-Item Graph
@@ -44,7 +44,7 @@ G = (U \sqcup I,\; E), \qquad (u, i) \in E \iff \text{user } u \text{ interacted
 \]
 </div>
 
-Because the graph is bipartite, message passing alternates sides — users only ever hear from items, and items only from users:
+Because the graph is bipartite, message passing alternates sides, users only ever hear from items, and items only from users:
 
 <div class="formula-box">
 \[
@@ -83,7 +83,7 @@ e_u = \sum_{k=0}^{K} \alpha_k\, h_u^{(k)},
 **Why remove the transformations?** Because on these benchmarks there is nothing for them to transform. The paper's ablation removes $$W_k$$ and $$\sigma(\cdot)$$ one at a time and finds that each removal helps, with the combined removal helping most: the collaborative signal lives in the propagation, and extra learnable matrices mainly add capacity to overfit.
 
 <div class="insight-box">
-<strong>LightGCN's key insight:</strong> Standard GCNs were designed for graphs with rich node features, where \(W\) does real work reprojecting them. In pure collaborative filtering the only input is a free ID embedding, already learned end to end — so \(W\) merely reparameterises a vector the model was free to choose anyway, buying no expressiveness while adding parameters and an optimisation burden. Stripping it back leaves the normalised propagation, which is the part that actually carries collaborative signal. This is a recommender-specific argument, not a general claim that simpler GNNs are better.
+<strong>LightGCN's key insight:</strong> Standard GCNs were designed for graphs with rich node features, where \(W\) does real work reprojecting them. In pure collaborative filtering the only input is a free ID embedding, already learned end to end, so \(W\) merely reparameterises a vector the model was free to choose anyway, buying no expressiveness while adding parameters and an optimisation burden. Stripping it back leaves the normalised propagation, which is the part that actually carries collaborative signal. This is a recommender-specific argument, not a general claim that simpler GNNs are better.
 </div>
 
 ## PinSage (Ying et al., 2018)
@@ -93,7 +93,7 @@ Pinterest's GNN for image recommendation, and one of the first published industr
 **Scale:** the paper reports a bipartite pin–board graph of 3 billion nodes and roughly 18 billion edges.
 
 **Key innovations:**
-1. **GraphSAGE-style sampling:** for each node, sample a fixed-size neighbourhood rather than the full one — this is what makes the computation tractable, since a full-neighbourhood pass over a graph this size is hopeless
+1. **GraphSAGE-style sampling:** for each node, sample a fixed-size neighbourhood rather than the full one, this is what makes the computation tractable, since a full-neighbourhood pass over a graph this size is hopeless
 2. **Random-walk importance sampling:** choose neighbours by how often they are visited in short random walks from the target node, not uniformly, and weight their messages by that visit count
 3. **Curriculum training:** feed progressively harder negative examples as training proceeds
 
@@ -108,7 +108,7 @@ m_{u \leftarrow i} = \frac{1}{\sqrt{\lvert \mathcal{N}(u) \rvert \, \lvert \math
 \]
 </div>
 
-The Hadamard product $$h_i \odot h_u$$ is meant to capture user-item feature interaction. LightGCN's ablation found that on the standard collaborative-filtering benchmarks this term costs more in overfitting than it returns in expressiveness — though the argument is specific to the ID-embedding-only setting, and richer side features change the calculus.
+The Hadamard product $$h_i \odot h_u$$ is meant to capture user-item feature interaction. LightGCN's ablation found that on the standard collaborative-filtering benchmarks this term costs more in overfitting than it returns in expressiveness, though the argument is specific to the ID-embedding-only setting, and richer side features change the calculus.
 
 <div class="blog-figure">
 <figure>
@@ -145,7 +145,7 @@ The Hadamard product $$h_i \odot h_u$$ is meant to capture user-item feature int
 
 ## Session-Based Recommendation
 
-Standard CF assumes all past interactions are known for each user. **Session-based recommendation** has no long-term user history — only the current session (sequence of clicks).
+Standard CF assumes all past interactions are known for each user. **Session-based recommendation** has no long-term user history, only the current session (sequence of clicks).
 
 **SR-GNN (Wu et al., 2019):** model a session as a directed graph (clicks are edges from previous item to next item). Run GCN on session graph, then use attention to extract user intent from node embeddings. This captures transition patterns between items within a session.
 

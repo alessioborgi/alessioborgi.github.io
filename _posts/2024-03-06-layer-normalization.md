@@ -6,7 +6,7 @@ categories: [transformers]
 book: transformers
 subsection: core
 tags: [layer-norm, batch-norm, Pre-LN, Post-LN, training stability]
-excerpt: "Layer norm is not optional plumbing. It determines training stability, gradient flow, and whether deep Transformers converge at all. Pre-LN vs Post-LN is not a detail — it changes training dynamics fundamentally."
+excerpt: "Layer norm is not optional plumbing. It determines training stability, gradient flow, and whether deep Transformers converge at all. Pre-LN vs Post-LN is not a detail, it changes training dynamics fundamentally."
 author_profile: true
 read_time: true
 is_overview: false
@@ -67,7 +67,7 @@ toc_label: "Contents"
 
 ## Intuition First: What Does "Normalise" Actually Do?
 
-Imagine you are a neuron receiving thousands of inputs from the previous layer. If those inputs have wildly different scales — some near 0, some near 1000 — your weights need to be tiny for large inputs and large for small inputs simultaneously. That is a frustrating optimisation landscape.
+Imagine you are a neuron receiving thousands of inputs from the previous layer. If those inputs have wildly different scales, some near 0, some near 1000, your weights need to be tiny for large inputs and large for small inputs simultaneously. That is a frustrating optimisation landscape.
 
 Normalisation is simply: "before passing information to the next layer, rescale it so every token's feature vector looks roughly the same." You lose no information (learned $$\gamma$$ and $$\beta$$ can undo the normalisation) but you gain a predictable, well-conditioned signal at every layer.
 
@@ -79,8 +79,8 @@ Normalisation is simply: "before passing information to the next layer, rescale 
 @keyframes appear { 0%,49%{opacity:0} 50%,100%{opacity:1} }
 </style>
 <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
-  <text x="180" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#dc2626">Before LayerNorm — high variance</text>
-  <text x="540" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#0d9488">After LayerNorm — unit variance</text>
+  <text x="180" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#dc2626">Before LayerNorm, high variance</text>
+  <text x="540" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#0d9488">After LayerNorm, unit variance</text>
 
   <!-- before bars (raw activations, varying heights) -->
   <rect x="40"  y="80" width="22" height="90" rx="3" fill="#fca5a5" style="transform-origin:40px 170px;animation:norm-bars 3s ease-in-out infinite"/>
@@ -108,7 +108,7 @@ Normalisation is simply: "before passing information to the next layer, rescale 
   <line x1="390" y1="170" x2="660" y2="170" stroke="#94a3b8" stroke-width="2"/>
   <text x="525" y="195" text-anchor="middle" font-size="11" fill="#64748b">features re-centered to mean 0, std 1</text>
 </svg>
-<figcaption>Animated: before LayerNorm (left) the \(d_{\text{model}}\) feature values of one token vary wildly in scale. After LayerNorm (right) all features are rescaled to near-unit variance — the network downstream sees a predictable signal regardless of which token or layer it is in.</figcaption>
+<figcaption>Animated: before LayerNorm (left) the \(d_{\text{model}}\) feature values of one token vary wildly in scale. After LayerNorm (right) all features are rescaled to near-unit variance, the network downstream sees a predictable signal regardless of which token or layer it is in.</figcaption>
 </figure>
 </div>
 
@@ -151,13 +151,13 @@ Given a token representation $$\mathbf{x} \in \mathbb{R}^d$$:
 - **$$\gamma$$** (scale) and **$$\beta$$** (shift) are learned parameters, initialised to 1 and 0 respectively
 - **$$\epsilon$$** (typically $$10^{-5}$$) prevents division by zero
 
-After normalisation, the output has approximately zero mean and unit variance. $$\gamma$$ and $$\beta$$ then allow the network to re-scale and re-shift to whatever distribution is optimal — without collapsing the normalisation.
+After normalisation, the output has approximately zero mean and unit variance. $$\gamma$$ and $$\beta$$ then allow the network to re-scale and re-shift to whatever distribution is optimal, without collapsing the normalisation.
 
 ## Worked Example: LayerNorm on a 4-Dimensional Token
 
 Suppose a token's representation is $$\mathbf{x} = [2, 4, -2, 0]$$ ($$d = 4$$, simplified).
 
-**Step 1 — Compute mean:**
+**Step 1, Compute mean:**
 
 <div class="formula-box">
 \[
@@ -165,7 +165,7 @@ Suppose a token's representation is $$\mathbf{x} = [2, 4, -2, 0]$$ ($$d = 4$$, s
 \]
 </div>
 
-**Step 2 — Compute variance:**
+**Step 2, Compute variance:**
 
 <div class="formula-box">
 \[
@@ -174,7 +174,7 @@ Suppose a token's representation is $$\mathbf{x} = [2, 4, -2, 0]$$ ($$d = 4$$, s
 \]
 </div>
 
-**Step 3 — Normalise:**
+**Step 3, Normalise:**
 
 <div class="formula-box">
 \[
@@ -184,7 +184,7 @@ Suppose a token's representation is $$\mathbf{x} = [2, 4, -2, 0]$$ ($$d = 4$$, s
 \]
 </div>
 
-**Step 4 — Apply $$\gamma$$ and $$\beta$$** (assume $$\gamma = [1,1,1,1]$$, $$\beta = [0,0,0,0]$$ at initialisation):
+**Step 4, Apply $$\gamma$$ and $$\beta$$** (assume $$\gamma = [1,1,1,1]$$, $$\beta = [0,0,0,0]$$ at initialisation):
 
 <div class="formula-box">
 \[
@@ -192,7 +192,7 @@ Suppose a token's representation is $$\mathbf{x} = [2, 4, -2, 0]$$ ($$d = 4$$, s
 \]
 </div>
 
-After training, $$\gamma$$ and $$\beta$$ may have become $$[2, 1, 1, 0.5]$$ and $$[0.1, -0.2, 0.1, 0]$$ — allowing the network to recover any useful scale it needs while keeping the normalisation benefit.
+After training, $$\gamma$$ and $$\beta$$ may have become $$[2, 1, 1, 0.5]$$ and $$[0.1, -0.2, 0.1, 0]$$, allowing the network to recover any useful scale it needs while keeping the normalisation benefit.
 
 <div class="insight-box">
 <strong>Why \(\epsilon\) matters:</strong> if \(\sigma^2 = 0\) (all features identical), the denominator would be zero. \(\epsilon = 10^{-5}\) prevents this. In practice it almost never matters numerically but is essential for correctness.
@@ -280,10 +280,10 @@ There are two layer norms per block: one before attention, one before the FFN. F
 
 ## Summary
 
-Layer norm is not cosmetic. It controls how information flows and how gradients propagate through the network. The choice between Pre-LN and Post-LN explains many practical differences between model families — and Pre-LN's superior stability is why it dominates modern large language model training.
+Layer norm is not cosmetic. It controls how information flows and how gradients propagate through the network. The choice between Pre-LN and Post-LN explains many practical differences between model families, and Pre-LN's superior stability is why it dominates modern large language model training.
 
 ## References
 
 - Ba, J. L., Kiros, J. R., & Hinton, G. E. (2016). [Layer Normalization](https://arxiv.org/abs/1607.06450). *arXiv 2016* (LayerNorm: normalises across the feature dimension rather than the batch dimension, enabling stable training of sequence models).
 - Xiong, R., Yang, Y., He, D., Zheng, K., Zheng, S., Xing, C., Zhang, H., Lan, Y., Wang, L., & Liu, T.-Y. (2020). [On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745). *ICML 2020* (Pre-LN vs Post-LN: theoretical and empirical comparison showing Pre-LN (before attention) improves gradient flow and training stability).
-- Zhang, B., & Sennrich, R. (2019). [Root Mean Square Layer Normalization](https://arxiv.org/abs/1910.07467). *NeurIPS 2019* (RMSNorm: removes the mean-centering step from LayerNorm — used in LLaMA, Mistral, and most modern open-weight LLMs).
+- Zhang, B., & Sennrich, R. (2019). [Root Mean Square Layer Normalization](https://arxiv.org/abs/1910.07467). *NeurIPS 2019* (RMSNorm: removes the mean-centering step from LayerNorm, used in LLaMA, Mistral, and most modern open-weight LLMs).

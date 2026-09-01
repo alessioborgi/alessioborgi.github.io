@@ -6,7 +6,7 @@ book: sheaf
 subsection: applications
 tags: [molecular, QM9, drug-discovery, force-field, SchNet, DimeNet, sheaf-molecular]
 published: false
-excerpt: "Molecular graphs are naturally heterophilic — atoms of different types bonded together — and have rich geometric structure (bond angles, torsion angles). Sheaf GNNs can encode this structure via restriction maps that represent the relational geometry between bonded atoms. This post explores how sheaf theory applies to molecular property prediction."
+excerpt: "Molecular graphs are naturally heterophilic, atoms of different types bonded together, and have rich geometric structure (bond angles, torsion angles). Sheaf GNNs can encode this structure via restriction maps that represent the relational geometry between bonded atoms. This post explores how sheaf theory applies to molecular property prediction."
 author_profile: true
 read_time: true
 is_overview: false
@@ -29,18 +29,18 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A molecule is a graph with typed atoms (nodes) and bonds (edges). Molecular graphs are naturally heterophilic — carbon bonds to oxygen, which bonds to hydrogen — and have geometric structure (bond angles, 3D positions). Sheaf restriction maps can encode bond-type-specific relational geometry: different maps for C-C vs C-O vs C-N bonds. This provides a principled alternative to hand-designed bond angle features (DimeNet) while retaining the sheaf's theoretical guarantees.
+<strong>TL;DR:</strong> A molecule is a graph with typed atoms (nodes) and bonds (edges). Molecular graphs are naturally heterophilic, carbon bonds to oxygen, which bonds to hydrogen, and have geometric structure (bond angles, 3D positions). Sheaf restriction maps can encode bond-type-specific relational geometry: different maps for C-C vs C-O vs C-N bonds. This provides a principled alternative to hand-designed bond angle features (DimeNet) while retaining the sheaf's theoretical guarantees.
 </div>
 {% include figure image_path="/images/blog/gnn/gilmer2017_mpnn.png" alt="Molecular sheaf GNN" caption="Molecular graph MPNN: basis for sheaf GNN extensions (Gilmer et al., 2017)" %}
 
 
 ## Why Molecular Graphs Are Heterophilic
 
-In a molecular graph, adjacent atoms (bonded atoms) are typically of different element types — carbon bonds to oxygen, oxygen bonds to hydrogen. The features of adjacent atoms (atomic number, electronegativity, orbital structure) are systematically different.
+In a molecular graph, adjacent atoms (bonded atoms) are typically of different element types, carbon bonds to oxygen, oxygen bonds to hydrogen. The features of adjacent atoms (atomic number, electronegativity, orbital structure) are systematically different.
 
-Standard GCN on molecular graphs averages these dissimilar features — an operation that conflates chemically distinct information. This is exactly the heterophily problem: adjacent nodes (atoms) should contribute different information, not be averaged toward the same representation.
+Standard GCN on molecular graphs averages these dissimilar features, an operation that conflates chemically distinct information. This is exactly the heterophily problem: adjacent nodes (atoms) should contribute different information, not be averaged toward the same representation.
 
-**Sheaf motivation:** Different bond types (C-C, C-O, C-N, C-H) encode different chemical relationships. A sheaf with bond-type-specific restriction maps can represent the relational geometry of each bond type independently — analogous to R-GCN for knowledge graphs but applied to molecular chemistry.
+**Sheaf motivation:** Different bond types (C-C, C-O, C-N, C-H) encode different chemical relationships. A sheaf with bond-type-specific restriction maps can represent the relational geometry of each bond type independently, analogous to R-GCN for knowledge graphs but applied to molecular chemistry.
 
 ## From 2D Connectivity to 3D Geometry
 
@@ -58,7 +58,7 @@ Each level adds richer geometric information but at higher computational cost.
 
 ## Sheaf Maps as Bond-Angle Encodings
 
-Consider three bonded atoms: i — j — k (atom j is bonded to both i and k). The bond angle θ_{ijk} = ∠(r_i − r_j, r_k − r_j) is the key geometric quantity DimeNet uses.
+Consider three bonded atoms: i, j, k (atom j is bonded to both i and k). The bond angle θ_{ijk} = ∠(r_i − r_j, r_k − r_j) is the key geometric quantity DimeNet uses.
 
 In the sheaf framework: the restriction map F_{i▷e_{ij}} encodes the "orientation" of atom i relative to the bond e_{ij}. The bond angle is encoded in the composition of maps:
 
@@ -66,9 +66,9 @@ In the sheaf framework: the restriction map F_{i▷e_{ij}} encodes the "orientat
 O_{ij} · O_{jk} = R(θ_{ijk})   (composition of restriction maps = rotation by bond angle)
 </div>
 
-When restriction maps are orthogonal, the holonomy around the path i–j–k is a rotation by the bond angle. NSD with orthogonal maps implicitly learns bond-angle-like geometric information — without explicitly computing angles.
+When restriction maps are orthogonal, the holonomy around the path i–j–k is a rotation by the bond angle. NSD with orthogonal maps implicitly learns bond-angle-like geometric information, without explicitly computing angles.
 
-**Formal claim:** For a sheaf with orthogonal maps trained on molecular data, the learned maps F_{v▷e} encode the 3D geometric relationship between atom v and bond e — in the same information-theoretic sense as DimeNet's angle features.
+**Formal claim:** For a sheaf with orthogonal maps trained on molecular data, the learned maps F_{v▷e} encode the 3D geometric relationship between atom v and bond e, in the same information-theoretic sense as DimeNet's angle features.
 
 <style>
 @keyframes rotateBondMap {
@@ -149,10 +149,10 @@ When restriction maps are orthogonal, the holonomy around the path i–j–k is 
     </marker>
   </defs>
 </svg>
-<figcaption>Molecular sheaf on a methane-like fragment. Atoms are nodes (C=gray, H=white, O=red in legend). Each bond is an edge. At each node-edge incidence there is a restriction map (animated colored arrows) encoding the local geometric relationship between atom and bond. The arrows rotate to different angles, representing how different bond orientations are encoded as different restriction maps — the sheaf's geometric vocabulary for molecular structure.</figcaption>
+<figcaption>Molecular sheaf on a methane-like fragment. Atoms are nodes (C=gray, H=white, O=red in legend). Each bond is an edge. At each node-edge incidence there is a restriction map (animated colored arrows) encoding the local geometric relationship between atom and bond. The arrows rotate to different angles, representing how different bond orientations are encoded as different restriction maps, the sheaf's geometric vocabulary for molecular structure.</figcaption>
 </figure></div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — bond types are restriction map types:</strong> Bond types in chemistry are <em>exactly</em> restriction map types in sheaf theory. A C-C single bond has a different electronic structure from a C=O double bond: different bond length, different orbital overlap, different electronegativity gradient. In sheaf language, these are different restriction maps: the single bond map encodes a sigma-bond geometry, the double bond map encodes sigma+pi geometry. By learning a different map per bond type, a sheaf GNN automatically encodes the chemical distinctions between bond types — without any hand-crafted bond-type features. The maps learn the chemistry.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, bond types are restriction map types:</strong> Bond types in chemistry are <em>exactly</em> restriction map types in sheaf theory. A C-C single bond has a different electronic structure from a C=O double bond: different bond length, different orbital overlap, different electronegativity gradient. In sheaf language, these are different restriction maps: the single bond map encodes a sigma-bond geometry, the double bond map encodes sigma+pi geometry. By learning a different map per bond type, a sheaf GNN automatically encodes the chemical distinctions between bond types, without any hand-crafted bond-type features. The maps learn the chemistry.</div>
 
 ## Multi-Relational Molecular Sheaves
 
@@ -170,7 +170,7 @@ The multi-relational Sheaf Laplacian:
 Δ_F = Σ_{bt} Δ_{F^{bt}}
 </div>
 
-This separates the contribution of different bond types to the diffusion — single bonds propagate information differently from double bonds.
+This separates the contribution of different bond types to the diffusion, single bonds propagate information differently from double bonds.
 
 **Concrete bond-angle encoding example.** Consider three atoms arranged as H–C–H in methane, with bond angle θ ≈ 109.5°. Label them i (H), j (C), k (H). The restriction maps on the two bonds are orthogonal matrices O_{i▷e_{ij}} and O_{j▷e_{ij}} (for the i-j bond) and O_{j▷e_{jk}}, O_{k▷e_{jk}} (for the j-k bond).
 
@@ -180,23 +180,23 @@ The **holonomy** around the path i → j → k is the composition of restriction
 Holonomy(i→j→k) = O_{j▷e_{jk}}ᵀ · O_{j▷e_{ij}} = R(θ_{ijk}) = R(109.5°)
 </div>
 
-This is a rotation by 109.5° in ℝ² (for d=2 stalks). The bond angle is encoded directly as the angle of this rotation matrix — no explicit angle feature is needed. When the sheaf predictor learns orthogonal maps from atomic positions, it implicitly encodes all bond angles as holonomies. This is the same information DimeNet computes explicitly as θ_{ijk} = arccos((r_i−r_j)·(r_k−r_j) / (|r_i−r_j||r_k−r_j|)), but encoded implicitly in the geometry of the sheaf.
+This is a rotation by 109.5° in ℝ² (for d=2 stalks). The bond angle is encoded directly as the angle of this rotation matrix, no explicit angle feature is needed. When the sheaf predictor learns orthogonal maps from atomic positions, it implicitly encodes all bond angles as holonomies. This is the same information DimeNet computes explicitly as θ_{ijk} = arccos((r_i−r_j)·(r_k−r_j) / (|r_i−r_j||r_k−r_j|)), but encoded implicitly in the geometry of the sheaf.
 
 **Numerical step-through:** For θ=109.5°, the 2×2 rotation matrix is:
 - cos(109.5°) ≈ −0.333,  sin(109.5°) ≈ 0.943
 - R(109.5°) = [[−0.333, −0.943], [0.943, −0.333]]
 
-If the j-node's stalk vector is h_j = [1, 0], then after holonomy transport h_j becomes [−0.333, 0.943] — a vector rotated by 109.5°. The sheaf diffusion propagates this angle-encoded signal without ever explicitly computing an angle.
+If the j-node's stalk vector is h_j = [1, 0], then after holonomy transport h_j becomes [−0.333, 0.943], a vector rotated by 109.5°. The sheaf diffusion propagates this angle-encoded signal without ever explicitly computing an angle.
 
 ## Equivariant Molecular Sheaves
 
 For molecular property prediction with 3D coordinates, E(n) equivariance is required: predictions must be invariant to rotation, translation, and reflection of the molecule.
 
-A **sheaf with O(3)-valued restriction maps** achieves this: maps O_{v▷e} ∈ O(3) encode the 3D orientation of atom v relative to bond e. The Sheaf Laplacian is gauge-equivariant under O(3) — applying a global rotation to all atoms corresponds to a gauge transformation.
+A **sheaf with O(3)-valued restriction maps** achieves this: maps O_{v▷e} ∈ O(3) encode the 3D orientation of atom v relative to bond e. The Sheaf Laplacian is gauge-equivariant under O(3), applying a global rotation to all atoms corresponds to a gauge transformation.
 
-This is the connection Laplacian approach applied to molecular graphs — the sheaf GNN becomes a gauge-equivariant model for 3D molecules.
+This is the connection Laplacian approach applied to molecular graphs, the sheaf GNN becomes a gauge-equivariant model for 3D molecules.
 
-**Comparison with EGNN:** EGNN achieves E(n) equivariance via distance-only messages (no directional information). Orthogonal sheaf maps add directional information (encoded in the maps) while maintaining equivariance — potentially capturing more geometric detail than EGNN.
+**Comparison with EGNN:** EGNN achieves E(n) equivariance via distance-only messages (no directional information). Orthogonal sheaf maps add directional information (encoded in the maps) while maintaining equivariance, potentially capturing more geometric detail than EGNN.
 
 ## Experimental Setup: QM9 Benchmark
 
@@ -225,16 +225,16 @@ Based on the theoretical analysis:
 **Expected limitations:**
 - 3D position encoding: sheaf maps encode relative orientations, not absolute positions → equivariance but limited chirality resolution
 - Long-range effects: with K=3 sheaf layers, only 3-hop interactions are captured → large molecules with long-range electronic effects require more layers or global attention
-- No explicit angle features: unlike DimeNet which explicitly computes θ_{ijk}, the sheaf must learn this from data — may require more training examples
+- No explicit angle features: unlike DimeNet which explicitly computes θ_{ijk}, the sheaf must learn this from data, may require more training examples
 
-**Comparison with SchNet:** SchNet uses distance-based filter functions, not restriction maps. For predicting energy (U₀): SchNet ≈ 14 meV MAE; a sheaf GNN with orthogonal maps (without explicit 3D position) would likely achieve ≈ 20–30 meV — better than 2D-only MPNNs but not competing with full 3D equivariant models.
+**Comparison with SchNet:** SchNet uses distance-based filter functions, not restriction maps. For predicting energy (U₀): SchNet ≈ 14 meV MAE; a sheaf GNN with orthogonal maps (without explicit 3D position) would likely achieve ≈ 20–30 meV, better than 2D-only MPNNs but not competing with full 3D equivariant models.
 
 ## Drug Discovery Applications
 
 Beyond QM9, molecular sheaf GNNs are applicable to:
 - **ADMET prediction:** molecular heterophily (different atom types in a drug molecule) benefits from sheaf maps; OGB-molhiv, OGB-molpcba benchmarks
-- **Protein-ligand binding:** the protein-ligand interface is a heterophilic bipartite graph — sheaf maps encode the complementarity between protein residues and ligand atoms
-- **Retrosynthesis:** reaction graphs have heterophilic structure (reagents of different types interacting) — sheaf maps encode the chemical compatibility constraints
+- **Protein-ligand binding:** the protein-ligand interface is a heterophilic bipartite graph, sheaf maps encode the complementarity between protein residues and ligand atoms
+- **Retrosynthesis:** reaction graphs have heterophilic structure (reagents of different types interacting), sheaf maps encode the chemical compatibility constraints
 
 <div class="insight-box">
 <strong>Key research gap:</strong> No published paper has directly applied NSD or PNSD to QM9 or OGB molecular benchmarks as of 2024. The theoretical framework suggests clear benefits for heterophilic molecular structures, but empirical validation is an open research opportunity.
@@ -242,6 +242,6 @@ Beyond QM9, molecular sheaf GNNs are applicable to:
 
 ## References
 
-- Gilmer, J., Schütt, K. T., Ramsundar, B., Ramakrishnan, R., Bronskill, M., Gomes, C., & Dahl, G. E. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017* (MPNN: unified molecular GNN framework — the 2D baseline that sheaf GNNs extend).
-- Klicpera, J., Groß, J., & Günnemann, S. (2020). [Directional Message Passing for Molecular Graphs](https://arxiv.org/abs/2003.03123). *ICLR 2020* (DimeNet: explicit bond angles — the geometric information sheaf restriction maps can implicitly encode).
+- Gilmer, J., Schütt, K. T., Ramsundar, B., Ramakrishnan, R., Bronskill, M., Gomes, C., & Dahl, G. E. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017* (MPNN: unified molecular GNN framework, the 2D baseline that sheaf GNNs extend).
+- Klicpera, J., Groß, J., & Günnemann, S. (2020). [Directional Message Passing for Molecular Graphs](https://arxiv.org/abs/2003.03123). *ICLR 2020* (DimeNet: explicit bond angles, the geometric information sheaf restriction maps can implicitly encode).
 - Satorras, V. G., Hoogeboom, E., & Welling, M. (2021). [E(n) Equivariant Graph Neural Networks](https://arxiv.org/abs/2102.09844). *ICML 2021* (EGNN: the equivariant baseline that orthogonal sheaf maps can extend with richer geometric structure).

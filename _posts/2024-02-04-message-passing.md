@@ -5,7 +5,7 @@ categories: [gnn]
 book: gnn
 tags: [message-passing, mpnn, framework]
 published: true
-excerpt: "Every GNN — GCN, GAT, GraphSAGE, GIN — is a special case of message passing. Learn the three-step loop that defines them all: compute messages, aggregate, update."
+excerpt: "Every GNN, GCN, GAT, GraphSAGE, GIN, is a special case of message passing. Learn the three-step loop that defines them all: compute messages, aggregate, update."
 author_profile: true
 read_time: true
 is_overview: false
@@ -37,13 +37,13 @@ h_v^{(t+1)} \;=\; \operatorname{UPDATE}\big(h_v^{(t)},\, m_v^{(t+1)}\big)
 </div>
 
 Where:
-- $$h_v^{(t)} \in \mathbb{R}^{d_t}$$ — the representation of node $$v$$ after $$t$$ message passing steps; $$h_v^{(0)}$$ is the input feature vector.
-- $$\mathcal{N}(v)$$ — the set of neighbours of $$v$$ in the graph.
-- $$e_{uv}$$ — the (optional) feature vector of the edge between $$u$$ and $$v$$.
-- $$m_v^{(t+1)}$$ — the aggregated message arriving at $$v$$ at step $$t+1$$.
-- $$\operatorname{MSG}$$ — the message function, computing what a neighbour sends.
-- $$\operatorname{AGGREGATE}$$ — combines all incoming messages (must be permutation-invariant, since $$\{\cdot\}$$ is a *multiset*, not an ordered list).
-- $$\operatorname{UPDATE}$$ — computes the new representation from the old one plus the aggregated message.
+- $$h_v^{(t)} \in \mathbb{R}^{d_t}$$, the representation of node $$v$$ after $$t$$ message passing steps; $$h_v^{(0)}$$ is the input feature vector.
+- $$\mathcal{N}(v)$$, the set of neighbours of $$v$$ in the graph.
+- $$e_{uv}$$, the (optional) feature vector of the edge between $$u$$ and $$v$$.
+- $$m_v^{(t+1)}$$, the aggregated message arriving at $$v$$ at step $$t+1$$.
+- $$\operatorname{MSG}$$, the message function, computing what a neighbour sends.
+- $$\operatorname{AGGREGATE}$$, combines all incoming messages (must be permutation-invariant, since $$\{\cdot\}$$ is a *multiset*, not an ordered list).
+- $$\operatorname{UPDATE}$$, computes the new representation from the old one plus the aggregated message.
 
 <div class="blog-figure">
 <figure>
@@ -111,7 +111,7 @@ Where:
 
 Let node $$B$$ have features $$h_B = [1, 0]$$, with three neighbours $$\mathcal{N}(B) = \{A, C, D\}$$ whose features are $$h_A = [0, 1]$$, $$h_C = [1, 1]$$ and $$h_D = [0, 0]$$.
 
-**Step 1 — Compute messages** (using the identity message function, $$\operatorname{MSG}(h_v, h_u, e_{uv}) = h_u$$, i.e. just pass the neighbour's features along):
+**Step 1, Compute messages** (using the identity message function, $$\operatorname{MSG}(h_v, h_u, e_{uv}) = h_u$$, i.e. just pass the neighbour's features along):
 
 <div class="formula-box">
 \[
@@ -119,7 +119,7 @@ m_{A \to B} = [0, 1], \qquad m_{C \to B} = [1, 1], \qquad m_{D \to B} = [0, 0]
 \]
 </div>
 
-**Step 2 — Aggregate** (sum):
+**Step 2, Aggregate** (sum):
 
 <div class="formula-box">
 \[
@@ -127,7 +127,7 @@ m_B = [0,1] + [1,1] + [0,0] = [1, 2]
 \]
 </div>
 
-**Step 3 — Update** (concatenate own features with the aggregate, apply a learned linear map $$W \in \mathbb{R}^{2 \times 4}$$ and a ReLU):
+**Step 3, Update** (concatenate own features with the aggregate, apply a learned linear map $$W \in \mathbb{R}^{2 \times 4}$$ and a ReLU):
 
 <div class="formula-box">
 \[
@@ -137,7 +137,7 @@ h_B' = \operatorname{ReLU}\big(W \, [\, h_B \,\Vert\, m_B \,]\big) = \operatorna
 
 Here $$\Vert$$ denotes concatenation, so $$[\, h_B \Vert m_B \,] \in \mathbb{R}^4$$. After this one layer, $$B$$'s new 2-dimensional embedding encodes information from all three of its neighbours.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The three steps — MSG, AGGREGATE, UPDATE — are independent design choices. Changing any one of them gives a different GNN family. GCN sends \(W h_u\) and aggregates with a degree-normalised sum. GAT weights that sum by learned attention coefficients. GIN uses a plain sum followed by an MLP. The framework shows that these are all variations on the same theme.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The three steps, MSG, AGGREGATE, UPDATE, are independent design choices. Changing any one of them gives a different GNN family. GCN sends \(W h_u\) and aggregates with a degree-normalised sum. GAT weights that sum by learned attention coefficients. GIN uses a plain sum followed by an MLP. The framework shows that these are all variations on the same theme.</div>
 
 ## Step 1: Message Function
 
@@ -166,7 +166,7 @@ The aggregation combines all messages. It **must be permutation-invariant** (the
 | Max | $$\max_{u \in \mathcal{N}(v)} m_{u \to v}$$ (elementwise) | Captures the most extreme feature |
 | Attention-weighted | $$\sum_{u \in \mathcal{N}(v)} \alpha_{vu} \, m_{u \to v}$$ | Adaptive, like GAT |
 
-**GIN** (see [the GIN post](/blog/gnn/gin/)) shows that **sum** is the most expressive of these: it is an *injective* function of the multiset of messages when the message space is countable, so it distinguishes every neighbourhood that the 1-WL test distinguishes. Mean and max are not injective — mean discards the neighbourhood size, max discards multiplicities — so both lose structural information.
+**GIN** (see [the GIN post](/blog/gnn/gin/)) shows that **sum** is the most expressive of these: it is an *injective* function of the multiset of messages when the message space is countable, so it distinguishes every neighbourhood that the 1-WL test distinguishes. Mean and max are not injective, mean discards the neighbourhood size, max discards multiplicities, so both lose structural information.
 
 ## Step 3: Update Function
 
@@ -193,7 +193,7 @@ Consider predicting if a molecule is toxic:
 - A **readout** $$h_G = R(\{h_v^{(k)} : v \in V\})$$ aggregates all atom embeddings into a single graph embedding; $$R$$ must itself be permutation-invariant.
 - An MLP predicts toxicity from $$h_G$$.
 
-After 3 layers, an atom "knows" about the atoms 3 bonds away — capturing local chemical environments like functional groups.
+After 3 layers, an atom "knows" about the atoms 3 bonds away, capturing local chemical environments like functional groups.
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

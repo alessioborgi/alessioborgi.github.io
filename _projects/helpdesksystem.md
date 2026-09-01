@@ -3,7 +3,7 @@ title: "HelpDeskSystem: Web-Based Customer Support Platform"
 collection: projects
 layout: single
 permalink: /projects/helpdesksystem/
-excerpt: "A full-stack web help desk for issue tracking and customer support — with ticket management, user authentication, and real-time status updates."
+excerpt: "A full-stack web help desk for issue tracking and customer support, with ticket management, user authentication, and real-time status updates."
 author_profile: true
 github: "https://github.com/alessioborgi/HelpDeskSystem"
 tags:
@@ -14,7 +14,7 @@ tags:
   - Support Systems
 ---
 
-HelpDeskSystem is a web-based customer support platform designed to streamline issue tracking and team communication. It provides a complete ticketing workflow — from submission to resolution — with role-based access for customers, agents, and administrators.
+HelpDeskSystem is a web-based customer support platform designed to streamline issue tracking and team communication. It provides a complete ticketing workflow, from submission to resolution, with role-based access for customers, agents, and administrators.
 
 ## Features
 

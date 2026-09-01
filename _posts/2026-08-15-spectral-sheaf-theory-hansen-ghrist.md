@@ -24,7 +24,7 @@ toc_label: "Contents"
 
 <div class="paper-box">
 <strong>Paper:</strong> Toward a Spectral Theory of Cellular Sheaves<br>
-<strong>Authors:</strong> Jakob Hansen, Robert Ghrist — University of Pennsylvania<br>
+<strong>Authors:</strong> Jakob Hansen, Robert Ghrist, University of Pennsylvania<br>
 <strong>Venue:</strong> <em>Journal of Applied and Computational Topology</em> 3(4), 315–358, 2019 · <a href="https://arxiv.org/abs/1808.01513">arXiv:1808.01513</a> · open access
 </div>
 

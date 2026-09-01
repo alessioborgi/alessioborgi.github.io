@@ -6,7 +6,7 @@ book: gnn
 subsection: geometric
 tags: [geometry, 3D, molecular, coordinates, symmetry]
 published: true
-excerpt: "Many real-world graphs are embedded in 3D space — molecules, proteins, point clouds, crystal structures. Standard GNNs ignore coordinates and only use connectivity. Geometric GNNs incorporate spatial positions and must respect physical symmetries."
+excerpt: "Many real-world graphs are embedded in 3D space, molecules, proteins, point clouds, crystal structures. Standard GNNs ignore coordinates and only use connectivity. Geometric GNNs incorporate spatial positions and must respect physical symmetries."
 author_profile: true
 read_time: true
 is_overview: false
@@ -17,14 +17,14 @@ toc: true
 toc_label: "Contents"
 ---
 <div class="tldr-box">
-<strong>TL;DR:</strong> A molecule is not just a graph of atoms and bonds — it is a 3D geometric object. The same chemical formula with different 3D arrangements (stereoisomers) can have completely different properties. A GNN that ignores 3D coordinates cannot distinguish them. Geometric GNNs incorporate position data while respecting the symmetries of 3D space.
+<strong>TL;DR:</strong> A molecule is not just a graph of atoms and bonds, it is a 3D geometric object. The same chemical formula with different 3D arrangements (stereoisomers) can have completely different properties. A GNN that ignores 3D coordinates cannot distinguish them. Geometric GNNs incorporate position data while respecting the symmetries of 3D space.
 </div>
 {% include figure image_path="/images/blog/gnn/satorras2021_egnn.png" alt="Geometric structure in molecules" caption="E(n) Equivariant GNN captures 3D molecular geometry (Satorras et al., 2021)" %}
 
 
 ## The Geometric Setting
 
-**Intuition First:** Imagine you have a molecular model kit. You can describe the connectivity — carbon bonded to two oxygens — without saying *how* those bonds are arranged in 3D space. But a flat (180°) CO₂ and a bent (120°) arrangement have wildly different properties. Standard GNNs only read the assembly instructions; geometric GNNs also read the 3D blueprint.
+**Intuition First:** Imagine you have a molecular model kit. You can describe the connectivity, carbon bonded to two oxygens, without saying *how* those bonds are arranged in 3D space. But a flat (180°) CO₂ and a bent (120°) arrangement have wildly different properties. Standard GNNs only read the assembly instructions; geometric GNNs also read the 3D blueprint.
 
 <style>
 @keyframes mol-rotate {
@@ -56,7 +56,7 @@ toc_label: "Contents"
   <text x="100" y="30"  text-anchor="middle" font-size="9"  fill="white">CH₃</text>
   <text x="140" y="57"  text-anchor="middle" font-size="9"  fill="white">H</text>
   <text x="100" y="150" text-anchor="middle" font-size="10" fill="#10b981">✓ Biologically active</text>
-  <!-- D-alanine (right) — mirror image -->
+  <!-- D-alanine (right), mirror image -->
   <text x="300" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">D-Alanine</text>
   <line x1="300" y1="60" x2="330" y2="100" stroke="#6b7280" stroke-width="2"/>
   <line x1="300" y1="60" x2="270" y2="100" stroke="#6b7280" stroke-width="2"/>
@@ -75,7 +75,7 @@ toc_label: "Contents"
   <text x="300" y="150" text-anchor="middle" font-size="10" fill="#ef4444">✗ Inactive (mirror)</text>
   <!-- Mirror line -->
   <line x1="200" y1="20" x2="200" y2="155" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="200" y="172" text-anchor="middle" font-size="10" fill="#9ca3af">Same connectivity — opposite chirality → different biology</text>
+  <text x="200" y="172" text-anchor="middle" font-size="10" fill="#9ca3af">Same connectivity, opposite chirality → different biology</text>
 </svg>
 <figcaption>Stereoisomers: identical bond graph, completely different 3D structure and biological activity. A connectivity-only GNN gives them the same embedding.</figcaption>
 </figure>
@@ -87,11 +87,11 @@ Consider a molecule modelled as a graph $$G = (V, E, H, X)$$:
 
 Standard GNNs use only $$(V, E, H)$$ and ignore $$X$$. This loses crucial information:
 
-**Stereoisomers:** molecules with the same atoms and bonds but different 3D arrangement. L-alanine and D-alanine are mirror images — identical connectivity, different biological activity. A GNN without 3D coordinates assigns them the same embedding; so, as it happens, does any model built purely from interatomic distances, since distances survive reflection unchanged.
+**Stereoisomers:** molecules with the same atoms and bonds but different 3D arrangement. L-alanine and D-alanine are mirror images, identical connectivity, different biological activity. A GNN without 3D coordinates assigns them the same embedding; so, as it happens, does any model built purely from interatomic distances, since distances survive reflection unchanged.
 
-**Conformation:** proteins fold into specific 3D shapes that determine their function. Two proteins with the same sequence but different folds (conformers) have different biological roles — invisible to connectivity-only GNNs.
+**Conformation:** proteins fold into specific 3D shapes that determine their function. Two proteins with the same sequence but different folds (conformers) have different biological roles, invisible to connectivity-only GNNs.
 
-**Distances and angles:** in chemistry, reaction rates depend on bond angles and dihedral angles — geometric properties that cannot be inferred from connectivity alone.
+**Distances and angles:** in chemistry, reaction rates depend on bond angles and dihedral angles, geometric properties that cannot be inferred from connectivity alone.
 
 ## The Symmetry Problem
 
@@ -102,11 +102,11 @@ Standard GNNs use only $$(V, E, H)$$ and ignore $$X$$. This loses crucial inform
 
 Rotations plus translations form $$\mathrm{SE}(3)$$; adding reflections gives $$\mathrm{E}(3)$$. Which one you want is a modelling decision, not a detail: an $$\mathrm{E}(3)$$-invariant model is *by construction* unable to tell L-alanine from D-alanine, because it assigns mirror images the same output. If chirality matters for your target, you want $$\mathrm{SE}(3)$$ and features that change sign under reflection.
 
-**Failure mode:** naive addition of coordinates to node features gives the model different inputs for the same molecule in different orientations. The model must learn the symmetry from data — requiring training examples covering all orientations, and even then only approximately.
+**Failure mode:** naive addition of coordinates to node features gives the model different inputs for the same molecule in different orientations. The model must learn the symmetry from data, requiring training examples covering all orientations, and even then only approximately.
 
 ## Invariance vs Equivariance
 
-Let $$\Phi$$ be the network, $$g$$ a group element, and $$\rho(g)$$ the representation of $$g$$ — the concrete matrix by which $$g$$ acts on a given space.
+Let $$\Phi$$ be the network, $$g$$ a group element, and $$\rho(g)$$ the representation of $$g$$, the concrete matrix by which $$g$$ acts on a given space.
 
 **Invariant:** the output does not move at all when the input is transformed.
 
@@ -128,10 +128,10 @@ For graph-level scalar properties (energy, solubility): the property is invarian
 
 For node-level vector properties (forces, velocities): the property is equivariant with $$\rho_{\text{out}}(g) = Q$$. Rotate the molecule and the forces rotate with it.
 
-Invariance is the special case $$\rho_{\text{out}}(g) = I$$ for every $$g$$ — the trivial representation. Writing both with $$\rho_{\text{in}}$$ and $$\rho_{\text{out}}$$ made explicit is worth the extra symbols, because "$$\Phi(g x) = g \Phi(x)$$" hides the fact that the two $$g$$'s act on different spaces and are generally different matrices.
+Invariance is the special case $$\rho_{\text{out}}(g) = I$$ for every $$g$$, the trivial representation. Writing both with $$\rho_{\text{in}}$$ and $$\rho_{\text{out}}$$ made explicit is worth the extra symbols, because "$$\Phi(g x) = g \Phi(x)$$" hides the fact that the two $$g$$'s act on different spaces and are generally different matrices.
 
 <div class="insight-box">
-<strong>Why you need both:</strong> In molecular dynamics simulations, you need to predict both energy (invariant — a scalar) and forces (equivariant — 3D vectors). An equivariant force field model outputs forces that automatically rotate with the molecule — no data augmentation needed, no invariance violation possible.
+<strong>Why you need both:</strong> In molecular dynamics simulations, you need to predict both energy (invariant, a scalar) and forces (equivariant, 3D vectors). An equivariant force field model outputs forces that automatically rotate with the molecule, no data augmentation needed, no invariance violation possible.
 </div>
 
 ## What Standard GNNs Cannot Do
@@ -152,10 +152,10 @@ Three levels of geometric sophistication:
 Add interatomic distances $$\lVert x_u - x_v \rVert$$ as edge features. Distances are unchanged by translation, rotation *and* reflection, so such a model is $$\mathrm{E}(3)$$-invariant. Two consequences: it cannot predict vector quantities at all, and it cannot distinguish enantiomers.
 
 **Level 2: Angle-based (richer invariant)**
-Add angles between bond triplets $$(u, v, w)$$ and dihedral angles $$(u, v, w, z)$$. DimeNet and SphereNet operate at this level. Bond angles are still reflection-invariant; it is the *signed* dihedral angle that flips sign under reflection, which is why torsions — not angles — are what buy you chirality sensitivity.
+Add angles between bond triplets $$(u, v, w)$$ and dihedral angles $$(u, v, w, z)$$. DimeNet and SphereNet operate at this level. Bond angles are still reflection-invariant; it is the *signed* dihedral angle that flips sign under reflection, which is why torsions, not angles, are what buy you chirality sensitivity.
 
 **Level 3: Equivariant (full 3D)**
-Process 3D vectors as vectors — not just their magnitudes. EGNN, SE(3)-Transformers, NequIP, MACE operate at this level.
+Process 3D vectors as vectors, not just their magnitudes. EGNN, SE(3)-Transformers, NequIP, MACE operate at this level.
 
 ## Real Applications
 
@@ -169,14 +169,14 @@ Process 3D vectors as vectors — not just their magnitudes. EGNN, SE(3)-Transfo
 
 **Particle physics:** predict particle interaction properties with detector geometry.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Every symmetry you bake into the architecture is one fewer thing the model needs to learn from data. A rotation-invariant model trained on one molecular orientation generalises to all orientations for free, exactly and not approximately. That is a real reduction in what has to be learned from data, and it shows up as better sample efficiency on molecular benchmarks — though how much depends heavily on the task, and it is not a fixed multiplier.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Every symmetry you bake into the architecture is one fewer thing the model needs to learn from data. A rotation-invariant model trained on one molecular orientation generalises to all orientations for free, exactly and not approximately. That is a real reduction in what has to be learned from data, and it shows up as better sample efficiency on molecular benchmarks, though how much depends heavily on the task, and it is not a fixed multiplier.</div>
 
 ## Summary
 
-Adding geometry to GNNs is not optional for applications where 3D structure matters. The challenge is doing so while respecting the symmetries of 3D space — translation, rotation, and (depending on the target) reflection. State which group you actually want: $$\mathrm{E}(3)$$ invariance is the right default for energies, but it forecloses chirality by construction. The subsequent posts in this section cover the architectures (EGNN, SE(3)-Transformers, TFN) that build these constraints in systematically.
+Adding geometry to GNNs is not optional for applications where 3D structure matters. The challenge is doing so while respecting the symmetries of 3D space, translation, rotation, and (depending on the target) reflection. State which group you actually want: $$\mathrm{E}(3)$$ invariance is the right default for energies, but it forecloses chirality by construction. The subsequent posts in this section cover the architectures (EGNN, SE(3)-Transformers, TFN) that build these constraints in systematically.
 
 ## References
 
 - Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478). *arXiv 2021* (the unifying geometric deep learning blueprint: symmetry groups, equivariance, and the 5G framework).
 - Schütt, K. T., Kindermans, P.-J., Sauceda Felix, H. E., Chmiela, S., Tkatchenko, A., & Müller, K.-R. (2017). [SchNet: A Continuous-Filter Convolutional Neural Network for Modeling Quantum Interactions](https://arxiv.org/abs/1706.08566). *NeurIPS 2017* (SchNet: distance-based interaction filters for molecular property prediction).
-- Klicpera, J., Groß, J., & Günnemann, S. (2020). [Directional Message Passing for Molecular Graphs](https://arxiv.org/abs/2003.03123). *ICLR 2020* (DimeNet: directional message passing over bond angles, recovering angular information that a cutoff-graph distance model cannot — though bond angles alone remain reflection-invariant).
+- Klicpera, J., Groß, J., & Günnemann, S. (2020). [Directional Message Passing for Molecular Graphs](https://arxiv.org/abs/2003.03123). *ICLR 2020* (DimeNet: directional message passing over bond angles, recovering angular information that a cutoff-graph distance model cannot, though bond angles alone remain reflection-invariant).

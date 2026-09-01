@@ -26,7 +26,7 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> The nerve of a cover 𝒰 of a space X is the simplicial complex whose simplices are finite subcollections of 𝒰 with non-empty common intersection. The nerve theorem states that if every non-empty intersection of cover elements is contractible (a "good cover"), then the nerve is homotopy equivalent to X. This is why TDA works.</div>
 
-**Intuition First.** A cover of a space $$X$$ is a collection of overlapping "patches" whose union is all of $$X$$. The nerve of the cover is a combinatorial object that only records which patches overlap — not their actual shapes. The nerve theorem says: if every overlap is topologically trivial (contractible), the nerve has exactly the same topology as $$X$$. This is profound: you can replace a complicated continuous space with a finite combinatorial object (the nerve) and compute the same homology groups.
+**Intuition First.** A cover of a space $$X$$ is a collection of overlapping "patches" whose union is all of $$X$$. The nerve of the cover is a combinatorial object that only records which patches overlap, not their actual shapes. The nerve theorem says: if every overlap is topologically trivial (contractible), the nerve has exactly the same topology as $$X$$. This is profound: you can replace a complicated continuous space with a finite combinatorial object (the nerve) and compute the same homology groups.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 480 155" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;font-family:sans-serif;">
@@ -74,7 +74,7 @@ The nerve is a combinatorial shadow of the cover's intersection pattern.
 
 ## The Nerve Theorem
 
-**Theorem (Borsuk 1948, Leray 1945)**: If $$\mathcal{U}$$ is a **good cover** of $$X$$ — meaning every finite non-empty intersection $$U_{\alpha_0} \cap \cdots \cap U_{\alpha_k}$$ is contractible — then the nerve $$\mathcal{N}(\mathcal{U})$$ is homotopy equivalent to $$X$$:
+**Theorem (Borsuk 1948, Leray 1945)**: If $$\mathcal{U}$$ is a **good cover** of $$X$$, meaning every finite non-empty intersection $$U_{\alpha_0} \cap \cdots \cap U_{\alpha_k}$$ is contractible, then the nerve $$\mathcal{N}(\mathcal{U})$$ is homotopy equivalent to $$X$$:
 
 <div class="math-box">$$X \simeq \mathcal{N}(\mathcal{U})$$</div>
 
@@ -88,9 +88,9 @@ The nerve of $$\{B(p,r)\}_{p \in P}$$ is the **Čech complex** $$\mathrm{Čech}(
 
 **By the nerve theorem**: $$\mathrm{Čech}(P, r) \simeq \bigcup_{p \in P} B(p, r)$$.
 
-The Čech filtration (growing $$r$$ from 0 to ∞) thus computes the persistent homology of the union-of-balls filtration — the topologically correct answer for point cloud data.
+The Čech filtration (growing $$r$$ from 0 to ∞) thus computes the persistent homology of the union-of-balls filtration, the topologically correct answer for point cloud data.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The contractibility condition in the nerve theorem is not merely technical — it is essential. If intersections can have holes, the nerve can have the wrong homology. Convex sets in ℝᵈ are contractible (their intersections are also convex), which is exactly why balls in Euclidean space give a good cover. This is the geometric fact that underpins the entire TDA pipeline for point cloud data.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The contractibility condition in the nerve theorem is not merely technical, it is essential. If intersections can have holes, the nerve can have the wrong homology. Convex sets in ℝᵈ are contractible (their intersections are also convex), which is exactly why balls in Euclidean space give a good cover. This is the geometric fact that underpins the entire TDA pipeline for point cloud data.</div>
 
 ## Vietoris-Rips as an Approximation
 

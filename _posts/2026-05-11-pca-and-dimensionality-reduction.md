@@ -8,7 +8,7 @@ subsection: unsupervised
 tags: [pca, dimensionality-reduction, svd, eigenvectors, tsne]
 published: true
 is_overview: false
-excerpt: "PCA can be derived by asking for the directions of greatest spread, or by asking for the subspace that loses the least when you project onto it. The two questions look unrelated and have the same answer — which is the most useful thing to understand about it."
+excerpt: "PCA can be derived by asking for the directions of greatest spread, or by asking for the subspace that loses the least when you project onto it. The two questions look unrelated and have the same answer, which is the most useful thing to understand about it."
 author_profile: true
 read_time: true
 icon: "📉"
@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Principal component analysis finds an orthogonal set of directions ordered by how much of the data's variance each one carries. It answers two apparently different questions — "where is the data most spread out?" and "which subspace can I project onto while losing the least?" — with the same eigenvectors. Compute it with an SVD, never by forming \(X^\top X\), and remember that it is a <em>linear</em> method: no amount of it will unroll a spiral.
+<strong>TL;DR:</strong> Principal component analysis finds an orthogonal set of directions ordered by how much of the data's variance each one carries. It answers two apparently different questions, "where is the data most spread out?" and "which subspace can I project onto while losing the least?", with the same eigenvectors. Compute it with an SVD, never by forming \(X^\top X\), and remember that it is a <em>linear</em> method: no amount of it will unroll a spiral.
 </div>
 
 ## The same answer to two questions
@@ -47,7 +47,7 @@ These sound like different problems. They are the same problem, and the reason i
 The left side does not depend on $$P$$. So maximising the first term on the right and minimising the second are the *same* optimisation, and they must select the same subspace.
 
 <div class="insight-box">
-<strong>Why this matters practically:</strong> it tells you what PCA is optimising when someone asks. It is not "finding meaningful structure" or "removing noise" — it is minimising squared reconstruction error over linear subspaces. Everything PCA is good at, and everything it is bad at, follows from that being the objective.
+<strong>Why this matters practically:</strong> it tells you what PCA is optimising when someone asks. It is not "finding meaningful structure" or "removing noise", it is minimising squared reconstruction error over linear subspaces. Everything PCA is good at, and everything it is bad at, follows from that being the objective.
 </div>
 
 ## The mechanics, on numbers you can check
@@ -105,15 +105,15 @@ They sum to $$3.5$$, matching the trace, and multiply to $$0.25$$, matching the 
   <text x="330" y="72"  font-size="8.5" fill="#475569">(1,1)</text>
   <text x="390" y="72"  font-size="8.5" fill="#475569">(2,1)</text>
 
-  <text x="384" y="64" font-size="9.5" font-weight="700" fill="#0d9488">PC1 — 97.9%</text>
-  <text x="278" y="170" font-size="9.5" font-weight="700" fill="#ea580c">PC2 — 2.1%</text>
+  <text x="384" y="64" font-size="9.5" font-weight="700" fill="#0d9488">PC1, 97.9%</text>
+  <text x="278" y="170" font-size="9.5" font-weight="700" fill="#ea580c">PC2, 2.1%</text>
   <text x="260" y="250" text-anchor="middle" font-size="8.5" fill="#475569">The second axis is genuinely that short; the ratio is √0.0729 to √3.4271.</text>
 </svg>
-<figcaption>The two principal axes of the worked example, drawn with lengths proportional to the square roots of their eigenvalues. PC2 is short because it is short — the drawing is not compressed for effect.</figcaption>
+<figcaption>The two principal axes of the worked example, drawn with lengths proportional to the square roots of their eigenvalues. PC2 is short because it is short, the drawing is not compressed for effect.</figcaption>
 </figure>
 </div>
 
-Now check the equivalence claim numerically. Projecting onto $$u_1$$ alone leaves a total squared reconstruction error of $$0.2918$$. And $$(n-1)\lambda_2 = 4 \times 0.0729 = 0.2918$$. The variance you discard *is* the error you incur — exactly, not approximately.
+Now check the equivalence claim numerically. Projecting onto $$u_1$$ alone leaves a total squared reconstruction error of $$0.2918$$. And $$(n-1)\lambda_2 = 4 \times 0.0729 = 0.2918$$. The variance you discard *is* the error you incur, exactly, not approximately.
 
 ## Use the SVD, not the covariance matrix
 
@@ -125,7 +125,7 @@ Everything above is easier and better conditioned through the singular value dec
 \]
 </div>
 
-On the example, $$s = (3.7025,\ 0.5402)$$, and $$s^2/4 = (3.4271,\ 0.0729)$$ — the eigenvalues again.
+On the example, $$s = (3.7025,\ 0.5402)$$, and $$s^2/4 = (3.4271,\ 0.0729)$$, the eigenvalues again.
 
 <div class="warning-box">
 <strong>Forming \(X^\top X\) squares the conditioning.</strong> The condition number of \(X^\top X\) is the square of that of \(X\), so building the covariance matrix explicitly throws away roughly half your available precision before you start. The <a href="/blog/basics/linear-regression/">linear regression chapter</a> makes the same argument about the normal equations, and the fix is the same: factorise \(X\) directly.
@@ -133,9 +133,9 @@ On the example, $$s = (3.7025,\ 0.5402)$$, and $$s^2/4 = (3.4271,\ 0.0729)$$ —
 
 ## Two preprocessing steps that are not optional
 
-**Centring.** PCA on uncentred data does not find the direction of greatest spread — it finds the direction of the mean. Shift the example by $$(10,10)$$ and the leading direction becomes $$\approx(0.709, 0.705)$$, which points at the centroid, not along the data. The variance structure is unchanged; only the centring was dropped. Most libraries centre for you. Verify that yours does.
+**Centring.** PCA on uncentred data does not find the direction of greatest spread, it finds the direction of the mean. Shift the example by $$(10,10)$$ and the leading direction becomes $$\approx(0.709, 0.705)$$, which points at the centroid, not along the data. The variance structure is unchanged; only the centring was dropped. Most libraries centre for you. Verify that yours does.
 
-**Scaling.** Covariance is not unit-free. Measure one feature in metres and another in millimetres and the millimetre feature's variance is a million times larger, so PC1 will align with it regardless of whether it carries any real information. If your features have incomparable units, standardise first — which amounts to running PCA on the correlation matrix instead.
+**Scaling.** Covariance is not unit-free. Measure one feature in metres and another in millimetres and the millimetre feature's variance is a million times larger, so PC1 will align with it regardless of whether it carries any real information. If your features have incomparable units, standardise first, which amounts to running PCA on the correlation matrix instead.
 
 ## How many components
 
@@ -158,11 +158,11 @@ The honest answer is that this is a judgement call dressed up in several ways: k
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>
 <ul>
-  <li>Maximising retained variance and minimising squared reconstruction error are the same optimisation — Pythagoras splits a fixed total between them.</li>
+  <li>Maximising retained variance and minimising squared reconstruction error are the same optimisation, Pythagoras splits a fixed total between them.</li>
   <li>Components are eigenvectors of the covariance; explained variance is its eigenvalues. On the worked example \(\lambda = (3.4271, 0.0729)\), so PC1 carries 97.9%.</li>
   <li>The discarded variance <em>equals</em> the reconstruction error: \((n-1)\lambda_2 = 0.2918\) is exactly the SSE from projecting onto PC1.</li>
   <li>Compute via SVD, using \(\lambda_i = s_i^2/(n-1)\). Forming \(X^\top X\) squares the condition number for no benefit.</li>
   <li>Centre always; standardise whenever features have different units. Skipping the centring makes PC1 point at the mean.</li>
-  <li>PCA is linear, unsupervised, and optimises reconstruction — so it cannot unroll curved structure, and it has no reason to keep the direction your classifier needs.</li>
+  <li>PCA is linear, unsupervised, and optimises reconstruction, so it cannot unroll curved structure, and it has no reason to keep the direction your classifier needs.</li>
 </ul>
 </div>

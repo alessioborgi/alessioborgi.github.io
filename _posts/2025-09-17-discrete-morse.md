@@ -28,7 +28,7 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Think of a discrete Morse function as a "pairing up" game on the simplicial complex. You pair each edge with one of its vertices, each triangle with one of its edges, and so on — as long as each simplex appears in at most one pair. Paired simplices cancel each other topologically (like cancelling +1 and -1). The leftover, unpaired simplices are "critical" — they are the ones that genuinely contribute to homology. The game's goal: pair as many simplices as possible, leaving as few critical ones as needed.
+Think of a discrete Morse function as a "pairing up" game on the simplicial complex. You pair each edge with one of its vertices, each triangle with one of its edges, and so on, as long as each simplex appears in at most one pair. Paired simplices cancel each other topologically (like cancelling +1 and -1). The leftover, unpaired simplices are "critical", they are the ones that genuinely contribute to homology. The game's goal: pair as many simplices as possible, leaving as few critical ones as needed.
 
 <style>
 @keyframes pairPulse {
@@ -91,7 +91,7 @@ Think of a discrete Morse function as a "pairing up" game on the simplicial comp
   <text x="360" y="56" font-size="10" fill="#d97706" text-anchor="middle" font-weight="bold">CRITICAL</text>
 
   <!-- Pair labels -->
-  <text x="275" y="185" font-size="9" fill="#7c3aed">— gradient pair (cancels)</text>
+  <text x="275" y="185" font-size="9" fill="#7c3aed">, gradient pair (cancels)</text>
   <text x="275" y="197" font-size="9" fill="#d97706">● critical simplex (contributes to H)</text>
 </svg>
 <figcaption style="text-align:center;font-size:.85em;color:#64748b;">Left: triangle with filtration values. Right: gradient pairs (purple arrows, paired simplices cancel) and the single critical 0-simplex v₃ (gold, glowing) that contributes to H₀.</figcaption>
@@ -128,7 +128,7 @@ where the coefficient $$\langle \sigma, \tau \rangle$$ counts the (algebraic) nu
 
 Take the unit square triangulated as two triangles: vertices $$A, B, C, D$$, edges $$AB, BC, CD, DA, AC$$ (diagonal), triangles $$ABC, ACD$$. That's 4 + 5 + 2 = 11 simplices.
 
-A gradient vector field can pair: $$(A, AB)$$, $$(B, BC)$$, $$(C, AC)$$, $$(CD, ACD)$$. This leaves only $$DA$$ and $$ABC$$ unpaired? No — let's recount: we can pair $$(A,AB)$$, $$(C,BC)$$, $$(D,CD)$$, $$(AC, ABC)$$, $$(DA, ACD)$$. Only $$B$$ is unpaired — one critical 0-simplex. The Morse complex has one cell (the minimum), correctly reflecting that the square is contractible: $$\beta_0 = 1$$, $$\beta_1 = 0$$. We collapsed 11 simplices down to 1 critical simplex — a 11× reduction in the matrix size for homology computation.
+A gradient vector field can pair: $$(A, AB)$$, $$(B, BC)$$, $$(C, AC)$$, $$(CD, ACD)$$. This leaves only $$DA$$ and $$ABC$$ unpaired? No, let's recount: we can pair $$(A,AB)$$, $$(C,BC)$$, $$(D,CD)$$, $$(AC, ABC)$$, $$(DA, ACD)$$. Only $$B$$ is unpaired, one critical 0-simplex. The Morse complex has one cell (the minimum), correctly reflecting that the square is contractible: $$\beta_0 = 1$$, $$\beta_1 = 0$$. We collapsed 11 simplices down to 1 critical simplex, a 11× reduction in the matrix size for homology computation.
 
 ## Application to Persistence
 
@@ -136,11 +136,11 @@ For persistence computation, one builds a discrete Morse function compatible wit
 
 1. Process simplices in filtration order $$\sigma_1, \ldots, \sigma_n$$.
 2. Greedily pair each simplex with a free face if possible (producing a gradient pair).
-3. Unpaired simplices become critical — these are exactly the "positive" and "negative" simplices of the persistence algorithm.
+3. Unpaired simplices become critical, these are exactly the "positive" and "negative" simplices of the persistence algorithm.
 
 The result: the boundary matrix of the Morse complex is already partially reduced, and can be much smaller than the original boundary matrix.
 
-**Complexity benefit**: If the Morse complex has $$m$$ critical simplices (with $$m \ll n$$), persistence computation runs in $$O(m^3)$$ instead of $$O(n^3)$$ — a dramatic speedup on "nice" inputs.
+**Complexity benefit**: If the Morse complex has $$m$$ critical simplices (with $$m \ll n$$), persistence computation runs in $$O(m^3)$$ instead of $$O(n^3)$$, a dramatic speedup on "nice" inputs.
 
 <div class="insight-box"><strong>Key Insight:</strong> The connection between discrete Morse theory and persistence is deep: the persistence algorithm itself can be viewed as computing a discrete gradient vector field (each pairing $$(\sigma_i, \sigma_j)$$ is a gradient pair), and the "unpaired" simplices are precisely the critical simplices of a compatible Morse function. Tools like Perseus (Nanda) implement persistence via Morse-theoretic preprocessing and achieve major speedups on high-dimensional image data.</div>
 

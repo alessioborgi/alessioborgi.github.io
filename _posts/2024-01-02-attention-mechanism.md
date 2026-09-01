@@ -5,7 +5,7 @@ date: 2026-05-26
 categories: [transformers]
 book: transformers
 tags: [attention, mechanism]
-excerpt: "Self-attention is the core of every Transformer. Learn how Query, Key, and Value vectors let every token directly attend to every other — and why that matters."
+excerpt: "Self-attention is the core of every Transformer. Learn how Query, Key, and Value vectors let every token directly attend to every other, and why that matters."
 author_profile: true
 read_time: true
 is_overview: false
@@ -34,7 +34,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Self-attention lets each token in a sequence ask "who else here is relevant to me?" It uses three learned projections — Query, Key, and Value — to compute a weighted mixture of all token representations in one shot.
+  <strong>TL;DR:</strong> Self-attention lets each token in a sequence ask "who else here is relevant to me?" It uses three learned projections, Query, Key, and Value, to compute a weighted mixture of all token representations in one shot.
 </div>
 {% include figure image_path="/images/blog/transformers/slides/slide-14-attention-op.png" alt="Slide visualizing the attention operation with Q K transpose softmax and V" caption="Attention is easiest to understand as a pipeline from Queries and Keys to a row-normalized weighting pattern that mixes the Values. Source: [2]." %}
 
@@ -150,9 +150,9 @@ Q = X W_Q, \qquad K = X W_K, \qquad V = X W_V
 </figure>
 </div>
 
-**Step 1 — Project:** Multiply the input matrix $$X$$ by three weight matrices to get $$Q$$, $$K$$, $$V$$.
+**Step 1, Project:** Multiply the input matrix $$X$$ by three weight matrices to get $$Q$$, $$K$$, $$V$$.
 
-**Step 2 — Score:** Compute the dot product of every query with every key: $$Q K^{\top}$$. Divide by $$\sqrt{d_k}$$ to prevent large values from pushing the softmax into saturation.
+**Step 2, Score:** Compute the dot product of every query with every key: $$Q K^{\top}$$. Divide by $$\sqrt{d_k}$$ to prevent large values from pushing the softmax into saturation.
 
 <div class="formula-box">
 \[
@@ -160,9 +160,9 @@ Q = X W_Q, \qquad K = X W_K, \qquad V = X W_V
 \]
 </div>
 
-**Step 3 — Normalise:** Apply softmax row-wise. Each row now sums to 1, giving a probability distribution: *"how much should token i attend to token j?"*
+**Step 3, Normalise:** Apply softmax row-wise. Each row now sums to 1, giving a probability distribution: *"how much should token i attend to token j?"*
 
-**Step 4 — Mix:** Multiply the attention weights by V. Each token's output is a weighted average of all value vectors — heavily weighted towards the tokens it found most relevant.
+**Step 4, Mix:** Multiply the attention weights by V. Each token's output is a weighted average of all value vectors, heavily weighted towards the tokens it found most relevant.
 
 <div class="blog-figure--compact">
 {% include figure image_path="/images/blog/transformers/vaswani2017_scaled_dot_product.png" alt="Scaled dot-product attention equation and computation flow" caption="Scaled dot-product attention: queries score keys, softmax turns scores into weights, and values are mixed accordingly (Vaswani et al., 2017)." %}
@@ -176,7 +176,7 @@ Without scaling, the dot products grow large as dimensionality $$d_k$$ increases
 
 The attention matrix has a score for every (query-token, key-token) pair. High score = "I find you useful." After softmax, these are weights that determine how much each token borrows from each other token when forming its output representation.
 
-Critically, this computation is **fully differentiable** — the model learns which token pairs should have high attention purely from training signal, with no hand-crafted rules.
+Critically, this computation is **fully differentiable**, the model learns which token pairs should have high attention purely from training signal, with no hand-crafted rules.
 
 ## Concrete Worked Example (2-token sequence, $$d_k = 2$$)
 
@@ -185,11 +185,11 @@ Let's trace the full computation with tiny numbers so you can verify it by hand.
 **Setup:** two tokens "cat" ($$x_1$$) and "sat" ($$x_2$$), $$d_k = 2$$.
 
 Suppose after projection we have:
-- $$Q = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$ — $$q_1 = [1,0]$$, $$q_2 = [0,1]$$
-- $$K = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$ — $$k_1 = [1,0]$$, $$k_2 = [0,1]$$
-- $$V = \begin{bmatrix} 2 & 3 \\ 5 & 1 \end{bmatrix}$$ — $$v_1 = [2,3]$$, $$v_2 = [5,1]$$
+- $$Q = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$, $$q_1 = [1,0]$$, $$q_2 = [0,1]$$
+- $$K = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$, $$k_1 = [1,0]$$, $$k_2 = [0,1]$$
+- $$V = \begin{bmatrix} 2 & 3 \\ 5 & 1 \end{bmatrix}$$, $$v_1 = [2,3]$$, $$v_2 = [5,1]$$
 
-**Step 1 — Raw scores** ($$Q K^{\top}$$):
+**Step 1, Raw scores** ($$Q K^{\top}$$):
 
 ```
           k₁=[1,0]  k₂=[0,1]
@@ -203,7 +203,7 @@ q₂=[0,1]    0·1+1·0=0   0·0+1·1=1
 \]
 </div>
 
-**Step 2 — Scale by $$\sqrt{d_k} = \sqrt{2} \approx 1.41$$:**
+**Step 2, Scale by $$\sqrt{d_k} = \sqrt{2} \approx 1.41$$:**
 
 <div class="formula-box">
 \[
@@ -211,7 +211,7 @@ q₂=[0,1]    0·1+1·0=0   0·0+1·1=1
 \]
 </div>
 
-**Step 3 — Softmax row-wise:**
+**Step 3, Softmax row-wise:**
 
 <div class="formula-box">
 \[
@@ -223,7 +223,7 @@ q₂=[0,1]    0·1+1·0=0   0·0+1·1=1
 \]
 </div>
 
-**Step 4 — Weighted sum of $$V$$:**
+**Step 4, Weighted sum of $$V$$:**
 
 <div class="formula-box">
 \[
@@ -235,7 +235,7 @@ q₂=[0,1]    0·1+1·0=0   0·0+1·1=1
 </div>
 
 <div class="insight-box">
-<strong>What just happened:</strong> "cat" (token 1) attends mostly to itself (0.67) and a little to "sat" (0.33). Its output is a blend of both value vectors — it has absorbed context from the full sequence. Neither token's representation is isolated.
+<strong>What just happened:</strong> "cat" (token 1) attends mostly to itself (0.67) and a little to "sat" (0.33). Its output is a blend of both value vectors, it has absorbed context from the full sequence. Neither token's representation is isolated.
 </div>
 
 ## What Self-Attention Gives You That RNNs Do Not
@@ -257,6 +257,6 @@ q₂=[0,1]    0·1+1·0=0   0·0+1·1=1
   <li>Self-attention projects each token into <strong>Q, K, V</strong> vectors via learned weight matrices.</li>
   <li>Relevance scores are <strong>dot products of \(Q\) and \(K\)</strong>, scaled by \(\sqrt{d_k}\) and normalised with softmax.</li>
   <li>The output of each token is a <strong>weighted sum of all Value vectors</strong>.</li>
-  <li>The whole computation runs in parallel across all token pairs — no sequential dependency.</li>
+  <li>The whole computation runs in parallel across all token pairs, no sequential dependency.</li>
 </ul>
 </div>

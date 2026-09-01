@@ -39,9 +39,9 @@ toc_label: "Contents"
 
 ## Intuition First: GCN Is One Point in a Vast Design Space
 
-Standard GCN uses identity restriction maps — every node talks to its neighbours in the same language (ℝ^d), with no translation needed. Hansen & Gebhart's insight is that this is an arbitrary special case.
+Standard GCN uses identity restriction maps, every node talks to its neighbours in the same language (ℝ^d), with no translation needed. Hansen & Gebhart's insight is that this is an arbitrary special case.
 
-Think of restriction maps as *interpreters* sitting on each edge. GCN uses the same interpreter everywhere (the trivial identity). A sheaf GNN can use a different interpreter per edge — one that says "when node u talks to edge e, translate u's signal using matrix F_{u▷e} first." The space of possible interpreters is enormous; GCN lives at a single corner of it.
+Think of restriction maps as *interpreters* sitting on each edge. GCN uses the same interpreter everywhere (the trivial identity). A sheaf GNN can use a different interpreter per edge, one that says "when node u talks to edge e, translate u's signal using matrix F_{u▷e} first." The space of possible interpreters is enormous; GCN lives at a single corner of it.
 
 <style>
 @keyframes gcnHl {
@@ -89,7 +89,7 @@ Think of restriction maps as *interpreters* sitting on each edge. GCN uses the s
   <text x="140" y="65" font-size="9" fill="#7c3aed">Hansen &amp; Gebhart (2020):</text>
   <text x="140" y="77" font-size="9" fill="#7c3aed">"GCN is just one point here"</text>
 </svg>
-<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">The sheaf GNN design space. GCN (blue, pulsing) lives at the corner with identity restriction maps. Hansen & Gebhart showed that moving away from that corner — to diagonal, orthogonal, or general maps — opens a richer space. NSD (2022) made the maps learnable; PNSD (2024) added a polynomial spectral filter on top.</figcaption>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">The sheaf GNN design space. GCN (blue, pulsing) lives at the corner with identity restriction maps. Hansen & Gebhart showed that moving away from that corner, to diagonal, orthogonal, or general maps, opens a richer space. NSD (2022) made the maps learnable; PNSD (2024) added a polynomial spectral filter on top.</figcaption>
 </figure></div>
 
 ## Context and Motivation
@@ -134,7 +134,7 @@ X^{(k+1)} = σ( (I − Δ_F^{norm}) X^{(k)} W^{(k)} )
 
 where Δ_F^{norm} = D_F^{-1/2} Δ_F D_F^{-1/2} is the normalised Sheaf Laplacian and W^{(k)} is a trainable weight matrix.
 
-This is exactly GCN with the graph Laplacian replaced by the Sheaf Laplacian. The restriction maps F are fixed — determined by domain knowledge or handcrafted rules — rather than learned from data.
+This is exactly GCN with the graph Laplacian replaced by the Sheaf Laplacian. The restriction maps F are fixed, determined by domain knowledge or handcrafted rules, rather than learned from data.
 
 **Key difference from GCN:** The operator (I − Δ_F^{norm}) is an (Nd)×(Nd) matrix rather than N×N. So the input to the weight matrix W is an Nd-dimensional vector per node (the stalk), not just d-dimensional.
 
@@ -166,16 +166,16 @@ Experiments on Cora, Citeseer, Pubmed (homophilic, node classification):
 The improvements are modest but consistent. More importantly, the paper establishes that sheaf diffusion is a **well-defined generalisation** of GCN with a principled theoretical foundation.
 
 <div class="insight-box">
-<strong>What the results show:</strong> Fixed sheaf maps already provide some benefit on homophilic benchmarks, even without learning. The paper's primary contribution is not performance — it is the theoretical framework that makes sheaf GNNs conceivable. The follow-up work (NSD) makes the restriction maps learnable, dramatically improving performance on heterophilic graphs.
+<strong>What the results show:</strong> Fixed sheaf maps already provide some benefit on homophilic benchmarks, even without learning. The paper's primary contribution is not performance, it is the theoretical framework that makes sheaf GNNs conceivable. The follow-up work (NSD) makes the restriction maps learnable, dramatically improving performance on heterophilic graphs.
 </div>
 
 ## Theoretical Contributions
 
-**Theorem 1 (Generalised oversmoothing):** As K → ∞, the output of K-layer SNN converges to the projection of X₀ onto ker(Δ_F). For the constant sheaf, ker(Δ_F) = span{1_N}⊗ℝ^d — standard oversmoothing. For non-trivial sheaves, ker(Δ_F) can be much larger.
+**Theorem 1 (Generalised oversmoothing):** As K → ∞, the output of K-layer SNN converges to the projection of X₀ onto ker(Δ_F). For the constant sheaf, ker(Δ_F) = span{1_N}⊗ℝ^d, standard oversmoothing. For non-trivial sheaves, ker(Δ_F) can be much larger.
 
 **Proposition 1 (Generalised graph Laplacian):** The constant sheaf recovers the standard graph Laplacian. Diagonal sheaves recover generalised graph Laplacians used in APPNP, GCNII, and related work.
 
-**Proposition 2 (Spectral interpretation):** Sheaf diffusion is low-pass filtering with respect to the Sheaf Laplacian — it attenuates high-frequency components (large eigenvalues) while preserving low-frequency ones (small eigenvalues, including ker(Δ_F)).
+**Proposition 2 (Spectral interpretation):** Sheaf diffusion is low-pass filtering with respect to the Sheaf Laplacian, it attenuates high-frequency components (large eigenvalues) while preserving low-frequency ones (small eigenvalues, including ker(Δ_F)).
 
 ## Limitations of the Fixed-Map Approach
 
@@ -194,20 +194,20 @@ The paper explicitly connects sheaf GNNs to:
 - **Graph Signal Processing** (Shuman et al., 2013): the Sheaf Laplacian as the correct generalisation of the graph Laplacian for multi-dimensional signals
 - **Topological Data Analysis** (Ghrist, 2014; Curry, 2014): cellular sheaves as a TDA tool applied to graph learning
 
-The paper establishes sheaf GNNs within a broader intellectual tradition — not as an ad-hoc architecture improvement but as a principled connection between topology and machine learning.
+The paper establishes sheaf GNNs within a broader intellectual tradition, not as an ad-hoc architecture improvement but as a principled connection between topology and machine learning.
 
 ## Legacy
 
 Hansen & Gebhart (2020) opened a research direction that has produced:
-- Neural Sheaf Diffusion (2022) — learned maps, NeurIPS
-- Polynomial NSD (2024) — learnable spectral filters, ICLR
-- Sheaf Attention Networks (2022) — attention + sheaves
+- Neural Sheaf Diffusion (2022), learned maps, NeurIPS
+- Polynomial NSD (2024), learnable spectral filters, ICLR
+- Sheaf Attention Networks (2022), attention + sheaves
 - Connections to topological deep learning (Giusti et al., 2023)
 
-The paper's insight — that GCN's aggregation can be analysed as sheaf diffusion, and that the null space of the Sheaf Laplacian controls oversmoothing — remains the central theoretical pillar of the entire field.
+The paper's insight, that GCN's aggregation can be analysed as sheaf diffusion, and that the null space of the Sheaf Laplacian controls oversmoothing, remains the central theoretical pillar of the entire field.
 
 ## References
 
 - Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop*.
-- Li, Q., Han, Z., & Wu, X.-M. (2018). [Deeper Insights Into Graph Convolutional Networks for Semi-Supervised Classification](https://arxiv.org/abs/1801.07606). *AAAI 2018* (oversmoothing in GCN — key motivation for the null space analysis).
+- Li, Q., Han, Z., & Wu, X.-M. (2018). [Deeper Insights Into Graph Convolutional Networks for Semi-Supervised Classification](https://arxiv.org/abs/1801.07606). *AAAI 2018* (oversmoothing in GCN, key motivation for the null space analysis).
 - Ghrist, R. (2014). [Elementary Applied Topology](https://www2.math.upenn.edu/~ghrist/EAT/). *Createspace* (the topology background Hansen & Gebhart draw from).

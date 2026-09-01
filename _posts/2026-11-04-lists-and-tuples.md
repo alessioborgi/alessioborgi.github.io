@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> A list is a dynamic array of references — index and <code>append</code> are \(O(1)\), <code>insert(0, x)</code> and <code>remove</code> are \(O(n)\), and membership is a linear scan. Slicing always builds a new list, which makes <code>xs[:]</code> the shallow-copy idiom and <code>xs[::-1]</code> the reverse idiom. <code>sort()</code> mutates and returns <code>None</code>; <code>sorted()</code> returns a new list and accepts any iterable. Tuples are the immutable sibling, which is exactly why they can be dictionary keys.
+  <strong>TL;DR:</strong> A list is a dynamic array of references, index and <code>append</code> are \(O(1)\), <code>insert(0, x)</code> and <code>remove</code> are \(O(n)\), and membership is a linear scan. Slicing always builds a new list, which makes <code>xs[:]</code> the shallow-copy idiom and <code>xs[::-1]</code> the reverse idiom. <code>sort()</code> mutates and returns <code>None</code>; <code>sorted()</code> returns a new list and accepts any iterable. Tuples are the immutable sibling, which is exactly why they can be dictionary keys.
 </div>
 
 ## What a list actually is
 
-CPython implements `list` as a contiguous array of pointers to objects, plus a length and a capacity. Elements are not stored inline, so a list can hold objects of different types and any element can be any size. When the array fills up, CPython allocates a larger one — with geometric over-allocation, so `append` is $$O(1)$$ *amortised*, not $$O(1)$$ in the worst case.
+CPython implements `list` as a contiguous array of pointers to objects, plus a length and a capacity. Elements are not stored inline, so a list can hold objects of different types and any element can be any size. When the array fills up, CPython allocates a larger one, with geometric over-allocation, so `append` is $$O(1)$$ *amortised*, not $$O(1)$$ in the worst case.
 
-Everything else follows. Indexing is pointer arithmetic, so it is constant time. Inserting or deleting at position `i` must shift the $$n - i$$ pointers after it, so it is $$O(n - i)$$ — free at the end, expensive at the front. Searching has no index to exploit, so `x in xs` is $$O(n)$$.
+Everything else follows. Indexing is pointer arithmetic, so it is constant time. Inserting or deleting at position `i` must shift the $$n - i$$ pointers after it, so it is $$O(n - i)$$, free at the end, expensive at the front. Searching has no index to exploit, so `x in xs` is $$O(n)$$.
 
 ## Indexing and slicing
 
@@ -49,7 +49,7 @@ print(xs[1:5:2])  # -> ['b', 'd']
 
 Two idioms worth memorising: `xs[:]` is a shallow copy, and `xs[::-1]` is a reversed copy. Both are $$O(n)$$ in time and space.
 
-Slices never raise `IndexError` — out-of-range bounds are clamped, so `xs[10:20]` gives `[]` while `xs[10]` raises. That leniency is convenient and occasionally hides a bug.
+Slices never raise `IndexError`, out-of-range bounds are clamped, so `xs[10:20]` gives `[]` while `xs[10]` raises. That leniency is convenient and occasionally hides a bug.
 
 Slices are also assignable, which lets you splice in place:
 
@@ -100,7 +100,7 @@ print(ys)             # -> []
 Note the asymmetry between `append`/`extend`: `xs.append([1, 2])` adds one element that happens to be a list, while `xs.extend([1, 2])` adds two. And if you find yourself calling `insert(0, v)` or `pop(0)` in a loop, you want `collections.deque`, which does both ends in $$O(1)$$.
 
 <div class="warning-box">
-  <strong>The classic trap — <code>[[0] * 3] * 3</code> does not build a grid.</strong> The outer <code>* 3</code> repeats the <em>reference</em>, so all three rows are the same list object:
+  <strong>The classic trap, <code>[[0] * 3] * 3</code> does not build a grid.</strong> The outer <code>* 3</code> repeats the <em>reference</em>, so all three rows are the same list object:
   <pre><code>grid = [[0] * 3] * 3
 grid[0][0] = 1
 print(grid)   # -> [[1, 0, 0], [1, 0, 0], [1, 0, 0]]</code></pre>
@@ -132,7 +132,7 @@ print(sorted(words, key=len))                 # -> ['fig', 'kiwi', 'apple', 'ban
 print(sorted(words, key=len, reverse=True))   # -> ['banana', 'apple', 'kiwi', 'fig']
 ```
 
-Return a tuple from `key` to sort by several fields at once. Timsort is **stable** — equal keys keep their original relative order — so descending by score then ascending by name is one call:
+Return a tuple from `key` to sort by several fields at once. Timsort is **stable**, equal keys keep their original relative order, so descending by score then ascending by name is one call:
 
 ```python
 pairs = [("bob", 3), ("ann", 5), ("cid", 3)]
@@ -144,7 +144,7 @@ The `-p[1]` trick only works for numbers; for a descending string field, sort tw
 
 ## Tuples
 
-A tuple is an immutable sequence. It supports indexing, slicing, `in`, `len`, `count` and `index` — everything a list does except the mutating half of the API.
+A tuple is an immutable sequence. It supports indexing, slicing, `in`, `len`, `count` and `index`, everything a list does except the mutating half of the API.
 
 ```python
 t = (1, 2, 3)
@@ -185,7 +185,7 @@ print(a, mid, z)        # -> 1 [2, 3, 4] 5
 
 ## When the immutability matters
 
-Tuples are hashable when their contents are, so they can be dictionary keys and set members — a list cannot:
+Tuples are hashable when their contents are, so they can be dictionary keys and set members, a list cannot:
 
 ```python
 d = {(0, 0): "origin"}
@@ -195,10 +195,10 @@ print(d[(0, 0)])      # -> origin
 # TypeError: unhashable type: 'list'
 ```
 
-That is the main practical reason to reach for a tuple: coordinates, `(row, col)` cells, `(year, month)` buckets, memoisation keys. Multiple return values are also tuples — `return x, y` builds one, and the caller unpacks it. Beyond that, a tuple documents that a collection is a fixed record of heterogeneous fields rather than a homogeneous sequence you will iterate over. When the fields deserve names, `collections.namedtuple` or `typing.NamedTuple` gives you a tuple with attribute access at no extra memory cost.
+That is the main practical reason to reach for a tuple: coordinates, `(row, col)` cells, `(year, month)` buckets, memoisation keys. Multiple return values are also tuples, `return x, y` builds one, and the caller unpacks it. Beyond that, a tuple documents that a collection is a fixed record of heterogeneous fields rather than a homogeneous sequence you will iterate over. When the fields deserve names, `collections.namedtuple` or `typing.NamedTuple` gives you a tuple with attribute access at no extra memory cost.
 
 <div class="insight-box">
-  <strong>Key Insight — immutable does not mean unchangeable all the way down:</strong> a tuple freezes its <em>references</em>, not the objects they point at. So <code>t = ([1, 2], 3)</code> allows <code>t[0].append(9)</code>, giving <code>([1, 2, 9], 3)</code>, and <code>hash(t)</code> still fails with <code>TypeError: unhashable type: 'list'</code>. Hashability is recursive, immutability of the container is not — which is precisely why a tuple containing a list cannot be a dictionary key.
+  <strong>Key Insight, immutable does not mean unchangeable all the way down:</strong> a tuple freezes its <em>references</em>, not the objects they point at. So <code>t = ([1, 2], 3)</code> allows <code>t[0].append(9)</code>, giving <code>([1, 2, 9], 3)</code>, and <code>hash(t)</code> still fails with <code>TypeError: unhashable type: 'list'</code>. Hashability is recursive, immutability of the container is not, which is precisely why a tuple containing a list cannot be a dictionary key.
 </div>
 
 Next up: [dicts and sets](/blog/python-primer/dicts-and-sets/), where hashing buys back the $$O(1)$$ membership test that lists cannot offer.
@@ -209,7 +209,7 @@ Next up: [dicts and sets](/blog/python-primer/dicts-and-sets/), where hashing bu
     <li>A list is a dynamic array of references: index and <code>append</code> are \(O(1)\); <code>insert(0, v)</code>, <code>pop(0)</code>, <code>remove</code> and <code>in</code> are \(O(n)\). Use <code>collections.deque</code> for a queue.</li>
     <li>Slicing copies; <code>xs[:]</code> is the shallow-copy idiom, <code>xs[::-1]</code> the reverse. Out-of-range slice bounds clamp instead of raising.</li>
     <li><code>xs.sort()</code> mutates and returns <code>None</code>; <code>sorted(it)</code> returns a new list. Both are stable Timsort, and <code>key</code> is called once per element.</li>
-    <li><code>[[0] * 3] * 3</code> aliases one row three times — use a comprehension.</li>
+    <li><code>[[0] * 3] * 3</code> aliases one row three times, use a comprehension.</li>
     <li>Commas make tuples; a one-element tuple needs the trailing comma. Starred unpacking takes at most one star.</li>
     <li>Tuples are hashable only if every element is, which is what qualifies them as dict keys.</li>
   </ul>
@@ -218,8 +218,8 @@ Next up: [dicts and sets](/blog/python-primer/dicts-and-sets/), where hashing bu
 ## References
 
 1. Python Software Foundation. [Data Structures: more on lists](https://docs.python.org/3/tutorial/datastructures.html).
-2. Python Software Foundation. [Sequence Types — list, tuple, range](https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range).
+2. Python Software Foundation. [Sequence Types, list, tuple, range](https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range).
 3. Python Software Foundation. [Sorting Techniques (the HOWTO)](https://docs.python.org/3/howto/sorting.html).
-4. Python Wiki. [TimeComplexity — costs of the built-in container operations](https://wiki.python.org/moin/TimeComplexity).
-5. Hettinger, R. [PEP 3132 — Extended Iterable Unpacking](https://peps.python.org/pep-3132/).
-6. Peters, T. [listsort.txt — the design notes for Timsort](https://github.com/python/cpython/blob/main/Objects/listsort.txt).
+4. Python Wiki. [TimeComplexity, costs of the built-in container operations](https://wiki.python.org/moin/TimeComplexity).
+5. Hettinger, R. [PEP 3132, Extended Iterable Unpacking](https://peps.python.org/pep-3132/).
+6. Peters, T. [listsort.txt, the design notes for Timsort](https://github.com/python/cpython/blob/main/Objects/listsort.txt).

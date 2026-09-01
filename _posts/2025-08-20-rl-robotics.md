@@ -33,7 +33,7 @@ toc_label: "Contents"
 
 ## Intuition First: Why Robotics Is the Hardest RL Domain
 
-In Atari, a bad policy just loses points. In robotics, a bad policy breaks the robot, injures a human, or destroys expensive hardware. The simulator runs at 1000 Hz in MuJoCo but a real robot runs at real time — meaning one hour of real experience takes an hour to collect, not seconds. The sim-to-real gap is like training a surgeon on a rubber dummy and expecting flawless performance on a real patient: the mismatch in touch, friction, compliance, and noise can cause catastrophic failures. Domain randomisation is the community's answer: if the policy works on every plausible version of the simulation, it should work on the real world too.
+In Atari, a bad policy just loses points. In robotics, a bad policy breaks the robot, injures a human, or destroys expensive hardware. The simulator runs at 1000 Hz in MuJoCo but a real robot runs at real time, meaning one hour of real experience takes an hour to collect, not seconds. The sim-to-real gap is like training a surgeon on a rubber dummy and expecting flawless performance on a real patient: the mismatch in touch, friction, compliance, and noise can cause catastrophic failures. Domain randomisation is the community's answer: if the policy works on every plausible version of the simulation, it should work on the real world too.
 
 ## The Robotics Challenge
 
@@ -47,19 +47,19 @@ Robotics is one of the most demanding application domains for RL. The challenges
 
 ## Simulation and the Sim-to-Real Gap
 
-Training in simulation avoids hardware wear and enables parallelism: 1,000 simulated robots training simultaneously in MuJoCo or Isaac Gym generates data orders of magnitude faster than a real robot. However, the **sim-to-real gap** — differences in friction, actuator dynamics, sensor noise, and visual appearance — can cause policies trained in simulation to fail when deployed on real hardware.
+Training in simulation avoids hardware wear and enables parallelism: 1,000 simulated robots training simultaneously in MuJoCo or Isaac Gym generates data orders of magnitude faster than a real robot. However, the **sim-to-real gap**, differences in friction, actuator dynamics, sensor noise, and visual appearance, can cause policies trained in simulation to fail when deployed on real hardware.
 
 **Domain randomisation** (Tobin et al. 2017; Andrychowicz et al. 2019) addresses this by randomising simulation parameters during training:
 
 <div class="math-box">π* = argmax_π E_{ξ ~ p(ξ)} [ J(π; ξ) ]</div>
 
-where $$\xi$$ captures randomised parameters (mass, friction, damping, motor delays, visual textures). If the range of randomisation spans the real world, the policy must generalise across all of them — and real hardware is just one more point in the distribution.
+where $$\xi$$ captures randomised parameters (mass, friction, damping, motor delays, visual textures). If the range of randomisation spans the real world, the policy must generalise across all of them, and real hardware is just one more point in the distribution.
 
 <div class="insight-box"><strong>Key Insight:</strong> Domain randomisation trades a narrow policy optimised for one environment for a broader policy optimised for a distribution. The resulting policy is more conservative and robust, sacrificing peak in-simulation performance for real-world transferability. The key design choice is which parameters to randomise and by how much.</div>
 
 ## OpenAI Dactyl: Dexterous Manipulation
 
-OpenAI Dactyl (Andrychowicz et al. 2019) trained a Shadow Dexterous Hand to solve a Rubik's cube — a task requiring 24 degrees of freedom and fine-grained finger coordination. The training used:
+OpenAI Dactyl (Andrychowicz et al. 2019) trained a Shadow Dexterous Hand to solve a Rubik's cube, a task requiring 24 degrees of freedom and fine-grained finger coordination. The training used:
 
 - 13,000+ CPU cores running MuJoCo in parallel.
 - Automatic Domain Randomisation (ADR): the randomisation range expands automatically whenever the policy becomes proficient at the current range.
@@ -114,7 +114,7 @@ The policy successfully solved the Rubik's cube on real hardware, demonstrating 
   <text x="200" y="120" text-anchor="middle" font-size="9" fill="#64748b">Policy trained across randomised params ξ ~ p(ξ)</text>
   <text x="200" y="135" text-anchor="middle" font-size="9" fill="#64748b">Real world = just another point in the distribution</text>
 </svg>
-<figcaption>Domain randomisation trains one policy across many simulated environments with randomised physical parameters. The real world is treated as one more sample from that distribution — closing the sim-to-real gap through breadth of training.</figcaption>
+<figcaption>Domain randomisation trains one policy across many simulated environments with randomised physical parameters. The real world is treated as one more sample from that distribution, closing the sim-to-real gap through breadth of training.</figcaption>
 </figure></div>
 
 ## MuJoCo Locomotion
@@ -123,7 +123,7 @@ MuJoCo (Multi-Joint dynamics with Contact) has become the standard benchmark for
 
 <div class="math-box">r_t = v_x - α · ||a_t||² - β · Δheight</div>
 
-Reward shaping terms — forward velocity, action cost, healthy posture bonuses — guide exploration when task completion alone is too sparse. SAC and PPO have both achieved human-quality gaits on these benchmarks.
+Reward shaping terms, forward velocity, action cost, healthy posture bonuses, guide exploration when task completion alone is too sparse. SAC and PPO have both achieved human-quality gaits on these benchmarks.
 
 ## Reward Shaping and Sparse Rewards
 
@@ -138,7 +138,7 @@ Safe RL formalises constraints as a Constrained MDP:
 
 <div class="math-box">max_π J(π)  subject to  C^i(π) ≤ d^i  ∀i</div>
 
-where $$C^i$$ is the expected cumulative cost of constraint $$i$$. Methods like Constrained Policy Optimisation (CPO) and Safety-Gym provide frameworks for learning policies that satisfy hard safety limits — essential for deploying robots near humans.
+where $$C^i$$ is the expected cumulative cost of constraint $$i$$. Methods like Constrained Policy Optimisation (CPO) and Safety-Gym provide frameworks for learning policies that satisfy hard safety limits, essential for deploying robots near humans.
 
 ## References
 

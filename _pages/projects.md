@@ -256,16 +256,16 @@ author_profile: true
 {% assign items = site.projects | sort: 'title' %}
 {% if items and items.size > 0 %}
 
-{%- comment -%}Helper macro — renders one project card{%- endcomment -%}
+{%- comment -%}Helper macro, renders one project card{%- endcomment -%}
 {%- assign _rendered_ = "" -%}
 
 {%- comment -%}
   Categories (keyword-matched on title | downcase):
-  1. graph-topo   — sheaf, graph, polysheaf, xgnn
-  2. genai-vision — style, adavit, vision transformer, vlm, realtime-vlm, clip, skin, alpr, license plate, llm, translation, modernization, nlp
-  3. robotics     — moonbot, moon, amr, cleaning robot, robomat, autodrive, unidrive, autonomous, rover
-  4. sci-health   — bioheat, pinn, careconnect, hospital, cluster, segmentation, rtad, anomaly, 5g
-  5. software     — everything else
+  1. graph-topo, sheaf, graph, polysheaf, xgnn
+  2. genai-vision, style, adavit, vision transformer, vlm, realtime-vlm, clip, skin, alpr, license plate, llm, translation, modernization, nlp
+  3. robotics, moonbot, moon, amr, cleaning robot, robomat, autodrive, unidrive, autonomous, rover
+  4. sci-health, bioheat, pinn, careconnect, hospital, cluster, segmentation, rtad, anomaly, 5g
+  5. software, everything else
 {%- endcomment -%}
 
 <!-- ── 1. Graph & Topological ML ──────────────────────── -->

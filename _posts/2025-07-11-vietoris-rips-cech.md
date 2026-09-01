@@ -20,9 +20,9 @@ permalink: /blog/persistent-homology/vietoris-rips-cech/
 
 You have a cloud of GPS locations sampled from a running route. As you inflate a "bubble" of radius $$\varepsilon$$ around each point, bubbles that overlap suggest nearby points. When three bubbles all share a common intersection, those three points form a triangle. When all four of a group share a common point, they form a tetrahedron.
 
-That is, at each scale $$\varepsilon$$, you get a simplicial complex. Varying $$\varepsilon$$ from 0 to $$\infty$$ gives you a **filtration** — a nested sequence of complexes — whose persistent homology reveals the topological shape of the route: isolated clusters at small $$\varepsilon$$, loops (if the route forms a circuit) at medium $$\varepsilon$$, and everything connected at large $$\varepsilon$$.
+That is, at each scale $$\varepsilon$$, you get a simplicial complex. Varying $$\varepsilon$$ from 0 to $$\infty$$ gives you a **filtration**, a nested sequence of complexes, whose persistent homology reveals the topological shape of the route: isolated clusters at small $$\varepsilon$$, loops (if the route forms a circuit) at medium $$\varepsilon$$, and everything connected at large $$\varepsilon$$.
 
-The three main constructions — Vietoris-Rips, Cech, and alpha — differ in which simplices they include and how efficiently they can be computed.
+The three main constructions, Vietoris-Rips, Cech, and alpha, differ in which simplices they include and how efficiently they can be computed.
 
 ---
 
@@ -37,9 +37,9 @@ $$\text{VR}(X, \varepsilon) = \{\sigma \subseteq X \mid \text{diam}(\sigma) \leq
 A simplex $$\sigma$$ is included if and only if every pair of its vertices is within distance $$\varepsilon$$ of each other (i.e., $$\sigma$$ is a **clique** in the $$\varepsilon$$-graph).
 
 **Properties:**
-- Determined entirely by pairwise distances — works for any metric space, not just $$\mathbb{R}^d$$.
+- Determined entirely by pairwise distances, works for any metric space, not just $$\mathbb{R}^d$$.
 - Easy to compute: construct the $$\varepsilon$$-graph, then find all cliques.
-- **Approximation:** $$\text{VR}(X, \varepsilon) \supseteq \text{Cech}(X, \varepsilon) \supseteq \text{VR}(X, \varepsilon/2)$$ — so Rips is a 2-approximation of the Cech complex.
+- **Approximation:** $$\text{VR}(X, \varepsilon) \supseteq \text{Cech}(X, \varepsilon) \supseteq \text{VR}(X, \varepsilon/2)$$, so Rips is a 2-approximation of the Cech complex.
 
 ### Čech Complex
 
@@ -55,7 +55,7 @@ A simplex is included if all the $$\varepsilon$$-balls around its vertices have 
 - Expensive to compute in high dimensions (requires checking ball intersections, i.e., smallest enclosing ball problems).
 - In $$\mathbb{R}^1$$: Cech = Rips. In $$\mathbb{R}^2$$: checking triple intersections is straightforward.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Nerve Theorem:</strong> The Cech complex of radius ε is homotopy equivalent to the union of ε-balls around the point cloud. This is the theorem that justifies TDA: the topology of the complex matches the topology of the underlying space sampled by the point cloud, provided ε is chosen appropriately relative to the sampling density.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, Nerve Theorem:</strong> The Cech complex of radius ε is homotopy equivalent to the union of ε-balls around the point cloud. This is the theorem that justifies TDA: the topology of the complex matches the topology of the underlying space sampled by the point cloud, provided ε is chosen appropriately relative to the sampling density.</div>
 
 ### Alpha Complex
 
@@ -63,7 +63,7 @@ A simplex is included if all the $$\varepsilon$$-balls around its vertices have 
 
 **Properties:**
 - Subset of the Cech complex: \(\text{Alpha}(X,\varepsilon) \subseteq \text{Cech}(X,\varepsilon)\), but homotopy equivalent to it.
-- Size \(O(n)\) in \(\mathbb{R}^2\), \(O(n^{\lceil d/2 \rceil})\) in \(\mathbb{R}^d\) — much smaller than Rips.
+- Size \(O(n)\) in \(\mathbb{R}^2\), \(O(n^{\lceil d/2 \rceil})\) in \(\mathbb{R}^d\), much smaller than Rips.
 - Requires an ambient Euclidean space (cannot use arbitrary metric).
 - Default choice in GUDHI for point clouds in low-to-moderate dimensions.
 
@@ -96,9 +96,9 @@ A simplex is included if all the $$\varepsilon$$-balls around its vertices have 
 <svg viewBox="0 0 440 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;display:block;margin:auto;">
   <!-- Three panels: small ε, medium ε, large ε -->
 
-  <!-- Panel 1: small ε — isolated points -->
+  <!-- Panel 1: small ε, isolated points -->
   <rect x="5" y="20" width="130" height="160" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="70" y="15" text-anchor="middle" font-size="10" fill="#64748b">ε small — clusters</text>
+  <text x="70" y="15" text-anchor="middle" font-size="10" fill="#64748b">ε small, clusters</text>
   <!-- 5 points -->
   <circle cx="40"  cy="80"  r="3" fill="#3b82f6"/>
   <circle cx="60"  cy="100" r="3" fill="#3b82f6"/>
@@ -113,9 +113,9 @@ A simplex is included if all the $$\varepsilon$$-balls around its vertices have 
   <circle cx="110" cy="90"  r="12" fill="#93c5fd" opacity="0.2" class="ball-grow" style="animation-delay:0.5s"/>
   <text x="70" y="175" text-anchor="middle" font-size="9" fill="#64748b">H₀: 5 components</text>
 
-  <!-- Panel 2: medium ε — edges form, some triangles -->
+  <!-- Panel 2: medium ε, edges form, some triangles -->
   <rect x="155" y="20" width="130" height="160" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="220" y="15" text-anchor="middle" font-size="10" fill="#64748b">ε medium — loops</text>
+  <text x="220" y="15" text-anchor="middle" font-size="10" fill="#64748b">ε medium, loops</text>
   <!-- same points shifted -->
   <!-- Triangle fill -->
   <polygon points="190,80 210,100 200,120" fill="#a78bfa" opacity="0.25" class="tri-show" style="animation-delay:0.8s"/>
@@ -138,9 +138,9 @@ A simplex is included if all the $$\varepsilon$$-balls around its vertices have 
   <circle cx="260" cy="90"  r="22" fill="#93c5fd" opacity="0.12"/>
   <text x="220" y="175" text-anchor="middle" font-size="9" fill="#64748b">H₀: 2, H₁: 0</text>
 
-  <!-- Panel 3: large ε — everything connected -->
+  <!-- Panel 3: large ε, everything connected -->
   <rect x="305" y="20" width="130" height="160" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="370" y="15" text-anchor="middle" font-size="10" fill="#64748b">ε large — one component</text>
+  <text x="370" y="15" text-anchor="middle" font-size="10" fill="#64748b">ε large, one component</text>
   <!-- Full complex -->
   <polygon points="340,80 360,100 350,120 395,70 410,90" fill="#6ee7b7" opacity="0.2" class="tri-show" style="animation-delay:1.2s"/>
   <line x1="340" y1="80"  x2="360" y2="100" stroke="#059669" stroke-width="1.5"/>
@@ -189,7 +189,7 @@ Pairwise distances:
 
 **Persistence diagram (Rips):**
 - $$H_0$$: $$(0, 1.00)$$, $$(0, 2.24)$$, $$(0, \infty)$$
-- $$H_1$$: $$(1.41, 1.41)$$ — born and killed simultaneously, a zero-persistence feature (numerical artefact; in practice ignored by thresholding)
+- $$H_1$$: $$(1.41, 1.41)$$, born and killed simultaneously, a zero-persistence feature (numerical artefact; in practice ignored by thresholding)
 
 ---
 

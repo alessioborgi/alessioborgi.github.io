@@ -6,7 +6,7 @@ book: tdl
 subsection: ml-integration
 tags: [learning-filtrations, graph-filtration-learning, task-specific-topology, parametric-filtration]
 published: false
-excerpt: "Standard TDA uses pre-defined filtrations (Rips, sublevel sets). Learning filtrations optimises the filtration function jointly with a downstream task — so the persistent homology computed reflects features that are actually discriminative for the task, not just geometric proximity."
+excerpt: "Standard TDA uses pre-defined filtrations (Rips, sublevel sets). Learning filtrations optimises the filtration function jointly with a downstream task, so the persistent homology computed reflects features that are actually discriminative for the task, not just geometric proximity."
 author_profile: true
 read_time: true
 icon: "🎓"
@@ -28,7 +28,7 @@ toc_label: "Contents"
 
 ## Intuition First
 
-Imagine describing a social network with topology. If you filter by "number of connections" (degree), you see communities forming around hubs. If you filter by "age," you see age-cohort clusters. Neither is universally best — it depends on what you want to predict. Learning filtrations asks: given a downstream task (predict drug toxicity, classify proteins), what filtration function makes topology most discriminative? A GNN learns to assign each node a real-valued "importance score" so that the resulting persistence diagram is maximally useful for the task.
+Imagine describing a social network with topology. If you filter by "number of connections" (degree), you see communities forming around hubs. If you filter by "age," you see age-cohort clusters. Neither is universally best, it depends on what you want to predict. Learning filtrations asks: given a downstream task (predict drug toxicity, classify proteins), what filtration function makes topology most discriminative? A GNN learns to assign each node a real-valued "importance score" so that the resulting persistence diagram is maximally useful for the task.
 
 ## The Fixed Filtration Problem
 
@@ -76,13 +76,13 @@ This captures loops and voids in the graph, weighted by learned node importance.
 
 Consider two graphs \(G_1\) (a ring of 6 nodes) and \(G_2\) (a path of 6 nodes). Under the **degree filtration** (node value = degree):
 
-- Both graphs have all nodes with degree 2 (ring) or degree 1–2 (path) — the degree values are nearly identical, so the persistence diagrams are almost indistinguishable.
+- Both graphs have all nodes with degree 2 (ring) or degree 1–2 (path), the degree values are nearly identical, so the persistence diagrams are almost indistinguishable.
 
 Under a **learned filtration** trained to separate rings from paths, the GNN learns to assign:
 - \(G_1\) nodes: values spread from 0.1 to 0.9 in a cyclic pattern → one long-lived \(H_1\) bar (the ring dies late).
 - \(G_2\) nodes: values monotone 0.1, 0.3, 0.5, 0.7, 0.9, 1.0 → no \(H_1\) bar (path has no cycle).
 
-The persistent \(H_1\) bar is now a perfect discriminator between the two graph classes — something no fixed filtration based on local structure could achieve.
+The persistent \(H_1\) bar is now a perfect discriminator between the two graph classes, something no fixed filtration based on local structure could achieve.
 
 <style>
 @keyframes gfl-pulse {
@@ -102,7 +102,7 @@ The persistent \(H_1\) bar is now a perfect discriminator between the two graph 
   <text x="90" y="14" text-anchor="middle" font-size="10" fill="#1e293b" font-weight="bold">G₁: Ring (learned filtration)</text>
   <text x="340" y="14" text-anchor="middle" font-size="10" fill="#1e293b" font-weight="bold">G₂: Path (same filtration)</text>
 
-  <!-- Ring G1 — hexagon, center (90,90) -->
+  <!-- Ring G1, hexagon, center (90,90) -->
   <!-- edges -->
   <polygon points="90,35 140,63 140,118 90,145 40,118 40,63" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
   <!-- nodes with learned values (color = filtration value) -->
@@ -131,7 +131,7 @@ The persistent \(H_1\) bar is now a perfect discriminator between the two graph 
   <!-- Divider -->
   <line x1="230" y1="10" x2="230" y2="180" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4"/>
 
-  <!-- Path G2 — 6 nodes in a line -->
+  <!-- Path G2, 6 nodes in a line -->
   <line x1="260" y1="90" x2="420" y2="90" stroke="#94a3b8" stroke-width="1.5"/>
   <circle cx="260" cy="90" r="12" fill="#bfdbfe"><animate attributeName="fill" values="#e2e8f0;#bfdbfe" dur="1s" fill="freeze"/></circle>
   <text x="260" y="94" text-anchor="middle" font-size="8" fill="#1e40af">0.1</text>
@@ -151,7 +151,7 @@ The persistent \(H_1\) bar is now a perfect discriminator between the two graph 
     <animate attributeName="opacity" values="0;1" dur="0.5s" begin="1.5s" fill="freeze"/>
   </text>
 </svg>
-<figcaption>Learned filtration (colour = node value) creates a long-lived H₁ bar for the ring graph but none for the path — perfectly discriminating the two graph classes.</figcaption>
+<figcaption>Learned filtration (colour = node value) creates a long-lived H₁ bar for the ring graph but none for the path, perfectly discriminating the two graph classes.</figcaption>
 </figure>
 </div>
 

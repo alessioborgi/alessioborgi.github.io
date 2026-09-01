@@ -63,14 +63,14 @@ h(Δ_F) x = Q · diag(h(λ₁), ..., h(λ_{Nd})) · Qᵀ x
 A sheaf spectral filter h(Δ_F) acts on the Nd-dimensional signal x by scaling each sheaf-Fourier component independently.
 
 **Key differences from standard GSP:**
-- The signal dimension is Nd (not N) — each node contributes d frequency components
-- The eigenvectors Q are sheaf-specific — they depend on the restriction maps
+- The signal dimension is Nd (not N), each node contributes d frequency components
+- The eigenvectors Q are sheaf-specific, they depend on the restriction maps
 - The filter h(Δ_F) operates on the sheaf's frequency domain, not the graph's
-- Low-frequency components (λ_i ≈ 0) correspond to global sections — consistent signals
+- Low-frequency components (λ_i ≈ 0) correspond to global sections, consistent signals
 
 ## Polynomial Sheaf Filters
 
-Computing the full eigendecomposition of Δ_F costs O((Nd)³) — prohibitive for large N. Instead, polynomial filters avoid explicit eigendecomposition:
+Computing the full eigendecomposition of Δ_F costs O((Nd)³), prohibitive for large N. Instead, polynomial filters avoid explicit eigendecomposition:
 
 <div class="math-box">
 h(Δ_F) x ≈ Σ_{k=0}^{K} a_k Δ_F^k x
@@ -80,7 +80,7 @@ This requires only K applications of Δ_F to x, each costing O(E·d²) (sparse m
 
 **Universality:** By the Weierstrass approximation theorem, any continuous function h on [0, λ_max] can be approximated by polynomials. So polynomial sheaf filters can approximate any spectral filter to arbitrary accuracy (as K → ∞).
 
-Just as audio equalizers shape the frequency content of a sound — boosting bass, cutting treble, or adding a mid-range peak — sheaf spectral filters shape the "relational frequency" content of graph signals. A low-pass sheaf filter amplifies the patterns that match the graph's relational structure (the global sections) and attenuates signals that are inconsistent with the restriction maps. A high-pass sheaf filter does the opposite: it amplifies the maximally inconsistent modes, which can be useful for detecting structural anomalies or learning from heterophilic graphs. The filter design problem becomes: which relational frequencies matter for your task?
+Just as audio equalizers shape the frequency content of a sound, boosting bass, cutting treble, or adding a mid-range peak, sheaf spectral filters shape the "relational frequency" content of graph signals. A low-pass sheaf filter amplifies the patterns that match the graph's relational structure (the global sections) and attenuates signals that are inconsistent with the restriction maps. A high-pass sheaf filter does the opposite: it amplifies the maximally inconsistent modes, which can be useful for detecting structural anomalies or learning from heterophilic graphs. The filter design problem becomes: which relational frequencies matter for your task?
 
 ## Standard Graph Filters as Special Cases
 
@@ -93,7 +93,7 @@ Just as audio equalizers shape the frequency content of a sound — boosting bas
 | BernNet | Σ_k θ_k B_k^K(L/2) | Σ_k θ_k B_k^K(Δ_F/2) = PNSD with Bernstein |
 | SGC | L^K (no trainable weights in filter) | Δ_F^K (K-hop sheaf diffusion) |
 
-Every spectral GNN has a natural sheaf generalisation — replace L with Δ_F.
+Every spectral GNN has a natural sheaf generalisation, replace L with Δ_F.
 
 <style>
 @keyframes draw-curve-blue {
@@ -180,13 +180,13 @@ Every spectral GNN has a natural sheaf generalisation — replace L with Δ_F.
 
 For the identity sheaf (all maps = I): Δ_F = L ⊗ I_d. The eigenvectors are Q = U ⊗ I_d where U is the graph Fourier basis. Each node-frequency pair (i, k) has eigenvector u_i ⊗ e_k (the i-th graph eigenvector in the k-th coordinate direction). The eigenvalue is λ_i (repeated d times).
 
-For a non-trivial sheaf: Q is no longer block-diagonal. Each eigenvector is a sheaf-specific "vibrational mode" — a consistent pattern of vectors across nodes that respects the restriction maps.
+For a non-trivial sheaf: Q is no longer block-diagonal. Each eigenvector is a sheaf-specific "vibrational mode", a consistent pattern of vectors across nodes that respects the restriction maps.
 
 <div class="insight-box">
-<strong>Geometric interpretation:</strong> The k-th eigenvector of Δ_F describes a "mode of global inconsistency" — how nodes could jointly move in their stalks to reduce Sheaf Dirichlet energy. Modes with small eigenvalues (near 0) are near-consistent (close to global sections). Modes with large eigenvalues are highly inconsistent and are attenuated by low-pass sheaf filters.
+<strong>Geometric interpretation:</strong> The k-th eigenvector of Δ_F describes a "mode of global inconsistency", how nodes could jointly move in their stalks to reduce Sheaf Dirichlet energy. Modes with small eigenvalues (near 0) are near-consistent (close to global sections). Modes with large eigenvalues are highly inconsistent and are attenuated by low-pass sheaf filters.
 </div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — Modes of Inconsistency:</strong> The eigenvectors of Δ_F are the sheaf generalisation of the graph Fourier basis. In classical graph Fourier analysis, the low-frequency eigenvectors of L are smooth (slowly varying across the graph), and the high-frequency eigenvectors are rough. In sheaf Fourier analysis, <em>low-frequency eigenvectors of Δ_F are near-global sections</em> — signals that are nearly consistent with all restriction maps. High-frequency eigenvectors are <em>maximally inconsistent</em> signals — they point in directions that violate the relational constraints as severely as possible. A model that learns to process the right sheaf-frequency band is learning to attend to the right level of relational consistency in the data.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, Modes of Inconsistency:</strong> The eigenvectors of Δ_F are the sheaf generalisation of the graph Fourier basis. In classical graph Fourier analysis, the low-frequency eigenvectors of L are smooth (slowly varying across the graph), and the high-frequency eigenvectors are rough. In sheaf Fourier analysis, <em>low-frequency eigenvectors of Δ_F are near-global sections</em>, signals that are nearly consistent with all restriction maps. High-frequency eigenvectors are <em>maximally inconsistent</em> signals, they point in directions that violate the relational constraints as severely as possible. A model that learns to process the right sheaf-frequency band is learning to attend to the right level of relational consistency in the data.</div>
 
 ## Chebyshev Sheaf Filters
 
@@ -204,7 +204,7 @@ h(Δ_F) x ≈ Σ_{k=0}^{K} a_k T_k(Λ̃) x
 
 Computed via the recurrence: x₀ = x, x₁ = Λ̃x, x_k = 2Λ̃x_{k-1} − x_{k-2}. Each step costs O(E·d²).
 
-This is the sheaf generalisation of ChebNet — applying Chebyshev polynomials of the Sheaf Laplacian rather than the graph Laplacian.
+This is the sheaf generalisation of ChebNet, applying Chebyshev polynomials of the Sheaf Laplacian rather than the graph Laplacian.
 
 ## Wavelet-Like Filters on Sheaves
 
@@ -214,9 +214,9 @@ The diffusion wavelets framework (Coifman & Maggioni, 2006) can be extended to s
 ψ_{j,v}(u) = [Δ_F^{2^j} δ_v](u)
 </div>
 
-where δ_v is the indicator of node v (a delta function in the stalk). Sheaf wavelets are scale-specific (at scale 2^j) and localised around node v — they describe how a perturbation at v diffuses through the sheaf at scale j.
+where δ_v is the indicator of node v (a delta function in the stalk). Sheaf wavelets are scale-specific (at scale 2^j) and localised around node v, they describe how a perturbation at v diffuses through the sheaf at scale j.
 
-These provide a multi-resolution representation of sheaf signals — useful for hierarchical graph learning and sheaf-based graph coarsening.
+These provide a multi-resolution representation of sheaf signals, useful for hierarchical graph learning and sheaf-based graph coarsening.
 
 ## Computational Trade-offs
 
@@ -228,18 +228,18 @@ These provide a multi-resolution representation of sheaf signals — useful for 
 | K-polynomial filter | O(K·E·d²) | Feasible; preferred approach |
 | Map prediction (MLP) | O(E·d_hidden²) | Per-edge MLP forward pass |
 
-For d=2, N=10⁴, E=10⁵, K=5: cost ≈ 5×10⁵×4 = 2×10⁶ operations per layer — fast on modern hardware.
+For d=2, N=10⁴, E=10⁵, K=5: cost ≈ 5×10⁵×4 = 2×10⁶ operations per layer, fast on modern hardware.
 
 ## When Spectral View Helps
 
 The spectral view of sheaf GNNs is useful for:
-1. **Diagnosing oversmoothing:** the filter h(λ) = (1−λ)^K at large K suppresses all frequencies except ker(Δ_F) — visualising the spectrum shows what information survives
+1. **Diagnosing oversmoothing:** the filter h(λ) = (1−λ)^K at large K suppresses all frequencies except ker(Δ_F), visualising the spectrum shows what information survives
 2. **Designing task-specific filters:** for heterophilic tasks, design h to amplify high frequencies; for smooth tasks, design h to suppress them
-3. **Understanding PNSD:** PNSD learns h(λ) ≈ Σ_k a_k λ^k — the learned profile reveals what frequency the task requires
+3. **Understanding PNSD:** PNSD learns h(λ) ≈ Σ_k a_k λ^k, the learned profile reveals what frequency the task requires
 4. **Connecting to GSP:** established GSP theory on sampling, reconstruction, and uncertainty principles transfers to the sheaf setting
 
 ## References
 
 - Borgi, A., Silvestri, F., & Liò, P. (2025). [Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves](https://arxiv.org/abs/2512.00242). *arXiv:2512.00242* (PolyNSD: polynomial spectral filters on the Sheaf Laplacian).
 - Shuman, D. I., Narang, S. K., Frossard, P., Ortega, A., & Vandergheynst, P. (2013). [The Emerging Field of Signal Processing on Graphs](https://arxiv.org/abs/1211.0053). *IEEE Signal Processing Magazine* (classical GSP framework that sheaf convolutions extend).
-- Defferrard, M., Bresson, X., & Vandergheynst, P. (2016). [Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](https://arxiv.org/abs/1606.09375). *NeurIPS 2016* (ChebNet — the Chebyshev filter approach that generalises to sheaves via Δ_F).
+- Defferrard, M., Bresson, X., & Vandergheynst, P. (2016). [Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](https://arxiv.org/abs/1606.09375). *NeurIPS 2016* (ChebNet, the Chebyshev filter approach that generalises to sheaves via Δ_F).

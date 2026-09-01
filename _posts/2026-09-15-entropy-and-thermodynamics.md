@@ -6,7 +6,7 @@ categories: [physics-basics]
 book: physics-basics
 subsection: thermodynamics
 tags: [entropy, free-energy, elbo, thermodynamics]
-excerpt: "Thermodynamic entropy and Shannon entropy differ by a constant with units. Once you accept that, the ELBO stops being an inference trick and becomes a free energy — and diffusion models stop being a clever architecture and become a driven non-equilibrium process."
+excerpt: "Thermodynamic entropy and Shannon entropy differ by a constant with units. Once you accept that, the ELBO stops being an inference trick and becomes a free energy, and diffusion models stop being a clever architecture and become a driven non-equilibrium process."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,7 +18,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Gibbs entropy \(S = -k\sum p\log p\) is Shannon entropy in nats multiplied by Boltzmann's constant — same functional, different units. The second law says the entropy of an isolated system does not decrease, which is a statement about counting rather than about dynamics. Free energy \(F = U - TS\) is the trade-off between low energy and high entropy, and the ELBO of variational inference is exactly a negative free energy at temperature 1. Jarzynski's non-equilibrium work relation is the ancestor of diffusion models.
+  <strong>TL;DR:</strong> Gibbs entropy \(S = -k\sum p\log p\) is Shannon entropy in nats multiplied by Boltzmann's constant, same functional, different units. The second law says the entropy of an isolated system does not decrease, which is a statement about counting rather than about dynamics. Free energy \(F = U - TS\) is the trade-off between low energy and high entropy, and the ELBO of variational inference is exactly a negative free energy at temperature 1. Jarzynski's non-equilibrium work relation is the ancestor of diffusion models.
 </div>
 
 ## Two entropies that turn out to be one
@@ -38,14 +38,14 @@ S_{\text{thermo}} \;=\; k\ln 2 \cdot H_{\text{bits}} \;=\; k\,H_{\text{nats}} .
 Everything conceptual is in that "dull". The two quantities are the same functional; only the base of the logarithm and a unit conversion differ. Landauer's principle makes the identification physical: erasing one bit at temperature $$T$$ must dissipate at least $$kT\ln 2$$ of heat, which at 300 K is $$2.87\times10^{-21}$$ J. Information has a thermodynamic price.
 
 <div class="warning-box">
-  <strong>Interview trap:</strong> "entropy is disorder" will not survive a follow-up. Entropy counts the microstates consistent with the macrostate you chose to describe. It depends on the coarse-graining — on which variables you decided to track — and a state that looks disordered to one description can be low-entropy under another. The second law is also statistical, not absolute: entropy decreases are not forbidden, merely overwhelmingly improbable at macroscopic scale.
+  <strong>Interview trap:</strong> "entropy is disorder" will not survive a follow-up. Entropy counts the microstates consistent with the macrostate you chose to describe. It depends on the coarse-graining, on which variables you decided to track, and a state that looks disordered to one description can be low-entropy under another. The second law is also statistical, not absolute: entropy decreases are not forbidden, merely overwhelmingly improbable at macroscopic scale.
 </div>
 
 ## The second law and the arrow of time
 
-For an isolated system, $$\Delta S \ge 0$$. The awkward part is that the microscopic laws have no such asymmetry — [Hamilton's equations](/blog/physics-basics/hamiltonian-dynamics/) run backwards perfectly well, and Liouville's theorem says phase-space volume is exactly conserved, so the fine-grained Gibbs entropy of an isolated system never changes at all.
+For an isolated system, $$\Delta S \ge 0$$. The awkward part is that the microscopic laws have no such asymmetry, [Hamilton's equations](/blog/physics-basics/hamiltonian-dynamics/) run backwards perfectly well, and Liouville's theorem says phase-space volume is exactly conserved, so the fine-grained Gibbs entropy of an isolated system never changes at all.
 
-The arrow comes from coarse-graining plus initial conditions. The flow stretches and folds an initial blob into a filament that threads through the accessible region; its volume is unchanged, but any macroscopic description that cannot resolve the filaments sees it as having spread out to fill the space. Entropy increases because the system started in an atypical, small-volume macrostate and typical macrostates are vastly larger. There is no dynamical asymmetry to find — only a counting one.
+The arrow comes from coarse-graining plus initial conditions. The flow stretches and folds an initial blob into a filament that threads through the accessible region; its volume is unchanged, but any macroscopic description that cannot resolve the filaments sees it as having spread out to fill the space. Entropy increases because the system started in an atypical, small-volume macrostate and typical macrostates are vastly larger. There is no dynamical asymmetry to find, only a counting one.
 
 ## Free energy: the energy–entropy trade-off
 
@@ -57,7 +57,7 @@ F \;=\; U - TS,
 \]
 </div>
 
-with $$U = \langle E\rangle$$ the mean energy. Low $$T$$ makes the energy term dominate and the system orders; high $$T$$ makes the entropy term dominate and it disorders. Phase transitions are where the balance tips. The equilibrium distribution — the [Boltzmann distribution](/blog/physics-basics/statistical-mechanics/) — is precisely the minimiser of $$F$$ over all distributions, and its minimum value is $$F = -kT\log Z$$.
+with $$U = \langle E\rangle$$ the mean energy. Low $$T$$ makes the energy term dominate and the system orders; high $$T$$ makes the entropy term dominate and it disorders. Phase transitions are where the balance tips. The equilibrium distribution, the [Boltzmann distribution](/blog/physics-basics/statistical-mechanics/), is precisely the minimiser of $$F$$ over all distributions, and its minimum value is $$F = -kT\log Z$$.
 
 ## The ELBO is a free energy
 
@@ -69,15 +69,15 @@ Now take a latent-variable model $$p(x,z)$$ and define an energy $$E(x,z) = -\lo
 \]
 </div>
 
-Rewrite the ELBO with the energy: $$-\mathcal L(q) = \mathbb E_q[E(x,z)] - H[q]$$. That is $$U - TS$$ with $$T = 1$$. Maximising the ELBO is minimising a variational free energy; the two terms are the familiar reconstruction/energy pull and the entropy pull that stops $$q$$ collapsing to a point. Because $$\mathrm{KL}\ge 0$$, the ELBO lower-bounds $$\log p(x)$$, and the gap is exactly the KL — in thermodynamic language, the excess free energy of a non-equilibrium $$q$$ over the equilibrium posterior. The equality case $$q = p(z\mid x)$$ is the statement that equilibrium minimises free energy.
+Rewrite the ELBO with the energy: $$-\mathcal L(q) = \mathbb E_q[E(x,z)] - H[q]$$. That is $$U - TS$$ with $$T = 1$$. Maximising the ELBO is minimising a variational free energy; the two terms are the familiar reconstruction/energy pull and the entropy pull that stops $$q$$ collapsing to a point. Because $$\mathrm{KL}\ge 0$$, the ELBO lower-bounds $$\log p(x)$$, and the gap is exactly the KL, in thermodynamic language, the excess free energy of a non-equilibrium $$q$$ over the equilibrium posterior. The equality case $$q = p(z\mid x)$$ is the statement that equilibrium minimises free energy.
 
 <div class="insight-box">
-  <strong>Key Insight — what the entropy term is doing:</strong> drop \(H[q]\) from the ELBO and the optimum is a delta function at the mode of \(p(x,z)\) — posterior collapse in its purest form. The entropy term is the only thing preventing it. This is the same role noise plays in Langevin sampling and the same role temperature plays in annealing: without an entropy contribution, every energy-minimising procedure collapses to a single point.
+  <strong>Key Insight, what the entropy term is doing:</strong> drop \(H[q]\) from the ELBO and the optimum is a delta function at the mode of \(p(x,z)\), posterior collapse in its purest form. The entropy term is the only thing preventing it. This is the same role noise plays in Langevin sampling and the same role temperature plays in annealing: without an entropy contribution, every energy-minimising procedure collapses to a single point.
 </div>
 
 ## Non-equilibrium work and where diffusion came from
 
-Drive a system from one equilibrium to another by changing a parameter at finite speed. The work $$W$$ done is random — it depends on the trajectory. The second law gives only an inequality, $$\langle W\rangle \ge \Delta F$$, with equality for an infinitely slow (quasi-static) protocol. Jarzynski (1997) sharpened this to an *equality* valid at any speed:
+Drive a system from one equilibrium to another by changing a parameter at finite speed. The work $$W$$ done is random, it depends on the trajectory. The second law gives only an inequality, $$\langle W\rangle \ge \Delta F$$, with equality for an infinitely slow (quasi-static) protocol. Jarzynski (1997) sharpened this to an *equality* valid at any speed:
 
 <div class="formula-box">
 \[

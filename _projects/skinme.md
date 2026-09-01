@@ -28,7 +28,7 @@ Dermatological conditions affect a large proportion of the population, yet acces
 
 ## Dataset
 
-Trained and evaluated on the HAM10000 (Human Against Machine) dataset — 10,000+ dermoscopic images across 7 diagnostic categories (melanoma, melanocytic nevus, basal cell carcinoma, actinic keratosis, benign keratosis, dermatofibroma, vascular lesion).
+Trained and evaluated on the HAM10000 (Human Against Machine) dataset, 10,000+ dermoscopic images across 7 diagnostic categories (melanoma, melanocytic nevus, basal cell carcinoma, actinic keratosis, benign keratosis, dermatofibroma, vascular lesion).
 
 ## Technology
 

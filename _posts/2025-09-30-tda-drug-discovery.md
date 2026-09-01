@@ -6,7 +6,7 @@ book: tdl
 subsection: applications
 tags: [tda-drug-discovery, molecular-topology, protein-structure, drug-design, cheminformatics]
 published: false
-excerpt: "Persistent homology provides multi-scale topological fingerprints of molecular structures — capturing rings, cavities, and protein pockets that traditional cheminformatics descriptors miss. Applications include binding site detection, ADMET property prediction, and protein-ligand interaction modelling."
+excerpt: "Persistent homology provides multi-scale topological fingerprints of molecular structures, capturing rings, cavities, and protein pockets that traditional cheminformatics descriptors miss. Applications include binding site detection, ADMET property prediction, and protein-ligand interaction modelling."
 author_profile: true
 read_time: true
 icon: "💊"
@@ -24,11 +24,11 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Molecular structures — atom position clouds with element types — are natural inputs for TDA. By building element-specific Rips filtrations (e.g., on carbon atoms, on nitrogen atoms, on C–N atom pairs), one computes persistence diagrams that encode ring systems, binding pockets, and molecular cavities. These topological molecular descriptors predict ADMET properties and binding affinities better than many classical fingerprints, especially when combined with GNNs.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Molecular structures, atom position clouds with element types, are natural inputs for TDA. By building element-specific Rips filtrations (e.g., on carbon atoms, on nitrogen atoms, on C–N atom pairs), one computes persistence diagrams that encode ring systems, binding pockets, and molecular cavities. These topological molecular descriptors predict ADMET properties and binding affinities better than many classical fingerprints, especially when combined with GNNs.</div>
 
 ## Intuition First
 
-A drug molecule is not just a graph of atom–bond connections — it is a 3D shape. Two molecules can have identical bond graphs but different 3D arrangements, and only one may fit the binding pocket. Traditional fingerprints count subgraph patterns; they are blind to 3D geometry. TDA sees geometry: it grows balls around atoms and tracks when ring-shaped voids appear (H₁ bars = aromatic rings, macrocycles) and when enclosed cavities form (H₂ bars = binding pockets). The birth scale of an H₁ bar directly encodes the ring's spatial diameter — information no 2D fingerprint captures.
+A drug molecule is not just a graph of atom–bond connections, it is a 3D shape. Two molecules can have identical bond graphs but different 3D arrangements, and only one may fit the binding pocket. Traditional fingerprints count subgraph patterns; they are blind to 3D geometry. TDA sees geometry: it grows balls around atoms and tracks when ring-shaped voids appear (H₁ bars = aromatic rings, macrocycles) and when enclosed cavities form (H₂ bars = binding pockets). The birth scale of an H₁ bar directly encodes the ring's spatial diameter, information no 2D fingerprint captures.
 
 ## Molecular Topology
 
@@ -45,9 +45,9 @@ A molecule can be represented as a **3D point cloud**: \(P = \{(x_i, \text{eleme
 
 **Cang & Wei (2017)** introduced element-specific TDA: instead of one Rips filtration on all atoms, compute separate filtrations for each element type and pair:
 
-- \(\mathrm{Rips}(P_C)\) — carbon-only complex; \(H_1\) captures aromatic rings and ring systems.
-- \(\mathrm{Rips}(P_N)\) — nitrogen atoms; encodes nitrogen-containing rings (pyridine, imidazole).
-- \(\mathrm{Rips}(P_{C,O})\) — carbon-oxygen pairs; captures carbonyl and ether geometry.
+- \(\mathrm{Rips}(P_C)\), carbon-only complex; \(H_1\) captures aromatic rings and ring systems.
+- \(\mathrm{Rips}(P_N)\), nitrogen atoms; encodes nitrogen-containing rings (pyridine, imidazole).
+- \(\mathrm{Rips}(P_{C,O})\), carbon-oxygen pairs; captures carbonyl and ether geometry.
 
 Each element-specific diagram is vectorised (persistence images) and concatenated into a multi-channel topological fingerprint.
 
@@ -66,7 +66,7 @@ This gives a scale-parameterised pocket detection without requiring a threshold 
 
 ## Worked Example: Benzene vs. Cyclohexane
 
-Both molecules have the formula C₆H₆ / C₆H₁₂ — a 6-membered carbon ring. Their 3D atom positions give very similar Rips filtrations on the carbon-only point cloud \(P_C\):
+Both molecules have the formula C₆H₆ / C₆H₁₂, a 6-membered carbon ring. Their 3D atom positions give very similar Rips filtrations on the carbon-only point cloud \(P_C\):
 
 **Benzene** (flat, aromatic, bond length ≈ 1.40 Å):
 - At \(r \approx 0.70\) Å: adjacent C atoms connect.
@@ -76,7 +76,7 @@ Both molecules have the formula C₆H₆ / C₆H₁₂ — a 6-membered carbon r
 - At \(r \approx 0.77\) Å: adjacent C atoms connect.
 - At \(r \approx 1.54\) Å: ring closes but at a larger scale → \(H_1\) bar born at \((0.77, 2.80)\), persistence \(= 2.03\) Å.
 
-The birth times differ (0.70 vs 0.77 Å) because aromatic C–C bonds are shorter. The death times differ because the ring diameter differs. A classifier using these H₁ birth/death values can distinguish aromatic from non-aromatic rings without any chemical domain knowledge — the geometry is encoded automatically.
+The birth times differ (0.70 vs 0.77 Å) because aromatic C–C bonds are shorter. The death times differ because the ring diameter differs. A classifier using these H₁ birth/death values can distinguish aromatic from non-aromatic rings without any chemical domain knowledge, the geometry is encoded automatically.
 
 <style>
 @keyframes dd-grow {
@@ -191,9 +191,9 @@ For a protein-ligand complex:
 2. Compute the difference in persistence diagrams (before and after ligand binding).
 3. The "topological fingerprint of binding" = the difference diagram.
 
-This captures how the ligand changes the topological environment of the binding pocket — complementary to docking score energy terms.
+This captures how the ligand changes the topological environment of the binding pocket, complementary to docking score energy terms.
 
-<div class="insight-box"><strong>Key Insight:</strong> The power of TDA in drug discovery comes from capturing ring systems — both aromatic rings (critical for drug-likeness) and macrocyclic loops (increasingly important drug scaffolds). Classical 2D fingerprints count ring patterns by subgraph matching; TDA captures them geometrically via H₁ persistence. The geometric information (ring size, 3D arrangement, conformation) is automatically encoded in the birth-death times, giving TDA a natural advantage for 3D-QSAR applications.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The power of TDA in drug discovery comes from capturing ring systems, both aromatic rings (critical for drug-likeness) and macrocyclic loops (increasingly important drug scaffolds). Classical 2D fingerprints count ring patterns by subgraph matching; TDA captures them geometrically via H₁ persistence. The geometric information (ring size, 3D arrangement, conformation) is automatically encoded in the birth-death times, giving TDA a natural advantage for 3D-QSAR applications.</div>
 
 ## References
 

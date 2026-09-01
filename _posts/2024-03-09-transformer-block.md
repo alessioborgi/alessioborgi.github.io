@@ -70,7 +70,7 @@ toc_label: "Contents"
 
 ## The Block is the Atom
 
-The Transformer is not a complex monolith. It is a simple building block — the **Transformer block** — stacked repeatedly. GPT-2 small stacks 12. GPT-3 stacks 96. LLaMA 3 (70B) stacks 80. But each block is identical in structure.
+The Transformer is not a complex monolith. It is a simple building block, the **Transformer block**, stacked repeatedly. GPT-2 small stacks 12. GPT-3 stacks 96. LLaMA 3 (70B) stacks 80. But each block is identical in structure.
 
 Understand one block; understand any Transformer.
 
@@ -134,7 +134,7 @@ The normalised input is projected into Q, K, V for each head:
 
 Heads run in parallel; their outputs are concatenated and projected back to $$d_{\text{model}}$$.
 
-*Output shape: $$[\text{seq\_len},\, d_{\text{model}}]$$ — same as input.*
+*Output shape: $$[\text{seq\_len},\, d_{\text{model}}]$$, same as input.*
 
 ### Step 3: First Residual Addition
 
@@ -157,7 +157,7 @@ The FFN processes each token position independently:
 - **Nonlinearity:** GELU or SwiGLU
 - **Project down:** $$4 \times d_{\text{model}}$$ → $$d_{\text{model}}$$
 
-The FFN does not mix positions — it refines each token's representation in place.
+The FFN does not mix positions, it refines each token's representation in place.
 
 ### Step 6: Second Residual Addition
 
@@ -185,7 +185,7 @@ The FFN's contribution is added to $$x'$$. Again, the skip connection preserves 
 | After $$W_2$$ (FFN contract) | $$[L,\, d_{\text{model}}]$$ |
 | After residual (output) | $$[L,\, d_{\text{model}}]$$ |
 
-The shape is **always $$[L,\, d_{\text{model}}]$$** entering and leaving the block. Stacking blocks does not change the shape — only the content.
+The shape is **always $$[L,\, d_{\text{model}}]$$** entering and leaving the block. Stacking blocks does not change the shape, only the content.
 
 ## What Each Component Contributes
 
@@ -308,7 +308,7 @@ GPT-3 at 175B parameters is 96 of these blocks, each with $$d_{\text{model}} = 1
   <text x="180" y="28" text-anchor="middle" font-size="9" fill="#ea580c">skip 1 (identity)</text>
   <text x="460" y="165" text-anchor="middle" font-size="9" fill="#ea580c">skip 2 (identity)</text>
 </svg>
-<figcaption>Animated forward pass through one Pre-LN Transformer block. Each component pulses when active. The orange dashed arcs are the residual skip connections — they carry the original signal directly to the addition nodes, ensuring the block only needs to learn a correction, not a full transformation.</figcaption>
+<figcaption>Animated forward pass through one Pre-LN Transformer block. Each component pulses when active. The orange dashed arcs are the residual skip connections, they carry the original signal directly to the addition nodes, ensuring the block only needs to learn a correction, not a full transformation.</figcaption>
 </figure>
 </div>
 
@@ -325,15 +325,15 @@ That division of labor is why the same blueprint works from tiny classroom model
 
 The Transformer block is:
 
-1. **LN + MHA + Residual** — cross-position information gathering
-2. **LN + FFN + Residual** — per-position processing and knowledge retrieval
+1. **LN + MHA + Residual**, cross-position information gathering
+2. **LN + FFN + Residual**, per-position processing and knowledge retrieval
 
-Everything else in a Transformer — BERT, GPT, T5, ViT, LLaMA — is a combination of how these blocks are arranged, what masking strategy is used, and what input/output heads are attached. The block itself is always the same.
+Everything else in a Transformer, BERT, GPT, T5, ViT, LLaMA, is a combination of how these blocks are arranged, what masking strategy is used, and what input/output heads are attached. The block itself is always the same.
 
 ## References
 
 - Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). [Attention Is All You Need](https://arxiv.org/abs/1706.03762). *NeurIPS 2017* (original Transformer block: MHA → Add&Norm → FFN → Add&Norm, stacked L times).
-- Xiong, R., Yang, Y., He, D., Zheng, K., Zheng, S., Xing, C., Zhang, H., Lan, Y., Wang, L., & Liu, T.-Y. (2020). [On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745). *ICML 2020* (Pre-LN block variant: LN before each sublayer instead of after — improves gradient flow and dominates modern LLM architectures).
+- Xiong, R., Yang, Y., He, D., Zheng, K., Zheng, S., Xing, C., Zhang, H., Lan, Y., Wang, L., & Liu, T.-Y. (2020). [On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745). *ICML 2020* (Pre-LN block variant: LN before each sublayer instead of after, improves gradient flow and dominates modern LLM architectures).
 - Geva, M., et al. (2021). [Transformer Feed-Forward Layers Are Key-Value Memories](https://arxiv.org/abs/2012.14913).
-- Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M.-A., Lacroix, T., Rozière, B., Goyal, N., Hambro, E., Azhar, F., Rodriguez, A., Joulin, A., Grave, E., & Lample, G. (2023). [LLaMA: Open and Efficient Foundation Language Models](https://arxiv.org/abs/2302.13971). *arXiv 2023* (LLaMA: uses Pre-LN block with RMSNorm, SwiGLU FFN, and RoPE — the dominant open-weight Transformer block design).
+- Touvron, H., Lavril, T., Izacard, G., Martinet, X., Lachaux, M.-A., Lacroix, T., Rozière, B., Goyal, N., Hambro, E., Azhar, F., Rodriguez, A., Joulin, A., Grave, E., & Lample, G. (2023). [LLaMA: Open and Efficient Foundation Language Models](https://arxiv.org/abs/2302.13971). *arXiv 2023* (LLaMA: uses Pre-LN block with RMSNorm, SwiGLU FFN, and RoPE, the dominant open-weight Transformer block design).
 - [2] https://www.sscardapane.it/alice-book/

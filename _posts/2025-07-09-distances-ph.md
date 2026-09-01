@@ -18,9 +18,9 @@ permalink: /blog/persistent-homology/distances-ph/
 
 ## Intuition First
 
-Imagine two scatter plots — your two persistence diagrams — each with a handful of points. You want to say "these two diagrams are similar." But how? You cannot simply take a Euclidean distance between two point sets of potentially different sizes.
+Imagine two scatter plots, your two persistence diagrams, each with a handful of points. You want to say "these two diagrams are similar." But how? You cannot simply take a Euclidean distance between two point sets of potentially different sizes.
 
-The key idea is an **optimal matching**: pair up each point in diagram A with either a point in diagram B, or with its own nearest point on the diagonal (the line $$b = d$$). Sending a point to the diagonal means declaring it "unpaired" — a topological feature we choose not to match. The cost of this choice is proportional to the point's persistence ($$d - b$$), so short-lived noise is cheaply discarded.
+The key idea is an **optimal matching**: pair up each point in diagram A with either a point in diagram B, or with its own nearest point on the diagonal (the line $$b = d$$). Sending a point to the diagonal means declaring it "unpaired", a topological feature we choose not to match. The cost of this choice is proportional to the point's persistence ($$d - b$$), so short-lived noise is cheaply discarded.
 
 The **bottleneck distance** then asks: what is the minimum, over all such matchings, of the *maximum* edge cost? The **Wasserstein distance** instead sums (or takes the $$L^p$$ norm of) all edge costs. Both yield a genuine metric on the space of persistence diagrams.
 
@@ -44,9 +44,9 @@ The **cost** of matching point $$p = (b, d)$$ to point $$q = (b', d')$$ is $$\|p
 
 $$d_B(\text{Dgm}_1, \text{Dgm}_2) \;=\; \inf_{\mu} \sup_{p \in \text{Dgm}_1 \cup \Delta} \|p - \mu(p)\|_\infty$$
 
-The bottleneck distance is controlled by the **single worst-matched pair**. It is robust to noise (small perturbations of the input space change $$d_B$$ by at most the size of the perturbation — the stability theorem) but can ignore many-to-few imbalances.
+The bottleneck distance is controlled by the **single worst-matched pair**. It is robust to noise (small perturbations of the input space change $$d_B$$ by at most the size of the perturbation, the stability theorem) but can ignore many-to-few imbalances.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The bottleneck distance is essentially the <em>minimax</em> matching cost. It is dominated by the largest unmatched feature. If one diagram has a single highly persistent point that the other lacks, the bottleneck distance is determined entirely by that point — regardless of how well everything else matches.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The bottleneck distance is essentially the <em>minimax</em> matching cost. It is dominated by the largest unmatched feature. If one diagram has a single highly persistent point that the other lacks, the bottleneck distance is determined entirely by that point, regardless of how well everything else matches.</div>
 
 ---
 
@@ -154,13 +154,13 @@ The animation below shows the optimal bottleneck matching between two small pers
 
 We must find a bijection between $$\text{Dgm}_1 \cup \Delta$$ and $$\text{Dgm}_2 \cup \Delta$$.
 
-**Option 1 — Match $$(0,3) \leftrightarrow (0.2, 3.1)$$, send $$(1,4)$$ to diagonal.**
+**Option 1, Match $$(0,3) \leftrightarrow (0.2, 3.1)$$, send $$(1,4)$$ to diagonal.**
 
 - Cost of $$(0,3) \leftrightarrow (0.2, 3.1)$$: $$\|(0,3)-(0.2,3.1)\|_\infty = \max(0.2, 0.1) = 0.2$$
 - Cost of $$(1,4) \to \Delta$$: persistence $$= 4 - 1 = 3$$, diagonal cost $$= 3/2 = 1.5$$
 - **Bottleneck cost: $$\max(0.2, 1.5) = 1.5$$**
 
-**Option 2 — Match $$(1,4) \leftrightarrow (0.2, 3.1)$$, send $$(0,3)$$ to diagonal.**
+**Option 2, Match $$(1,4) \leftrightarrow (0.2, 3.1)$$, send $$(0,3)$$ to diagonal.**
 
 - Cost of $$(1,4) \leftrightarrow (0.2,3.1)$$: $$\max(0.8, 0.9) = 0.9$$
 - Cost of $$(0,3) \to \Delta$$: $$3/2 = 1.5$$

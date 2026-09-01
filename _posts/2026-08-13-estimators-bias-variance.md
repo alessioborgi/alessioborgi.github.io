@@ -6,7 +6,7 @@ categories: [stats-basics]
 book: stats-basics
 subsection: estimation
 tags: [estimators, bias-variance, shrinkage, ridge]
-excerpt: "An estimator is a random variable, so it has a mean and a spread. Squared error splits exactly into those two pieces — and once you see the split, it becomes obvious that deliberately biasing an estimator can make it strictly better."
+excerpt: "An estimator is a random variable, so it has a mean and a spread. Squared error splits exactly into those two pieces, and once you see the split, it becomes obvious that deliberately biasing an estimator can make it strictly better."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,20 +18,20 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> An estimator \(\hat{\theta}\) is a function of the sample, so it is itself random and has a distribution. Mean squared error decomposes exactly as \(\mathrm{MSE} = \mathrm{Var}(\hat\theta) + \mathrm{Bias}(\hat\theta)^2\), with no remainder. Unbiasedness only kills the second term, and it often does so by inflating the first — which is why shrinking an estimate towards zero, as ridge regression does, can lower total error even though it guarantees you are wrong on average.
+  <strong>TL;DR:</strong> An estimator \(\hat{\theta}\) is a function of the sample, so it is itself random and has a distribution. Mean squared error decomposes exactly as \(\mathrm{MSE} = \mathrm{Var}(\hat\theta) + \mathrm{Bias}(\hat\theta)^2\), with no remainder. Unbiasedness only kills the second term, and it often does so by inflating the first, which is why shrinking an estimate towards zero, as ridge regression does, can lower total error even though it guarantees you are wrong on average.
 </div>
 
 ## An estimator is a random variable
 
 An **estimator** is any function of the sample, \\(\hat{\theta} = g(x_1,\dots,x_n)\\), used to guess an unknown parameter \\(\theta\\). The sample mean is one; so is the sample median, the sample maximum, and the constant function that always returns 7. Nothing about the definition requires the estimator to be sensible.
 
-The important consequence is that because the sample is random, \\(\hat{\theta}\\) is random. It has a distribution — the **sampling distribution** — and every property below is a property of that distribution, not of the single number you computed from your one dataset.
+The important consequence is that because the sample is random, \\(\hat{\theta}\\) is random. It has a distribution, the **sampling distribution**, and every property below is a property of that distribution, not of the single number you computed from your one dataset.
 
 ## Four properties
 
 **Bias** is the systematic offset, \\(\mathrm{Bias}(\hat\theta) = \mathbb{E}[\hat\theta] - \theta\\). The sample mean is unbiased for \\(\mu\\). The maximum-likelihood variance \\(\frac{1}{n}\sum_i(x_i-\bar{x})^2\\) is biased downwards by a factor \\((n-1)/n\\), as [descriptive statistics](/blog/stats-basics/descriptive-statistics/) derives.
 
-**Variance** is the scatter, \\(\mathrm{Var}(\hat\theta) = \mathbb{E}\big[(\hat\theta - \mathbb{E}[\hat\theta])^2\big]\\) — how much the answer would move if you collected a different sample of the same size.
+**Variance** is the scatter, \\(\mathrm{Var}(\hat\theta) = \mathbb{E}\big[(\hat\theta - \mathbb{E}[\hat\theta])^2\big]\\), how much the answer would move if you collected a different sample of the same size.
 
 **Consistency** is an asymptotic guarantee: \\(\hat\theta_n \to \theta\\) in probability as \\(n \to \infty\\). Consistency and unbiasedness are independent. The MLE of variance is biased at every finite \\(n\\) yet consistent, since the factor \\((n-1)/n \to 1\\). Conversely, "use \\(x_1\\) and ignore the rest" is unbiased for \\(\mu\\) and never consistent.
 
@@ -45,7 +45,7 @@ I(\theta) = -\,\mathbb{E}\!\left[\frac{\partial^2}{\partial\theta^2}\log p(x \mi
 \]
 </div>
 
-Here \\(I(\theta)\\) is the information a single observation carries about \\(\theta\\): the expected curvature of the log-density. Sharp curvature means the likelihood changes fast as \\(\theta\\) moves, so \\(\theta\\) is easy to pin down. An estimator attaining the bound is called efficient — the sample mean is efficient for a Gaussian mean.
+Here \\(I(\theta)\\) is the information a single observation carries about \\(\theta\\): the expected curvature of the log-density. Sharp curvature means the likelihood changes fast as \\(\theta\\) moves, so \\(\theta\\) is easy to pin down. An estimator attaining the bound is called efficient, the sample mean is efficient for a Gaussian mean.
 
 ## The decomposition
 
@@ -74,7 +74,7 @@ The cross term dies because \\(\bar\theta-\theta\\) is a constant and \\(\hat\th
 
 This is an identity, not an approximation and not a trade-off law. It says squared error has exactly two sources, and any estimator that reduces one by more than it inflates the other is an improvement.
 
-The same algebra applied to prediction gives the familiar three-term version. For a target \\(y = f(x) + \varepsilon\\) with \\(\mathrm{Var}(\varepsilon)=\sigma^2\\) and a model \\(\hat{f}\\) trained on a random dataset, the expected squared error at a fixed \\(x\\) is \\(\sigma^2 + \mathrm{Bias}(\hat f(x))^2 + \mathrm{Var}(\hat f(x))\\). The extra \\(\sigma^2\\) is irreducible noise — no model removes it. Underfitting is the bias term dominating; overfitting is the variance term dominating, the model chasing sampling noise that a different training set would not have contained.
+The same algebra applied to prediction gives the familiar three-term version. For a target \\(y = f(x) + \varepsilon\\) with \\(\mathrm{Var}(\varepsilon)=\sigma^2\\) and a model \\(\hat{f}\\) trained on a random dataset, the expected squared error at a fixed \\(x\\) is \\(\sigma^2 + \mathrm{Bias}(\hat f(x))^2 + \mathrm{Var}(\hat f(x))\\). The extra \\(\sigma^2\\) is irreducible noise, no model removes it. Underfitting is the bias term dominating; overfitting is the variance term dominating, the model chasing sampling noise that a different training set would not have contained.
 
 ## Buying a lower error with bias
 
@@ -98,7 +98,7 @@ Take \\(\mu = 1\\), \\(\sigma^2 = 1\\), \\(n = 4\\), so \\(\sigma^2/n = 0.25\\) 
 | 0.7 | 0.1225 | 0.0900 | 0.2125 |
 | 0.5 | 0.0625 | 0.2500 | 0.3125 |
 
-Shrinking by 20% cuts MSE from 0.2500 to 0.2000 — a 20% reduction — while guaranteeing the estimate is too small on average. The unbiased estimator is not even a local optimum: the derivative of MSE at \\(c=1\\) is \\(2\sigma^2/n > 0\\), so *some* shrinkage always helps.
+Shrinking by 20% cuts MSE from 0.2500 to 0.2000, a 20% reduction, while guaranteeing the estimate is too small on average. The unbiased estimator is not even a local optimum: the derivative of MSE at \\(c=1\\) is \\(2\sigma^2/n > 0\\), so *some* shrinkage always helps.
 
 <div class="blog-figure">
 <figure>
@@ -133,7 +133,7 @@ Shrinking by 20% cuts MSE from 0.2500 to 0.2000 — a 20% reduction — while gu
 </div>
 
 <div class="insight-box">
-  <strong>Key Insight — why shrinkage keeps working:</strong> the gain comes from the asymmetry of the two terms near \(c=1\). Variance falls <em>linearly</em> in the amount of shrinkage (derivative \(2c\sigma^2/n\), non-zero at \(c=1\)) while squared bias grows only <em>quadratically</em> from zero (derivative \(2(c-1)\mu^2 = 0\) at \(c=1\)). First-order gain against second-order loss means the trade always starts in your favour. Stein's result that the sample mean is inadmissible in three or more dimensions is this observation, made uniform over \(\mu\).
+  <strong>Key Insight, why shrinkage keeps working:</strong> the gain comes from the asymmetry of the two terms near \(c=1\). Variance falls <em>linearly</em> in the amount of shrinkage (derivative \(2c\sigma^2/n\), non-zero at \(c=1\)) while squared bias grows only <em>quadratically</em> from zero (derivative \(2(c-1)\mu^2 = 0\) at \(c=1\)). First-order gain against second-order loss means the trade always starts in your favour. Stein's result that the sample mean is inadmissible in three or more dimensions is this observation, made uniform over \(\mu\).
 </div>
 
 ## Ridge, and the ML reading
@@ -141,7 +141,7 @@ Shrinking by 20% cuts MSE from 0.2500 to 0.2000 — a 20% reduction — while gu
 Ridge regression is exactly this move for linear models: $$\hat\beta_{\text{ridge}} = (X^\top X + \lambda I)^{-1}X^\top y$$ shrinks every coefficient towards zero, which biases the fit and lowers its variance. When predictors are correlated, \\(X^\top X\\) is near-singular, the ordinary least-squares variance explodes, and even a large \\(\lambda\\) pays for itself. Weight decay, early stopping and dropout all sit in the same family. [Maximum likelihood](/blog/stats-basics/maximum-likelihood/) shows that the ridge penalty is what a Gaussian prior looks like from the optimisation side.
 
 <div class="warning-box">
-  <strong>Interview trap:</strong> "bias–variance trade-off" invites two errors. First, the decomposition is an <em>identity</em>, not a constraint — more training data reduces variance without touching bias, so both can fall at once and nothing is being traded. Second, it is specific to squared loss; 0–1 loss and cross-entropy do not decompose this cleanly. And the classic U-shaped test-error curve is not universal: Belkin et al. (2019) documented double descent, where error falls again past the interpolation threshold.
+  <strong>Interview trap:</strong> "bias–variance trade-off" invites two errors. First, the decomposition is an <em>identity</em>, not a constraint, more training data reduces variance without touching bias, so both can fall at once and nothing is being traded. Second, it is specific to squared loss; 0–1 loss and cross-entropy do not decompose this cleanly. And the classic U-shaped test-error curve is not universal: Belkin et al. (2019) documented double descent, where error falls again past the interpolation threshold.
 </div>
 
 <div class="key-takeaways">
@@ -149,7 +149,7 @@ Ridge regression is exactly this move for linear models: $$\hat\beta_{\text{ridg
   <ul>
     <li>An estimator is a random variable; bias, variance, consistency and efficiency are properties of its sampling distribution.</li>
     <li>\(\mathrm{MSE} = \mathrm{Var} + \mathrm{Bias}^2\) exactly, and for prediction there is an extra irreducible \(\sigma^2\).</li>
-    <li>Unbiased and consistent are independent properties — the MLE variance is biased but consistent.</li>
+    <li>Unbiased and consistent are independent properties, the MLE variance is biased but consistent.</li>
     <li>Shrinking by 20% in the worked example cut MSE by 20%; some shrinkage always helps because variance falls first-order while bias² grows second-order.</li>
     <li>Ridge, weight decay and early stopping are the same trade in a model with many parameters.</li>
   </ul>

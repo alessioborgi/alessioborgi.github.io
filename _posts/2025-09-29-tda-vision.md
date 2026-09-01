@@ -6,7 +6,7 @@ book: tdl
 subsection: applications
 tags: [tda-vision, image-analysis, texture-classification, object-recognition, topological-features]
 published: false
-excerpt: "Topological methods in computer vision extract features that are invariant to rotation, scaling, and illumination — while capturing structural properties like the number of holes, loops, and connected regions that standard CNN features miss. Applications include texture discrimination, medical image analysis, and topologically-constrained segmentation."
+excerpt: "Topological methods in computer vision extract features that are invariant to rotation, scaling, and illumination, while capturing structural properties like the number of holes, loops, and connected regions that standard CNN features miss. Applications include texture discrimination, medical image analysis, and topologically-constrained segmentation."
 author_profile: true
 read_time: true
 icon: "👁️"
@@ -28,7 +28,7 @@ toc_label: "Contents"
 
 ## Intuition First
 
-A letter "O" has one hole; a letter "B" has two; a letter "L" has none. Even a blurry, rotated, or noisy scan of a letter preserves these counts — they are topological invariants. Persistent homology applied to an image does exactly this at every intensity scale: it scans from dark to bright (or bright to dark) and counts how regions form, merge, and enclose holes. The result is a multi-scale topological fingerprint of the image structure that no amount of rotation, scaling, or moderate noise can change.
+A letter "O" has one hole; a letter "B" has two; a letter "L" has none. Even a blurry, rotated, or noisy scan of a letter preserves these counts, they are topological invariants. Persistent homology applied to an image does exactly this at every intensity scale: it scans from dark to bright (or bright to dark) and counts how regions form, merge, and enclose holes. The result is a multi-scale topological fingerprint of the image structure that no amount of rotation, scaling, or moderate noise can change.
 
 ## Topological Features in Images
 
@@ -65,7 +65,7 @@ Two integration strategies:
 1. **Pre-computed features**: Compute persistence images from raw data → concatenate with CNN features → classify.
 2. **Topological regularisation**: Add a topological loss to the CNN training objective (e.g., ensure segmentation masks have correct \(\beta_0, \beta_1\)).
 
-**Clough et al. (2020)** used topological losses to train segmentation networks that produce topologically correct cardiac structures — significantly reducing clinically problematic disconnected regions.
+**Clough et al. (2020)** used topological losses to train segmentation networks that produce topologically correct cardiac structures, significantly reducing clinically problematic disconnected regions.
 
 ## TDA Vision Pipeline
 
@@ -161,7 +161,7 @@ For 2D shape recognition (silhouettes, contours):
 - Curvature-based filtrations are invariant to rotation, translation, and scale.
 - The resulting persistence diagrams are compact shape descriptors.
 
-<div class="insight-box"><strong>Key Insight:</strong> CNNs excel at detecting local patterns (edges, textures, gradients) but struggle with global structural properties (is this region connected? does this vessel form a loop?). TDA features complement CNNs by providing exactly these global properties in a compact, stable representation. The most powerful approach — a topological + CNN hybrid — significantly outperforms either alone on tasks where topology is meaningful.</div>
+<div class="insight-box"><strong>Key Insight:</strong> CNNs excel at detecting local patterns (edges, textures, gradients) but struggle with global structural properties (is this region connected? does this vessel form a loop?). TDA features complement CNNs by providing exactly these global properties in a compact, stable representation. The most powerful approach, a topological + CNN hybrid, significantly outperforms either alone on tasks where topology is meaningful.</div>
 
 ## References
 

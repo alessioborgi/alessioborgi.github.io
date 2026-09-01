@@ -6,7 +6,7 @@ book: gnn
 subsection: sheaf
 tags: [sheaf, message-passing, heterophily, limitations, cellular-sheaf]
 published: true
-excerpt: "Standard message passing aggregates neighbour features and averages. On heterophilic graphs (where neighbours often disagree), this is harmful. Cellular sheaves provide a mathematically principled framework to model per-edge relationships between node features — going beyond mere averaging."
+excerpt: "Standard message passing aggregates neighbour features and averages. On heterophilic graphs (where neighbours often disagree), this is harmful. Cellular sheaves provide a mathematically principled framework to model per-edge relationships between node features, going beyond mere averaging."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,14 +18,14 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Standard message passing computes \(h_v \leftarrow \mathrm{UPDATE}\big(h_v, \mathrm{AGG}\{h_u : u \in \mathcal{N}(v)\}\big)\). This assumes neighbours' features are directly comparable — the same "type" of information. On heterophilic graphs, this assumption fails: neighbours have different labels, different semantics, different feature spaces. Sheaves replace this flat comparison with per-edge linear maps that transform features before comparison.
+<strong>TL;DR:</strong> Standard message passing computes \(h_v \leftarrow \mathrm{UPDATE}\big(h_v, \mathrm{AGG}\{h_u : u \in \mathcal{N}(v)\}\big)\). This assumes neighbours' features are directly comparable, the same "type" of information. On heterophilic graphs, this assumption fails: neighbours have different labels, different semantics, different feature spaces. Sheaves replace this flat comparison with per-edge linear maps that transform features before comparison.
 </div>
-{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Non-isomorphic graphs that message passing maps to identical representations (Xu et al., 2019)" caption="A <em>different</em> limitation, shown for contrast: the <em>expressivity</em> bound of Xu et al. (2019) — non-isomorphic graph structures that standard MPNNs provably cannot tell apart. This post is about a separate failure mode: even on graphs message passing can distinguish, averaging neighbours whose features live in incompatible frames destroys the signal." %}
+{% include figure image_path="/images/blog/gnn/xu2019_gin.png" alt="Non-isomorphic graphs that message passing maps to identical representations (Xu et al., 2019)" caption="A <em>different</em> limitation, shown for contrast: the <em>expressivity</em> bound of Xu et al. (2019), non-isomorphic graph structures that standard MPNNs provably cannot tell apart. This post is about a separate failure mode: even on graphs message passing can distinguish, averaging neighbours whose features live in incompatible frames destroys the signal." %}
 
 
 ## The Fundamental Assumption of Message Passing
 
-**Intuition First:** Standard message passing is like asking every person in a room to shout their opinion, then averaging what you hear. In a room where everyone agrees (homophilic graph), the average is a good summary. But in a room where your neighbours all have opposite political views, the average is a useless mush that says nothing about *your* views. Sheaves give each pair of people a translation device: instead of averaging raw opinions, you first transform what each person says into a common frame of reference — then compare.
+**Intuition First:** Standard message passing is like asking every person in a room to shout their opinion, then averaging what you hear. In a room where everyone agrees (homophilic graph), the average is a good summary. But in a room where your neighbours all have opposite political views, the average is a useless mush that says nothing about *your* views. Sheaves give each pair of people a translation device: instead of averaging raw opinions, you first transform what each person says into a common frame of reference, then compare.
 
 <style>
 @keyframes avg-collapse {
@@ -62,7 +62,7 @@ toc_label: "Contents"
   <line x1="335" y1="92" x2="352" y2="103" stroke="#fca5a5" stroke-width="1.5"/>
   <text x="315" y="150" text-anchor="middle" font-size="10" fill="#ef4444">avg = useless mix ✗</text>
 </svg>
-<figcaption>Left: homophilic graph — all neighbours share the same class (blue), averaging works. Right: heterophilic — node A is surrounded by four different classes; averaging pushes its embedding to an uninformative middle point.</figcaption>
+<figcaption>Left: homophilic graph, all neighbours share the same class (blue), averaging works. Right: heterophilic, node A is surrounded by four different classes; averaging pushes its embedding to an uninformative middle point.</figcaption>
 </figure>
 </div>
 
@@ -86,20 +86,20 @@ This is a strong assumption. Consider:
 
 ## What Goes Wrong: The Heterophily Problem
 
-On homophilic graphs (connected nodes tend to have the same label), GNNs work well — averaging similar nodes gives a good representation of the node's label.
+On homophilic graphs (connected nodes tend to have the same label), GNNs work well, averaging similar nodes gives a good representation of the node's label.
 
 On heterophilic graphs (connected nodes tend to have different labels), the standard GNN suffers:
 1. It averages over nodes with different labels → the average is "between" all label classes → uninformative
 2. Oversmoothing pushes all nodes toward the global average faster → even worse on heterophilic data
 3. The model must learn to "undo" the averaging to recover discriminative information
 
-Empirically this shows up as a clear gap. On the classic heterophilic benchmarks Chameleon and Squirrel (edge homophily $$h \approx 0.23$$ and $$h \approx 0.22$$, five classes each), a plain GCN sits in the mid-50s to mid-60s in accuracy, while models built for heterophily — and sheaf models in particular — sit several points higher. Note that these accuracies are still far above the 20% chance level: the failure of GCN here is a *relative* failure, not a collapse to random guessing.
+Empirically this shows up as a clear gap. On the classic heterophilic benchmarks Chameleon and Squirrel (edge homophily $$h \approx 0.23$$ and $$h \approx 0.22$$, five classes each), a plain GCN sits in the mid-50s to mid-60s in accuracy, while models built for heterophily, and sheaf models in particular, sit several points higher. Note that these accuracies are still far above the 20% chance level: the failure of GCN here is a *relative* failure, not a collapse to random guessing.
 
 ## The Core Issue: Features on Edges
 
 Standard GNNs attach features to **nodes** and send them unchanged along edges. There is no mechanism to transform features as they cross an edge.
 
-Consider two nodes $$u$$ and $$v$$ connected by an edge, with features $$x_u \in \mathbb{R}^d$$. The message from $$u$$ to $$v$$ is (some function of) $$x_u$$. But what if the "right" message from $$u$$ to $$v$$ should be **a different projection of $$x_u$$** — one that highlights what is relevant from $$u$$'s perspective to $$v$$?
+Consider two nodes $$u$$ and $$v$$ connected by an edge, with features $$x_u \in \mathbb{R}^d$$. The message from $$u$$ to $$v$$ is (some function of) $$x_u$$. But what if the "right" message from $$u$$ to $$v$$ should be **a different projection of $$x_u$$**, one that highlights what is relevant from $$u$$'s perspective to $$v$$?
 
 **Sheaves** formalise exactly this. Each edge $$e$$ gets its own vector space, and each endpoint gets its own **linear map** into it. For the edge $$e = (u,v)$$ these are
 
@@ -114,7 +114,7 @@ Consider two nodes $$u$$ and $$v$$ connected by an edge, with features $$x_u \in
 so that $$u$$'s features are transformed *before* they are compared to $$v$$'s (also transformed) features. Note that the transformation happens on the way to the shared edge space, not directly from node to node.
 
 <div class="insight-box">
-<strong>The geometric intuition:</strong> Think of two observers at different locations. They may be looking at the same object, but from different angles. To compare their observations, you must first transform each observation to a common reference frame. The sheaf's edge maps are exactly these "frame transformation" operations — they align features from different nodes before aggregation.
+<strong>The geometric intuition:</strong> Think of two observers at different locations. They may be looking at the same object, but from different angles. To compare their observations, you must first transform each observation to a common reference frame. The sheaf's edge maps are exactly these "frame transformation" operations, they align features from different nodes before aggregation.
 </div>
 
 ## From Flat to Structured Aggregation
@@ -137,15 +137,15 @@ All neighbour features aggregated directly.
 \]
 </div>
 
-Each neighbour feature is first pushed into the edge space by $$\mathcal{F}_{u \trianglelefteq e}$$ and then pulled back into $$v$$'s space by $$\mathcal{F}_{v \trianglelefteq e}^{\top}$$ — a *transport* from $$u$$'s frame to $$v$$'s frame.
+Each neighbour feature is first pushed into the edge space by $$\mathcal{F}_{u \trianglelefteq e}$$ and then pulled back into $$v$$'s space by $$\mathcal{F}_{v \trianglelefteq e}^{\top}$$, a *transport* from $$u$$'s frame to $$v$$'s frame.
 
 The restriction maps can be constrained to different matrix classes:
-- **Scalar ($$d = 1$$):** a single signed number per endpoint. Crucially the sign is free, so the transport $$\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{u \trianglelefteq e}$$ can be negative — something softmax attention (GAT) cannot express.
-- **Diagonal:** elementwise rescaling — captures which stalk coordinates to emphasise.
-- **Orthogonal:** rotations and reflections in feature space — preserves norm, changes direction.
-- **General ($$d \times d$$ matrix):** full linear transformation — most expressive.
+- **Scalar ($$d = 1$$):** a single signed number per endpoint. Crucially the sign is free, so the transport $$\mathcal{F}_{v \trianglelefteq e}^{\top}\mathcal{F}_{u \trianglelefteq e}$$ can be negative, something softmax attention (GAT) cannot express.
+- **Diagonal:** elementwise rescaling, captures which stalk coordinates to emphasise.
+- **Orthogonal:** rotations and reflections in feature space, preserves norm, changes direction.
+- **General ($$d \times d$$ matrix):** full linear transformation, most expressive.
 
-<div class="insight-box"><strong>Key Insight:</strong> The restriction maps are learnable linear transformations applied to each endpoint's features before they are compared in the shared edge space. When two nodes have different class-driven feature directions (heterophily), the model can learn maps that rotate \(u\)'s features into alignment with \(v\)'s — making the comparison meaningful. Standard message passing is the special case where every stalk is \(\mathbb{R}\) and every restriction map is the identity: neighbours are always compared raw, which is only appropriate when they should be equal.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The restriction maps are learnable linear transformations applied to each endpoint's features before they are compared in the shared edge space. When two nodes have different class-driven feature directions (heterophily), the model can learn maps that rotate \(u\)'s features into alignment with \(v\)'s, making the comparison meaningful. Standard message passing is the special case where every stalk is \(\mathbb{R}\) and every restriction map is the identity: neighbours are always compared raw, which is only appropriate when they should be equal.</div>
 
 ## The Mathematical Object: A Cellular Sheaf
 
@@ -154,7 +154,7 @@ A **cellular sheaf** $$\mathcal{F}$$ on a graph $$G = (V, E)$$ assigns:
 - A vector space $$\mathcal{F}(e)$$ to each edge $$e$$ (the "stalk" over $$e$$)
 - A linear map $$\mathcal{F}_{v \trianglelefteq e} : \mathcal{F}(v) \to \mathcal{F}(e)$$ for each node $$v$$ incident to $$e$$ (the "restriction map")
 
-The restriction maps "restrict" the node feature to the edge — producing a view of the node from the edge's perspective. The notation $$v \trianglelefteq e$$ reads "$$v$$ is a face of $$e$$", i.e. $$v$$ is an endpoint of $$e$$.
+The restriction maps "restrict" the node feature to the edge, producing a view of the node from the edge's perspective. The notation $$v \trianglelefteq e$$ reads "$$v$$ is a face of $$e$$", i.e. $$v$$ is an endpoint of $$e$$.
 
 This structure, coming from algebraic topology, provides a principled mathematical foundation for understanding information flow on graphs beyond simple averaging.
 
@@ -163,7 +163,7 @@ This structure, coming from algebraic topology, provides a principled mathematic
 Sheaf-based GNNs can:
 1. Handle heterophilic graphs by learning restriction maps that align features of nodes with different labels
 2. Model multi-relational graphs with different maps per edge type
-3. Enable richer information flow: the "disagreement" $$\mathcal{F}_{v \trianglelefteq e} x_v - \mathcal{F}_{u \trianglelefteq e} x_u$$ measures edge inconsistency — a useful signal
+3. Enable richer information flow: the "disagreement" $$\mathcal{F}_{v \trianglelefteq e} x_v - \mathcal{F}_{u \trianglelefteq e} x_u$$ measures edge inconsistency, a useful signal
 4. Connect to topological data analysis, providing interpretability
 
 The next posts build this intuition into concrete architectures: the sheaf Laplacian, Neural Sheaf Diffusion, and Polynomial Neural Sheaf Diffusion.

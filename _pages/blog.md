@@ -385,7 +385,7 @@ author_profile: true
       <div class="pb-hero__label">Research · Milestones · Experiences</div>
       <h2 class="pb-hero__title">Updates &amp; Highlights</h2>
       <p class="pb-hero__desc">
-        Papers, conferences, awards, summer schools, and milestones — originally shared on LinkedIn.
+        Papers, conferences, awards, summer schools, and milestones, originally shared on LinkedIn.
       </p>
       <a class="pb-hero__li-btn" href="https://www.linkedin.com/in/alessioborgi/" target="_blank" rel="noopener">
         <i class="fab fa-linkedin" aria-hidden="true"></i> Follow on LinkedIn
@@ -497,7 +497,7 @@ author_profile: true
   </div>
 
 {% else %}
-  <div class="pb-empty">No posts yet — check back soon.</div>
+  <div class="pb-empty">No posts yet, check back soon.</div>
 {% endfor %}
 </div>
 

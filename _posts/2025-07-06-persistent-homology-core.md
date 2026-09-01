@@ -6,7 +6,7 @@ book: tdl
 subsection: core
 tags: [persistent-homology, birth-death, persistence, filtration, topological-features]
 published: false
-excerpt: "Persistent homology applies homology to a filtration rather than a single space. Each topological feature — a connected component, a loop, a void — has a birth time (when it first appears) and a death time (when it merges with an older feature). Persistence pairs these events into a complete multi-scale description of shape."
+excerpt: "Persistent homology applies homology to a filtration rather than a single space. Each topological feature, a connected component, a loop, a void, has a birth time (when it first appears) and a death time (when it merges with an older feature). Persistence pairs these events into a complete multi-scale description of shape."
 author_profile: true
 read_time: true
 is_overview: false
@@ -25,11 +25,11 @@ permalink: /blog/persistent-homology/persistent-homology-core/
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Persistent homology applies homology to a filtration. Each topological feature has a birth time (when it first appears) and a death time (when it merges with an older feature or becomes trivial). The full lifetime of all features is encoded in a persistence diagram — a multi-scale, noise-robust shape signature. The fundamental decomposition theorem guarantees this encoding is complete and unique.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Persistent homology applies homology to a filtration. Each topological feature has a birth time (when it first appears) and a death time (when it merges with an older feature or becomes trivial). The full lifetime of all features is encoded in a persistence diagram, a multi-scale, noise-robust shape signature. The fundamental decomposition theorem guarantees this encoding is complete and unique.</div>
 {% include figure image_path="/images/blog/tdl/carriere2020_perslay.png" alt="Persistent homology barcodes" caption="Persistent homology via PersLay (Carrière et al., 2020)" %}
 
 
-**Intuition First.** Think of a persistence module as a film reel. Each frame is a vector space (the homology group at that scale), and consecutive frames are connected by linear maps (induced by inclusions). The decomposition theorem says: every such film can be cut into independent single-feature films, each showing one topological feature alive for exactly one contiguous interval. The barcode is just the list of those intervals — a complete, lossless description of the entire reel.
+**Intuition First.** Think of a persistence module as a film reel. Each frame is a vector space (the homology group at that scale), and consecutive frames are connected by linear maps (induced by inclusions). The decomposition theorem says: every such film can be cut into independent single-feature films, each showing one topological feature alive for exactly one contiguous interval. The barcode is just the list of those intervals, a complete, lossless description of the entire reel.
 
 <style>
 @keyframes bar-grow {
@@ -80,7 +80,7 @@ Given a filtration \(\{K_\varepsilon\}_{\varepsilon \geq 0}\), applying the \(k\
 
 These maps are the homological shadows of the simplicial inclusions $$K_{\varepsilon_1} \hookrightarrow K_{\varepsilon_2}$$. The persistence module records how topological classes are created (born) and destroyed (die) as the filtration grows.
 
-A persistence module is **pointwise finite-dimensional** if each $$H_k(K_\varepsilon)$$ is finite-dimensional — which is guaranteed for finite simplicial complexes. Under this condition, the module decomposes as a direct sum of **interval modules**.
+A persistence module is **pointwise finite-dimensional** if each $$H_k(K_\varepsilon)$$ is finite-dimensional, which is guaranteed for finite simplicial complexes. Under this condition, the module decomposes as a direct sum of **interval modules**.
 
 ## The Fundamental Decomposition Theorem
 
@@ -98,7 +98,7 @@ This decomposition is the algebraic version of the barcode: each interval $$[b_i
 
 When two connected components (or higher-dimensional features) merge, the **elder rule** determines which survives: the feature with the earlier birth time is the "elder" and survives; the younger one dies. This rule ensures that the pairing of births and deaths is unique.
 
-Algorithmically, persistence pairs are computed by reducing the boundary matrix (see the boundary matrix post). Each column reduction produces a pivot that corresponds to a birth–death pair $$(b, d)$$. Columns that are never reduced correspond to **essential classes** — features that persist to infinity, i.e., have $$d = \infty$$.
+Algorithmically, persistence pairs are computed by reducing the boundary matrix (see the boundary matrix post). Each column reduction produces a pivot that corresponds to a birth–death pair $$(b, d)$$. Columns that are never reduced correspond to **essential classes**, features that persist to infinity, i.e., have $$d = \infty$$.
 
 For a connected simplicial complex, there is always exactly one essential $$H_0$$ class (the single connected component) with birth 0 and death $$\infty$$. For closed surfaces, essential $$H_1$$ and $$H_2$$ classes record non-bounding cycles.
 
@@ -108,13 +108,13 @@ A homology class $$\gamma \in H_k(K_\varepsilon)$$ is said to be **born** at $$\
 
 The **persistence** $$\mathrm{pers}(\gamma) = d - b$$ measures feature lifetime. The stability theorem (Cohen-Steiner et al., 2007) shows that only features with persistence greater than the noise level $$\delta$$ are truly data-driven: the bottleneck distance between diagrams of perturbed inputs is bounded by the perturbation size.
 
-<div class="insight-box"><strong>Key Insight:</strong> The fundamental decomposition theorem is the reason TDA works: it says the persistence module — an infinite-dimensional algebraic object — has a completely discrete, finite, canonical description: its barcode. This means we can represent all topological information at all scales with a finite multiset of intervals. No information is lost; no choices are made. The barcode is the unique complete invariant of the persistence module.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The fundamental decomposition theorem is the reason TDA works: it says the persistence module, an infinite-dimensional algebraic object, has a completely discrete, finite, canonical description: its barcode. This means we can represent all topological information at all scales with a finite multiset of intervals. No information is lost; no choices are made. The barcode is the unique complete invariant of the persistence module.</div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The elder rule is what makes the persistence pairing <em>unique</em>. Without it, merging events would be ambiguous: when two components fuse, either could be declared dead. The elder rule resolves this canonically — the younger one dies — ensuring that every filtration has exactly one barcode, with no arbitrary choices. This uniqueness is what makes persistence diagrams a well-defined invariant.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The elder rule is what makes the persistence pairing <em>unique</em>. Without it, merging events would be ambiguous: when two components fuse, either could be declared dead. The elder rule resolves this canonically, the younger one dies, ensuring that every filtration has exactly one barcode, with no arbitrary choices. This uniqueness is what makes persistence diagrams a well-defined invariant.</div>
 
 ## Example: Two Loops
 
-Consider a point cloud sampled from two disjoint circles. In $$\mathrm{dgm}_0$$, many components are born at small $$\varepsilon$$ and die as nearby points connect; one persistent component survives per loop until the two loops connect (if the inter-loop distance is large). In $$\mathrm{dgm}_1$$, two prominent points appear — one per loop — with high persistence (they are born when the loop forms and die only when the triangulation fills the interior, which happens at a much larger scale). These two off-diagonal points in $$\mathrm{dgm}_1$$ are the topological signature of "two circles."
+Consider a point cloud sampled from two disjoint circles. In $$\mathrm{dgm}_0$$, many components are born at small $$\varepsilon$$ and die as nearby points connect; one persistent component survives per loop until the two loops connect (if the inter-loop distance is large). In $$\mathrm{dgm}_1$$, two prominent points appear, one per loop, with high persistence (they are born when the loop forms and die only when the triangulation fills the interior, which happens at a much larger scale). These two off-diagonal points in $$\mathrm{dgm}_1$$ are the topological signature of "two circles."
 
 ## References
 

@@ -6,7 +6,7 @@ book: tdl
 subsection: core
 tags: [stability, bottleneck-distance, Cohen-Steiner, noise-robustness, Lipschitz]
 published: false
-excerpt: "The stability theorem (Cohen-Steiner et al., 2007) is the cornerstone of TDA's applicability to real data: if two functions f and g are close in the L∞ norm, their persistence diagrams are close in the bottleneck distance. This Lipschitz guarantee means persistent homology tolerates noise, sampling variation, and small perturbations — a prerequisite for any statistical analysis."
+excerpt: "The stability theorem (Cohen-Steiner et al., 2007) is the cornerstone of TDA's applicability to real data: if two functions f and g are close in the L∞ norm, their persistence diagrams are close in the bottleneck distance. This Lipschitz guarantee means persistent homology tolerates noise, sampling variation, and small perturbations, a prerequisite for any statistical analysis."
 author_profile: true
 read_time: true
 is_overview: false
@@ -25,11 +25,11 @@ permalink: /blog/persistent-homology/stability-theorems/
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> The bottleneck stability theorem guarantees that small perturbations in input data cause at most equally small changes in the persistence diagram. Formally: \(d_B(\mathrm{dgm}(f), \mathrm{dgm}(g)) \leq \|f - g\|_\infty\). This makes TDA noise-robust — features with persistence larger than the noise level are genuine shape features, not artefacts of measurement error.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> The bottleneck stability theorem guarantees that small perturbations in input data cause at most equally small changes in the persistence diagram. Formally: \(d_B(\mathrm{dgm}(f), \mathrm{dgm}(g)) \leq \|f - g\|_\infty\). This makes TDA noise-robust, features with persistence larger than the noise level are genuine shape features, not artefacts of measurement error.</div>
 {% include figure image_path="/images/blog/tdl/hofer2020_topological_layers.png" alt="Stability of persistence" caption="Topological stability and layers (Hofer et al., 2020)" %}
 
 
-**Intuition First.** Imagine two persistence diagrams as two sets of dots in the plane. The bottleneck distance asks: what is the cheapest way to match every dot in diagram 1 to a dot in diagram 2, where unmatched dots get sent to the nearest point on the diagonal? The "cost" of a match is the maximum displacement of any single dot. The stability theorem says this cost is bounded by how much the underlying data changed — measured in the \(L^\infty\) norm.
+**Intuition First.** Imagine two persistence diagrams as two sets of dots in the plane. The bottleneck distance asks: what is the cheapest way to match every dot in diagram 1 to a dot in diagram 2, where unmatched dots get sent to the nearest point on the diagonal? The "cost" of a match is the maximum displacement of any single dot. The stability theorem says this cost is bounded by how much the underlying data changed, measured in the \(L^\infty\) norm.
 
 <div class="blog-figure"><figure>
 <svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;font-family:sans-serif;">
@@ -115,7 +115,7 @@ The stability theorem has three practical consequences:
 
 3. **Differentiability**: the map $$f \mapsto \mathrm{dgm}(f)$$ is Lipschitz, hence differentiable almost everywhere. This is the foundation for topological loss functions in neural networks.
 
-<div class="insight-box"><strong>Key Insight:</strong> Stability is what separates TDA from naive topological analysis. Without it, persistent homology would be a mathematical curiosity — any noise in the data could create or destroy features arbitrarily. With the stability theorem, we have a precise quantitative relationship: the topological signal is at most as sensitive to noise as the input data itself. Features that survive perturbation are real; features that do not are noise. This is the statistical foundation of all TDA applications.</div>
+<div class="insight-box"><strong>Key Insight:</strong> Stability is what separates TDA from naive topological analysis. Without it, persistent homology would be a mathematical curiosity, any noise in the data could create or destroy features arbitrarily. With the stability theorem, we have a precise quantitative relationship: the topological signal is at most as sensitive to noise as the input data itself. Features that survive perturbation are real; features that do not are noise. This is the statistical foundation of all TDA applications.</div>
 
 ## References
 

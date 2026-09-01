@@ -19,7 +19,7 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> Two distinct research programmes share the word "topology". In <strong>TDA-as-features</strong> you build a filtration, compute persistent homology, vectorise the diagram, and feed that vector to an ordinary model — topology is a fixed preprocessing step and the learning happens in \(\mathbb{R}^d\). In <strong>topological deep learning</strong> the data <em>is</em> a simplicial complex, cell complex, or hypergraph, and message passing runs along its incidences — topology is the domain, not a feature. The distinction matters because the second buys you something the first cannot: a graph edge is intrinsically a pairwise relation, so group interactions can only be encoded lossily. The clique expansion of a hypergraph is <em>not injective</em>, and this post constructs two hypergraphs that collapse to the same graph.
+  <strong>TL;DR:</strong> Two distinct research programmes share the word "topology". In <strong>TDA-as-features</strong> you build a filtration, compute persistent homology, vectorise the diagram, and feed that vector to an ordinary model, topology is a fixed preprocessing step and the learning happens in \(\mathbb{R}^d\). In <strong>topological deep learning</strong> the data <em>is</em> a simplicial complex, cell complex, or hypergraph, and message passing runs along its incidences, topology is the domain, not a feature. The distinction matters because the second buys you something the first cannot: a graph edge is intrinsically a pairwise relation, so group interactions can only be encoded lossily. The clique expansion of a hypergraph is <em>not injective</em>, and this post constructs two hypergraphs that collapse to the same graph.
 </div>
 
 ## Two Things Called "Topology"
@@ -42,7 +42,7 @@ X \;\xrightarrow{\ \text{filtration}\ } \; \{K_t\}_{t \in \mathbb{R}} \;\xrighta
 \]
 </div>
 
-You choose a filtration (Rips, alpha, sublevel sets of a function, cubical for images). You run persistent homology to get a multiset of birth–death pairs. You apply a vectorisation map $$\Phi$$ — a persistence image, a persistence landscape, a Betti curve, a vector of persistence entropies — to land in a fixed-dimensional Euclidean space. Then you train whatever you like: an SVM, a random forest, an MLP.
+You choose a filtration (Rips, alpha, sublevel sets of a function, cubical for images). You run persistent homology to get a multiset of birth–death pairs. You apply a vectorisation map $$\Phi$$, a persistence image, a persistence landscape, a Betti curve, a vector of persistence entropies, to land in a fixed-dimensional Euclidean space. Then you train whatever you like: an SVM, a random forest, an MLP.
 
 The properties of this pipeline follow directly from its shape:
 
@@ -57,7 +57,7 @@ The honest summary: this is feature engineering, done with unusually good mathem
 
 Now change what the input *is*.
 
-Suppose the data point is not a point cloud but a **simplicial complex** $$K$$: a set of vertices, edges, triangles, tetrahedra, closed under taking faces. Attach a feature vector to every simplex, not just every vertex. Define a layer that updates the feature of a simplex $$\sigma$$ from the features of the simplices it touches — its faces, its cofaces, and the simplices it is adjacent to through a shared face or a shared coface. Stack those layers. Read out.
+Suppose the data point is not a point cloud but a **simplicial complex** $$K$$: a set of vertices, edges, triangles, tetrahedra, closed under taking faces. Attach a feature vector to every simplex, not just every vertex. Define a layer that updates the feature of a simplex $$\sigma$$ from the features of the simplices it touches, its faces, its cofaces, and the simplices it is adjacent to through a shared face or a shared coface. Stack those layers. Read out.
 
 Schematically, for a $$k$$-simplex $$\sigma$$ with features $$h_\sigma$$:
 
@@ -95,7 +95,7 @@ Nothing here computes homology. No filtration is chosen. The topology is in the 
 
 Here is the concrete reason the second programme exists.
 
-A graph edge is a *pair*. That is not a convention; it is what an edge is. So whenever the real relation in your data involves three or more entities at once — three authors on one paper, six atoms in one aromatic ring, four nodes in one communication group, a triangular face of a mesh — the graph representation must encode it indirectly. The standard trick is the **clique expansion**: replace each group by all the pairwise edges among its members.
+A graph edge is a *pair*. That is not a convention; it is what an edge is. So whenever the real relation in your data involves three or more entities at once, three authors on one paper, six atoms in one aromatic ring, four nodes in one communication group, a triangular face of a mesh, the graph representation must encode it indirectly. The standard trick is the **clique expansion**: replace each group by all the pairwise edges among its members.
 
 The clique expansion loses information, and it is easy to see exactly how.
 
@@ -165,17 +165,17 @@ H_B = \big\{\{1,2,3\},\ \{1,2,4\},\ \{1,3,4\},\ \{2,3,4\}\big\}
 \]
 </div>
 
-Expand $$H_A$$: the triple $$\{1,2,3\}$$ contributes edges 12, 13, 23; $$\{1,2,4\}$$ contributes 12, 14, 24; $$\{1,3,4\}$$ contributes 13, 14, 34. The union is $$\{12, 13, 14, 23, 24, 34\}$$ — all six edges, so the clique expansion is $$K_4$$. Expand $$H_B$$: it contains every triple of $$H_A$$, so its expansion contains $$K_4$$, and $$K_4$$ is all there is. **Both clique-expand to $$K_4$$.**
+Expand $$H_A$$: the triple $$\{1,2,3\}$$ contributes edges 12, 13, 23; $$\{1,2,4\}$$ contributes 12, 14, 24; $$\{1,3,4\}$$ contributes 13, 14, 34. The union is $$\{12, 13, 14, 23, 24, 34\}$$, all six edges, so the clique expansion is $$K_4$$. Expand $$H_B$$: it contains every triple of $$H_A$$, so its expansion contains $$K_4$$, and $$K_4$$ is all there is. **Both clique-expand to $$K_4$$.**
 
 They are not isomorphic hypergraphs: $$H_A$$ has 3 hyperedges and $$H_B$$ has 4, and their vertex degree sequences are $$(2,2,2,3)$$ and $$(3,3,3,3)$$. So this is not a relabelling artefact. Two genuinely different 3-uniform hypergraphs, one graph.
 
 <div class="warning-box">
-<strong>What this does and does not prove.</strong> It proves the clique expansion is a many-to-one map, so <em>no</em> model that consumes only the expanded graph can distinguish \(H_A\) from \(H_B\) — this is a statement about the representation, not about any particular architecture, and no amount of depth, width, or attention repairs it. It does <em>not</em> prove the distinction matters for your task. If the label of \(H_A\) and \(H_B\) is the same, you have lost nothing.
+<strong>What this does and does not prove.</strong> It proves the clique expansion is a many-to-one map, so <em>no</em> model that consumes only the expanded graph can distinguish \(H_A\) from \(H_B\), this is a statement about the representation, not about any particular architecture, and no amount of depth, width, or attention repairs it. It does <em>not</em> prove the distinction matters for your task. If the label of \(H_A\) and \(H_B\) is the same, you have lost nothing.
 </div>
 
 ### The lift keeps what the expansion discards
 
-Take the downward closure of each hypergraph — add every subset of every hyperedge — and you get a simplicial complex. Count the simplices:
+Take the downward closure of each hypergraph, add every subset of every hyperedge, and you get a simplicial complex. Count the simplices:
 
 - $$H_A$$ closed: 4 vertices, 6 edges, 3 triangles. **13 simplices.** Euler characteristic $$\chi = 4 - 6 + 3 = 1$$.
 - $$H_B$$ closed: 4 vertices, 6 edges, 4 triangles. **14 simplices.** Euler characteristic $$\chi = 4 - 6 + 4 = 2$$.
@@ -184,16 +184,16 @@ Take the downward closure of each hypergraph — add every subset of every hyper
 Three different complexes, one shared 1-skeleton. And the difference is not cosmetic. The closure of $$H_B$$ is the hollow tetrahedron $$\partial \Delta^3$$, which is a 2-sphere: $$\beta_2 = 1$$. The closure of $$H_A$$ is the cone with apex 1 over the cycle $$2 \to 3 \to 4 \to 2$$, which is contractible: $$\beta_2 = 0$$. One encloses a void, the other does not, and their graphs are indistinguishable.
 
 <div class="insight-box">
-<strong>Also worth noticing:</strong> the clique complex is the <em>third</em> object here, distinct from both closures. Automatically filling in every clique is a modelling choice, and it is the aggressive one — it manufactured a solid tetrahedron that neither hypergraph asked for. Choosing the lift is part of the model.
+<strong>Also worth noticing:</strong> the clique complex is the <em>third</em> object here, distinct from both closures. Automatically filling in every clique is a modelling choice, and it is the aggressive one, it manufactured a solid tetrahedron that neither hypergraph asked for. Choosing the lift is part of the model.
 </div>
 
 ## The Line Genuinely Blurs in Two Places
 
 Being honest about where the distinction breaks down is more useful than defending it too hard.
 
-**A graph is already a topological object.** A graph is a 1-dimensional simplicial complex. Its $$\beta_0$$ counts connected components and its $$\beta_1$$ counts independent cycles; these are homology groups, computed on a chain complex, in the ordinary sense. So a GNN is already doing message passing on a topological domain — one that happens to be truncated at dimension 1. "Graphs versus topology" is a difference of degree, not of kind, and the honest framing of TDL is *the same idea, without the truncation*. This is also why the expressivity story is continuous rather than a jump: simplicial and cellular Weisfeiler–Leman refinements are defined by the same colour-refinement recipe as 1-WL, run over cells of every dimension instead of vertices only.
+**A graph is already a topological object.** A graph is a 1-dimensional simplicial complex. Its $$\beta_0$$ counts connected components and its $$\beta_1$$ counts independent cycles; these are homology groups, computed on a chain complex, in the ordinary sense. So a GNN is already doing message passing on a topological domain, one that happens to be truncated at dimension 1. "Graphs versus topology" is a difference of degree, not of kind, and the honest framing of TDL is *the same idea, without the truncation*. This is also why the expressivity story is continuous rather than a jump: simplicial and cellular Weisfeiler–Leman refinements are defined by the same colour-refinement recipe as 1-WL, run over cells of every dimension instead of vertices only.
 
-**Differentiable persistence deliberately erases the boundary.** If the filtration values are a differentiable function of learnable parameters, and the persistence diagram is a piecewise-linear function of those values, then $$\Phi(\mathrm{dgm})$$ becomes a differentiable layer and the whole "preprocessing" stage joins the computation graph. At that point topology is no longer fixed before training — the model learns which filtration to build. Topological autoencoders and topological regularisation losses live here. They are TDA machinery inside a TDL training loop, and calling them one or the other is a matter of emphasis.
+**Differentiable persistence deliberately erases the boundary.** If the filtration values are a differentiable function of learnable parameters, and the persistence diagram is a piecewise-linear function of those values, then $$\Phi(\mathrm{dgm})$$ becomes a differentiable layer and the whole "preprocessing" stage joins the computation graph. At that point topology is no longer fixed before training, the model learns which filtration to build. Topological autoencoders and topological regularisation losses live here. They are TDA machinery inside a TDL training loop, and calling them one or the other is a matter of emphasis.
 
 There is no contradiction in using both at once. Nothing stops you from running a simplicial network on a lifted complex *and* appending a persistence-image feature to the readout. They answer different questions: persistence tells you about the shape of the data at many scales; higher-order message passing tells you how to compute on a fixed shape.
 
@@ -203,21 +203,21 @@ Four things worth saying plainly, because the enthusiastic version of this post 
 
 **The lift can be enormous.** If you lift a graph by filling in all its cliques, the count is combinatorial. On $$K_{20}$$ there are $$\binom{20}{2} = 190$$ edges but $$\binom{20}{3} = 1140$$ triangles and $$\binom{20}{4} = 4845$$ tetrahedra. Dense subgraphs are exactly where clique lifting explodes, and social and citation graphs are full of them. Ring lifting and other sparse lifts exist precisely because of this.
 
-**The lift is a modelling assumption, not data.** If your dataset is a plain graph, the higher-order structure did not come with it — you invented it. A clique lift and a ring lift on the same molecule produce different models with different inductive biases, and the choice is on you. This is the exact counterpart of choosing a filtration in the TDA pipeline; the arbitrariness did not go away, it moved.
+**The lift is a modelling assumption, not data.** If your dataset is a plain graph, the higher-order structure did not come with it, you invented it. A clique lift and a ring lift on the same molecule produce different models with different inductive biases, and the choice is on you. This is the exact counterpart of choosing a filtration in the TDA pipeline; the arbitrariness did not go away, it moved.
 
 **More expressive does not mean better generalisation.** The theory says a strictly larger set of inputs can be told apart. It says nothing about test error. An architecture that can distinguish more graphs can also overfit distinctions that are noise.
 
-**Many reported gains are domain-specific.** The clean win cases for higher-order message passing are the ones where the group structure is real and load-bearing — rings in molecules, faces in meshes, co-authorship in bibliographic data, simplicial signals like flows on edges. On a graph whose relations genuinely are pairwise, lifting adds cost and buys nothing.
+**Many reported gains are domain-specific.** The clean win cases for higher-order message passing are the ones where the group structure is real and load-bearing, rings in molecules, faces in meshes, co-authorship in bibliographic data, simplicial signals like flows on edges. On a graph whose relations genuinely are pairwise, lifting adds cost and buys nothing.
 
 <div class="paper-box">
-<strong>Where the expressivity claim comes from.</strong> Bodnar et al. (2021) introduced message-passing simplicial networks and the simplicial Weisfeiler–Leman refinement, and showed it is strictly more powerful than 1-WL — the ceiling for ordinary message-passing GNNs. A companion paper extended the construction to regular cell complexes, where a ring can be a single 2-cell rather than a filled-in clique, which matters for molecules because the clique lift of a six-membered ring is not a hexagon. Hajij et al. later unified simplicial complexes, cell complexes, and hypergraphs under combinatorial complexes, where the containment relation is decoupled from any dimension-by-dimension face condition.
+<strong>Where the expressivity claim comes from.</strong> Bodnar et al. (2021) introduced message-passing simplicial networks and the simplicial Weisfeiler–Leman refinement, and showed it is strictly more powerful than 1-WL, the ceiling for ordinary message-passing GNNs. A companion paper extended the construction to regular cell complexes, where a ring can be a single 2-cell rather than a filled-in clique, which matters for molecules because the clique lift of a six-membered ring is not a hexagon. Hajij et al. later unified simplicial complexes, cell complexes, and hypergraphs under combinatorial complexes, where the containment relation is decoupled from any dimension-by-dimension face condition.
 </div>
 
 ## How to Read the Rest of Book IV
 
-Most chapters in this book — filtrations, persistence diagrams, stability, the twist algorithm, Mapper, persistence images, the application chapters — are Pipeline One. They are TDA, and the deep learning in them is a downstream consumer.
+Most chapters in this book, filtrations, persistence diagrams, stability, the twist algorithm, Mapper, persistence images, the application chapters, are Pipeline One. They are TDA, and the deep learning in them is a downstream consumer.
 
-A smaller set — differentiable persistence, learning filtrations, topological autoencoders, topological regularisation — sits on the boundary, using TDA objects inside a gradient-based loop.
+A smaller set, differentiable persistence, learning filtrations, topological autoencoders, topological regularisation, sits on the boundary, using TDA objects inside a gradient-based loop.
 
 The chapters that would be TDL proper are the ones about computing *on* a complex: simplicial and cellular networks, hypergraph networks, sheaf neural networks, higher-order attention. If you are reading this book to learn how to build a model that consumes a simplicial complex, this post is the map that tells you which chapters will actually help.
 
@@ -225,7 +225,7 @@ The chapters that would be TDL proper are the ones about computing *on* a comple
 <h3>✅ Key Takeaways</h3>
 <ul>
   <li><strong>TDA-as-features</strong> computes a topological descriptor (a persistence diagram, vectorised) and hands it to an ordinary model. The topology is fixed before training; the learning happens in \(\mathbb{R}^d\).</li>
-  <li><strong>TDL proper</strong> makes a higher-order object — simplicial complex, cell complex, hypergraph — the domain the network runs on, with features on cells of every dimension and message passing along incidences.</li>
+  <li><strong>TDL proper</strong> makes a higher-order object, simplicial complex, cell complex, hypergraph, the domain the network runs on, with features on cells of every dimension and message passing along incidences.</li>
   <li>The one-line test: remove the persistence computation and ask whether anything topological remains. If not, it is Pipeline One.</li>
   <li>A graph edge is intrinsically a <em>pairwise</em> relation, so group interactions must be encoded lossily. The <strong>clique expansion is not injective</strong>: \(\{\{1,2,3\}\}\) and \(\{\{1,2\},\{1,3\},\{2,3\}\}\) give the same triangle, and the 3-uniform hypergraphs \(H_A\) (3 hyperedges) and \(H_B\) (4 hyperedges) both give \(K_4\).</li>
   <li>The simplicial lifts keep the difference: 13 versus 14 simplices, \(\chi = 1\) versus \(\chi = 2\), \(\beta_2 = 0\) versus \(\beta_2 = 1\). The clique complex of \(K_4\) is a third object again, with 15 simplices.</li>
@@ -236,7 +236,7 @@ The chapters that would be TDL proper are the ones about computing *on* a comple
 
 ## References
 
-- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826) *ICLR 2019* (establishes 1-WL as the expressivity ceiling for message-passing GNNs — the baseline that higher-order methods aim to exceed).
+- Xu, K., Hu, W., Leskovec, J., & Jegelka, S. (2019). [How Powerful are Graph Neural Networks?](https://arxiv.org/abs/1810.00826) *ICLR 2019* (establishes 1-WL as the expressivity ceiling for message-passing GNNs, the baseline that higher-order methods aim to exceed).
 - Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). [Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges](https://arxiv.org/abs/2104.13478) (the symmetry-first framing in which "choose the domain, then the equivariant layer" is the design principle TDL follows).
 - Bodnar, C., Frasca, F., Wang, Y. G., Otter, N., Montúfar, G., Liò, P., & Bronstein, M. (2021). [Weisfeiler and Lehman Go Topological: Message Passing Simplicial Networks](https://arxiv.org/abs/2103.03212). *ICML 2021* (introduces simplicial WL and MPSN; the strict improvement over 1-WL).
 - Bodnar, C., Frasca, F., Otter, N., Wang, Y. G., Liò, P., Montúfar, G., & Bronstein, M. (2021). [Weisfeiler and Lehman Go Cellular: CW Networks](https://arxiv.org/abs/2106.12575). *NeurIPS 2021* (extends the construction to regular cell complexes, where a ring is a single 2-cell).

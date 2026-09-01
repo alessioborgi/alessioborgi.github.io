@@ -27,21 +27,21 @@ toc_label: "Contents"
 .blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Training robot policies entirely in simulation is safe and scalable, but the "reality gap" — discrepancies between simulated and real physics — causes policies to fail when deployed. Domain randomisation, domain adaptation, and careful system identification are the main strategies used to bridge this gap, as demonstrated dramatically by OpenAI Dactyl's in-hand cube manipulation.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> Training robot policies entirely in simulation is safe and scalable, but the "reality gap", discrepancies between simulated and real physics, causes policies to fail when deployed. Domain randomisation, domain adaptation, and careful system identification are the main strategies used to bridge this gap, as demonstrated dramatically by OpenAI Dactyl's in-hand cube manipulation.</div>
 {% include figure image_path="/images/blog/robotics/andrychowicz2019_dactyl.png" alt="Sim-to-real transfer with Dactyl" caption="OpenAI Dactyl: sim-to-real transfer for dexterous manipulation (Andrychowicz et al., 2019)" %}
 
 
 ## The Reality Gap
 
-**Intuition first.** Imagine learning to ride a bicycle on a perfect frictionless surface, then stepping onto a real road with gravel, wind, and bumps. Every skill you learned still helps — balance, steering — but the fine-tuned reflexes fail. The reality gap is this same mismatch between the clean simulator and the messy real world. Domain randomisation is the equivalent of practising on many different surfaces so that real gravel is just another surface you have already handled.
+**Intuition first.** Imagine learning to ride a bicycle on a perfect frictionless surface, then stepping onto a real road with gravel, wind, and bumps. Every skill you learned still helps, balance, steering, but the fine-tuned reflexes fail. The reality gap is this same mismatch between the clean simulator and the messy real world. Domain randomisation is the equivalent of practising on many different surfaces so that real gravel is just another surface you have already handled.
 
 Modern physics simulators (MuJoCo, Isaac Gym, PyBullet) enable massively parallel training of robot policies at virtually zero cost and with no hardware risk. A policy can experience millions of episodes in hours of simulation time that would take months on real hardware.
 
-The catch is **the reality gap**: simulators approximate the real world, and these approximations matter. Friction coefficients, motor backlash, sensor noise, contact dynamics, and rendering artifacts all differ between simulation and reality. A policy that exploits simulator quirks — a common outcome of deep RL — will fail catastrophically when those quirks disappear.
+The catch is **the reality gap**: simulators approximate the real world, and these approximations matter. Friction coefficients, motor backlash, sensor noise, contact dynamics, and rendering artifacts all differ between simulation and reality. A policy that exploits simulator quirks, a common outcome of deep RL, will fail catastrophically when those quirks disappear.
 
 ## Domain Randomisation
 
-**Domain randomisation** (Tobin et al. 2017) addresses the reality gap by training policies across a wide distribution of simulated environments with randomised physical parameters. If the real world is just another sample from this distribution — or close to it — the policy must be robust enough to handle it.
+**Domain randomisation** (Tobin et al. 2017) addresses the reality gap by training policies across a wide distribution of simulated environments with randomised physical parameters. If the real world is just another sample from this distribution, or close to it, the policy must be robust enough to handle it.
 
 Parameters commonly randomised include:
 
@@ -105,10 +105,10 @@ The result: a policy that had never touched real hardware successfully solved in
     <text x="310" y="120" text-anchor="middle" font-size="9" fill="#065f46" font-family="sans-serif">real world ∈ P(Ξ)</text>
   </g>
 </svg>
-<figcaption>Domain randomisation: the simulator samples random physical parameters each episode (left). The real robot has unknown-but-fixed parameters — domain randomisation bets they fall within the training distribution.</figcaption>
+<figcaption>Domain randomisation: the simulator samples random physical parameters each episode (left). The real robot has unknown-but-fixed parameters, domain randomisation bets they fall within the training distribution.</figcaption>
 </figure></div>
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The wider you set the randomisation range, the more robust the policy — but also the harder the training problem. Automatic Domain Randomisation (ADR) solves this by starting narrow and progressively widening ranges only when the policy demonstrates competence, keeping the training problem tractable throughout.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The wider you set the randomisation range, the more robust the policy, but also the harder the training problem. Automatic Domain Randomisation (ADR) solves this by starting narrow and progressively widening ranges only when the policy demonstrates competence, keeping the training problem tractable throughout.</div>
 
 ## Domain Adaptation
 
@@ -131,7 +131,7 @@ Dactyl randomised over 100 physical parameters. To make this concrete, here is a
 | Visual lighting | random hue, intensity |
 | Object texture | random colour/pattern |
 
-Each episode samples a new combination. Over millions of episodes the policy experiences a dense grid of "possible realities" — so the actual Shadow Hand, with its single fixed set of parameters, is just one more sample.
+Each episode samples a new combination. Over millions of episodes the policy experiences a dense grid of "possible realities", so the actual Shadow Hand, with its single fixed set of parameters, is just one more sample.
 
 ## System Identification
 

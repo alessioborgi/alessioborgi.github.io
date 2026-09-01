@@ -17,14 +17,14 @@ toc: true
 toc_label: "Contents"
 ---
 <div class="tldr-box">
-<strong>TL;DR:</strong> TGN (Rossi et al., 2020) processes a continuous stream of interaction events. Each node maintains a memory vector \(s_v\) that is updated by a memory updater (GRU-based) when \(v\) participates in an event. When node embeddings are needed, a temporal graph attention module aggregates from recent neighbours using time-aware features. This combines persistent memory with structural context — while only ever reading events that have already happened.
+<strong>TL;DR:</strong> TGN (Rossi et al., 2020) processes a continuous stream of interaction events. Each node maintains a memory vector \(s_v\) that is updated by a memory updater (GRU-based) when \(v\) participates in an event. When node embeddings are needed, a temporal graph attention module aggregates from recent neighbours using time-aware features. This combines persistent memory with structural context, while only ever reading events that have already happened.
 </div>
 {% include figure image_path="/images/blog/gnn/rossi2020_tgn.png" alt="TGN memory module" caption="Temporal Graph Network (TGN): memory module and interaction processing (Rossi et al., 2020)" %}
 
 
 ## TGN's Design Philosophy
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Think of each node as a person carrying a wallet-sized summary card (the memory \(s_v\)). When they meet someone new, they update their card — but they do not replay their entire life history. When you ask them for a full introduction, they pull out their card and also look around at who is nearby (temporal graph attention). TGN's separation of memory from embedding is exactly this: cheap persistent state plus rich on-demand context.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Think of each node as a person carrying a wallet-sized summary card (the memory \(s_v\)). When they meet someone new, they update their card, but they do not replay their entire life history. When you ask them for a full introduction, they pull out their card and also look around at who is nearby (temporal graph attention). TGN's separation of memory from embedding is exactly this: cheap persistent state plus rich on-demand context.</div>
 
 TGN separates two concerns:
 1. **Memory:** long-term history of a node's interactions, stored as a fixed-size vector $$s_v$$
@@ -38,7 +38,7 @@ This separation allows efficient online updates (only memory changes on each eve
 
 Each node $$v$$ has a memory state $$s_v \in \mathbb{R}^{d_s}$$. A node that has never been seen starts from $$s_v = 0$$.
 
-When an interaction $$(u, v, t, e_{uv})$$ occurs — node $$u$$ interacting with node $$v$$ at time $$t$$ with edge features $$e_{uv}$$ — a **raw message** is computed for each of the two endpoints:
+When an interaction $$(u, v, t, e_{uv})$$ occurs, node $$u$$ interacting with node $$v$$ at time $$t$$ with edge features $$e_{uv}$$, a **raw message** is computed for each of the two endpoints:
 
 <div class="formula-box">
 \[
@@ -68,7 +68,7 @@ If several events touching $$u$$ arrive in the same batch, TGN first collapses t
 
 When we need node $$u$$'s embedding at time $$t$$ (for inference), we aggregate from temporal neighbours:
 
-**Time encoding:** encode elapsed time as a feature using learnable frequencies — the Bochner-theorem construction of TGAT:
+**Time encoding:** encode elapsed time as a feature using learnable frequencies, the Bochner-theorem construction of TGAT:
 
 <div class="formula-box">
 \[
@@ -76,7 +76,7 @@ When we need node $$u$$'s embedding at time $$t$$ (for inference), we aggregate 
 \]
 </div>
 
-This gives the model a sense of recency — events further in the past have lower encoded similarity to the current time.
+This gives the model a sense of recency, events further in the past have lower encoded similarity to the current time.
 
 **Temporal attention over neighbours:**
 
@@ -123,7 +123,7 @@ s_u(t=100) = GRU(m_u, s_u(t^-))
            → suppose s_u = [0.45, 0.6, 0.3]   (gate blends old + new)
 ```
 
-The GRU's forget gate suppresses the old memory dimension 3 (0.8 → 0.3) because the new message strongly activates it differently. Dimension 2 rises (−0.2 → 0.6) reflecting the new interaction. This is all differentiable — gradients flow back through the GRU to learn what to remember.
+The GRU's forget gate suppresses the old memory dimension 3 (0.8 → 0.3) because the new message strongly activates it differently. Dimension 2 rises (−0.2 → 0.6) reflecting the new interaction. This is all differentiable, gradients flow back through the GRU to learn what to remember.
 
 <style>
 @keyframes mem-update {
@@ -192,7 +192,7 @@ For each batch of events, in chronological order:
      updated memories + neighbours with timestamp < t
   3. Predict p(u, v, t) and compute the loss
   4. Compute the raw messages for THIS batch's events and
-     push them to the store — to be consumed at step 1
+     push them to the store, to be consumed at step 1
      of the next batch
 ```
 
@@ -209,7 +209,7 @@ Several prior architectures fall out of the TGN template as particular choices o
 | TGAT | None | Temporal graph attention |
 | TGN-attn | GRU | Temporal graph attention |
 
-Note that DyRep *does* carry a memory — what distinguishes it from TGN-attn is that its embedding module is the identity, so the memory is used directly as the node representation, and the graph attention is folded into how its messages are built.
+Note that DyRep *does* carry a memory, what distinguishes it from TGN-attn is that its embedding module is the identity, so the memory is used directly as the node representation, and the graph attention is folded into how its messages are built.
 
 In the paper's ablations, TGN-attn is the strongest of these variants on the Wikipedia and Reddit link-prediction benchmarks, and it is also the most expensive: memory plus attention is strictly more computation than either alone.
 
@@ -219,7 +219,7 @@ TGN naturally handles new nodes: when a previously unseen node $$v$$ appears, it
 
 ## Batch Processing and Training
 
-Online, one-event-at-a-time processing is not directly compatible with batched GPU training, and there is a subtler problem: if the memory is updated with an interaction and the loss is then computed on that same interaction, the memory-related modules receive no useful gradient at all — the answer is already in the input.
+Online, one-event-at-a-time processing is not directly compatible with batched GPU training, and there is a subtler problem: if the memory is updated with an interaction and the loss is then computed on that same interaction, the memory-related modules receive no useful gradient at all, the answer is already in the input.
 
 TGN's fix is the raw-message store described above. Within a batch, memories are brought up to date using messages *from previous batches*, the loss is computed, and only then are this batch's messages stored. The memory updater therefore sits on the path from an earlier batch's events to the current batch's prediction, and does receive gradient. Backpropagation is truncated at the batch boundary rather than run over the entire event history.
 
@@ -231,12 +231,12 @@ A consequence worth remembering: batch size is not a free hyperparameter in TGN.
 |-----------|---------|
 | Memory $$s_v$$ | Long-term history (fixed-size, GRU-updated) |
 | Raw messages | Per-event information for memory update |
-| Raw-message store | Defers updates by one batch — keeps the model causal and trainable |
+| Raw-message store | Defers updates by one batch, keeps the model causal and trainable |
 | Time encoding | Recency signal for temporal attention |
 | Temporal attention | Structural context from neighbours strictly before $$t$$ |
 | Link decoder | Interaction probability from embeddings |
 
-TGN is the standard baseline for continuous-time dynamic graph link prediction. Its modular design (memory + embedding + decoder) allows ablation studies and component swapping — making it a useful research framework as well as a practical model.
+TGN is the standard baseline for continuous-time dynamic graph link prediction. Its modular design (memory + embedding + decoder) allows ablation studies and component swapping, making it a useful research framework as well as a practical model.
 
 ## References
 

@@ -6,7 +6,7 @@ book: gnn
 subsection: applications
 tags: [knowledge-graph, entity-alignment, reasoning, Freebase, Wikidata]
 published: true
-excerpt: "Knowledge graphs encode human knowledge as typed entity-relation triples. GNNs enable structure-aware entity representation, multi-hop reasoning, knowledge base completion, and entity alignment — tasks that shallow embedding methods cannot fully solve."
+excerpt: "Knowledge graphs encode human knowledge as typed entity-relation triples. GNNs enable structure-aware entity representation, multi-hop reasoning, knowledge base completion, and entity alignment, tasks that shallow embedding methods cannot fully solve."
 author_profile: true
 read_time: true
 is_overview: false
@@ -18,12 +18,12 @@ toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Knowledge graphs (Freebase, Wikidata, ConceptNet) are large multi-relational graphs: edges are typed triples \((s, r, o)\). GNNs power three key tasks — link prediction (fill in missing triples), entity alignment (match entities across KGs), and multi-hop reasoning. The advantage over shallow embedding methods is that a GNN encoder conditions an entity's representation on its <em>neighbourhood</em> rather than storing an independent vector per entity, which is what lets sparse entities borrow strength from well-connected ones.
+<strong>TL;DR:</strong> Knowledge graphs (Freebase, Wikidata, ConceptNet) are large multi-relational graphs: edges are typed triples \((s, r, o)\). GNNs power three key tasks, link prediction (fill in missing triples), entity alignment (match entities across KGs), and multi-hop reasoning. The advantage over shallow embedding methods is that a GNN encoder conditions an entity's representation on its <em>neighbourhood</em> rather than storing an independent vector per entity, which is what lets sparse entities borrow strength from well-connected ones.
 </div>
 
 ## Knowledge Graphs in Production
 
-**Intuition First:** A knowledge graph is like a massive, structured encyclopedia where every fact is a triple (subject, relation, object): (Barack Obama, bornIn, Hawaii), (Hawaii, partOf, USA). The graph is inevitably incomplete — millions of true facts are missing. GNNs address this by learning that entities with similar neighbourhood structures tend to participate in similar relations. If an entity's neighbourhood looks like that of many known US senators — connected to a party, a state, a set of committee memberships — the model can propose the missing `memberOf` triple from that structural resemblance, without ever having memorised the specific fact.
+**Intuition First:** A knowledge graph is like a massive, structured encyclopedia where every fact is a triple (subject, relation, object): (Barack Obama, bornIn, Hawaii), (Hawaii, partOf, USA). The graph is inevitably incomplete, millions of true facts are missing. GNNs address this by learning that entities with similar neighbourhood structures tend to participate in similar relations. If an entity's neighbourhood looks like that of many known US senators, connected to a party, a state, a set of committee memberships, the model can propose the missing `memberOf` triple from that structural resemblance, without ever having memorised the specific fact.
 
 **Freebase:** on the order of a billion triples; now retired, with its content largely migrated to Wikidata
 **Wikidata:** over 100 million entities and well over a billion statements, multilingual and community-maintained
@@ -54,7 +54,7 @@ where $$\mathcal{N}_r(v)$$ is the set of neighbours reached from $$v$$ by relati
 The obvious problem is that $$\lvert \mathcal{R} \rvert$$ can run to thousands, and one full $$W_r$$ per relation is far too many parameters. R-GCN handles this with **basis decomposition**: every $$W_r$$ is written as a coefficient-weighted sum of a small shared set of basis matrices, so rare relations share statistical strength with common ones instead of each learning an unconstrained matrix from a handful of triples.
 
 **Why a GNN encoder beats a purely shallow model:**
-- Sparse entities with few triples benefit from neighbourhood aggregation — they borrow strength from well-connected neighbours instead of fitting an isolated vector from almost no evidence
+- Sparse entities with few triples benefit from neighbourhood aggregation, they borrow strength from well-connected neighbours instead of fitting an isolated vector from almost no evidence
 - Multi-hop structure enters the representation directly: after $$k$$ layers, $$h_v^{(k)}$$ reflects relation *paths* of length up to $$k$$, which is what supports "friend of my friend" style inference
 - The scoring decoder stays cheap, so the extra cost is confined to the encoder
 
@@ -86,7 +86,7 @@ This requires a chain of reasoning:
 
 **Neural LP / DRUM:** learn rules (soft logical implications) as differentiable programs. The GNN computes path scores for all entity paths of a given type.
 
-**MINERVA:** framed as a Markov decision process — an agent starts at the query entity and follows relation edges step by step. A GNN encodes local context at each step; policy network selects next edge. This is fully interpretable (the path is the reasoning chain).
+**MINERVA:** framed as a Markov decision process, an agent starts at the query entity and follows relation edges step by step. A GNN encodes local context at each step; policy network selects next edge. This is fully interpretable (the path is the reasoning chain).
 
 ## Task 4: Question Answering over KGs (KGQA)
 
@@ -99,11 +99,11 @@ This requires a chain of reasoning:
 
 **GRAFT-Net, PullNet:** retrieve relevant subgraph from KG (k-hop around mentioned entities), run GNN, combine with document retrieval for hybrid KG+text QA.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — and a common overstatement:</strong> GNN encoders are often described as making knowledge graph models "inductive", meaning able to embed an entity never seen in training. The mechanism is real but the claim needs care. Shallow methods (TransE, DistMult, RotatE) learn a lookup table indexed by entity id, so a new entity genuinely has no representation at all. A message-passing encoder <em>can</em> compute a representation for a new entity from its neighbours — but only if its layer-0 input does not itself come from an id-indexed table. R-GCN as published for link prediction does use learnable per-entity input embeddings, so it is not inductive out of the box. You get the inductive property by feeding the encoder something structural or featural instead: entity attributes and text, or explicitly inductive designs such as GraIL and NBFNet, which score a triple from the subgraph or the relation paths between its endpoints and never look up the entities at all.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, and a common overstatement:</strong> GNN encoders are often described as making knowledge graph models "inductive", meaning able to embed an entity never seen in training. The mechanism is real but the claim needs care. Shallow methods (TransE, DistMult, RotatE) learn a lookup table indexed by entity id, so a new entity genuinely has no representation at all. A message-passing encoder <em>can</em> compute a representation for a new entity from its neighbours, but only if its layer-0 input does not itself come from an id-indexed table. R-GCN as published for link prediction does use learnable per-entity input embeddings, so it is not inductive out of the box. You get the inductive property by feeding the encoder something structural or featural instead: entity attributes and text, or explicitly inductive designs such as GraIL and NBFNet, which score a triple from the subgraph or the relation paths between its endpoints and never look up the entities at all.</div>
 
 ## Challenges
 
-**Scalability:** Wikidata has over 100 million entities, so running a GNN over the whole graph is out of the question. The practical approach is subgraph extraction — pull the relevant $$K$$-hop neighbourhood around the query, then run the GNN on that.
+**Scalability:** Wikidata has over 100 million entities, so running a GNN over the whole graph is out of the question. The practical approach is subgraph extraction, pull the relevant $$K$$-hop neighbourhood around the query, then run the GNN on that.
 
 **Relation diversity:** a general-purpose KG carries thousands of distinct relation types, which is precisely what makes a naive per-relation weight matrix unaffordable. R-GCN's basis decomposition is the classical answer; more recent heterogeneous models (HGT) instead use type-conditioned attention.
 
@@ -118,7 +118,7 @@ This requires a chain of reasoning:
 | Multi-hop reasoning | Reasoning paths | MINERVA, DRUM |
 | Question answering | KG subgraph + text | GRAFT-Net |
 
-The unifying mechanism is worth stating once more plainly: a shallow KG embedding stores one vector per entity and learns it from that entity's own triples alone, while a GNN encoder *computes* the vector from the typed neighbourhood. Everything else in this post — sparse-entity performance, structure-based alignment across languages, path-based reasoning — follows from that single change of where the representation comes from.
+The unifying mechanism is worth stating once more plainly: a shallow KG embedding stores one vector per entity and learns it from that entity's own triples alone, while a GNN encoder *computes* the vector from the typed neighbourhood. Everything else in this post, sparse-entity performance, structure-based alignment across languages, path-based reasoning, follows from that single change of where the representation comes from.
 
 ## References
 

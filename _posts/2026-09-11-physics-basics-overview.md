@@ -6,7 +6,7 @@ categories: [physics-basics]
 book: physics-basics
 subsection: foundations
 tags: [physics, statistical-mechanics, thermodynamics, overview]
-excerpt: "Diffusion models, energy-based models and Hamiltonian Monte Carlo were not inspired by physics — they are physics, rewritten with a neural network in place of an analytic potential. Knowing which physics saves you from re-deriving it badly."
+excerpt: "Diffusion models, energy-based models and Hamiltonian Monte Carlo were not inspired by physics, they are physics, rewritten with a neural network in place of an analytic potential. Knowing which physics saves you from re-deriving it badly."
 author_profile: true
 read_time: true
 is_overview: true
@@ -25,7 +25,7 @@ toc_label: "Contents"
 
 An interviewer rarely asks "what is the second law of thermodynamics". They ask why diffusion models need many small steps, or why Hamiltonian Monte Carlo uses a leapfrog integrator, or what temperature does in a softmax. Each of those has a one-line answer if you know the physics and a confused one if you do not.
 
-The reason is historical and not accidental. Sampling from a complicated high-dimensional distribution is the central computational problem of statistical mechanics, and it has been for a century. Machine learning inherited the problem — and, with it, the solutions.
+The reason is historical and not accidental. Sampling from a complicated high-dimensional distribution is the central computational problem of statistical mechanics, and it has been for a century. Machine learning inherited the problem, and, with it, the solutions.
 
 ## Four lines of descent
 
@@ -39,7 +39,7 @@ p_\theta(x) = \frac{e^{-E_\theta(x)}}{Z(\theta)}, \qquad Z(\theta) = \int e^{-E_
 \]
 </div>
 
-where $$E_\theta$$ is a learned energy and $$Z(\theta)$$ the partition function. This is the Boltzmann distribution at unit temperature. Every difficulty in training such a model — the intractable normaliser, the need for MCMC in the gradient, the role of temperature — is a difficulty statistical physics met first.
+where $$E_\theta$$ is a learned energy and $$Z(\theta)$$ the partition function. This is the Boltzmann distribution at unit temperature. Every difficulty in training such a model, the intractable normaliser, the need for MCMC in the gradient, the role of temperature, is a difficulty statistical physics met first.
 
 **Hamiltonian Monte Carlo comes from mechanics.** HMC invents a fictitious momentum, writes down a Hamiltonian, and integrates the resulting dynamics. It works because Hamiltonian flow preserves phase-space volume and is reversible, which is exactly what makes the Metropolis–Hastings acceptance ratio collapse to an energy difference. Neal's review (2011) is the standard reference.
 
@@ -71,7 +71,7 @@ where $$E_\theta$$ is a learned energy and $$Z(\theta)$$ the partition function.
   </g>
   <defs><marker id="pbarr" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L0,5 L7,2.5z" fill="#475569"/></marker></defs>
 </svg>
-<figcaption>Each arrow is a derivation, not an analogy. Notice that the two columns are not related methods — the right column is the left column applied to a learned energy or a learned score.</figcaption>
+<figcaption>Each arrow is a derivation, not an analogy. Notice that the two columns are not related methods, the right column is the left column applied to a learned energy or a learned score.</figcaption>
 </figure>
 </div>
 
@@ -88,17 +88,17 @@ The clearest single case is temperature. The Boltzmann distribution over states 
 Low temperature concentrates on the lowest-energy state; high temperature flattens towards uniform. Simulated annealing, nucleus sampling and the noise schedule of a diffusion model are all versions of the same lever.
 
 <div class="insight-box">
-  <strong>Key Insight — why physics keeps winning:</strong> physics spent a century on one problem machine learning cannot avoid: given an unnormalised density \(e^{-E(x)}\) over a space with \(10^6\) dimensions, produce samples and estimate expectations without ever computing the normaliser. Every technique that survived — Metropolis, annealing, Langevin dynamics, Hamiltonian flow — transfers unchanged when \(E\) becomes a neural network, because none of them ever needed \(E\) to have a closed form.
+  <strong>Key Insight, why physics keeps winning:</strong> physics spent a century on one problem machine learning cannot avoid: given an unnormalised density \(e^{-E(x)}\) over a space with \(10^6\) dimensions, produce samples and estimate expectations without ever computing the normaliser. Every technique that survived, Metropolis, annealing, Langevin dynamics, Hamiltonian flow, transfers unchanged when \(E\) becomes a neural network, because none of them ever needed \(E\) to have a closed form.
 </div>
 
 ## What the rest of the book covers
 
-- **[Lagrangian mechanics](/blog/physics-basics/lagrangian-mechanics/)** — stationary action, $$L = T - V$$, the Euler–Lagrange equation, and why a variational formulation travels better than force balance.
-- **[Hamiltonian dynamics](/blog/physics-basics/hamiltonian-dynamics/)** — phase space, Liouville's theorem, and why HMC needs a symplectic integrator.
-- **[Statistical mechanics](/blog/physics-basics/statistical-mechanics/)** — microstates, the Boltzmann distribution, and what the partition function really is.
-- **[Entropy and thermodynamics](/blog/physics-basics/entropy-and-thermodynamics/)** — Gibbs versus Shannon entropy, free energy as the ELBO, and the non-equilibrium origin of diffusion.
-- **[Diffusion and Brownian motion](/blog/physics-basics/diffusion-and-brownian-motion/)** — Wiener processes, Langevin and Fokker–Planck, and the sampler behind [score-based models](/blog/diffusion/score-based-sde/).
-- **[Symmetry and conservation](/blog/physics-basics/symmetry-and-conservation/)** — Noether's theorem and equivariant architectures.
+- **[Lagrangian mechanics](/blog/physics-basics/lagrangian-mechanics/)**, stationary action, $$L = T - V$$, the Euler–Lagrange equation, and why a variational formulation travels better than force balance.
+- **[Hamiltonian dynamics](/blog/physics-basics/hamiltonian-dynamics/)**, phase space, Liouville's theorem, and why HMC needs a symplectic integrator.
+- **[Statistical mechanics](/blog/physics-basics/statistical-mechanics/)**, microstates, the Boltzmann distribution, and what the partition function really is.
+- **[Entropy and thermodynamics](/blog/physics-basics/entropy-and-thermodynamics/)**, Gibbs versus Shannon entropy, free energy as the ELBO, and the non-equilibrium origin of diffusion.
+- **[Diffusion and Brownian motion](/blog/physics-basics/diffusion-and-brownian-motion/)**, Wiener processes, Langevin and Fokker–Planck, and the sampler behind [score-based models](/blog/diffusion/score-based-sde/).
+- **[Symmetry and conservation](/blog/physics-basics/symmetry-and-conservation/)**, Noether's theorem and equivariant architectures.
 
 <div class="warning-box">
   <strong>Interview trap:</strong> saying diffusion models are "inspired by" thermodynamics understates the connection and invites a follow-up you will not enjoy. The forward process <em>is</em> a discretised Ornstein–Uhlenbeck process, its stationary distribution <em>is</em> the equilibrium Gaussian, and the reverse-time SDE is a standard result from stochastic process theory. Claim the derivation, not the metaphor.

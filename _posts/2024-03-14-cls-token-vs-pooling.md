@@ -6,7 +6,7 @@ book: transformers
 subsection: vision
 tags: [ViT, CLS-token, pooling, classification, representation]
 published: false
-excerpt: "The [CLS] token and global average pooling are two competing strategies for aggregating patch representations into a single image embedding. Understanding when each works — and why — reveals something fundamental about how ViTs learn."
+excerpt: "The [CLS] token and global average pooling are two competing strategies for aggregating patch representations into a single image embedding. Understanding when each works, and why, reveals something fundamental about how ViTs learn."
 author_profile: true
 read_time: true
 is_overview: false
@@ -56,9 +56,9 @@ toc_label: "Contents"
 
 Imagine you have read 196 pages of a book (one page per patch) and must write a one-paragraph summary.
 
-**[CLS] token approach:** You are an editor who, on every page, can ask "wait, what's the key point here for the summary?" — you selectively gather what matters. By the last page your mental summary is refined by selective attention across all chapters.
+**[CLS] token approach:** You are an editor who, on every page, can ask "wait, what's the key point here for the summary?", you selectively gather what matters. By the last page your mental summary is refined by selective attention across all chapters.
 
-**Global average pooling:** You photocopy every page and stack them all on top of each other. Every page contributes equal ink. The result is a blurry average — good for capturing the general theme, worse at isolating the crucial scene on page 147.
+**Global average pooling:** You photocopy every page and stack them all on top of each other. Every page contributes equal ink. The result is a blurry average, good for capturing the general theme, worse at isolating the crucial scene on page 147.
 
 The [CLS] token is the editor. GAP is the photocopier.
 
@@ -70,7 +70,7 @@ The [CLS] token is the editor. GAP is the photocopier.
 </style>
 <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;font-family:system-ui,sans-serif">
   <!-- CLS panel -->
-  <text x="185" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#0d9488">[CLS] Token — selective attention readout</text>
+  <text x="185" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#0d9488">[CLS] Token, selective attention readout</text>
   <rect x="20" y="28" width="330" height="150" rx="10" fill="#f0fdfa" stroke="#5eead4" stroke-width="2"/>
 
   <!-- Patch tokens (circles) with varying attention weight -->
@@ -96,7 +96,7 @@ The [CLS] token is the editor. GAP is the photocopier.
   <text x="185" y="190" text-anchor="middle" font-size="10" fill="#475569">high-weight patches pull CLS toward object</text>
 
   <!-- GAP panel -->
-  <text x="540" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">Global Average Pooling — uniform readout</text>
+  <text x="540" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">Global Average Pooling, uniform readout</text>
   <rect x="375" y="28" width="330" height="150" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="2"/>
 
   <circle cx="425" cy="80" r="12" fill="#7c3aed" opacity="0.5" style="animation:gap-grey 2.2s 0.0s ease-in-out infinite"/>
@@ -122,7 +122,7 @@ The [CLS] token is the editor. GAP is the photocopier.
 
   <text x="540" y="190" text-anchor="middle" font-size="10" fill="#475569">equal weight → background dilutes object signal</text>
 </svg>
-<figcaption>Left: the [CLS] token selectively attends to the most discriminative patches (larger circles = higher attention weight), concentrating the image summary on the object. Right: GAP assigns equal weight to every patch — background patches dilute the object signal but gradients flow to every position during training.</figcaption>
+<figcaption>Left: the [CLS] token selectively attends to the most discriminative patches (larger circles = higher attention weight), concentrating the image summary on the object. Right: GAP assigns equal weight to every patch, background patches dilute the object signal but gradients flow to every position during training.</figcaption>
 </figure>
 </div>
 
@@ -138,7 +138,7 @@ For image classification (one label per image), you need a **single vector**. Tw
 
 ## Strategy 1: The [CLS] Token
 
-Borrowed from BERT, a learnable vector [CLS] is prepended to the patch sequence at position 0. It has no corresponding image region — it starts as a random trainable embedding.
+Borrowed from BERT, a learnable vector [CLS] is prepended to the patch sequence at position 0. It has no corresponding image region, it starts as a random trainable embedding.
 
 After L blocks of multi-head attention, the [CLS] position has attended to every patch at every layer. By the final layer, z_CLS is expected to contain a global summary of the image.
 
@@ -148,7 +148,7 @@ The classification head is applied only to z_CLS:
 logits = W_head · z_CLS
 </div>
 
-**Why it works:** Attention is content-based. The [CLS] token learns to attend to the most discriminative patches — it preferentially gathers features that matter for classification. Through training, it specialises as a global image descriptor.
+**Why it works:** Attention is content-based. The [CLS] token learns to attend to the most discriminative patches, it preferentially gathers features that matter for classification. Through training, it specialises as a global image descriptor.
 
 **Drawback:** Only one token receives the gradient from the classification loss directly. Training can be slower to propagate globally, especially in early layers.
 
@@ -166,9 +166,9 @@ The classification head is applied to z_image:
 logits = W_head · z_image
 </div>
 
-**Why it works:** Every patch contributes equally to the representation (initially). Gradient flows back to every patch token during training — the learning signal is spread across the full sequence from the start.
+**Why it works:** Every patch contributes equally to the representation (initially). Gradient flows back to every patch token during training, the learning signal is spread across the full sequence from the start.
 
-**Drawback:** No mechanism for selective attention at readout time. All patches contribute equally regardless of relevance — a background patch contributes as much as the object of interest.
+**Drawback:** No mechanism for selective attention at readout time. All patches contribute equally regardless of relevance, a background patch contributes as much as the object of interest.
 
 ## What Experiments Show
 
@@ -176,15 +176,15 @@ Dosovitskiy et al. (ViT, 2020) found that **both strategies perform comparably**
 
 DeiT finds similar results. MAE (masked autoencoder) uses GAP because masked reconstruction benefits from gradients flowing to all patches.
 
-DINO and DINOv2 use [CLS] — and the [CLS] token embedding from DINOv2 is remarkably useful for dense tasks (segmentation, depth) despite being trained with classification objectives.
+DINO and DINOv2 use [CLS], and the [CLS] token embedding from DINOv2 is remarkably useful for dense tasks (segmentation, depth) despite being trained with classification objectives.
 
 <div class="insight-box">
-<strong>The [CLS] token as a query over the image:</strong> In later layers, the [CLS] token's query vector asks "which patches contain the most class-relevant information?" and its key becomes the aggregated answer. This is why [CLS] representations from large pre-trained ViTs are strong classifiers even with a linear head — they have learned to summarise images through selective attention.
+<strong>The [CLS] token as a query over the image:</strong> In later layers, the [CLS] token's query vector asks "which patches contain the most class-relevant information?" and its key becomes the aggregated answer. This is why [CLS] representations from large pre-trained ViTs are strong classifiers even with a linear head, they have learned to summarise images through selective attention.
 </div>
 
 ## [CLS] Token as a Dense Feature Extractor
 
-An important property: because [CLS] attends to all patches, its attention weights in the last layer form an **attention map** — a rough spatial map of which regions mattered for classification.
+An important property: because [CLS] attends to all patches, its attention weights in the last layer form an **attention map**, a rough spatial map of which regions mattered for classification.
 
 DINO exploits this: the attention maps from a self-supervised ViT produce surprisingly clean segmentation-like highlights of the foreground object, with no segmentation supervision whatsoever.
 
@@ -222,10 +222,10 @@ Some models use both: the [CLS] token representation and the mean-pooled patch t
 | Performance | Comparable | Comparable |
 | Used by | ViT, DeiT, DINO, CLIP | MAE, some CNN hybrids |
 
-The [CLS] token is the dominant convention in Transformer-based vision models. Understanding it — and its alternative — clarifies how image representations are formed and why ViT attention maps can serve as segmentation signals without any spatial supervision.
+The [CLS] token is the dominant convention in Transformer-based vision models. Understanding it, and its alternative, clarifies how image representations are formed and why ViT attention maps can serve as segmentation signals without any spatial supervision.
 
 ## References
 
 - Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., Uszkoreit, J., & Houlsby, N. (2020). [An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929). *ICLR 2021* (ViT: introduces the [CLS] token prepended to patch sequences; the final [CLS] embedding is used for image classification).
-- He, K., Chen, X., Xie, S., Li, Y., Dollár, P., & Girshick, R. (2022). [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377). *CVPR 2022* (MAE: uses global average pooling of patch tokens instead of [CLS] for its encoder — the canonical pooling approach).
+- He, K., Chen, X., Xie, S., Li, Y., Dollár, P., & Girshick, R. (2022). [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377). *CVPR 2022* (MAE: uses global average pooling of patch tokens instead of [CLS] for its encoder, the canonical pooling approach).
 - Caron, M., Touvron, H., Misra, I., Jégou, H., Mairal, J., Bojanowski, P., & Joulin, A. (2021). [Emerging Properties in Self-Supervised Vision Transformers](https://arxiv.org/abs/2104.14294). *ICCV 2021* (DINO: self-supervised ViT with [CLS] token; shows that [CLS] attention maps form interpretable segmentation maps without spatial supervision).

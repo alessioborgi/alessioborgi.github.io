@@ -6,7 +6,7 @@ categories: [stats-basics]
 book: stats-basics
 subsection: inference
 tags: [bayesian, frequentist, credible-interval, conjugate-prior]
-excerpt: "One school says probability is a long-run frequency, so parameters cannot have probabilities. The other says probability is a degree of belief, so they can. Everything else — priors, credible intervals, the whole argument — follows from that one disagreement."
+excerpt: "One school says probability is a long-run frequency, so parameters cannot have probabilities. The other says probability is a degree of belief, so they can. Everything else, priors, credible intervals, the whole argument, follows from that one disagreement."
 author_profile: true
 read_time: true
 is_overview: false
@@ -23,9 +23,9 @@ toc_label: "Contents"
 
 ## The disagreement
 
-To a frequentist, \\(\mathbb{P}(A)\\) is the limiting relative frequency of \\(A\\) in repeated trials. A coin's bias \\(\theta\\) is a fixed physical constant, not the outcome of a trial, so "\\(\mathbb{P}(\theta > 0.5)\\)" is not a meaningful expression — it is either true or false. Randomness lives entirely in the sampling, which is why every frequentist guarantee is a statement about what would happen across hypothetical repeated experiments.
+To a frequentist, \\(\mathbb{P}(A)\\) is the limiting relative frequency of \\(A\\) in repeated trials. A coin's bias \\(\theta\\) is a fixed physical constant, not the outcome of a trial, so "\\(\mathbb{P}(\theta > 0.5)\\)" is not a meaningful expression, it is either true or false. Randomness lives entirely in the sampling, which is why every frequentist guarantee is a statement about what would happen across hypothetical repeated experiments.
 
-To a Bayesian, \\(\mathbb{P}(A)\\) is a degree of belief obeying the probability axioms. Uncertainty about a fixed constant is still uncertainty, so \\(\theta\\) gets a distribution — before the data (the **prior**) and after (the **posterior**). The data, once observed, are not random at all; they are what you conditioned on.
+To a Bayesian, \\(\mathbb{P}(A)\\) is a degree of belief obeying the probability axioms. Uncertainty about a fixed constant is still uncertainty, so \\(\theta\\) gets a distribution, before the data (the **prior**) and after (the **posterior**). The data, once observed, are not random at all; they are what you conditioned on.
 
 ## Bayes' theorem as inference
 
@@ -44,7 +44,7 @@ The denominator does not depend on \\(\theta\\), so for inference it is just the
 
 A **conjugate** prior is one that leaves the posterior in the same family, so the update is arithmetic on parameters rather than an integral. For binomial data the conjugate prior is the Beta.
 
-Take \\(\theta \sim \mathrm{Beta}(2,2)\\) — symmetric, gently favouring values near \\(0.5\\), worth as much as two prior successes and two prior failures. Observe \\(s = 7\\) successes in \\(n = 10\\) trials. Since \\(p(\theta) \propto \theta^{1}(1-\theta)^{1}\\) and \\(p(x\mid\theta)\propto\theta^{7}(1-\theta)^{3}\\), the product is \\(\theta^{8}(1-\theta)^{4}\\):
+Take \\(\theta \sim \mathrm{Beta}(2,2)\\), symmetric, gently favouring values near \\(0.5\\), worth as much as two prior successes and two prior failures. Observe \\(s = 7\\) successes in \\(n = 10\\) trials. Since \\(p(\theta) \propto \theta^{1}(1-\theta)^{1}\\) and \\(p(x\mid\theta)\propto\theta^{7}(1-\theta)^{3}\\), the product is \\(\theta^{8}(1-\theta)^{4}\\):
 
 <div class="formula-box">
 \[
@@ -83,7 +83,7 @@ The prior carries \\(\alpha+\beta = 4\\) pseudo-observations against the data's 
   <text x="150" y="112" font-size="10" font-weight="700" fill="#475569">prior Beta(2,2)</text>
   <text x="520" y="70" font-size="10" font-weight="700" fill="#c2410c">likelihood</text>
   <text x="330" y="42" font-size="10" font-weight="700" fill="#0c4a6e">posterior Beta(9,5)</text>
-  <text x="330" y="22" text-anchor="middle" font-size="10.5" fill="#334155">θ, the success probability — 7 successes in 10 trials</text>
+  <text x="330" y="22" text-anchor="middle" font-size="10.5" fill="#334155">θ, the success probability, 7 successes in 10 trials</text>
 </svg>
 <figcaption>Notice that the posterior is taller and narrower than either input. Multiplying two densities concentrates: the posterior is more certain than the prior and than the data alone, because it uses both.</figcaption>
 </figure>
@@ -101,24 +101,24 @@ The 95% equal-tailed credible interval for \\(\mathrm{Beta}(9,5)\\) runs from 0.
 | Wald, \\(\hat p \pm 1.96\sqrt{\hat p(1-\hat p)/n}\\) | [0.416, 0.984] | nominally 95%, actually much less |
 
 <div class="warning-box">
-  <strong>Interview trap — the two intervals answer different questions:</strong> a <em>credible</em> interval is a statement about \(\theta\) given the data and the prior. A <em>confidence</em> interval is a statement about the procedure's success rate over repeated samples; see <a href="/blog/stats-basics/confidence-intervals/">confidence intervals</a>. They are not interchangeable and they are not generally equal. Note also the Wald row above: it is the interval most people write down by reflex, and at \(n=10\) it reaches 0.984 — its coverage is far below the advertised 95% for \(p\) near 0 or 1, as Brown, Cai and DasGupta (2001) document in detail.
+  <strong>Interview trap, the two intervals answer different questions:</strong> a <em>credible</em> interval is a statement about \(\theta\) given the data and the prior. A <em>confidence</em> interval is a statement about the procedure's success rate over repeated samples; see <a href="/blog/stats-basics/confidence-intervals/">confidence intervals</a>. They are not interchangeable and they are not generally equal. Note also the Wald row above: it is the interval most people write down by reflex, and at \(n=10\) it reaches 0.984, its coverage is far below the advertised 95% for \(p\) near 0 or 1, as Brown, Cai and DasGupta (2001) document in detail.
 </div>
 
 ## When it matters and when it does not
 
-With a large sample and a prior that is not sharply informative, the Bernstein–von Mises theorem says the posterior converges to a Gaussian centred at the MLE with variance given by the inverse Fisher information — the same object the frequentist asymptotics produce. At \\(n = 10\\) the credible and Clopper–Pearson intervals above differ by a lot; at \\(n = 1000\\) they would agree to three digits. The choice is then a matter of interpretation, not of numbers.
+With a large sample and a prior that is not sharply informative, the Bernstein–von Mises theorem says the posterior converges to a Gaussian centred at the MLE with variance given by the inverse Fisher information, the same object the frequentist asymptotics produce. At \\(n = 10\\) the credible and Clopper–Pearson intervals above differ by a lot; at \\(n = 1000\\) they would agree to three digits. The choice is then a matter of interpretation, not of numbers.
 
 The genuine divergences are: small samples, where the prior does real work; problems with sequential or optional stopping, where frequentist error rates depend on the stopping rule and the posterior does not; hierarchical models, where partial pooling is natural in one framework and awkward in the other; and any setting where you want a direct probability about a hypothesis rather than a tail probability under a null.
 
 <div class="insight-box">
-  <strong>Key Insight — the prior is not the only assumption:</strong> the usual objection is that priors are subjective. But the likelihood is an assumption too, and it is a much stronger one — choosing "the data are i.i.d. Gaussian" constrains the analysis far more than choosing Beta(2,2) over Beta(1,1). Frequentist methods do not avoid subjectivity, they relocate it into the model, the test statistic, the stopping rule and the \(\alpha\) threshold. The honest difference is that a Bayesian analysis is obliged to write one of its assumptions down explicitly.
+  <strong>Key Insight, the prior is not the only assumption:</strong> the usual objection is that priors are subjective. But the likelihood is an assumption too, and it is a much stronger one, choosing "the data are i.i.d. Gaussian" constrains the analysis far more than choosing Beta(2,2) over Beta(1,1). Frequentist methods do not avoid subjectivity, they relocate it into the model, the test statistic, the stopping rule and the \(\alpha\) threshold. The honest difference is that a Bayesian analysis is obliged to write one of its assumptions down explicitly.
 </div>
 
 <div class="key-takeaways">
   <h3>Recap</h3>
   <ul>
     <li>Frequentist: parameter fixed, data random, probability = long-run frequency. Bayesian: data given, parameter uncertain, probability = degree of belief.</li>
-    <li>Posterior ∝ likelihood × prior; conjugacy makes the update arithmetic — Beta(α,β) with \(s\) of \(n\) becomes Beta(α+s, β+n−s).</li>
+    <li>Posterior ∝ likelihood × prior; conjugacy makes the update arithmetic, Beta(α,β) with \(s\) of \(n\) becomes Beta(α+s, β+n−s).</li>
     <li>Beta(2,2) with 7/10 gives Beta(9,5): posterior mean 0.643, a weighted average of the prior mean 0.5 and the MLE 0.7 with weights 4/14 and 10/14.</li>
     <li>Credible interval [0.386, 0.861] claims 95% posterior probability; a confidence interval claims 95% coverage of the procedure. Different claims.</li>
     <li>Bernstein–von Mises: with enough data and a non-degenerate prior the two answers converge. Disagreement is a small-sample, stopping-rule or hierarchical phenomenon.</li>

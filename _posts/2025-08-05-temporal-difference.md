@@ -6,7 +6,7 @@ book: rl
 subsection: foundations
 tags: [temporal-difference, td-learning, bootstrapping, eligibility-traces, td-lambda]
 published: false
-excerpt: "Temporal Difference learning bridges dynamic programming and Monte Carlo methods by updating value estimates from incomplete experience using bootstrapped targets — enabling sample-efficient online learning."
+excerpt: "Temporal Difference learning bridges dynamic programming and Monte Carlo methods by updating value estimates from incomplete experience using bootstrapped targets, enabling sample-efficient online learning."
 author_profile: true
 read_time: true
 is_overview: false
@@ -25,13 +25,13 @@ toc_label: "Contents"
 .paper-box strong { color: #7c3aed; }
 </style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> TD learning updates value estimates after each step using a bootstrapped target — combining the model-free nature of Monte Carlo with the online efficiency of dynamic programming. The TD error δ = r + γV(s') - V(s) is the fundamental learning signal in Q-learning, actor-critic, and most deep RL algorithms.</div>
+<div class="tldr-box"><strong>TL;DR:</strong> TD learning updates value estimates after each step using a bootstrapped target, combining the model-free nature of Monte Carlo with the online efficiency of dynamic programming. The TD error δ = r + γV(s') - V(s) is the fundamental learning signal in Q-learning, actor-critic, and most deep RL algorithms.</div>
 {% include figure image_path="/images/blog/rl/mnih2016_a3c.png" alt="Temporal difference learning" caption="Temporal difference in asynchronous learning (Mnih et al., 2016)" %}
 
 
 ## Intuition First: Bootstrapping as Grade Estimation
 
-Imagine you are midway through a semester and want to estimate your final grade. Monte Carlo says: *wait until you get your final mark at the end of the semester, then use that exact number.* Dynamic programming says: *use the official grade book, which lists every assignment weight exactly.* Temporal Difference says: *estimate your final grade right now from your partial exam scores — update that estimate after each test, without waiting for the semester to end.* The partial estimate introduces a small bias (it is not the real final grade yet) but massively reduces the variance you would suffer from waiting for one noisy end-of-semester signal.
+Imagine you are midway through a semester and want to estimate your final grade. Monte Carlo says: *wait until you get your final mark at the end of the semester, then use that exact number.* Dynamic programming says: *use the official grade book, which lists every assignment weight exactly.* Temporal Difference says: *estimate your final grade right now from your partial exam scores, update that estimate after each test, without waiting for the semester to end.* The partial estimate introduces a small bias (it is not the real final grade yet) but massively reduces the variance you would suffer from waiting for one noisy end-of-semester signal.
 
 ## The DP–MC–TD Triangle
 
@@ -45,7 +45,7 @@ Three approaches to policy evaluation form a triangle of trade-offs:
 
 **Monte Carlo** (MC) methods wait for the episode to end, then update using the actual return \(G_t = r_t + \gamma r_{t+1} + \cdots + \gamma^{T-t} r_T\). This is unbiased but has high variance because \(G_t\) is a long sum of random variables.
 
-**Temporal Difference** methods update after each step using an estimated return — the **TD target**: \(r_t + \gamma V(s_{t+1})\). This introduces some bias (\(V\) is not yet converged) but dramatically reduces variance.
+**Temporal Difference** methods update after each step using an estimated return, the **TD target**: \(r_t + \gamma V(s_{t+1})\). This introduces some bias (\(V\) is not yet converged) but dramatically reduces variance.
 
 ## TD(0): The Fundamental Update
 
@@ -73,7 +73,7 @@ for each episode:
 
 **Convergence**: for tabular representations and a policy $$\pi$$, TD(0) converges to $$V^\pi$$ almost surely as long as the step-size $$\alpha$$ satisfies the Robbins-Monro conditions: $$\sum_t \alpha_t = \infty$$ and $$\sum_t \alpha_t^2 < \infty$$.
 
-<div class="insight-box"><strong>Key Insight:</strong> The TD error δ_t is the RL analogue of the *prediction error* in neuroscience — dopamine neurons in the brain appear to encode something very similar to δ_t. This connection, noted by Montague, Dayan, and Sejnowski (1996), suggests that temporal difference learning may be biologically implemented in the basal ganglia.</div>
+<div class="insight-box"><strong>Key Insight:</strong> The TD error δ_t is the RL analogue of the *prediction error* in neuroscience, dopamine neurons in the brain appear to encode something very similar to δ_t. This connection, noted by Montague, Dayan, and Sejnowski (1996), suggests that temporal difference learning may be biologically implemented in the basal ganglia.</div>
 
 ## Worked Example: TD(0) Update by Hand
 
@@ -91,9 +91,9 @@ A 4-state gridworld (S1 → S2 → S3 → Goal). Rewards: 0 everywhere except +1
 \(\delta = 0 + 0.9 \times 0.1 - 0 = +0.09\)
 \(V(S2) \leftarrow 0 + 0.1 \times 0.09 = \mathbf{0.009}\)
 
-The reward at Goal is slowly propagating backward — one hop per episode visit. After many episodes the values converge to \([0.729, 0.81, 0.9, 0]\) (the true \(\gamma\)-discounted values).
+The reward at Goal is slowly propagating backward, one hop per episode visit. After many episodes the values converge to \([0.729, 0.81, 0.9, 0]\) (the true \(\gamma\)-discounted values).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> TD learning propagates reward information one step at a time. Crucially it does this <em>online</em> — updating after every transition rather than waiting for the episode to end. This is why TD is much faster to learn in long episodes than Monte Carlo.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> TD learning propagates reward information one step at a time. Crucially it does this <em>online</em>, updating after every transition rather than waiting for the episode to end. This is why TD is much faster to learn in long episodes than Monte Carlo.</div>
 
 ## n-Step Returns
 
@@ -113,7 +113,7 @@ For $$n=1$$: TD(0). For $$n=\infty$$: MC. The optimal $$n$$ is task-dependent, a
 
 $$G_t^\lambda = (1-\lambda) \sum_{n=1}^\infty \lambda^{n-1} G_t^{(n)}$$
 
-This is implemented online via **eligibility traces** — a memory variable $$z(s)$$ that decays exponentially:
+This is implemented online via **eligibility traces**, a memory variable $$z(s)$$ that decays exponentially:
 
 ```
 z(s) ← 0 for all s
@@ -128,9 +128,9 @@ When $$\lambda = 0$$: reduces to TD(0). When $$\lambda = 1$$: equivalent to MC (
 
 ## Why TD is More Efficient than MC
 
-Consider estimating the value at a state visited 1000 times. MC updates $$V(s)$$ 1000 times — once per visit, with the episode return. TD(0) also updates 1000 times, but **every other state on the trajectory is also updated after each step**. This means TD learning propagates information much faster through the state space.
+Consider estimating the value at a state visited 1000 times. MC updates $$V(s)$$ 1000 times, once per visit, with the episode return. TD(0) also updates 1000 times, but **every other state on the trajectory is also updated after each step**. This means TD learning propagates information much faster through the state space.
 
-Additionally, TD can learn online during an episode without waiting for termination — critical for long or continuing tasks where waiting for episode end would make learning prohibitively slow.
+Additionally, TD can learn online during an episode without waiting for termination, critical for long or continuing tasks where waiting for episode end would make learning prohibitively slow.
 
 ## References
 

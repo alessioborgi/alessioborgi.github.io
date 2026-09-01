@@ -6,7 +6,7 @@ book: transformers
 subsection: vision
 tags: [ViT, patch-embeddings, vision-transformer, tokenization]
 published: false
-excerpt: "ViT's key insight: split an image into fixed-size patches, flatten each patch into a vector, and project it linearly. The image is now a sequence of tokens — and any Transformer can handle it."
+excerpt: "ViT's key insight: split an image into fixed-size patches, flatten each patch into a vector, and project it linearly. The image is now a sequence of tokens, and any Transformer can handle it."
 author_profile: true
 read_time: true
 is_overview: false
@@ -47,7 +47,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A 224×224 RGB image is split into 16×16 patches (196 patches total). Each patch is flattened to a 768-dimensional vector and passed through a linear projection. These 196 vectors become the token sequence fed to the Transformer — identical in format to word embeddings.
+<strong>TL;DR:</strong> A 224×224 RGB image is split into 16×16 patches (196 patches total). Each patch is flattened to a 768-dimensional vector and passed through a linear projection. These 196 vectors become the token sequence fed to the Transformer, identical in format to word embeddings.
 </div>
 {% include figure image_path="/images/blog/transformers/dosovitskiy2020_vit.png" alt="Patch embedding in ViT" caption="Image patch embeddings as input tokens (Dosovitskiy et al., 2020)" %}
 
@@ -147,7 +147,7 @@ toc_label: "Contents"
   <text x="674" y="102" text-anchor="middle" font-size="9" fill="#92400e">([CLS] + 196)</text>
   <text x="674" y="118" text-anchor="middle" font-size="9" fill="#92400e">→ Transformer</text>
 
-  <text x="360" y="208" text-anchor="middle" font-size="11" fill="#475569">Each 16×16×3 = 768-pixel patch becomes one 768-dim vector — identical format to word embeddings</text>
+  <text x="360" y="208" text-anchor="middle" font-size="11" fill="#475569">Each 16×16×3 = 768-pixel patch becomes one 768-dim vector, identical format to word embeddings</text>
 </svg>
 <figcaption>Animated patch embedding pipeline: a 224×224 image is divided into 196 non-overlapping 16×16 patches (coloured grid), each flattened and projected to 768 dimensions. A learnable [CLS] token (amber) is prepended and positional embeddings are added, giving 197 tokens ready for any standard Transformer.</figcaption>
 </figure>
@@ -155,9 +155,9 @@ toc_label: "Contents"
 
 ## The Core Problem: Transformers Expect Sequences
 
-The Transformer architecture processes sequences of vectors. Text is naturally sequential — words come one after another. Images are 2D grids. How do you turn a grid into a sequence?
+The Transformer architecture processes sequences of vectors. Text is naturally sequential, words come one after another. Images are 2D grids. How do you turn a grid into a sequence?
 
-The naive answer: flatten the entire image pixel by pixel. A 224×224×3 image would become a sequence of 150,528 tokens — far too long for attention (quadratic cost).
+The naive answer: flatten the entire image pixel by pixel. A 224×224×3 image would become a sequence of 150,528 tokens, far too long for attention (quadratic cost).
 
 ViT's answer: **patches**.
 
@@ -165,26 +165,26 @@ ViT's answer: **patches**.
 
 Given an image of size H × W × C (height, width, channels):
 
-**Step 1 — Divide into patches.**  
+**Step 1, Divide into patches.**
 Split the image into a grid of non-overlapping P×P patches. For ViT-Base: P=16, giving (224/16)² = **196 patches**.
 
-**Step 2 — Flatten each patch.**  
+**Step 2, Flatten each patch.**
 Each patch has shape P × P × C = 16 × 16 × 3 = **768 raw values**.
 
-**Step 3 — Project linearly.**  
-Apply a learnable linear projection: 768 → d_model (also 768 for ViT-Base). This is equivalent to a convolution with kernel size P, stride P, and d_model output channels — often implemented exactly that way.
+**Step 3, Project linearly.**
+Apply a learnable linear projection: 768 → d_model (also 768 for ViT-Base). This is equivalent to a convolution with kernel size P, stride P, and d_model output channels, often implemented exactly that way.
 
 <div class="math-box">
 x_patch_i = Flatten(patch_i) · W_E + b   ∈ ℝ^{d_model}
 </div>
 
-**Step 4 — Add positional encoding.**  
+**Step 4, Add positional encoding.**
 Since the patches lose spatial order when flattened, add a learned 1D positional embedding to each patch token (ViT uses 1D, not 2D, and finds it works fine).
 
-**Step 5 — Prepend [CLS] token.**  
+**Step 5, Prepend [CLS] token.**
 Add a learned classification token at position 0. Its final representation is used for image-level classification.
 
-The sequence fed to the Transformer: **[CLS, patch₁, patch₂, ..., patch₁₉₆]** — 197 vectors of dimension 768.
+The sequence fed to the Transformer: **[CLS, patch₁, patch₂, ..., patch₁₉₆]**, 197 vectors of dimension 768.
 
 ## Worked Example: Patch Count and Sequence Length
 
@@ -199,7 +199,7 @@ The sequence fed to the Transformer: **[CLS, patch₁, patch₂, ..., patch₁�
 **With P=8 (finer resolution):**
 - Patches: (224/8)² = 28² = **784**
 - Sequence length = **785**
-- Attention cost: 785² ≈ **616,225** — still 4,000× cheaper than pixel-level, but 16× more costly than P=16
+- Attention cost: 785² ≈ **616,225**, still 4,000× cheaper than pixel-level, but 16× more costly than P=16
 
 This trade-off is why P=16 became the standard for classification and P=8 is reserved for tasks needing fine-grained detail (dense prediction, medical imaging).
 
@@ -212,7 +212,7 @@ This trade-off is why P=16 became the standard for classification and P=8 is res
 | Local structure preserved | Fully | Within patches |
 | Practical with attention | No | Yes |
 
-Patches retain local structure within each 16×16 region. Attention across patches captures global structure (how different image regions relate). This mirrors how convolution captures local patterns while global pooling captures global structure — but with full attention instead.
+Patches retain local structure within each 16×16 region. Attention across patches captures global structure (how different image regions relate). This mirrors how convolution captures local patterns while global pooling captures global structure, but with full attention instead.
 
 ## The Linear Projection as a Convolutional Layer
 
@@ -232,7 +232,7 @@ self.proj = nn.Conv2d(in_channels=3, out_channels=d_model,
 This is mathematically identical to the flatten-then-project formulation. Conv2d is used in practice for implementation efficiency.
 
 <div class="insight-box">
-<strong>What does the projection learn?</strong> The linear projection W_E learns to extract features from each patch — essentially learning a local feature detector. Unlike CNNs which stack many convolutional layers, ViT uses a single linear projection and relies on Transformer attention to combine patches globally. Despite this simplicity, it works remarkably well at scale.
+<strong>What does the projection learn?</strong> The linear projection W_E learns to extract features from each patch, essentially learning a local feature detector. Unlike CNNs which stack many convolutional layers, ViT uses a single linear projection and relies on Transformer attention to combine patches globally. Despite this simplicity, it works remarkably well at scale.
 </div>
 
 ## Patch Size vs Sequence Length Trade-off
@@ -250,11 +250,11 @@ Smaller patches = longer sequences = better fine-grained resolution = more compu
 
 ViT uses **learned 1D positional embeddings** (not the sinusoidal encodings of the original Transformer). Each position 0…196 gets a learned vector of dimension d_model.
 
-Interestingly, when ViT-Base is fine-tuned on higher-resolution images (more patches), interpolating the positional embeddings to the new length works surprisingly well — the model transfers its spatial understanding.
+Interestingly, when ViT-Base is fine-tuned on higher-resolution images (more patches), interpolating the positional embeddings to the new length works surprisingly well, the model transfers its spatial understanding.
 
 ## The [CLS] Token
 
-Borrowed from BERT, the [CLS] token is a learnable vector prepended to the patch sequence. It has no corresponding image region — it serves as a global "accumulator" that attends to all patches and whose final representation is used for classification.
+Borrowed from BERT, the [CLS] token is a learnable vector prepended to the patch sequence. It has no corresponding image region, it serves as a global "accumulator" that attends to all patches and whose final representation is used for classification.
 
 An alternative is **global average pooling** (GAP) over all patch tokens. Both approaches work; see the next post on Class Token vs Pooling.
 
@@ -268,10 +268,10 @@ Patch embeddings are the minimal, elegant bridge between 2D images and 1D Transf
 4. **Add** positional embeddings
 5. **Feed** to any standard Transformer
 
-The simplicity is the point. Once the image is a token sequence, every Transformer technique — multi-head attention, pre-training objectives, fine-tuning, scaling laws — applies directly.
+The simplicity is the point. Once the image is a token sequence, every Transformer technique, multi-head attention, pre-training objectives, fine-tuning, scaling laws, applies directly.
 
 ## References
 
-- Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., Uszkoreit, J., & Houlsby, N. (2020). [An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929). *ICLR 2021* (ViT: introduces patch embeddings — flattening 16×16 image patches into a token sequence fed to a standard Transformer).
+- Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., Uszkoreit, J., & Houlsby, N. (2020). [An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929). *ICLR 2021* (ViT: introduces patch embeddings, flattening 16×16 image patches into a token sequence fed to a standard Transformer).
 - He, K., Chen, X., Xie, S., Li, Y., Dollár, P., & Girshick, R. (2022). [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377). *CVPR 2022* (MAE: applies masked autoencoding to ViT patch tokens for self-supervised pre-training).
 - Touvron, H., Cord, M., Douze, M., Massa, F., Sablayrolles, A., & Jégou, H. (2021). [Training Data-Efficient Image Transformers & Distillation through Attention](https://arxiv.org/abs/2012.12877). *ICML 2021* (DeiT: shows patch-based ViT can be trained effectively on ImageNet alone without JFT-300M).

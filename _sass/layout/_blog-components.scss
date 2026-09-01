@@ -13,7 +13,7 @@
    ========================================================================== */
 
 :root {
-  /* Brand tokens — aligned with the masthead navy + teal used site-wide. */
+  /* Brand tokens, aligned with the masthead navy + teal used site-wide. */
   --blog-navy:        #003e74;
   --blog-teal:        #0d9488;
   --blog-amber:       #b45309;
@@ -181,7 +181,7 @@
    (complexity columns, step-by-step arithmetic) forces the whole page to
    scroll sideways on a phone.
 
-   The usual fix — `display: block` on the <table> itself — is not safe: it
+   The usual fix, `display: block` on the <table> itself, is not safe: it
    drops the implicit ARIA table/row/cell roles in Firefox and Safari, so
    screen-reader users lose row and column navigation. Scroll a wrapper
    instead; assets/js/table-scroll.js adds it, and the table keeps its
@@ -205,7 +205,7 @@
    The theme ships `input:focus { outline: 0 }` with only an IE-era
    `outline: thin dotted \9` fallback, which no current browser honours. The
    replacement cue is a border-colour change to --global-border-color, which
-   on white is ~1.11:1 — fainter than the resting border. Keyboard users get
+   on white is ~1.11:1, fainter than the resting border. Keyboard users get
    no usable focus indicator on any form control, including the temperature
    slider on the activations post.
    -------------------------------------------------------------------------- */
@@ -223,7 +223,7 @@ summary:focus-visible,
    Dark mode
 
    assets/js/_main.js applies html[data-theme="dark"] automatically whenever the
-   browser reports prefers-color-scheme: dark — not only when the user hits the
+   browser reports prefers-color-scheme: dark, not only when the user hits the
    toggle. In dark mode --global-text-color becomes near-white.
 
    Every callout in _posts/ declares a light `background` but no `color` (254
@@ -273,7 +273,7 @@ html[data-theme="dark"] {
    Motion
 
    Posts animate figures with CSS keyframes, and several set opacity:0 /
-   stroke-dashoffset with animation-fill-mode:forwards — meaning the content is
+   stroke-dashoffset with animation-fill-mode:forwards, meaning the content is
    only revealed once the animation runs. Simply disabling animation would hide
    that content permanently, so the reduced-motion rule must also force the
    final visible state. !important is deliberate: it has to beat the inline
@@ -307,7 +307,7 @@ html[data-theme="dark"] {
    Ad slots
 
    Rendered by _includes/ads/unit.html, which emits nothing until an AdSense
-   publisher ID is configured — so these rules are inert on a site without ads.
+   publisher ID is configured, so these rules are inert on a site without ads.
 
    The label is not decoration: disclosing paid placement is required by
    AdSense policy and keeps the unit from reading as editorial content. Height

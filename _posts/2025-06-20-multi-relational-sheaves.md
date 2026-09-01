@@ -6,7 +6,7 @@ book: sheaf
 subsection: extensions
 tags: [multi-relational, knowledge-graph, heterogeneous, R-GCN, TransE, sheaf-KG]
 published: false
-excerpt: "Knowledge graphs have multiple relation types — each edge type encodes a different relationship. Multi-relational sheaves assign different restriction maps to different relation types, giving a principled framework for heterogeneous graph learning. This generalises R-GCN (separate weight per relation) and TransE (relation as translation) to the sheaf setting."
+excerpt: "Knowledge graphs have multiple relation types, each edge type encodes a different relationship. Multi-relational sheaves assign different restriction maps to different relation types, giving a principled framework for heterogeneous graph learning. This generalises R-GCN (separate weight per relation) and TransE (relation as translation) to the sheaf setting."
 author_profile: true
 read_time: true
 is_overview: false
@@ -28,16 +28,16 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A multi-relational sheaf assigns different restriction maps to different relation types: for relation type r, the map is F^r_{v▷e}. The Sheaf Laplacian sums over all relation types, weighted by their restriction maps. This generalises R-GCN (relation-specific weight matrices in aggregation) while adding the topological structure of sheaf diffusion. For knowledge graphs, sheaf maps encode the geometric meaning of relations — translations (TransE), rotations (RotatE), or arbitrary linear maps.
+<strong>TL;DR:</strong> A multi-relational sheaf assigns different restriction maps to different relation types: for relation type r, the map is F^r_{v▷e}. The Sheaf Laplacian sums over all relation types, weighted by their restriction maps. This generalises R-GCN (relation-specific weight matrices in aggregation) while adding the topological structure of sheaf diffusion. For knowledge graphs, sheaf maps encode the geometric meaning of relations, translations (TransE), rotations (RotatE), or arbitrary linear maps.
 </div>
 
 ## Intuition First: One Interpreter Per Relationship Type
 
-In a knowledge graph, the same entity (node) participates in very different kinds of relationships: a person *lives_in* a city, *works_at* a company, *knows* another person. Standard GNNs treat all edge types the same — every message is aggregated with the same weights regardless of the relationship type.
+In a knowledge graph, the same entity (node) participates in very different kinds of relationships: a person *lives_in* a city, *works_at* a company, *knows* another person. Standard GNNs treat all edge types the same, every message is aggregated with the same weights regardless of the relationship type.
 
-A **multi-relational sheaf** assigns a different restriction map to each relation type — a different *interpreter* for each kind of edge. The "works_at" interpreter transforms an entity's features differently from the "knows" interpreter before comparing to the adjacent node. This is the principled generalisation of R-GCN (separate weight matrix per relation) to the full sheaf framework, where the maps also encode a *geometric* relationship (not just a linear transform).
+A **multi-relational sheaf** assigns a different restriction map to each relation type, a different *interpreter* for each kind of edge. The "works_at" interpreter transforms an entity's features differently from the "knows" interpreter before comparing to the adjacent node. This is the principled generalisation of R-GCN (separate weight matrix per relation) to the full sheaf framework, where the maps also encode a *geometric* relationship (not just a linear transform).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Every major knowledge graph embedding method is a special case of multi-relational sheaves with specific constraints on the restriction maps: TransE uses affine maps (translation by ±w_r), RotatE uses orthogonal maps (rotation by O_r), DistMult uses diagonal maps (element-wise scaling by w_r). The sheaf framework unifies all of these under one mathematical umbrella — and shows that any of them can be combined with sheaf diffusion to propagate entity embeddings through the graph topology.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Every major knowledge graph embedding method is a special case of multi-relational sheaves with specific constraints on the restriction maps: TransE uses affine maps (translation by ±w_r), RotatE uses orthogonal maps (rotation by O_r), DistMult uses diagonal maps (element-wise scaling by w_r). The sheaf framework unifies all of these under one mathematical umbrella, and shows that any of them can be combined with sheaf diffusion to propagate entity embeddings through the graph topology.</div>
 
 <style>
 @keyframes relPulse {
@@ -76,7 +76,7 @@ A **multi-relational sheaf** assigns a different restriction map to each relatio
   <text x="330" y="58" text-anchor="middle" font-size="9" fill="#7c3aed" transform="rotate(-15,330,58)">knows</text>
   <text x="330" y="70" text-anchor="middle" font-size="8" fill="#7c3aed" transform="rotate(-15,330,70)">F^{know}_{v▷e}</text>
   <!-- caption -->
-  <text x="230" y="170" text-anchor="middle" font-size="9" fill="#374151">Each relation type has its own restriction map — different geometry per relationship.</text>
+  <text x="230" y="170" text-anchor="middle" font-size="9" fill="#374151">Each relation type has its own restriction map, different geometry per relationship.</text>
 </svg>
 <figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Entity "Alice" (centre) participates in three different relation types, each with its own restriction map (animated dashed lines). The "works_at" map (blue) encodes employment geometry; "lives_in" (green) encodes spatial geometry; "knows" (purple) encodes social geometry. The multi-relational Sheaf Laplacian sums the contributions from all relation types.</figcaption>
 </figure></div>
@@ -147,15 +147,15 @@ TransE (Bordes et al., 2013) models relations as translations: for a valid tripl
 e_u + w_r ≈ e_v
 </div>
 
-In sheaf terms: F^r_{u▷e} = I, F^r_{v▷e} = I (identity), with edge stalk shifted by w_r. The consistency condition F^r_{u▷e} x_u = F^r_{v▷e} x_v becomes x_u = x_v (equal entity embeddings) — which doesn't capture TransE's translation.
+In sheaf terms: F^r_{u▷e} = I, F^r_{v▷e} = I (identity), with edge stalk shifted by w_r. The consistency condition F^r_{u▷e} x_u = F^r_{v▷e} x_v becomes x_u = x_v (equal entity embeddings), which doesn't capture TransE's translation.
 
-A better sheaf encoding of TransE: use the **affine restriction map** F^r_{u▷e} x = x + w_r/2 and F^r_{v▷e} x = x − w_r/2. The consistency condition becomes (x_u + w_r/2) = (x_v − w_r/2), i.e., x_v = x_u + w_r — exactly TransE!
+A better sheaf encoding of TransE: use the **affine restriction map** F^r_{u▷e} x = x + w_r/2 and F^r_{v▷e} x = x − w_r/2. The consistency condition becomes (x_u + w_r/2) = (x_v − w_r/2), i.e., x_v = x_u + w_r, exactly TransE!
 
 <div class="insight-box">
 <strong>Sheaf interpretation of KG embeddings:</strong>
 - TransE: affine restriction maps (translation by ±w_r)
-- RotatE: orthogonal restriction maps (rotation by O_r) — F^r_{u▷e} = I, F^r_{v▷e} = O_r
-- DistMult: diagonal restriction maps (element-wise scaling) — F^r_{v▷e} = diag(w_r)
+- RotatE: orthogonal restriction maps (rotation by O_r), F^r_{u▷e} = I, F^r_{v▷e} = O_r
+- DistMult: diagonal restriction maps (element-wise scaling), F^r_{v▷e} = diag(w_r)
 - ComplEx: complex-valued orthogonal maps
 Every major KG embedding method is a special case of multi-relational sheaves with different restriction map constraints.
 </div>
@@ -186,12 +186,12 @@ score(u, r, v) = h_u^{(K)ᵀ} diag(w_r) h_v^{(K)}   (DistMult-style decoder)
 ## Relation Type Embeddings
 
 In multi-relational sheaves, relation types have two levels of representation:
-1. The **restriction maps** F^r_{v▷e} — encoding the geometric relationship
-2. The **relation embedding** w_r ∈ ℝ^d — used in the decoder
+1. The **restriction maps** F^r_{v▷e}, encoding the geometric relationship
+2. The **relation embedding** w_r ∈ ℝ^d, used in the decoder
 
-The restriction maps are learned by the sheaf predictor MLP and can be different for each (u, v, r) triple — **instance-specific** relation geometry.
+The restriction maps are learned by the sheaf predictor MLP and can be different for each (u, v, r) triple, **instance-specific** relation geometry.
 
-In contrast, standard R-GCN uses a shared W_r for all edges of type r — **type-specific** but instance-invariant. Multi-relational sheaves subsume R-GCN by allowing instance-specific maps within each relation type.
+In contrast, standard R-GCN uses a shared W_r for all edges of type r, **type-specific** but instance-invariant. Multi-relational sheaves subsume R-GCN by allowing instance-specific maps within each relation type.
 
 ## Inverse Relations in Sheaves
 
@@ -201,7 +201,7 @@ For forward relation r: F^r_{u▷e} = A, F^r_{v▷e} = B
 
 For inverse relation r⁻¹ (the reverse edge): F^{r⁻¹}_{v▷e} = B, F^{r⁻¹}_{u▷e} = A (same maps, reversed role)
 
-This ensures that the sheaf Laplacian is symmetric — a necessary condition for the positive-semidefinite Sheaf Laplacian construction.
+This ensures that the sheaf Laplacian is symmetric, a necessary condition for the positive-semidefinite Sheaf Laplacian construction.
 
 Alternatively: add inverse edges explicitly with separate maps F^{r⁻¹}_{v▷e} = (F^r_{v▷e})⁻ᵀ (the inverse-transpose), which preserves gauge-equivariance under O(d).
 
@@ -215,6 +215,6 @@ Multi-relational sheaves provide a unified alternative: replace the per-meta-pat
 
 ## References
 
-- Schlichtkrull, M., Kipf, T. N., Bloem, P., van den Berg, R., Titov, I., & Welling, M. (2018). [Modeling Relational Data with Graph Convolutional Networks](https://arxiv.org/abs/1703.06103). *ESWC 2018* (R-GCN: relation-specific weight matrices — the special case of multi-relational sheaves with shared type-level maps).
-- Vashishth, S., Sanyal, S., Nitin, V., & Talukdar, P. (2020). [Composition-based Multi-Relational Graph Convolutional Networks](https://arxiv.org/abs/1911.03082). *ICLR 2020* (CompGCN: composition of entity and relation embeddings — a different approach to multi-relational GNNs that sheaves subsume).
+- Schlichtkrull, M., Kipf, T. N., Bloem, P., van den Berg, R., Titov, I., & Welling, M. (2018). [Modeling Relational Data with Graph Convolutional Networks](https://arxiv.org/abs/1703.06103). *ESWC 2018* (R-GCN: relation-specific weight matrices, the special case of multi-relational sheaves with shared type-level maps).
+- Vashishth, S., Sanyal, S., Nitin, V., & Talukdar, P. (2020). [Composition-based Multi-Relational Graph Convolutional Networks](https://arxiv.org/abs/1911.03082). *ICLR 2020* (CompGCN: composition of entity and relation embeddings, a different approach to multi-relational GNNs that sheaves subsume).
 - Bordes, A., Usunier, N., Garcia-Durán, A., Weston, J., & Yakhnenko, O. (2013). [Translating Embeddings for Modeling Multi-relational Data](https://papers.nips.cc/paper/2013/hash/1cecc7a77928ca8133fa24680a88d2f9-Abstract.html). *NeurIPS 2013* (TransE: the canonical KG embedding method re-interpreted as an affine sheaf above).

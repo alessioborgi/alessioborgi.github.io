@@ -6,7 +6,7 @@ book: sheaf
 subsection: foundations
 tags: [sheaf, topology, cellular-sheaf, stalk, restriction-map, section]
 published: false
-excerpt: "A sheaf is a mathematical device for consistently gluing local data together into global information. This post explains the concept from first principles — no topology background required — and builds the intuition that carries through the entire series."
+excerpt: "A sheaf is a mathematical device for consistently gluing local data together into global information. This post explains the concept from first principles, no topology background required, and builds the intuition that carries through the entire series."
 author_profile: true
 read_time: true
 is_overview: false
@@ -43,7 +43,7 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A sheaf assigns data (vectors, functions, sets) to the parts of a space, plus <em>restriction maps</em> that say how data on larger pieces relates to data on smaller pieces. A <em>global section</em> is a consistent assignment across the whole space — one where all the local pieces agree. On a graph, nodes and edges are the "pieces", restriction maps encode inter-node relationships, and the Sheaf Laplacian measures how inconsistent a signal is.
+<strong>TL;DR:</strong> A sheaf assigns data (vectors, functions, sets) to the parts of a space, plus <em>restriction maps</em> that say how data on larger pieces relates to data on smaller pieces. A <em>global section</em> is a consistent assignment across the whole space, one where all the local pieces agree. On a graph, nodes and edges are the "pieces", restriction maps encode inter-node relationships, and the Sheaf Laplacian measures how inconsistent a signal is.
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Cellular sheaf on a graph" caption="A cellular sheaf on a graph: stalks at nodes/edges and restriction maps (Bodnar et al., 2022)" %}
 
@@ -71,7 +71,7 @@ Imagine a weather network: temperature sensors at every city (nodes), with the u
 2. Assigning a **data space** to every road between cities: the pair of readings that are "consistent" for that road.
 3. Specifying a **restriction map** per road that says: "if city u has reading x_u, what does that imply at the road endpoint?"
 
-A **global section** is an assignment of readings to all cities such that every road's restriction is satisfied — the whole network is self-consistent.
+A **global section** is an assignment of readings to all cities such that every road's restriction is satisfied, the whole network is self-consistent.
 
 This is exactly the structure a Sheaf Neural Network learns: not just node features, but the *relational geometry* between them.
 
@@ -92,9 +92,9 @@ The classic example: the sheaf of **continuous functions**. F(U) = {continuous f
 
 A graph G = (V, E) is a 1-dimensional **CW complex**: a topological space built from 0-cells (nodes) and 1-cells (edges). A **cellular sheaf** F on G assigns:
 
-- A vector space F(v) ≅ ℝ^{d_v} to each node v — called the **node stalk**
-- A vector space F(e) ≅ ℝ^{d_e} to each edge e — called the **edge stalk**
-- A linear map F_{v→e} : F(v) → F(e) for each incidence (v is an endpoint of e) — the **restriction map**
+- A vector space F(v) ≅ ℝ^{d_v} to each node v, called the **node stalk**
+- A vector space F(e) ≅ ℝ^{d_e} to each edge e, called the **edge stalk**
+- A linear map F_{v→e} : F(v) → F(e) for each incidence (v is an endpoint of e), the **restriction map**
 
 <div class="math-box">
 F = { F(v), F(e), F_{v→e} : v ∈ V, e ∈ E, v incident to e }
@@ -104,7 +104,7 @@ No consistency axioms are needed for a 1-dimensional CW complex (they would invo
 
 ## What the Restriction Maps Encode
 
-The restriction map F_{v→e} : ℝ^d → ℝ^d (assuming equal stalk dimensions) describes how node v's data "projects onto" the shared edge. The two restriction maps for edge e = (u, v) — namely F_{u→e} and F_{v→e} — describe how u and v respectively relate to the shared edge.
+The restriction map F_{v→e} : ℝ^d → ℝ^d (assuming equal stalk dimensions) describes how node v's data "projects onto" the shared edge. The two restriction maps for edge e = (u, v), namely F_{u→e} and F_{v→e}, describe how u and v respectively relate to the shared edge.
 
 **Special cases:**
 
@@ -117,12 +117,12 @@ The restriction map F_{v→e} : ℝ^d → ℝ^d (assuming equal stalk dimensions
 | F_{v→e} ∈ ℝ^{d×d} | General linear: arbitrary learned relationship |
 
 <div class="insight-box">
-<strong>Key insight:</strong> Standard GCN's message passing is a sheaf neural network with all restriction maps fixed to the identity. The "oversmoothing" problem is exactly the consequence of this assumption: the Sheaf Laplacian with identity maps forces all node features to agree, collapsing to constants. By learning richer restriction maps, sheaf GNNs can represent the relational structure of heterophilic graphs — where connected nodes should differ in a *structured way*, not randomly.
+<strong>Key insight:</strong> Standard GCN's message passing is a sheaf neural network with all restriction maps fixed to the identity. The "oversmoothing" problem is exactly the consequence of this assumption: the Sheaf Laplacian with identity maps forces all node features to agree, collapsing to constants. By learning richer restriction maps, sheaf GNNs can represent the relational structure of heterophilic graphs, where connected nodes should differ in a *structured way*, not randomly.
 </div>
 
 ## Global Sections: When Everything Agrees
 
-A **0-cochain** is a collection of vectors x = (x_v)_{v∈V} with x_v ∈ F(v) — an assignment of data to every node.
+A **0-cochain** is a collection of vectors x = (x_v)_{v∈V} with x_v ∈ F(v), an assignment of data to every node.
 
 A **global section** is a 0-cochain where every restriction is satisfied: for every edge e = (u, v),
 
@@ -137,7 +137,7 @@ This is the object that later shows up everywhere in sheaf GNN theory:
 - it is the asymptotic destination of diffusion,
 - and it is the reason oversmoothing in sheaf models is qualitatively different from oversmoothing in vanilla GCNs.
 
-The space of global sections, denoted H⁰(G, F) = ker(δ₀), is the analogue of the null space of the standard graph Laplacian. For standard GCN, H⁰ consists of constant functions. For a sheaf with non-trivial maps, H⁰ is much richer — it can contain functions that vary across nodes while still satisfying the relational constraints imposed by the restriction maps.
+The space of global sections, denoted H⁰(G, F) = ker(δ₀), is the analogue of the null space of the standard graph Laplacian. For standard GCN, H⁰ consists of constant functions. For a sheaf with non-trivial maps, H⁰ is much richer, it can contain functions that vary across nodes while still satisfying the relational constraints imposed by the restriction maps.
 
 ## The Coboundary and Inconsistency
 
@@ -254,21 +254,21 @@ F_{A→e_AB} = +1,  F_{B→e_AB} = −1<br>
 F_{B→e_BC} = +1,  F_{C→e_BC} = +1
 </div>
 
-**Step 1 — Write δ₀ as a matrix.** Node order: (A, B, C). Edge order: (e_AB, e_BC).
+**Step 1, Write δ₀ as a matrix.** Node order: (A, B, C). Edge order: (e_AB, e_BC).
 
 <div class="math-box">
 δ₀ = [ +1  −1   0 ]   ← row for e_AB: F_{A→e}·x_A − F_{B→e}·x_B<br>
      [  0  +1  +1 ]   ← row for e_BC: F_{B→e}·x_B − F_{C→e}·x_C  (note sign convention)
 </div>
 
-Wait — the standard convention is (δ₀ x)_e = F_{v→e} x_v − F_{u→e} x_u for edge e=(u,v) with u the tail. For e_BC = (B,C): (δ₀ x)_{e_BC} = F_{C→e} x_C − F_{B→e} x_B. Adopting orientation A→B and B→C:
+Wait, the standard convention is (δ₀ x)_e = F_{v→e} x_v − F_{u→e} x_u for edge e=(u,v) with u the tail. For e_BC = (B,C): (δ₀ x)_{e_BC} = F_{C→e} x_C − F_{B→e} x_B. Adopting orientation A→B and B→C:
 
 <div class="math-box">
 (δ₀ x)_{e_AB} = F_{B→e} x_B − F_{A→e} x_A = (−1)x_B − (+1)x_A<br>
 (δ₀ x)_{e_BC} = F_{C→e} x_C − F_{B→e} x_B = (+1)x_C − (+1)x_B
 </div>
 
-**Step 2 — Compute Δ_F = δ₀ᵀ δ₀.** With the matrix above:
+**Step 2, Compute Δ_F = δ₀ᵀ δ₀.** With the matrix above:
 
 <div class="math-box">
 Δ_F = δ₀ᵀ δ₀ = [  1   1   0 ]<br>
@@ -276,18 +276,18 @@ Wait — the standard convention is (δ₀ x)_e = F_{v→e} x_v − F_{u→e} x_
                [  0  −1   1 ]
 </div>
 
-(Diagonal entries: Δ[A,A] = 1, Δ[B,B] = 1+1 = 2, Δ[C,C] = 1. Off-diagonal: Δ[A,B] = (+1)(−1) netting to +1 via the product of columns — verify by direct multiplication.)
+(Diagonal entries: Δ[A,A] = 1, Δ[B,B] = 1+1 = 2, Δ[C,C] = 1. Off-diagonal: Δ[A,B] = (+1)(−1) netting to +1 via the product of columns, verify by direct multiplication.)
 
-**Step 3 — Check x = (1, −1, 1).**
+**Step 3, Check x = (1, −1, 1).**
 
 <div class="math-box" style="text-align:left;">
 (δ₀ x)_{e_AB} = (−1)(−1) − (+1)(1) = 1 − 1 = 0  ✓<br>
 (δ₀ x)_{e_BC} = (+1)(1) − (+1)(−1) = 1 + 1 = 2  ✗
 </div>
 
-x = (1, −1, 1) is **not** a global section — e_BC has disagreement 2.
+x = (1, −1, 1) is **not** a global section, e_BC has disagreement 2.
 
-**Step 4 — Find a global section.** Need δ₀ x = 0:
+**Step 4, Find a global section.** Need δ₀ x = 0:
 
 <div class="math-box" style="text-align:left;">
 (−1)x_B − x_A = 0  →  x_A = −x_B<br>
@@ -296,9 +296,9 @@ x_C − x_B = 0       →  x_C = x_B
 
 Global sections: multiples of (−1, 1, 1). So x = (−1, 1, 1) is a genuine global section. x = (0, 0, 0) is always trivially one. **dim(H⁰) = 1.**
 
-The non-trivial section (−1, 1, 1) is not constant — node A has the opposite sign to B and C. The sheaf encodes the signed relation F_{A→e_AB}=+1, F_{B→e_AB}=−1, and the global section reflects this: A must be opposite to B for the edge to be satisfied.
+The non-trivial section (−1, 1, 1) is not constant, node A has the opposite sign to B and C. The sheaf encodes the signed relation F_{A→e_AB}=+1, F_{B→e_AB}=−1, and the global section reflects this: A must be opposite to B for the edge to be satisfied.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The standard graph Laplacian L = D − A is a special case of the Sheaf Laplacian with all restriction maps equal to the scalar 1 and stalk dimension d=1. The Sheaf Laplacian Δ_F = δ₀ᵀδ₀ generalises this in two directions simultaneously: (1) stalk dimension d &gt; 1 turns each node feature into a vector, and (2) non-identity restriction maps replace the implicit "nodes should be equal" with "nodes should be related by a learned linear map". Setting all maps to the identity and d=1 recovers L exactly. Every theorem about sheaf diffusion therefore reduces to a known theorem about graph diffusion in this special case — a useful sanity check throughout this series.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The standard graph Laplacian L = D − A is a special case of the Sheaf Laplacian with all restriction maps equal to the scalar 1 and stalk dimension d=1. The Sheaf Laplacian Δ_F = δ₀ᵀδ₀ generalises this in two directions simultaneously: (1) stalk dimension d &gt; 1 turns each node feature into a vector, and (2) non-identity restriction maps replace the implicit "nodes should be equal" with "nodes should be related by a learned linear map". Setting all maps to the identity and d=1 recovers L exactly. Every theorem about sheaf diffusion therefore reduces to a known theorem about graph diffusion in this special case, a useful sanity check throughout this series.</div>
 
 ## The Three Key Objects
 
@@ -315,17 +315,17 @@ The Sheaf Laplacian Δ_F is an (Nd) × (Nd) block matrix, where N is the number 
 [Δ_F]_{uu} = Σ_{e incident to u} F_{u→e}ᵀ F_{u→e}
 </div>
 
-When all restriction maps are the identity: [Δ_F]_{uv} = −I (if u∼v), [Δ_F]_{uu} = deg(u)·I — exactly d copies of the standard graph Laplacian.
+When all restriction maps are the identity: [Δ_F]_{uv} = −I (if u∼v), [Δ_F]_{uu} = deg(u)·I, exactly d copies of the standard graph Laplacian.
 
 ## Summary
 
-A sheaf is not exotic mathematics — it is a principled framework for attaching structured data to a space and asking when that data is globally consistent. On a graph:
+A sheaf is not exotic mathematics, it is a principled framework for attaching structured data to a space and asking when that data is globally consistent. On a graph:
 - **Node stalks** hold feature vectors
 - **Restriction maps** encode the relational geometry between adjacent nodes
-- **Global sections** are the self-consistent configurations — the null space of the Sheaf Laplacian
+- **Global sections** are the self-consistent configurations, the null space of the Sheaf Laplacian
 - **The Sheaf Laplacian** measures inconsistency and drives diffusion
 
-Everything else in this series — architectures, theory, applications — is a consequence of this foundational structure.
+Everything else in this series, architectures, theory, applications, is a consequence of this foundational structure.
 
 ## References
 

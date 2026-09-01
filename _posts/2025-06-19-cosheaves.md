@@ -6,7 +6,7 @@ book: sheaf
 subsection: extensions
 tags: [cosheaf, pushforward, dual, corestriction, homology, distribution]
 published: false
-excerpt: "A cosheaf is the categorical dual of a sheaf: instead of restriction maps (pulling data from larger to smaller), cosheaves have extension maps (pushing data from smaller to larger). This dual perspective leads to different consistency conditions, different homology groups, and different neural network architectures — better suited for data that 'integrates' over regions rather than restricts to them."
+excerpt: "A cosheaf is the categorical dual of a sheaf: instead of restriction maps (pulling data from larger to smaller), cosheaves have extension maps (pushing data from smaller to larger). This dual perspective leads to different consistency conditions, different homology groups, and different neural network architectures, better suited for data that 'integrates' over regions rather than restricts to them."
 author_profile: true
 read_time: true
 is_overview: false
@@ -28,20 +28,20 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> A cosheaf assigns vector spaces to parts of a space but with <em>extension maps</em> (corestriction maps) going from smaller to larger: G_{e→v} : G(e) → G(v). Instead of asking "can we consistently restrict data from nodes to edges?", cosheaves ask "can we consistently extend data from edges to nodes?" The dual boundary operator ∂₀ = δ₀ᵀ gives rise to cosheaf homology H₀, H₁, ... — different from sheaf cohomology. Cosheaves are natural for data that aggregates (distributions, measures, flows) rather than restricts (sections, fields).
+<strong>TL;DR:</strong> A cosheaf assigns vector spaces to parts of a space but with <em>extension maps</em> (corestriction maps) going from smaller to larger: G_{e→v} : G(e) → G(v). Instead of asking "can we consistently restrict data from nodes to edges?", cosheaves ask "can we consistently extend data from edges to nodes?" The dual boundary operator ∂₀ = δ₀ᵀ gives rise to cosheaf homology H₀, H₁, ..., different from sheaf cohomology. Cosheaves are natural for data that aggregates (distributions, measures, flows) rather than restricts (sections, fields).
 </div>
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd_sheaf.png" alt="Cosheaf vs sheaf duality" caption="Sheaf and cosheaf duality: restriction vs corestriction maps (Bodnar et al., 2022)" %}
 
 
 ## Intuition First: Measuring vs Observing
 
-A **sheaf** is like a weather sensor network: each station (node) observes local temperature and the restriction maps say how to compare readings at adjacent stations — data *restricts* from nodes down to edges (you can always look at a subset).
+A **sheaf** is like a weather sensor network: each station (node) observes local temperature and the restriction maps say how to compare readings at adjacent stations, data *restricts* from nodes down to edges (you can always look at a subset).
 
-A **cosheaf** is like a water-flow network: the flow on each pipe (edge) *pushes up* to the junction (node) by accumulating — water from multiple pipes merges at an intersection. Data *extends* from edges up to nodes, and the question is whether the accumulated flows are consistent.
+A **cosheaf** is like a water-flow network: the flow on each pipe (edge) *pushes up* to the junction (node) by accumulating, water from multiple pipes merges at an intersection. Data *extends* from edges up to nodes, and the question is whether the accumulated flows are consistent.
 
 The key difference in a machine learning context: sheaves model **fields** (temperature, node features, opinions), while cosheaves model **distributions or flows** (traffic, probability mass, gradients accumulating at nodes).
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> For standard node-feature GNNs, the sheaf is the right object — node features project onto edges via restriction maps. For edge-flow GNNs (traffic, transactions, electrical current), the cosheaf is more natural — edge signals accumulate at nodes via corestriction maps. Most sheaf GNN papers use the sheaf setting because node features are more common, but cosheaf GNNs are the correct choice whenever edge data is the primary modality.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> For standard node-feature GNNs, the sheaf is the right object, node features project onto edges via restriction maps. For edge-flow GNNs (traffic, transactions, electrical current), the cosheaf is more natural, edge signals accumulate at nodes via corestriction maps. Most sheaf GNN papers use the sheaf setting because node features are more common, but cosheaf GNNs are the correct choice whenever edge data is the primary modality.</div>
 
 <style>
 @keyframes sheafDown { 0%,100%{stroke-dashoffset:16} 50%{stroke-dashoffset:0} }
@@ -99,7 +99,7 @@ The key difference in a machine learning context: sheaves model **fields** (temp
     <marker id="uArr2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#16a34a"/></marker>
   </defs>
 </svg>
-<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Sheaf (left, blue): restriction maps send node data down to edge stalks — asking "do adjacent nodes agree?" Cosheaf (right, green): corestriction maps push edge data up to node stalks — asking "do edges consistently contribute to their nodes?" The arrows reverse direction; the cohomology groups swap roles.</figcaption>
+<figcaption style="text-align:center;font-size:.85rem;color:#6b7280;margin-top:.4rem;">Sheaf (left, blue): restriction maps send node data down to edge stalks, asking "do adjacent nodes agree?" Cosheaf (right, green): corestriction maps push edge data up to node stalks, asking "do edges consistently contribute to their nodes?" The arrows reverse direction; the cohomology groups swap roles.</figcaption>
 </figure></div>
 
 ## Sheaves vs Cosheaves: The Duality
@@ -120,13 +120,13 @@ The coboundary operator becomes a **boundary operator**:
 (∂₀ y)_v = Σ_{e incident to v} G_{e▷v} y_e · (orientation sign)
 </div>
 
-This is the transpose/dual of δ₀ — it maps edge-level data to node-level data by "extending" along corestriction maps.
+This is the transpose/dual of δ₀, it maps edge-level data to node-level data by "extending" along corestriction maps.
 
 ## Cosheaf Homology vs Sheaf Cohomology
 
 **Sheaf cohomology:**
 <div class="math-box">
-H⁰(G, F) = ker(δ₀)    (global sections — consistent node assignments)
+H⁰(G, F) = ker(δ₀)    (global sections, consistent node assignments)
 H¹(G, F) = C¹ / im(δ₀)    (obstruction to consistency)
 </div>
 
@@ -150,7 +150,7 @@ L_G = ∂₀ ∂₀ᵀ   (acting on C₁ = edge space)
 
 Note: this is the **down-Laplacian** Δ₁ = δ₀ δ₀ᵀ acting on edges, when the cosheaf maps are the transposes of the sheaf maps.
 
-The node-level operator ∂₀ᵀ ∂₀ is the **up-Laplacian** on nodes — the adjoint of the cosheaf Laplacian.
+The node-level operator ∂₀ᵀ ∂₀ is the **up-Laplacian** on nodes, the adjoint of the cosheaf Laplacian.
 
 ## The Sheaf-Cosheaf Duality
 
@@ -162,13 +162,13 @@ Under this duality:
 - Sheaf cohomology H*(G, F) ↔ Cosheaf homology H*(G, F*)
 - The sheaf Laplacian Δ_F ↔ The cosheaf Laplacian of F*
 
-For finite-dimensional vector spaces over ℝ, F ≅ F* (via the standard inner product), so sheaves and cosheaves are "the same" in the vector space setting — the distinction is in how the maps are oriented.
+For finite-dimensional vector spaces over ℝ, F ≅ F* (via the standard inner product), so sheaves and cosheaves are "the same" in the vector space setting, the distinction is in how the maps are oriented.
 
 ## When Cosheaves Are Natural
 
-**Sheaves are natural when:** data is a **field** or **section** — something you observe at each point and which restricts consistently to smaller regions. Examples: temperature readings (restrict to subset of sensors), functions on a manifold (restrict to submanifold).
+**Sheaves are natural when:** data is a **field** or **section**, something you observe at each point and which restricts consistently to smaller regions. Examples: temperature readings (restrict to subset of sensors), functions on a manifold (restrict to submanifold).
 
-**Cosheaves are natural when:** data is a **distribution** or **measure** — something you aggregate from smaller regions to larger ones. Examples: flow on roads (aggregate from roads to intersections), probability distributions (extend from local regions to global), signals that integrate over regions.
+**Cosheaves are natural when:** data is a **distribution** or **measure**, something you aggregate from smaller regions to larger ones. Examples: flow on roads (aggregate from roads to intersections), probability distributions (extend from local regions to global), signals that integrate over regions.
 
 <div class="insight-box">
 <strong>Graph learning implication:</strong> For traffic flow prediction, the natural object is a cosheaf (flows on edges extend to intersections), not a sheaf. For node feature propagation, the natural object is a sheaf (node features restrict to edges). Most sheaf GNN papers focus on the sheaf setting (node features), but cosheaf GNNs may be more appropriate for edge-flow datasets.
@@ -187,14 +187,14 @@ This gives a **bipartite message-passing scheme** where information flows down (
 
 ## Computing Cosheaf Homology for Graph Learning
 
-The key quantity for cosheaf-based GNNs is the null space of the cosheaf Laplacian ker(∂₀ᵀ ∂₀) = ker(∂₀ᵀ) — the "cosection" space of nodes whose data is orthogonal to all edge extensions.
+The key quantity for cosheaf-based GNNs is the null space of the cosheaf Laplacian ker(∂₀ᵀ ∂₀) = ker(∂₀ᵀ), the "cosection" space of nodes whose data is orthogonal to all edge extensions.
 
-For the constant cosheaf: ker(∂₀ᵀ) = ker(δ₀) = span{1_N} — constant node assignments. This is the same as the standard GCN null space.
+For the constant cosheaf: ker(∂₀ᵀ) = ker(δ₀) = span{1_N}, constant node assignments. This is the same as the standard GCN null space.
 
-For non-trivial cosheaf maps: ker(∂₀ᵀ) can be larger or smaller — analogous to the sheaf null space. Cosheaf GNNs can avoid oversmoothing via the same null space argument as sheaf GNNs.
+For non-trivial cosheaf maps: ker(∂₀ᵀ) can be larger or smaller, analogous to the sheaf null space. Cosheaf GNNs can avoid oversmoothing via the same null space argument as sheaf GNNs.
 
 ## References
 
-- Curry, J. (2014). [Sheaves, Cosheaves and Applications](https://arxiv.org/abs/1303.3255). *PhD Thesis, Penn 2014* (rigorous treatment of cosheaves, their homology, and duality with sheaves — chapters 2 and 4 are the key references).
+- Curry, J. (2014). [Sheaves, Cosheaves and Applications](https://arxiv.org/abs/1303.3255). *PhD Thesis, Penn 2014* (rigorous treatment of cosheaves, their homology, and duality with sheaves, chapters 2 and 4 are the key references).
 - Ghrist, R., & Robinson, M. (2011). [Euler Characteristic Gauss-Bonnet Formula and Applications to Sheaves on Graphs](https://www2.math.upenn.edu/~ghrist/preprints/eulerchar.pdf). *Preprint* (Euler characteristic and duality for sheaves and cosheaves on graphs).
 - Hansen, J., & Gebhart, T. (2020). [Sheaf Neural Networks](https://arxiv.org/abs/2012.06333). *NeurIPS 2020 GRL+ Workshop* (briefly discusses the cosheaf dual perspective; focuses on the sheaf side for the neural network architecture).

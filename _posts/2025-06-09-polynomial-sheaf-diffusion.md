@@ -6,7 +6,7 @@ book: sheaf
 subsection: core-papers
 tags: [PNSD, polynomial-sheaf-diffusion, Zaghen, ICLR2024, spectral-filter, Bernstein]
 published: false
-excerpt: "PNSD replaces NSD's fixed low-pass filter (I − Δ_F) with a learnable polynomial p(Δ_F) = Σ_k a_k Δ_F^k. This adds spectral flexibility — the model can act as a low-pass, high-pass, or band-pass filter depending on the task — while retaining all the structural advantages of sheaf diffusion."
+excerpt: "PNSD replaces NSD's fixed low-pass filter (I − Δ_F) with a learnable polynomial p(Δ_F) = Σ_k a_k Δ_F^k. This adds spectral flexibility, the model can act as a low-pass, high-pass, or band-pass filter depending on the task, while retaining all the structural advantages of sheaf diffusion."
 author_profile: true
 read_time: true
 is_overview: false
@@ -119,15 +119,15 @@ NSD's diffusion step is:
 H^{(k+1)} = (I − Δ_F^{norm}) H^{(k)} W^{(k)}
 </div>
 
-The filter h(λ) = 1 − λ is **fixed** — it always attenuates frequencies in proportion to their eigenvalue. In the eigenbasis of Δ_F^{norm}, with eigenvalues in [0, 2]:
+The filter h(λ) = 1 − λ is **fixed**, it always attenuates frequencies in proportion to their eigenvalue. In the eigenbasis of Δ_F^{norm}, with eigenvalues in [0, 2]:
 - λ = 0 (global sections): kept with weight 1
 - λ = 1: attenuated to 0
 - λ = 2 (maximum frequency): kept with weight −1 (phase-flipped)
 
-This is a fixed "tent-shaped" low-pass filter. For homophilic graphs, this is good: low-frequency signals (smooth across nodes) are the useful ones. But for heterophilic graphs, **high-frequency signals** (alternating across edges) are often more discriminative — and NSD's filter partially attenuates them.
+This is a fixed "tent-shaped" low-pass filter. For homophilic graphs, this is good: low-frequency signals (smooth across nodes) are the useful ones. But for heterophilic graphs, **high-frequency signals** (alternating across edges) are often more discriminative, and NSD's filter partially attenuates them.
 
 <div class="insight-box">
-<strong>The gap NSD leaves:</strong> NSD handles heterophily by learning restriction maps that make high-frequency signals low-frequency with respect to Δ_F (so they survive the filter). But this is indirect — it relies on the maps doing all the work. PNSD directly addresses the filter, letting it be high-pass or band-pass when beneficial, without relying entirely on the maps.
+<strong>The gap NSD leaves:</strong> NSD handles heterophily by learning restriction maps that make high-frequency signals low-frequency with respect to Δ_F (so they survive the filter). But this is indirect, it relies on the maps doing all the work. PNSD directly addresses the filter, letting it be high-pass or band-pass when beneficial, without relying entirely on the maps.
 </div>
 
 ## The PNSD Architecture
@@ -147,11 +147,11 @@ H^{(ℓ+1)} = σ( p^{(ℓ)}(Δ_F) · H^{(ℓ)} · W^{(ℓ)} )
          = σ( (Σ_{k=0}^{K} a_k^{(ℓ)} Δ_F^k) H^{(ℓ)} W^{(ℓ)} )
 </div>
 
-The filter profile h(λ) = Σ_k a_k λ^k can be **any polynomial** of degree K — low-pass, high-pass, band-pass, or any shape.
+The filter profile h(λ) = Σ_k a_k λ^k can be **any polynomial** of degree K, low-pass, high-pass, band-pass, or any shape.
 
-This is computed without explicitly forming or diagonalising Δ_F. Each Δ_F^k x is computed by k applications of the sparse Δ_F operator, making the cost O(K · E · d²) — the same as running K NSD layers.
+This is computed without explicitly forming or diagonalising Δ_F. Each Δ_F^k x is computed by k applications of the sparse Δ_F operator, making the cost O(K · E · d²), the same as running K NSD layers.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight — High-pass filters capture heterophily's "texture":</strong> In heterophilic graphs, nodes of different classes are neighbours. Their features oscillate rapidly across edges — this is the high-frequency signal in the Sheaf Laplacian's eigenbasis. NSD's fixed filter h(λ) = 1 − λ partially attenuates these high-frequency components (at λ close to 2, the filter approaches −1, phase-flipping rather than amplifying them). A learnable high-pass filter with h(λ) growing toward λ = 2 directly amplifies exactly this inter-class contrast, making the model more discriminative on heterophilic tasks without relying solely on the restriction maps to compensate.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight, High-pass filters capture heterophily's "texture":</strong> In heterophilic graphs, nodes of different classes are neighbours. Their features oscillate rapidly across edges, this is the high-frequency signal in the Sheaf Laplacian's eigenbasis. NSD's fixed filter h(λ) = 1 − λ partially attenuates these high-frequency components (at λ close to 2, the filter approaches −1, phase-flipping rather than amplifying them). A learnable high-pass filter with h(λ) growing toward λ = 2 directly amplifies exactly this inter-class contrast, making the model more discriminative on heterophilic tasks without relying solely on the restriction maps to compensate.</div>
 
 ## Bernstein Polynomial Basis
 
@@ -207,7 +207,7 @@ The filter is low-pass: p(0) = 0.80 > p(1) ≈ 0.48 > p(2) = 0.10. Global sectio
 
 Now the filter is high-pass: p(0) = 0.10 < p(1) = 0.50 < p(2) = 0.90. The maximum-frequency components are amplified by 0.9 while the global sections are nearly suppressed.
 
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The Bernstein coefficients θ_k are approximately the filter's gain at frequency λ = 2k/K. This gives them a direct interpretability that the raw monomial coefficients a_k lack — a learned θ sequence that is increasing means the task benefits from high-frequency amplification (heterophily), while a decreasing θ sequence indicates low-pass behaviour (homophily). You can read off the task's spectral preference directly from the learned θ values.</div>
+<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> The Bernstein coefficients θ_k are approximately the filter's gain at frequency λ = 2k/K. This gives them a direct interpretability that the raw monomial coefficients a_k lack, a learned θ sequence that is increasing means the task benefits from high-frequency amplification (heterophily), while a decreasing θ sequence indicates low-pass behaviour (homophily). You can read off the task's spectral preference directly from the learned θ values.</div>
 
 ## Filter Profile Analysis
 
@@ -219,7 +219,7 @@ With K=5 Bernstein coefficients, PNSD can represent:
 | Heterophily | High-pass or band-pass | Amplify inter-class differences |
 | Mixed | Non-monotone polynomial | Task-specific spectral shaping |
 
-On heterophilic datasets (Chameleon, Squirrel, Actor), the paper shows that PNSD learns high-pass filters — confirming that heterophilic graphs require amplifying high-frequency signals.
+On heterophilic datasets (Chameleon, Squirrel, Actor), the paper shows that PNSD learns high-pass filters, confirming that heterophilic graphs require amplifying high-frequency signals.
 
 ## Comparison with BernNet and GPRGNN
 
@@ -236,7 +236,7 @@ PNSD strictly subsumes NSD (by setting K=1, θ₀=1, θ₁=0 → p(λ) = 1 − �
 
 ## Sheaf Map Learning in PNSD
 
-The restriction maps are learned the same way as in NSD — via a per-edge MLP:
+The restriction maps are learned the same way as in NSD, via a per-edge MLP:
 
 <div class="math-box">
 [F_{u▷e} | F_{v▷e}] = MLP(h_u, h_v)
@@ -275,11 +275,11 @@ This means: as K increases, PNSD can approximate any continuous spectral filter 
 ## Limitations and Future Directions
 
 1. **K scaling:** Higher K means more expressive filters but more FLOPs (K applications of Δ_F). In practice K=5 or K=10 is used.
-2. **Map-filter interaction:** The maps and filter are jointly learned but interact in complex ways — the training landscape has multiple equilibria.
+2. **Map-filter interaction:** The maps and filter are jointly learned but interact in complex ways, the training landscape has multiple equilibria.
 3. **Node-level filter:** The current polynomial uses scalar coefficients (same filter for all feature channels). Per-channel or per-node polynomial filters could improve expressiveness further.
 
 ## References
 
 - Zaghen, O., Quak, M., & Bronstein, M. M. (2024). [Polynomial Neural Sheaf Diffusion](https://openreview.net/forum?id=KGPmqVFEW4). *ICLR 2024*.
-- He, M., Wei, Z., Huang, Z., & Xu, H. (2021). [BernNet: Learning Arbitrary Graph Spectral Filters via Bernstein Approximation](https://arxiv.org/abs/2106.10994). *NeurIPS 2021* (Bernstein basis for spectral graph filters — the filter basis PNSD inherits).
-- Chien, E., Peng, J., Li, P., & Milenkovic, O. (2021). [Adaptive Universal Generalized PageRank Graph Neural Network](https://arxiv.org/abs/2006.07988). *ICLR 2021* (GPRGNN: learnable polynomial filter on L — the homogeneous precursor to PNSD on Δ_F).
+- He, M., Wei, Z., Huang, Z., & Xu, H. (2021). [BernNet: Learning Arbitrary Graph Spectral Filters via Bernstein Approximation](https://arxiv.org/abs/2106.10994). *NeurIPS 2021* (Bernstein basis for spectral graph filters, the filter basis PNSD inherits).
+- Chien, E., Peng, J., Li, P., & Milenkovic, O. (2021). [Adaptive Universal Generalized PageRank Graph Neural Network](https://arxiv.org/abs/2006.07988). *ICLR 2021* (GPRGNN: learnable polynomial filter on L, the homogeneous precursor to PNSD on Δ_F).

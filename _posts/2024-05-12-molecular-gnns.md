@@ -6,7 +6,7 @@ book: gnn
 subsection: geometric
 tags: [molecular, drug-discovery, SchNet, DimeNet, QM9, HOMO-LUMO]
 published: true
-excerpt: "Molecules are graphs. Molecular GNNs predict chemical properties from structure. The best models use 3D coordinates and bond angles — not just connectivity."
+excerpt: "Molecules are graphs. Molecular GNNs predict chemical properties from structure. The best models use 3D coordinates and bond angles, not just connectivity."
 author_profile: true
 read_time: true
 is_overview: false
@@ -39,9 +39,9 @@ The task: predict molecular properties from $$G$$. Properties include:
 
 ## From Fingerprints to GNNs
 
-**Intuition First:** Morgan fingerprints work like a census of neighbourhoods. Each atom looks at the atoms within K bonds of it, hashes the whole pattern to a number, and reports that number. The GNN approach instead lets atoms *talk* to their neighbours iteratively — at round 1 atoms share their own identity, at round 2 they share what they heard from round 1, and so on. Unlike the fixed hash, GNN representations are learned end-to-end for the specific task, so they focus on the features that actually predict toxicity (or solubility, or binding), rather than encoding everything uniformly.
+**Intuition First:** Morgan fingerprints work like a census of neighbourhoods. Each atom looks at the atoms within K bonds of it, hashes the whole pattern to a number, and reports that number. The GNN approach instead lets atoms *talk* to their neighbours iteratively, at round 1 atoms share their own identity, at round 2 they share what they heard from round 1, and so on. Unlike the fixed hash, GNN representations are learned end-to-end for the specific task, so they focus on the features that actually predict toxicity (or solubility, or binding), rather than encoding everything uniformly.
 
-**Traditional approach — Morgan fingerprints (ECFP):**
+**Traditional approach, Morgan fingerprints (ECFP):**
 - Encode each atom's K-hop neighbourhood as a hash
 - Sum over all atoms → fixed-size bit vector
 - Feed to SVM or random forest
@@ -81,13 +81,13 @@ h_i \;\leftarrow\; \sum_{j \in \mathcal{N}(i)} h_j \odot W\Big( \big\lVert x_i -
 \]
 </div>
 
-$$W$$ is a filter-generating network and $$\odot$$ is elementwise. Because distances are invariant under the full $$\mathrm{E}(3)$$ — rotations, translations *and* reflections — the model is $$\mathrm{E}(3)$$-invariant. Two consequences follow directly: it cannot output vector quantities, and it assigns enantiomers identical predictions.
+$$W$$ is a filter-generating network and $$\odot$$ is elementwise. Because distances are invariant under the full $$\mathrm{E}(3)$$, rotations, translations *and* reflections, the model is $$\mathrm{E}(3)$$-invariant. Two consequences follow directly: it cannot output vector quantities, and it assigns enantiomers identical predictions.
 
-**QM9 performance:** SchNet reaches chemical accuracy on several QM9 targets — notably the atomisation energies — at a small fraction of the cost of the DFT calculations that produced the labels.
+**QM9 performance:** SchNet reaches chemical accuracy on several QM9 targets, notably the atomisation energies, at a small fraction of the cost of the DFT calculations that produced the labels.
 
 ## Level 3: Angular GNNs (Bond Angles)
 
-Why are distances not enough? The careful statement matters here, because the loose one is false. A *complete* pairwise distance matrix does determine the geometry up to rigid motion and reflection, and therefore determines every bond angle. The problem is that models never see the complete matrix: they build a cutoff graph, keeping only distances below $$r_c$$. From that partial set the angles are genuinely not recoverable, and two different structures can produce identical cutoff-graph distance multisets. That gap — not some impossibility about distances in principle — is what angular models close. Note also what stays out of reach: bond angles are unsigned and reflection-invariant, so adding them does not make a model chirality-aware.
+Why are distances not enough? The careful statement matters here, because the loose one is false. A *complete* pairwise distance matrix does determine the geometry up to rigid motion and reflection, and therefore determines every bond angle. The problem is that models never see the complete matrix: they build a cutoff graph, keeping only distances below $$r_c$$. From that partial set the angles are genuinely not recoverable, and two different structures can produce identical cutoff-graph distance multisets. That gap, not some impossibility about distances in principle, is what angular models close. Note also what stays out of reach: bond angles are unsigned and reflection-invariant, so adding them does not make a model chirality-aware.
 
 **DimeNet (Klicpera et al., 2020):** messages live on directed edges rather than nodes, and each edge message is updated using the angle it makes with adjacent incoming edges:
 
@@ -99,7 +99,7 @@ m_{ji} \;\leftarrow\; f\Big( m_{ji},\ \sum_{k \in \mathcal{N}(j) \setminus \{i\}
 
 $$\theta_{kji}$$ is the angle at $$j$$ between the edges $$ji$$ and $$jk$$; the exclusion $$k \ne i$$ prevents a message from immediately feeding back on itself. DimeNet uses spherical Bessel functions for the radial basis and spherical harmonics for the angular basis.
 
-**SphereNet:** adds torsion (dihedral) angles — the angle between two planes defined by four atoms. Torsions are *signed*, and the sign flips under reflection, which is what finally makes chirality visible to the model. With distances, angles and torsions together, the local 3D geometry is fully specified.
+**SphereNet:** adds torsion (dihedral) angles, the angle between two planes defined by four atoms. Torsions are *signed*, and the sign flips under reflection, which is what finally makes chirality visible to the model. With distances, angles and torsions together, the local 3D geometry is fully specified.
 
 <div class="insight-box">
 <strong>Why angles matter:</strong> Two carbon atoms bonded to the same central atom at different angles (e.g., 90° vs 120°) experience very different bonding environments. The angle encodes hybridisation (sp³ = 109.5°, sp² = 120°, sp = 180°) and strain. Ignoring angles misses key chemical information.
@@ -111,7 +111,7 @@ Equivariant models process 3D positions as vectors, satisfying $$\Phi(\rho_{\tex
 
 **EGNN:** invariant distance-based messages plus equivariant coordinate updates. Simple, fast, effective for energies and forces; blind to chirality.
 
-**NequIP:** TFN-style irrep features inside a message-passing network. Its headline result is data efficiency — competitive interatomic potentials from small training sets.
+**NequIP:** TFN-style irrep features inside a message-passing network. Its headline result is data efficiency, competitive interatomic potentials from small training sets.
 
 **MACE:** many-body interactions built from repeated tensor products. Among the strongest reported results on MD17-style force-field benchmarks.
 
@@ -150,7 +150,7 @@ Equivariant models process 3D positions as vectors, satisfying $$\Phi(\rho_{\tex
   <rect x="165" y="160" height="18" width="26"  fill="#3b82f6" rx="2"><animate attributeName="width" from="0" to="26"  dur="1.2s" fill="freeze"/></rect>
   <text x="196" y="172" font-size="9" fill="#9ca3af">+ vectors / tensors</text>
 </svg>
-<figcaption>Schematic only — bar lengths illustrate the direction of the trend, not measured values. Each additional level of geometric information tends to reduce error, but by how much depends heavily on the target and the dataset; consult the individual papers for figures on a specific benchmark.</figcaption>
+<figcaption>Schematic only, bar lengths illustrate the direction of the trend, not measured values. Each additional level of geometric information tends to reduce error, but by how much depends heavily on the target and the dataset; consult the individual papers for figures on a specific benchmark.</figcaption>
 </figure>
 </div>
 
@@ -166,9 +166,9 @@ Equivariant models process 3D positions as vectors, satisfying $$\Phi(\rho_{\tex
 
 ## Reading Benchmark Numbers
 
-The usual way this progression is presented — a single column of QM9 errors, one row per model — is worth treating with care, and this post deliberately does not reproduce one.
+The usual way this progression is presented, a single column of QM9 errors, one row per model, is worth treating with care, and this post deliberately does not reproduce one.
 
-Three reasons. QM9 has twelve targets with different units and different difficulty, so "the QM9 error" is not a well-defined quantity; a model can lead on dipole moment and trail on the HOMO-LUMO gap. Chemical accuracy is likewise target-dependent — it is conventionally 1 kcal/mol $$\approx 0.043$$ eV for energies, and quoting one threshold across all properties is a category error. And several of the strongest equivariant models, NequIP and MACE among them, were built and evaluated as *interatomic potentials* on MD17-style force-field tasks rather than on QM9 property regression, so placing them in the same column as SchNet or DimeNet compares numbers that were never measured on the same task.
+Three reasons. QM9 has twelve targets with different units and different difficulty, so "the QM9 error" is not a well-defined quantity; a model can lead on dipole moment and trail on the HOMO-LUMO gap. Chemical accuracy is likewise target-dependent, it is conventionally 1 kcal/mol $$\approx 0.043$$ eV for energies, and quoting one threshold across all properties is a category error. And several of the strongest equivariant models, NequIP and MACE among them, were built and evaluated as *interatomic potentials* on MD17-style force-field tasks rather than on QM9 property regression, so placing them in the same column as SchNet or DimeNet compares numbers that were never measured on the same task.
 
 What is robust is the ordering of *information*, which is the point the hierarchy is really making:
 
@@ -190,11 +190,11 @@ Each step strictly increases what the model can represent. How much accuracy tha
 | + torsions | $$\varphi_{ijkl}$$ (signed) | SphereNet | $$\mathrm{SE}(3)$$-invariant | No |
 | Full equivariance | 3D vectors, irreps | EGNN, NequIP, MACE | $$\mathrm{E}(n)$$ / $$\mathrm{E}(3)$$-equivariant | Yes |
 
-For industrial drug discovery, 2D GNNs suffice for fast virtual screening. For physics-accurate property prediction and force fields — anywhere you need forces, not just energies — equivariant models are the only ones that can express the target at all.
+For industrial drug discovery, 2D GNNs suffice for fast virtual screening. For physics-accurate property prediction and force fields, anywhere you need forces, not just energies, equivariant models are the only ones that can express the target at all.
 
 ## References
 
 - Gilmer, J., Schoenholz, S. S., Riley, P. F., Vinyals, O., & Dahl, G. E. (2017). [Neural Message Passing for Quantum Chemistry](https://arxiv.org/abs/1704.01212). *ICML 2017* (MPNN: unified message passing framework for quantum chemistry, benchmarked on QM9).
 - Schütt, K. T., Kindermans, P.-J., Sauceda Felix, H. E., Chmiela, S., Tkatchenko, A., & Müller, K.-R. (2017). [SchNet: A Continuous-Filter Convolutional Neural Network for Modeling Quantum Interactions](https://arxiv.org/abs/1706.08566). *NeurIPS 2017* (SchNet: continuous-filter convolutions over interatomic distances for E(3)-invariant molecular property prediction).
-- Klicpera, J., Groß, J., & Günnemann, S. (2020). [Directional Message Passing for Molecular Graphs](https://arxiv.org/abs/2003.03123). *ICLR 2020* (DimeNet: directional message passing over bond angles, recovering angular structure that a cutoff-distance model loses — bond angles alone are still reflection-invariant).
+- Klicpera, J., Groß, J., & Günnemann, S. (2020). [Directional Message Passing for Molecular Graphs](https://arxiv.org/abs/2003.03123). *ICLR 2020* (DimeNet: directional message passing over bond angles, recovering angular structure that a cutoff-distance model loses, bond angles alone are still reflection-invariant).
 - Liu, Y., Wang, L., Liu, M., Lin, Y., Zhang, X., Oztekin, B., & Ji, S. (2022). [Spherical Message Passing for 3D Molecular Graphs](https://arxiv.org/abs/2102.05013). *ICLR 2022* (SphereNet: extends DimeNet with torsion angles for full 3D geometry encoding).
