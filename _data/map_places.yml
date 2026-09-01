@@ -18,12 +18,12 @@
   note: "Sapienza University of Rome, Rome, Italy 🇮🇹"
 
 - name: "Barcelona"
-  subtitle: "SEIO Workshop and PhD School: Precise Methods for Optimizing Vehicle Routing and Logistics"
+  subtitle: "SEIO Workshop and PhD School 2025 · ACM Europe Summer School on HPC 2026"
   type: "study"
   lat: 41.3874
   lng: 2.1686
-  date: "2025"
-  note: "Universitat Pompeu Fabra, Barcelona, Spain 🇪🇸"
+  date: "2025, 2026"
+  note: "Universitat Pompeu Fabra, Barcelona, Spain 🇪🇸 — 2025: precise methods for vehicle routing and logistics. 2026: high-performance computing, AI, and quantum computing."
 
 - name: "Cambridge"
   subtitle: "PhD Long Visiting in Graph Neural Networks and Generative AI"
@@ -121,14 +121,6 @@
   date: "July 27–August 1, 2026"
   note: "EEML / MAIA, Cetinje, Montenegro 🇲🇪 — Presented a poster on Equivariant Sheaf Neural Networks."
 
-- name: "Barcelona"
-  subtitle: "ACM Europe Summer School on HPC 2026"
-  type: "study"
-  lat: 41.3874
-  lng: 2.1686
-  date: "July 20–24, 2026"
-  note: "ACM Europe, Barcelona, Spain 🇪🇸 — High Performance Computing and Artificial Intelligence, with emerging research in quantum computing."
-
 
 ################################ LEISURE ################################
 - name: "London"
@@ -146,6 +138,14 @@
   lng: 0.2624
   date: "2026"
   note: "Ely Cathedral is stunning, and the cannon in front of the cathedral is amazing!"
+
+- name: "Cardiff"
+  subtitle: "Holiday"
+  type: "holiday"
+  lat: 51.4816
+  lng: -3.1791
+  date: "2026"
+  note: "The vibrant capital of Wales!"
 
 - name: "Vienna"
   subtitle: "Holiday"
