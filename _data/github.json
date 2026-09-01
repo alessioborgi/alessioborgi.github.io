@@ -98,7 +98,7 @@
     {
       "name": "Z-SASLM",
       "html_url": "https://github.com/alessioborgi/Z-SASLM",
-      "description": "[CVPR 2025]  Z-SASLM is a zero-shot framework for multi-style image synthesis leveraging Spherical Linear Interpolation (SLI) to achieve smooth, coherent blending, without any fine-tuning.",
+      "description": "[CVPR 2025]  Z-SASLM is a zero-shot framework for multi-style image synthesis leveraging Spherical Linear Interpolation (SLI) to achieve smooth, coherent blending\u2014without any fine-tuning.",
       "stars": 3,
       "forks": 0,
       "language": "Jupyter Notebook"
