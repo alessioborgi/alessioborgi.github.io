@@ -58,7 +58,7 @@ toc_label: "Contents"
 <div class="paper-meta">
   <strong>Paper:</strong> "Heterogeneous Sheaf Neural Networks" &nbsp;·&nbsp; arXiv:2409.08036<br>
   <strong>Authors:</strong> L. Braithwaite, <em>A. Borgi</em>, G. Onorato, K. Tarantelli, F. Restuccia, F. Silvestri, P. Liò<br>
-  <strong>Venue:</strong> arXiv preprint, 2024 &nbsp;·&nbsp;
+  <strong>Venue:</strong> NeurReps Workshop @ NeurIPS 2026 (accepted) &nbsp;·&nbsp;
   <a href="https://arxiv.org/abs/2409.08036" target="_blank" rel="noopener">📄 Read the paper</a>
 </div>
 

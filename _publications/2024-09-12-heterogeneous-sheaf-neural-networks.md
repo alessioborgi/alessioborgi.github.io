@@ -2,13 +2,13 @@
 title: "Heterogeneous Sheaf Neural Networks"
 collection: publications
 slug: heterogeneous-sheaf-neural-networks
-category: preprints
-excerpt: "**HetSheaf** is a cellular-sheaf framework for heterogeneous graphs that encodes node and edge types through type-aware local feature spaces and learned restriction maps, without specialised architectural components. The companion **SheafPool** readout is invariant to basis changes and enables graph-level prediction. Gains of up to +2 pp on the Heterogeneous Graph Benchmark with up to 10× fewer parameters."
+category: conferences
+excerpt: "**Accepted at the NeurReps Workshop @ NeurIPS 2026.** **HetSheaf** is a cellular-sheaf framework for heterogeneous graphs that encodes node and edge types through type-aware local feature spaces and learned restriction maps, without specialised architectural components. The companion **SheafPool** readout is invariant to basis changes and enables graph-level prediction. Gains of up to +2 pp on the Heterogeneous Graph Benchmark with up to 10× fewer parameters."
 date: 2024-09-12
-venue: "arXiv preprint arXiv:2409.08036"
+venue: "NeurReps Workshop @ NeurIPS 2026 — Symmetry and Geometry in Neural Representations"
 paperurl: "https://arxiv.org/abs/2409.08036"
 bibtexurl: "https://arxiv.org/bibtex/2409.08036"
-citation: 'Braithwaite, L.; Borgi, A.; Onorato, G.; Tarantelli, K.; Restuccia, F.; Silvestri, F.; Liò, P. (2024). "Heterogeneous Sheaf Neural Networks." <i>arXiv:2409.08036</i>.'
+citation: 'Braithwaite, L.; Borgi, A.; Onorato, G.; Tarantelli, K.; Restuccia, F.; Silvestri, F.; Liò, P. (2026). "Heterogeneous Sheaf Neural Networks." <i>NeurIPS 2026 Workshop on Symmetry and Geometry in Neural Representations (NeurReps)</i>. arXiv:2409.08036.'
 webpageurl: "/publications/2024-09-12-heterogeneous-sheaf-neural-networks/"
 blogurl: "/blog/sheaf/hetsheaf-paper/"
 ---
@@ -26,5 +26,6 @@ We introduce **HetSheaf**, a framework that uses cellular sheaves to handle hete
 
 ## Resources
 
+- 🏛️ **Venue:** NeurIPS 2026 Workshop on Symmetry and Geometry in Neural Representations (NeurReps)
 - 📄 **ArXiv:** [https://arxiv.org/abs/2409.08036](https://arxiv.org/abs/2409.08036)
 - 🧾 **BibTeX:** [https://arxiv.org/bibtex/2409.08036](https://arxiv.org/bibtex/2409.08036)
