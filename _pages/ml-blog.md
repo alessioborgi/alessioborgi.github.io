@@ -339,6 +339,7 @@ author_profile: true
 {% assign genai_posts       = site.posts | where: "book", "generative-ai"         | sort: "date" %}
 {% assign diffusion_posts   = site.posts | where: "book", "diffusion"             | sort: "date" %}
 {% assign gdl_posts         = site.posts | where: "book", "gdl"                   | sort: "date" %}
+{% assign cyber_posts       = site.posts | where: "book", "cybersecurity"         | sort: "date" %}
 {% assign mathb_posts       = site.posts | where: "book", "math-basics"           | sort: "date" %}
 {% assign statsb_posts      = site.posts | where: "book", "stats-basics"          | sort: "date" %}
 {% assign probb_posts       = site.posts | where: "book", "prob-basics"           | sort: "date" %}
@@ -1370,6 +1371,57 @@ author_profile: true
     {% for grp in gdl_groups %}
       {% assign parts = grp | split: "|" %}
       {% assign items = gdl_posts | where: "subsection", parts[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+          <a class="chapter-card" href="{{ post.url | relative_url }}">
+            <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+            <div class="ch-meta">
+              <span class="ch-time">⏱ {{ post.read_mins | default: "5" }} min</span>
+              {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+            </div>
+          </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  BOOK IX · CYBERSECURITY                                  -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book" data-book="cybersecurity">
+  <div class="book-banner">
+    <span class="book-icon">🛡️</span>
+    <div>
+      <h2>Book IX, Cybersecurity</h2>
+      <p>Machine learning for software security: program graphs, vulnerability intelligence, and securing code that AI wrote</p>
+    </div>
+  </div>
+  <div class="book-body">
+
+    {% assign cyber_overview = cyber_posts | where_exp: "p", "p.is_overview" | first %}
+    {% if cyber_overview %}
+    <a class="blog-overview-card" href="{{ cyber_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ cyber_overview.title }}</h3>
+      <p>{{ cyber_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ cyber_overview.read_mins | default: "5" }} min read</span>
+        <span>Where machine learning meets software security</span>
+      </div>
+    </a>
+    {% endif %}
+
+    {% assign cyber_groups = "program-security|Program &amp; Code Security|🕸️" | split: "," %}
+    {% for grp in cyber_groups %}
+      {% assign parts = grp | split: "|" %}
+      {% assign items = cyber_posts | where: "subsection", parts[0] %}
       {% if items.size > 0 %}
       <div class="subsection-label" data-section="{{ parts[0] }}">{{ parts[2] }} {{ parts[1] }}</div>
       <div class="chapters-grid">

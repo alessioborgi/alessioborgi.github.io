@@ -244,7 +244,6 @@ gnn:
         - { slug: "2024-05-25-gnns-knowledge-graphs",    title: "GNNs for Knowledge Graphs: Reasoning and Completion",                 published: online }
         - { slug: "2024-05-26-gnns-robotics",            title: "GNNs for Robotics: Planning, Manipulation, and Multi-Agent Systems",  published: online }
         - { slug: "2024-05-27-gnns-computer-vision",     title: "GNNs for Computer Vision: Scene Graphs and Beyond",                  published: online }
-        - { slug: "2026-10-02-program-graph-vulnerability-survey", title: "Program Graphs for Software Vulnerability Analysis: A Survey (Yu, Wang, Li et al., 2026)", published: online }
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -624,6 +623,22 @@ gdl:
       label: "Hardware & Scaling"
       posts:
         - { slug: "2026-08-04-the-hardware-lottery", title: "The Hardware Lottery: Why the Dense Version Won", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# BOOK IX: CYBERSECURITY
+# ──────────────────────────────────────────────────────────────────────────
+cybersecurity:
+  label: "Book IX: Cybersecurity"
+  icon:  "🛡️"
+  color: "#b91c1c"
+
+  sections:
+
+    program-security:
+      label: "Program & Code Security"
+      posts:
+        - { slug: "2026-10-02-program-graph-vulnerability-survey", title: "Program Graphs for Software Vulnerability Analysis: A Survey (Yu, Wang, Li et al., 2026)", published: online }
 
 
 # ──────────────────────────────────────────────────────────────────────────
