@@ -394,6 +394,9 @@ author_profile: true
 
 {% assign t_overview  = transformer_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign t_core      = transformer_posts | where: "subsection", "core" %}
+{% comment %} Cross-listed from Book III: Top-A is an attention paper as much as a sheaf one. {% endcomment %}
+{% assign topa_cross  = site.posts | where: "slug", "topological-attention" | first %}
+{% if topa_cross %}{% assign t_core = t_core | push: topa_cross %}{% endif %}
 {% assign t_pe        = transformer_posts | where: "subsection", "positional-encodings" %}
 {% assign t_variants  = transformer_posts | where: "subsection", "variants" %}
 {% assign t_vision    = transformer_posts | where: "subsection", "vision" %}
@@ -1772,7 +1775,9 @@ document.addEventListener('DOMContentLoaded', function () {
     '2025-12-02-polynsd-paper',
     '2024-09-12-hetsheaf-paper',
     '2025-06-26-sheafpool',
-    '2026-09-01-equivariant-sheaf-neural-networks'
+    '2026-09-01-equivariant-sheaf-neural-networks',
+    '2026-10-01-topological-attention',
+    '2026-10-02-program-graph-vulnerability-survey'
   ];
   var mlBlogPosts = [
     {% for p in site.posts %}
