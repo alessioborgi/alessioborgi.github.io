@@ -1777,6 +1777,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '2025-06-26-sheafpool',
     '2026-09-01-equivariant-sheaf-neural-networks',
     '2026-10-01-topological-attention',
+    '2026-10-09-onda-paper',
     '2026-10-02-program-graph-vulnerability-survey'
   ];
   var mlBlogPosts = [
