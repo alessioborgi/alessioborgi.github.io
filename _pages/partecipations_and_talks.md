@@ -212,6 +212,63 @@ author_profile: true
 </style>
 
 <!-- ═══════════════════════════════════════════════════════
+     CONFERENCES
+     ═══════════════════════════════════════════════════════ -->
+<div class="pt-section">
+  <div class="pt-section__hd">
+    <span class="pt-bar"></span>
+    Conferences Attended
+  </div>
+  <div class="pt-section__body">
+    <div class="pt-timeline">
+
+      <!-- Erlangen Hub Conference 2026 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--purple"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--purple">September 2026</div>
+          <div class="pt-title"><a href="https://erlangenhub.ox.ac.uk/event/the-erlangen-hub-conference-2026/" target="_blank" rel="noopener">Mathematical Foundations of AI: The Erlangen Hub Conference 2026</a></div>
+          <div class="pt-org">🇬🇧 Oxford, United Kingdom &nbsp;·&nbsp; Erlangen AI Hub, University of Oxford</div>
+          <div class="pt-body">
+            <p>Participated in the Erlangen Hub Conference, held from <strong>September 1–3, 2026</strong> at the Mathematical Institute, University of Oxford, bringing together researchers in the mathematical foundations of artificial intelligence.</p>
+            <p>Presented the posters <strong>Equivariant Sheaf Neural Networks: Learning Geometric Transport on Graphs</strong> and <strong>TOPological Attention: Edge-conditioned Cross-Head Routing on Graphs</strong>.</p>
+          </div>
+          <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/Erlangen_Hub_2026/ESNN_Poster_Oxford.pdf" target="_blank" rel="noopener">🪧 View ESNN Poster</a>
+            <a class="pt-link-btn" href="/files/Erlangen_Hub_2026/TOPA_Poster_Oxford.pdf" target="_blank" rel="noopener">🪧 View TOPA Poster</a>
+            <span class="pt-badge--purple pt-badge">Erlangen Hub 2026</span>
+            <span class="pt-badge">Poster Presentations</span>
+            <span class="pt-badge--blue pt-badge">Mathematical Foundations of AI</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CVPR 2025 -->
+      <div class="pt-item">
+        <div class="pt-dot pt-dot--purple"><span></span></div>
+        <div class="pt-content">
+          <div class="pt-period pt-period--purple">June 2025</div>
+          <div class="pt-title"><a href="https://cvpr.thecvf.com/Conferences/2025" target="_blank" rel="noopener">CVPR 2025, IEEE/CVF Conference on Computer Vision and Pattern Recognition</a></div>
+          <div class="pt-org">🇺🇸 Nashville, Tennessee, United States &nbsp;·&nbsp; Music City Center</div>
+          <div class="pt-body">
+            <p>Attended <strong>CVPR 2025</strong>, one of the leading international conferences in computer vision and machine learning.</p>
+            <p>Presented the paper <strong>Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation</strong> at the <strong>CVEU Workshop</strong> held in conjunction with CVPR 2025.</p>
+          </div>
+          <div class="pt-badges">
+            <a class="pt-link-btn" href="/files/CVPR_2025/Z-SASLM_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
+            <a class="pt-link-btn" href="/blog/research/zsaslm-paper/">📘 Read the ML Blog Companion</a>
+            <span class="pt-badge--purple pt-badge">CVPR 2025</span>
+            <span class="pt-badge--blue pt-badge">CVEU Workshop</span>
+            <span class="pt-badge">Paper Presentation</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
      SCHOOLS & COURSES
      ═══════════════════════════════════════════════════════ -->
 <div class="pt-section">
@@ -482,63 +539,6 @@ author_profile: true
             <span class="pt-badge--blue pt-badge">Google Cloud</span>
             <span class="pt-badge">MLOps</span>
             <span class="pt-badge--blue pt-badge">Responsible AI</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     CONFERENCES
-     ═══════════════════════════════════════════════════════ -->
-<div class="pt-section">
-  <div class="pt-section__hd">
-    <span class="pt-bar"></span>
-    Conferences Attended
-  </div>
-  <div class="pt-section__body">
-    <div class="pt-timeline">
-
-      <!-- Erlangen Hub Conference 2026 -->
-      <div class="pt-item">
-        <div class="pt-dot pt-dot--purple"><span></span></div>
-        <div class="pt-content">
-          <div class="pt-period pt-period--purple">September 2026</div>
-          <div class="pt-title"><a href="https://erlangenhub.ox.ac.uk/event/the-erlangen-hub-conference-2026/" target="_blank" rel="noopener">Mathematical Foundations of AI: The Erlangen Hub Conference 2026</a></div>
-          <div class="pt-org">🇬🇧 Oxford, United Kingdom &nbsp;·&nbsp; Erlangen AI Hub, University of Oxford</div>
-          <div class="pt-body">
-            <p>Participated in the Erlangen Hub Conference, held from <strong>September 1–3, 2026</strong> at the Mathematical Institute, University of Oxford, bringing together researchers in the mathematical foundations of artificial intelligence.</p>
-            <p>Presented the posters <strong>Equivariant Sheaf Neural Networks: Learning Geometric Transport on Graphs</strong> and <strong>TOPological Attention: Edge-conditioned Cross-Head Routing on Graphs</strong>.</p>
-          </div>
-          <div class="pt-badges">
-            <a class="pt-link-btn" href="/files/Erlangen_Hub_2026/ESNN_Poster_Oxford.pdf" target="_blank" rel="noopener">🪧 View ESNN Poster</a>
-            <a class="pt-link-btn" href="/files/Erlangen_Hub_2026/TOPA_Poster_Oxford.pdf" target="_blank" rel="noopener">🪧 View TOPA Poster</a>
-            <span class="pt-badge--purple pt-badge">Erlangen Hub 2026</span>
-            <span class="pt-badge">Poster Presentations</span>
-            <span class="pt-badge--blue pt-badge">Mathematical Foundations of AI</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- CVPR 2025 -->
-      <div class="pt-item">
-        <div class="pt-dot pt-dot--purple"><span></span></div>
-        <div class="pt-content">
-          <div class="pt-period pt-period--purple">June 2025</div>
-          <div class="pt-title"><a href="https://cvpr.thecvf.com/Conferences/2025" target="_blank" rel="noopener">CVPR 2025, IEEE/CVF Conference on Computer Vision and Pattern Recognition</a></div>
-          <div class="pt-org">🇺🇸 Nashville, Tennessee, United States &nbsp;·&nbsp; Music City Center</div>
-          <div class="pt-body">
-            <p>Attended <strong>CVPR 2025</strong>, one of the leading international conferences in computer vision and machine learning.</p>
-            <p>Presented the paper <strong>Z-SASLM: Zero-Shot Style-Aligned SLI Blending Latent Manipulation</strong> at the <strong>CVEU Workshop</strong> held in conjunction with CVPR 2025.</p>
-          </div>
-          <div class="pt-badges">
-            <a class="pt-link-btn" href="/files/CVPR_2025/Z-SASLM_Poster.pdf" target="_blank" rel="noopener">🪧 View Poster</a>
-            <a class="pt-link-btn" href="/blog/research/zsaslm-paper/">📘 Read the ML Blog Companion</a>
-            <span class="pt-badge--purple pt-badge">CVPR 2025</span>
-            <span class="pt-badge--blue pt-badge">CVEU Workshop</span>
-            <span class="pt-badge">Paper Presentation</span>
           </div>
         </div>
       </div>
