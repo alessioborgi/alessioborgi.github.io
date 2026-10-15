@@ -1,138 +1,101 @@
 ---
 layout: single
-title: "Robot Sensors: Cameras, LiDAR, and IMUs"
-categories: [robotics]
+title: 'Robot Sensing: Measurements, Noise, and State Estimates'
+categories:
+- robotics
 book: robotics
 subsection: foundations
-tags: [sensors, cameras, lidar, imu, sensor-fusion, pointcloud]
-published: false
-excerpt: "Modern robots fuse data from cameras, LiDAR, and IMUs to perceive their environment, understanding sensor noise models and calibration is essential for reliable robot perception."
+tags:
+- sensors
+- state-estimation
+- uncertainty
+- foundations
+published: true
+excerpt: Understand what encoders, cameras, LiDAR, and IMUs measure, then combine two uncertain estimates in a small scalar example.
 author_profile: true
 read_time: true
 is_overview: false
-icon: "👁️"
-read_mins: 6
+icon: 👁️
+read_mins: 4
 permalink: /blog/robotics/sensors-perception/
 toc: true
-toc_label: "Contents"
+toc_label: Contents
+last_modified_at: '2026-10-15'
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.paper-box strong { color: #7c3aed; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> No single sensor is sufficient for robust robot perception. Cameras provide rich texture but lack depth; LiDAR provides precise 3D geometry but is expensive and sparse; IMUs measure motion at high frequency but drift over time. Sensor fusion, particularly Kalman filtering, combines their complementary strengths. Point cloud processing networks like PointNet enable direct learning on 3D data.</div>
-{% include figure image_path="/images/blog/robotics/qi2017_pointnet.png" alt="PointNet for robot perception" caption="PointNet: deep learning on 3D point clouds for robot perception (Qi et al., 2017)" %}
+<div class="tldr-box"><strong>TL;DR:</strong> Sensors provide measurements, not a complete physical state. State estimation combines measurements with a motion model and uncertainty assumptions. Calibration, coordinate frames, and timestamps determine whether the quantities being combined are actually comparable.</div>
 
+## Different sensors answer different questions
 
-## Sensor Modalities
+**Intuition first.** An arm's encoders report joint positions, but they do not directly say whether a cup has slipped. A camera may reveal the cup's position while missing an occluded contact. Combining sensors is useful when their information complements one another.
 
-**Intuition first.** No single sensor tells the whole story. A camera sees colour and texture but is blind to depth. LiDAR measures precise distances but captures no colour. An IMU feels every vibration but drifts badly over time. Fusion is not a luxury, it is the only way to build a reliable picture of the world.
+| Sensor | Typical measurement | A limitation to remember |
+|---|---|---|
+| Joint encoder | Joint position or rotation | Does not directly locate external objects |
+| Camera | Image intensity and colour | Occlusion and projection hide information |
+| LiDAR | Range along measured rays | Range data still needs a frame and association |
+| IMU | Angular rate and specific force | Bias and integration can cause drift |
+| Force/torque sensor | Load at the sensor | Interpretation depends on mounting and contact |
 
-<style>
-@keyframes lidar-sweep {
-  0%   { transform: rotate(-80deg); opacity: 0.9; }
-  100% { transform: rotate(80deg);  opacity: 0.9; }
-}
-@keyframes beam-fade { 0%,100%{opacity:.1} 50%{opacity:.7} }
-.lidar-beam { animation: beam-fade 0.4s ease-in-out infinite; }
-.lidar-ray  { transform-origin: 170px 120px; animation: lidar-sweep 2s ease-in-out infinite alternate; }
-</style>
+An accelerometer measures specific force; recovering world-frame acceleration requires accounting for orientation and gravity. Merely integrating its raw readings twice is not a general position estimator.
+
+## Prediction and correction
+
+A motion model predicts a state estimate forward. A new measurement supplies evidence for a correction. In a scalar linear example with measurement $$z=x+v$$ and zero-mean noise, let $$\hat x^-$$ be the prior estimate, $$P^-$$ its error variance, and $$R$$ the measurement-noise variance. The Kalman update is
+
+<div class="formula-box">
+\[
+\begin{aligned}
+K&=\frac{P^-}{P^-+R},\\
+\hat x^+&=\hat x^-+K(z-\hat x^-),\\
+P^+&=(1-K)P^-.
+\end{aligned}
+\]
+</div>
+
+These expressions assume the prior error and measurement noise are uncorrelated, with the stated linear measurement model. Gaussian assumptions make the update an exact posterior mean and variance. [Kalman-filter course notes](https://www.cs.cornell.edu/courses/cs4758/2012sp/materials/kalman_notes.pdf).
+
 <div class="blog-figure"><figure>
-<svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;display:block;margin:auto;">
-  <!-- Ground / obstacles -->
-  <rect x="0" y="155" width="340" height="45" fill="#f3f4f6"/>
-  <rect x="60"  y="110" width="30" height="45" fill="#d1d5db" rx="3"/>
-  <rect x="220" y="95"  width="40" height="60" fill="#d1d5db" rx="3"/>
-  <rect x="130" y="125" width="25" height="30" fill="#d1d5db" rx="3"/>
-  <!-- LiDAR unit -->
-  <circle cx="170" cy="120" r="12" fill="#0d9488"/>
-  <text x="170" y="145" text-anchor="middle" fill="#0d9488" font-size="9">LiDAR</text>
-  <!-- Rotating sweep beam -->
-  <g class="lidar-ray">
-    <line x1="170" y1="120" x2="170" y2="35" stroke="#0d9488" stroke-width="1.5" opacity="0.7"/>
-    <!-- Reflection dots along beam -->
-    <circle cx="170" cy="65"  r="3" fill="#f97316" class="lidar-beam"/>
-    <circle cx="170" cy="80"  r="3" fill="#f97316" class="lidar-beam" style="animation-delay:0.1s"/>
-    <circle cx="170" cy="95"  r="3" fill="#f97316" class="lidar-beam" style="animation-delay:0.2s"/>
-  </g>
-  <!-- FOV arc -->
-  <path d="M 100 120 A 70 70 0 0 1 240 120" fill="none" stroke="#0d9488" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
-  <!-- Camera FOV cone -->
-  <polygon points="270,60 310,30 340,60 310,90" fill="#7c3aed" opacity="0.15"/>
-  <rect x="300" y="52" width="20" height="16" rx="2" fill="#7c3aed"/>
-  <text x="310" y="100" text-anchor="middle" fill="#7c3aed" font-size="9">Camera</text>
-  <text x="310" y="110" text-anchor="middle" fill="#7c3aed" font-size="8">FOV ~60°</text>
-  <!-- IMU -->
-  <rect x="10" y="60" width="28" height="22" rx="3" fill="#f59e0b"/>
-  <text x="24" y="73" text-anchor="middle" fill="white" font-size="8" font-weight="bold">IMU</text>
-  <text x="24" y="98" text-anchor="middle" fill="#f59e0b" font-size="8">100–1000 Hz</text>
-  <!-- Labels -->
-  <text x="170" y="18" text-anchor="middle" fill="#374151" font-size="10" font-weight="bold">Multi-Sensor Robot Perception</text>
+<svg role="img" aria-labelledby="sensor-fusion-title sensor-fusion-desc" viewBox="0 0 640 135" style="width:100%;max-width:640px;height:auto">
+<title id="sensor-fusion-title">Combine a prediction with a measurement</title>
+<desc id="sensor-fusion-desc">The residual compares the measurement with its prediction. Uncertainty controls how much of that residual changes the estimate.</desc>
+<rect width="640" height="135" rx="10" fill="#f8fafc"/>
+<g font-family="sans-serif" font-size="17" fill="#334155"><rect x="20" y="35" width="180" height="65" rx="8" fill="#ccfbf1"/><text x="110" y="73" text-anchor="middle">Prior estimate</text><path d="M204 67 H224 M218 61 L224 67 L218 73" fill="none" stroke="#64748b" stroke-width="2"/><rect x="230" y="35" width="180" height="65" rx="8" fill="#dbeafe"/><text x="320" y="73" text-anchor="middle">Measurement residual</text><path d="M414 67 H434 M428 61 L434 67 L428 73" fill="none" stroke="#64748b" stroke-width="2"/><rect x="440" y="35" width="180" height="65" rx="8" fill="#ede9fe"/><text x="530" y="73" text-anchor="middle">Corrected estimate</text></g>
 </svg>
-<figcaption>LiDAR sweeps across the scene (teal beam, orange return points). The camera covers a narrow forward FOV (purple cone). The IMU (amber box) measures motion at high frequency. Each sensor has complementary strengths.</figcaption>
+<figcaption>The residual compares the measurement with its prediction. Uncertainty controls how much of that residual changes the estimate.</figcaption>
 </figure></div>
 
-**RGB cameras** are the most widely deployed sensor in robotics. They capture rich texture and color information at low cost. However, they are projective sensors, depth information is lost in the 2D image plane. Stereo cameras recover depth via triangulation but require careful calibration and struggle with textureless regions.
+## Worked example: uncertainty determines the weight
 
-**RGB-D cameras** (e.g., Intel RealSense, Microsoft Kinect) add per-pixel depth using structured light or time-of-flight. They provide a registered color-depth image pair, enabling direct 3D reconstruction at short range (0.2–4 m). At longer ranges or in outdoor bright light, structured light degrades.
+Suppose the predicted position is $$\hat x^-=1.0$$ metre with variance $$P^-=0.04\;\mathrm{m}^2$$. A sensor reports $$z=1.3$$ metres with noise variance $$R=0.09\;\mathrm{m}^2$$. Then
 
-**LiDAR (Light Detection and Ranging)** emits laser pulses and measures time-of-flight to reconstruct precise 3D point clouds. A Velodyne HDL-64E generates 1.3 million points per second with centimetre-level accuracy and 360° horizontal field of view. LiDAR is robust to lighting conditions and long-range, but expensive and sparse, objects have far fewer LiDAR points than image pixels.
-
-**Inertial Measurement Units (IMUs)** combine accelerometers and gyroscopes to measure linear acceleration and angular velocity at 100–1000 Hz. IMUs are lightweight, cheap, and fast, but suffer from integration drift. A small bias in the accelerometer grows to significant position error after a few seconds of dead-reckoning.
-
-**Force/torque sensors** at the wrist measure contact forces in 6-DOF (3 forces, 3 torques). They are essential for compliant manipulation, assembly tasks, and safe human-robot interaction.
-
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> Sensor comparison at a glance, <strong>Camera</strong>: rich colour/texture, cheap, no direct depth; <strong>LiDAR</strong>: precise 3D geometry, 360° FOV, expensive, lighting-robust; <strong>RGB-D</strong>: colour + depth, short range only; <strong>IMU</strong>: 100–1000 Hz motion, lightweight, drifts fast; <strong>Force/torque</strong>: contact quality, essential for assembly but adds weight and cost. Real robots almost always fuse at least two of these modalities.</div>
-
-## Calibration: Intrinsic and Extrinsic
-
-**Intrinsic calibration** determines the camera's internal parameters. The pinhole camera model projects a 3D point \(\mathbf{P}_w\) to image coordinates \(\mathbf{p}\) via the camera matrix \(K\):
-
-<div class="math-box">
-\(\mathbf{p} = K \begin{bmatrix} R \mid \mathbf{t} \end{bmatrix} \mathbf{P}_w, \quad K = \begin{pmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{pmatrix}\)
+<div class="formula-box">
+\[
+\begin{aligned}
+K&=0.04/(0.04+0.09)\approx0.3077,\\
+\hat x^+&=1.0+0.3077(0.3)\approx1.0923\;\mathrm m,\\
+P^+&\approx0.0277\;\mathrm{m}^2.
+\end{aligned}
+\]
 </div>
 
-where $$f_x, f_y$$ are focal lengths in pixels, $$(c_x, c_y)$$ is the principal point, and the extrinsic matrix $$[R \mid t]$$ maps world to camera coordinates. Lens distortion adds radial and tangential correction terms. Calibration uses checkerboard patterns (Zhang 2000) to solve for $$K$$ and distortion coefficients.
+The correction favours the prior because its stated variance is smaller. The posterior standard deviation is approximately $$\sqrt{0.0277}=0.1664$$ metres; variance and standard deviation have different units.
 
-**Extrinsic calibration** determines the rigid-body transform between sensor coordinate frames, e.g., the LiDAR-to-camera transform $$T_{LC} \in SE(3)$$. This is done by finding correspondences between 3D LiDAR points and 2D image points on a calibration target.
+If the measurement variance were 0.01 instead, the gain would be 0.8 and the estimate 1.24 metres. More confidence in the measurement leads to a larger correction.
 
-## Sensor Fusion: Kalman Filtering
+## The assumptions can fail before the arithmetic does
 
-The **Extended Kalman Filter (EKF)** is the standard tool for fusing IMU measurements with slower, noisier sensors (GPS, wheel odometry, vision). The filter maintains a Gaussian belief over robot state $$\mathbf{x}$$ (position, velocity, orientation):
+Suppose two estimates both reuse the same camera detection. Treating them as independent evidence can count the same information twice and produce excessive confidence. Likewise, an unknown constant sensor bias is not explained by a zero-mean noise model merely because a variance was supplied.
 
-<div class="math-box">
-Predict: \(\hat{\mathbf{x}}_{k|k-1} = f(\mathbf{x}_{k-1}), \quad P_{k|k-1} = F P_{k-1} F^T + Q\)
-<br><br>
-Update: \(K_k = P_{k|k-1} H^T (H P_{k|k-1} H^T + R)^{-1}\)
-<br>
-\(\mathbf{x}_k = \hat{\mathbf{x}}_{k|k-1} + K_k(z_k - h(\hat{\mathbf{x}}_{k|k-1}))\)
-</div>
+Timing matters too. At 0.5 metres per second, a 0.1-second delay corresponds to 0.05 metres of motion. Combining the old position with a current joint reading without alignment describes a scene that may never have existed.
 
-The IMU provides high-rate predictions (predict step); GPS or visual odometry provides corrections (update step). The complementary filter structure makes the combination robust: IMU covers high-frequency motion, external sensors correct low-frequency drift.
+Calibration supplies the mapping between sensor units and geometry. A correct estimator using a wrong camera-to-base transform can confidently report the wrong location. The [robot_localization sensor-data guide](https://github.com/cra-ros-pkg/robot_localization/blob/ros2/doc/preparing_sensor_data.rst) gives concrete examples of frame, sign, and covariance conventions.
 
-### EKF Fusion Worked Example
+<div class="insight-box"><strong>Key Insight:</strong> Sensor fusion improves an estimate when its models and uncertainty assumptions describe the evidence. More measurements do not automatically mean more independent or better information.</div>
 
-Suppose a robot is navigating at 1 m/s. Its IMU provides acceleration measurements at 200 Hz. After 1 second of pure dead-reckoning, a 0.01 m/s² accelerometer bias accumulates to **0.5 cm** position error, acceptable. After 10 seconds: **50 cm**. After 60 seconds: **18 m**. This is why GPS/visual corrections in the EKF update step are not optional; they reset drift before it compounds catastrophically.
-
-## Point Cloud Processing
-
-Raw LiDAR or RGBD data arrives as an **unordered point cloud** $$\mathcal{P} = \{p_i\}_{i=1}^N$$ where each $$p_i \in \mathbb{R}^3$$ (or $$\mathbb{R}^6$$ with normals). Standard 3D convolutions do not apply to irregular point clouds.
-
-**PointNet** (Qi et al. 2017) solves this with a permutation-invariant architecture: apply a shared MLP to each point independently, then aggregate with a global max-pool. Despite its simplicity, PointNet achieves strong results on 3D object classification and segmentation. **PointNet++** extends this with hierarchical local feature aggregation using ball queries, capturing local geometry at multiple scales.
-
-**VoxelNet** discretises the point cloud into a regular voxel grid and applies 3D convolutions, more computationally expensive but captures local density structure. Modern LiDAR detectors (CenterPoint, VoxelNeXt) combine voxelisation with sparse convolutions for efficient inference.
-
-<div class="insight-box"><strong>Key Insight:</strong> The move from hand-crafted sensor processing pipelines to learned representations (PointNet, learned stereo depth, learned IMU calibration) mirrors the broader trend in robotics: raw sensor data fed into neural networks outperforms carefully engineered feature extractors when sufficient training data is available.</div>
+Next, [feedback control](/blog/robotics/robot-control/) uses the estimate to correct motion. [Rapid motor adaptation](/blog/robotics/rapid-motor-adaptation/) learns information about hidden dynamics from recent interaction history.
 
 ## References
 
-1. Thrun, S., Burgard, W., & Fox, D. (2005). *Probabilistic Robotics*. MIT Press.
-2. Qi, C. R., Su, H., Mo, K., & Guibas, L. J. (2017). PointNet: Deep learning on point sets for 3D classification and segmentation. *CVPR*. arXiv:1612.00593.
-3. Zhang, Z. (2000). A flexible new technique for camera calibration. *IEEE TPAMI*, 22(11), 1330–1334.
+1. Welch, G., & Bishop, G. [An Introduction to the Kalman Filter: SIGGRAPH course notes](https://www.cs.cornell.edu/courses/cs4758/2012sp/materials/kalman_notes.pdf).
+2. robot_localization maintainers. [Preparing sensor data](https://github.com/cra-ros-pkg/robot_localization/blob/ros2/doc/preparing_sensor_data.rst).

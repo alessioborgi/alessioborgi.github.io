@@ -1,140 +1,101 @@
 ---
 layout: single
-title: "Robot Control: PID, Impedance, and Whole-Body Control"
-categories: [robotics]
+title: 'Robot Control Basics: Dynamics, Feedback, and Tracking Error'
+categories:
+- robotics
 book: robotics
 subsection: foundations
-tags: [control, PID, impedance-control, whole-body-control, MPC]
-published: false
-excerpt: "From PID position loops to impedance control and hierarchical whole-body control, robot controllers span a spectrum from simple reactive feedback to sophisticated model-based optimisation."
+tags:
+- control
+- dynamics
+- feedback
+- foundations
+published: true
+excerpt: Separate geometric motion from physical dynamics, calculate a simple proportional-derivative command, and understand how feedback connects to learned controllers.
 author_profile: true
 read_time: true
 is_overview: false
-icon: "⚡"
-read_mins: 5
+icon: ⚡
+read_mins: 4
 permalink: /blog/robotics/robot-control/
 toc: true
-toc_label: "Contents"
+toc_label: Contents
+last_modified_at: '2026-10-15'
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.paper-box strong { color: #7c3aed; }
-.blog-figure { margin: 1.5rem 0; text-align: center; }
-.blog-figure figcaption { font-size: .83rem; color: #6b7280; margin-top: .5rem; font-style: italic; }
-</style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> Robot control spans a hierarchy from low-level PID joint position loops (kHz) to high-level task-space controllers (100 Hz) to planning (1–10 Hz). Impedance control models the robot as a virtual spring-damper for compliant contact. Whole-body control uses quadratic programming to satisfy hierarchical task priorities. MPC optimises over a receding horizon for anticipatory behaviour.</div>
-{% include figure image_path="/images/blog/robotics/andrychowicz2019_dactyl.png" alt="Robot control for manipulation" caption="Learned robot control for dexterous manipulation (Andrychowicz et al., 2019)" %}
+<div class="tldr-box"><strong>TL;DR:</strong> Dynamics describes how forces and torques change motion. A feedback controller compares measured behaviour with a target and updates its commands. A learned policy must match the controller's action interface, units, and timing.</div>
 
+## Reaching a pose is also a physical problem
 
-## PID Control: The Universal Baseline
+**Intuition first.** The same joint-position target can produce different motion when an arm holds an empty gripper or a heavy object. Kinematics describes the target geometry. Dynamics accounts for inertia, gravity, and other forces along the way.
 
-**Intuition first.** Imagine trying to park a car by feel alone. The proportional term is how hard you steer based on how far off-centre you are. The derivative term is the instinct to ease off as you approach the target (avoiding overshoot). The integral term is the slow correction for a persistent lean caused by, say, a crosswind. PID captures exactly these three instincts in a single formula.
+A simplified rigid-joint robot equation is
 
-The **PID (Proportional-Integral-Derivative) controller** is the workhorse of industrial robot control. Given a position error \(e(t) = q_{\text{des}}(t) - q(t)\) between desired and actual joint angle, the control torque is:
-
-<div class="math-box">
-\(u(t) = K_p\, e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d\, \dot{e}(t)\)
+<div class="formula-box">
+\[
+M(q)\ddot q+C(q,\dot q)\dot q+g(q)
+=\tau+\tau_{\mathrm{ext}}.
+\]
 </div>
 
-- **Proportional** term: restoring force proportional to error. High $$K_p$$ gives fast response but can cause overshoot and oscillation.
-- **Integral** term: eliminates steady-state error by accumulating it over time. Can cause **integral windup** when the actuator saturates.
-- **Derivative** term: damping based on the rate of change of error. Reduces oscillation but amplifies sensor noise.
+Here $$M$$ is the inertia matrix, $$C\dot q$$ collects velocity-dependent terms, $$g$$ is gravity torque, $$\tau$$ is actuator torque, and $$\tau_{\mathrm{ext}}$$ represents external joint torques. Real systems may also need friction and actuator models. [Dynamics background](https://underactuated.mit.edu/intro.html).
 
-PID operates in **joint space**, one controller per joint. Cross-coupling between joints (due to inertia and Coriolis forces) is handled as a disturbance, which works for slow, light robots but breaks down for fast or heavy manipulation.
+## Feedback closes the loop
 
-Computed torque control (a model-based approach) adds the inverse dynamics $$M(\mathbf{q})\ddot{\mathbf{q}} + C(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q})$$ as a feedforward term, linearising and decoupling the system so that simple PID suffices in the error space.
+Let $$q_d$$ be the desired joint position and $$e=q_d-q$$ the tracking error. A proportional-derivative torque controller has the form
 
-### PID Tuning: What Goes Wrong
+<div class="formula-box">
+\[
+\tau=K_p(q_d-q)+K_d(\dot q_d-\dot q).
+\]
+</div>
 
-| Setting | Effect | Failure Mode |
-|---------|--------|--------------|
-| High K_p | Fast response | Oscillation / instability |
-| High K_i | Eliminates steady-state error | Integral windup on saturation |
-| High K_d | Damps oscillation | Amplifies sensor noise |
+The position term reacts to displacement error; the velocity term can provide damping. A PID controller adds an accumulated-error term. Integral action can remove some persistent offsets, but needs care when commands saturate because the integral can keep growing.
 
-A practical rule of thumb: tune K_p until you see oscillation, then halve it; add K_d to kill the oscillation; add K_i last and only as much as needed to eliminate steady-state error.
+The [Modern Robotics control introduction](https://modernrobotics.northwestern.edu/nu-gm-book-resource/11-1-control-system-overview/) distinguishes motion, force, and impedance objectives. Tracking position is only one possible control task.
 
-<style>
-@keyframes pid-track {
-  0%   { cx: 30px;  cy: 100px; }
-  25%  { cx: 120px; cy: 40px; }
-  50%  { cx: 210px; cy: 70px; }
-  75%  { cx: 300px; cy: 65px; }
-  100% { cx: 390px; cy: 65px; }
-}
-@keyframes pid-setpoint { 0%,100%{opacity:.5} 50%{opacity:1} }
-.pid-dot { animation: pid-track 4s ease-in-out infinite; }
-.pid-setpoint { animation: pid-setpoint 2s ease-in-out infinite; }
-</style>
 <div class="blog-figure"><figure>
-<svg viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:auto;">
-  <!-- Axes -->
-  <line x1="20" y1="130" x2="410" y2="130" stroke="#9ca3af" stroke-width="1.5"/>
-  <line x1="20" y1="10"  x2="20"  y2="130" stroke="#9ca3af" stroke-width="1.5"/>
-  <text x="415" y="133" fill="#6b7280" font-size="9">t</text>
-  <text x="5"   y="14"  fill="#6b7280" font-size="9">q</text>
-  <!-- Setpoint line -->
-  <line x1="20" y1="65" x2="410" y2="65" stroke="#f97316" stroke-width="1" stroke-dasharray="5,4" class="pid-setpoint"/>
-  <text x="380" y="60" fill="#f97316" font-size="8">setpoint</text>
-  <!-- P-only response (oscillates) -->
-  <polyline points="20,130 60,30 110,95 160,45 210,80 260,60 310,72 360,66 410,65"
-            fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.7"/>
-  <text x="65" y="22" fill="#ef4444" font-size="8">P-only (oscillates)</text>
-  <!-- PID response (converges smoothly) -->
-  <polyline points="20,130 80,42 150,60 220,63 290,65 360,65 410,65"
-            fill="none" stroke="#0d9488" stroke-width="2"/>
-  <text x="220" y="55" fill="#0d9488" font-size="8">PID (converges)</text>
-  <!-- Tracking dot -->
-  <circle r="5" fill="#0d9488" class="pid-dot"/>
+<svg role="img" aria-labelledby="feedback-control-title feedback-control-desc" viewBox="0 0 640 135" style="width:100%;max-width:640px;height:auto">
+<title id="feedback-control-title">Feedback turns tracking error into a command</title>
+<desc id="feedback-control-desc">The measured motion returns to the comparison at the next update. A disturbance changes what must be corrected.</desc>
+<rect width="640" height="135" rx="10" fill="#f8fafc"/>
+<g font-family="sans-serif" font-size="17" fill="#334155"><rect x="20" y="35" width="180" height="65" rx="8" fill="#ccfbf1"/><text x="110" y="73" text-anchor="middle">Target minus estimate</text><path d="M204 67 H224 M218 61 L224 67 L218 73" fill="none" stroke="#64748b" stroke-width="2"/><rect x="230" y="35" width="180" height="65" rx="8" fill="#dbeafe"/><text x="320" y="73" text-anchor="middle">Controller command</text><path d="M414 67 H434 M428 61 L434 67 L428 73" fill="none" stroke="#64748b" stroke-width="2"/><rect x="440" y="35" width="180" height="65" rx="8" fill="#ede9fe"/><text x="530" y="73" text-anchor="middle">Measured motion</text></g>
 </svg>
-<figcaption>P-only control (red) oscillates around the setpoint. Adding D damping and I correction (teal) drives the joint smoothly to the target angle.</figcaption>
+<figcaption>The measured motion returns to the comparison at the next update. A disturbance changes what must be corrected.</figcaption>
 </figure></div>
 
-## Impedance Control: Compliant Interaction
+## Worked example: a single-joint command
 
-Classic position control is unsuitable for contact-rich tasks: if the robot pushes against a rigid wall, position error accumulates and torques spike. **Impedance control** (Hogan 1985) models the robot end-effector as a **virtual spring-damper system**:
+Take a stationary target $$q_d=1.0$$ radian, current position $$q=0.8$$ radians, and velocity $$\dot q=0.1$$ radians per second. Let $$K_p=10\;\mathrm{N\,m/rad}$$ and $$K_d=2\;\mathrm{N\,m\,s/rad}$$. Then
 
-<div class="math-box">
-\(F = K(x_d - x) + D(\dot{x}_d - \dot{x}) + M_d(\ddot{x}_d - \ddot{x})\)
+<div class="formula-box">
+\[
+\tau=10(1.0-0.8)+2(0-0.1)
+=1.8\;\mathrm{N\,m}.
+\]
 </div>
 
-where $$K$$ is the stiffness matrix, $$D$$ is the damping matrix, and $$M_d$$ is the desired inertia. In operational space, the controller applies forces $$F$$ to drive the end-effector toward $$x_d$$ while yielding compliantly to external forces.
+The derivative term reduces the torque because the joint is already moving towards the target. If the velocity instead were $$-0.1$$ radians per second, the command would be 2.2 newton-metres.
 
-**Admittance control** is the dual formulation: given measured forces, compute position corrections. This is preferred when the robot is stiff (high gear-ratio motors) and force control is not directly possible via joint torques.
+These numbers illustrate the law, not gains validated for a particular robot. Whether the joint accelerates as desired also depends on gravity, inertia, disturbances, and actuator limits.
 
-Impedance control is essential for assembly tasks (peg-in-hole, screwing), human-robot interaction, and legged locomotion (contact with uncertain terrain).
+## Increasing a gain is not an unlimited improvement
 
-## Whole-Body Control
+A larger proportional gain can reduce position error in some regimes, but delay, sampling, noise, and unmodelled dynamics can produce oscillations. A torque limit also means the actual input may differ from the requested one. Analyse the controlled system, not the formula in isolation.
 
-Humanoids and legged robots have many degrees of freedom (28–50 DOF) and must simultaneously satisfy multiple objectives: balance, end-effector task, joint limit avoidance, and contact force constraints. **Whole-body control (WBC)** formulates these as a **hierarchical quadratic program (QP)**:
+For contact tasks, an impedance objective specifies a relationship between displacement and force, like a virtual spring and damper. It can permit compliant interaction instead of insisting on an exact position against a rigid surface. The appropriate objective depends on the task and available sensing.
 
-<div class="math-box">
-\(\min_{\ddot{\mathbf{q}}, \mathbf{f}} \;\|\text{Task}_1\|^2 + \epsilon\|\text{Task}_2\|^2 \quad \text{s.t.} \quad A\mathbf{x} \leq \mathbf{b}\)
-</div>
+## Where learning connects
 
-Higher-priority tasks (balance) are solved exactly; lower-priority tasks (reaching) are solved in the null space of higher-priority constraints. The QP is solved in real time (1 kHz) using efficient active-set solvers. WBC was instrumental in enabling Atlas (Boston Dynamics) to perform dynamic manipulation and parkour.
+A policy may output position targets tracked by a lower-level controller. Another policy may output torque directly. Those systems have different responsibilities even when both are described as “end-to-end robot learning.”
 
-## Learning Residual Controllers and MPC
+[Residual RL](/blog/robotics/residual-reinforcement-learning/) learns corrections to a baseline controller. [Learned MPC](/blog/robotics/learned-model-predictive-control/) predicts candidate futures and replans. Both still rely on measurements and an explicit command interface.
 
-**Residual learning** augments a model-based controller with a learned correction: $$u = u_{\text{model-based}} + f_\theta(s)$$. The neural network learns only the modelling error, making training more data-efficient and the combined controller safer.
+<div class="insight-box"><strong>Key Insight:</strong> A desired action and an achieved motion are different objects. Feedback supplies the correction between them; dynamics determines how that correction affects the physical system.</div>
 
-**Model Predictive Control (MPC)** optimises a sequence of actions over a finite horizon $$H$$:
-
-<div class="math-box">
-\(\min_{u_{0:H-1}} \sum_{t=0}^{H-1} \ell(x_t, u_t) + \ell_f(x_H) \quad \text{s.t.} \quad x_{t+1} = f(x_t, u_t)\)
-</div>
-
-Only the first action is executed; the optimisation repeats at the next timestep (receding horizon). MPC naturally handles constraints (joint limits, contact forces) and provides anticipatory behaviour. **MPPI (Model Predictive Path Integral)** solves this via sampling: thousands of random trajectories are simulated, weighted by their costs, and combined via importance sampling, amenable to GPU parallelisation.
-
-<div class="insight-box"><strong>Key Insight:</strong> The trend in robot control is hybrid: model-based controllers provide stability and safety guarantees, while learned components handle unmodelled dynamics and task-specific adaptation. This "model-based + learned residual" paradigm combines the best of both worlds, interpretability and data efficiency.</div>
+Continue with [robot-learning basics](/blog/robotics/robot-learning-basics/) to compare the signals used to train a policy.
 
 ## References
 
-1. Hogan, N. (1985). Impedance control: An approach to manipulation. *ASME Journal of Dynamic Systems, Measurement and Control*, 107(1), 1–24.
-2. De Luca, A., & Oriolo, G. (1995). Modelling and control of nonholonomic mechanical systems. In *Kinematics and Dynamics of Multi-Body Systems*. Springer.
-3. Wensing, P. M., & Orin, D. E. (2013). Generation of dynamic humanoid behaviors through task-space control with conic optimization. *ICRA*.
+1. Lynch, K. M., & Park, F. C. [Modern Robotics: Control System Overview](https://modernrobotics.northwestern.edu/nu-gm-book-resource/11-1-control-system-overview/).
+2. Tedrake, R. [Underactuated Robotics: Introduction](https://underactuated.mit.edu/intro.html).

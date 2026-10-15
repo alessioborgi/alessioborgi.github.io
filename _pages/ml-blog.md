@@ -1027,8 +1027,8 @@ author_profile: true
       <h3>{{ rl_overview.title }}</h3>
       <p>{{ rl_overview.excerpt | strip_html | truncate: 210 }}</p>
       <div class="blog-meta">
-        <span class="blog-read-badge">📖 5 min read</span>
-        <span>The complete picture in one post</span>
+        <span class="blog-read-badge">📖 {{ rl_overview.read_mins | default: "4" }} min read</span>
+        <span>Start with the basics, then explore the papers</span>
       </div>
     </a>
     {% endif %}
@@ -1159,8 +1159,8 @@ author_profile: true
       <h3>{{ rob_overview.title }}</h3>
       <p>{{ rob_overview.excerpt | strip_html | truncate: 210 }}</p>
       <div class="blog-meta">
-        <span class="blog-read-badge">📖 5 min read</span>
-        <span>The complete picture in one post</span>
+        <span class="blog-read-badge">📖 {{ rob_overview.read_mins | default: "4" }} min read</span>
+        <span>Start with the basics, then explore the papers</span>
       </div>
     </a>
     {% endif %}

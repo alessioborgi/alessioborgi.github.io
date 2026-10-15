@@ -1,139 +1,109 @@
 ---
 layout: single
-title: "Temporal Difference Learning: Bootstrapping from Experience"
-categories: [rl]
+title: 'Temporal-Difference Learning: Update a Value from One Transition'
+categories:
+- rl
 book: rl
 subsection: foundations
-tags: [temporal-difference, td-learning, bootstrapping, eligibility-traces, td-lambda]
-published: false
-excerpt: "Temporal Difference learning bridges dynamic programming and Monte Carlo methods by updating value estimates from incomplete experience using bootstrapped targets, enabling sample-efficient online learning."
+tags:
+- temporal-difference
+- bootstrapping
+- value-functions
+- foundations
+published: true
+excerpt: Learn the TD error with a numerical update, compare bootstrapping with full returns, and handle terminal states without confusing them with rollout cutoffs.
 author_profile: true
 read_time: true
 is_overview: false
-icon: "⏱️"
-read_mins: 6
+icon: ⏱️
+read_mins: 4
 permalink: /blog/rl/temporal-difference/
 toc: true
-toc_label: "Contents"
+toc_label: Contents
+last_modified_at: '2026-10-15'
 ---
-<style>
-.tldr-box { background: linear-gradient(145deg,#e8fbfb,#dbeafe); border-left: 4px solid #0d9488; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.tldr-box strong { color: #0d9488; }
-.insight-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.math-box { background: linear-gradient(145deg,#f8fafc,#f0f4f8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.4rem; margin: 1.25rem 0; font-family: monospace; text-align: center; }
-.paper-box { background: linear-gradient(145deg,#fdf4ff,#ede9fe); border-left: 4px solid #7c3aed; border-radius: 8px; padding: 1rem 1.2rem; margin: 1.25rem 0; }
-.paper-box strong { color: #7c3aed; }
-</style>
 
-<div class="tldr-box"><strong>TL;DR:</strong> TD learning updates value estimates after each step using a bootstrapped target, combining the model-free nature of Monte Carlo with the online efficiency of dynamic programming. The TD error δ = r + γV(s') - V(s) is the fundamental learning signal in Q-learning, actor-critic, and most deep RL algorithms.</div>
-{% include figure image_path="/images/blog/rl/mnih2016_a3c.png" alt="Temporal difference learning" caption="Temporal difference in asynchronous learning (Mnih et al., 2016)" %}
+<div class="tldr-box"><strong>TL;DR:</strong> TD learning updates a value estimate towards reward plus an estimated continuation value. It can learn before an episode finishes. Because its target includes another estimate, it bootstraps; terminal states and externally truncated rollouts need different treatment.</div>
 
+## Learn from a step before knowing the whole outcome
 
-## Intuition First: Bootstrapping as Grade Estimation
+**Intuition first.** You predicted that a route would yield return 4. After one step, you receive reward 1 and arrive somewhere currently valued at 5. With discount 0.9, that experience suggests a target of 5.5 for the earlier state.
 
-Imagine you are midway through a semester and want to estimate your final grade. Monte Carlo says: *wait until you get your final mark at the end of the semester, then use that exact number.* Dynamic programming says: *use the official grade book, which lists every assignment weight exactly.* Temporal Difference says: *estimate your final grade right now from your partial exam scores, update that estimate after each test, without waiting for the semester to end.* The partial estimate introduces a small bias (it is not the real final grade yet) but massively reduces the variance you would suffer from waiting for one noisy end-of-semester signal.
+For transitions collected under a fixed policy, tabular TD(0) uses
 
-## The DP–MC–TD Triangle
-
-Three approaches to policy evaluation form a triangle of trade-offs:
-
-| Method | Requires model? | Waits for episode? | Bias | Variance |
-|---|---|---|---|---|
-| Dynamic Programming | Yes | No | Low | Zero |
-| Monte Carlo | No | Yes | Zero | High |
-| Temporal Difference | No | No | Low | Low |
-
-**Monte Carlo** (MC) methods wait for the episode to end, then update using the actual return \(G_t = r_t + \gamma r_{t+1} + \cdots + \gamma^{T-t} r_T\). This is unbiased but has high variance because \(G_t\) is a long sum of random variables.
-
-**Temporal Difference** methods update after each step using an estimated return, the **TD target**: \(r_t + \gamma V(s_{t+1})\). This introduces some bias (\(V\) is not yet converged) but dramatically reduces variance.
-
-## TD(0): The Fundamental Update
-
-The simplest TD algorithm, **TD(0)**, updates the value function after each transition:
-
-<div class="math-box">
-\(V(s_t) \leftarrow V(s_t) + \alpha \underbrace{\left[r_t + \gamma V(s_{t+1}) - V(s_t)\right]}_{\delta_t \;=\; \text{TD error}}\)
+<div class="formula-box">
+\[
+\begin{aligned}
+\delta_t&=R_{t+1}+\gamma V(S_{t+1})-V(S_t),\\
+V(S_t)&\leftarrow V(S_t)+\alpha\delta_t.
+\end{aligned}
+\]
 </div>
 
-The **TD error** $$\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)$$ is the central object: it measures how much better (or worse) the outcome was compared to the current prediction. When $$\delta_t > 0$$, the agent was pleasantly surprised; when $$\delta_t < 0$$, the outcome was worse than expected.
+The TD error $$\delta_t$$ measures disagreement between the current estimate and a one-step target. The learning rate $$\alpha$$ controls how far to move towards that target. [Model-free prediction lecture](https://davidstarsilver.wordpress.com/wp-content/uploads/2025/04/lecture-4-model-free-prediction-.pdf).
 
-The TD(0) algorithm:
+<div class="blog-figure"><figure>
+<svg role="img" aria-labelledby="td-update-title td-update-desc" viewBox="0 0 640 135" style="width:100%;max-width:640px;height:auto">
+<title id="td-update-title">A temporal-difference update</title>
+<desc id="td-update-desc">The target uses the observed reward and an estimated continuation; the learning rate controls the update size.</desc>
+<rect width="640" height="135" rx="10" fill="#f8fafc"/>
+<g font-family="sans-serif" font-size="17" fill="#334155"><rect x="20" y="35" width="180" height="65" rx="8" fill="#ccfbf1"/><text x="110" y="73" text-anchor="middle">Observe transition</text><path d="M204 67 H224 M218 61 L224 67 L218 73" fill="none" stroke="#64748b" stroke-width="2"/><rect x="230" y="35" width="180" height="65" rx="8" fill="#dbeafe"/><text x="320" y="73" text-anchor="middle">Build TD target</text><path d="M414 67 H434 M428 61 L434 67 L428 73" fill="none" stroke="#64748b" stroke-width="2"/><rect x="440" y="35" width="180" height="65" rx="8" fill="#ede9fe"/><text x="530" y="73" text-anchor="middle">Adjust old value</text></g>
+</svg>
+<figcaption>The target uses the observed reward and an estimated continuation; the learning rate controls the update size.</figcaption>
+</figure></div>
 
-```
-Initialise V(s) = 0 for all s
-for each episode:
-    s ← initial state
-    while s is not terminal:
-        a ← π(s)
-        s', r ← step(s, a)
-        δ ← r + γ V(s') - V(s)
-        V(s) ← V(s) + α δ
-        s ← s'
-```
+## Worked example: target, error, update
 
-**Convergence**: for tabular representations and a policy $$\pi$$, TD(0) converges to $$V^\pi$$ almost surely as long as the step-size $$\alpha$$ satisfies the Robbins-Monro conditions: $$\sum_t \alpha_t = \infty$$ and $$\sum_t \alpha_t^2 < \infty$$.
+Take $$V(S_t)=4$$, $$R_{t+1}=1$$, $$V(S_{t+1})=5$$, $$\gamma=0.9$$, and $$\alpha=0.2$$:
 
-<div class="insight-box"><strong>Key Insight:</strong> The TD error δ_t is the RL analogue of the *prediction error* in neuroscience, dopamine neurons in the brain appear to encode something very similar to δ_t. This connection, noted by Montague, Dayan, and Sejnowski (1996), suggests that temporal difference learning may be biologically implemented in the basal ganglia.</div>
-
-## Worked Example: TD(0) Update by Hand
-
-A 4-state gridworld (S1 → S2 → S3 → Goal). Rewards: 0 everywhere except +1 at Goal. \(\gamma = 0.9\), \(\alpha = 0.1\). Initial estimates: \(V = [0, 0, 0, 0]\).
-
-**Step 1**: Agent in S1, moves to S2, receives r=0.
-\(\delta = 0 + 0.9 \times V(S2) - V(S1) = 0 + 0 - 0 = 0\)
-\(V(S1) \leftarrow 0 + 0.1 \times 0 = 0\) *(no change yet)*
-
-**Step 2**: Agent in S3, moves to Goal, receives r=+1.
-\(\delta = 1 + 0.9 \times 0 - 0 = +1.0\)
-\(V(S3) \leftarrow 0 + 0.1 \times 1.0 = \mathbf{0.1}\)
-
-**Step 3**: Agent in S2, moves to S3, receives r=0.
-\(\delta = 0 + 0.9 \times 0.1 - 0 = +0.09\)
-\(V(S2) \leftarrow 0 + 0.1 \times 0.09 = \mathbf{0.009}\)
-
-The reward at Goal is slowly propagating backward, one hop per episode visit. After many episodes the values converge to \([0.729, 0.81, 0.9, 0]\) (the true \(\gamma\)-discounted values).
-
-<div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:.95rem 1.1rem;margin:1.25rem 0;"><strong>Key Insight:</strong> TD learning propagates reward information one step at a time. Crucially it does this <em>online</em>, updating after every transition rather than waiting for the episode to end. This is why TD is much faster to learn in long episodes than Monte Carlo.</div>
-
-## n-Step Returns
-
-TD(0) uses a 1-step return. MC uses an \(\infty\)-step return. **n-step TD** interpolates between them:
-
-<div class="math-box">
-\(G_t^{(n)} = r_t + \gamma r_{t+1} + \cdots + \gamma^{n-1} r_{t+n-1} + \gamma^n V(s_{t+n})\)
+<div class="formula-box">
+\[
+\begin{aligned}
+\text{target}&=1+0.9(5)=5.5,\\
+\delta_t&=5.5-4=1.5,\\
+V_{\mathrm{new}}(S_t)&=4+0.2(1.5)=4.3.
+\end{aligned}
+\]
 </div>
 
-The update is: $$V(s_t) \leftarrow V(s_t) + \alpha [G_t^{(n)} - V(s_t)]$$.
+The update does not set the estimate equal to the target because $$\alpha<1$$. Nor does a positive TD error prove that the action was objectively good: an inaccurate next-state estimate can make the target overoptimistic.
 
-For $$n=1$$: TD(0). For $$n=\infty$$: MC. The optimal $$n$$ is task-dependent, and in practice $$n \in [3, 20]$$ often outperforms both extremes.
+## Compare three kinds of backup
 
-## TD(λ) and Eligibility Traces
+| Method | Information used for the target | Main distinction |
+|---|---|---|
+| Dynamic programming | Expected outcomes from a model | Sums over possible transitions |
+| Monte Carlo prediction | Observed return to episode end | Waits for the sampled outcome |
+| TD(0) | One reward plus next-state estimate | Bootstraps immediately |
 
-**TD(λ)** combines n-step returns for all $$n$$ simultaneously, weighted by $$\lambda^{n-1}$$:
+Monte Carlo targets can vary substantially across episodes. TD uses an imperfect continuation estimate and can propagate its errors. Neither method is universally more accurate for a fixed amount of data.
 
-$$G_t^\lambda = (1-\lambda) \sum_{n=1}^\infty \lambda^{n-1} G_t^{(n)}$$
+## A terminal transition has no continuation
 
-This is implemented online via **eligibility traces**, a memory variable $$z(s)$$ that decays exponentially:
+If the transition ends the task, its target is just the received reward. In the same example, a terminal reward of 1 gives $$\delta=1-4=-3$$ and updated value $$4+0.2(-3)=3.4$$.
 
-```
-z(s) ← 0 for all s
-for each step:
-    z(s_t) ← z(s_t) + 1     # accumulating trace
-    δ ← r + γ V(s') - V(s)
-    for all s: V(s) ← V(s) + α δ z(s)
-               z(s) ← γ λ z(s)  # decay
-```
+An external collection cutoff is different. If the underlying task would continue, its continuation value remains relevant. Use the final observation before reset for that estimate. A reset observation belongs to a different episode. [Gymnasium's termination and truncation guide](https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/) explains this distinction.
 
-When $$\lambda = 0$$: reduces to TD(0). When $$\lambda = 1$$: equivalent to MC (in the offline case). The trace $$z(s)$$ records which states were recently visited, so a surprising reward propagates backward through the trajectory.
+A time limit that is part of the task definition is a genuine finite-horizon boundary; the state should then account for remaining time. The word “timeout” alone does not determine the correct target.
 
-## Why TD is More Efficient than MC
+## From one step to several
 
-Consider estimating the value at a state visited 1000 times. MC updates $$V(s)$$ 1000 times, once per visit, with the episode return. TD(0) also updates 1000 times, but **every other state on the trajectory is also updated after each step**. This means TD learning propagates information much faster through the state space.
+An $$n$$-step target combines several observed rewards before bootstrapping:
 
-Additionally, TD can learn online during an episode without waiting for termination, critical for long or continuing tasks where waiting for episode end would make learning prohibitively slow.
+<div class="formula-box">
+\[
+G_t^{(n)}=\sum_{k=0}^{n-1}\gamma^kR_{t+k+1}
++\gamma^nV(S_{t+n}).
+\]
+</div>
+
+If the task terminates earlier, stop at that boundary and omit the continuation. This connects one-step updates to longer returns and prepares the idea behind [generalised advantage estimation](/blog/rl/generalised-advantage-estimation/).
+
+<div class="insight-box"><strong>Key Insight:</strong> Bootstrapping replaces an unknown future return with a current estimate. It makes early updates possible, while making the target's accuracy and episode boundaries part of the algorithm.</div>
+
+Next, [actor–critic basics](/blog/rl/policies-and-actor-critics/) explains how value estimates help update the action policy.
 
 ## References
 
-1. Sutton, R. S. (1988). Learning to predict by the methods of temporal differences. *Machine Learning*, 3(1), 9–44.
-2. Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction* (2nd ed.), Chapter 6. MIT Press.
-3. Montague, P. R., Dayan, P., & Sejnowski, T. J. (1996). A framework for mesencephalic dopamine systems based on predictive Hebbian learning. *Journal of Neuroscience*, 16(5), 1936–1947.
+1. Silver, D. [Reinforcement Learning course: Model-Free Prediction](https://davidstarsilver.wordpress.com/wp-content/uploads/2025/04/lecture-4-model-free-prediction-.pdf).
+2. Farama Foundation. [Handling Time Limits](https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/).

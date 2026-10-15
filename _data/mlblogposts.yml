@@ -420,17 +420,18 @@ rl:
   color: "#059669"
 
   overview:
-    - { slug: "2025-08-01-rl-overview", title: "Reinforcement Learning: A Complete Guide", published: offline }
+    - { slug: "2025-08-01-rl-overview", title: "Reinforcement Learning Basics: Agents, Rewards, and Returns", published: online }
 
   sections:
 
     foundations:
       label: "Foundations"
       posts:
-        - { slug: "2025-08-02-mdp",                    title: "Markov Decision Processes: The Framework of RL",                   published: offline }
-        - { slug: "2025-08-03-bellman-equations",       title: "Bellman Equations: Recursive Structure of Optimal Value",         published: offline }
-        - { slug: "2025-08-04-exploration-exploitation", title: "Exploration vs Exploitation: The Core Dilemma of RL",           published: offline }
-        - { slug: "2025-08-05-temporal-difference",     title: "Temporal Difference Learning: Bootstrapping from Experience",    published: offline }
+        - { slug: "2025-08-02-mdp", title: "Markov Decision Processes: States, Actions, and Transitions", published: online }
+        - { slug: "2025-08-03-bellman-equations", title: "Bellman Equations: Value as Reward Plus What Comes Next", published: online }
+        - { slug: "2025-08-04-exploration-exploitation", title: "Exploration and Exploitation: Learning Which Actions Are Worth Taking", published: online }
+        - { slug: "2025-08-05-temporal-difference", title: "Temporal-Difference Learning: Update a Value from One Transition", published: online }
+        - { slug: "2026-10-15-policies-and-actor-critics", title: "Policies and Actor–Critics: Turning Value Estimates into Better Actions", published: online }
 
     value-based:
       label: "Value-Based Methods"
@@ -481,16 +482,17 @@ robotics:
   color: "#7c3aed"
 
   overview:
-    - { slug: "2025-09-01-robotics-overview", title: "Learning-Based Robotics: A Complete Guide", published: offline }
+    - { slug: "2025-09-01-robotics-overview", title: "Robotics Basics: From Measurements to Motion", published: online }
 
   sections:
 
     foundations:
       label: "Foundations"
       posts:
-        - { slug: "2025-09-02-robot-kinematics",   title: "Robot Kinematics: Forward and Inverse",      published: offline }
-        - { slug: "2025-09-03-sensors-perception",  title: "Robot Sensors: Cameras, LiDAR, and IMUs",   published: offline }
-        - { slug: "2025-09-04-robot-control",       title: "Robot Control: PID, Impedance, and Beyond",  published: offline }
+        - { slug: "2025-09-02-robot-kinematics", title: "Robot Kinematics: Joints, Coordinate Frames, and Gripper Motion", published: online }
+        - { slug: "2025-09-03-sensors-perception", title: "Robot Sensing: Measurements, Noise, and State Estimates", published: online }
+        - { slug: "2025-09-04-robot-control", title: "Robot Control Basics: Dynamics, Feedback, and Tracking Error", published: online }
+        - { slug: "2026-10-15-robot-learning-basics", title: "Robot Learning Basics: Demonstrations, Rewards, and Models", published: online }
 
     planning:
       label: "Planning & Navigation"
