@@ -20,6 +20,8 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> TFN (Thomas et al., 2018) gives each node a set of features indexed by degree \(\ell\), each transforming under the Wigner-D matrix \(D^{\ell}(R)\). Messages combine node features with spherical harmonics of the edge direction through Clebsch–Gordan tensor products, weighted by learned functions of distance alone. This is the algebraic foundation on which SE(3)-Transformers, NequIP and MACE are built; EGNN is best read as a lightweight alternative to it rather than a special case of it.
 </div>
 
+{% include paper-preview.html paper="arxiv-1802-08219" %}
+
 ## The TFN Framework
 
 **Intuition First:** Imagine describing wind at a weather station. A scalar (speed) tells you how hard the wind blows, that's an $$\ell = 0$$ feature. A vector (velocity arrow) tells you direction too, that's $$\ell = 1$$. A quantity describing how the flow shears in different planes is $$\ell = 2$$. TFN stores all of these simultaneously at every atom, each transforming correctly under rotation. The Clebsch–Gordan product is the rule for combining two such descriptors, combining a dipole and a quadrupole, for instance, gives terms at degrees 1, 2 and 3.

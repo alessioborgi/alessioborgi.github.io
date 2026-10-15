@@ -21,6 +21,8 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> GraphSAGE (SAmple and aggreGatE) learns to aggregate features from a <em>sampled</em> subset of neighbours. Because it learns the aggregation function (not per-node embeddings), it generalises to new nodes never seen during training, making it <em>inductive</em>.
 </div>
 
+{% include paper-preview.html paper="arxiv-1706-02216" %}
+
 ## The Inductive vs. Transductive Distinction
 
 **Transductive GNNs (GCN, GAT):** as originally formulated, these operate on one fixed graph: the layer is a product with a normalised adjacency $$\hat{A}$$ built from the whole training graph. Add a new node tomorrow and $$\hat{A}$$ changes, so at minimum you must rebuild it and re-run a full-graph forward pass.

@@ -28,6 +28,8 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Ha and Schmidhuber's World Models (2018) decompose the agent into three components: a VAE that compresses observations into a compact latent code, an MDN-RNN that predicts future latent states from past experience, and a small linear controller trained with CMA-ES. The agent can "dream", training entirely inside the learned model, and still perform competitively on real environments.</div>
+
+{% include paper-preview.html paper="arxiv-1803-10122" %}
 {% include figure image_path="/images/blog/rl/ha2018_world_models.png" alt="World Models architecture" caption="World Models: vision, memory, and controller components (Ha & Schmidhuber, 2018)" %}
 
 

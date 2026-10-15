@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Venue:</strong> NeurIPS 2023 Workshop on Symmetry and Geometry in Neural Representations · <em>PMLR</em> 228
 </div>
 
+{% include paper-preview.html paper="sheaf-positional-encodings" %}
+
 ## What positional encodings are for
 
 Message passing is local. A node's representation is a function of its immediate neighbourhood, so two nodes with isomorphic neighbourhoods get identical embeddings, which is the 1-WL ceiling, and the reason GNNs fail on regular graphs and miss simple substructures.

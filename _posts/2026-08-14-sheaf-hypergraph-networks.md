@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Venue:</strong> NeurIPS 2023 · <a href="https://arxiv.org/abs/2309.17116">arXiv:2309.17116</a>
 </div>
 
+{% include paper-preview.html paper="arxiv-2309-17116" %}
+
 ## What a hyperedge loses under uniform aggregation
 
 A graph edge can only say *these two things interact*. Real interactions are frequently not pairwise, higher-order relations show up in neuroscience, chemical reaction networks, ecology and social dynamics, and hypergraphs are the standard answer, with each hyperedge $$e$$ a subset of nodes of any size $$\delta_e = \lvert e \rvert$$.

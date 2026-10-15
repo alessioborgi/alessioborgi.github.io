@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Venue:</strong> ICML 2022 Workshop on Topology, Algebra, and Geometry in Machine Learning · <a href="https://arxiv.org/abs/2206.08702">arXiv:2206.08702</a>
 </div>
 
+{% include paper-preview.html paper="arxiv-2206-08702" %}
+
 ## Two ways to get a sheaf, both unsatisfying
 
 The sheaf literature had, at this point, exactly two ways of getting a sheaf.

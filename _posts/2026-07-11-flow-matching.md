@@ -21,6 +21,8 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> A continuous normalising flow turns noise into data by integrating a learned velocity field, but training one by maximum likelihood costs an ODE solve plus a divergence estimate per gradient step. Flow matching replaces that with plain regression: pick a probability path, write down the velocity field that generates it <em>for a single data point</em>, and regress against it. A short argument shows the conditional and the intractable marginal objectives have identical gradients. Diffusion turns out to be one particular, and curved, choice of path.
 </div>
 
+{% include paper-preview.html paper="arxiv-2210-02747" %}
+
 ## Flows you can sample from but cannot afford to train
 
 A continuous normalising flow (CNF) defines a sample as the endpoint of an ODE. Start from noise \\(x_0 \sim p_0 = \mathcal{N}(\mathbf{0}, \mathbf{I})\\) and push it along a learned velocity field $$v_\theta$$:

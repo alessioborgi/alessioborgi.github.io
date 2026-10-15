@@ -340,6 +340,7 @@ author_profile: true
 {% assign diffusion_posts   = site.posts | where: "book", "diffusion"             | sort: "date" %}
 {% assign gdl_posts         = site.posts | where: "book", "gdl"                   | sort: "date" %}
 {% assign cyber_posts       = site.posts | where: "book", "cybersecurity"         | sort: "date" %}
+{% assign jepa_posts        = site.posts | where: "book", "jepa"                  | sort: "date" %}
 {% assign mathb_posts       = site.posts | where: "book", "math-basics"           | sort: "date" %}
 {% assign statsb_posts      = site.posts | where: "book", "stats-basics"          | sort: "date" %}
 {% assign probb_posts       = site.posts | where: "book", "prob-basics"           | sort: "date" %}
@@ -1443,6 +1444,52 @@ author_profile: true
       {% endif %}
     {% endfor %}
 
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!--  BOOK X · JEPA                                            -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="blog-book" data-book="jepa">
+  <div class="book-banner">
+    <span class="book-icon">🧩</span>
+    <div>
+      <h2>Book X, JEPA</h2>
+      <p>Joint-embedding predictive architectures: images, video, world models, and vision-language learning</p>
+    </div>
+  </div>
+  <div class="book-body">
+    {% assign jepa_overview = jepa_posts | where_exp: "p", "p.is_overview" | first %}
+    {% if jepa_overview %}
+    <a class="blog-overview-card" href="{{ jepa_overview.url | relative_url }}">
+      <span class="overview-label">Start Here · Overview</span>
+      <h3>{{ jepa_overview.title }}</h3>
+      <p>{{ jepa_overview.excerpt | strip_html | truncate: 210 }}</p>
+      <div class="blog-meta">
+        <span class="blog-read-badge">📖 {{ jepa_overview.read_mins | default: "5" }} min read</span>
+        <span>From latent prediction to representations that support action</span>
+      </div>
+    </a>
+    {% endif %}
+    {% for section in site.data.mlblogposts.jepa.sections %}
+      {% assign items = jepa_posts | where: "subsection", section[0] %}
+      {% if items.size > 0 %}
+      <div class="subsection-label" data-section="{{ section[0] }}">🧩 {{ section[1].label }}</div>
+      <div class="chapters-grid">
+        {% for post in items %}{% unless post.is_overview %}
+        <a class="chapter-card" href="{{ post.url | relative_url }}">
+          <span class="ch-icon">{{ post.icon | default: "📄" }}</span>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.excerpt | strip_html | truncate: 105 }}</p>
+          <div class="ch-meta">
+            <span class="ch-time">⏱ {{ post.read_mins | default: "5" }} min</span>
+            {% for tag in post.tags limit:2 %}<span class="ch-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </a>
+        {% endunless %}{% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
   </div>
 </div>
 

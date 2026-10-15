@@ -1,0 +1,597 @@
+# First-page images rendered from the original PDFs.
+# Use with: {% include paper-preview.html paper="paper-key" %}
+# Keep the source, PDF, and preview aligned with the same paper.
+
+arxiv-2506-22084:
+  title: Transformers are Graph Neural Networks
+  authors: Chaitanya K. Joshi
+  source: https://arxiv.org/abs/2506.22084
+  pdf: https://arxiv.org/pdf/2506.22084
+  image: /images/blog/papers/arxiv-2506-22084.png
+  width: 1100
+  height: 1424
+arxiv-2009-06489:
+  title: The Hardware Lottery
+  authors: Sara Hooker
+  source: https://arxiv.org/abs/2009.06489
+  pdf: https://arxiv.org/pdf/2009.06489
+  image: /images/blog/papers/arxiv-2009-06489.png
+  width: 1100
+  height: 1424
+arxiv-1609-02907:
+  title: Semi-Supervised Classification with Graph Convolutional Networks
+  authors: Thomas N. Kipf, Max Welling
+  source: https://arxiv.org/abs/1609.02907
+  pdf: https://arxiv.org/pdf/1609.02907
+  image: /images/blog/papers/arxiv-1609-02907.png
+  width: 1100
+  height: 1424
+arxiv-1710-10903:
+  title: Graph Attention Networks
+  authors: Petar Veličković, Guillem Cucurull, Arantxa Casanova et al.
+  source: https://arxiv.org/abs/1710.10903
+  pdf: https://arxiv.org/pdf/1710.10903
+  image: /images/blog/papers/arxiv-1710-10903.png
+  width: 1100
+  height: 1424
+arxiv-1706-02216:
+  title: Inductive Representation Learning on Large Graphs
+  authors: William L. Hamilton, Rex Ying, Jure Leskovec
+  source: https://arxiv.org/abs/1706.02216
+  pdf: https://arxiv.org/pdf/1706.02216
+  image: /images/blog/papers/arxiv-1706-02216.png
+  width: 1100
+  height: 1424
+arxiv-1810-00826:
+  title: How Powerful are Graph Neural Networks?
+  authors: Keyulu Xu, Weihua Hu, Jure Leskovec et al.
+  source: https://arxiv.org/abs/1810.00826
+  pdf: https://arxiv.org/pdf/1810.00826
+  image: /images/blog/papers/arxiv-1810-00826.png
+  width: 1100
+  height: 1424
+arxiv-1606-09375:
+  title: Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering
+  authors: Michaël Defferrard, Xavier Bresson, Pierre Vandergheynst
+  source: https://arxiv.org/abs/1606.09375
+  pdf: https://arxiv.org/pdf/1606.09375
+  image: /images/blog/papers/arxiv-1606-09375.png
+  width: 1100
+  height: 1424
+arxiv-1902-07153:
+  title: Simplifying Graph Convolutional Networks
+  authors: Felix Wu, Tianyi Zhang, Amauri Holanda de Souza Jr. et al.
+  source: https://arxiv.org/abs/1902.07153
+  pdf: https://arxiv.org/pdf/1902.07153
+  image: /images/blog/papers/arxiv-1902-07153.png
+  width: 1100
+  height: 1424
+arxiv-1810-05997:
+  title: 'Predict then Propagate: Graph Neural Networks meet Personalized PageRank'
+  authors: Johannes Gasteiger, Aleksandar Bojchevski, Stephan Günnemann
+  source: https://arxiv.org/abs/1810.05997
+  pdf: https://arxiv.org/pdf/1810.05997
+  image: /images/blog/papers/arxiv-1810-05997.png
+  width: 1100
+  height: 1424
+arxiv-2106-05234:
+  title: Do Transformers Really Perform Bad for Graph Representation?
+  authors: Chengxuan Ying, Tianle Cai, Shengjie Luo et al.
+  source: https://arxiv.org/abs/2106.05234
+  pdf: https://arxiv.org/pdf/2106.05234
+  image: /images/blog/papers/arxiv-2106-05234.png
+  width: 1100
+  height: 1424
+arxiv-1704-01212:
+  title: Neural Message Passing for Quantum Chemistry
+  authors: Justin Gilmer, Samuel S. Schoenholz, Patrick F. Riley et al.
+  source: https://arxiv.org/abs/1704.01212
+  pdf: https://arxiv.org/pdf/1704.01212
+  image: /images/blog/papers/arxiv-1704-01212.png
+  width: 1100
+  height: 1424
+arxiv-1806-08804:
+  title: Hierarchical Graph Representation Learning with Differentiable Pooling
+  authors: Rex Ying, Jiaxuan You, Christopher Morris et al.
+  source: https://arxiv.org/abs/1806.08804
+  pdf: https://arxiv.org/pdf/1806.08804
+  image: /images/blog/papers/arxiv-1806-08804.png
+  width: 1100
+  height: 1424
+arxiv-1703-06103:
+  title: Modeling Relational Data with Graph Convolutional Networks
+  authors: Michael Schlichtkrull, Thomas N. Kipf, Peter Bloem et al.
+  source: https://arxiv.org/abs/1703.06103
+  pdf: https://arxiv.org/pdf/1703.06103
+  image: /images/blog/papers/arxiv-1703-06103.png
+  width: 1100
+  height: 1424
+arxiv-1903-07293:
+  title: Heterogeneous Graph Attention Network
+  authors: Xiao Wang, Houye Ji, Chuan Shi et al.
+  source: https://arxiv.org/abs/1903.07293
+  pdf: https://arxiv.org/pdf/1903.07293
+  image: /images/blog/papers/arxiv-1903-07293.png
+  width: 1100
+  height: 1424
+arxiv-2006-10637:
+  title: Temporal Graph Networks for Deep Learning on Dynamic Graphs
+  authors: Emanuele Rossi, Ben Chamberlain, Fabrizio Frasca et al.
+  source: https://arxiv.org/abs/2006.10637
+  pdf: https://arxiv.org/pdf/2006.10637
+  image: /images/blog/papers/arxiv-2006-10637.png
+  width: 1100
+  height: 1424
+arxiv-2102-09844:
+  title: E(n) Equivariant Graph Neural Networks
+  authors: Victor Garcia Satorras, Emiel Hoogeboom, Max Welling
+  source: https://arxiv.org/abs/2102.09844
+  pdf: https://arxiv.org/pdf/2102.09844
+  image: /images/blog/papers/arxiv-2102-09844.png
+  width: 1100
+  height: 1424
+arxiv-2006-10503:
+  title: 'SE(3)-Transformers: 3D Roto-Translation Equivariant Attention Networks'
+  authors: Fabian B. Fuchs, Daniel E. Worrall, Volker Fischer et al.
+  source: https://arxiv.org/abs/2006.10503
+  pdf: https://arxiv.org/pdf/2006.10503
+  image: /images/blog/papers/arxiv-2006-10503.png
+  width: 1100
+  height: 1424
+arxiv-1802-08219:
+  title: 'Tensor field networks: Rotation- and translation-equivariant neural networks for 3D point clouds'
+  authors: Nathaniel Thomas, Tess Smidt, Steven Kearnes et al.
+  source: https://arxiv.org/abs/1802.08219
+  pdf: https://arxiv.org/pdf/1802.08219
+  image: /images/blog/papers/arxiv-1802-08219.png
+  width: 1100
+  height: 1424
+arxiv-2202-04579:
+  title: 'Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs'
+  authors: Cristian Bodnar, Francesco Di Giovanni, Benjamin Paul Chamberlain et al.
+  source: https://arxiv.org/abs/2202.04579
+  pdf: https://arxiv.org/pdf/2202.04579
+  image: /images/blog/papers/arxiv-2202-04579.png
+  width: 1100
+  height: 1424
+arxiv-2012-06333:
+  title: Sheaf Neural Networks
+  authors: Jakob Hansen, Thomas Gebhart
+  source: https://arxiv.org/abs/2012.06333
+  pdf: https://arxiv.org/pdf/2012.06333
+  image: /images/blog/papers/arxiv-2012-06333.png
+  width: 1100
+  height: 1424
+arxiv-2605-19021:
+  title: Deep Neural Sheaf Diffusion
+  authors: Rémi Bourgerie, Šarūnas Girdzijauskas, Viktoria Fodor
+  source: https://arxiv.org/abs/2605.19021
+  pdf: https://arxiv.org/pdf/2605.19021
+  image: /images/blog/papers/arxiv-2605-19021.png
+  width: 1100
+  height: 1424
+arxiv-2605-19324:
+  title: 'BrainDyn: A Sheaf Neural ODE for Forecasting and Generating Brain Dynamics'
+  authors: Siddharth Viswanath, Panayiotis Ketonis, Cassidy All et al.
+  source: https://arxiv.org/abs/2605.19324
+  pdf: https://arxiv.org/pdf/2605.19324
+  image: /images/blog/papers/arxiv-2605-19324.png
+  width: 1100
+  height: 1424
+arxiv-2206-08702:
+  title: Sheaf Neural Networks with Connection Laplacians
+  authors: Federico Barbero, Cristian Bodnar, Haitz Sáez de Ocáriz Borde et al.
+  source: https://arxiv.org/abs/2206.08702
+  pdf: https://arxiv.org/pdf/2206.08702
+  image: /images/blog/papers/arxiv-2206-08702.png
+  width: 1100
+  height: 1424
+arxiv-2407-20597:
+  title: Joint Diffusion Processes as an Inductive Bias in Sheaf Neural Networks
+  authors: Ferran Hernandez Caralt, Guillermo Bernárdez Gil, Iulia Duta et al.
+  source: https://arxiv.org/abs/2407.20597
+  pdf: https://arxiv.org/pdf/2407.20597
+  image: /images/blog/papers/arxiv-2407-20597.png
+  width: 1100
+  height: 1424
+arxiv-2410-09590:
+  title: Bayesian Sheaf Neural Networks
+  authors: Patrick Gillespie, Layal Bou Hamdan, Ioannis Schizas et al.
+  source: https://arxiv.org/abs/2410.09590
+  pdf: https://arxiv.org/pdf/2410.09590
+  image: /images/blog/papers/arxiv-2410-09590.png
+  width: 1100
+  height: 1424
+arxiv-2309-17116:
+  title: Sheaf Hypergraph Networks
+  authors: Iulia Duta, Giulia Cassarà, Fabrizio Silvestri et al.
+  source: https://arxiv.org/abs/2309.17116
+  pdf: https://arxiv.org/pdf/2309.17116
+  image: /images/blog/papers/arxiv-2309-17116.png
+  width: 1100
+  height: 1424
+arxiv-1808-01513:
+  title: Toward a Spectral Theory of Cellular Sheaves
+  authors: Jakob Hansen, Robert Ghrist
+  source: https://arxiv.org/abs/1808.01513
+  pdf: https://arxiv.org/pdf/1808.01513
+  image: /images/blog/papers/arxiv-1808-01513.png
+  width: 1100
+  height: 1556
+arxiv-2507-00647:
+  title: Cooperative Sheaf Neural Networks
+  authors: André Ribeiro, Ana Luiza Tenório, Juan Belieni et al.
+  source: https://arxiv.org/abs/2507.00647
+  pdf: https://arxiv.org/pdf/2507.00647
+  image: /images/blog/papers/arxiv-2507-00647.png
+  width: 1100
+  height: 1424
+arxiv-2304-09097:
+  title: 'Sheaf4Rec: Sheaf Neural Networks for Graph-based Recommender Systems'
+  authors: Antonio Purificato, Giulia Cassarà, Federico Siciliano et al.
+  source: https://arxiv.org/abs/2304.09097
+  pdf: https://arxiv.org/pdf/2304.09097
+  image: /images/blog/papers/arxiv-2304-09097.png
+  width: 1100
+  height: 1424
+arxiv-2006-11239:
+  title: Denoising Diffusion Probabilistic Models
+  authors: Jonathan Ho, Ajay Jain, Pieter Abbeel
+  source: https://arxiv.org/abs/2006.11239
+  pdf: https://arxiv.org/pdf/2006.11239
+  image: /images/blog/papers/arxiv-2006-11239.png
+  width: 1100
+  height: 1424
+arxiv-2011-13456:
+  title: Score-Based Generative Modeling through Stochastic Differential Equations
+  authors: Yang Song, Jascha Sohl-Dickstein, Diederik P. Kingma et al.
+  source: https://arxiv.org/abs/2011.13456
+  pdf: https://arxiv.org/pdf/2011.13456
+  image: /images/blog/papers/arxiv-2011-13456.png
+  width: 1100
+  height: 1424
+arxiv-2010-02502:
+  title: Denoising Diffusion Implicit Models
+  authors: Jiaming Song, Chenlin Meng, Stefano Ermon
+  source: https://arxiv.org/abs/2010.02502
+  pdf: https://arxiv.org/pdf/2010.02502
+  image: /images/blog/papers/arxiv-2010-02502.png
+  width: 1100
+  height: 1424
+arxiv-2207-12598:
+  title: Classifier-Free Diffusion Guidance
+  authors: Jonathan Ho, Tim Salimans
+  source: https://arxiv.org/abs/2207.12598
+  pdf: https://arxiv.org/pdf/2207.12598
+  image: /images/blog/papers/arxiv-2207-12598.png
+  width: 1100
+  height: 1424
+arxiv-2112-10752:
+  title: High-Resolution Image Synthesis with Latent Diffusion Models
+  authors: Robin Rombach, Andreas Blattmann, Dominik Lorenz et al.
+  source: https://arxiv.org/abs/2112.10752
+  pdf: https://arxiv.org/pdf/2112.10752
+  image: /images/blog/papers/arxiv-2112-10752.png
+  width: 1100
+  height: 1424
+arxiv-2210-02747:
+  title: Flow Matching for Generative Modeling
+  authors: Yaron Lipman, Ricky T. Q. Chen, Heli Ben-Hamu et al.
+  source: https://arxiv.org/abs/2210.02747
+  pdf: https://arxiv.org/pdf/2210.02747
+  image: /images/blog/papers/arxiv-2210-02747.png
+  width: 1100
+  height: 1424
+arxiv-2209-03003:
+  title: 'Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow'
+  authors: Xingchao Liu, Chengyue Gong, Qiang Liu
+  source: https://arxiv.org/abs/2209.03003
+  pdf: https://arxiv.org/pdf/2209.03003
+  image: /images/blog/papers/arxiv-2209-03003.png
+  width: 1100
+  height: 1424
+arxiv-2304-13705:
+  title: Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware
+  authors: Tony Z. Zhao, Vikash Kumar, Sergey Levine et al.
+  source: https://arxiv.org/abs/2304.13705
+  pdf: https://arxiv.org/pdf/2304.13705
+  image: /images/blog/papers/arxiv-2304-13705.png
+  width: 1100
+  height: 1424
+arxiv-1506-02438:
+  title: High-Dimensional Continuous Control Using Generalized Advantage Estimation
+  authors: John Schulman, Philipp Moritz, Sergey Levine et al.
+  source: https://arxiv.org/abs/1506.02438
+  pdf: https://arxiv.org/pdf/1506.02438
+  image: /images/blog/papers/arxiv-1506-02438.png
+  width: 1100
+  height: 1424
+arxiv-1707-01495:
+  title: Hindsight Experience Replay
+  authors: Marcin Andrychowicz, Filip Wolski, Alex Ray et al.
+  source: https://arxiv.org/abs/1707.01495
+  pdf: https://arxiv.org/pdf/1707.01495
+  image: /images/blog/papers/arxiv-1707-01495.png
+  width: 1100
+  height: 1424
+arxiv-1805-12114:
+  title: Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models
+  authors: Kurtland Chua, Roberto Calandra, Rowan McAllister et al.
+  source: https://arxiv.org/abs/1805.12114
+  pdf: https://arxiv.org/pdf/1805.12114
+  image: /images/blog/papers/arxiv-1805-12114.png
+  width: 1100
+  height: 1424
+arxiv-2110-06169:
+  title: Offline Reinforcement Learning with Implicit Q-Learning
+  authors: Ilya Kostrikov, Ashvin Nair, Sergey Levine
+  source: https://arxiv.org/abs/2110.06169
+  pdf: https://arxiv.org/pdf/2110.06169
+  image: /images/blog/papers/arxiv-2110-06169.png
+  width: 1100
+  height: 1424
+arxiv-2107-04034:
+  title: 'RMA: Rapid Motor Adaptation for Legged Robots'
+  authors: Ashish Kumar, Zipeng Fu, Deepak Pathak et al.
+  source: https://arxiv.org/abs/2107.04034
+  pdf: https://arxiv.org/pdf/2107.04034
+  image: /images/blog/papers/arxiv-2107-04034.png
+  width: 1100
+  height: 1424
+arxiv-1812-03201:
+  title: Residual Reinforcement Learning for Robot Control
+  authors: Tobias Johannink, Shikhar Bahl, Ashvin Nair et al.
+  source: https://arxiv.org/abs/1812.03201
+  pdf: https://arxiv.org/pdf/1812.03201
+  image: /images/blog/papers/arxiv-1812-03201.png
+  width: 1100
+  height: 1424
+arxiv-1802-09477:
+  title: Addressing Function Approximation Error in Actor-Critic Methods
+  authors: Scott Fujimoto, Herke van Hoof, David Meger
+  source: https://arxiv.org/abs/1802.09477
+  pdf: https://arxiv.org/pdf/1802.09477
+  image: /images/blog/papers/arxiv-1802-09477.png
+  width: 1100
+  height: 1424
+arxiv-1810-04805:
+  title: 'BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding'
+  authors: Jacob Devlin, Ming-Wei Chang, Kenton Lee et al.
+  source: https://arxiv.org/abs/1810.04805
+  pdf: https://arxiv.org/pdf/1810.04805
+  image: /images/blog/papers/arxiv-1810-04805.png
+  width: 1100
+  height: 1556
+arxiv-1910-10683:
+  title: Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer
+  authors: Colin Raffel, Noam Shazeer, Adam Roberts et al.
+  source: https://arxiv.org/abs/1910.10683
+  pdf: https://arxiv.org/pdf/1910.10683
+  image: /images/blog/papers/arxiv-1910-10683.png
+  width: 1100
+  height: 1424
+arxiv-2010-11929:
+  title: 'An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale'
+  authors: Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov et al.
+  source: https://arxiv.org/abs/2010.11929
+  pdf: https://arxiv.org/pdf/2010.11929
+  image: /images/blog/papers/arxiv-2010-11929.png
+  width: 1100
+  height: 1424
+arxiv-2103-14030:
+  title: 'Swin Transformer: Hierarchical Vision Transformer using Shifted Windows'
+  authors: Ze Liu, Yutong Lin, Yue Cao et al.
+  source: https://arxiv.org/abs/2103.14030
+  pdf: https://arxiv.org/pdf/2103.14030
+  image: /images/blog/papers/arxiv-2103-14030.png
+  width: 1100
+  height: 1424
+arxiv-2012-12877:
+  title: Training data-efficient image transformers & distillation through attention
+  authors: Hugo Touvron, Matthieu Cord, Matthijs Douze et al.
+  source: https://arxiv.org/abs/2012.12877
+  pdf: https://arxiv.org/pdf/2012.12877
+  image: /images/blog/papers/arxiv-2012-12877.png
+  width: 1100
+  height: 1424
+arxiv-2111-06377:
+  title: Masked Autoencoders Are Scalable Vision Learners
+  authors: Kaiming He, Xinlei Chen, Saining Xie et al.
+  source: https://arxiv.org/abs/2111.06377
+  pdf: https://arxiv.org/pdf/2111.06377
+  image: /images/blog/papers/arxiv-2111-06377.png
+  width: 1100
+  height: 1424
+arxiv-2103-00020:
+  title: Learning Transferable Visual Models From Natural Language Supervision
+  authors: Alec Radford, Jong Wook Kim, Chris Hallacy et al.
+  source: https://arxiv.org/abs/2103.00020
+  pdf: https://arxiv.org/pdf/2103.00020
+  image: /images/blog/papers/arxiv-2103-00020.png
+  width: 1100
+  height: 1424
+arxiv-1710-02298:
+  title: 'Rainbow: Combining Improvements in Deep Reinforcement Learning'
+  authors: Matteo Hessel, Joseph Modayil, Hado van Hasselt et al.
+  source: https://arxiv.org/abs/1710.02298
+  pdf: https://arxiv.org/pdf/1710.02298
+  image: /images/blog/papers/arxiv-1710-02298.png
+  width: 1100
+  height: 1424
+arxiv-1602-01783:
+  title: Asynchronous Methods for Deep Reinforcement Learning
+  authors: Volodymyr Mnih, Adrià Puigdomènech Badia, Mehdi Mirza et al.
+  source: https://arxiv.org/abs/1602.01783
+  pdf: https://arxiv.org/pdf/1602.01783
+  image: /images/blog/papers/arxiv-1602-01783.png
+  width: 1100
+  height: 1424
+arxiv-1707-06347:
+  title: Proximal Policy Optimization Algorithms
+  authors: John Schulman, Filip Wolski, Prafulla Dhariwal et al.
+  source: https://arxiv.org/abs/1707.06347
+  pdf: https://arxiv.org/pdf/1707.06347
+  image: /images/blog/papers/arxiv-1707-06347.png
+  width: 1100
+  height: 1556
+arxiv-1801-01290:
+  title: 'Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor'
+  authors: Tuomas Haarnoja, Aurick Zhou, Pieter Abbeel et al.
+  source: https://arxiv.org/abs/1801.01290
+  pdf: https://arxiv.org/pdf/1801.01290
+  image: /images/blog/papers/arxiv-1801-01290.png
+  width: 1100
+  height: 1424
+arxiv-1502-05477:
+  title: Trust Region Policy Optimization
+  authors: John Schulman, Sergey Levine, Philipp Moritz et al.
+  source: https://arxiv.org/abs/1502.05477
+  pdf: https://arxiv.org/pdf/1502.05477
+  image: /images/blog/papers/arxiv-1502-05477.png
+  width: 1100
+  height: 1424
+arxiv-1803-10122:
+  title: World Models
+  authors: David Ha, Jürgen Schmidhuber
+  source: https://arxiv.org/abs/1803.10122
+  pdf: https://arxiv.org/pdf/1803.10122
+  image: /images/blog/papers/arxiv-1803-10122.png
+  width: 1100
+  height: 1424
+arxiv-1911-08265:
+  title: Mastering Atari, Go, Chess and Shogi by Planning with a Learned Model
+  authors: Julian Schrittwieser, Ioannis Antonoglou, Thomas Hubert et al.
+  source: https://arxiv.org/abs/1911.08265
+  pdf: https://arxiv.org/pdf/1911.08265
+  image: /images/blog/papers/arxiv-1911-08265.png
+  width: 1100
+  height: 1424
+arxiv-2303-04137:
+  title: 'Diffusion Policy: Visuomotor Policy Learning via Action Diffusion'
+  authors: Cheng Chi, Zhenjia Xu, Siyuan Feng et al.
+  source: https://arxiv.org/abs/2303.04137
+  pdf: https://arxiv.org/pdf/2303.04137
+  image: /images/blog/papers/arxiv-2303-04137.png
+  width: 1100
+  height: 1556
+arxiv-1507-06217:
+  title: 'Persistence Images: A Stable Vector Representation of Persistent Homology'
+  authors: Henry Adams, Sofya Chepushtanova, Tegan Emerson et al.
+  source: https://arxiv.org/abs/1507.06217
+  pdf: https://arxiv.org/pdf/1507.06217
+  image: /images/blog/papers/arxiv-1507-06217.png
+  width: 1100
+  height: 1424
+arxiv-1207-6437:
+  title: Statistical topological data analysis using persistence landscapes
+  authors: Peter Bubenik
+  source: https://arxiv.org/abs/1207.6437
+  pdf: https://arxiv.org/pdf/1207.6437
+  image: /images/blog/papers/arxiv-1207-6437.png
+  width: 1100
+  height: 1424
+arxiv-1904-09378:
+  title: 'PersLay: A Neural Network Layer for Persistence Diagrams and New Graph Topological Signatures'
+  authors: Mathieu Carrière, Frédéric Chazal, Yuichi Ike et al.
+  source: https://arxiv.org/abs/1904.09378
+  pdf: https://arxiv.org/pdf/1904.09378
+  image: /images/blog/papers/arxiv-1904-09378.png
+  width: 1100
+  height: 1424
+arxiv-1906-00722:
+  title: Topological Autoencoders
+  authors: Michael Moor, Max Horn, Bastian Rieck et al.
+  source: https://arxiv.org/abs/1906.00722
+  pdf: https://arxiv.org/pdf/1906.00722
+  image: /images/blog/papers/arxiv-1906-00722.png
+  width: 1100
+  height: 1424
+sheaf-attention:
+  title: Sheaf Attention Networks
+  authors: Federico Barbero, Cristian Bodnar, Haitz Sáez-de-Ocáriz-Borde, and Pietro Liò
+  source: https://openreview.net/references/pdf?id=LmReABiozR
+  pdf: https://openreview.net/references/pdf?id=LmReABiozR
+  image: /images/blog/papers/sheaf-attention-paper.png
+  width: 1100
+  height: 1424
+surfing-neural-sheaf:
+  title: Surfing on the Neural Sheaf
+  authors: Julian Suk, Lorenzo Giusti, Tamir Hemo, Miguel Lopez, Konstantinos Barmpas, and Cristian Bodnar
+  source: https://openreview.net/references/pdf?id=orCqShvuf
+  pdf: https://openreview.net/references/pdf?id=orCqShvuf
+  image: /images/blog/papers/surfing-neural-sheaf-paper.png
+  width: 1100
+  height: 1424
+sheaf-positional-encodings:
+  title: Sheaf-based Positional Encodings for Graph Neural Networks
+  authors: Yu He, Cristian Bodnar, and Pietro Liò
+  source: https://proceedings.mlr.press/v228/he24a.html
+  pdf: https://raw.githubusercontent.com/mlresearch/v228/main/assets/he24a/he24a.pdf
+  image: /images/blog/papers/sheaf-positional-encodings-paper.png
+  width: 1100
+  height: 1424
+polynsd:
+  title: 'Polynomial Neural Sheaf Diffusion: A Spectral Filtering Approach on Cellular Sheaves'
+  authors: Alessio Borgi, Fabrizio Silvestri, and Pietro Liò
+  source: https://arxiv.org/abs/2512.00242
+  pdf: https://arxiv.org/pdf/2512.00242
+  image: /images/blog/papers/polynsd-paper.png
+  width: 1236
+  height: 1600
+dqn-nature:
+  title: Human-level control through deep reinforcement learning
+  authors: Volodymyr Mnih, Koray Kavukcuoglu, David Silver et al.
+  source: https://www.nature.com/articles/nature14236
+  pdf: https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf
+  image: /images/blog/papers/dqn-nature-paper.png
+  width: 1100
+  height: 1446
+
+arxiv-2301-08243:
+  title: Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture
+  authors: Mahmoud Assran, Quentin Duval, Ishan Misra et al.
+  source: https://arxiv.org/abs/2301.08243
+  pdf: https://arxiv.org/pdf/2301.08243
+  image: /images/blog/papers/arxiv-2301-08243.png
+  width: 1100
+  height: 1424
+arxiv-2404-08471:
+  title: Revisiting Feature Prediction for Learning Visual Representations from Video
+  authors: Adrien Bardes, Quentin Garrido, Jean Ponce et al.
+  source: https://arxiv.org/abs/2404.08471
+  pdf: https://arxiv.org/pdf/2404.08471
+  image: /images/blog/papers/arxiv-2404-08471.png
+  width: 1100
+  height: 1424
+arxiv-2512-10942:
+  title: 'VL-JEPA: Joint Embedding Predictive Architecture for Vision-language'
+  authors: Delong Chen, Mustafa Shukor, Théo Moutakanni et al.
+  source: https://arxiv.org/abs/2512.10942
+  pdf: https://arxiv.org/pdf/2512.10942
+  image: /images/blog/papers/arxiv-2512-10942.png
+  width: 1100
+  height: 1424
+arxiv-2511-08544:
+  title: 'LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics'
+  authors: Randall Balestriero and Yann LeCun
+  source: https://arxiv.org/abs/2511.08544
+  pdf: https://arxiv.org/pdf/2511.08544
+  image: /images/blog/papers/arxiv-2511-08544.png
+  width: 1100
+  height: 1424
+arxiv-2506-09985:
+  title: 'V-JEPA 2: Self-Supervised Video Models Enable Understanding, Prediction and Planning'
+  authors: Mahmoud Assran, Adrien Bardes, David Fan et al.
+  source: https://arxiv.org/abs/2506.09985
+  pdf: https://arxiv.org/pdf/2506.09985
+  image: /images/blog/papers/arxiv-2506-09985.png
+  width: 1100
+  height: 1424
+arxiv-2603-14482:
+  title: 'V-JEPA 2.1: Unlocking Dense Features in Video Self-Supervised Learning'
+  authors: Lorenzo Mur-Labadia, Matthew Muckley, Amir Bar et al.
+  source: https://arxiv.org/abs/2603.14482
+  pdf: https://arxiv.org/pdf/2603.14482
+  image: /images/blog/papers/arxiv-2603-14482.png
+  width: 1100
+  height: 1424

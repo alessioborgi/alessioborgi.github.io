@@ -21,6 +21,8 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> Rectified flow is flow matching with the simplest possible probability path, a straight line between noise and data, travelled at constant speed. That makes each <em>conditional</em> trajectory exactly integrable in one Euler step, but the <em>marginal</em> field the network actually learns is still curved, because paths from different examples cross. Reflow fixes this by retraining on the model's own (noise, sample) pairs, which removes the crossings and straightens the marginal field. The price is that each reflow round learns from synthetic data and drifts a little further from the real distribution.
 </div>
 
+{% include paper-preview.html paper="arxiv-2209-03003" %}
+
 ## The simplest path you can write down
 
 [Flow matching](/blog/diffusion/flow-matching/) leaves the probability path as a design choice. Rectified flow makes the least imaginative choice available: draw noise \\(x_0 \sim \mathcal{N}(\mathbf{0},\mathbf{I})\\), draw data \\(x_1 \sim q\\), and interpolate linearly.

@@ -28,6 +28,8 @@ toc_label: "Contents"
 </style>
 
 <div class="tldr-box"><strong>TL;DR:</strong> Diffusion Policy (Chi et al. 2023) frames robot action generation as a denoising diffusion process over action sequences, conditioned on visual observations. This naturally captures multi-modal action distributions, a major failure mode of MSE-based behaviour cloning, and achieves state-of-the-art performance across a range of dexterous manipulation tasks.</div>
+
+{% include paper-preview.html paper="arxiv-2303-04137" %}
 {% include figure image_path="/images/blog/robotics/chi2023_diffusion_policy.png" alt="Diffusion Policy architecture" caption="Diffusion Policy for visuomotor robot control (Chi et al., 2023)" %}
 
 

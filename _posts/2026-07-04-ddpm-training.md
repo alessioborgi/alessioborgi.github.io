@@ -21,6 +21,8 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> The ELBO for a diffusion model decomposes into one constant, one reconstruction term, and \(T-1\) KL divergences between Gaussians, each of which reduces to a squared distance between two means. Substituting the \(\boldsymbol{\epsilon}\)-parameterisation turns each into \(w_t\lVert\boldsymbol{\epsilon}-\boldsymbol{\epsilon}_\theta\rVert^2\) with a known weight. Setting every \(w_t = 1\) gives \(\mathcal{L}_{\text{simple}}\), which is no longer a bound on likelihood but produces better samples, because the original weights concentrate almost all mass on the easiest timesteps.
 </div>
 
+{% include paper-preview.html paper="arxiv-2006-11239" %}
+
 ## The bound and what it decomposes into
 
 The marginal likelihood $$p_\theta(\mathbf{x}_0)$$ integrates over every trajectory, so we bound it in the usual variational way, using the fixed [forward process](/blog/diffusion/forward-process/) $$q$$ as the proposal:

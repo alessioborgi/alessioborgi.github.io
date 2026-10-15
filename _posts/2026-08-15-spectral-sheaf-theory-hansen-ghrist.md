@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Venue:</strong> <em>Journal of Applied and Computational Topology</em> 3(4), 315–358, 2019 · <a href="https://arxiv.org/abs/1808.01513">arXiv:1808.01513</a> · open access
 </div>
 
+{% include paper-preview.html paper="arxiv-1808-01513" %}
+
 ## Why sheaf networks depend on this paper
 
 If you have read [Neural Sheaf Diffusion](/blog/sheaf/neural-sheaf-diffusion/), [Sheaf Hypergraph Networks](/blog/sheaf/sheaf-hypergraph-networks/) or [Conn-NSD](/blog/sheaf/conn-nsd-paper/), you have used the sheaf Laplacian $$L_{\mathcal{F}} = \delta^{\top}\delta$$ and its normalised form $$\Delta_{\mathcal{F}} = D^{-1/2}L_{\mathcal{F}}D^{-1/2}$$. Both are defined here. So is the identification that makes the geometric reading of those models legitimate rather than decorative: the graph connection Laplacian of Singer and Wu is the sheaf Laplacian of an $$O(n)$$-vector bundle over a graph.

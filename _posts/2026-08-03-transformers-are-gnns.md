@@ -22,6 +22,8 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> A Graph Attention Network computes attention over a node's neighbours. A Transformer computes attention over every token. Written in the same notation, the equations differ in exactly one symbol, \(\mathcal{N}_i\) against \(\mathcal{S}\). So a Transformer is a GNN whose graph happens to be complete, and a GAT is a Transformer whose attention has been masked by an adjacency matrix. This chapter does the substitution carefully, then flags two places where "identical" is stronger than the mathematics supports.
 </div>
 
+{% include paper-preview.html paper="arxiv-2506-22084" %}
+
 ## The two update rules
 
 **Self-attention.** For token $$i$$ in a sentence $$\mathcal{S}$$:

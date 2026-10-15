@@ -20,6 +20,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> NSD (Bodnar et al., 2022) jointly learns the restriction maps \(\mathcal{F}_{v \trianglelefteq e}\), via a parametric function of the two endpoint features, and diffuses with the resulting sheaf Laplacian. At each layer: (1) predict the restriction maps from the current features; (2) build \(\Delta_{\mathcal{F}}\); (3) take one residual diffusion step. The operator is not fixed, and that is the whole point: what makes NSD more than a hand-designed propagation matrix is that the geometry itself is learned.
 </div>
+
+{% include paper-preview.html paper="arxiv-2202-04579" %}
 {% include figure image_path="/images/blog/sheaf/bodnar2022_nsd.png" alt="NSD architecture" caption="Neural Sheaf Diffusion: learned restriction maps on the graph (Bodnar et al., 2022)" %}
 
 

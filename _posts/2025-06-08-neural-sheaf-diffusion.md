@@ -27,6 +27,8 @@ toc_label: "Contents"
 <strong>Venue:</strong> NeurIPS 2022 · <a href="https://arxiv.org/abs/2202.04579">arXiv:2202.04579</a> · <a href="https://github.com/twitter-research/neural-sheaf-diffusion">code</a>
 </div>
 
+{% include paper-preview.html paper="arxiv-2202-04579" %}
+
 ## Two complaints, one cause
 
 The two standard complaints about GNNs are usually filed separately. **Oversmoothing**: stack enough layers and every node's representation converges to the same thing. **Heterophily**: models built on the assumption that neighbours are similar do badly when neighbours are systematically *dis*similar.

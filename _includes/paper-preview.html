@@ -1,0 +1,22 @@
+{% assign preview_paper = site.data.paper_previews[include.paper] %}
+{% if preview_paper %}
+<div class="paper-preview">
+  <figure class="blog-media">
+    <a href="{{ preview_paper.pdf | escape }}" aria-label="Read {{ preview_paper.title | escape }} (PDF)">
+      <img src="{{ preview_paper.image | relative_url }}"
+           class="blog-media__img"
+           alt="First page of {{ preview_paper.title | escape }}"
+           width="{{ preview_paper.width }}"
+           height="{{ preview_paper.height }}"
+           loading="lazy"
+           decoding="async">
+    </a>
+    <figcaption class="blog-media__caption">
+      <strong>Paper preview:</strong>
+      <a href="{{ preview_paper.source | escape }}">{{ preview_paper.title | escape }}</a>.<br>
+      {{ preview_paper.authors | escape }}<br>
+      <a href="{{ preview_paper.pdf | escape }}">Read the paper (PDF)</a>
+    </figcaption>
+  </figure>
+</div>
+{% endif %}

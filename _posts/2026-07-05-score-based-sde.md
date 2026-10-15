@@ -21,6 +21,8 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> The score \(\nabla_{\mathbf{x}}\log p(\mathbf{x})\) can be estimated without ever touching the normalising constant, and for a Gaussian perturbation kernel the optimal estimator is exactly \(-\boldsymbol{\epsilon}_\theta/\sqrt{1-\bar{\alpha}_t}\), so a DDPM already <em>is</em> a score model. Letting the step size go to zero makes the forward chain a stochastic differential equation, of which DDPM is the variance-preserving discretisation. Every SDE has an associated probability-flow ODE with the same marginals at every time, which buys deterministic sampling and exact likelihoods.
 </div>
 
+{% include paper-preview.html paper="arxiv-2011-13456" %}
+
 ## Why the score, and not the density
 
 Fitting a density means dealing with $$p_\theta(\mathbf{x}) = \tilde{p}_\theta(\mathbf{x})/Z_\theta$$, and the partition function $$Z_\theta = \int \tilde{p}_\theta$$ is an intractable integral over pixel space. The score sidesteps it entirely, because $$Z_\theta$$ does not depend on $$\mathbf{x}$$:

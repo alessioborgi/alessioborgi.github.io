@@ -31,6 +31,8 @@ toc_label: "Contents"
 
 <div class="paper-box"><strong>Key Paper:</strong> Hessel, M., et al. (2018). Rainbow: Combining improvements in deep reinforcement learning. <em>AAAI 2018</em>. arXiv:1710.02298. The paper is notable for showing that independently developed improvements are complementary and collectively achieve much better sample efficiency than any individual method.</div>
 
+{% include paper-preview.html paper="arxiv-1710-02298" %}
+
 ## Intuition First: Six Perspectives on the Same Problem
 
 Think of DQN as a car with six known weaknesses. Each Rainbow component is an independent fix:

@@ -22,6 +22,8 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> The <a href="/blog/gdl/transformers-are-gnns/">previous chapter</a> established that Transformers and GNNs compute the same thing on different graphs. This one asks why one of them took over. Attention compares every pair, asymptotically <em>more</em> work than sparse message passing, but expresses that work as dense matrix multiplication, which modern accelerators are built for. Sparse message passing needs gather and scatter over a neighbour index, which they are not. The winner was decided by hardware, not by mathematics.
 </div>
 
+{% include paper-preview.html paper="arxiv-2009-06489" %}
+
 ## The dense formulation
 
 Self-attention over a whole input is three matrix multiplications and a softmax:

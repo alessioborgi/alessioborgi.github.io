@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Preprint:</strong> <a href="https://arxiv.org/abs/2410.09590">arXiv:2410.09590</a>, October 2024 · <a href="https://github.com/patrick-gillespie/bsnn">code</a>
 </div>
 
+{% include paper-preview.html paper="arxiv-2410-09590" %}
+
 ## The problem with a point estimate of the geometry
 
 [NSD](/blog/sheaf/neural-sheaf-diffusion/)'s central move is to make the restriction maps a learned function of node features. That is what turned sheaf models from a synthetic-data curiosity into something you can run on a real graph.

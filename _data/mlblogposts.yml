@@ -438,6 +438,7 @@ rl:
         - { slug: "2025-08-06-q-learning",   title: "Q-Learning: Off-Policy TD Control",         published: offline }
         - { slug: "2025-08-07-dqn",          title: "DQN: Deep Q-Networks for Atari",            published: offline }
         - { slug: "2025-08-08-rainbow-dqn",  title: "Rainbow DQN: Combining Six Improvements",  published: offline }
+        - { slug: "2026-10-15-offline-rl-iql", title: "Offline RL and IQL: Learning Without Asking for Another Trial", published: online }
 
     policy-gradient:
       label: "Policy Gradient Methods"
@@ -447,6 +448,8 @@ rl:
         - { slug: "2025-08-11-ppo",             title: "PPO: Proximal Policy Optimisation",                      published: offline }
         - { slug: "2025-08-12-sac",             title: "SAC: Soft Actor-Critic and Maximum Entropy RL",          published: offline }
         - { slug: "2025-08-13-trpo-npg",        title: "TRPO and Natural Policy Gradient",                       published: offline }
+        - { slug: "2026-10-15-generalised-advantage-estimation", title: "Generalised Advantage Estimation: How Much Future Should an Update Trust?", published: online }
+        - { slug: "2026-10-15-td3", title: "TD3: Three Fixes for an Overconfident Actor-Critic", published: online }
 
     model-based:
       label: "Model-Based RL"
@@ -466,6 +469,7 @@ rl:
         - { slug: "2025-08-18-rl-for-games", title: "RL for Games: From Atari to AlphaGo",                      published: offline }
         - { slug: "2025-08-19-rlhf",         title: "RLHF: Reinforcement Learning from Human Feedback",         published: offline }
         - { slug: "2025-08-20-rl-robotics",  title: "RL for Robotics: From Simulation to Real Hardware",        published: offline }
+        - { slug: "2026-10-15-hindsight-experience-replay", title: "Hindsight Experience Replay: Learning from the Goal You Actually Reached", published: online }
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -494,6 +498,7 @@ robotics:
         - { slug: "2025-09-05-slam",          title: "SLAM: Simultaneous Localisation and Mapping",           published: offline }
         - { slug: "2025-09-06-path-planning",  title: "Path Planning: A*, RRT, and Learned Planners",         published: offline }
         - { slug: "2025-09-07-motion-planning", title: "Motion Planning: Task and Motion Planning",           published: offline }
+        - { slug: "2026-10-15-learned-model-predictive-control", title: "Learned Model Predictive Control: Plan with a Model, Correct with Reality", published: online }
 
     learning:
       label: "Learning for Robots"
@@ -503,6 +508,8 @@ robotics:
         - { slug: "2025-09-10-robot-learning-manipulation",  title: "Robot Manipulation: Grasping and Dexterous Control",        published: offline }
         - { slug: "2025-09-11-locomotion",                   title: "Robot Locomotion: Walking, Running, and Jumping",           published: offline }
         - { slug: "2025-09-12-skill-learning",               title: "Skill Learning and Hierarchical Robot Policies",            published: offline }
+        - { slug: "2026-10-15-residual-reinforcement-learning", title: "Residual Reinforcement Learning: Teaching a Controller Its Missing Correction", published: online }
+        - { slug: "2026-10-15-rapid-motor-adaptation", title: "Rapid Motor Adaptation: Inferring the Ground from the Way You Move", published: online }
 
     perception:
       label: "Perception"
@@ -518,6 +525,7 @@ robotics:
         - { slug: "2025-09-17-language-conditioned-robots",   title: "Language-Conditioned Robot Policies",                      published: offline }
         - { slug: "2025-09-18-safety-robotics",               title: "Safety in Robot Learning: Constraints and Guarantees",     published: offline }
         - { slug: "2025-09-19-open-problems-robotics",        title: "Open Problems in Robot Learning",                          published: offline }
+        - { slug: "2026-10-15-action-chunking-transformers", title: "ACT: Why a Robot Policy Predicts a Chunk of Actions", published: online }
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -640,6 +648,35 @@ cybersecurity:
       label: "Program & Code Security"
       posts:
         - { slug: "2026-10-02-program-graph-vulnerability-survey", title: "Program Graphs for Software Vulnerability Analysis: A Survey (Yu, Wang, Li et al., 2026)", published: online }
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# BOOK X: JEPA
+# ──────────────────────────────────────────────────────────────────────────
+jepa:
+  label: "Book X: JEPA"
+  icon:  "🧩"
+  color: "#0f766e"
+
+  overview:
+    - { slug: "2026-10-15-jepa-overview", title: "JEPA: Learning What to Predict in Representation Space", published: online }
+
+  sections:
+    foundations:
+      label: "Images & Representation Learning"
+      posts:
+        - { slug: "2026-10-15-i-jepa", title: "I-JEPA: Predicting Image Representations Behind a Mask", published: online }
+        - { slug: "2026-10-15-lejepa", title: "LeJEPA: Prediction Needs a Non-Collapsing Representation", published: online }
+    video:
+      label: "Video & World Models"
+      posts:
+        - { slug: "2026-10-15-v-jepa", title: "V-JEPA: Learning Motion by Predicting Video Features", published: online }
+        - { slug: "2026-10-15-v-jepa-2", title: "V-JEPA 2: From Watching Video to Planning Robot Actions", published: online }
+        - { slug: "2026-10-15-v-jepa-2-1", title: "V-JEPA 2.1: Why Dense Features Need Local Supervision", published: online }
+    multimodal:
+      label: "Vision & Language"
+      posts:
+        - { slug: "2026-10-15-vl-jepa", title: "VL-JEPA: Predicting Answer Embeddings Before Decoding Words", published: online }
 
 
 # ──────────────────────────────────────────────────────────────────────────

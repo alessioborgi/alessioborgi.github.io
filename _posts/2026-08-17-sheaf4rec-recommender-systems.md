@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Preprint:</strong> <a href="https://arxiv.org/abs/2304.09097">arXiv:2304.09097v3</a>, March 2024 · <a href="https://github.com/antoniopurificato/Sheaf4Rec">code</a>
 </div>
 
+{% include paper-preview.html paper="arxiv-2304-09097" %}
+
 ## Why a recommender might want a vector space per node
 
 Collaborative filtering on a bipartite user–item graph is the canonical GNN success story: nodes are users and items, edges are observed interactions, and stacked propagation layers cluster users with shared tastes. NGCF, LightGCN and UltraGCN all work this way.

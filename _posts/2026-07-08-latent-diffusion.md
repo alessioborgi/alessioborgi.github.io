@@ -21,6 +21,8 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> Pixel-space diffusion spends most of its capacity and nearly all of its compute modelling high-frequency detail that contributes almost nothing perceptually. Latent diffusion splits the problem in two: train an autoencoder once to strip that detail, then run diffusion on its compact latent code. At a downsampling factor of 8, a \(512\times512\times3\) image becomes a \(64\times64\times4\) latent, exactly 48× fewer dimensions, and 4096× cheaper for a full self-attention layer. Conditioning enters through cross-attention. The price is a hard reconstruction ceiling you can never sample your way past.
 </div>
 
+{% include paper-preview.html paper="arxiv-2112-10752" %}
+
 ## Where the compute goes
 
 A diffusion model on raw pixels has to learn everything at once: which objects exist, how they are arranged, and also the exact grain of a wall's plaster. Rate–distortion analysis of natural images says the last of these dominates the bit budget while carrying very little perceptual weight. Rombach et al. call the two regimes *semantic* compression and *perceptual* compression, and the point of latent diffusion is that only the first needs a generative model with a thousand sequential forward passes. The second is a job for a single-pass autoencoder.

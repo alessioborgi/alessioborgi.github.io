@@ -20,6 +20,8 @@ toc_label: "Contents"
 <strong>TL;DR:</strong> Graphormer (Ying et al., Microsoft, 2021) takes a standard Transformer and injects three graph-structural signals: (1) degree centrality added to the input node embeddings, (2) shortest-path distance added as a learned scalar bias on the attention logits, (3) edge features along the shortest path added as a second bias. With these, the paper shows the architecture can reproduce the aggregate-and-combine step of common message-passing GNNs and can separate graphs that 1-WL cannot. It won the KDD Cup 2021 OGB-LSC quantum-property track.
 </div>
 
+{% include paper-preview.html paper="arxiv-2106-05234" %}
+
 ## The Bridge Between Transformers and GNNs
 
 Graphormer's key insight: a standard Transformer on graphs, without any structural information, ignores the graph entirely. Inject the right structural signals and it can express things message passing cannot.

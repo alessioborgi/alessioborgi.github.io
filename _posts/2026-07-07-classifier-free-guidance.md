@@ -21,6 +21,8 @@ toc_label: "Contents"
   <strong>TL;DR:</strong> A conditional diffusion model trained the obvious way treats the prompt as a weak hint. Classifier guidance sharpened it, but needed a separate classifier trained on noisy images. Classifier-free guidance removes that classifier by training a single network on both the conditional and unconditional task, drop the condition on roughly 10% of examples, and then extrapolating past the conditional prediction at sampling time. The guidance weight \(w\) is a dial from "diverse and vague" to "on-prompt and samey", and turning it up means you are no longer sampling from the true conditional distribution.
 </div>
 
+{% include paper-preview.html paper="arxiv-2207-12598" %}
+
 ## Conditioning is not control
 
 Feeding a text embedding into the denoiser gives you $$\epsilon_\theta(\mathbf{x}_t, t, c)$$, a model of \\(p(\mathbf{x}\mid c)\\). Trained this way it works, but weakly: the prompt nudges the sample rather than governing it. The reason is that the training loss rewards covering the data, and the conditional and unconditional distributions of natural images overlap heavily. A model can score well while largely ignoring \\(c\\).

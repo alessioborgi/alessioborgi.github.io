@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Preprint:</strong> <a href="https://arxiv.org/abs/2605.19324">arXiv:2605.19324</a>, May 2026 &nbsp;·&nbsp; <a href="https://github.com/KrishnaswamyLab/BrainDyn">code</a>
 </div>
 
+{% include paper-preview.html paper="arxiv-2605-19324" %}
+
 ## Why a sheaf, for brains specifically
 
 Most applications of sheaf neural networks are motivated by heterophily: neighbouring nodes have different labels, so averaging them is destructive, and restriction maps let you align before you compare. BrainDyn's motivation is different and, I think, more physically grounded.

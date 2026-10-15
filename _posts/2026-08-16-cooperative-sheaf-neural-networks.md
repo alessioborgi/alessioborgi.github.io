@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Preprint:</strong> <a href="https://arxiv.org/abs/2507.00647">arXiv:2507.00647v2</a>, September 2025
 </div>
 
+{% include paper-preview.html paper="arxiv-2507-00647" %}
+
 ## The question: can a sheaf network cooperate?
 
 Finkelshtein et al.'s cooperative GNNs treat nodes as players who pick an action each layer: **PROPAGATE** (send only), **LISTEN** (receive only), **STANDARD** (both), **ISOLATE** (neither). An auxiliary *action network* chooses, trained through discrete choices with a straight-through Gumbel-Softmax estimator. The motivation is oversquashing: if a node can decline to relay, exponentially growing neighbourhoods stop being compressed into fixed-size vectors.

@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Venue:</strong> NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations
 </div>
 
+{% include paper-preview.html paper="surfing-neural-sheaf" %}
+
 ## Changing the equation instead of the operator
 
 The PDE-based view of GNNs had by 2022 produced a small family of architectures, GRAND, Beltrami flow, PDE-GCN, all built on the observation that message passing looks like a discretised diffusion. Their common criticism, which this paper opens with, is that the *dynamics* are too simple for hard node classification even when the analysis tools are good.

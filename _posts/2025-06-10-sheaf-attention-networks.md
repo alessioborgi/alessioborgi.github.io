@@ -27,6 +27,8 @@ toc_label: "Contents"
 <strong>Venue:</strong> NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations (Extended Abstract Track)
 </div>
 
+{% include paper-preview.html paper="sheaf-attention" %}
+
 ## Two knobs that were never combined
 
 By late 2022 the two competing answers to "how should a node treat its neighbours differently?" were both well established and entirely separate.

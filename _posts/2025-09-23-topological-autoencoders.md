@@ -26,6 +26,8 @@ toc_label: "Contents"
 
 <div class="tldr-box"><strong>TL;DR:</strong> A Topological Autoencoder (TopoAE) minimises the sum of a reconstruction loss and a topological similarity loss: λ·d(dgm(X), dgm(Z)), where X is the input point cloud and Z = encoder(X) is the latent point cloud. This forces the encoder to preserve homological features (number of clusters, loops) across the bottleneck. Unlike VAEs (which regularise towards Gaussian), TopoAEs regularise towards the actual topology of the data.</div>
 
+{% include paper-preview.html paper="arxiv-1906-00722" %}
+
 ## Intuition First
 
 Imagine folding a piece of paper into a cylinder, you have changed its shape but not its topology (it still has one hole). Now tape the ends together to make a torus, the topology changed (now two independent loops). Standard autoencoders are like origami: they can fold and distort freely. TopoAE adds a rule: "the number of holes in the latent space must match the number of holes in the data." This forces the encoder to be topologically honest, not just geometrically faithful at a local level.

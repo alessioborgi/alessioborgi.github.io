@@ -28,6 +28,8 @@ toc_label: "Contents"
 <strong>Venue:</strong> ICML 2024 Workshop on Geometry-grounded Representation Learning and Generative Modeling · <a href="https://arxiv.org/abs/2407.20597">arXiv:2407.20597</a>
 </div>
 
+{% include paper-preview.html paper="arxiv-2407-20597" %}
+
 ## Why universal approximation is the wrong goal here
 
 [NSD](/blog/sheaf/neural-sheaf-diffusion/) proves that with enough capacity and diverse enough features, $$\Phi = \mathrm{MLP}(x_u \Vert x_v)$$ can learn any sheaf on the graph. That is presented as a strength, and in one sense it is.

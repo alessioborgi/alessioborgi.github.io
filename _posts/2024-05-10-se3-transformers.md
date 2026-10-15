@@ -19,6 +19,8 @@ toc_label: "Contents"
 <div class="tldr-box">
 <strong>TL;DR:</strong> SE(3)-Transformers (Fuchs et al., 2020) combine Transformer-style self-attention with SE(3)-equivariant features built from spherical harmonics. Queries, keys and values are all equivariant features; what makes the mechanism work is that the attention <em>logit</em> is an SO(3)-invariant inner product of query and key, so the weights are scalars while the values still carry geometry. What it buys is direction-aware attention and access to features above \(\ell = 1\); what it costs is the Clebsch–Gordan machinery and a cost that climbs steeply with the maximum degree \(L\).
 </div>
+
+{% include paper-preview.html paper="arxiv-2006-10503" %}
 {% include figure image_path="/images/blog/gnn/fuchs2020_se3.png" alt="SE(3)-Transformer" caption="SE(3)-Transformer: equivariant self-attention for 3D point clouds (Fuchs et al., 2020)" %}
 
 
