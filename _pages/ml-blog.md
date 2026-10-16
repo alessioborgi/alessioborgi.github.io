@@ -1455,7 +1455,7 @@ author_profile: true
     <span class="book-icon">🧩</span>
     <div>
       <h2>Book X, JEPA</h2>
-      <p>Joint-embedding predictive architectures: images, video, world models, and vision-language learning</p>
+      <p>Joint-embedding predictive architectures: images, video, world models, audio, language, and generative extensions</p>
     </div>
   </div>
   <div class="book-body">

@@ -2,6 +2,7 @@
 layout: single
 title: "JEPA: Learning What to Predict in Representation Space"
 date: 2026-10-15
+last_modified_at: 2026-10-16
 categories: [jepa]
 book: jepa
 subsection: foundations
@@ -73,7 +74,11 @@ A second failure is subtler. Suppose two scenes differ only in whether a cup is 
 | [V-JEPA](/blog/jepa/v-jepa/) | What changes when the missing information spans time? |
 | [V-JEPA 2](/blog/jepa/v-jepa-2/) | What additional information makes action-conditioned planning possible? |
 | [V-JEPA 2.1](/blog/jepa/v-jepa-2-1/) | Why can good global features still be poor local features? |
+| [LeWorldModel](/blog/jepa/leworldmodel/) | How can visual representations and action-conditioned dynamics be learned together? |
 | [VL-JEPA](/blog/jepa/vl-jepa/) | When should a predicted meaning be decoded into words? |
+| [Audio-JEPA](/blog/jepa/audio-jepa/) | Which sound information survives masked spectrogram prediction? |
+| [LLM-JEPA](/blog/jepa/llm-jepa/) | How can a representation objective complement token generation? |
+| [D-JEPA](/blog/jepa/d-jepa/) | How can predicted features condition a generative denoising model? |
 
 ## Reading the evidence
 

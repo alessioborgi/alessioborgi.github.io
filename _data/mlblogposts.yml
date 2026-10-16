@@ -675,10 +675,17 @@ jepa:
         - { slug: "2026-10-15-v-jepa", title: "V-JEPA: Learning Motion by Predicting Video Features", published: online }
         - { slug: "2026-10-15-v-jepa-2", title: "V-JEPA 2: From Watching Video to Planning Robot Actions", published: online }
         - { slug: "2026-10-15-v-jepa-2-1", title: "V-JEPA 2.1: Why Dense Features Need Local Supervision", published: online }
+        - { slug: "2026-10-16-leworldmodel", title: "LeWorldModel: Learning Action-Conditioned Dynamics from Pixels", published: online }
     multimodal:
-      label: "Vision & Language"
+      label: "Audio & Language"
       posts:
         - { slug: "2026-10-15-vl-jepa", title: "VL-JEPA: Predicting Answer Embeddings Before Decoding Words", published: online }
+        - { slug: "2026-10-16-audio-jepa", title: "Audio-JEPA: Predicting Missing Sound Representations", published: online }
+        - { slug: "2026-10-16-llm-jepa", title: "LLM-JEPA: Add Representation Prediction Without Losing Text Generation", published: online }
+    generative:
+      label: "Generative Extensions"
+      posts:
+        - { slug: "2026-10-16-d-jepa", title: "D-JEPA: Combining Feature Prediction with Generative Denoising", published: online }
 
 
 # ──────────────────────────────────────────────────────────────────────────

@@ -595,3 +595,36 @@ arxiv-2603-14482:
   image: /images/blog/papers/arxiv-2603-14482.png
   width: 1100
   height: 1424
+
+arxiv-2507-02915:
+  title: 'Audio-JEPA: Joint-Embedding Predictive Architecture for Audio Representation Learning'
+  authors: Ludovic Tuncay, Etienne Labbé, Emmanouil Benetos, and Thomas Pellegrini
+  source: https://arxiv.org/abs/2507.02915
+  pdf: https://arxiv.org/pdf/2507.02915
+  image: /images/blog/papers/arxiv-2507-02915.png
+  width: 1100
+  height: 1424
+arxiv-2509-14252:
+  title: 'LLM-JEPA: Large Language Models Meet Joint Embedding Predictive Architectures'
+  authors: Hai Huang, Yann LeCun, and Randall Balestriero
+  source: https://arxiv.org/abs/2509.14252
+  pdf: https://arxiv.org/pdf/2509.14252
+  image: /images/blog/papers/arxiv-2509-14252.png
+  width: 1100
+  height: 1424
+arxiv-2603-19312:
+  title: 'LeWorldModel: Stable End-to-End Joint-Embedding Predictive Architecture from Pixels'
+  authors: Lucas Maes, Quentin Le Lidec, Damien Scieur, Yann LeCun, and Randall Balestriero
+  source: https://arxiv.org/abs/2603.19312
+  pdf: https://arxiv.org/pdf/2603.19312
+  image: /images/blog/papers/arxiv-2603-19312.png
+  width: 1100
+  height: 1424
+arxiv-2410-03755:
+  title: Denoising with a Joint-Embedding Predictive Architecture
+  authors: Dengsheng Chen, Jie Hu, Xiaoming Wei, and Enhua Wu
+  source: https://arxiv.org/abs/2410.03755
+  pdf: https://arxiv.org/pdf/2410.03755
+  image: /images/blog/papers/arxiv-2410-03755.png
+  width: 1100
+  height: 1424
