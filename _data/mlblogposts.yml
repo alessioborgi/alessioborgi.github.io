@@ -688,6 +688,90 @@ jepa:
         - { slug: "2026-10-16-d-jepa", title: "D-JEPA: Combining Feature Prediction with Generative Denoising", published: online }
 
 
+
+# BOOK XI: NATURAL LANGUAGE PROCESSING
+nlp:
+  label: "Book XI: Natural Language Processing"
+  icon: "💬"
+  color: "#0f766e"
+
+  overview:
+    - { slug: "2026-10-19-nlp-overview", title: "Natural Language Processing: From Text to Structure and Meaning", published: online }
+
+  sections:
+    foundations:
+      label: "Text, Corpora & Morphology"
+      posts:
+        - { slug: "2026-10-19-corpora-and-annotation", title: "Corpora and Annotation: What Your Dataset Actually Measures", published: online }
+        - { slug: "2026-10-19-tokenisation-and-morphology", title: "Tokenisation and Morphology: What Counts as a Word?", published: online }
+        - { slug: "2026-10-19-subword-tokenisation", title: "Subword Tokenisation: BPE, WordPiece and Unigram Models", published: online }
+        - { slug: "2026-10-19-finite-state-morphology", title: "Finite-State Morphology: From Lemmas and Features to Surface Words", published: online }
+        - { slug: "2026-10-19-spelling-and-edit-distance", title: "Spelling Correction: Edit Distance and the Noisy Channel", published: online }
+
+    representations:
+      label: "Lexical & Distributional Representations"
+      posts:
+        - { slug: "2026-10-19-text-representations", title: "Text Representations: Counts, TF–IDF and Word Vectors", published: online }
+        - { slug: "2026-10-19-distributional-semantics", title: "Distributional Semantics: Co-occurrence, PMI and Latent Semantic Analysis", published: online }
+        - { slug: "2026-10-19-word2vec", title: "Word2vec: Skip-Gram, Negative Sampling and What the Vectors Learn", published: online }
+        - { slug: "2026-10-19-glove-and-fasttext", title: "GloVe and fastText: Global Counts and Subword Sharing", published: online }
+
+    language-models:
+      label: "Language Models & Decoding"
+      posts:
+        - { slug: "2026-10-19-ngram-language-models", title: "N-gram Language Models: Counts, Smoothing and Perplexity", published: online }
+        - { slug: "2026-10-19-smoothing-and-kneser-ney", title: "Smoothing Language Models: Backoff, Interpolation and Kneser–Ney", published: online }
+        - { slug: "2026-10-19-neural-language-models", title: "Neural Language Models: Shared Embeddings, Recurrence and Training", published: online }
+        - { slug: "2026-10-19-decoding-and-search", title: "Decoding Text: Greedy Search, Beam Search and Sampling", published: online }
+
+    classification:
+      label: "Classification, Sentiment & Topics"
+      posts:
+        - { slug: "2026-10-19-text-classification", title: "Text Classification: A Baseline You Can Explain", published: online }
+        - { slug: "2026-10-19-sentiment-and-aspect-analysis", title: "Sentiment and Aspect Analysis: Who Feels What About Which Feature?", published: online }
+        - { slug: "2026-10-19-topic-models", title: "Topic Models: LDA, Mixed Membership and Interpretable Word Groups", published: online }
+
+    sequence-models:
+      label: "Tagging & Information Extraction"
+      posts:
+        - { slug: "2026-10-19-sequence-labelling", title: "Sequence Labelling: Parts of Speech and Named Entities", published: online }
+        - { slug: "2026-10-19-hidden-markov-models", title: "Hidden Markov Models: Forward Probabilities, Viterbi and Tagging", published: online }
+        - { slug: "2026-10-19-conditional-random-fields", title: "Conditional Random Fields: Global Normalisation for Sequence Labels", published: online }
+        - { slug: "2026-10-19-named-entities-and-linking", title: "Named Entities and Entity Linking: From Spans to Identifiers", published: online }
+
+    syntax:
+      label: "Syntax & Parsing Algorithms"
+      posts:
+        - { slug: "2026-10-19-syntactic-parsing", title: "Syntactic Parsing: Constituents, Dependencies and Ambiguity", published: online }
+        - { slug: "2026-10-19-constituency-and-cky", title: "Constituency Parsing with CKY: Spans, Split Points and Inside Scores", published: online }
+        - { slug: "2026-10-19-dependency-parsing", title: "Dependency Parsing: Transition Systems, Tree Constraints and Attachment Scores", published: online }
+
+    semantics:
+      label: "Semantics, Reference & Inference"
+      posts:
+        - { slug: "2026-10-19-semantics-and-discourse", title: "Semantics and Discourse: Roles, Negation and Reference", published: online }
+        - { slug: "2026-10-19-lexical-semantics-and-wsd", title: "Lexical Semantics and Word Senses: Relations, Glosses and Context", published: online }
+        - { slug: "2026-10-19-semantic-role-labelling", title: "Semantic Role Labelling: Predicates, Arguments and Event Structure", published: online }
+        - { slug: "2026-10-19-coreference-resolution", title: "Coreference Resolution: Mentions, Antecedents and Entity Clusters", published: online }
+        - { slug: "2026-10-19-natural-language-inference", title: "Natural Language Inference: Entailment, Contradiction and Shortcuts", published: online }
+
+    applications:
+      label: "Retrieval, Translation & Language Applications"
+      posts:
+        - { slug: "2026-10-19-lexical-retrieval-bm25", title: "Lexical Retrieval and BM25: Ranking Documents Without Losing Rare Terms", published: online }
+        - { slug: "2026-10-19-machine-translation", title: "Machine Translation: Alignment, Conditional Generation and Evaluation", published: online }
+        - { slug: "2026-10-19-question-answering", title: "Question Answering: Retrieval, Span Extraction and Answerability", published: online }
+        - { slug: "2026-10-19-summarisation", title: "Summarisation: Selection, Compression and Faithfulness", published: online }
+        - { slug: "2026-10-19-dialogue-systems", title: "Dialogue Systems: Intent, State Tracking and Conversational Repair", published: online }
+
+    evaluation:
+      label: "Evaluation, Multilinguality & Experiments"
+      posts:
+        - { slug: "2026-10-19-evaluation", title: "Evaluating NLP: Metrics, Leakage and Language Errors", published: online }
+        - { slug: "2026-10-19-multilingual-nlp", title: "Multilingual NLP: Transfer, Tokenisation and Uneven Language Coverage", published: online }
+        - { slug: "2026-10-19-experimental-design", title: "NLP Experimental Design: Paired Tests, Ablations and Behavioural Checks", published: online }
+
+
 # ──────────────────────────────────────────────────────────────────────────
 # A1: MATHEMATICAL BASICS
 # ──────────────────────────────────────────────────────────────────────────
