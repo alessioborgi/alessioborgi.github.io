@@ -6,19 +6,19 @@ categories: [nlp]
 book: nlp
 subsection: foundations
 tags: ["nlp", "language", "overview"]
-excerpt: "A complete route through 36 NLP chapters: corpora, morphology, word vectors, language models, structured prediction, syntax, semantics, applications and evaluation."
+excerpt: "A complete route through 59 NLP chapters: corpora, morphology, word vectors, language models, structured prediction, syntax, semantics, applications, retrieval-augmented generation and evaluation."
 author_profile: true
 read_time: true
 is_overview: true
 icon: "💬"
-read_mins: 10
+read_mins: 14
 permalink: /blog/nlp/overview/
 toc: true
 toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-  <strong>TL;DR:</strong> This book develops natural language processing through <strong>36 chapters in nine sections</strong>: text and corpora, lexical representations, language models, classification, sequence prediction, syntax, semantics, applications and evaluation. Each chapter explains the assumptions, works through the mechanism, and identifies the mistakes that matter in practice.
+  <strong>TL;DR:</strong> This book develops natural language processing through <strong>59 chapters in fifteen sections</strong>: text and corpora, lexical representations, language models, classification, sequence prediction, syntax, semantics, applications, retrieval-augmented generation and evaluation. Each chapter explains the assumptions, works through the mechanism, and identifies the mistakes that matter in practice.
 </div>
 
 ## Language is both data and structure
@@ -112,6 +112,59 @@ Assemble language components into retrieval, translation, question answering, su
 - [Summarisation](/blog/nlp/summarisation/) — Compare extractive and abstractive summaries, derive a redundancy-aware selector and a ROUGE example, and audit factual claims against the source.
 - [Dialogue Systems](/blog/nlp/dialogue-systems/) — Model a conversation as evolving information, distinguish state from utterance labels, and design clarification and evaluation around task completion.
 
+### RAG: Foundations & Index Design
+
+Trace a question through ingestion, indexing, evidence selection and generation. Distinguish the original RAG objective from a modern retrieve–prompt–generate pipeline.
+
+- [Retrieval-Augmented Generation](/blog/nlp/rag-foundations/) — Build a complete mental model of RAG, locate its failure points, and follow the important paper families from dense retrieval to search agents and graph-based synthesis.
+- [RAG Index Design](/blog/nlp/rag-chunking-indexes/) — Choose retrieval units without losing document structure, preserve provenance through indexing, and evaluate chunking under a fixed evidence budget.
+- [The Original RAG Paper](/blog/nlp/rag-original-paper/) — Derive the two marginalisation schemes in Lewis et al., work through a toy mixture, and distinguish them from concatenating search results into a prompt.
+
+### RAG: Retrieval, Reranking & Query Expansion
+
+Compare dense, sparse and token-level retrieval, combine candidate lists, and expand queries without confusing generated search hints with evidence.
+
+- [DPR and Contriever](/blog/nlp/rag-dpr-contriever/) — Derive dual-encoder retrieval and contrastive training, compare supervised DPR with Contriever pretraining, and separate embedding errors from approximate-search errors.
+- [ColBERT and SPLADE](/blog/nlp/rag-colbert-splade/) — Compare late token interaction with learned sparse expansion, work through MaxSim, and understand the storage and matching tradeoffs.
+- [Hybrid Retrieval and Reranking](/blog/nlp/rag-hybrid-reranking/) — Combine lexical and dense candidates without mixing incompatible score scales, calculate RRF, and identify the recall ceiling of a reranker.
+- [HyDE and Query2doc](/blog/nlp/rag-query-expansion/) — Compare hypothetical-document embeddings with pseudo-document query expansion, and diagnose drift when generated search text invents the wrong details.
+
+### RAG: Retrieval-Aware Language Models
+
+Follow the different places retrieval can enter a language model: pre-training, reader fusion, chunk attention, next-token memory and frozen-model inference.
+
+- [REALM](/blog/nlp/rag-realm/) — Explain latent retrieval for masked prediction, derive document responsibility, and understand why a changing document encoder requires index refreshes.
+- [Fusion-in-Decoder and Atlas](/blog/nlp/rag-fid-atlas/) — Explain independent passage encoding with shared decoding, compare FiD with Atlas training, and analyse how multi-passage fusion changes computation and evidence use.
+- [RETRO](/blog/nlp/rag-retro/) — Explain chunk-level neighbour retrieval and continuation memory, distinguish RETRO from prompt-based RAG, and audit causal boundaries and datastore overlap.
+- [kNN-LM](/blog/nlp/rag-knn-lm/) — Derive distance-weighted neighbour probabilities and interpolation with a base language model, then distinguish token memory from passage retrieval.
+- [REPLUG](/blog/nlp/rag-replug/) — Explain document-conditioned probability ensembling and reader-guided retriever learning, including the interface capabilities required to reproduce them.
+
+### RAG: Adaptive Retrieval & Search Agents
+
+Decide when to retrieve, when to correct poor evidence and how to search through several steps. Separate prompted control loops from learned retrieval policies.
+
+- [Self-RAG](/blog/nlp/rag-self-rag/) — Explain retrieval and reflection tokens, separate relevance from support and utility, and analyse why self-assessment needs independent evaluation.
+- [CRAG and Adaptive-RAG](/blog/nlp/rag-crag-adaptive/) — Compare retrieval-quality correction with question-complexity routing, work through a cost-sensitive decision, and evaluate branch errors separately.
+- [FLARE](/blog/nlp/rag-flare/) — Explain forward-looking retrieval, confidence-triggered regeneration and the difference between useful uncertainty signals and calibrated factual confidence.
+- [IRCoT and ReAct](/blog/nlp/rag-ircot-react/) — Compare retrieval-guided reasoning with general tool interaction, follow a two-hop evidence graph, and distinguish generated plans from observed results.
+- [Search-R1](/blog/nlp/rag-search-r1/) — Explain retrieval inside an RL rollout, distinguish action tokens from retrieved observations, and diagnose reward shortcuts and search-environment dependence.
+
+### RAG: Trees, Graphs & Corpus Synthesis
+
+Move beyond independent passages to summary trees, entity relationships and community reports. Track the original evidence through every compression step.
+
+- [RAPTOR](/blog/nlp/rag-raptor/) — Explain hierarchical summarisation for retrieval, compare tree traversal with collapsed search, and trace summary claims back to original evidence.
+- [GraphRAG](/blog/nlp/rag-graphrag/) — Explain the original GraphRAG approach to corpus-level synthesis, distinguish communities from evidence proofs, and audit extraction and summarisation errors.
+- [LightRAG](/blog/nlp/rag-lightrag/) — Compare entity-focused and relation-focused retrieval, explain graph-plus-vector indexing, and inspect the limits of incremental updates and local neighbourhood expansion.
+
+### RAG: Evaluation, Citations & Long Context
+
+Evaluate evidence access, faithful generation and citation support separately. Compare retrieval with long-context reading under explicit corpus and cost budgets.
+
+- [Evaluating RAG](/blog/nlp/rag-evaluation/) — Separate retrieval coverage, faithfulness and answer quality, compare automated evaluation approaches, and calibrate judge predictions against human labels.
+- [Citations in RAG](/blog/nlp/rag-attribution/) — Distinguish answer correctness from citation correctness, audit compound claims, and trace generated statements through summaries and graphs to source evidence.
+- [RAG or Long Context? Lost in the Middle, LongRAG and Routing](/blog/nlp/rag-long-context/) — Compare evidence selection with evidence reading, explain positional sensitivity, and design fair experiments for retrieval, larger context windows and hybrid routes.
+
 ### Evaluation, Multilinguality & Experiments
 
 Choose metrics, compare systems responsibly and examine multilingual coverage. These chapters connect a benchmark result to the actual claim it supports.
@@ -120,13 +173,15 @@ Choose metrics, compare systems responsibly and examine multilingual coverage. T
 - [Multilingual NLP](/blog/nlp/multilingual-nlp/) — Analyse cross-lingual transfer, sampling balance and token fragmentation, then design evaluations that expose weak languages and annotation mismatches.
 - [NLP Experimental Design](/blog/nlp/experimental-design/) — Design comparisons that isolate a change, quantify uncertainty on shared examples, and detect linguistic shortcuts that a benchmark average conceals.
 
-## Three routes through the book
+## Four routes through the book
 
 **A first course.** Read the text foundations, representation overview and n-gram model before the sequence and parsing sections. Continue with semantics and an application that interests you. Basic probability, logarithms and vector notation are enough to begin; the algorithm chapters derive their dynamic programs rather than assuming you already know them.
 
 **An implementation route.** Start with corpus design, tokenisation, sparse representations and text classification. Add the evaluation and experimental-design chapters early. Then choose a task pipeline such as entity linking, retrieval plus QA, or dialogue state tracking. Keep original text, offsets and intermediate predictions so each component can be checked independently.
 
 **A mathematical route.** Follow PMI/SVD, negative sampling, smoothing, HMMs, CRFs and CKY. These chapters reveal recurring computations: normalising scores, marginalising hidden choices, maximising structured paths and sharing subproblems. Compare the objectives before comparing model names.
+
+**A RAG research route.** Begin with lexical retrieval and question answering, then read the RAG pipeline and original-paper chapters. Follow dense and hybrid retrieval into FiD/Atlas and retrieval-aware language models. Continue with adaptive search, trees and graphs, and finish with evaluation, attribution and long context. The 23 RAG chapters connect the original papers to worked mechanisms, practical trade-offs and experiments that distinguish their contributions.
 
 ## A running diagnostic set
 
@@ -147,7 +202,7 @@ The diagnostic set complements a representative held-out test set. It explains p
 <div class="key-takeaways">
   <h3>Recap</h3>
   <ul>
-    <li>The book contains 36 substantive chapters across nine connected sections.</li>
+    <li>The book contains 59 substantive chapters across fifteen connected sections.</li>
     <li>Text processing, model assumptions and annotation conventions jointly define the task.</li>
     <li>Worked examples expose what an algorithm actually computes.</li>
     <li>Evaluate language-specific behaviour alongside aggregate metrics and uncertainty.</li>
@@ -159,3 +214,4 @@ The diagnostic set complements a representative held-out test set. It explains p
 1. Jurafsky and Martin. [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/).
 2. Bird, Klein and Loper. [Natural Language Processing with Python](https://www.nltk.org/book/).
 3. Manning and Schütze. *Foundations of Statistical Natural Language Processing*. MIT Press, 1999.
+4. Lewis et al. [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401). NeurIPS, 2020.

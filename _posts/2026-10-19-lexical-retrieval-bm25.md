@@ -76,6 +76,10 @@ Indexing whole documents versus passages changes lengths, vocabulary statistics 
 
 Evaluate both answer-containing passage recall and downstream answer quality when retrieval supports QA. A high ranking score is not evidence that a passage entails a particular answer; it only measures the retrieval model's match under its scoring rule.
 
+## Where this goes next
+
+BM25 also supplies a strong candidate source for RAG. Continue with [DPR and Contriever](/blog/nlp/rag-dpr-contriever/) for dense retrieval, [ColBERT and SPLADE](/blog/nlp/rag-colbert-splade/) for alternative interaction structures, and [hybrid retrieval and reranking](/blog/nlp/rag-hybrid-reranking/) for combining their strengths.
+
 <div class="insight-box">
   <strong>Key Insight:</strong> BM25 distinguishes repeated evidence from independent evidence: more occurrences help, but with diminishing returns and a correction for how much text produced them.
 </div>

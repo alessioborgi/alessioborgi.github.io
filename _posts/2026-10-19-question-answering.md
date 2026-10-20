@@ -11,7 +11,7 @@ author_profile: true
 read_time: true
 is_overview: false
 icon: "❓"
-read_mins: 4
+read_mins: 5
 permalink: /blog/nlp/question-answering/
 toc: true
 toc_label: "Contents"
@@ -91,6 +91,10 @@ Retrieval recall asks whether a supporting passage appears among candidates. Rea
 Exact match requires an answer string to match a reference after specified normalisation. Token F1 measures lexical overlap; for predicted `North Harbour` and gold `North Harbour Labs`, precision is one, recall is $$2/3$$ and F1 is 0.8. That partial score does not necessarily mean the named organisation was identified correctly.
 
 Multiple valid answer forms and aliases require an evaluation policy. Also report answerability, unsupported-answer rates and performance on questions requiring more than one sentence. A high extractive F1 should not be advertised as evidence of broad conversational reasoning.
+
+## Where this goes next
+
+For generative answers grounded in retrieved documents, continue with [the RAG pipeline](/blog/nlp/rag-foundations/) and [the original RAG paper](/blog/nlp/rag-original-paper/). Then compare [FiD and Atlas](/blog/nlp/rag-fid-atlas/) for combining passage evidence, and [citation attribution](/blog/nlp/rag-attribution/) for checking whether the answer is actually supported.
 
 <div class="insight-box">
   <strong>Key Insight:</strong> Answerability is a separate prediction from span selection. Every passage has a highest-scoring span, including passages that contain no answer.

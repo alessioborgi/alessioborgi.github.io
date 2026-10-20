@@ -764,6 +764,53 @@ nlp:
         - { slug: "2026-10-19-summarisation", title: "Summarisation: Selection, Compression and Faithfulness", published: online }
         - { slug: "2026-10-19-dialogue-systems", title: "Dialogue Systems: Intent, State Tracking and Conversational Repair", published: online }
 
+    rag-foundations:
+      label: "RAG: Foundations & Index Design"
+      posts:
+        - { slug: "2026-10-20-rag-foundations", title: "Retrieval-Augmented Generation: The Pipeline, the Evidence and the Paper Map", published: online }
+        - { slug: "2026-10-20-rag-chunking-indexes", title: "RAG Index Design: Chunking, Metadata, Updates and Context Budgets", published: online }
+        - { slug: "2026-10-20-rag-original-paper", title: "The Original RAG Paper: Latent Documents, RAG-Sequence and RAG-Token", published: online }
+
+    rag-retrieval:
+      label: "RAG: Retrieval, Reranking & Query Expansion"
+      posts:
+        - { slug: "2026-10-20-rag-dpr-contriever", title: "DPR and Contriever: Learning a Searchable Dense Representation", published: online }
+        - { slug: "2026-10-20-rag-colbert-splade", title: "ColBERT and SPLADE: Beyond One Dense Vector per Passage", published: online }
+        - { slug: "2026-10-20-rag-hybrid-reranking", title: "Hybrid Retrieval and Reranking: BM25, Reciprocal Rank Fusion and Cross-Encoders", published: online }
+        - { slug: "2026-10-20-rag-query-expansion", title: "HyDE and Query2doc: Generate a Better Search Representation", published: online }
+
+    rag-models:
+      label: "RAG: Retrieval-Aware Language Models"
+      posts:
+        - { slug: "2026-10-20-rag-realm", title: "REALM: Learning to Retrieve During Language-Model Pretraining", published: online }
+        - { slug: "2026-10-20-rag-fid-atlas", title: "Fusion-in-Decoder and Atlas: Reading Many Passages and Learning Retrieval", published: online }
+        - { slug: "2026-10-20-rag-retro", title: "RETRO: Retrieval Inside an Autoregressive Language Model", published: online }
+        - { slug: "2026-10-20-rag-knn-lm", title: "kNN-LM: A Datastore of Contexts and Next Tokens", published: online }
+        - { slug: "2026-10-20-rag-replug", title: "REPLUG: Retrieval for a Frozen Black-Box Language Model", published: online }
+
+    rag-adaptive:
+      label: "RAG: Adaptive Retrieval & Search Agents"
+      posts:
+        - { slug: "2026-10-20-rag-self-rag", title: "Self-RAG: Learning When to Retrieve and How to Critique Evidence", published: online }
+        - { slug: "2026-10-20-rag-crag-adaptive", title: "CRAG and Adaptive-RAG: Correct the Evidence or Route the Question", published: online }
+        - { slug: "2026-10-20-rag-flare", title: "FLARE: Retrieve for the Sentence the Model Is About to Write", published: online }
+        - { slug: "2026-10-20-rag-ircot-react", title: "IRCoT and ReAct: Interleave Evidence Acquisition with Multi-Step Work", published: online }
+        - { slug: "2026-10-20-rag-search-r1", title: "Search-R1: Learning a Search Policy with Reinforcement Learning", published: online }
+
+    rag-structured:
+      label: "RAG: Trees, Graphs & Corpus Synthesis"
+      posts:
+        - { slug: "2026-10-20-rag-raptor", title: "RAPTOR: Retrieve Across Chunks and Recursive Summaries", published: online }
+        - { slug: "2026-10-20-rag-graphrag", title: "GraphRAG: Entity Graphs, Community Reports and Global Questions", published: online }
+        - { slug: "2026-10-20-rag-lightrag", title: "LightRAG: Dual-Level Retrieval over Entities and Relationships", published: online }
+
+    rag-evidence:
+      label: "RAG: Evaluation, Citations & Long Context"
+      posts:
+        - { slug: "2026-10-20-rag-evaluation", title: "Evaluating RAG: RAGAS, ARES and Evidence-Centred Experiments", published: online }
+        - { slug: "2026-10-20-rag-attribution", title: "Citations in RAG: ALCE, Claim Support and Source Provenance", published: online }
+        - { slug: "2026-10-20-rag-long-context", title: "RAG or Long Context? Lost in the Middle, LongRAG and Routing", published: online }
+
     evaluation:
       label: "Evaluation, Multilinguality & Experiments"
       posts:

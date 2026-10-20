@@ -83,6 +83,10 @@ Compare systems at similar length budgets and on the same document distribution.
 
 For long documents, evaluate whether the retrieval or chunk-selection stage discarded key evidence before generation. A summariser cannot faithfully include a critical qualification it was never allowed to see.
 
+## Where this goes next
+
+When summaries become searchable evidence, their errors can propagate into later answers. [RAPTOR](/blog/nlp/rag-raptor/) builds a hierarchy of summaries, while [GraphRAG](/blog/nlp/rag-graphrag/) uses graph communities and reports for corpus-level synthesis. Both make the relationship between a compressed representation and its original sources essential.
+
 <div class="insight-box">
   <strong>Key Insight:</strong> Faithfulness concerns the relationship between output claims and source evidence. It is separate from how much wording overlaps with a reference summary.
 </div>

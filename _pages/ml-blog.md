@@ -1502,7 +1502,7 @@ author_profile: true
     <span class="book-icon">💬</span>
     <div>
       <h2>Book XI, Natural Language Processing</h2>
-      <p>36 chapters on corpora, morphology, language models, syntax, semantics and language applications</p>
+      <p>59 chapters on language foundations, syntax, semantics, applications and retrieval-augmented generation</p>
     </div>
   </div>
   <div class="book-body">
@@ -1514,7 +1514,7 @@ author_profile: true
       <p>{{ nlp_overview.excerpt | strip_html | truncate: 210 }}</p>
       <div class="blog-meta">
         <span class="blog-read-badge">📖 {{ nlp_overview.read_mins | default: "3" }} min read</span>
-        <span>Nine sections, from text foundations to complete NLP systems</span>
+        <span>Fifteen sections, including 23 chapters on RAG and related research</span>
       </div>
     </a>
     {% endif %}
