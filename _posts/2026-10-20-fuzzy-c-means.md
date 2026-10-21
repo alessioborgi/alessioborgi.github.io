@@ -4,7 +4,7 @@ title: "Fuzzy C-means: Membership Weights, Fuzziness and Alternating Updates"
 date: "2026-10-20 10:21:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "clustering"
+subsection: clustering
 tags: ["machine-learning", "clustering", "fuzzy-clustering", "soft-assignments"]
 excerpt: "Derive the membership and centre updates, calculate a two-centre assignment, and distinguish fuzzy membership from a probabilistic mixture posterior."
 author_profile: true
@@ -35,7 +35,8 @@ For exponent $$m>1$$ and centres $$v_j$$, minimise
 \[
 J_m(U,V)=\sum_i\sum_{j=1}^k u_{ij}^{m}\|x_i-v_j\|^2,
 \qquad \sum_j u_{ij}=1.
-\]\n</div>
+\]
+</div>
 
 Larger m softens the effect of memberships and tends toward more diffuse assignments. Values approaching one produce sharper assignments, away from ties. m is a modelling parameter, not the number of clusters or a probability temperature derived automatically from data.
 
@@ -48,7 +49,8 @@ For fixed U, differentiate with respect to a centre. The resulting weighted mean
 <div class="formula-box">
 \[
 v_j=\frac{\sum_i u_{ij}^{m}x_i}{\sum_i u_{ij}^{m}}.
-\]\n</div>
+\]
+</div>
 
 The weights are membership raised to m, not raw membership. With points 0 and 10, memberships 0.8 and 0.2 for one cluster, and m=2, the updated centre is $$10(0.2)^2/((0.8)^2+(0.2)^2)=10/17\approx0.588$$.
 
@@ -61,9 +63,10 @@ With centres fixed and nonzero distances $$d_{ij}=\|x_i-v_j\|$$, a Lagrange mult
 <div class="formula-box">
 \[
 u_{ij}=\frac{1}{\sum_{l=1}^k(d_{ij}/d_{il})^{2/(m-1)}}.
-\]\n</div>
+\]
+</div>
 
-Here the left-hand symbol denotes the membership $$u_{ij}$$. The exponent is written for ordinary distances. If an implementation starts from squared distances, the corresponding exponent is $$1/(m-1)$$ instead. Confusing these conventions makes assignments too sharp or too diffuse.
+The exponent is written for ordinary distances. If an implementation starts from squared distances, the corresponding exponent is $$1/(m-1)$$ instead. Confusing these conventions makes assignments too sharp or too diffuse.
 
 For two centres at distances 1 and 2 and m=2, memberships are $$1/(1+1/4)=0.8$$ and 0.2. With m=3, they become $$1/(1+1/2)=2/3$$ and 1/3. Increasing fuzziness makes the more distant centre less strongly excluded.
 

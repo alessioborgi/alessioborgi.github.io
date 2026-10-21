@@ -4,7 +4,7 @@ title: "Random Forests: Bootstrap Trees, Feature Randomness and Out-of-Bag Evalu
 date: "2026-10-20 10:07:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "trees-ensembles"
+subsection: trees-ensembles
 tags: ["machine-learning", "ensembles", "random-forests", "bagging"]
 excerpt: "Derive the variance of correlated averages, calculate the out-of-bag fraction, and explain why random feature subsets and diagnostic choices matter."
 author_profile: true
@@ -34,7 +34,8 @@ Suppose B scalar tree predictions have equal variance $$\sigma^2$$ and equal pai
 <div class="formula-box">
 \[
 \operatorname{Var}(\bar T)=\rho\sigma^2+\frac{1-\rho}{B}\sigma^2.
-\]\n</div>
+\]
+</div>
 
 If $$\sigma^2=4$$, rho=0.25 and B=100, the variance is $$1+0.03=1.03$$. With independent predictions it would be 0.04. More trees reduce the finite-ensemble term but cannot remove the shared component in this simplified model.
 
@@ -55,7 +56,8 @@ The probability that a particular observation is absent from one size-n bootstra
 <div class="formula-box">
 \[
 \left(1-\frac1n\right)^n\longrightarrow e^{-1}\approx0.368.
-\]\n</div>
+\]
+</div>
 
 Thus each training observation is excluded from roughly 36.8% of sufficiently large bootstrap samples on average. Its out-of-bag prediction aggregates only trees that did not train on it.
 

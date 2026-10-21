@@ -2,7 +2,7 @@
 layout: single
 title: "JEPA: Learning What to Predict in Representation Space"
 date: 2026-10-15
-last_modified_at: 2026-10-16
+last_modified_at: 2026-10-21
 categories: [jepa]
 book: jepa
 subsection: foundations
@@ -71,6 +71,7 @@ A second failure is subtler. Suppose two scenes differ only in whether a cup is 
 |---|---|
 | [I-JEPA](/blog/jepa/i-jepa/) | How do masking and target features shape image learning? |
 | [LeJEPA](/blog/jepa/lejepa/) | Why must agreement be paired with a distribution constraint? |
+| [LocaLeJEPA](/blog/jepa/localejepa/) | How can local entropy-inspired regularisation respect geometric priors? |
 | [V-JEPA](/blog/jepa/v-jepa/) | What changes when the missing information spans time? |
 | [V-JEPA 2](/blog/jepa/v-jepa-2/) | What additional information makes action-conditioned planning possible? |
 | [V-JEPA 2.1](/blog/jepa/v-jepa-2-1/) | Why can good global features still be poor local features? |

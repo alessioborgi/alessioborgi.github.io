@@ -4,7 +4,7 @@ title: "Clustering: What Each Algorithm Assumes a Cluster Is"
 date: 2026-05-10
 categories: [basics]
 book: basics
-subsection: unsupervised
+subsection: clustering
 tags: [clustering, k-means, dbscan, hierarchical, gaussian-mixture]
 published: true
 is_overview: false
@@ -385,6 +385,10 @@ and you pick the $$k$$ minimising it. The $$p \ln n$$ term makes extra component
 - **You want probabilities, calibrated uncertainty, elliptical clusters, or a criterion for $$k$$:** a Gaussian mixture. It is the right default when clusters overlap and you need to say *how much*.
 
 One practical note that outranks all of the above: **every method here except the hierarchical ones with a custom metric depends on the scale of your features.** A feature measured in metres and one measured in millimetres are not comparable under Euclidean distance, and the second will dominate every distance in the dataset. Standardise first, or decide deliberately not to and be able to say why.
+
+## Dedicated method chapters
+
+This survey connects the family. Continue with the individual chapters for derivations, worked examples, implementation choices and evaluation: [K-means](/blog/basics/k-means/), [Mini-Batch K-means](/blog/basics/mini-batch-k-means/), [K-medoids](/blog/basics/k-medoids/), [Agglomerative Clustering](/blog/basics/agglomerative-clustering/), [DBSCAN](/blog/basics/dbscan/), [OPTICS](/blog/basics/optics/), [HDBSCAN](/blog/basics/hdbscan/), [Gaussian Mixture Models](/blog/basics/gaussian-mixtures/), [Spectral Clustering](/blog/basics/spectral-clustering/), [Mean Shift](/blog/basics/mean-shift/), [BIRCH](/blog/basics/birch/), [Fuzzy C-means](/blog/basics/fuzzy-c-means/), [Evaluating Clustering](/blog/basics/clustering-evaluation/).
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

@@ -4,7 +4,7 @@ title: "K-Nearest Neighbours: Local Prediction, Distance Weighting and Dimension
 date: "2026-10-20 10:04:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "supervised"
+subsection: supervised
 tags: ["machine-learning", "classification", "regression", "nearest-neighbours"]
 excerpt: "Compute classification and regression predictions, analyse the neighbourhood-size tradeoff, and understand why representation and search strategy dominate this simple estimator."
 author_profile: true
@@ -34,14 +34,16 @@ Let $$N_k(x)$$ be the selected k training neighbours. Unweighted regression pred
 <div class="formula-box">
 \[
 \hat f(x)=\frac1k\sum_{i\in N_k(x)}y_i.
-\]\n</div>
+\]
+</div>
 
 Classification estimates local class frequencies and chooses a class according to those frequencies or an explicit decision cost. A weighted form uses nonnegative weights $$w_i(x)$$:
 
 <div class="formula-box">
 \[
 \hat p(c\mid x)=\frac{\sum_{i\in N_k(x)}w_i(x)\mathbf1[y_i=c]}{\sum_{i\in N_k(x)}w_i(x)}.
-\]\n</div>
+\]
+</div>
 
 These local frequencies are not automatically well-calibrated probabilities, particularly with small k, imbalanced sampling or shifted deployment data. Check calibration if decisions depend on numeric probabilities.
 
@@ -52,7 +54,8 @@ Suppose the three neighbours have targets 10, 20 and 40 at distances 1, 2 and 4.
 <div class="formula-box">
 \[
 \hat f(x)=\frac{10+10+10}{1+0.5+0.25}=\frac{120}{7}\approx17.14.
-\]\n</div>
+\]
+</div>
 
 The nearest observation now has greater influence. For classification with labels A, B, B at those same distances, unweighted voting chooses B, but inverse-distance voting gives A total weight 1 and B total 0.75, so it chooses A.
 

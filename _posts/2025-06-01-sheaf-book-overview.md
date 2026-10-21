@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Sheaf Neural Networks: A Complete Research Guide"
+last_modified_at: 2026-10-21
 categories: [sheaf]
 book: sheaf
 subsection: foundations
@@ -329,6 +330,7 @@ The paper chapters are published; the foundations and theory chapters are still 
   <li><strong><a href="/blog/sheaf/dnsd-paper/" style="color:#99f6e4">DNSD</a></strong>, why sheaf diffusion stalls at depth, and what it costs to fix. Read this second: it is the sharpest critique of the framework from inside it.</li>
   <li><strong><a href="/blog/sheaf/hetsheaf-paper/" style="color:#99f6e4">HetSheaf</a></strong>, sheaves on heterogeneous graphs, where node and edge <em>types</em> condition the restriction maps.</li>
   <li><strong><a href="/blog/sheaf/sheafpool/" style="color:#99f6e4">SheafPool</a></strong>, graph-level readout that respects the sheaf's basis ambiguity.</li>
+  <li><strong><a href="/blog/sheaf/bochner-sheaf-laplacians/" style="color:#99f6e4">Bochner–Weitzenböck for sheaves</a></strong>, separates transport from local response, then connects holonomy and curvature to diagnostics of what trained networks learn.</li>
   <li><strong><a href="/blog/sheaf/braindyn-paper/" style="color:#99f6e4">BrainDyn</a></strong>, sheaves inside a neural ODE, applied to brain dynamics. The most different thing in the book.</li>
 </ol>
 </div>
@@ -336,6 +338,10 @@ The paper chapters are published; the foundations and theory chapters are still 
 Still to come: the foundations run (what a sheaf is, cellular sheaves on graphs, cohomology, the Laplacian spectrum, connection Laplacians), the theory run (oversmoothing, heterophily, oversquashing, expressiveness, Hodge decomposition), and the extensions run (cosheaves, simplicial sheaves, multi-relational and temporal sheaves).
 
 ## Key papers at a glance
+
+<div class="paper-box">
+<strong>Guadagnuolo, Borgi, Thanou &amp; Liò (2026)</strong>, <em><a href="/blog/sheaf/bochner-sheaf-laplacians/">A Bochner–Weitzenböck Decomposition for Cellular Sheaf Laplacians, Curvature and Neural Sheaf Diffusion.</a></em> Splits the operator into a positive semidefinite Bochner term and a local Forman term. The resulting theory connects anisotropic transport, holonomy and curvature; conviction and Forman profiles make the viewpoint measurable on trained networks.
+</div>
 
 <div class="paper-box">
 <strong>Hansen &amp; Gebhart (2020)</strong>, <em>Sheaf Neural Networks.</em> The first sheaf GNN. Restriction maps are fixed by hand rather than learned, which makes it the cleanest illustration of what the operator does on its own.

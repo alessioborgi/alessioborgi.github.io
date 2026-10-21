@@ -17,46 +17,82 @@
 # ────────────────────────────────────────────────────────────────────────────
 basics:
   label: "Book 0: Basics"
-  icon:  "🧠"
+  icon: "🧠"
   color: "#2563eb"
 
   overview:
     - { slug: "2026-05-01-basics-overview", title: "Machine Learning Before Transformers: A Working Foundation", published: online }
 
   sections:
-
     foundations:
-      label: "Learning Foundations"
+      label: "Learning Foundations & Experimental Practice"
       posts:
         - { slug: "2026-05-02-bias-variance-and-regularisation", title: "Bias, Variance, and Regularisation: Why Models Fail to Generalise", published: online }
-        - { slug: "2026-05-03-gradient-descent-and-backprop",    title: "Gradient Descent and Backpropagation: How a Model Learns",        published: online }
+        - { slug: "2026-05-03-gradient-descent-and-backprop", title: "Gradient Descent and Backpropagation: How a Model Learns", published: online }
+        - { slug: "2026-10-20-ml-preprocessing", title: "ML Preprocessing: Scaling, Missing Values and Leakage-Safe Pipelines", published: online }
+        - { slug: "2026-10-20-ml-cross-validation", title: "Cross-Validation: Splits, Nested Selection and Honest Generalisation Estimates", published: online }
 
     supervised:
-      label: "Supervised Learning"
+      label: "Linear, Local & Probabilistic Prediction"
       posts:
-        - { slug: "2026-05-05-linear-regression",       title: "Linear Regression: Least Squares as Projection",   published: online }
-        - { slug: "2026-05-06-logistic-regression",     title: "Logistic Regression: Linear in the Log-Odds",      published: online }
-        - { slug: "2026-05-07-trees-forests-boosting",  title: "Trees, Forests, and Boosting: Axis-Aligned Everything", published: online }
-        - { slug: "2026-05-08-svm-and-kernels",         title: "Support Vector Machines: Margins and the Kernel Trick", published: online }
+        - { slug: "2026-05-05-linear-regression", title: "Linear Regression: Least Squares as Projection", published: online }
+        - { slug: "2026-10-20-ridge-regression", title: "Ridge Regression: Shrinkage, Singular Directions and Stable Prediction", published: online }
+        - { slug: "2026-10-20-lasso-regression", title: "Lasso Regression: Soft Thresholding, Sparse Solutions and Correlated Features", published: online }
+        - { slug: "2026-05-06-logistic-regression", title: "Logistic Regression: Linear in the Log-Odds", published: online }
+        - { slug: "2026-10-20-nearest-neighbours", title: "K-Nearest Neighbours: Local Prediction, Distance Weighting and Dimensionality", published: online }
+        - { slug: "2026-10-20-naive-bayes", title: "Naive Bayes: Conditional Independence, Smoothing and Log-Space Prediction", published: online }
+        - { slug: "2026-05-08-svm-and-kernels", title: "Support Vector Machines: Margins and the Kernel Trick", published: online }
 
-    unsupervised:
-      label: "Unsupervised Learning"
+    trees-ensembles:
+      label: "Decision Trees & Ensembles"
+      posts:
+        - { slug: "2026-05-07-trees-forests-boosting", title: "Trees, Forests, and Boosting: Axis-Aligned Everything", published: online }
+        - { slug: "2026-10-20-decision-trees", title: "Decision Trees: Split Criteria, Leaf Predictions and Cost-Complexity Pruning", published: online }
+        - { slug: "2026-10-20-random-forests", title: "Random Forests: Bootstrap Trees, Feature Randomness and Out-of-Bag Evaluation", published: online }
+        - { slug: "2026-10-20-adaboost", title: "AdaBoost: Reweighted Examples, Margins and Exponential Loss", published: online }
+        - { slug: "2026-10-20-gradient-boosting", title: "Gradient Boosting: Functional Gradients, Leaf Updates and Regularisation", published: online }
+
+    clustering:
+      label: "Clustering: One Method at a Time"
       posts:
         - { slug: "2026-05-10-clustering", title: "Clustering: What Each Algorithm Assumes a Cluster Is", published: online }
+        - { slug: "2026-10-20-k-means", title: "K-means: Deriving Lloyd’s Algorithm, Choosing Centres and Diagnosing Failure", published: online }
+        - { slug: "2026-10-20-mini-batch-k-means", title: "Mini-Batch K-means: Online Centroid Updates and the Cost of Approximation", published: online }
+        - { slug: "2026-10-20-k-medoids", title: "K-medoids: Representative Observations, Dissimilarities and PAM Swaps", published: online }
+        - { slug: "2026-10-20-agglomerative-clustering", title: "Agglomerative Clustering: Linkages, Ward’s Criterion and Dendrograms", published: online }
+        - { slug: "2026-10-20-dbscan", title: "DBSCAN: Core Points, Density Reachability and Explicit Noise", published: online }
+        - { slug: "2026-10-20-optics", title: "OPTICS: Reachability Ordering and Clusters at Multiple Density Scales", published: online }
+        - { slug: "2026-10-20-hdbscan", title: "HDBSCAN: Mutual Reachability, Condensed Trees and Stable Clusters", published: online }
+        - { slug: "2026-10-20-gaussian-mixtures", title: "Gaussian Mixture Models: Responsibilities, EM and Covariance Geometry", published: online }
+        - { slug: "2026-10-20-spectral-clustering", title: "Spectral Clustering: Affinity Graphs, Laplacians and Relaxed Cuts", published: online }
+        - { slug: "2026-10-20-mean-shift", title: "Mean Shift: Kernel Density Modes, Bandwidth and Attraction Basins", published: online }
+        - { slug: "2026-10-20-birch", title: "BIRCH: Clustering Features, CF Trees and Streaming Compression", published: online }
+        - { slug: "2026-10-20-fuzzy-c-means", title: "Fuzzy C-means: Membership Weights, Fuzziness and Alternating Updates", published: online }
+        - { slug: "2026-10-20-clustering-evaluation", title: "Evaluating Clustering: Silhouettes, Stability, External Labels and Useful Partitions", published: online }
+
+    dimensionality-reduction:
+      label: "PCA, Factorisation & Neighbourhood Embeddings"
+      posts:
         - { slug: "2026-05-11-pca-and-dimensionality-reduction", title: "PCA: Maximum Variance and Minimum Reconstruction Error", published: online }
+        - { slug: "2026-10-20-kernel-pca", title: "Kernel PCA: Centred Gram Matrices, Nonlinear Coordinates and Pre-Images", published: online }
+        - { slug: "2026-10-20-independent-component-analysis", title: "Independent Component Analysis: Whitening, Non-Gaussianity and Source Recovery", published: online }
+        - { slug: "2026-10-20-nonnegative-matrix-factorisation", title: "Nonnegative Matrix Factorisation: Additive Parts, Loss Functions and Ambiguity", published: online }
+        - { slug: "2026-10-20-random-projections", title: "Random Projections: Johnson–Lindenstrauss Geometry and Fast Compression", published: online }
+        - { slug: "2026-10-20-t-sne", title: "t-SNE: Neighbour Probabilities, Perplexity and Reading the Map Correctly", published: online }
+        - { slug: "2026-10-20-umap", title: "UMAP: Fuzzy Neighbourhood Graphs, Layout Optimisation and New-Point Transforms", published: online }
 
     deep-learning:
       label: "Neural Networks"
       posts:
         - { slug: "2026-05-13-convolutions-and-cnns", title: "Convolutions and CNNs: Weight Sharing as a Prior", published: online }
-        - { slug: "2026-05-14-rnns-lstms-grus",       title: "RNNs, LSTMs, and GRUs: Sequence Models Before Attention", published: online }
+        - { slug: "2026-05-14-rnns-lstms-grus", title: "RNNs, LSTMs, and GRUs: Sequence Models Before Attention", published: online }
 
     activation-functions:
       label: "Activation Functions"
       posts:
         - { slug: "2026-06-01-activation-functions-overview", title: "Activation Functions in Neural Networks: Why Non-Linearity Matters", published: online }
         - { slug: "2026-06-02-modern-activation-functions", title: "Modern Activation Functions: GELU, SiLU, Mish, and Smooth Gating", published: online }
-        - { slug: "2026-06-03-output-gated-and-special-activations", title: "Output, Gated, and Special Activations: Softmax, GLU, SIREN, and More", published: online }
+        - { slug: "2026-06-03-output-gated-and-special-activations", title: "Output and Gated Activations: Softmax, Sparsemax, GLU, and SIREN", published: online }
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -284,6 +320,7 @@ sheaf:
         - { slug: "2026-09-01-equivariant-sheaf-neural-networks", title: "ESNN: Equivariant Sheaf Neural Networks, Learning Geometric Transport on Graphs (Borgi, Severino, Silvestri & Liò, 2026)", published: online }
         - { slug: "2026-10-01-topological-attention", title: "Top-A: Let the Heads Talk, Beyond Diagonal Graph Attention (Ali, Borgi, Severino et al., 2026)", published: online }
         - { slug: "2026-10-09-onda-paper", title: "ONDA: Oscillatory Neural Dynamics over Sheaves (Van Looy, Trenta, Gravina, Borgi et al., 2026)", published: online }
+        - { slug: "2026-10-21-bochner-sheaf-laplacians", title: "Bochner–Weitzenböck for Sheaves: Transport, Curvature, and What Networks Learn", published: online }
         - { slug: "2025-06-11-sheaf-map-parameterisation", title: "Learning Sheaf Maps: Parameterisation Strategies Compared",                                      published: offline }
         - { slug: "2025-06-12-spectral-sheaf-convolution", title: "Spectral Sheaf Convolution: Filtering Signals on Sheaves",                                       published: offline }
 
@@ -669,6 +706,7 @@ jepa:
       posts:
         - { slug: "2026-10-15-i-jepa", title: "I-JEPA: Predicting Image Representations Behind a Mask", published: online }
         - { slug: "2026-10-15-lejepa", title: "LeJEPA: Prediction Needs a Non-Collapsing Representation", published: online }
+        - { slug: "2026-10-21-localejepa", title: "LocaLeJEPA: Maximum Entropy Without Flattening the Geometry", published: online }
     video:
       label: "Video & World Models"
       posts:

@@ -4,7 +4,7 @@ title: "Mean Shift: Kernel Density Modes, Bandwidth and Attraction Basins"
 date: "2026-10-20 10:19:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "clustering"
+subsection: clustering
 tags: ["machine-learning", "clustering", "density-estimation", "mode-seeking"]
 excerpt: "Derive the weighted-mean movement behind mode seeking, follow a local update, and explain why bandwidth and mode merging determine the final clustering."
 author_profile: true
@@ -34,14 +34,16 @@ For bandwidth h in d dimensions, a radial estimate has the form
 <div class="formula-box">
 \[
 \hat f(x)=\frac{c}{nh^d}\sum_i k\!\left(\frac{\|x-x_i\|^2}{h^2}\right),
-\]\n</div>
+\]
+</div>
 
 where c supplies normalisation and k is a kernel profile. Differentiation leads to a movement direction based on a weighted local mean. With $$g(t)=-k'(t)$$, the mean-shift vector is
 
 <div class="formula-box">
 \[
 m(x)=\frac{\sum_i g(\|x-x_i\|^2/h^2)x_i}{\sum_i g(\|x-x_i\|^2/h^2)}-x.
-\]\n</div>
+\]
+</div>
 
 An update sets the candidate to $$x+m(x)$$. The weights are related to the derivative of the kernel profile; one should not assume any arbitrarily chosen averaging weights perform gradient ascent for a claimed density estimate.
 

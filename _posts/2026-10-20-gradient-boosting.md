@@ -4,7 +4,7 @@ title: "Gradient Boosting: Functional Gradients, Leaf Updates and Regularisation
 date: "2026-10-20 10:09:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "trees-ensembles"
+subsection: trees-ensembles
 tags: ["machine-learning", "ensembles", "gradient-boosting", "optimisation"]
 excerpt: "Derive residual fitting from the loss gradient, work through a regression update, and extend the mechanism to logistic and second-order tree boosting."
 author_profile: true
@@ -34,14 +34,16 @@ At iteration t, compute
 <div class="formula-box">
 \[
 r_{it}=-\left.\frac{\partial L(y_i,F)}{\partial F}\right|_{F=F_{t-1}(x_i)}.
-\]\n</div>
+\]
+</div>
 
 Fit a base learner $$h_t(x)$$ to approximate these values, then update
 
 <div class="formula-box">
 \[
 F_t(x)=F_{t-1}(x)+\nu\gamma_t h_t(x),
-\]\n</div>
+\]
+</div>
 
 where nu is a shrinkage factor and gamma may be selected by a line search. Tree implementations often estimate separate leaf values instead of one global multiplier. The details depend on the loss and boosting variant.
 
@@ -81,7 +83,8 @@ Some boosting methods approximate each observation’s loss with its first deriv
 \frac12\left(\sum_{i\in\mathrm{leaf}}h_i+\lambda\right)w^2,
 \qquad
 w^*=-\frac{\sum_i g_i}{\sum_i h_i+\lambda}.
-\]\n</div>
+\]
+</div>
 
 This is a local approximation with explicit regularisation, not the definition of every gradient-boosting algorithm. Numerical safeguards matter when curvature is small. Split penalties, leaf constraints and histogram construction add further implementation choices.
 

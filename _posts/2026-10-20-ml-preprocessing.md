@@ -4,7 +4,7 @@ title: "ML Preprocessing: Scaling, Missing Values and Leakage-Safe Pipelines"
 date: "2026-10-20 10:00:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "foundations"
+subsection: foundations
 tags: ["machine-learning", "preprocessing", "data-leakage", "pipelines"]
 excerpt: "Work through training-only scaling, distinguish missingness strategies, and build preprocessing decisions around the distance, loss and deployment information available."
 author_profile: true
@@ -34,7 +34,8 @@ A standardised numerical feature is
 <div class="formula-box">
 \[
 z=\frac{x-\mu_{\mathrm{train}}}{s_{\mathrm{train}}}.
-\]\n</div>
+\]
+</div>
 
 For training observations 1, 2 and 3, the mean is 2. Using population variance for this transformer gives $$s=\sqrt{2/3}$$. A future value 4 transforms to $$2/\sqrt{2/3}\approx2.449$$. It can lie outside the range of transformed training values; that is normal.
 

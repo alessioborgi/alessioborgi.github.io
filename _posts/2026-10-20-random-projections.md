@@ -4,7 +4,7 @@ title: "Random Projections: Johnson–Lindenstrauss Geometry and Fast Compressio
 date: "2026-10-20 10:26:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "dimensionality-reduction"
+subsection: dimensionality-reduction
 tags: ["machine-learning", "dimensionality-reduction", "random-projection", "geometry"]
 excerpt: "Derive expected squared-distance preservation, interpret finite-set concentration bounds, and compare random embeddings with PCA and neighbourhood-based methods."
 author_profile: true
@@ -34,7 +34,8 @@ For $$x\in\mathbb R^d$$, use $$z=Rx\in\mathbb R^k$$ with independent entries $$R
 <div class="formula-box">
 \[
 \mathbb E\|Rv\|^2=\|v\|^2.
-\]\n</div>
+\]
+</div>
 
 This expectation is over random matrices. It does not say that every matrix preserves every vector or that one projected distance is always exact. Concentration results are what turn the expectation into a useful finite-data guarantee.
 
@@ -48,7 +49,8 @@ A Johnson–Lindenstrauss-style guarantee seeks
 \[
 (1-\varepsilon)\|x_i-x_j\|^2\le\|R(x_i-x_j)\|^2
 \le(1+\varepsilon)\|x_i-x_j\|^2
-\]\n</div>
+\]
+</div>
 
 for all pairs in a specified finite set, with high probability. A sufficient target dimension scales on the order of $$\varepsilon^{-2}\log(n/\delta)$$ for n observations and a specified failure probability delta, with constants depending on the theorem and construction.
 

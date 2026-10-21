@@ -4,7 +4,7 @@ title: "Trees, Forests, and Boosting: Axis-Aligned Everything"
 date: 2026-05-07
 categories: [basics]
 book: basics
-subsection: supervised
+subsection: trees-ensembles
 tags: [decision-trees, random-forest, gradient-boosting, bagging, ensembles]
 published: true
 is_overview: false
@@ -189,6 +189,10 @@ The learning rate $$\nu$$ shrinks each correction so that no single tree dominat
 On small and medium tabular problems, tens of thousands of rows, dozens to hundreds of heterogeneous columns, missing values, mixed types, gradient-boosted trees are routinely the strongest thing on the table, and often beat carefully tuned deep networks. The reason is not mysterious: the inductive bias fits the data. Tabular columns are not smooth functions of one another, they are not translation-invariant, and their units are arbitrary. A model built from axis-aligned thresholds on individual columns assumes exactly that, needs no scaling, and handles interactions without being told which ones to look for. Neural networks must learn all of that structure from data they usually do not have enough of.
 
 That is a statement about a matching between model and data, not a ranking of methods. Change the data to pixels, waveforms, or text and the ordering reverses completely, for the same reason: the assumptions no longer match. This is why the book's overview insists the arrow through these chapters is chronological, not a ladder from worse to better. The correct question is never "which model is best" but "which set of assumptions is true here".
+
+## Dedicated method chapters
+
+This survey connects the family. Continue with the individual chapters for derivations, worked examples, implementation choices and evaluation: [Decision Trees](/blog/basics/decision-trees/), [Random Forests](/blog/basics/random-forests/), [AdaBoost](/blog/basics/adaboost/), [Gradient Boosting](/blog/basics/gradient-boosting/).
 
 <div class="key-takeaways">
 <h3>✅ Key Takeaways</h3>

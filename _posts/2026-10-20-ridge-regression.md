@@ -4,7 +4,7 @@ title: "Ridge Regression: Shrinkage, Singular Directions and Stable Prediction"
 date: "2026-10-20 10:02:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "supervised"
+subsection: supervised
 tags: ["machine-learning", "regression", "regularisation", "ridge"]
 excerpt: "Derive the regularised least-squares solution, inspect shrinkage in the SVD basis, and connect scaling, intercept handling and validation to the meaning of the penalty."
 author_profile: true
@@ -35,14 +35,16 @@ For centred X and y, use the explicit convention
 \[
 J(\beta)=\|y-X\beta\|_2^2+\lambda\|\beta\|_2^2,
 \qquad\lambda\gt 0.
-\]\n</div>
+\]
+</div>
 
 Differentiating gives $$-2X^\top(y-X\beta)+2\lambda\beta=0$$, so
 
 <div class="formula-box">
 \[
 (X^\top X+\lambda I)\hat\beta=X^\top y.
-\]\n</div>
+\]
+</div>
 
 The matrix is positive definite for positive lambda, even if X is rank deficient. This states a linear system to solve, not an instruction to form an explicit inverse. Stable decompositions or iterative solvers are usually preferable.
 
@@ -61,7 +63,8 @@ Write $$X=USV^\top$$. Along a nonzero singular direction with singular value $$s
 <div class="formula-box">
 \[
 \hat\beta_\lambda=V\operatorname{diag}\!\left(\frac{s_j}{s_j^2+\lambda}\right)U^\top y.
-\]\n</div>
+\]
+</div>
 
 Compared with least squares, the coefficient contribution is multiplied by $$s_j^2/(s_j^2+\lambda)$$. Small singular values receive stronger relative shrinkage because the data provides less information in those directions.
 
@@ -84,7 +87,8 @@ The ridge fitted values are $$\hat y=H_\lambda y$$ with $$H_\lambda=X(X^\top X+\
 <div class="formula-box">
 \[
 \operatorname{tr}(H_\lambda)=\sum_j\frac{s_j^2}{s_j^2+\lambda}.
-\]\n</div>
+\]
+</div>
 
 It decreases continuously as lambda grows. An unpenalised intercept contributes separately. This is one way to describe model flexibility without counting every nonzero coefficient equally.
 

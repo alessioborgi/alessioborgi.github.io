@@ -4,7 +4,7 @@ title: "Lasso Regression: Soft Thresholding, Sparse Solutions and Correlated Fea
 date: "2026-10-20 10:03:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "supervised"
+subsection: supervised
 tags: ["machine-learning", "regression", "regularisation", "sparsity"]
 excerpt: "Derive the coordinate update from the L1 subgradient, calculate exact zeros, and explain when sparse selection becomes unstable or elastic net is preferable."
 author_profile: true
@@ -35,7 +35,8 @@ For centred data, define
 \[
 J(\beta)=\frac{1}{2n}\|y-X\beta\|^2+\alpha\sum_j|\beta_j|,
 \qquad\alpha\ge0.
-\]\n</div>
+\]
+</div>
 
 The factor $$1/(2n)$$ determines the numeric scale of alpha. Other conventions rescale the penalty. As with ridge, the intercept is ordinarily unpenalised and feature scaling affects which coefficients are cheap to use.
 
@@ -48,7 +49,8 @@ Hold all coefficients except j fixed and define the partial residual $$r_j=y-\su
 <div class="formula-box">
 \[
 \min_b\ \frac12a_jb^2-c_jb+\alpha|b|.
-\]\n</div>
+\]
+</div>
 
 For nonzero b, differentiation introduces $$\alpha\operatorname{sign}(b)$$. At zero, the subgradient of absolute value is the interval [−1,1]. Combining these cases gives
 
@@ -56,7 +58,8 @@ For nonzero b, differentiation introduces $$\alpha\operatorname{sign}(b)$$. At z
 \[
 \beta_j\leftarrow\frac{S(c_j,\alpha)}{a_j},
 \qquad S(c,\alpha)=\operatorname{sign}(c)\max(|c|-\alpha,0).
-\]\n</div>
+\]
+</div>
 
 A zero-variance feature requires separate handling because $$a_j=0$$. Iterating these coordinate minimisations is a common optimisation strategy.
 
@@ -94,7 +97,8 @@ Elastic net adds an L2 term to an L1 term. Under a common convention,
 \[
 J(\beta)=\frac{\|y-X\beta\|^2}{2n}
 +\alpha\rho\|\beta\|_1+\frac{\alpha(1-\rho)}2\|\beta\|_2^2.
-\]\n</div>
+\]
+</div>
 
 The L2 part stabilises correlated directions while the L1 part retains the possibility of zeros. It can encourage related predictors to remain together more readily than pure lasso, but it introduces a second tuning dimension. Report both alpha and the mixing parameter rho.
 

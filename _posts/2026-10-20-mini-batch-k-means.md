@@ -4,14 +4,14 @@ title: "Mini-Batch K-means: Online Centroid Updates and the Cost of Approximatio
 date: "2026-10-20 10:11:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "clustering"
+subsection: clustering
 tags: ["machine-learning", "clustering", "online-learning", "scalability"]
 excerpt: "Derive the running-mean update, distinguish mini-batch optimisation from concept-drift tracking, and measure the speed–quality tradeoff on a fixed evaluation sample."
 author_profile: true
 read_time: true
 is_overview: false
 icon: "⚡"
-read_mins: 3
+read_mins: 5
 permalink: "/blog/basics/mini-batch-k-means/"
 toc: true
 toc_label: "Contents"
@@ -35,7 +35,8 @@ Suppose a centre has incorporated v assigned observations and currently equals t
 \[
 \mu_{\mathrm{new}}=\frac{v\mu+x}{v+1}
 =\mu+\frac{1}{v+1}(x-\mu).
-\]\n</div>
+\]
+</div>
 
 The learning rate is $$1/(v+1)$$. A batch implementation can aggregate several assigned points: add their count to v and their vector sum to the accumulated sum. Implementations differ in reassignment and stopping details, but the count-weighted mean is the central mechanism.
 

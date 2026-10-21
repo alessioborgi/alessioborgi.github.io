@@ -4,7 +4,7 @@ title: "Cross-Validation: Splits, Nested Selection and Honest Generalisation Est
 date: "2026-10-20 10:01:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "foundations"
+subsection: foundations
 tags: ["machine-learning", "evaluation", "cross-validation", "generalisation"]
 excerpt: "Design random, grouped and temporal splits, compute an out-of-fold error correctly, and separate model selection from evaluation of the selection procedure."
 author_profile: true
@@ -40,7 +40,8 @@ For K folds, each observation receives a prediction from a model that did not tr
 <div class="formula-box">
 \[
 \widehat R_{\mathrm{OOF}}=\frac{1}{n}\sum_{i=1}^n L(y_i,\hat f_{-\mathrm{fold}(i)}(x_i)).
-\]\n</div>
+\]
+</div>
 
 If one validation fold contains two observations with mean loss 1 and another contains eight with mean loss 3, pooled loss is $$(2\cdot1+8\cdot3)/10=2.6$$. The unweighted mean of fold means is 2, which answers a different question. With equal fold sizes these coincide.
 

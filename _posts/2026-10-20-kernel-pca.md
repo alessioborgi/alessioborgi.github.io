@@ -4,7 +4,7 @@ title: "Kernel PCA: Centred Gram Matrices, Nonlinear Coordinates and Pre-Images"
 date: "2026-10-20 10:23:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "dimensionality-reduction"
+subsection: dimensionality-reduction
 tags: ["machine-learning", "dimensionality-reduction", "pca", "kernels"]
 excerpt: "Derive kernel centring and feature-space coordinates, project new observations correctly, and distinguish nonlinear representation from reconstruction in the original space."
 author_profile: true
@@ -34,7 +34,8 @@ The feature-space mean is $$\bar\phi=n^{-1}\sum_i\phi(x_i)$$. Let $$K_{ij}=k(x_i
 <div class="formula-box">
 \[
 K_c=HKH.
-\]\n</div>
+\]
+</div>
 
 Elementwise, subtract the row mean and column mean and add the grand mean. Centring raw x before evaluating a nonlinear kernel does not generally equal centring $$\phi(x)$$. The feature-space correction is still required.
 
@@ -47,7 +48,8 @@ Let $$K_cv_j=\lambda_jv_j$$ with $$\|v_j\|=1$$ and positive eigenvalue. The corr
 <div class="formula-box">
 \[
 z_{ij}=\sqrt{\lambda_j}\,v_{ij}.
-\]\n</div>
+\]
+</div>
 
 The Gram eigenvalue and the sample covariance eigenvalue differ by the factor n−1 under the usual sample convention. Keeping this distinction prevents unexplained scale mismatches between derivations and software outputs.
 
@@ -61,7 +63,8 @@ For a new x, define its vector of kernel evaluations against the training set. I
 \[
 \widetilde k_i(x)=k(x_i,x)-\frac1n\sum_l k(x_l,x)
 -\frac1n\sum_l K_{il}+\frac1{n^2}\sum_{l,m}K_{lm}.
-\]\n</div>
+\]
+</div>
 
 Then $$z_j(x)=v_j^\top\widetilde k(x)/\sqrt{\lambda_j}$$. The training Gram means remain fixed. Recentring the combined training-and-test collection changes the fitted representation and leaks information when used during evaluation.
 

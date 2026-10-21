@@ -4,7 +4,7 @@ title: "Spectral Clustering: Affinity Graphs, Laplacians and Relaxed Cuts"
 date: "2026-10-20 10:18:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "clustering"
+subsection: clustering
 tags: ["machine-learning", "clustering", "spectral", "graphs"]
 excerpt: "Derive the graph-smoothness objective, connect eigenvectors to disconnected components, and explain why affinity construction often matters more than the final k-means step."
 author_profile: true
@@ -34,7 +34,8 @@ Let W be a symmetric, nonnegative affinity matrix. A common Gaussian affinity is
 <div class="formula-box">
 \[
 W_{ij}=\exp\!\left(-\frac{\|x_i-x_j\|^2}{2\sigma^2}\right)
-\]\n</div>
+\]
+</div>
 
 for selected pairs, with a stated diagonal convention. A k-nearest-neighbour graph keeps local edges, while a radius graph connects pairs within a fixed distance. A directed neighbour graph needs a symmetrisation rule, such as a union or mutual-neighbour intersection.
 
@@ -47,7 +48,8 @@ Define $$D_{ii}=\sum_jW_{ij}$$ and $$L=D-W$$. For any real vector f,
 <div class="formula-box">
 \[
 f^\top Lf=\frac12\sum_{i,j}W_{ij}(f_i-f_j)^2.
-\]\n</div>
+\]
+</div>
 
 A low value means strongly connected observations receive similar coordinates. The constant vector gives zero and contains no partition information. Further low-eigenvalue directions vary slowly within strongly connected regions while changing across weak connections.
 
@@ -69,7 +71,8 @@ For a partition A, B, let cut(A,B) sum crossing affinities and vol(A) sum degree
 \[
 \operatorname{Ncut}(A,B)=\frac{\operatorname{cut}(A,B)}{\operatorname{vol}(A)}+
 \frac{\operatorname{cut}(A,B)}{\operatorname{vol}(B)}.
-\]\n</div>
+\]
+</div>
 
 The volume terms discourage isolating a tiny set merely because it has few crossing edges. Relaxing discrete assignments leads to Laplacian eigenproblems. Common variants use $$L_{\mathrm{sym}}=I-D^{-1/2}WD^{-1/2}$$ or the random-walk Laplacian; zero-degree vertices need explicit handling.
 

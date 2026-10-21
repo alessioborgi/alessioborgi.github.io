@@ -4,7 +4,7 @@ title: "Naive Bayes: Conditional Independence, Smoothing and Log-Space Predictio
 date: "2026-10-20 10:05:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "supervised"
+subsection: supervised
 tags: ["machine-learning", "classification", "probability", "naive-bayes"]
 excerpt: "Derive the class score, calculate a smoothed text example, and distinguish Gaussian, multinomial and Bernoulli likelihoods and their failure modes."
 author_profile: true
@@ -28,7 +28,8 @@ Bayes’ rule gives $$p(y\mid x)\propto p(y)p(x\mid y)$$. Estimating the full jo
 <div class="formula-box">
 \[
 p(x\mid y=c)\approx\prod_{j=1}^d p(x_j\mid y=c).
-\]\n</div>
+\]
+</div>
 
 The assumption is conditional independence given the class, not unconditional independence of the features. Words can be correlated across the population because they share a topic, while the model makes the stronger simplifying claim that remaining dependence within each class can be ignored.
 
@@ -41,7 +42,8 @@ For a class c, compute
 <div class="formula-box">
 \[
 s_c=\log p(c)+\sum_j\log p(x_j\mid c).
-\]\n</div>
+\]
+</div>
 
 Choose the class with the largest score. To obtain normalised probabilities, subtract a log-sum-exp over class scores before exponentiating. Directly multiplying hundreds of small likelihoods can underflow even when their ratio is informative.
 
@@ -76,7 +78,8 @@ For class c with total token count $$N_c$$ and vocabulary size V,
 <div class="formula-box">
 \[
 \hat\theta_{cj}=\frac{N_{cj}+\alpha}{N_c+\alpha V}.
-\]\n</div>
+\]
+</div>
 
 Larger alpha pulls the distribution more strongly toward a uniform vocabulary baseline. A symmetric Dirichlet prior supplies one interpretation, with care about posterior-mean versus posterior-mode conventions. Tune the predictive effect rather than treating alpha=1 as universally correct.
 

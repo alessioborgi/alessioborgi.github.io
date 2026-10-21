@@ -4,7 +4,7 @@ title: "Agglomerative Clustering: Linkages, Ward’s Criterion and Dendrograms"
 date: "2026-10-20 10:13:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "clustering"
+subsection: clustering
 tags: ["machine-learning", "clustering", "hierarchical", "ward"]
 excerpt: "Compute competing linkage decisions, derive Ward’s merge cost, and read a dendrogram without confusing a greedy hierarchy with a unique natural taxonomy."
 author_profile: true
@@ -58,7 +58,8 @@ Let $$n_A,n_B$$ and $$\mu_A,\mu_B$$ be sizes and means. Decomposing squared devi
 \[
 \Delta(A,B)=\mathrm{SSE}(A\cup B)-\mathrm{SSE}(A)-\mathrm{SSE}(B)
 =\frac{n_A n_B}{n_A+n_B}\|\mu_A-\mu_B\|^2.
-\]\n</div>
+\]
+</div>
 
 For the example, A has size 2 and mean 1, while B has size 1 and mean 3. Their merge costs $$\tfrac23(1-3)^2=8/3$$. Merging B and C costs $$\tfrac12(3-6)^2=4.5$$, so Ward favours A–B.
 

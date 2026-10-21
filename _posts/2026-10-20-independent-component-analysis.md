@@ -4,7 +4,7 @@ title: "Independent Component Analysis: Whitening, Non-Gaussianity and Source Re
 date: "2026-10-20 10:24:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "dimensionality-reduction"
+subsection: dimensionality-reduction
 tags: ["machine-learning", "dimensionality-reduction", "ica", "signal-processing"]
 excerpt: "Explain the linear mixing model, why decorrelation is insufficient, and how non-Gaussian contrasts identify sources only under explicit assumptions and ambiguities."
 author_profile: true
@@ -28,7 +28,8 @@ Imagine two microphones recording different mixtures of two speakers. Each micro
 <div class="formula-box">
 \[
 x=As,
-\]\n</div>
+\]
+</div>
 
 where s contains latent sources and A is an unknown mixing matrix. Basic ICA assumes independent sources, sufficient observations and a suitable full-rank mixing relationship. Real recordings with echoes, delays and changing sources may require a more complicated model.
 
@@ -49,7 +50,8 @@ Centre the observations and write their covariance as $$C=U\Lambda U^\top$$. A w
 <div class="formula-box">
 \[
 z=\Lambda^{-1/2}U^\top(x-\mu).
-\]\n</div>
+\]
+</div>
 
 On the retained positive-eigenvalue subspace, the transformed covariance is identity. Tiny eigenvalues amplify noise, so dimensionality reduction and numerical regularisation may be needed before inversion.
 
@@ -73,7 +75,8 @@ For a whitened z and a unit direction w, one common fixed-point idea has the for
 \[
 w_{\mathrm{new}}\propto\mathbb E[z\,g(w^\top z)]-
 \mathbb E[g'(w^\top z)]w,
-\]\n</div>
+\]
+</div>
 
 followed by normalisation and appropriate orthogonalisation across components. The chosen nonlinearity g specifies the contrast. This sketches the mechanism of FastICA; a full implementation must handle simultaneous components, convergence and numerical details.
 

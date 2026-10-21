@@ -4,7 +4,7 @@ title: "Gaussian Mixture Models: Responsibilities, EM and Covariance Geometry"
 date: "2026-10-20 10:17:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "clustering"
+subsection: clustering
 tags: ["machine-learning", "clustering", "probability", "em"]
 excerpt: "Derive expectation–maximisation updates, calculate a soft assignment, and diagnose likelihood singularities, covariance assumptions and model-selection errors."
 author_profile: true
@@ -31,7 +31,8 @@ For k components,
 \[
 p(x)=\sum_{j=1}^k\pi_j\mathcal N(x\mid\mu_j,\Sigma_j),
 \qquad \pi_j\ge0,\quad\sum_j\pi_j=1.
-\]\n</div>
+\]
+</div>
 
 The components define a density. Calling each component a meaningful cluster is an additional interpretation: one curved population may require several Gaussian components to approximate it. Density estimation and discovery of semantic groups are related but different goals.
 
@@ -42,7 +43,8 @@ The observed-data log-likelihood contains a log of a sum:
 <div class="formula-box">
 \[
 \ell(\theta)=\sum_i\log\sum_j\pi_j\mathcal N(x_i\mid\mu_j,\Sigma_j).
-\]\n</div>
+\]
+</div>
 
 If the component labels were known, estimating each Gaussian would be straightforward. EM alternates estimating the missing labels probabilistically and solving the resulting weighted estimation problem. It improves the objective under exact steps and regularity assumptions, but can settle at a poor stationary solution.
 
@@ -54,7 +56,8 @@ For observation i, the responsibility of component j is
 \[
 r_{ij}=\frac{\pi_j\mathcal N(x_i\mid\mu_j,\Sigma_j)}
 {\sum_l\pi_l\mathcal N(x_i\mid\mu_l,\Sigma_l)}.
-\]\n</div>
+\]
+</div>
 
 Consider equal mixing weights, one-dimensional means 0 and 2, and both variances equal to 1. At x=0, the density ratio of the second component to the first is $$e^{-2}$$. Responsibilities are therefore $$1/(1+e^{-2})\approx0.881$$ and 0.119. At x=1 the responsibilities are exactly one half by symmetry.
 
@@ -69,7 +72,8 @@ Let $$N_j=\sum_i r_{ij}$$. The unconstrained updates are
 \pi_j=\frac{N_j}{n},\qquad
 \mu_j=\frac{\sum_i r_{ij}x_i}{N_j},\qquad
 \Sigma_j=\frac{\sum_i r_{ij}(x_i-\mu_j)(x_i-\mu_j)^\top}{N_j}.
-\]\n</div>
+\]
+</div>
 
 These are maximum-likelihood covariance estimates, with denominator $$N_j$$ rather than an unbiased sample-covariance correction. Each observation contributes fractionally to every component. For points 0 and 2 with responsibilities 0.75 and 0.25 for one component, its effective count is 1 and its updated mean is 0.5.
 

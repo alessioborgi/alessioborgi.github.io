@@ -4,7 +4,7 @@ title: "PCA: Maximum Variance and Minimum Reconstruction Error"
 date: 2026-05-11
 categories: [basics]
 book: basics
-subsection: unsupervised
+subsection: dimensionality-reduction
 tags: [pca, dimensionality-reduction, svd, eigenvectors, tsne]
 published: true
 is_overview: false
@@ -12,14 +12,14 @@ excerpt: "PCA can be derived by asking for the directions of greatest spread, or
 author_profile: true
 read_time: true
 icon: "📉"
-read_mins: 7
+read_mins: 11
 permalink: /blog/basics/pca-and-dimensionality-reduction/
 toc: true
 toc_label: "Contents"
 ---
 
 <div class="tldr-box">
-<strong>TL;DR:</strong> Principal component analysis finds an orthogonal set of directions ordered by how much of the data's variance each one carries. It answers two apparently different questions, "where is the data most spread out?" and "which subspace can I project onto while losing the least?", with the same eigenvectors. Compute it with an SVD, never by forming \(X^\top X\), and remember that it is a <em>linear</em> method: no amount of it will unroll a spiral.
+<strong>TL;DR:</strong> Principal component analysis finds an orthogonal set of directions ordered by how much of the data's variance each one carries. It answers two apparently different questions, "where is the data most spread out?" and "which subspace can I project onto while losing the least?", with the same eigenvectors. A direct SVD is a numerically robust way to compute it, and remember that it is a <em>linear</em> method: no amount of it will unroll a spiral.
 </div>
 
 ## The same answer to two questions
@@ -115,7 +115,7 @@ They sum to $$3.5$$, matching the trace, and multiply to $$0.25$$, matching the 
 
 Now check the equivalence claim numerically. Projecting onto $$u_1$$ alone leaves a total squared reconstruction error of $$0.2918$$. And $$(n-1)\lambda_2 = 4 \times 0.0729 = 0.2918$$. The variance you discard *is* the error you incur, exactly, not approximately.
 
-## Use the SVD, not the covariance matrix
+## Compute the components with an SVD
 
 Everything above is easier and better conditioned through the singular value decomposition $$X = U S V^\top$$. The right singular vectors are the principal directions, and the eigenvalues follow from the singular values:
 
@@ -128,18 +128,68 @@ Everything above is easier and better conditioned through the singular value dec
 On the example, $$s = (3.7025,\ 0.5402)$$, and $$s^2/4 = (3.4271,\ 0.0729)$$, the eigenvalues again.
 
 <div class="warning-box">
-<strong>Forming \(X^\top X\) squares the conditioning.</strong> The condition number of \(X^\top X\) is the square of that of \(X\), so building the covariance matrix explicitly throws away roughly half your available precision before you start. The <a href="/blog/basics/linear-regression/">linear regression chapter</a> makes the same argument about the normal equations, and the fix is the same: factorise \(X\) directly.
+<strong>Forming \(X^\top X\) squares the conditioning.</strong> The condition number of \(X^\top X\) is the square of that of \(X\), so explicit covariance formation can lose accuracy in weak directions when the data is ill-conditioned. Covariance eigendecomposition can still be practical when the feature dimension is small and conditioning is acceptable. The <a href="/blog/basics/linear-regression/">linear regression chapter</a> makes the same argument about the normal equations, and the fix is the same: factorise \(X\) directly.
 </div>
 
-## Two preprocessing steps that are not optional
+## Centring and scaling define the geometry
 
-**Centring.** PCA on uncentred data does not find the direction of greatest spread, it finds the direction of the mean. Shift the example by $$(10,10)$$ and the leading direction becomes $$\approx(0.709, 0.705)$$, which points at the centroid, not along the data. The variance structure is unchanged; only the centring was dropped. Most libraries centre for you. Verify that yours does.
+**Centring.** An uncentred singular-value decomposition uses second moments about the origin, rather than covariance about the mean. A large mean can dominate its leading direction. Shift the example by $$(10,10)$$ and the leading direction becomes $$\approx(0.709, 0.705)$$, which points at the centroid, not along the data. The variance structure is unchanged; only the centring was dropped. Most libraries centre for you. Verify that yours does.
 
-**Scaling.** Covariance is not unit-free. Measure one feature in metres and another in millimetres and the millimetre feature's variance is a million times larger, so PC1 will align with it regardless of whether it carries any real information. If your features have incomparable units, standardise first, which amounts to running PCA on the correlation matrix instead.
+**Scaling.** Covariance is not unit-free. Measure one feature in metres and another in millimetres and the millimetre feature's variance is a million times larger, so PC1 will align with it regardless of whether it carries any real information. If equal standardised variation is the intended geometry, scale the features first; correlation-matrix PCA expresses that choice. Physical units or domain priorities may justify a different scaling. Fit these statistics on the training data only.
+
+## Project new observations and reconstruct them
+
+Let the columns of \(V_k\) contain the retained principal directions. With training mean \(\mu\), row-vector observations transform and reconstruct as
+
+<div class="formula-box">
+\[
+z=(x-\mu)V_k,\qquad \hat x=\mu+zV_k^\top.
+\]
+</div>
+
+If features were standardised, apply the fitted training scales before projection and undo them after reconstruction. Otherwise the reconstructed values are expressed in transformed units. New observations use the original fitted mean and axes; refitting on the test set changes the representation and contaminates an inductive evaluation.
+
+For the worked example, take \(x=(2,1)\) and \(u_1\approx(0.85065,0.52573)\). Its coordinate is about 2.2270, giving reconstruction \((1.8944,1.1708)\). The discarded residual is perpendicular to the retained axis. Its squared norm contributes to the total discarded variance calculated above.
+
+```python
+import math
+u = (math.sqrt((1+1/math.sqrt(5))/2),
+     math.sqrt((1-1/math.sqrt(5))/2))
+x = (2.0, 1.0)
+score = sum(a*b for a, b in zip(x, u))
+reconstruction = tuple(score*a for a in u)
+residual = tuple(a-b for a, b in zip(x, reconstruction))
+assert abs(sum(a*b for a, b in zip(residual, u))) < 1e-12
+assert abs(sum(a*a for a in x)-score**2-sum(a*a for a in residual)) < 1e-12
+```
+
+## Scores, directions and loadings are different objects
+
+Principal directions are vectors in feature space. Scores are the coordinates of observations along those directions. The term *loadings* is used inconsistently: some sources mean the direction coefficients, while others scale them by square roots of eigenvalues or report correlations with original variables. State the convention before comparing tables from different packages.
+
+The sign of any principal direction is arbitrary. Replacing a direction with its negative and negating its scores leaves reconstruction unchanged. When eigenvalues repeat, rotations inside the corresponding eigenspace are also valid. Nearly tied eigenvalues can therefore produce unstable individual directions even when the retained subspace is stable.
+
+For interpretation, examine the span, reconstruction and stability under resampling rather than treating a sign change or a rotated pair of similar components as a failed fit. A large coefficient also reflects feature scaling, so it is not automatically an importance score in original units.
+
+## Whitening changes the metric after PCA
+
+Ordinary PCA scores have covariance \(\operatorname{diag}(\lambda_1,\ldots,\lambda_k)\) under the sample-covariance convention. Whitened scores divide coordinate j by \(\sqrt{\lambda_j}\), giving identity covariance on the retained positive-eigenvalue subspace.
+
+If two score directions have variances 9 and 1, whitening divides the first coordinate by 3 and leaves the second unchanged. It gives equal variance to directions that ordinary PCA regards as differently energetic. That can help a later estimator, but it removes relative scale information and amplifies noise when an eigenvalue is tiny.
+
+Whitening does not imply independence, normality or semantic disentanglement. [ICA](/blog/basics/independent-component-analysis/) uses stronger assumptions to seek independent sources; [ridge regression](/blog/basics/ridge-regression/) instead shrinks weak singular directions without assigning them equal variance. Exact finite-sample scaling can vary by software convention, so verify whether variances use n or n−1.
 
 ## How many components
 
-The honest answer is that this is a judgement call dressed up in several ways: keep enough components to reach a chosen cumulative explained-variance ratio (90%, 95%); look for a bend in the scree plot; or, if you are feeding a downstream model, cross-validate the number as a hyperparameter. The last is the only one that optimises something you actually care about. The first two are conventions, and the "elbow" is frequently not there.
+The honest answer is that this is a judgement call dressed up in several ways: keep enough components to reach a chosen cumulative explained-variance ratio (90%, 95%); look for a bend in the scree plot; or, if you are feeding a downstream model, cross-validate the number as a hyperparameter. Choose the criterion from the task: retained variance can be meaningful for compression, whereas downstream validation measures predictive utility. An elbow is frequently absent, and no fixed variance percentage proves that all useful signal survived.
+
+## Large matrices, sparse data and solver choices
+
+A full SVD is often unnecessary when only a small rank is needed. Randomised methods estimate a subspace using matrix–vector products, with oversampling and power iterations controlling approximation quality. Incremental PCA updates a low-rank approximation in batches, trading memory for approximation and order sensitivity. Neither changes the need for a fixed evaluation protocol.
+
+Centring a sparse matrix can destroy sparsity. Truncated SVD on an uncentred sparse matrix is useful for some applications, but it is a different objective from centred PCA. Keep that distinction explicit when comparing text representations or interpreting explained variance.
+
+Missing values also require a strategy. Replacing missing entries by zero changes the covariance unless zero is truly the measured value. Fit imputation within the training split, or use a method designed for incomplete observations. Outliers can dominate squared-error PCA, motivating robust alternatives when contamination is part of the problem.
 
 ## What PCA cannot do
 
@@ -149,10 +199,10 @@ The honest answer is that this is a judgement call dressed up in several ways: k
 
 **Components are rarely interpretable.** PC1 is a weighted mixture of every original feature. Occasionally that mixture means something; usually it does not, and reading a story into the loadings is a common way to fool yourself.
 
-**Non-linear alternatives, and a warning.** Kernel PCA applies the [kernel trick](/blog/basics/svm-and-kernels/) to do PCA in a feature space. Autoencoders learn a non-linear encoder and decoder, and reduce to PCA's subspace when made linear with a squared-error loss. t-SNE and UMAP are for visualisation.
+**Non-linear alternatives, and a warning.** [Kernel PCA](/blog/basics/kernel-pca/) applies the kernel trick to do PCA in a feature space. At a global optimum under the appropriate unconstrained linear bottleneck and squared-error assumptions, a linear autoencoder recovers PCA’s principal subspace, though its coordinates need not be the principal axes. Nonlinear autoencoders have different objectives and constraints. [t-SNE](/blog/basics/t-sne/) and [UMAP](/blog/basics/umap/) focus on neighbourhood structure and are often used for visualisation; UMAP also supports higher-dimensional downstream representations.
 
 <div class="warning-box">
-<strong>Do not read t-SNE or UMAP plots quantitatively.</strong> Both optimise the preservation of <em>local</em> neighbourhoods and explicitly do not preserve global geometry. Cluster sizes on the plot do not indicate cluster variance, distances between clusters do not indicate dissimilarity, and both change with the perplexity or neighbour count. They are excellent for noticing that groups exist, and unreliable for anything you would put a number on.
+<strong>Do not read t-SNE or UMAP plots quantitatively.</strong> Their neighbourhood objectives do not generally preserve all global distances or densities. Cluster sizes on the plot do not indicate cluster variance, distances between clusters do not indicate dissimilarity, and both change with the perplexity or neighbour count. Use them to inspect candidate structure, then verify group claims and quantitative relationships in the original representation. A plotted island alone does not establish a natural population.
 </div>
 
 <div class="key-takeaways">
@@ -161,8 +211,13 @@ The honest answer is that this is a judgement call dressed up in several ways: k
   <li>Maximising retained variance and minimising squared reconstruction error are the same optimisation, Pythagoras splits a fixed total between them.</li>
   <li>Components are eigenvectors of the covariance; explained variance is its eigenvalues. On the worked example \(\lambda = (3.4271, 0.0729)\), so PC1 carries 97.9%.</li>
   <li>The discarded variance <em>equals</em> the reconstruction error: \((n-1)\lambda_2 = 0.2918\) is exactly the SSE from projecting onto PC1.</li>
-  <li>Compute via SVD, using \(\lambda_i = s_i^2/(n-1)\). Forming \(X^\top X\) squares the condition number for no benefit.</li>
-  <li>Centre always; standardise whenever features have different units. Skipping the centring makes PC1 point at the mean.</li>
+  <li>Compute via SVD, using \(\lambda_i = s_i^2/(n-1)\). Direct SVD avoids the squared conditioning of explicit covariance formation.</li>
+  <li>Centre for covariance PCA; choose scaling according to the intended geometry, using training statistics only.</li>
   <li>PCA is linear, unsupervised, and optimises reconstruction, so it cannot unroll curved structure, and it has no reason to keep the direction your classifier needs.</li>
 </ul>
 </div>
+
+## References
+
+1. scikit-learn. [Principal component analysis and decomposition methods](https://scikit-learn.org/stable/modules/decomposition.html#pca).
+2. James, Witten, Hastie, Tibshirani and Taylor. [An Introduction to Statistical Learning with Applications in Python](https://www.statlearning.com/). Springer, 2023.

@@ -4,7 +4,7 @@ title: "Decision Trees: Split Criteria, Leaf Predictions and Cost-Complexity Pru
 date: "2026-10-20 10:06:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "trees-ensembles"
+subsection: trees-ensembles
 tags: ["machine-learning", "classification", "regression", "decision-trees"]
 excerpt: "Calculate Gini and regression split improvements, understand greedy axis-aligned partitions, and connect leaf size and pruning to prediction stability."
 author_profile: true
@@ -34,7 +34,8 @@ For a parent set S with children L and R, a classification impurity reduction is
 <div class="formula-box">
 \[
 \Delta I=I(S)-\frac{|L|}{|S|}I(L)-\frac{|R|}{|S|}I(R).
-\]\n</div>
+\]
+</div>
 
 Gini impurity is $$1-\sum_c p_c^2$$. Entropy is $$-\sum_c p_c\log p_c$$ with a specified log base. Both reward purity, but they are not identical criteria and can rank candidate splits differently.
 
@@ -79,7 +80,8 @@ Cost-complexity pruning considers a fitted tree T and an objective such as
 <div class="formula-box">
 \[
 R_\alpha(T)=R(T)+\alpha|\mathcal L(T)|,
-\]\n</div>
+\]
+</div>
 
 where R is the chosen training risk and $$\mathcal L(T)$$ its leaves. Increasing alpha trades fit for fewer leaves. A pruning path supplies candidate subtrees; validation chooses among them. Training risk alone would favour the larger tree.
 

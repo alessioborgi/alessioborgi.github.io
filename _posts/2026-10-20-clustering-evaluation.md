@@ -4,7 +4,7 @@ title: "Evaluating Clustering: Silhouettes, Stability, External Labels and Usefu
 date: "2026-10-20 10:22:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "clustering"
+subsection: clustering
 tags: ["machine-learning", "clustering", "evaluation", "stability"]
 excerpt: "Calculate silhouette and pair agreement, diagnose misleading cluster-count criteria, and design evaluations that match the purpose of an unsupervised analysis."
 author_profile: true
@@ -42,7 +42,8 @@ For an observation i, let a(i) be mean distance to other members of its own clus
 <div class="formula-box">
 \[
 s(i)=\frac{b(i)-a(i)}{\max\{a(i),b(i)\}}.
-\]\n</div>
+\]
+</div>
 
 Take clusters $$A=\{0,1\}$$ and $$B=\{5,6\}$$ on the number line. For point 1, a=1 and b=4.5, so $$s=3.5/4.5\approx0.778$$. It is much closer on average to its own group.
 
@@ -59,7 +60,8 @@ Pair-based measures ask whether two observations are together in both partitions
 <div class="formula-box">
 \[
 \operatorname{ARI}=\frac{A-BC/T}{(B+C)/2-BC/T}.
-\]\n</div>
+\]
+</div>
 
 For truth $$\{1,2\},\{3,4\}$$ and prediction $$\{1,3\},\{2,4\}$$, every contingency cell is 1. Thus A=0, B=C=2, T=6, and ARI=−0.5. Below-zero values are possible; chance adjustment is not a transformation forcing every result into [0,1]. Degenerate partitions need explicit conventions.
 

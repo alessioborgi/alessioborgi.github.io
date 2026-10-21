@@ -4,7 +4,7 @@ title: "Nonnegative Matrix Factorisation: Additive Parts, Loss Functions and Amb
 date: "2026-10-20 10:25:00 +0100"
 categories: ["basics"]
 book: "basics"
-subsection: "dimensionality-reduction"
+subsection: dimensionality-reduction
 tags: ["machine-learning", "dimensionality-reduction", "nmf", "factorisation"]
 excerpt: "Derive nonnegative low-rank reconstruction, inspect multiplicative updates and scale ambiguity, and separate useful additive factors from guaranteed semantic parts."
 author_profile: true
@@ -28,7 +28,8 @@ Let $$X\in\mathbb R_+^{n\times d}$$ contain nonnegative observations such as cou
 <div class="formula-box">
 \[
 X\approx WH,\qquad W\in\mathbb R_+^{n\times k},\quad H\in\mathbb R_+^{k\times d}.
-\]\n</div>
+\]
+</div>
 
 Rows of H are factors in the original feature space, and each row of W describes how an observation combines them. The rank k controls the size of the representation. Unlike PCA coordinates, neither factor is required to be orthogonal.
 
@@ -41,7 +42,8 @@ A common objective is squared Frobenius error:
 <div class="formula-box">
 \[
 \min_{W,H\ge0}\ \frac12\|X-WH\|_F^2.
-\]\n</div>
+\]
+</div>
 
 Another uses generalised KL divergence, with terms $$x\log(x/y)-x+y$$ and appropriate zero conventions. These losses penalise deviations differently and can correspond to different noise assumptions. A factorisation good under one loss may not be good under another.
 
@@ -55,7 +57,8 @@ Take factors $$H_1=(1,0,1)$$ and $$H_2=(0,1,1)$$. With weights
 \[
 W=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix},
 \qquad H=\begin{pmatrix}1&0&1\\0&1&1\end{pmatrix},
-\]\n</div>
+\]
+</div>
 
 the reconstruction rows are $$(1,0,1)$$, $$(0,1,1)$$ and $$(1,1,2)$$. The third observation contains both patterns additively. No negative coefficient cancels the shared third feature.
 
@@ -69,7 +72,8 @@ For the squared-error objective, a classic pair of updates is
 \[
 H\leftarrow H\odot\frac{W^\top X}{W^\top WH},\qquad
 W\leftarrow W\odot\frac{XH^\top}{WHH^\top},
-\]\n</div>
+\]
+</div>
 
 where multiplication and division are elementwise, with denominators handled safely. Numerators reflect agreement with observed data; denominators reflect what the current reconstruction already supplies. Nonnegative initial values remain nonnegative.
 

@@ -389,7 +389,7 @@ author_profile: true
 {% assign cs_overview = csb_posts | where_exp: "p", "p.is_overview" | first %}
 {% assign py_overview = pyp_posts | where_exp: "p", "p.is_overview" | first %}
 
-{% comment %} Book 0 renders its sections from the b_groups list further down,
+{% comment %} Book 0 renders its sections from the shared catalog further down,
    which re-derives each group from basics_posts, so only the overview is
    assigned here. {% endcomment %}
 {% assign b_overview = basics_posts | where_exp: "p", "p.is_overview" | first %}
@@ -455,7 +455,7 @@ author_profile: true
     <span class="book-icon">🧠</span>
     <div>
       <h2>Book 0, Basics</h2>
-      <p>The neural-network foundations that make the later books easier to understand</p>
+      <p>42 chapters on classical ML, clustering, dimensionality reduction and neural-network foundations</p>
     </div>
   </div>
   <div class="book-body">
@@ -467,16 +467,14 @@ author_profile: true
       <p>{{ b_overview.excerpt | strip_html | truncate: 210 }}</p>
       <div class="blog-meta">
         <span class="blog-read-badge">📖 {{ b_overview.read_mins | default: "5" }} min read</span>
-        <span>A guided introduction before Transformers, GNNs, and Sheaf models</span>
+        <span>Seven sections, including 12 dedicated clustering methods and an expanded PCA chapter</span>
       </div>
     </a>
     {% endif %}
 
-    {% assign b_groups = "foundations|🧭 Learning Foundations,supervised|📈 Supervised Learning,unsupervised|🔍 Unsupervised Learning,deep-learning|🧠 Neural Networks,activation-functions|⚡ Activation Functions" | split: "," %}
-    {% for grp in b_groups %}
-      {% assign parts = grp | split: "|" %}
-      {% assign key   = parts[0] %}
-      {% assign label = parts[1] %}
+    {% for section in site.data.mlblogposts.basics.sections %}
+      {% assign key = section[0] %}
+      {% assign label = section[1].label %}
       {% assign items = basics_posts | where: "subsection", key %}
       {% if items.size > 0 %}
       <div class="subsection-label" data-section="{{ key }}">{{ label }}</div>
@@ -1864,6 +1862,8 @@ author_profile: true
 document.addEventListener('DOMContentLoaded', function () {
   var mlBlogCatalog = {{ site.data.mlblogposts | jsonify }};
   var authoredPaperSlugs = [
+    '2026-10-21-bochner-sheaf-laplacians',
+    '2026-10-21-localejepa',
     '2026-05-11-gape-paper',
     '2025-06-17-zsaslm-paper',
     '2025-12-02-polynsd-paper',
