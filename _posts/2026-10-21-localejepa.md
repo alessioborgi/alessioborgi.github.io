@@ -25,7 +25,7 @@ toc_label: "Contents"
 <div class="paper-box">
 <strong>Paper:</strong> LocaLeJEPA: Maximum Entropy Representations under Geometric Priors<br>
 <strong>Authors:</strong> Kartik Tandon*, <em>Alessio Borgi*</em>, Pavel Snopov, Inés García-Redondo, Davide D’Ascenzo, Sebastiano Cultrera di Montesano, Fabrizio Silvestri, Pietro Liò, Francesca Dominici, Randall Balestriero, Claudio Battiloro. *Equal contribution.<br>
-<strong>Preprint:</strong> <a href="https://arxiv.org/abs/2610.28458">arXiv:2610.28458</a>, submitted 20 October 2026 · <a href="https://arxiv.org/pdf/2610.28458v1">PDF, v1</a> · <a href="https://github.com/alessioborgi/LocaLeJEPA">Code</a>
+<strong>Preprint:</strong> <a href="https://arxiv.org/abs/2610.28458">arXiv:2610.28458</a>, submitted 20 October 2026 · <a href="https://arxiv.org/pdf/2610.28458v1">PDF, v1</a> · <a href="https://github.com/alessioborgi/LocaLeJEPA">Code</a> · <a href="https://www.linkedin.com/feed/update/urn:li:activity:7518625151010275329/">LinkedIn announcement</a>
 </div>
 
 <div class="paper-preview">
