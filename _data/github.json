@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 85,
+  "total_stars": 86,
   "total_forks": 20,
   "public_repos": 33,
   "followers": 20,
@@ -128,20 +128,20 @@
       "language": "Jupyter Notebook"
     },
     {
+      "name": "LocaLeJEPA",
+      "html_url": "https://github.com/alessioborgi/LocaLeJEPA",
+      "description": "LocaLeJEPA: JEPA self-supervised learning that matches the embedding distribution locally, in k-means neighborhoods, instead of globally, giving stronger features across Euclidean, hyperbolic and equivariant encoders.",
+      "stars": 1,
+      "forks": 0,
+      "language": "Python"
+    },
+    {
       "name": "SkinMe",
       "html_url": "https://github.com/alessioborgi/SkinMe",
       "description": "A deep learning-based application for skin disease detection and classification. ",
       "stars": 1,
       "forks": 3,
       "language": "Jupyter Notebook"
-    },
-    {
-      "name": "ALPR-Automatic-License-Plate-Recognition",
-      "html_url": "https://github.com/alessioborgi/ALPR-Automatic-License-Plate-Recognition",
-      "description": "A comprehensive system for detecting and recognizing license plates in real-time, combining image processing, object detection, and optical character recognition (OCR) to provide an accurate and efficient solution for automatic license plate recognition, with also double GUI, both for the Security Manager and for the Car User.",
-      "stars": 1,
-      "forks": 2,
-      "language": "Python"
     }
   ]
 }
