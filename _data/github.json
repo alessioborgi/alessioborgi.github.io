@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 86,
+  "total_stars": 90,
   "total_forks": 20,
   "public_repos": 33,
   "followers": 21,
@@ -80,6 +80,14 @@
       "language": "Mathematica"
     },
     {
+      "name": "LocaLeJEPA",
+      "html_url": "https://github.com/alessioborgi/LocaLeJEPA",
+      "description": "LocaLeJEPA: JEPA self-supervised learning that matches the embedding distribution locally, in k-means neighborhoods, instead of globally, giving stronger features across Euclidean, hyperbolic and equivariant encoders.",
+      "stars": 5,
+      "forks": 0,
+      "language": "Python"
+    },
+    {
       "name": "MoonBot-Navigation",
       "html_url": "https://github.com/alessioborgi/MoonBot-Navigation",
       "description": "Autonomous robot for lunar navigation and object interaction, developed during TESP '25 at the Space Robotics Lab (Tohoku University). Features custom robot design, Dijkstra-based path planning, object detection with vision, and gripper control.",
@@ -126,14 +134,6 @@
       "stars": 2,
       "forks": 0,
       "language": "Jupyter Notebook"
-    },
-    {
-      "name": "LocaLeJEPA",
-      "html_url": "https://github.com/alessioborgi/LocaLeJEPA",
-      "description": "LocaLeJEPA: JEPA self-supervised learning that matches the embedding distribution locally, in k-means neighborhoods, instead of globally, giving stronger features across Euclidean, hyperbolic and equivariant encoders.",
-      "stars": 1,
-      "forks": 0,
-      "language": "Python"
     },
     {
       "name": "SkinMe",
