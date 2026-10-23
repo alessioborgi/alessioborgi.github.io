@@ -8,6 +8,7 @@ date: 2026-11-12
 venue: "NeurReps Workshop @ NeurIPS 2026 - Symmetry and Geometry in Neural Representations, (Sydney, Australia 🇦🇺)"
 paperurl: "https://arxiv.org/abs/2409.08036"
 bibtexurl: "https://arxiv.org/bibtex/2409.08036"
+codeurl: "https://github.com/alessioborgi/Heterogeneous-Sheaf-Neural-Networks"
 citation: 'Braithwaite, L.; Borgi, A.; Onorato, G.; Tarantelli, K.; Restuccia, F.; Silvestri, F.; Liò, P. (2026). "Heterogeneous Sheaf Neural Networks." <i>NeurIPS 2026 Workshop on Symmetry and Geometry in Neural Representations (NeurReps)</i>. arXiv:2409.08036.'
 webpageurl: "/publications/2024-09-12-heterogeneous-sheaf-neural-networks/"
 blogurl: "/blog/sheaf/hetsheaf-paper/"
