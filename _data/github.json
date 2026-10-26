@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 93,
+  "total_stars": 94,
   "total_forks": 20,
   "public_repos": 33,
   "followers": 22,
@@ -64,20 +64,20 @@
       "language": "C++"
     },
     {
+      "name": "RealTime-VLM",
+      "html_url": "https://github.com/alessioborgi/RealTime-VLM",
+      "description": "RealTime-VLM brings real-time VLM inference to the browser. It continuously captures webcam frames, sends image+text to an OpenAI-compatible API, and displays responses with sub-second latency. Works with local or hosted VLMs.",
+      "stars": 10,
+      "forks": 0,
+      "language": "JavaScript"
+    },
+    {
       "name": "LocaLeJEPA",
       "html_url": "https://github.com/alessioborgi/LocaLeJEPA",
       "description": "LocaLeJEPA: JEPA self-supervised learning that matches the embedding distribution locally, in k-means neighborhoods, instead of globally, giving stronger features across Euclidean, hyperbolic and equivariant encoders.",
       "stars": 9,
       "forks": 0,
       "language": "Python"
-    },
-    {
-      "name": "RealTime-VLM",
-      "html_url": "https://github.com/alessioborgi/RealTime-VLM",
-      "description": "RealTime-VLM brings real-time VLM inference to the browser. It continuously captures webcam frames, sends image+text to an OpenAI-compatible API, and displays responses with sub-second latency. Works with local or hosted VLMs.",
-      "stars": 9,
-      "forks": 0,
-      "language": "JavaScript"
     },
     {
       "name": "BioHeat-PINNs",
