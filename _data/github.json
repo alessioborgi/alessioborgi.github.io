@@ -7,13 +7,13 @@
   "top_languages": [
     {
       "name": "Jupyter Notebook",
-      "bytes": 604997523,
-      "percent": 94.8
+      "bytes": 618556012,
+      "percent": 94.6
     },
     {
       "name": "Python",
-      "bytes": 30073254,
-      "percent": 4.7
+      "bytes": 32001440,
+      "percent": 4.9
     },
     {
       "name": "Go",
