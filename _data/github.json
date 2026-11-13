@@ -1,9 +1,9 @@
 {
   "username": "alessioborgi",
-  "total_stars": 103,
+  "total_stars": 104,
   "total_forks": 19,
   "public_repos": 34,
-  "followers": 24,
+  "followers": 23,
   "top_languages": [
     {
       "name": "Jupyter Notebook",
@@ -67,7 +67,7 @@
       "name": "LocaLeJEPA",
       "html_url": "https://github.com/alessioborgi/LocaLeJEPA",
       "description": "LocaLeJEPA: JEPA self-supervised learning that matches the embedding distribution locally, in k-means neighborhoods, instead of globally, giving stronger features across Euclidean, hyperbolic and equivariant encoders.",
-      "stars": 13,
+      "stars": 14,
       "forks": 0,
       "language": "Python"
     },
