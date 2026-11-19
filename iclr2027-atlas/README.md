@@ -37,3 +37,7 @@ python iclr2027-atlas/collect_snapshot.py
 ```
 
 If OpenReview responds with a network error, no incomplete snapshot will be published.
+
+### Public-source fallback when OpenReview returns HTTP 403
+
+OpenReview's bulk `/notes` endpoint can return a bot challenge to automated clients, even when the reviews themselves are public. If this happens, the scheduled refresh uses a **separately published public score snapshot**, sourced and credited to [songjhPKU/ICLR2027-statistics](https://github.com/songjhPKU/ICLR2027-statistics). Its collection timestamp is **2026-11-06**, not the import date; the dashboard labels it as historical rather than live. That source supplies submission IDs, titles, research areas, status, and individual rating/confidence pairs, without reviewer identifiers or submission numbers. The fallback is not presented as an up-to-date scrape. If a later official OpenReview fetch succeeds, it replaces this older fallback with newly collected scores.

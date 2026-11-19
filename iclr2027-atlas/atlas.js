@@ -151,7 +151,7 @@
     state.source=src;state.stamp=data.generated_utc||'';
     el('data-light').className='status-dot ok';el('data-status-small').textContent=`${number(state.papers.length)} submissions loaded`;
     el('snapshot-time').textContent=state.stamp?'Updated '+new Date(state.stamp).toLocaleString():'Loaded dataset';
-    el('data-provenance').textContent=`Source: ${src}. ${state.stamp?'Collected at '+state.stamp+'. ':''}Public official reviews only. Total submissions: ${number(state.papers.length)}.`;
+    el('data-provenance').textContent=`Source: ${src}${data.source?' · '+data.source:''}. ${state.stamp?'Collected at '+state.stamp+'. ':''}Public official reviews only. Total submissions: ${number(state.papers.length)}.`;
     fillAreas();compute();
   }
   function fillAreas() {
@@ -174,7 +174,7 @@
     el('kpi-confidence').textContent=num2(mean(reviews.map(r=>r.confidence).filter(Number.isFinite)));
     drawHistogram(el('histogram'),state.subset.map(p=>p[state.metric]),1,4,15,'#9385f3');
     drawBarList('rating-bars',[1,2,3,4].map(v=>({label:['','1 · Strong reject','2 · Weak reject','3 · Weak accept','4 · Strong accept'][v],count:reviews.filter(r=>Math.round(r.rating)===v).length})),false);
-    drawBarList('confidence-chart',[1,2,3,4,5].map(v=>({label:`Confidence ${v}`,count:reviews.filter(r=>Math.round(r.confidence)===v).length})),false);
+    drawBarList('confidence-chart',[1,2,3,4].map(v=>({label:`Confidence ${v}`,count:reviews.filter(r=>Math.round(r.confidence)===v).length})),false);
     drawHistogram(el('disagreement'),state.subset.map(p=>p.spread).filter(Number.isFinite),0,2,12,'#62cfc6');
     compare();renderTable();
   }
@@ -253,6 +253,24 @@
   function db() {return new Promise((resolve,reject)=>{if(!('indexedDB'in window))return reject(new Error('No IndexedDB support'));const req=indexedDB.open('iclr2027-atlas',1);req.onupgradeneeded=()=>req.result.createObjectStore('cache');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
   async function saveCache(data){try{const d=await db();await new Promise((resolve,reject)=>{const tx=d.transaction('cache','readwrite');tx.objectStore('cache').put(data,'complete');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});d.close();}catch{/* cache optional */}}
   async function readCache(){try{const d=await db();const data=await new Promise((resolve,reject)=>{const tx=d.transaction('cache','readonly');const req=tx.objectStore('cache').get('complete');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});d.close();return data;}catch{return null;}}
+  async function loadPublicFallback() {
+    const url='https://raw.githubusercontent.com/songjhPKU/ICLR2027-statistics/main/src/snapshot.json';
+    const resp=await fetch(url,{mode:'cors'});
+    if(!resp.ok)throw new Error(`Public snapshot endpoint returned ${resp.status}`);
+    const data=await resp.json();
+    if(!Array.isArray(data.rows)||data.rows.length<10000||!data.meta?.fetched_at)
+      throw new Error('Third-party public snapshot was unavailable or incomplete.');
+    const status={active:'Active',withdrawn:'Withdrawn',desk:'Desk rejected',other:'Rejected'};
+    const papers=data.rows.map(([id,title,area,st,rows])=>({
+      id:String(id),number:null,title:String(title||'Untitled'),area:String(area||'Unspecified'),
+      status:status[st]||'Rejected',url:safeUrl(null,id),
+      reviews:rows.map(([rating,confidence],i)=>({id:`${id}_snapshot_${i}`,rating,confidence,reviewer:'Anonymous'}))
+    }));
+    const snap={complete:true,generated_utc:data.meta.fetched_at,source:'Third-party public OpenReview snapshot (Nov 6, 2026)',source_url:'https://github.com/songjhPKU/ICLR2027-statistics',papers};
+    loadData(snap,'Public snapshot · songjhPKU/ICLR2027-statistics');
+    await saveCache(snap);
+    alert('Loaded an independently published OpenReview snapshot dated November 6, 2026. It is not live: review scores may have changed during rebuttal. The original public bulk endpoint currently returns HTTP 403.',false);
+  }
   async function boot() {
     const local=await readCache();if(local?.complete){try{loadData(local,'Browser cache');}catch{}}
     try {
@@ -264,7 +282,7 @@
         }
       }
     } catch {/* browser can still fetch live or import CSV */}
-    if(!state.papers.length) alert('No complete conference snapshot is published yet. Select “Refresh from OpenReview” to retrieve public reviews directly. If OpenReview blocks browser access, import a review-level CSV.',false);
+    if(!state.papers.length) {try{await loadPublicFallback();}catch(e){alert('No complete snapshot could be loaded. OpenReview bulk retrieval is currently blocked, and the public fallback could not be reached ('+e.message+'). You can still import a review-level CSV.');}}
   }
   function bind() {
     el('refresh-btn').addEventListener('click',collect);el('fetch-bottom').addEventListener('click',collect);
