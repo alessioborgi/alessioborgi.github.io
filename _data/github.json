@@ -12,7 +12,7 @@
     },
     {
       "name": "Python",
-      "bytes": 32047449,
+      "bytes": 32059654,
       "percent": 4.9
     },
     {
@@ -41,8 +41,8 @@
       "percent": 0.0
     },
     {
-      "name": "Cython",
-      "bytes": 228560,
+      "name": "JavaScript",
+      "bytes": 246043,
       "percent": 0.0
     }
   ],
