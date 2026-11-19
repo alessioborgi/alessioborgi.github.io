@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>ICLR 2027 · Review Atlas</title>
+  <meta name="description" content="Unofficial ICLR 2027 OpenReview statistics, paper rankings and score comparison dashboard." />
+  <link rel="stylesheet" href="./atlas.css" />
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="#overview"><span class="brand-logo">◈</span><span><strong>REVIEW ATLAS</strong><small>ICLR 2027 · Unofficial</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav aria-label="Dashboard sections">
+      <a href="#overview" data-nav="overview" class="active"><span>◫</span> Overview</a>
+      <a href="#compare" data-nav="compare"><span>◎</span> Score comparison</a>
+      <a href="#rankings" data-nav="rankings"><span>≡</span> Paper rankings</a>
+      <a href="#reviews" data-nav="reviews"><span>▥</span> Reviewer statistics</a>
+      <a href="#settings" data-nav="settings"><span>⚙</span> Data & settings</a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="dot-line"><span id="data-light" class="status-dot"></span><span id="data-status-small">No data loaded</span></div>
+      <p>Uses publicly accessible official reviews only. Not affiliated with ICLR or OpenReview.</p>
+      <a href="https://openreview.net/group?id=ICLR.cc/2027/Conference" target="_blank" rel="noopener noreferrer">Open ICLR 2027 ↗</a>
+    </div>
+  </aside>
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="breadcrumbs"><span>ICLR 2027</span><span class="chev">/</span><strong>Review intelligence</strong></div>
+      <div class="top-actions"><span id="snapshot-time" class="snap-date">Not synced yet</span><button id="refresh-btn" class="btn btn-primary">↻ <span>Refresh from OpenReview</span></button></div>
+    </header>
+    <main>
+      <section class="intro" id="overview">
+        <div><div class="eyebrow"><span class="pulse"></span> OPENREVIEW ANALYTICS · CONFERENCE-WIDE</div><h1>Understand your standing<br><span>in the review landscape.</span></h1><p>Explore official review scores, rank submissions, and find exactly where your paper stands within the public ICLR 2027 distribution.</p></div>
+        <div class="hero-art" aria-hidden="true"><div class="orb-ring ring-1"></div><div class="orb-ring ring-2"></div><div class="orb-ring ring-3"></div><div class="orb-mid">2027<span>ICLR</span></div></div>
+      </section>
+      <div id="alert" class="alert" hidden role="alert"></div>
+      <section id="loading-block" class="loading-block" hidden><div class="loading-head"><div><strong id="load-title">Fetching public reviews</strong><p id="load-message">Connecting to OpenReview…</p></div><button id="stop-btn" class="btn btn-ghost btn-small">Stop</button></div><div class="progress-track"><div id="progress-bar" class="progress-fill"></div></div></section>
+      <section class="kpis" aria-label="Conference statistics">
+        <article class="kpi"><div class="kpi-label">Active submissions <span>◫</span></div><div id="kpi-total" class="kpi-val">—</div><div class="kpi-sub" id="kpi-total-sub">Waiting for data</div></article>
+        <article class="kpi"><div class="kpi-label">Scored papers <span>▤</span></div><div id="kpi-scored" class="kpi-val">—</div><div class="kpi-sub" id="kpi-scored-sub">Official reviews only</div></article>
+        <article class="kpi"><div class="kpi-label">Mean paper rating <span>◎</span></div><div id="kpi-average" class="kpi-val">—</div><div class="kpi-sub">Scale 1–4</div></article>
+        <article class="kpi"><div class="kpi-label">Mean confidence <span>◇</span></div><div id="kpi-confidence" class="kpi-val">—</div><div class="kpi-sub">Among scored reviews</div></article>
+      </section>
+      <section class="workspace-controls" aria-label="Global filters">
+        <div><label for="metric">RANKING METRIC</label><select id="metric"><option value="mean">Mean rating</option><option value="weighted">Confidence-weighted mean</option></select></div>
+        <div><label for="area">RESEARCH AREA</label><select id="area"><option value="">All research areas</option></select></div>
+        <div><label for="min-reviews">MINIMUM RATINGS</label><select id="min-reviews"><option value="1">At least 1</option><option value="2">At least 2</option><option value="3">At least 3</option><option value="4">At least 4</option></select></div>
+        <label class="toggle-wrap"><input id="include-inactive" type="checkbox" /><span class="switch"></span><span>Include inactive</span></label>
+      </section>
+      <section class="section-grid overview-grid">
+        <article class="panel"><div class="panel-head"><div><span class="mini-eyebrow">DISTRIBUTION</span><h2>Average paper ratings</h2></div><span class="pill">Paper-level</span></div><div id="histogram" class="chart-holder"></div><div class="chart-foot"><span>1.0 · Strong reject</span><span>4.0 · Strong accept</span></div></article>
+        <article class="panel"><div class="panel-head"><div><span class="mini-eyebrow">REVIEW LANDSCAPE</span><h2>Score composition</h2></div><span class="pill">Review-level</span></div><div id="rating-bars" class="bar-list"></div></article>
+      </section>
+      <section class="section" id="compare">
+        <div class="section-header"><div><div class="mini-eyebrow">YOUR PAPER</div><h2>Where does your average place you?</h2><p>Compare your own rating against every scored paper in the selected cohort.</p></div></div>
+        <div class="compare-layout">
+          <article class="panel compare-input"><div class="input-lead">ENTER YOUR AVERAGE REVIEW SCORE</div><div class="big-score"><input id="target" aria-label="My average rating" type="number" min="1" max="4" step="0.01" value="3.00" /><span>/ 4.00</span></div><input id="score-slider" type="range" min="1" max="4" step="0.01" value="3" /><div class="range-label"><span>1.00</span><span>2.00</span><span>3.00</span><span>4.00</span></div><div class="info-line">ⓘ Comparison uses the chosen ranking metric and filters. Your paper is not included in the cohort unless it is already present as a submission.</div></article>
+          <article class="panel compare-results"><div class="compare-title">YOUR RELATIVE STANDING <span id="cohort-name" class="pill">All areas</span></div><div class="rank-line"><span class="rank-pre">Estimated rank</span><span id="your-rank" class="rank-number">—</span><span id="rank-of" class="rank-of">among scored papers</span></div><div class="three-cards"><div class="mini-stat"><strong id="higher">—</strong><span>Higher than you</span></div><div class="mini-stat accent"><strong id="lower">—</strong><span>Lower than you</span></div><div class="mini-stat"><strong id="ties">—</strong><span>Equal to you</span></div></div><div class="percentile-head"><span>Midrank percentile</span><strong id="percentile">—</strong></div><div class="percentile-track"><div id="percentile-fill"></div></div></article>
+        </div>
+      </section>
+      <section class="section" id="rankings"><div class="section-header"><div><div class="mini-eyebrow">FULL LEADERBOARD</div><h2>Paper rankings</h2><p>Every scored paper, linked to the public OpenReview forum.</p></div><button id="download-rankings" class="btn btn-ghost">↓ Export CSV</button></div>
+        <article class="panel table-panel"><div class="table-tools"><label class="search-box"><span>⌕</span><input id="search" type="search" placeholder="Search title, submission number or ID…" /></label><span id="rank-total" class="muted">No records</span></div><div class="table-scroll"><table><thead><tr><th>RANK</th><th>SUBMISSION</th><th>AREA</th><th>MEAN</th><th>WEIGHTED</th><th>REVIEWS</th><th>CONF.</th><th>SPREAD</th></tr></thead><tbody id="paper-rows"><tr><td colspan="8" class="empty-row">Load public OpenReview data to see the leaderboard.</td></tr></tbody></table></div><div class="table-footer"><span id="pagination-label">—</span><div class="pagination"><button id="prev-page" class="btn btn-ghost btn-small">← Previous</button><button id="next-page" class="btn btn-ghost btn-small">Next →</button></div></div></article>
+      </section>
+      <section class="section" id="reviews"><div class="section-header"><div><div class="mini-eyebrow">REVIEWERS</div><h2>Confidence and disagreement</h2><p>Understand individual scores, score variance and reviewer confidence.</p></div><button id="download-reviews" class="btn btn-ghost">↓ Export reviews CSV</button></div><div class="section-grid"><article class="panel"><div class="panel-head"><h2>Review confidence</h2><span class="pill">Scored reviews</span></div><div id="confidence-chart" class="bar-list"></div></article><article class="panel"><div class="panel-head"><h2>Reviewer disagreement</h2><span class="pill">Rated papers</span></div><div id="disagreement" class="chart-holder"></div><div class="chart-foot"><span>Std. dev. 0</span><span>Greater disagreement →</span></div></article></div></section>
+      <section class="section" id="settings"><div class="section-header"><div><div class="mini-eyebrow">DATA SOURCE</div><h2>Keep your results up to date</h2><p>The website can load a published snapshot or fetch public OpenReview data into your browser.</p></div></div>
+        <div class="section-grid"><article class="panel source-card"><div class="source-icon">↻</div><h3>Load from OpenReview</h3><p>Fetch every publicly available submission and official review. This can take several minutes; your browser must permit requests to the OpenReview API.</p><button id="fetch-bottom" class="btn btn-primary">Fetch latest reviews ↗</button></article><article class="panel source-card"><div class="source-icon">⇩</div><h3>Import review-level CSV</h3><p>Use a local export if direct API access is restricted. Required columns: <code>paper_id,title,rating,confidence</code>. Optional: <code>review_id,number,area,status,url</code>.</p><label for="csv-file" class="btn btn-ghost file-button">Choose CSV</label><input type="file" id="csv-file" accept=".csv,text/csv" hidden /></article></div>
+        <div class="data-note"><strong>How rankings are calculated.</strong> Each paper's score is the arithmetic mean of its valid numeric official reviewer ratings. The optional weighted score is Σ(rating × confidence) / Σ(confidence), using reviews with positive confidence. Equal scores share a rank. Withdrawn, desk-rejected and rejected papers are excluded by default. All comparisons are unofficial and are not acceptance predictions.<br><br><span id="data-provenance">No data source loaded.</span></div>
+      </section>
+      <footer>ICLR 2027 Review Atlas · Independent analytics · <a href="https://openreview.net/group?id=ICLR.cc/2027/Conference" target="_blank" rel="noopener noreferrer">Data: OpenReview ↗</a> · <a href="https://github.com/alessioborgi/alessioborgi/tree/main/ICLR2027-Review-Atlas" target="_blank" rel="noopener noreferrer">Streamlit source ↗</a></footer>
+    </main>
+  </div>
+</div>
+<script src="./atlas.js" defer></script>
+</body>
+</html>
