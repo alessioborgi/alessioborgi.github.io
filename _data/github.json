@@ -1,6 +1,6 @@
 {
   "username": "alessioborgi",
-  "total_stars": 104,
+  "total_stars": 108,
   "total_forks": 20,
   "public_repos": 34,
   "followers": 23,
@@ -67,7 +67,7 @@
       "name": "LocaLeJEPA",
       "html_url": "https://github.com/alessioborgi/LocaLeJEPA",
       "description": "LocaLeJEPA: JEPA self-supervised learning that matches the embedding distribution locally, in k-means neighborhoods, instead of globally, giving stronger features across Euclidean, hyperbolic and equivariant encoders.",
-      "stars": 14,
+      "stars": 15,
       "forks": 0,
       "language": "Python"
     },
@@ -75,7 +75,7 @@
       "name": "RealTime-VLM",
       "html_url": "https://github.com/alessioborgi/RealTime-VLM",
       "description": "RealTime-VLM brings real-time VLM inference to the browser. It continuously captures webcam frames, sends image+text to an OpenAI-compatible API, and displays responses with sub-second latency. Works with local or hosted VLMs.",
-      "stars": 10,
+      "stars": 11,
       "forks": 0,
       "language": "JavaScript"
     },
@@ -104,11 +104,27 @@
       "language": "MATLAB"
     },
     {
+      "name": "AdaViT",
+      "html_url": "https://github.com/alessioborgi/AdaViT",
+      "description": "Adaptive Vision Transformer for efficient image classification, implementing dynamic token sparsification to reduce computational costs while maintaining accuracy.",
+      "stars": 3,
+      "forks": 1,
+      "language": "Python"
+    },
+    {
       "name": "Z-SASLM",
       "html_url": "https://github.com/alessioborgi/Z-SASLM",
       "description": "[CVPR 2025]  Z-SASLM is a zero-shot framework for multi-style image synthesis leveraging Spherical Linear Interpolation (SLI) to achieve smooth, coherent blending\u2014without any fine-tuning.",
       "stars": 3,
       "forks": 0,
+      "language": "Jupyter Notebook"
+    },
+    {
+      "name": "Clustering-Deepening",
+      "html_url": "https://github.com/alessioborgi/Clustering-Deepening",
+      "description": "An in-depth exploration of clustering algorithms and techniques in machine learning, with applications focus on Object Tracking and Image Segmentation.",
+      "stars": 2,
+      "forks": 1,
       "language": "Jupyter Notebook"
     },
     {
@@ -120,27 +136,11 @@
       "language": "Jupyter Notebook"
     },
     {
-      "name": "AdaViT",
-      "html_url": "https://github.com/alessioborgi/AdaViT",
-      "description": "Adaptive Vision Transformer for efficient image classification, implementing dynamic token sparsification to reduce computational costs while maintaining accuracy.",
-      "stars": 2,
-      "forks": 1,
-      "language": "Python"
-    },
-    {
       "name": "Z-SAMB_StyleAligned_MultiReference-MultiModal",
       "html_url": "https://github.com/alessioborgi/Z-SAMB_StyleAligned_MultiReference-MultiModal",
       "description": "Novel framework for Zero-Shot Style Alignment in Text-to-Image generation, incorporating Multi-Modal Context-Awareness and Multi-Reference Style Alignment, using minimal attention sharing, ensuring consistent style transfer without fine-tuning.",
       "stars": 2,
       "forks": 0,
-      "language": "Jupyter Notebook"
-    },
-    {
-      "name": "SkinMe",
-      "html_url": "https://github.com/alessioborgi/SkinMe",
-      "description": "A deep learning-based application for skin disease detection and classification. ",
-      "stars": 1,
-      "forks": 3,
       "language": "Jupyter Notebook"
     }
   ]
