@@ -4,6 +4,7 @@
   const VENUE = 'ICLR.cc/2027/Conference';
   const API = 'https://api2.openreview.net';
   const LIMIT = 150;
+  const POST_REBUTTAL_CUTOFF = Date.parse('2026-11-20T00:00:00Z');
   const el = id => document.getElementById(id);
   const state = {papers: [], subset: [], ranked: [], metric: 'mean', area: '', minReviews: 1,
     includeInactive: false, query: '', page: 0, source: '', stamp: '', busy: false, cancel: null};
@@ -150,8 +151,8 @@
     state.papers=annotate(valid);
     state.source=src;state.stamp=data.generated_utc||'';
     el('data-light').className='status-dot ok';el('data-status-small').textContent=`${number(state.papers.length)} submissions loaded`;
-    el('snapshot-time').textContent=state.stamp?'Updated '+new Date(state.stamp).toLocaleString():'Loaded dataset';
-    el('data-provenance').textContent=`Source: ${src}${data.source?' · '+data.source:''}. ${state.stamp?'Collected at '+state.stamp+'. ':''}Public official reviews only. Total submissions: ${number(state.papers.length)}.`;
+    el('snapshot-time').textContent=state.stamp?'Snapshot '+new Date(state.stamp).toLocaleString():'Loaded dataset';
+    el('data-provenance').textContent=`Source: ${src}${data.source?' · '+data.source:''}${data.source_url?' · '+data.source_url:''}. ${state.stamp?'Score snapshot collected '+state.stamp+'. ':''}Public official reviews only. Total submissions: ${number(state.papers.length)}. Scores may still change during reviewer–AC discussion.`;
     fillAreas();compute();
   }
   function fillAreas() {
@@ -253,36 +254,63 @@
   function db() {return new Promise((resolve,reject)=>{if(!('indexedDB'in window))return reject(new Error('No IndexedDB support'));const req=indexedDB.open('iclr2027-atlas',1);req.onupgradeneeded=()=>req.result.createObjectStore('cache');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
   async function saveCache(data){try{const d=await db();await new Promise((resolve,reject)=>{const tx=d.transaction('cache','readwrite');tx.objectStore('cache').put(data,'complete');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});d.close();}catch{/* cache optional */}}
   async function readCache(){try{const d=await db();const data=await new Promise((resolve,reject)=>{const tx=d.transaction('cache','readonly');const req=tx.objectStore('cache').get('complete');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});d.close();return data;}catch{return null;}}
+  function isPostRebuttal(data) {
+    const ts = Date.parse(data?.generated_utc || '');
+    return Boolean(data?.complete && Array.isArray(data.papers) && data.papers.length &&
+      Number.isFinite(ts) && ts >= POST_REBUTTAL_CUTOFF);
+  }
   async function loadPublicFallback() {
-    const url='https://raw.githubusercontent.com/songjhPKU/ICLR2027-statistics/main/src/snapshot.json';
-    const resp=await fetch(url,{mode:'cors'});
-    if(!resp.ok)throw new Error(`Public snapshot endpoint returned ${resp.status}`);
-    const data=await resp.json();
-    if(!Array.isArray(data.rows)||data.rows.length<10000||!data.meta?.fetched_at)
-      throw new Error('Third-party public snapshot was unavailable or incomplete.');
-    const status={active:'Active',withdrawn:'Withdrawn',desk:'Desk rejected',other:'Rejected'};
-    const papers=data.rows.map(([id,title,area,st,rows])=>({
-      id:String(id),number:null,title:String(title||'Untitled'),area:String(area||'Unspecified'),
-      status:status[st]||'Rejected',url:safeUrl(null,id),
-      reviews:rows.map(([rating,confidence],i)=>({id:`${id}_snapshot_${i}`,rating,confidence,reviewer:'Anonymous'}))
-    }));
-    const snap={complete:true,generated_utc:data.meta.fetched_at,source:'Third-party public OpenReview snapshot (Nov 6, 2026)',source_url:'https://github.com/songjhPKU/ICLR2027-statistics',papers};
-    loadData(snap,'Public snapshot · songjhPKU/ICLR2027-statistics');
+    const url = 'https://miraymen.github.io/iclr27_analysis/static/data.json';
+    const resp = await fetch(url, {mode:'cors',cache:'no-store'});
+    if(!resp.ok) throw new Error('Post-rebuttal public source returned HTTP '+resp.status);
+    const raw = await resp.json();
+    if(!Array.isArray(raw.papers) || raw.papers.length < 40000 ||
+       !/^\d{4}-\d\d-\d\d \d\d:\d\d GMT$/.test(raw.downloaded||''))
+      throw new Error('Post-rebuttal public source is incomplete or malformed.');
+    const stamp = new Date(raw.downloaded.replace(' ','T').replace(' GMT',':00Z')).toISOString();
+    if(Date.parse(stamp) < POST_REBUTTAL_CUTOFF)
+      throw new Error('Public source predates the requested post-rebuttal cutoff.');
+    const status = ['Active','Withdrawn','Desk rejected'];
+    const papers = raw.papers.map(([id,title,rs,cs,st]) => {
+      if(typeof id!=='string'||!/^[A-Za-z0-9_-]+$/.test(id) ||
+         typeof rs!=='string'||typeof cs!=='string' || rs.length!==cs.length ||
+         /[^1-4]/.test(rs)||/[^1-4]/.test(cs)||!status[st])
+        throw new Error('Invalid rating/confidence pairing in public snapshot.');
+      return {
+        id,number:null,title:String(title||'Untitled'),area:'Unspecified',status:status[st],
+        url:safeUrl(null,id),
+        reviews:Array.from(rs,(r,i)=>({
+          id:id+'_post_rebuttal_'+i,rating:Number(r),confidence:Number(cs[i]),reviewer:'Anonymous'
+        }))
+      };
+    });
+    const snap={complete:true,generated_utc:stamp,source:'Post-rebuttal public OpenReview-derived snapshot, 20 Nov 2026 (miraymen/iclr27_analysis)',
+      source_url:'https://github.com/miraymen/iclr27_analysis',papers};
+    loadData(snap,'Public post-rebuttal snapshot - Aymen Mir');
     await saveCache(snap);
-    alert('Loaded an independently published OpenReview snapshot dated November 6, 2026. It is not live: review scores may have changed during rebuttal. The original public bulk endpoint currently returns HTTP 403.',false);
+    alert('Loaded the November 20 post-rebuttal public snapshot. Research areas are unavailable in this emergency browser fallback; the published site snapshot includes preserved areas. This is a historical snapshot, not live scores.',false);
   }
   async function boot() {
-    const local=await readCache();if(local?.complete){try{loadData(local,'Browser cache');}catch{}}
+    const local = await readCache();
+    // A previously cached November 6 pre-rebuttal snapshot must NEVER be used.
+    if(isPostRebuttal(local)) {
+      try {loadData(local,'Browser cache - post-rebuttal');} catch {}
+    }
     try {
-      const resp=await fetch('./snapshot.json',{cache:'no-store'});
+      const resp = await fetch('./snapshot.json',{cache:'no-store'});
       if(resp.ok) {
-        const snap=await resp.json();
-        if(snap?.complete && snap.papers?.length && (!state.stamp || String(snap.generated_utc||'')>state.stamp)) {
-          loadData(snap,'Published GitHub Pages snapshot');await saveCache(snap);
+        const snap = await resp.json();
+        if(isPostRebuttal(snap) &&
+           (!state.stamp || Date.parse(snap.generated_utc)>=Date.parse(state.stamp))) {
+          loadData(snap,'Published GitHub Pages post-rebuttal snapshot');
+          await saveCache(snap);
         }
       }
-    } catch {/* browser can still fetch live or import CSV */}
-    if(!state.papers.length) {try{await loadPublicFallback();}catch(e){alert('No complete snapshot could be loaded. OpenReview bulk retrieval is currently blocked, and the public fallback could not be reached ('+e.message+'). You can still import a review-level CSV.');}}
+    } catch {/* Public fallback below can load if necessary. */}
+    if(!state.papers.length) {
+      try {await loadPublicFallback();}
+      catch(e){alert('No verified post-rebuttal snapshot could be loaded ('+e.message+'). The pre-rebuttal November 6 dataset is deliberately excluded. Try again or import a review-level CSV.');}
+    }
   }
   function bind() {
     el('refresh-btn').addEventListener('click',collect);el('fetch-bottom').addEventListener('click',collect);
