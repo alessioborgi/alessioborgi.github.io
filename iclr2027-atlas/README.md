@@ -5,7 +5,7 @@ A **standalone browser-based dashboard** for all public ICLR 2027 official revie
 ## How it works
 
 - The UI (`index.html`, `atlas.css`, `atlas.js`) runs as a static site on GitHub Pages, without Streamlit or a Python server.
-- On opening, it first loads the complete local IndexedDB cache (when available), then the latest `snapshot.json` published by the scheduled GitHub Action.
+- On opening, it first loads the complete local IndexedDB cache (when available), then the newest **post-rebuttal** `snapshot.json` published by the scheduled GitHub Action. Any cache older than November 20 is ignored.
 - The `Refresh from OpenReview` button also offers a direct browser download using the **public OpenReview API v2**. This fallback requires CORS access from OpenReview. If the browser is denied, the existing snapshot is preserved.
 - `collect_snapshot.py`, run by `.github/workflows/update_iclr2027_atlas.yml`, refreshes the public snapshot every 12 hours and on deployment, **only replacing the previous complete dataset** when all pages succeed. GitHub Actions and public data availability can affect this schedule.
 - CSV import is available if OpenReview blocks the collection process; imported CSV rankings only cover the imported cohort, not the whole conference.
@@ -38,6 +38,14 @@ python iclr2027-atlas/collect_snapshot.py
 
 If OpenReview responds with a network error, no incomplete snapshot will be published.
 
-### Public-source fallback when OpenReview returns HTTP 403
+### Post-rebuttal snapshot policy (November 20, 2026 onward)
 
-OpenReview's bulk `/notes` endpoint can return a bot challenge to automated clients, even when the reviews themselves are public. If this happens, the scheduled refresh uses a **separately published public score snapshot**, sourced and credited to [songjhPKU/ICLR2027-statistics](https://github.com/songjhPKU/ICLR2027-statistics). Its collection timestamp is **2026-11-06**, not the import date; the dashboard labels it as historical rather than live. That source supplies submission IDs, titles, research areas, status, and individual rating/confidence pairs, without reviewer identifiers or submission numbers. The fallback is not presented as an up-to-date scrape. If a later official OpenReview fetch succeeds, it replaces this older fallback with newly collected scores.
+The **author-reviewer discussion ended on November 18, 2026**. The dashboard is configured to **reject every cached or published snapshot earlier than November 20, 2026 (UTC)**, so the old November 6 initial-review dataset cannot reappear as the current ranking.
+
+**Primary refresh**: GitHub Actions tries the complete OpenReview API v2 official reviews every 12 hours. If OpenReview allows access, the current collection (including each reviewer's rating and confidence) replaces the previous snapshot.
+
+**Bot-challenge fallback**: OpenReview currently responds with HTTP 403 in automated jobs. The collector then uses the public November 20, 2026 19:26 UTC dataset from [Aymen Mir's post-discussion score percentiles](https://github.com/miraymen/iclr27_analysis). That source preserves reviewer-level rating/confidence pairs and the status of all 42,790 submissions. Our converter validates every pair, reuses only the research-area metadata from the old snapshot, and NEVER reuses the old ratings or statuses. It refuses to overwrite a newer complete official snapshot with older fallback data.
+
+The source date, not the GitHub import or deployment date, is shown in the dashboard. As of November 23, scores are **post-author discussion but not final decisions**; reviewer–AC discussion continues and can produce later revisions. A successful official refresh will supersede the November 20 fallback. Nothing in the app is an official acceptance prediction.
+
+This is an independent, unofficial data aggregation tool. Credit: [Aymen Mir](https://github.com/miraymen/iclr27_analysis), [OpenReview](https://openreview.net/group?id=ICLR.cc/2027/Conference).
